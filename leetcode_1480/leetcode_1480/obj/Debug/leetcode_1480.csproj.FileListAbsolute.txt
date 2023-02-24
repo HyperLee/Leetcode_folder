@@ -1,0 +1,6 @@
+D:\TestFolder\leetcode_1480\leetcode_1480\bin\Debug\leetcode_1480.exe.config
+D:\TestFolder\leetcode_1480\leetcode_1480\bin\Debug\leetcode_1480.exe
+D:\TestFolder\leetcode_1480\leetcode_1480\bin\Debug\leetcode_1480.pdb
+D:\TestFolder\leetcode_1480\leetcode_1480\obj\Debug\leetcode_1480.exe
+D:\TestFolder\leetcode_1480\leetcode_1480\obj\Debug\leetcode_1480.pdb
+D:\TestFolder\leetcode_1480\leetcode_1480\obj\Debug\leetcode_1480.csprojResolveAssemblyReference.cache
