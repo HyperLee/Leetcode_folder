@@ -1,0 +1,1 @@
+含main function 可以跑結果

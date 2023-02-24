@@ -1,0 +1,6 @@
+D:\TestFolder\leetcode_061\leetcode_061\bin\Debug\leetcode_061.exe.config
+D:\TestFolder\leetcode_061\leetcode_061\bin\Debug\leetcode_061.exe
+D:\TestFolder\leetcode_061\leetcode_061\bin\Debug\leetcode_061.pdb
+D:\TestFolder\leetcode_061\leetcode_061\obj\Debug\leetcode_061.csprojResolveAssemblyReference.cache
+D:\TestFolder\leetcode_061\leetcode_061\obj\Debug\leetcode_061.exe
+D:\TestFolder\leetcode_061\leetcode_061\obj\Debug\leetcode_061.pdb
