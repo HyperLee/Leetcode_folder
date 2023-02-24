@@ -1,0 +1,14 @@
+C:\Users\A6005\source\repos\leetcode_342\leetcode_342\bin\Debug\leetcode_342.exe.config
+C:\Users\A6005\source\repos\leetcode_342\leetcode_342\bin\Debug\leetcode_342.exe
+C:\Users\A6005\source\repos\leetcode_342\leetcode_342\bin\Debug\leetcode_342.pdb
+C:\Users\A6005\source\repos\leetcode_342\leetcode_342\obj\Debug\leetcode_342.csproj.AssemblyReference.cache
+C:\Users\A6005\source\repos\leetcode_342\leetcode_342\obj\Debug\leetcode_342.csproj.SuggestedBindingRedirects.cache
+C:\Users\A6005\source\repos\leetcode_342\leetcode_342\obj\Debug\leetcode_342.csproj.CoreCompileInputs.cache
+C:\Users\A6005\source\repos\leetcode_342\leetcode_342\obj\Debug\leetcode_342.exe
+C:\Users\A6005\source\repos\leetcode_342\leetcode_342\obj\Debug\leetcode_342.pdb
+D:\Leetcode_folder\leetcode_342\leetcode_342\bin\Debug\leetcode_342.exe.config
+D:\Leetcode_folder\leetcode_342\leetcode_342\obj\Debug\leetcode_342.exe
+D:\Leetcode_folder\leetcode_342\leetcode_342\obj\Debug\leetcode_342.pdb
+D:\Leetcode_folder\leetcode_342\leetcode_342\bin\Debug\leetcode_342.exe
+D:\Leetcode_folder\leetcode_342\leetcode_342\bin\Debug\leetcode_342.pdb
+D:\Leetcode_folder\leetcode_342\leetcode_342\obj\Debug\leetcode_342.csprojResolveAssemblyReference.cache

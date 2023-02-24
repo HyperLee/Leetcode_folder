@@ -1,0 +1,8 @@
+D:\TestFolder\leetcode_318\leetcode_318\bin\Debug\leetcode_318.exe.config
+D:\TestFolder\leetcode_318\leetcode_318\bin\Debug\leetcode_318.exe
+D:\TestFolder\leetcode_318\leetcode_318\bin\Debug\leetcode_318.pdb
+D:\TestFolder\leetcode_318\leetcode_318\obj\Debug\leetcode_318.csproj.AssemblyReference.cache
+D:\TestFolder\leetcode_318\leetcode_318\obj\Debug\leetcode_318.csproj.SuggestedBindingRedirects.cache
+D:\TestFolder\leetcode_318\leetcode_318\obj\Debug\leetcode_318.csproj.CoreCompileInputs.cache
+D:\TestFolder\leetcode_318\leetcode_318\obj\Debug\leetcode_318.exe
+D:\TestFolder\leetcode_318\leetcode_318\obj\Debug\leetcode_318.pdb

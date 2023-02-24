@@ -1,0 +1,8 @@
+D:\TestFolder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.csproj.AssemblyReference.cache
+D:\TestFolder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.csproj.SuggestedBindingRedirects.cache
+D:\TestFolder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.csproj.CoreCompileInputs.cache
+D:\TestFolder\leetcode_448\leetcode_448\bin\Debug\leetcode_448.exe.config
+D:\TestFolder\leetcode_448\leetcode_448\bin\Debug\leetcode_448.exe
+D:\TestFolder\leetcode_448\leetcode_448\bin\Debug\leetcode_448.pdb
+D:\TestFolder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.exe
+D:\TestFolder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.pdb

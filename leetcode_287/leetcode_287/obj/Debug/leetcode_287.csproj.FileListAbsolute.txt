@@ -1,0 +1,8 @@
+D:\TestFolder\leetcode_287\leetcode_287\bin\Debug\leetcode_287.exe.config
+D:\TestFolder\leetcode_287\leetcode_287\bin\Debug\leetcode_287.exe
+D:\TestFolder\leetcode_287\leetcode_287\bin\Debug\leetcode_287.pdb
+D:\TestFolder\leetcode_287\leetcode_287\obj\Debug\leetcode_287.csproj.AssemblyReference.cache
+D:\TestFolder\leetcode_287\leetcode_287\obj\Debug\leetcode_287.csproj.SuggestedBindingRedirects.cache
+D:\TestFolder\leetcode_287\leetcode_287\obj\Debug\leetcode_287.csproj.CoreCompileInputs.cache
+D:\TestFolder\leetcode_287\leetcode_287\obj\Debug\leetcode_287.exe
+D:\TestFolder\leetcode_287\leetcode_287\obj\Debug\leetcode_287.pdb
