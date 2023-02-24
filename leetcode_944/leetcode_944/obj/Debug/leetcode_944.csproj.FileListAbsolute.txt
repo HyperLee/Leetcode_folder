@@ -1,0 +1,8 @@
+D:\Leetcode_folder\leetcode_944\leetcode_944\bin\Debug\leetcode_944.exe.config
+D:\Leetcode_folder\leetcode_944\leetcode_944\bin\Debug\leetcode_944.exe
+D:\Leetcode_folder\leetcode_944\leetcode_944\bin\Debug\leetcode_944.pdb
+D:\Leetcode_folder\leetcode_944\leetcode_944\obj\Debug\leetcode_944.csproj.AssemblyReference.cache
+D:\Leetcode_folder\leetcode_944\leetcode_944\obj\Debug\leetcode_944.csproj.SuggestedBindingRedirects.cache
+D:\Leetcode_folder\leetcode_944\leetcode_944\obj\Debug\leetcode_944.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\leetcode_944\leetcode_944\obj\Debug\leetcode_944.exe
+D:\Leetcode_folder\leetcode_944\leetcode_944\obj\Debug\leetcode_944.pdb

@@ -1,0 +1,6 @@
+D:\TestFolder\leetcode_763\leetcode_763\bin\Debug\leetcode_763.exe.config
+D:\TestFolder\leetcode_763\leetcode_763\obj\Debug\leetcode_763.csprojResolveAssemblyReference.cache
+D:\TestFolder\leetcode_763\leetcode_763\bin\Debug\leetcode_763.exe
+D:\TestFolder\leetcode_763\leetcode_763\bin\Debug\leetcode_763.pdb
+D:\TestFolder\leetcode_763\leetcode_763\obj\Debug\leetcode_763.exe
+D:\TestFolder\leetcode_763\leetcode_763\obj\Debug\leetcode_763.pdb
