@@ -17,7 +17,7 @@ namespace leetcode_121
         static void Main(string[] args)
         {
             int[] input = new int[] { 7, 1, 5, 3, 6, 4 };
-            Console.WriteLine(MaxProfit(input));
+            Console.WriteLine(MaxProfit3(input));
             Console.ReadKey();
         }
 
@@ -68,6 +68,26 @@ namespace leetcode_121
             }
             return maxprofit;
 
+        }
+
+
+        /// <summary>
+        /// 概念類似 方法二
+        /// </summary>
+        /// <param name="prices"></param>
+        /// <returns></returns>
+        public static int MaxProfit3(int[] prices)
+        {
+            int minprice = int.MaxValue;
+            int maxprofit = 0;
+            
+            foreach(int price in prices)
+            {
+                maxprofit = Math.Max(maxprofit, price - minprice);
+                minprice = Math.Min(minprice, price);
+            }
+
+            return maxprofit;
         }
 
     }
