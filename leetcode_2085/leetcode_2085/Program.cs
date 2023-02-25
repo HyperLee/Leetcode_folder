@@ -19,7 +19,7 @@ namespace leetcode_2085
             string[] input1 = new string[] { "leetcode", "is", "amazing", "as", "is" };
             string[] input2 = new string[] { "amazing", "leetcode", "is" };
 
-
+            Console.WriteLine(CountWords(input1, input2));
             Console.ReadKey();
         }
 
