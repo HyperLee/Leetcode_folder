@@ -78,7 +78,7 @@ namespace leetcode_121
         /// <returns></returns>
         public static int MaxProfit3(int[] prices)
         {
-            int minprice = int.MaxValue;
+            int minprice = int.MaxValue;  // int.MaxValue = 2147483647
             int maxprofit = 0;
             
             foreach(int price in prices)
