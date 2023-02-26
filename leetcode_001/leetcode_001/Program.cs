@@ -45,6 +45,7 @@ namespace leetcode_001
                 int left = target - nums[i];
                 if (temp.ContainsKey(left))
                 {
+                    // temp[left] : temp.Value
                     return new int[] { temp[left], i };
                 }
                 if (!temp.ContainsKey(nums[i]))
