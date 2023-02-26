@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -83,6 +84,19 @@ namespace leetcode_2085
                             counter++;
                         }
                     }
+                    
+
+                    // 改寫上面判斷式
+                    /* // 錯誤失敗 看起來沒法改寫; 之後再想其他方法
+                    if(dic2.ContainsKey(kv.Key) && dic2.ContainsValue(1))
+                    {
+                        if (kv.Key == dic2.FirstOrDefault(x => x.Value == 1).Key)
+                        {
+                            counter++;
+                        }
+                    }
+                    */
+
                 }
             }
 
