@@ -8,10 +8,17 @@ namespace leetcode_020
 {
     class Program
     {
+        /// <summary>
+        /// leetcode 20
+        /// https://leetcode.com/problems/valid-parentheses/
+        /// 有效的括号
+        /// https://leetcode.cn/problems/valid-parentheses/
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             string a = "";
-            a = "()";
+            a = "()[]{}";
 
             bool r = false;
             r = IsValid(a);
@@ -35,6 +42,12 @@ namespace leetcode_020
         ///    
         /// 每當遇到一個 左括號 就會期待 一個右括號 組合成一組
         /// 所以遇到一左就push一右 為一組
+        /// 
+        /// 
+        /// 其他方法可以參考
+        /// https://ithelp.ithome.com.tw/articles/10217603
+        /// https://leetcode.cn/problems/valid-parentheses/solution/you-xiao-de-gua-hao-by-leetcode-solution/
+        /// https://leetcode.cn/problems/valid-parentheses/solution/you-xiao-de-gua-hao-by-leetcode-learning-p2qg/
         /// 
         /// </summary>
         /// <param name="s"></param>
