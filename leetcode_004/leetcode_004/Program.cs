@@ -67,7 +67,7 @@ namespace leetcode_004
             int length = merged.Length;
             if (length % 2 == 0)
             {
-                // 偶數
+                // 偶數, * 1.0 ==>轉double. 小數點下位數顯示
                 int index = length / 2;
                 return (merged[index - 1] + merged[index]) * 1.0 / 2;
             }
