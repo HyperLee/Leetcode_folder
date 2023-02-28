@@ -42,6 +42,8 @@ namespace leetcode_004
         /// version3: 可以用list方式 來做 陣列串接
         /// https://blog.csdn.net/qq_45244974/article/details/115320059
         /// 
+        /// 中位數定義 wiki
+        /// https://zh.wikipedia.org/wiki/%E4%B8%AD%E4%BD%8D%E6%95%B8
         /// </summary>
         /// <param name="nums1"></param>
         /// <param name="nums2"></param>
@@ -77,55 +79,6 @@ namespace leetcode_004
             }
 
         }
-
-        /// <summary>
-        /// new 排序
-        /// </summary>
-        /// <param name="nums1"></param>
-        /// <param name="nums2"></param>
-        /// <returns></returns>
-        public int[] mergeTwoSortedArrays(int[] nums1, int[] nums2)
-        {
-            int[] merged = new int[nums1.Length + nums2.Length];
-
-            int pointer1 = 0;
-            int pointer2 = 0;
-            for (int i = 0; i < merged.Length; i++)
-            {
-                if ((pointer1 < nums1.Length) && (pointer2 < nums2.Length))
-                {
-                    if (nums1[pointer1] <= nums2[pointer2])
-                    {
-                        merged[i] = nums1[pointer1];
-                        pointer1++;
-                    }
-                    else if (nums1[pointer1] > nums2[pointer2])
-                    {
-                        merged[i] = nums2[pointer2];
-                        pointer2++;
-                    }
-                }
-                else if (pointer1 == nums1.Length)
-                {
-                    for (int k = pointer2; k < nums2.Length; k++, i++)
-                    {
-                        merged[i] = nums2[k];
-                    }
-                    break;
-                }
-                else if (pointer2 == nums2.Length)
-                {
-                    for (int k = pointer1; k < nums1.Length; k++, i++)
-                    {
-                        merged[i] = nums1[k];
-                    }
-                    break;
-                }
-            }
-            return merged;
-        }
-
-
 
     }
 }

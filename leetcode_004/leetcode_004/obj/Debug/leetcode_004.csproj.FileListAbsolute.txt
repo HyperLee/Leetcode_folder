@@ -10,3 +10,10 @@ D:\Leetcode_folder\leetcode_004\leetcode_004\obj\Debug\leetcode_004.csproj.Assem
 D:\Leetcode_folder\leetcode_004\leetcode_004\obj\Debug\leetcode_004.csproj.CoreCompileInputs.cache
 D:\Leetcode_folder\leetcode_004\leetcode_004\obj\Debug\leetcode_004.exe
 D:\Leetcode_folder\leetcode_004\leetcode_004\obj\Debug\leetcode_004.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_004\leetcode_004\bin\Debug\leetcode_004.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_004\leetcode_004\bin\Debug\leetcode_004.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_004\leetcode_004\bin\Debug\leetcode_004.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_004\leetcode_004\obj\Debug\leetcode_004.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_004\leetcode_004\obj\Debug\leetcode_004.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_004\leetcode_004\obj\Debug\leetcode_004.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_004\leetcode_004\obj\Debug\leetcode_004.pdb
