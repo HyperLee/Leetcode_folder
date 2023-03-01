@@ -29,6 +29,9 @@ namespace leetcode_912
 
         /// <summary>
         /// 偷懶 直接用 現成的function
+        /// 
+        /// 排序寫法 可參考
+        /// https://leetcode.cn/problems/sort-an-array/solution/by-stormsunshine-mjb5/
         /// </summary>
         /// <param name="nums"></param>
         /// <returns></returns>
