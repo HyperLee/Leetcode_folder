@@ -105,7 +105,11 @@ namespace leetcode_875
         /// 每堆香蕉吃完的耗时 = 这堆香蕉的数量 / 珂珂一小时吃香蕉的数量
         /// 根据题意，这里的 / 在不能整除的时候，需要 上取整。
         /// 
-        /// 取整还可以这样写：sum += (pile + speed - 1) / speed;。
+        /// 需要注意 關鍵寫法 取整數
+        /// 取整可以这样寫：
+        /// 1. totaltime += (pile + speed - 1) / speed; 
+        /// 2. totaltime += 1 + (piles[i] - 1) / speed;
+        /// 
         /// 这是因为题目问的是「最小速度 」。
         /// </summary>
         /// <param name="piles"></param>
@@ -128,6 +132,7 @@ namespace leetcode_875
                 {
                     // 全部所需時間
                     totaltime += (piles[i] + speed - 1) / speed;
+                    // totaltime += 1 + (piles[i] - 1) / speed;
                 }
 
                 if (totaltime > h)
