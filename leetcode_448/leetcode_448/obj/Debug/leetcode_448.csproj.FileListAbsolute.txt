@@ -6,3 +6,9 @@ D:\TestFolder\leetcode_448\leetcode_448\bin\Debug\leetcode_448.exe
 D:\TestFolder\leetcode_448\leetcode_448\bin\Debug\leetcode_448.pdb
 D:\TestFolder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.exe
 D:\TestFolder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\bin\Debug\leetcode_448.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\bin\Debug\leetcode_448.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\bin\Debug\leetcode_448.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.csprojResolveAssemblyReference.cache
