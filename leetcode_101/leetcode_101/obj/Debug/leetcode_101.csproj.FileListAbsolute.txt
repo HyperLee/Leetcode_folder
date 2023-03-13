@@ -6,3 +6,9 @@ D:\TestFolder\leetcode_101\leetcode_101\obj\Debug\leetcode_101.csproj.SuggestedB
 D:\TestFolder\leetcode_101\leetcode_101\obj\Debug\leetcode_101.csproj.CoreCompileInputs.cache
 D:\TestFolder\leetcode_101\leetcode_101\obj\Debug\leetcode_101.exe
 D:\TestFolder\leetcode_101\leetcode_101\obj\Debug\leetcode_101.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_101\leetcode_101\bin\Debug\leetcode_101.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_101\leetcode_101\obj\Debug\leetcode_101.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_101\leetcode_101\obj\Debug\leetcode_101.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_101\leetcode_101\bin\Debug\leetcode_101.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_101\leetcode_101\bin\Debug\leetcode_101.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_101\leetcode_101\obj\Debug\leetcode_101.csprojResolveAssemblyReference.cache
