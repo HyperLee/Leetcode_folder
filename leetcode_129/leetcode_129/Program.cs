@@ -22,7 +22,7 @@ namespace leetcode_129
         }
 
         /// <summary>
-        /// leetcode 129. Sum Root to Leaf Numbers\
+        /// leetcode 129. Sum Root to Leaf Numbers
         /// https://leetcode.com/problems/sum-root-to-leaf-numbers/
         /// 求根节点到叶节点数字之和
         /// https://leetcode.cn/problems/sum-root-to-leaf-numbers/
@@ -30,6 +30,17 @@ namespace leetcode_129
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            TreeNode tree = new TreeNode(4);
+
+            tree.left = new TreeNode(9);
+            tree.left.left = new TreeNode(5);
+            tree.left.right = new TreeNode(1);
+
+            tree.right = new TreeNode(0);
+
+            Console.WriteLine(SumNumbers(tree));
+            Console.ReadKey();
+
         }
 
         /// <summary>
@@ -38,7 +49,7 @@ namespace leetcode_129
         /// </summary>
         /// <param name="root"></param>
         /// <returns></returns>
-        public int SumNumbers(TreeNode root)
+        public static int SumNumbers(TreeNode root)
         {
             return dfs(root, 0);
         }
@@ -55,7 +66,7 @@ namespace leetcode_129
         /// <param name="root"></param>
         /// <param name="prevSum"></param>
         /// <returns></returns>
-        public int dfs(TreeNode root, int prevSum)
+        public static int dfs(TreeNode root, int prevSum)
         {
             if (root == null)
             {
