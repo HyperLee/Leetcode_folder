@@ -11,4 +11,6 @@ D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\obj\Debug\leetcode_
 D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.pdb
 D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\bin\Debug\leetcode_448.exe
 D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\bin\Debug\leetcode_448.pdb
-D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.csprojResolveAssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.csproj.SuggestedBindingRedirects.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_448\leetcode_448\obj\Debug\leetcode_448.csproj.CoreCompileInputs.cache
