@@ -18,7 +18,7 @@ namespace leetcode_605
         static void Main(string[] args)
         {
             int[] flow = new int[] { 1, 0, 0, 0, 1 };
-            int n = 2;
+            int n = 1;
 
             Console.WriteLine(CanPlaceFlowers2(flow, n));
             Console.ReadKey();
@@ -139,6 +139,13 @@ namespace leetcode_605
 
                     // 根据规则，下个位置不能种花，直接跳到下下个位置
                     i += 2;
+                }
+
+                // 當n <= 0 代表結束, 不用跑完 flowerbed.Length
+                // 提早結束用意
+                if (n <= 0)
+                {
+                    return true;
                 }
             }
 
