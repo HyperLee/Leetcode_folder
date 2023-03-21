@@ -1,8 +1,6 @@
 D:\Leetcode_folder\Leetcode_folder\leetcode_605\leetcode_605\bin\Debug\leetcode_605.exe.config
 D:\Leetcode_folder\Leetcode_folder\leetcode_605\leetcode_605\bin\Debug\leetcode_605.exe
 D:\Leetcode_folder\Leetcode_folder\leetcode_605\leetcode_605\bin\Debug\leetcode_605.pdb
-D:\Leetcode_folder\Leetcode_folder\leetcode_605\leetcode_605\obj\Debug\leetcode_605.csproj.AssemblyReference.cache
-D:\Leetcode_folder\Leetcode_folder\leetcode_605\leetcode_605\obj\Debug\leetcode_605.csproj.SuggestedBindingRedirects.cache
-D:\Leetcode_folder\Leetcode_folder\leetcode_605\leetcode_605\obj\Debug\leetcode_605.csproj.CoreCompileInputs.cache
 D:\Leetcode_folder\Leetcode_folder\leetcode_605\leetcode_605\obj\Debug\leetcode_605.exe
 D:\Leetcode_folder\Leetcode_folder\leetcode_605\leetcode_605\obj\Debug\leetcode_605.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_605\leetcode_605\obj\Debug\leetcode_605.csprojResolveAssemblyReference.cache
