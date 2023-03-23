@@ -17,7 +17,7 @@ namespace leetcode_055
         {
             int[] num = new int[] { 2, 3, 1, 1, 4 };
 
-            Console.WriteLine(CanJump(num));
+            Console.WriteLine(CanJump2(num));
             Console.ReadKey();
         }
 
