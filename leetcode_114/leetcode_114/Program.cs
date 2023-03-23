@@ -25,6 +25,7 @@ namespace leetcode_114
         /// leetcode 114 Flatten Binary Tree to Linked List
         /// 二叉树展开为链表
         /// https://leetcode.com/problems/flatten-binary-tree-to-linked-list/
+        /// 
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -40,6 +41,10 @@ namespace leetcode_114
 
         /// <summary>
         ///  Preorder traversal (前序遍歷) 需先拜訪父節點再拜訪左右子節點。
+        ///  
+        /// 对于每个结点，将其左子结点指针设为 null，
+        /// 将其右子结点指针设为前序遍历顺序的后一个结点
+        /// ，其中前序遍历顺序的最后一个结点的右子结点指针也设为 null。
         /// </summary>
         /// <param name="root"></param>
         public static void Flatten(TreeNode root)
@@ -58,7 +63,7 @@ namespace leetcode_114
                 prev.left = null;
                 prev.right = curr;
 
-                //Console.WriteLine(prev.val.ToString());
+                Console.WriteLine(curr.val.ToString());
             }
 
             //foreach (var a in list)
