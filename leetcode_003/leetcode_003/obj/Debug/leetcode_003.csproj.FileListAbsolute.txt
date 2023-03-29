@@ -6,3 +6,11 @@ D:\TestFolder\leetcode_003\leetcode_003\obj\Debug\leetcode_003.csproj.SuggestedB
 D:\TestFolder\leetcode_003\leetcode_003\obj\Debug\leetcode_003.csproj.CoreCompileInputs.cache
 D:\TestFolder\leetcode_003\leetcode_003\obj\Debug\leetcode_003.exe
 D:\TestFolder\leetcode_003\leetcode_003\obj\Debug\leetcode_003.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_003\leetcode_003\bin\Debug\leetcode_003.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_003\leetcode_003\bin\Debug\leetcode_003.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_003\leetcode_003\bin\Debug\leetcode_003.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_003\leetcode_003\obj\Debug\leetcode_003.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_003\leetcode_003\obj\Debug\leetcode_003.csproj.SuggestedBindingRedirects.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_003\leetcode_003\obj\Debug\leetcode_003.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_003\leetcode_003\obj\Debug\leetcode_003.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_003\leetcode_003\obj\Debug\leetcode_003.pdb
