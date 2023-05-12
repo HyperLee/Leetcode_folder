@@ -1,0 +1,8 @@
+D:\Leetcode_folder\Leetcode_folder\leetcode_1498\leetcode_1498\bin\Debug\leetcode_1498.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_1498\leetcode_1498\bin\Debug\leetcode_1498.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_1498\leetcode_1498\bin\Debug\leetcode_1498.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_1498\leetcode_1498\obj\Debug\leetcode_1498.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_1498\leetcode_1498\obj\Debug\leetcode_1498.csproj.SuggestedBindingRedirects.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_1498\leetcode_1498\obj\Debug\leetcode_1498.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_1498\leetcode_1498\obj\Debug\leetcode_1498.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_1498\leetcode_1498\obj\Debug\leetcode_1498.pdb
