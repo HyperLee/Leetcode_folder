@@ -96,5 +96,39 @@ namespace leetcode_1721
 
         }
 
+
+        /// <summary>
+        /// 方法2 雙指針
+        /// https://leetcode.cn/problems/swapping-nodes-in-a-linked-list/solution/1721-jiao-huan-lian-biao-zhong-de-jie-di-0pd9/
+        /// </summary>
+        /// <param name="head"></param>
+        /// <param name="k"></param>
+        /// <returns></returns>
+        public static ListNode SwapNodes2(ListNode head, int k)
+        {
+            ListNode node1 = head;
+
+            // node1找出第k個位置
+            for(int i = 1; i < k; i++)
+            {
+                node1 = node1.next;
+            }
+
+            // node2 找出倒數第k個位置, node2與temp相距k個位置
+            // temp走道null位置,此時node2 即為倒數第k位置
+            ListNode node2 = head, temp = node1.next;
+            while(temp != null)
+            {
+                node2 = node2.next;
+                temp = temp.next;
+            }
+
+            int val1 = node1.val, val2 = node2.val;
+            node1.val = val2;
+            node2.val = val1;
+
+            return head;
+        }
+
     }
 }
