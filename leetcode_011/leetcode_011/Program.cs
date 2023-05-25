@@ -36,15 +36,17 @@ namespace leetcode_011
         /// =>要取Min, 如果是Max會造成水位溢出
         /// 因兩邊不等高. 水當然會溢出.
         /// 兩邊高度一致水位才不會溢出
+        /// 
+        /// (right - left) 是為了找出面積 底長
         /// </summary>
         /// <param name="height"></param>
         /// <returns></returns>
         public static int MaxArea(int[] height)
         {
-            int length = height.Length;
-            int left = 0;
-            int right = length - 1;
-            int max = 0;
+            int length = height.Length; // 輸入之height總數量(筆數)
+            int left = 0; // 左邊 index
+            int right = length - 1; // 右邊 index, index: 0開始
+            int max = 0; // 最大儲存量
 
             while (left < right)
             {
@@ -53,14 +55,18 @@ namespace leetcode_011
                 int area = Math.Min(height[left], height[right]) * (right - left);
                 // 找出最大面積
                 max = Math.Max(max, area);
-                
+
                 //濃縮寫法
                 //max = Math.Max(max, Math.Min(height[left], height[right]) * (right - left));
 
                 if (height[left] < height[right])
+                {
                     left++;
+                }
                 else
+                {
                     right--;
+                }
             }
             return max;
         }
