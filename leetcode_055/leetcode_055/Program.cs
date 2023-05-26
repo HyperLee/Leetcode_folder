@@ -78,22 +78,27 @@ namespace leetcode_055
         {
             int length = nums.Length;
             if (length == 0)
+            {
                 return false;
+            }
 
             int max = 0;
             for (int i = 0; i < length; i++)
             {
                 if (i > max)
                 {
+                    // 走不完, false
                     return false;
                 }
                 if (max > length)
                 {
+                    // 提早走完, return
                     return true;
                 }
                 max = Math.Max(max, nums[i] + i);
             }
 
+            // 走到array最後才走完 return
             return true;
         }
 
