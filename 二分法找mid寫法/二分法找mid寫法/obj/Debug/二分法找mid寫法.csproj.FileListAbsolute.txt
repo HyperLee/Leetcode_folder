@@ -1,8 +1,0 @@
-D:\Leetcode_folder\Leetcode_folder\二分法找mid寫法\二分法找mid寫法\bin\Debug\二分法找mid寫法.exe.config
-D:\Leetcode_folder\Leetcode_folder\二分法找mid寫法\二分法找mid寫法\bin\Debug\二分法找mid寫法.exe
-D:\Leetcode_folder\Leetcode_folder\二分法找mid寫法\二分法找mid寫法\bin\Debug\二分法找mid寫法.pdb
-D:\Leetcode_folder\Leetcode_folder\二分法找mid寫法\二分法找mid寫法\obj\Debug\二分法找mid寫法.csproj.AssemblyReference.cache
-D:\Leetcode_folder\Leetcode_folder\二分法找mid寫法\二分法找mid寫法\obj\Debug\二分法找mid寫法.csproj.SuggestedBindingRedirects.cache
-D:\Leetcode_folder\Leetcode_folder\二分法找mid寫法\二分法找mid寫法\obj\Debug\二分法找mid寫法.csproj.CoreCompileInputs.cache
-D:\Leetcode_folder\Leetcode_folder\二分法找mid寫法\二分法找mid寫法\obj\Debug\二分法找mid寫法.exe
-D:\Leetcode_folder\Leetcode_folder\二分法找mid寫法\二分法找mid寫法\obj\Debug\二分法找mid寫法.pdb
