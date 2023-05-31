@@ -46,6 +46,8 @@ namespace leetcode_001
                 if (temp.ContainsKey(left))
                 {
                     // temp[left] : temp.Value
+                    // string aa = temp[left].ToString();
+                    // key: nums.Value;  value: nums.index
                     return new int[] { temp[left], i };
                 }
                 if (!temp.ContainsKey(nums[i]))
