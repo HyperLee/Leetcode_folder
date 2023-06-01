@@ -44,6 +44,12 @@ K' z' s; L? p? V' r. L? Y; V! V' S.t? Z' T' Y.s? i? Y! G? r; Y; T! h! K; M.k.U; 
         /// 利用 dic 統計 每個單字 出現 次數
         /// 最後用 OrderByDescending 來排序 大至小
         /// 取出 最大的那一個 唯一解答
+        /// 
+        /// sort:
+        /// https://blog.csdn.net/wint_1996/article/details/118493847
+        /// 
+        /// 從 C# 中的字符串中去除標點符號: 目前沒用到
+        /// https://www.techiedelight.com/zh-tw/strip-punctuations-from-a-string-in-csharp/
         /// </summary>
         /// <param name="paragraph"></param>
         /// <param name="banned"></param>
