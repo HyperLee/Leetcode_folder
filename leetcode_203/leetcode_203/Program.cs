@@ -50,7 +50,9 @@ namespace leetcode_203
         /// <summary>
         /// 遞迴處理
         /// 遇到 head.val == val
-        /// 就直接往下接 head.next
+        /// 就略過自己
+        /// 直接往下接 head.next
+        /// 
         /// 
         /// </summary>
         /// <param name="head"></param>
@@ -65,7 +67,15 @@ namespace leetcode_203
 
             head.next = RemoveElements(head.next, val);
 
-            return head.val == val ? head.next : head;
+            if (head.val == val)
+            {
+                return head.next;
+            }
+            else
+            {
+                return head;
+            }
+
         }
 
     }
