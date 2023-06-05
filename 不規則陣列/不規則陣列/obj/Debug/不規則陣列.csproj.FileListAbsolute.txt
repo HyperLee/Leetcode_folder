@@ -1,0 +1,8 @@
+D:\Leetcode_folder\Leetcode_folder\不規則陣列\不規則陣列\bin\Debug\不規則陣列.exe.config
+D:\Leetcode_folder\Leetcode_folder\不規則陣列\不規則陣列\bin\Debug\不規則陣列.exe
+D:\Leetcode_folder\Leetcode_folder\不規則陣列\不規則陣列\bin\Debug\不規則陣列.pdb
+D:\Leetcode_folder\Leetcode_folder\不規則陣列\不規則陣列\obj\Debug\不規則陣列.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\不規則陣列\不規則陣列\obj\Debug\不規則陣列.csproj.SuggestedBindingRedirects.cache
+D:\Leetcode_folder\Leetcode_folder\不規則陣列\不規則陣列\obj\Debug\不規則陣列.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\不規則陣列\不規則陣列\obj\Debug\不規則陣列.exe
+D:\Leetcode_folder\Leetcode_folder\不規則陣列\不規則陣列\obj\Debug\不規則陣列.pdb
