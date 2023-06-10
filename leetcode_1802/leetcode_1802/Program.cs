@@ -70,6 +70,8 @@ namespace leetcode_1802
 
         /// <summary>
         /// 函数 valid用来判断当前的 nums[index] 对应的 numsSum 是否满足条件。
+        /// numsSumnumsSum 由三部分组成，nums[index]
+        /// ，nums[index] 左边的部分之和，和 nums[index] 右边的部分之和。
         /// </summary>
         /// <param name="mid"></param>
         /// <param name="n"></param>
