@@ -41,10 +41,10 @@ namespace leetcode_1909
             for (int i = 0; i < nums.Length; i++)
             {
                 List<int> list = new List<int>(nums);
-                // 刪除 i 的值, 去Sort_OK測試 是不是遞增
+                // 每一輪刪除第 i 的值, 去 CheckSort 測試 是不是遞增
                 list.RemoveAt(i);
 
-                if (Sort_OK(list))
+                if (CheckSort(list))
                 {
                     return true;
                 }
@@ -54,7 +54,8 @@ namespace leetcode_1909
 
 
         /// <summary>
-        /// 判斷是不是遞增
+        /// 把資料丟進來測試
+        /// 判斷順序是不是遞增
         /// i > i - 1
         /// 
         /// cnt加總要與 list.Count - 1 相同
@@ -62,7 +63,7 @@ namespace leetcode_1909
         /// </summary>
         /// <param name="list"></param>
         /// <returns></returns>
-        public static bool Sort_OK(List<int> list)
+        public static bool CheckSort(List<int> list)
         {
             int cnt = 0;
 
