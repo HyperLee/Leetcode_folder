@@ -25,8 +25,7 @@ namespace leetcode_228
 
 
         /// <summary>
-        /// 目前方法 邊界 也就是 最後一個 會被忽略
-        /// 有bug
+        /// https://leetcode.cn/problems/summary-ranges/solution/shuang-zhi-zhen-100-miao-dong-by-sweetie-7vo6/
         /// </summary>
         /// <param name="nums"></param>
         /// <returns></returns>
@@ -34,36 +33,36 @@ namespace leetcode_228
         public static IList<string> SummaryRanges(int[] nums)
         {
             List<string> list = new List<string>();
+            // i 初始設定 第一個區間的左邊界
+            int i = 0;
 
-            int length = nums.Length;
-            int cnt = 0, end = 0;
-
-            for (int i = 1; i < length; i++)
+            for(int j = 0; j < nums.Length; j++)
             {
-                
-                if (nums[i] - nums[i - 1] == 1)
+                // i固定之後, j在後面跑過一輪. 直到遇到不連續的遞增 nums[j] + 1 != nums[j + 1]
+                // 或是 j 走道輸入資料的最右邊邊界 則當前的區間範圍就是[i, j] 寫入 StringBuilder
+                if ((j + 1 == nums.Length) || (nums[j] + 1 != nums[j + 1]))
                 {
-                    cnt++;
-                    end = i;
-                }
-                else if(cnt > 0)
-                {
-                    int start = i - cnt - 1;
-                    list.Add(nums[start] + "->" + nums[end]);
-                    cnt = 0;
-                }
-                else
-                {
-                    cnt = 0;
-                    list.Add(nums[i].ToString());
-                }
 
+                    StringBuilder sb = new StringBuilder();
+                    sb.Append(nums[i]);
+
+                    if(i != j)
+                    {
+                        sb.Append("->").Append(nums[j]);
+                    }
+
+                    list.Add(sb.ToString());
+                    // 將 i 指向下一個區間的起始點 j + 1當作新的區間左邊界起始位置 (因i~j已經跑過一次)
+                    i = j + 1;
+                }
             }
 
+            
             foreach(var value in list)
             {
                 Console.WriteLine(value.ToString());
             }
+            
 
             return list;
         }
