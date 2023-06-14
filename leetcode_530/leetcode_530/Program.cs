@@ -45,8 +45,8 @@ namespace leetcode_530
 
         /// <summary>
         /// https://leetcode.cn/problems/minimum-distance-between-bst-nodes/solution/gong-shui-san-xie-yi-ti-san-jie-shu-de-s-7r17/
-        /// 朴素解法（DFS）
-        /// 如果不考虑利用二叉搜索树特性的话，一个朴素的做法是将所有节点的 val 存到一个数组中。
+        /// 懶人字串解法（DFS）
+        /// 如果不考虑利用二叉搜索树特性的话，轉成字串的做法是将所有节点的 val 存到一个数组中。
         /// 对数组进行排序，并获取答案。
         /// 将所有节点的 val 存入数组，可以使用 BFS 或者 DFS。
         /// </summary>
