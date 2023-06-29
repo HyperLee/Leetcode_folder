@@ -6,3 +6,11 @@ D:\Leetcode_folder\leetcode_953\leetcode_953\obj\Debug\leetcode_953.csproj.Sugge
 D:\Leetcode_folder\leetcode_953\leetcode_953\obj\Debug\leetcode_953.csproj.CoreCompileInputs.cache
 D:\Leetcode_folder\leetcode_953\leetcode_953\obj\Debug\leetcode_953.exe
 D:\Leetcode_folder\leetcode_953\leetcode_953\obj\Debug\leetcode_953.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_953\leetcode_953\bin\Debug\leetcode_953.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_953\leetcode_953\bin\Debug\leetcode_953.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_953\leetcode_953\bin\Debug\leetcode_953.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_953\leetcode_953\obj\Debug\leetcode_953.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_953\leetcode_953\obj\Debug\leetcode_953.csproj.SuggestedBindingRedirects.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_953\leetcode_953\obj\Debug\leetcode_953.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_953\leetcode_953\obj\Debug\leetcode_953.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_953\leetcode_953\obj\Debug\leetcode_953.pdb
