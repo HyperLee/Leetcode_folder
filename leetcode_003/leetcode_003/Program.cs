@@ -22,7 +22,7 @@ namespace leetcode_003
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string s = "abacd";
+            string s = "abcabcbb";
 
             Console.WriteLine(LengthOfLongestSubstring2(s));
             Console.ReadKey();
@@ -75,6 +75,8 @@ namespace leetcode_003
 
 
         /// <summary>
+        /// 滑動視窗, 左右指針概念
+        /// 
         /// https://leetcode.cn/problems/longest-substring-without-repeating-characters/solution/hua-dong-chuang-kou-cban-by-seerjjj/
         /// https://leetcode.cn/problems/longest-substring-without-repeating-characters/solution/wu-zhong-fu-zi-fu-de-zui-chang-zi-chuan-rqmpw/
         /// https://leetcode.cn/problems/longest-substring-without-repeating-characters/solution/hua-dong-chuang-kou-by-powcai/
@@ -83,6 +85,11 @@ namespace leetcode_003
         /// 如果list集合中没有重覆出现字符，则right不断往右滑即right++并將當前字符添加到集合中
         /// ，如果出现重覆字符則left++缩小窗口。
         /// 直到滿足題目需求
+        /// 
+        /// 從左往右把字母加進去
+        /// 如果遇到相同重複就把最左邊扣除,
+        /// 右邊繼續往前進
+        /// 直到跑完整個輸入字串為止
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
