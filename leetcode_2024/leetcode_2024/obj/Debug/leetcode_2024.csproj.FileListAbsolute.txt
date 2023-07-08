@@ -1,0 +1,8 @@
+D:\Leetcode_folder\Leetcode_folder\leetcode_2024\leetcode_2024\bin\Debug\leetcode_2024.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_2024\leetcode_2024\bin\Debug\leetcode_2024.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_2024\leetcode_2024\bin\Debug\leetcode_2024.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_2024\leetcode_2024\obj\Debug\leetcode_2024.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_2024\leetcode_2024\obj\Debug\leetcode_2024.csproj.SuggestedBindingRedirects.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_2024\leetcode_2024\obj\Debug\leetcode_2024.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_2024\leetcode_2024\obj\Debug\leetcode_2024.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_2024\leetcode_2024\obj\Debug\leetcode_2024.pdb
