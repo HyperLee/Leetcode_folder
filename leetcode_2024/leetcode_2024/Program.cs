@@ -50,12 +50,15 @@ namespace leetcode_2024
         /// 理解這句話,就大概會懂解法用意
         /// 
         /// 帶入 function 的 ch
-        /// 去跟answerkey字串比對, 在滑動視窗[left, right]裡面 ch 數量不能大於 k
-        /// 在這範圍內才可以替換
+        /// 去跟answerkey字串比對, 在滑動視窗[left, right]裡面
+        /// 需要替換的文字數量不能超過 k
+        /// 當超過k 就需要把 left 往左移動
+        /// 找出新的視窗, 
         /// 
-        /// 然後T, F都要各跑一輪
-        /// 跑 CH = 'T' 時候就是有多少F可以替換
-        /// 反之如此
+        /// T 與 F 都要各跑過一輪
+        /// 找出兩者之間最大著
+        /// 即為答案
+        /// 
         /// </summary>
         /// <param name="answerKey"></param>
         /// <param name="k"></param>
@@ -84,6 +87,7 @@ namespace leetcode_2024
                     left++;
                 }
 
+                // 找出 滑動窗口 最大長度
                 ans = Math.Max(ans, right - left + 1);
             }
 
