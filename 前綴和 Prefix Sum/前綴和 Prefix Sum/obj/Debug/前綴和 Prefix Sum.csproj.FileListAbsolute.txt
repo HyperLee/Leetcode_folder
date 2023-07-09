@@ -1,0 +1,8 @@
+D:\Leetcode_folder\Leetcode_folder\前綴和 Prefix Sum\前綴和 Prefix Sum\bin\Debug\前綴和 Prefix Sum.exe.config
+D:\Leetcode_folder\Leetcode_folder\前綴和 Prefix Sum\前綴和 Prefix Sum\bin\Debug\前綴和 Prefix Sum.exe
+D:\Leetcode_folder\Leetcode_folder\前綴和 Prefix Sum\前綴和 Prefix Sum\bin\Debug\前綴和 Prefix Sum.pdb
+D:\Leetcode_folder\Leetcode_folder\前綴和 Prefix Sum\前綴和 Prefix Sum\obj\Debug\前綴和 Prefix Sum.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\前綴和 Prefix Sum\前綴和 Prefix Sum\obj\Debug\前綴和 Prefix Sum.csproj.SuggestedBindingRedirects.cache
+D:\Leetcode_folder\Leetcode_folder\前綴和 Prefix Sum\前綴和 Prefix Sum\obj\Debug\前綴和 Prefix Sum.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\前綴和 Prefix Sum\前綴和 Prefix Sum\obj\Debug\前綴和 Prefix Sum.exe
+D:\Leetcode_folder\Leetcode_folder\前綴和 Prefix Sum\前綴和 Prefix Sum\obj\Debug\前綴和 Prefix Sum.pdb
