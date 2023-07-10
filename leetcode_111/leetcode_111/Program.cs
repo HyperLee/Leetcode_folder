@@ -56,24 +56,25 @@ namespace leetcode_111
             {
                 return 0;
             }
-
-            if(root.left == null && root.right == null)
+            // 只有root 沒有左右子樹
+            if (root.left == null && root.right == null)
             {
                 return 1;
             }
 
             int mindepth = int.MaxValue;
-
-            if(root.left != null)
+            // 找出左邊最大
+            if (root.left != null)
             {
                 mindepth = Math.Min(MinDepth(root.left), mindepth);
             }
-
-            if(root.right != null)
+            // 找出右邊最大
+            if (root.right != null)
             {
                 mindepth = Math.Min(MinDepth(root.right), mindepth);
             }
 
+            // +1 上一層
             return mindepth + 1;
 
         }

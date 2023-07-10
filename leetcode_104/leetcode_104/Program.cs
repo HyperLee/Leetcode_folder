@@ -42,7 +42,7 @@ namespace leetcode_104
             root.right.left.val = 7;
 
 
-            Console.WriteLine(MaxDepth(root));
+            Console.WriteLine(MaxDepth2(root));
             Console.ReadKey();
         }
 
@@ -64,6 +64,45 @@ namespace leetcode_104
             if (root == null)
                 return 0;
             return Math.Max(MaxDepth(root.right), MaxDepth(root.left)) + 1;
+        }
+
+
+        /// <summary>
+        /// 方法二,
+        /// 參考 leetcode_111 Minimum Depth of Binary Tree
+        /// 修改而來
+        /// 
+        /// </summary>
+        /// <param name="root"></param>
+        /// <returns></returns>
+
+        public static int MaxDepth2(TreeNode root)
+        {
+            if (root == null)
+            {
+                return 0;
+            }
+
+            // 只有root 沒有左右子樹
+            if (root.left == null && root.right == null)
+            {
+                return 1;
+            }
+
+            int mindepth = int.MinValue;
+            // 找出左邊最大
+            if (root.left != null)
+            {
+                mindepth = Math.Max(MaxDepth2(root.left), mindepth);
+            }
+            // 找出右邊最大
+            if (root.right != null)
+            {
+                mindepth = Math.Max(MaxDepth2(root.right), mindepth);
+            }
+
+            // +1 上一層
+            return mindepth + 1;
         }
 
 
