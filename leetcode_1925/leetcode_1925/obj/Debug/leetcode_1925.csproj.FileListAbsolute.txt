@@ -1,0 +1,8 @@
+D:\Leetcode_folder\Leetcode_folder\leetcode_1925\leetcode_1925\bin\Debug\leetcode_1925.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_1925\leetcode_1925\bin\Debug\leetcode_1925.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_1925\leetcode_1925\bin\Debug\leetcode_1925.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_1925\leetcode_1925\obj\Debug\leetcode_1925.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_1925\leetcode_1925\obj\Debug\leetcode_1925.csproj.SuggestedBindingRedirects.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_1925\leetcode_1925\obj\Debug\leetcode_1925.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_1925\leetcode_1925\obj\Debug\leetcode_1925.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_1925\leetcode_1925\obj\Debug\leetcode_1925.pdb
