@@ -63,6 +63,14 @@ namespace leetcode_015
                     continue;
                 }
 
+                /* // 需要注意 first > 0 需要寫在前面 否則會 出錯 邊界有問題
+                if (nums[first] == nums[first - 1] && first > 0)
+                {
+                    // 項目7 另外判斷 first 是否已經重複，若重複則跳過此次迴圈，因為答案也會是一樣的
+                    continue;
+                }
+                */
+
                 // second 起始位置在first右邊
                 int second = first + 1;
 
