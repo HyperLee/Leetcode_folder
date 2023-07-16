@@ -59,8 +59,11 @@ namespace leetcode_020
             {
                 Console.WriteLine("string: " + s[i]);
 
-                if (s.Length % 2 == 1)
+                // 長度需要是2的倍數 因為括號是兩個唯一對
+                if (s.Length % 2 != 0)
+                {
                     return false;
+                }
 
                 if (s[i] == '(')
                 {
@@ -76,20 +79,26 @@ namespace leetcode_020
                 }
                 else if (_stack.Count == 0)
                 {
+                    // 剩餘左括號沒有可以配對
                     return false;
                 }
                 else if (s[i] == _stack.Peek())
                 {
+                    // 第一個剛好相符合
                     _stack.Pop();
-                    Console.WriteLine("Loop i:" + i +", pop _stack:" + s[i]);
+                    Console.WriteLine("Loop i:" + i + ", pop _stack:" + s[i]);
                 }
                 else
+                {
                     return false;
+                }
 
             }
 
             if (_stack.Count == 0)
+            {
                 return true;
+            }
 
             return false;
         }

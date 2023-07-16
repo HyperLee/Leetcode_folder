@@ -43,6 +43,7 @@ namespace leetcode_001
             for (int i = 0; i < nums.Length; i++)
             {
                 int left = target - nums[i];
+
                 if (temp.ContainsKey(left))
                 {
                     // temp[left] : temp.Value
@@ -50,6 +51,7 @@ namespace leetcode_001
                     // key: nums.Value;  value: nums.index
                     return new int[] { temp[left], i };
                 }
+
                 if (!temp.ContainsKey(nums[i]))
                 {
                     temp.Add(nums[i], i);

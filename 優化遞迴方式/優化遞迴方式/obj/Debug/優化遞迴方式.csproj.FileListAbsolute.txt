@@ -1,0 +1,8 @@
+D:\Leetcode_folder\Leetcode_folder\優化遞迴方式\優化遞迴方式\bin\Debug\優化遞迴方式.exe.config
+D:\Leetcode_folder\Leetcode_folder\優化遞迴方式\優化遞迴方式\bin\Debug\優化遞迴方式.exe
+D:\Leetcode_folder\Leetcode_folder\優化遞迴方式\優化遞迴方式\bin\Debug\優化遞迴方式.pdb
+D:\Leetcode_folder\Leetcode_folder\優化遞迴方式\優化遞迴方式\obj\Debug\優化遞迴方式.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\優化遞迴方式\優化遞迴方式\obj\Debug\優化遞迴方式.csproj.SuggestedBindingRedirects.cache
+D:\Leetcode_folder\Leetcode_folder\優化遞迴方式\優化遞迴方式\obj\Debug\優化遞迴方式.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\優化遞迴方式\優化遞迴方式\obj\Debug\優化遞迴方式.exe
+D:\Leetcode_folder\Leetcode_folder\優化遞迴方式\優化遞迴方式\obj\Debug\優化遞迴方式.pdb
