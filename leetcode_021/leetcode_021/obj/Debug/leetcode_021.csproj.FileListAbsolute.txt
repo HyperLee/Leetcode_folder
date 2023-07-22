@@ -11,3 +11,10 @@ D:\Leetcode_folder\leetcode_021\leetcode_021\obj\Debug\leetcode_021.csproj.Assem
 D:\Leetcode_folder\leetcode_021\leetcode_021\obj\Debug\leetcode_021.csproj.CoreCompileInputs.cache
 D:\Leetcode_folder\leetcode_021\leetcode_021\obj\Debug\leetcode_021.exe
 D:\Leetcode_folder\leetcode_021\leetcode_021\obj\Debug\leetcode_021.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_021\leetcode_021\bin\Debug\leetcode_021.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_021\leetcode_021\bin\Debug\leetcode_021.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_021\leetcode_021\bin\Debug\leetcode_021.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_021\leetcode_021\obj\Debug\leetcode_021.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_021\leetcode_021\obj\Debug\leetcode_021.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_021\leetcode_021\obj\Debug\leetcode_021.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_021\leetcode_021\obj\Debug\leetcode_021.pdb

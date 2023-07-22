@@ -42,7 +42,7 @@ namespace leetcode_021
             //Console.Write(MergeTwoLists("1,2,4", iList2));
 
             ListNode l1 = new ListNode(1);
-            //l1.next = new ListNode(2);
+            l1.next = new ListNode(2);
             //l1.next.next = new ListNode(3);
             //l1.next.next.next = new ListNode(9);
             //l1.next.next.next.next = new ListNode(9);
@@ -54,7 +54,16 @@ namespace leetcode_021
             //l2.next.next = new ListNode(4);
             //l2.next.next.next = new ListNode(9);
 
-            Console.WriteLine(MergeTwoLists(l1, l2));
+            //Console.WriteLine(MergeTwoLists(l1, l2));
+
+            var res = MergeTwoLists(l1, l2);
+
+            while (res != null)
+            {
+                Console.WriteLine("Ans:" + res.val);
+                res = res.next;
+            }
+
             Console.ReadKey();
 
         }
@@ -68,11 +77,19 @@ namespace leetcode_021
         public static ListNode MergeTwoLists(ListNode l1, ListNode l2)
         {
             if (l1 == null && l2 == null)
+            {
                 return null;
+            }
+
             if (l1 == null)
+            {
                 return l2;
+            }
+
             if (l2 == null)
+            {
                 return l1;
+            }
 
             if (l1.val <= l2.val)
             {
@@ -84,6 +101,7 @@ namespace leetcode_021
                 l2.next = MergeTwoLists(l1, l2.next); // 去比較 l2.next 及 l1 的大小並串接
                 return l2; // 因為 l2 比較小要先串接
             }
+
         }
 
 

@@ -52,11 +52,12 @@ namespace leetcode_387
         public static int FirstUniqChar(string s)
         {
             int[] array = new int[128];
+            // 先把輸入轉成ascii 塞入array裡面
             for (int i = 0; i < s.Length; i++)
             {
                 array[s[i]]++;
             }
-
+            // 從array裡面由0開始找出第一個 次數為1的就是 題目要求
             for (int i = 0; i < s.Length; i++)
             {
                 //int aa = 0;
