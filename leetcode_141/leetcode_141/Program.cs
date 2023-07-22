@@ -57,15 +57,20 @@ namespace leetcode_141
                 {
                     oneStep = oneStep.next;
                     twoStep = twoStep.next.next;
+
                     if (oneStep == twoStep)
+                    {
                         return true;
+                    }
                 }
+
                 return false;
             }
             catch (Exception)
             {
                 return false;
             }
+
         }
 
     }
