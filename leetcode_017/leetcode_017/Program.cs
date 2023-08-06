@@ -82,7 +82,7 @@ namespace leetcode_017
         /// <param name="combination"></param>
         public static void Backtrack(int index, StringBuilder combination)
         {
-            // 組合長度符合digits2長度 就加入
+            // 排列暫存的 組合長度符合digits2長度(題目輸入) 就加入
             if (index == digits2.Length)
             {
                 combinations.Add(combination.ToString());
@@ -97,9 +97,11 @@ namespace leetcode_017
                 // 找出所有可能之組合
                 foreach (char c in letters)
                 {
+                    // 加入排列暫存
                     combination.Append(c);
-                    // 加入之後, 計算下一種之組合, 扣除長度. 
+                    // 加入之後, 計算下一種之組合(index + 1)
                     Backtrack(index + 1, combination);
+                    // , 扣除長度. 
                     combination.Length--;
                 }
 
