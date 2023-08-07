@@ -14,6 +14,8 @@ namespace 不規則陣列
         /// 宣告
         /// 取長度
         /// 以及輸出 方式
+        /// 
+        /// sum: 計算陣列總和
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -34,6 +36,7 @@ namespace 不規則陣列
             // 長度
             //System.Console.WriteLine(input.Length);
 
+            int sum = 0;
             // 輸出 陣列資料
             for (int i = 0; i < input.Length; i++)
             {
@@ -42,10 +45,11 @@ namespace 不規則陣列
                 for (int j = 0; j < input[i].Length; j++)
                 {
                     System.Console.Write("{0}{1}", input[i][j], j == (input[i].Length - 1) ? "" : " ");
+                    sum += input[i][j];
                 }
                 System.Console.WriteLine();
             }
-
+            Console.WriteLine("sum: " + sum);
             Console.ReadKey();
         }
     }
