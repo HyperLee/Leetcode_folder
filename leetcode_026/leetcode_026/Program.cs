@@ -15,7 +15,7 @@ namespace leetcode_026
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] nums = { 1,0};
+            int[] nums = { 1, 1, 2 };
 
             Console.WriteLine(RemoveDuplicates(nums));
             Console.ReadKey();
@@ -24,7 +24,7 @@ namespace leetcode_026
 
 
         /// <summary>
-        /// 定义两个指针 fastfast 和 slowslow 分别为快指针和慢指针，快指针表示遍历数组到达的下标位置，慢指针表示下一
+        /// 定义两个指针 fast 和 slows 分别为快指针和慢指针，快指针表示遍历数组到达的下标位置，慢指针表示下一
         /// 个不同元素要填入的下标位置，初始时两个指针都指向下标 1
         /// 。
         /// https://leetcode.cn/problems/remove-duplicates-from-sorted-array/solution/shan-chu-pai-xu-shu-zu-zhong-de-zhong-fu-tudo/
