@@ -63,10 +63,11 @@ namespace leetcode_088
                 nums1[tail--] = cur;
             }
 
+            Console.Write("method1: ");
             foreach (var s in nums1)
             {
                 //Console.WriteLine(s);
-                Console.Write("method1: " + s + " ");
+                Console.Write(s + ", ");
             }
 
         }
@@ -112,11 +113,10 @@ namespace leetcode_088
             }
 
             Console.WriteLine("");
+            Console.Write("method2: ");
             foreach (var s in nums1)
             {
-                //Console.WriteLine(s);
-                
-                Console.Write("method2: " + s + " ");
+                Console.Write(s + ", ");
             }
         }
 
@@ -137,11 +137,10 @@ namespace leetcode_088
             Array.Sort(nums1);
 
             Console.WriteLine("");
+            Console.Write("method3: ");
             foreach (var s in nums1)
             {
-                //Console.WriteLine(s);
-                
-                Console.Write("method3: " + s + " ");
+                Console.Write(s + ", ");
             }
         }
 
