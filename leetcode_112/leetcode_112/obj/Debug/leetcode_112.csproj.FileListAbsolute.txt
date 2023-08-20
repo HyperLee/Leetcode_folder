@@ -1,0 +1,7 @@
+D:\Leetcode_folder\Leetcode_folder\leetcode_112\leetcode_112\bin\Debug\leetcode_112.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_112\leetcode_112\bin\Debug\leetcode_112.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_112\leetcode_112\bin\Debug\leetcode_112.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_112\leetcode_112\obj\Debug\leetcode_112.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_112\leetcode_112\obj\Debug\leetcode_112.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_112\leetcode_112\obj\Debug\leetcode_112.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_112\leetcode_112\obj\Debug\leetcode_112.pdb
