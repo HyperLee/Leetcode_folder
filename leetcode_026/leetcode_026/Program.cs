@@ -17,7 +17,9 @@ namespace leetcode_026
         {
             int[] nums = { 1, 1, 2 };
 
-            Console.WriteLine(RemoveDuplicates(nums));
+            //Console.WriteLine(RemoveDuplicates(nums));
+            RemoveDuplicates(nums);
+
             Console.ReadKey();
         }
 
@@ -29,6 +31,9 @@ namespace leetcode_026
         /// 。
         /// https://leetcode.cn/problems/remove-duplicates-from-sorted-array/solution/shan-chu-pai-xu-shu-zu-zhong-de-zhong-fu-tudo/
         /// 
+        /// 返回的長度,
+        /// 只需要該長度內不重複即可
+        /// 後續不用理會
         /// </summary>
         /// <param name="nums"></param>
         /// <returns></returns>
@@ -36,11 +41,14 @@ namespace leetcode_026
         public static int RemoveDuplicates(int[] nums)
         {
             int n = nums.Length;
+
             if (n == 0)
             {
                 return 0;
             }
+
             int fast = 1, slow = 1;
+
             while (fast < n)
             {
                 // 说明 nums[fast] 和之前的元素都不同, 不要連續兩個一樣的
@@ -51,6 +59,17 @@ namespace leetcode_026
                 }
                 ++fast;
             }
+
+            Console.WriteLine("長度: " + slow);
+            Console.WriteLine();
+
+            Console.Write("修正後 nums[");
+            foreach (int i in nums) 
+            {
+                Console.Write(i + ", ");
+            }
+            Console.Write("]");
+
             return slow;
         }
 
