@@ -19,12 +19,16 @@ namespace leetcode_080
         static void Main(string[] args)
         {
             int[] input = { 1, 1, 1, 2, 2, 2, 3 };
-            Console.WriteLine(RemoveDuplicates(input));
+            //Console.WriteLine(RemoveDuplicates(input));
+
+            RemoveDuplicates2(input);
+
             Console.ReadKey();
         }
 
 
         /// <summary>
+        /// 網路上神奇解法
         /// 參考
         /// https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/solutions/702970/gong-shui-san-xie-guan-yu-shan-chu-you-x-glnq/
         /// 通用解法 for 保留 k 位數
@@ -62,6 +66,62 @@ namespace leetcode_080
             }
 
             return u;
+        }
+
+
+        /// <summary>
+        /// 官方解法
+        /// https://leetcode.cn/problems/remove-duplicates-from-sorted-array-ii/solutions/702644/shan-chu-pai-xu-shu-zu-zhong-de-zhong-fu-yec2/
+        /// 
+        /// 同樣的數字最多保留兩個,
+        /// 輸入的序列是有排序過的
+        /// 不需要考虑数组中超出新长度后面的元素。
+        /// 
+        /// 我们定义两个指针 slow 和 fast 分别为慢指针和快指针，
+        /// 其中慢指针表示处理出的数组的长度，快指针表示已经检查过的数组的长度
+        /// ，即 nums[fast]表示待检查的第一个元素
+        /// ，nums[slow-1]为上一个应该被保留的元素所移动到的指定位置。
+        /// 
+        /// 請參考類似題目
+        /// Leetcode_026
+        /// Leetcode_027
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <returns></returns>
+        public static int RemoveDuplicates2(int[] nums)
+        {
+            int n = nums.Length;
+            // 最多保留兩個, 距離直接設定2
+            int fast = 2, slow = 2;
+
+            if(n <= 2)
+            {
+                return n;
+            }
+
+            while(fast < n)
+            {
+                // 相同元素最多只能出現兩次 
+                if (nums[slow - 2] != nums[fast])
+                {
+                    // slow從2開始, 請注意
+                    nums[slow] = nums[fast];
+                    slow++;
+                }
+                fast++;
+            }
+
+            Console.WriteLine("長度:" + slow);
+            Console.WriteLine();
+            Console.Write("[");
+            foreach (int x in nums)
+            {
+                Console.Write(x + ", ");
+            }
+            Console.WriteLine("]");
+
+            return slow;
+
         }
 
     }
