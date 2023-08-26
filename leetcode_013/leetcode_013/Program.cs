@@ -36,6 +36,13 @@ namespace leetcode_013
         /// ，則其在字典中的值直接相加，直到迴圈結束。
         /// 最後，返回結果。
         /// 時間複雜度：O(n)
+        /// 
+        /// 要小心羅馬數字有前後問題
+        /// 如下:
+        /// IV: 4  => -=
+        ///  V: 5
+        /// VI: 6  => +=
+        /// 並非像是阿拉伯數字一致性讀取即可, 會出錯
         /// </summary>
         /// <param name="str"></param>
         /// <returns></returns>
@@ -46,6 +53,8 @@ namespace leetcode_013
             for (int i = 0; i < str.Length; ++i)
             {
                 int val = dic[str[i]];
+                // 從第一個字元到倒數第二個字元，每個字元在字典中的值與後一個字元比較
+                // 倒數第二個字元避免邊界溢位 => dic[str[i + 1]]
                 if (i == str.Length - 1 || dic[str[i + 1]] <= dic[str[i]])
                 {
                     res += val;
