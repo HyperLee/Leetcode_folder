@@ -30,6 +30,13 @@ namespace leetcode_049
         /// 
         /// 思路就是弄个字典，把每个字符串排序比较，排序的string作为key
         /// ,值为strs[i]，遍历完strs,在从dic取值
+        /// 
+        /// String.Join:
+        /// https://dotblogs.com.tw/webber18/2020/06/12/154200
+        /// https://ithelp.ithome.com.tw/articles/10105683
+        /// 
+        /// Key: 排序之後的 string str
+        /// value: 排序前的輸入字串 strs[i]
         /// </summary>
         /// <param name="strs"></param>
         /// <returns></returns>
@@ -44,7 +51,9 @@ namespace leetcode_049
                 // 輸入的每個單字 取出然後排序 暫存至str
                 char[] a = strs[i].ToArray();
                 Array.Sort(a);
-                string str = String.Join("", a.Select(x => x.ToString()).ToArray());
+                // 每個 str 用""隔開 唯一組 
+                //string str = String.Join("", a.Select(x => x.ToString()).ToArray());
+                string str = new string(a);
 
                 if (dic.ContainsKey(str))
                 {
@@ -59,20 +68,32 @@ namespace leetcode_049
 
             }
 
-            // 取出所需放入res
+            // 取出value放入res
             foreach (var item in dic.Keys)
             {
                 res.Add(dic[item]);
             }
 
             // CMD輸出
-            foreach(var item in res) 
+            Console.Write("[");
+            foreach (var item in res) 
             {
+                Console.Write("[");
                 for(int i = 0; i < item.Count; i++)
                 {
-                    Console.WriteLine(item[i]);
+                    //Console.Write(item[i] + ", ");
+                    if(i == item.Count - 1)
+                    {
+                        Console.Write(item[i]);
+                    }
+                    else
+                    {
+                        Console.Write(item[i] + ", ");
+                    }
                 }
+                Console.Write("]");
             }
+            Console.Write("]");
 
             return res;
 
