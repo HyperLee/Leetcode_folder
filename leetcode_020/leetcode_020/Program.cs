@@ -42,7 +42,11 @@ namespace leetcode_020
         ///    
         /// 每當遇到一個 左括號 就會期待 一個右括號 組合成一組
         /// 所以遇到一左就push一右 為一組
-        /// 
+        /// 等後續有右括號進來就pop
+        /// 因為括號為偶數
+        /// 故最後 stack.count 為0
+        /// 就代表true 皆為兩兩一組
+        /// 反之false
         /// 
         /// 其他方法可以參考
         /// https://ithelp.ithome.com.tw/articles/10217603
@@ -57,9 +61,9 @@ namespace leetcode_020
             Stack<char> _stack = new Stack<char>();
             for(int i = 0; i < s.Length; i++)
             {
-                Console.WriteLine("string: " + s[i]);
+                Console.WriteLine("string s[i]: " + s[i]);
 
-                // 長度需要是2的倍數 因為括號是兩個唯一對
+                // 長度需要是2的倍數 因為括號是兩個為一對. 必須是偶數
                 if (s.Length % 2 != 0)
                 {
                     return false;
@@ -84,7 +88,8 @@ namespace leetcode_020
                 }
                 else if (s[i] == _stack.Peek())
                 {
-                    // 第一個剛好相符合
+                    // 先前遇到一個左括號, 就push 一個右括號進入stack
+                    // 現在遇到右括號與stack裡面相同, 就pop出去
                     _stack.Pop();
                     Console.WriteLine("Loop i:" + i + ", pop _stack:" + s[i]);
                 }

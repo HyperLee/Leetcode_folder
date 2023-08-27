@@ -22,15 +22,22 @@ namespace leetcode_205
         {
             string s = "egg";
             string t = "add";
-            Console.WriteLine(IsIsomorphic2(s, t));
+            Console.WriteLine(IsIsomorphic(s, t));
             Console.ReadKey();
 
         }
 
 
         /// <summary>
+        /// 此解法非常有趣
+        /// 值得參考學習
+        /// 來源:
         /// https://leetcode.cn/problems/isomorphic-strings/solutions/34208/c-ji-bai-liao-9231-de-ti-jiao-shi-yong-zi-fu-shou-/
+        /// 使用字符首次出现的等价序列
         /// 
+        /// 例子： paper 与 title paper中各字母首次出现下标的序列为: [0, 1, 0, 3, 4]， 
+        /// title中各字母首次出现下标的序列为: [0, 1, 0, 3, 4] 因为下标数组一致，所以
+        /// 两字符串同构。
         /// </summary>
         /// <param name="s"></param>
         /// <param name="t"></param>
@@ -86,6 +93,10 @@ namespace leetcode_205
                 }
                 else
                 {
+                    string _a = t[i].ToString();
+                    string _c = s[i].ToString();
+                    string _b = pairs[s[i]].ToString();
+
                     if (t[i] != pairs[s[i]])
                     {
                         return false;
