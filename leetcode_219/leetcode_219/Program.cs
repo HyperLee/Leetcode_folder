@@ -17,8 +17,8 @@ namespace leetcode_219
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] input = { 1, 0, 1, 1 };
-            int k = 1;
+            int[] input = { 1, 2, 3, 1 };
+            int k = 3;
 
             Console.WriteLine(ContainsNearbyDuplicate(input, k));
             Console.ReadKey();
@@ -33,8 +33,8 @@ namespace leetcode_219
         /// dic1[num]: 取出 dic中num的存放位置是多少
         /// 運算是否小於等於k
         /// 
-        /// 
-        /// 
+        /// key: 輸入的數字
+        /// value: 再nums裡面的位置
         /// </summary>
         /// <param name="nums"></param>
         /// <param name="k"></param>
@@ -48,8 +48,11 @@ namespace leetcode_219
             {
                 int num = nums[i];
 
-                if(dic1.ContainsKey(num) && i - dic1[num] <= k)
+                // 題目要求 nums[i] == nums[j] and  abs(i - j) <= k.
+                if (dic1.ContainsKey(num) && i - dic1[num] <= k)
                 {
+                    // _a: 取出 num 在dic裡面的 value也就是 位置
+                    string _a = dic1[num].ToString();
                     return true;
                 }
 
