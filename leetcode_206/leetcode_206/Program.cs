@@ -31,8 +31,8 @@ namespace leetcode_206
             l1.next.next = new ListNode(3);
             l1.next.next.next = new ListNode(4);
             l1.next.next.next.next = new ListNode(5);
-            l1.next.next.next.next.next = new ListNode(9);
-            l1.next.next.next.next.next.next = new ListNode(77);
+            //l1.next.next.next.next.next = new ListNode(9);
+            //l1.next.next.next.next.next.next = new ListNode(77);
 
             var res = ReverseList(l1);
             while (res != null)
@@ -46,19 +46,23 @@ namespace leetcode_206
 
 
         /// <summary>
+        /// 解法來源:
         /// 本解法為 Iteration
         /// https://ithelp.ithome.com.tw/articles/10225226
         /// 主要是邊找下一個 head node，邊將 head node 串接到新的 LinkedList root 前面，這樣就會是反轉的
         /// 
         /// 另有 Recursion
         /// https://ithelp.ithome.com.tw/articles/10224711
+        /// 
         /// </summary>
         /// <param name="head"></param>
         /// <returns></returns>
         public static ListNode ReverseList(ListNode head)
         {
             if (head == null)
+            {
                 return head;
+            }
 
             ListNode root = null;
             while (head != null)
@@ -66,7 +70,7 @@ namespace leetcode_206
                 ListNode next = head.next;
                 head.next = root;
                 root = head; // 把原先輸入list的head 放到 新的 ListNode root 裡面當root
-                head = next; 
+                head = next; // 第二個node給head 達到交換
             }
             return root; //一次一次找
         }
