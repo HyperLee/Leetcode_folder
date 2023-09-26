@@ -25,7 +25,7 @@ namespace leetcode_316
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string s = "cbacdcbc"; //"cbacdcbc"
+            string s = "bcabc"; //"cbacdcbc"
 
             /* // test code
             var count = new int[26]; // 每個字母最後一次出現的位置
@@ -61,7 +61,10 @@ namespace leetcode_316
         public static string RemoveDuplicateLetters(string s)
         {
             if (string.IsNullOrEmpty(s))
+            {
                 return s;
+            }
+
             var count = new int[26]; // 每個字母最後一次出現的位置
             for (int i = 0; i < s.Length; i++)
             {
@@ -74,7 +77,9 @@ namespace leetcode_316
             {
                 count[s[i] - 'a']--;
                 if (hs.Contains(s[i]))
+                {
                     continue;
+                }   
 
                 // ascii字典順序 有重複 且大的在前面小的在後面, 不是遞增順序狀況 ex: cbacb
                 // 需保证 返回结果的字典序最小（要求不能打乱其他字符的相对位置）使得每个字母只出现一次
