@@ -1,0 +1,7 @@
+D:\Leetcode_folder\Leetcode_folder\leetcode_2038\leetcode_2038\bin\Debug\leetcode_2038.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_2038\leetcode_2038\bin\Debug\leetcode_2038.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_2038\leetcode_2038\bin\Debug\leetcode_2038.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_2038\leetcode_2038\obj\Debug\leetcode_2038.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_2038\leetcode_2038\obj\Debug\leetcode_2038.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_2038\leetcode_2038\obj\Debug\leetcode_2038.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_2038\leetcode_2038\obj\Debug\leetcode_2038.pdb
