@@ -1,0 +1,7 @@
+D:\Leetcode_folder\Leetcode_folder\leetcode_443\leetcode_443\bin\Debug\leetcode_443.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_443\leetcode_443\bin\Debug\leetcode_443.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_443\leetcode_443\bin\Debug\leetcode_443.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_443\leetcode_443\obj\Debug\leetcode_443.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_443\leetcode_443\obj\Debug\leetcode_443.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_443\leetcode_443\obj\Debug\leetcode_443.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_443\leetcode_443\obj\Debug\leetcode_443.pdb
