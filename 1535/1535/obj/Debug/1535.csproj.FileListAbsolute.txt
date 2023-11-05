@@ -1,0 +1,7 @@
+D:\Leetcode_folder\Leetcode_folder\1535\1535\bin\Debug\1535.exe.config
+D:\Leetcode_folder\Leetcode_folder\1535\1535\bin\Debug\1535.exe
+D:\Leetcode_folder\Leetcode_folder\1535\1535\bin\Debug\1535.pdb
+D:\Leetcode_folder\Leetcode_folder\1535\1535\obj\Debug\1535.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\1535\1535\obj\Debug\1535.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\1535\1535\obj\Debug\1535.exe
+D:\Leetcode_folder\Leetcode_folder\1535\1535\obj\Debug\1535.pdb
