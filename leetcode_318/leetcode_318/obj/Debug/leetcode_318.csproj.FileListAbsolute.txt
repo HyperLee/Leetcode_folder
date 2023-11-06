@@ -6,3 +6,10 @@ D:\TestFolder\leetcode_318\leetcode_318\obj\Debug\leetcode_318.csproj.SuggestedB
 D:\TestFolder\leetcode_318\leetcode_318\obj\Debug\leetcode_318.csproj.CoreCompileInputs.cache
 D:\TestFolder\leetcode_318\leetcode_318\obj\Debug\leetcode_318.exe
 D:\TestFolder\leetcode_318\leetcode_318\obj\Debug\leetcode_318.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_318\leetcode_318\bin\Debug\leetcode_318.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_318\leetcode_318\bin\Debug\leetcode_318.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_318\leetcode_318\bin\Debug\leetcode_318.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_318\leetcode_318\obj\Debug\leetcode_318.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_318\leetcode_318\obj\Debug\leetcode_318.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_318\leetcode_318\obj\Debug\leetcode_318.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_318\leetcode_318\obj\Debug\leetcode_318.pdb
