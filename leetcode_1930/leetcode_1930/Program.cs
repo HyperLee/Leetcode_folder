@@ -25,6 +25,7 @@ namespace leetcode_1930
 
 
         /// <summary>
+        /// https://leetcode.cn/problems/unique-length-3-palindromic-subsequences/solutions/869731/c-xun-zhao-hui-wen-guan-jian-huan-shi-yi-264r/
         /// https://leetcode.com/problems/unique-length-3-palindromic-subsequences/solutions/4285483/beats-96-16-easiest-approach-beginner-friendly-explanation/?envType=daily-question&envId=2023-11-14
         /// https://leetcode.cn/problems/unique-length-3-palindromic-subsequences/solutions/870024/chang-du-wei-3-de-bu-tong-hui-wen-zi-xu-21trj/
         /// 說明類似 官方 方法一：枚举两侧的字符
@@ -34,6 +35,23 @@ namespace leetcode_1930
         /// 所以回文會出現在 邊界內
         /// 所以從邊界內去找出子字符串
         /// 計算在範圍內字符串 字符的種類有多少
+        /// 
+        /// 假設前後固定之後, 中間找出來有3種不重複的字符char
+        /// 也就是說 我們可以組合出 3種不同迴文字串
+        /// 例如 題目敘述的 Example 1:
+        /// aabca
+        /// 取出邊界之後會是
+        /// a[abc]a  =>中間三個獨立 不同
+        /// 可以組合出
+        /// 1. aaa
+        /// 2. aba
+        /// 3. aca
+        /// 題目說長度三
+        /// 前後固定
+        /// 中間每次取一種出來即可
+        /// 可以組合出三組不重複子字符串
+        /// 
+        /// 如果還是看不懂可以說看連結說明
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
