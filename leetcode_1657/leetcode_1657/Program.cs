@@ -44,7 +44,8 @@ namespace leetcode_1657
                 return false;
             }
 
-            // 統計 word1的 char
+            // 統計 word1
+            // key: char, Value:char的頻率
             Dictionary<char, int> dic1 = new Dictionary<char, int>();
             foreach(char value in word1.ToCharArray())
             {
@@ -58,7 +59,8 @@ namespace leetcode_1657
                 }
             }
 
-            // 統計 word2的 char
+            // 統計 word2
+            // key: char, Value:char的頻率
             Dictionary<char, int> dic2 = new Dictionary<char, int>();
             foreach (char value in word2.ToCharArray()) 
             {
@@ -86,7 +88,7 @@ namespace leetcode_1657
 
             foreach(var kvp in dic1) 
             {
-                // word1 出現char頻率
+                // word1 char頻率
                 list1.Add(kvp.Value);
             }
 
@@ -95,7 +97,7 @@ namespace leetcode_1657
 
             foreach(var kvp in dic2)
             {
-                // word2 出現char頻率
+                // word2 char頻率
                 list2.Add(kvp.Value);
             }
 
@@ -113,7 +115,7 @@ namespace leetcode_1657
             }
 
             return true;
-
         }
+
     }
 }
