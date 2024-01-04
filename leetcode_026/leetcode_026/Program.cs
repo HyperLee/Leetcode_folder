@@ -54,13 +54,14 @@ namespace leetcode_026
                 // 说明 nums[fast] 和之前的元素都不同, 不要連續兩個一樣的
                 if (nums[fast] != nums[fast - 1])
                 {
+                    // 不重複的數字取代原先出現重複的項目位置
                     nums[slow] = nums[fast];
                     ++slow;
                 }
                 ++fast;
             }
 
-            Console.WriteLine("長度: " + slow);
+            Console.WriteLine("更新後陣列長度: " + slow);
             Console.WriteLine();
 
             Console.Write("修正後 nums[");
