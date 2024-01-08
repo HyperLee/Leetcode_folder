@@ -38,6 +38,7 @@ namespace leetcode_938
         /// 
         /// 按深度优先搜索的顺序计算范围和。记当前子树根节点为 rootroot，分以下四种情况讨论：
         /// 
+        /// 加總範圍內[low, high]節點數值
         /// </summary>
         /// <param name="root"></param>
         /// <param name="low"></param>
@@ -45,18 +46,25 @@ namespace leetcode_938
         /// <returns></returns>
         public static int RangeSumBST(TreeNode root, int low, int high)
         {
+            // root 為空
             if (root == null)
             {
                 return 0;
             }
+
+            // 二元樹右子樹節點值大於左子樹, 所以走左邊
             if (root.val > high)
             {
                 return RangeSumBST(root.left, low, high);
             }
+
+            // 二元樹右子樹節點值大於左子樹, 所以走右邊
             if (root.val < low)
             {
                 return RangeSumBST(root.right, low, high);
             }
+
+            // root.val在[low, high]範圍內,要加上
             return root.val + RangeSumBST(root.left, low, high) + RangeSumBST(root.right, low, high);
         }
 
