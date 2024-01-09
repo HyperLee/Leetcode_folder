@@ -6,3 +6,10 @@ D:\Leetcode_folder\leetcode_872\leetcode_872\obj\Debug\leetcode_872.csproj.Sugge
 D:\Leetcode_folder\leetcode_872\leetcode_872\obj\Debug\leetcode_872.csproj.CoreCompileInputs.cache
 D:\Leetcode_folder\leetcode_872\leetcode_872\obj\Debug\leetcode_872.exe
 D:\Leetcode_folder\leetcode_872\leetcode_872\obj\Debug\leetcode_872.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_872\leetcode_872\bin\Debug\leetcode_872.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_872\leetcode_872\bin\Debug\leetcode_872.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_872\leetcode_872\bin\Debug\leetcode_872.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_872\leetcode_872\obj\Debug\leetcode_872.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_872\leetcode_872\obj\Debug\leetcode_872.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_872\leetcode_872\obj\Debug\leetcode_872.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_872\leetcode_872\obj\Debug\leetcode_872.pdb
