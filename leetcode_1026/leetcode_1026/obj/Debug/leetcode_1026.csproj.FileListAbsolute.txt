@@ -1,0 +1,7 @@
+D:\Leetcode_folder\Leetcode_folder\leetcode_1026\leetcode_1026\obj\Debug\leetcode_1026.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_1026\leetcode_1026\obj\Debug\leetcode_1026.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_1026\leetcode_1026\bin\Debug\leetcode_1026.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_1026\leetcode_1026\bin\Debug\leetcode_1026.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_1026\leetcode_1026\bin\Debug\leetcode_1026.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_1026\leetcode_1026\obj\Debug\leetcode_1026.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_1026\leetcode_1026\obj\Debug\leetcode_1026.pdb
