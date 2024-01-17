@@ -35,50 +35,33 @@ namespace leetcode_1207
         /// <returns></returns>
         public static bool UniqueOccurrences(int[] arr)
         {
-            // 計算每個文字個數
+            // 計算每個文字個數(出現次數)
+            // Key:出現數字, value:arr中出現次數
             Dictionary<int, int> dict = new Dictionary<int, int>();
             foreach (var i in arr)
             {
                 if (!dict.ContainsKey(i))
                 {
+                    // 第一次出現給初始值0, 下一個步驟在累計次數
                     dict.Add(i, 0);
                 }
+
+                // 累加已經出現者次數
                 dict[i]++;
             }
 
             // 統計有沒有重覆
-            var hashSet = new HashSet<int>();
-            foreach (var pair in dict)
+            HashSet<int> hashSet = new HashSet<int>();
+            foreach (KeyValuePair<int, int> pair in dict)
             {
                 if (hashSet.Contains(pair.Value))
                 {
                     return false;
                 }
-                hashSet.Add(pair.Value);
-            }
-            return true;
-        }
 
-        public static bool UniqueOccurrences2(int[] arr)
-        {
-            Dictionary<int, int> dict = new Dictionary<int, int>();
-            foreach (var i in arr)
-            {
-                if (!dict.ContainsKey(i))
-                {
-                    dict.Add(i, 0);
-                }
-                dict[i]++;
-            }
-            var hashSet = new HashSet<int>();
-            foreach (var pair in dict)
-            {
-                if(hashSet.Contains(pair.Value))
-                {
-                    return false;
-                }
                 hashSet.Add(pair.Value);
             }
+
             return true;
         }
 
