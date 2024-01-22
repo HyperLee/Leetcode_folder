@@ -15,7 +15,7 @@ namespace leetcode_645
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] nums = { 1, 2, 2, 4};
+            int[] nums = { 1, 1, 3};
 
             FindErrorNums(nums);
             Console.ReadKey();
@@ -33,44 +33,52 @@ namespace leetcode_645
         /// <returns></returns>
         public static int[] FindErrorNums(int[] nums)
         {
+            // errorNums[0]: 重覆的數字, errorNums[1]: 消失的數字
             int[] errorNums = new int[2];
             int n = nums.Length;
+
+            // Key: 輸入的數字, Value: 該數字出現次數
             Dictionary<int, int> dictionary = new Dictionary<int, int>();
             foreach(int num in nums)
             {
-                // dictionary裡面不存在的 num 就+1
-                // 一開始一定都不存在, add過後就會有相同的存在數出現
+                // dictionary裡面不存在的 num 初始值給 1
                 if (!dictionary.ContainsKey(num))
                 {
                     dictionary.Add(num, 1);
                 }
                 else
                 {
-                    // num在dictionary已經有值就在加1
-                    // dictionary重複該數 + 1
+                    // 已經出現過 num 的就累加次數
                     dictionary[num]++;
                 }
             }
 
-            for(int i = 1; i <=n; i++)
+            for(int i = 1; i <= n; i++)
             {
                 int count = 0;
+
+                // 找出 i 是否存在, 存在輸出true
                 dictionary.TryGetValue(i, out count);
+
                 if(count == 2)
                 {
+                    // 出現兩次代表重覆了
                     errorNums[0] = i;
                 }
                 else if(count == 0)
                 {
+                    // 出現0次代表為 消失的那個數字
                     errorNums[1] = i;
                 }
             }
 
             // print array data
+            Console.Write("[ ");
             foreach (var s in errorNums)
             {
-                Console.WriteLine(s);
+                Console.Write(s + ", ");
             }
+            Console.Write("]");
 
             return errorNums;
 
