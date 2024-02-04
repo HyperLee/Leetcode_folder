@@ -1,0 +1,7 @@
+D:\Leetcode_folder\Leetcode_folder\leetcode_1043\leetcode_1043\bin\Debug\leetcode_1043.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_1043\leetcode_1043\bin\Debug\leetcode_1043.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_1043\leetcode_1043\bin\Debug\leetcode_1043.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_1043\leetcode_1043\obj\Debug\leetcode_1043.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_1043\leetcode_1043\obj\Debug\leetcode_1043.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_1043\leetcode_1043\obj\Debug\leetcode_1043.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_1043\leetcode_1043\obj\Debug\leetcode_1043.pdb
