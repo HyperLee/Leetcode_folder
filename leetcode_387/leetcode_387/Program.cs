@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,8 @@ namespace leetcode_387
             string s = "";
             s = "aaabc";
             Console.WriteLine("Version1: " + FirstUniqChar(s));
-            //Console.WriteLine("Version2: " + FirstUniqChar2(s));
+            Console.WriteLine("Version2: " + FirstUniqChar2(s));
+            Console.WriteLine("Version3: " + FirstUniqChar3(s));
             Console.ReadKey();
         }
 
@@ -97,6 +99,46 @@ namespace leetcode_387
                     return i;
             }
             return -1;
+        }
+
+
+        /// <summary>
+        /// Dictionary
+        /// 
+        /// leetcode上面跑 效能略輸方法1
+        /// 
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public static int FirstUniqChar3(string s)
+        {
+            // key: char, value: index 
+            Dictionary<int, int> dic = new Dictionary<int, int>();
+            for(int i = 0; i < s.Length; i++)
+            {
+                if (dic.ContainsKey(s[i]))
+                {
+                    // -1 就是超過一次
+                    dic[s[i]] = -1;
+                }
+                else
+                {
+                    // 第一次出現 value 給index位置
+                    dic.Add(s[i], i);
+                }
+            }
+
+            foreach (int i in dic.Values)
+            {
+                if(i != -1)
+                {
+                    // 只出現一次index 位置
+                    return i;
+                }
+            }
+
+            return -1;
+
         }
 
 
