@@ -75,7 +75,7 @@ namespace leetcode_049
             }
 
             // CMD輸出
-            Console.Write("[");
+            Console.Write("[ ");
             foreach (var item in res) 
             {
                 Console.Write("[");
@@ -93,7 +93,7 @@ namespace leetcode_049
                 }
                 Console.Write("]");
             }
-            Console.Write("]");
+            Console.Write(" ]");
 
             return res;
 
