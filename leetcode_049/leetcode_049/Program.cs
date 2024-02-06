@@ -43,7 +43,7 @@ namespace leetcode_049
 
         public static IList<IList<string>> GroupAnagrams(string[] strs)
         {
-            var dic = new Dictionary<string, IList<string>>();
+            Dictionary<string, IList<string>> dic = new Dictionary<string, IList<string>>();
             IList<IList<string>> res = new List<IList<string>>();
 
             for (int i = 0; i < strs.Length; i++)
@@ -74,7 +74,7 @@ namespace leetcode_049
                 res.Add(dic[item]);
             }
 
-            // CMD輸出
+            // Console 輸出
             Console.Write("[ ");
             foreach (var item in res) 
             {
