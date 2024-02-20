@@ -6,3 +6,10 @@ D:\TestFolder\leetcode_268\leetcode_268\obj\Debug\leetcode_268.csproj.SuggestedB
 D:\TestFolder\leetcode_268\leetcode_268\obj\Debug\leetcode_268.csproj.CoreCompileInputs.cache
 D:\TestFolder\leetcode_268\leetcode_268\obj\Debug\leetcode_268.exe
 D:\TestFolder\leetcode_268\leetcode_268\obj\Debug\leetcode_268.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_268\leetcode_268\bin\Debug\leetcode_268.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_268\leetcode_268\bin\Debug\leetcode_268.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_268\leetcode_268\bin\Debug\leetcode_268.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_268\leetcode_268\obj\Debug\leetcode_268.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_268\leetcode_268\obj\Debug\leetcode_268.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_268\leetcode_268\obj\Debug\leetcode_268.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_268\leetcode_268\obj\Debug\leetcode_268.pdb
