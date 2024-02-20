@@ -49,9 +49,12 @@ namespace leetcode_590
         /// 590. N 叉树的后序遍历
         /// https://leetcode.cn/problems/n-ary-tree-postorder-traversal/description/?envType=daily-question&envId=Invalid%20Date
         /// 
-        /// 
+        /// 二元樹 binary tree
         /// 後序遍歷 (Postorder Traversal)
         /// 後序遍歷：順序是左子節點、右子節點、根節點，根排在後面。
+        /// 
+        /// N-way tree
+        /// 顺序是先依次递归其 children 数组中的节点（子树），再访问根节点。
         /// 
         /// 類似題目 leetcode_145
         /// 145. Binary Tree Postorder Traversal
@@ -88,12 +91,23 @@ namespace leetcode_590
 
 
         /// <summary>
+        /// 二元樹 binary tree
         /// 後序遍歷 (Postorder Traversal)
         /// 後序遍歷：順序是左子節點、右子節點、根節點，根排在後面。
+        /// 
+        /// N-way tree
+        /// 顺序是先依次递归其 children 数组中的节点（子树），再访问根节点。
         /// 
         /// 每次递归时，先递归访问每个孩子节点，然后再访问根节点即可。
         /// 1. 按照从左到右的顺序，依次对当前结点的每个子树调用递归。
         /// 2. 将当前结点的结点值加入后序遍历序列。
+        /// 
+        /// 
+        /// 這是N-way 不是二元樹
+        /// 所以不是給左右子樹
+        /// 是給 childern
+        /// 跟常見的做法略有差異
+        /// https://leetcode.cn/problems/n-ary-tree-postorder-traversal/solutions/2645191/jian-dan-dfspythonjavacgojs-by-endlessch-ytdk/?envType=daily-question&envId=2024-02-19
         /// 
         /// </summary>
         /// <param name="root"></param>
@@ -105,11 +119,13 @@ namespace leetcode_590
                 return ;
             }
 
-            foreach(Node node in root.children) 
+            // 順序是左子節點、右子節點
+            foreach (Node node in root.children) 
             {
                 PostorderVisit(node, res);
             }
 
+            // 根排在後面。
             res.Add(root.val);
 
         }
