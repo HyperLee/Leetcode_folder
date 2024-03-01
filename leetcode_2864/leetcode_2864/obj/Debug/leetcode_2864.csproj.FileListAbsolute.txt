@@ -1,0 +1,7 @@
+D:\Leetcode_folder\Leetcode_folder\leetcode_2864\leetcode_2864\bin\Debug\leetcode_2864.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_2864\leetcode_2864\bin\Debug\leetcode_2864.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_2864\leetcode_2864\bin\Debug\leetcode_2864.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_2864\leetcode_2864\obj\Debug\leetcode_2864.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_2864\leetcode_2864\obj\Debug\leetcode_2864.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_2864\leetcode_2864\obj\Debug\leetcode_2864.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_2864\leetcode_2864\obj\Debug\leetcode_2864.pdb
