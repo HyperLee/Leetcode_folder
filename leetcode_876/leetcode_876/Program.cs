@@ -21,9 +21,13 @@ namespace leetcode_876
 
 
         /// <summary>
-        /// leetcode 876
+        /// 876. Middle of the Linked List
         /// https://leetcode.com/problems/middle-of-the-linked-list/
+        /// 876. 链表的中间结点
+        /// https://leetcode.cn/problems/middle-of-the-linked-list/description/
         /// 
+        /// 輸出中間節點往後的node資料
+        /// 如果中間節點有兩個 那就輸出後面那一個開始
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -33,7 +37,13 @@ namespace leetcode_876
             listNode.next.next = new ListNode(3);
             listNode.next.next.next = new ListNode(4);
 
-            Console.WriteLine(MiddleNode2(listNode));
+            //Console.WriteLine(MiddleNode(listNode));
+            var res = MiddleNode2(listNode);
+            while (res != null)
+            {
+                Console.WriteLine("Ans:" + res.val);
+                res = res.next;
+            }
             Console.ReadKey();
         }
 
