@@ -6,3 +6,10 @@ D:\Leetcode_folder\leetcode_452\leetcode_452\obj\Debug\leetcode_452.csproj.Sugge
 D:\Leetcode_folder\leetcode_452\leetcode_452\obj\Debug\leetcode_452.csproj.CoreCompileInputs.cache
 D:\Leetcode_folder\leetcode_452\leetcode_452\obj\Debug\leetcode_452.exe
 D:\Leetcode_folder\leetcode_452\leetcode_452\obj\Debug\leetcode_452.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_452\leetcode_452\bin\Debug\leetcode_452.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_452\leetcode_452\bin\Debug\leetcode_452.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_452\leetcode_452\bin\Debug\leetcode_452.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_452\leetcode_452\obj\Debug\leetcode_452.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_452\leetcode_452\obj\Debug\leetcode_452.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_452\leetcode_452\obj\Debug\leetcode_452.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_452\leetcode_452\obj\Debug\leetcode_452.pdb
