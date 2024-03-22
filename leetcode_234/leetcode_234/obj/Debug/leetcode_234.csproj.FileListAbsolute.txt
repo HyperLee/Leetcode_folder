@@ -11,3 +11,10 @@ D:\Leetcode_folder\leetcode_234\leetcode_234\bin\Debug\leetcode_234.exe
 D:\Leetcode_folder\leetcode_234\leetcode_234\bin\Debug\leetcode_234.pdb
 D:\Leetcode_folder\leetcode_234\leetcode_234\obj\Debug\leetcode_234.csproj.AssemblyReference.cache
 D:\Leetcode_folder\leetcode_234\leetcode_234\obj\Debug\leetcode_234.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_234\leetcode_234\bin\Debug\leetcode_234.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_234\leetcode_234\bin\Debug\leetcode_234.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_234\leetcode_234\bin\Debug\leetcode_234.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_234\leetcode_234\obj\Debug\leetcode_234.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_234\leetcode_234\obj\Debug\leetcode_234.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_234\leetcode_234\obj\Debug\leetcode_234.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_234\leetcode_234\obj\Debug\leetcode_234.pdb

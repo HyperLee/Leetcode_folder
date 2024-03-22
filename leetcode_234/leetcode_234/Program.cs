@@ -30,7 +30,7 @@ namespace leetcode_234
             ListNode l1 = new ListNode(1);
             l1.next = new ListNode(2);
             l1.next.next = new ListNode(2);
-            l1.next.next.next = new ListNode(1);
+            l1.next.next.next = new ListNode(3);
             //l1.next.next.next.next = new ListNode(9);
             //l1.next.next.next.next.next = new ListNode(9);
             //l1.next.next.next.next.next.next = new ListNode(9);
@@ -66,21 +66,31 @@ namespace leetcode_234
         public static  bool IsPalindrome(ListNode head)
         {
             if (head == null)
+            {
                 return true;
+            }
 
             if (realHead == null)
+            {
                 realHead = head;
+            }
 
             bool result = true;
 
             if (head.next != null)
+            {
                 result = result & IsPalindrome(head.next);
+            }
 
             if (isCrossed)
+            {
                 return result;
+            }
 
             if (head == realHead || realHead.next == head)
+            {
                 isCrossed = true;
+            }
 
             result = result & (head.val == realHead.val);
             realHead = realHead.next;
@@ -109,7 +119,7 @@ namespace leetcode_234
         {
             List<int> vals = new List<int>();
 
-            // 将链表的值复制到数组中
+            // 把linklist的數值複製到 vals中
             ListNode currentNode = head;
             while (currentNode != null)
             {
@@ -117,8 +127,10 @@ namespace leetcode_234
                 currentNode = currentNode.next;
             }
 
-            // 使用双指针判断是否回文
+            // 使用雙指針判斷是不是廻文
+            // 左邊; 先加入 list的元素
             int front = 0;
+            // 右邊; 後加入 list元素
             int back = vals.Count - 1;
             while (front < back)
             {
@@ -126,7 +138,10 @@ namespace leetcode_234
                 {
                     return false;
                 }
+
+                // 往左比對
                 front++;
+                // 往右比對
                 back--;
             }
             return true;
