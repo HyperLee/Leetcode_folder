@@ -11,6 +11,8 @@ namespace leetcode_287
         /// <summary>
         /// leetcode 287 Find the Duplicate Number
         /// https://leetcode.com/problems/find-the-duplicate-number/
+        /// 287. 寻找重复数
+        /// https://leetcode.cn/problems/find-the-duplicate-number/description/
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -31,20 +33,17 @@ namespace leetcode_287
         /// <returns></returns>
         public static int FindDuplicate(int[] nums)
         {
-            if(nums == null || nums.Length == 0)
-                return -1;
-
-            if(nums.Length == 1)
-                return nums[0];
-
             Array.Sort(nums);
+
             for(int i = 1; i < nums.Length; i++)
             {
                 if (nums[i] == nums[i - 1])
                 {
+                    // 回傳 array中該位置的數值, 不是index
                     return nums[i];
                 }
             }
+
             return -1;
 
         }
