@@ -25,7 +25,13 @@
         /// https://leetcode.cn/problems/subarray-product-less-than-k/solutions/1463527/cheng-ji-xiao-yu-k-de-zi-shu-zu-by-leetc-92wl/
         /// https://leetcode.cn/problems/subarray-product-less-than-k/solutions/1732841/by-stormsunshine-628t/
         /// 
-        /// [start, end] => 把這視窗(範圍)持續往右走, 找出新的組合
+        /// [start, end] => 把這整個視窗(範圍)持續往右走, 找出新的組合(範圍)
+        /// 概念: 整個視窗(範圍)會往右邊走(滑動)
+        /// end往右就是 加入新的element 乘積必須乘上新的element
+        /// 同時需要考慮題目條件, 
+        /// 乘積不能大於等於k
+        /// 所以當發現大於等於時候
+        /// start必須往右走, 也就是移除element 做除法運算
         /// 
         /// end一直往右走, 表示將乘積變大
         /// 當發現乘積超過 k
