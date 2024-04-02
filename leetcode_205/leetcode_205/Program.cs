@@ -20,8 +20,8 @@ namespace leetcode_205
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string s = "egg";
-            string t = "add";
+            string s = "paper";
+            string t = "title";
             Console.WriteLine(IsIsomorphic(s, t));
             Console.ReadKey();
 
@@ -33,11 +33,19 @@ namespace leetcode_205
         /// 值得參考學習
         /// 來源:
         /// https://leetcode.cn/problems/isomorphic-strings/solutions/34208/c-ji-bai-liao-9231-de-ti-jiao-shi-yong-zi-fu-shou-/
+        /// https://leetcode.cn/problems/isomorphic-strings/solutions/25596/tong-guo-pan-ding-shou-ci-chu-xian-de-xia-biao-shu/
+        /// 
         /// 使用字符首次出现的等价序列
         /// 
-        /// 例子： paper 与 title paper中各字母首次出现下标的序列为: [0, 1, 0, 3, 4]， 
-        /// title中各字母首次出现下标的序列为: [0, 1, 0, 3, 4] 因为下标数组一致，所以
-        /// 两字符串同构。
+        /// 例子： 
+        /// 統計s與t每個字母出現的下標拿出來比對
+        /// paper中p首次出现下标为0，a为1，e为3，r为4，则paper转为[0, 1, 0, 3, 4]
+        /// title中t首次出现下标为0，i为1，l为3，e为4，则title转为[0, 1, 0, 3, 4]
+        /// 因为下标数组一致，所以双方同构
+        /// 
+        /// 儲存s與t兩個字串中
+        /// 每一個字母出現的 下標
+        /// 
         /// </summary>
         /// <param name="s"></param>
         /// <param name="t"></param>
@@ -65,6 +73,8 @@ namespace leetcode_205
 
         /// <summary>
         /// https://leetcode.cn/problems/isomorphic-strings/solutions/537648/shi-yong-cde-dictionarygou-zao-zi-fu-zhi-ot8u/
+        /// 
+        /// https://leetcode.cn/problems/isomorphic-strings/solutions/1458480/by-stormsunshine-ujbm/
         /// 參考別人
         /// 
         /// 我自己的有點問題
