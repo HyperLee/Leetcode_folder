@@ -9,9 +9,9 @@ namespace leetcode_020
     class Program
     {
         /// <summary>
-        /// leetcode 20
+        /// 20. Valid Parentheses
         /// https://leetcode.com/problems/valid-parentheses/
-        /// 有效的括号
+        /// 20. 有效的括号
         /// https://leetcode.cn/problems/valid-parentheses/
         /// </summary>
         /// <param name="args"></param>
@@ -59,15 +59,16 @@ namespace leetcode_020
         public static bool IsValid(string s)
         {
             Stack<char> _stack = new Stack<char>();
-            for(int i = 0; i < s.Length; i++)
-            {
-                Console.WriteLine("string s[i]: " + s[i]);
 
-                // 長度需要是2的倍數 因為括號是兩個為一對. 必須是偶數
-                if (s.Length % 2 != 0)
-                {
-                    return false;
-                }
+            // 長度需要是2的倍數 因為括號是兩個為一對. 必須是偶數
+            if (s.Length % 2 != 0)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                //Console.WriteLine("string s[i]: " + s[i]);
 
                 if (s[i] == '(')
                 {
@@ -91,7 +92,7 @@ namespace leetcode_020
                     // 先前遇到一個左括號, 就push 一個右括號進入stack
                     // 現在遇到右括號與stack裡面相同, 就pop出去
                     _stack.Pop();
-                    Console.WriteLine("Loop i:" + i + ", pop _stack:" + s[i]);
+                    //Console.WriteLine("Loop i:" + i + ", pop _stack:" + s[i]);
                 }
                 else
                 {
@@ -100,6 +101,7 @@ namespace leetcode_020
 
             }
 
+            // 為0 代表 全部括號 都是合法的
             if (_stack.Count == 0)
             {
                 return true;
