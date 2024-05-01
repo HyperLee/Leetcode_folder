@@ -28,12 +28,11 @@ namespace leetcode_2000
         /// <summary>
         /// 1. 先取出 第一個 ch的位置
         /// 2. 反轉原先字串
-        /// 3. 把ch之後的文字接回去
+        /// 3. 把ch之後的文字接回去(從ch下一個文字開始, 直到字串結尾)
         /// </summary>
         /// <param name="word"></param>
         /// <param name="ch"></param>
         /// <returns></returns>
-
         public static string ReversePrefix(string word, char ch)
         {
             int tempi = -1;
@@ -68,6 +67,16 @@ namespace leetcode_2000
 
         /// <summary>
         /// https://leetcode.cn/problems/reverse-prefix-of-word/solution/fan-zhuan-dan-ci-qian-zhui-by-leetcode-s-ruaj/
+        /// 
+        /// 直接反轉,
+        /// 首先找出第一個char的位置
+        /// 找到之後 從index = 0 開始 反轉到 char 位置
+        /// 後續就直接接上
+        /// 
+        /// 
+        /// 上面方法1 是分兩階段擷取與組合
+        /// 本方法2, 只需要從index 0 開始 到 index char 位置 反轉而已
+        /// 不需要分兩階段擷取計算長度
         /// 
         /// </summary>
         /// <param name="word"></param>
