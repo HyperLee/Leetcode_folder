@@ -13,14 +13,18 @@ namespace leetcode_070
         /// https://leetcode.com/problems/climbing-stairs/submissions/
         /// 70. 爬楼梯
         /// https://leetcode.cn/problems/climbing-stairs/
+        /// 
+        /// 本題目推薦, 解法三
+        /// 易懂好寫
+        /// 類似fibonacci 優化解法
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
             int n = 3;
-            Console.WriteLine("total step:" + ClimbStairs(n));
-            Console.WriteLine("total step:" + ClimbStairs2(n));
-            Console.WriteLine("total step:" + ClimbStairs3(n));
+            Console.WriteLine("Method1, total step:" + ClimbStairs(n));
+            Console.WriteLine("Method2, total step:" + ClimbStairs2(n));
+            Console.WriteLine("Method3, total step:" + ClimbStairs3(n));
             Console.ReadKey();
         }
 
@@ -88,6 +92,11 @@ namespace leetcode_070
         }
 
 
+        /// <summary>
+        /// 遞迴
+        /// </summary>
+        /// <param name="n"></param>
+        /// <returns></returns>
         public static int ClimbStairs2(int n)
         {
             {
@@ -107,6 +116,13 @@ namespace leetcode_070
         /// 在 n 非常大時候 比較明顯
         /// 也比單純公式推理簡單
         /// 
+        /// 此方法原先用來解fibonacci
+        /// 也可以用來這題目使用
+        /// 類似情境
+        /// 
+        /// 要小心迴圈計算開始位置
+        /// i從2開始, 如果從3開始就會計算不到3的答案了
+        /// 迴圈是從前一個開始計算
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
@@ -125,6 +141,8 @@ namespace leetcode_070
             int result = 0;
             int pre = 1;
             int next = 2;
+
+            // i從2開始, 需要注意
             for (int i = 2; i < n; i++)
             {
                 result = pre + next;
