@@ -85,7 +85,7 @@
         /// 思路二：
         /// https://leetcode.cn/problems/subsets/solutions/7683/er-jin-zhi-wei-zhu-ge-mei-ju-dfssan-chong-si-lu-9c/
         /// 
-        /// 空集合是所有集合的 子集合的一種
+        /// 務必注意: 空集合是所有集合的 子集合的一種
         /// 
         /// 一開始先創建一個 List 裡面只加入 一個空集合
         /// 再來去遍歷輸入的nums
@@ -94,8 +94,8 @@
         /// temp加入新的元素,
         /// 然後 res再加入temp
         /// 
-        /// 簡單說就是在原先的集合中, 每輪加入一個新的num
-        /// 就會把原先集合多增加一個元素 擴大
+        /// 簡單說就是在原先的子集合中, 每輪加入一個新的num
+        /// 就會把原先子集合多增加一個元素 擴大
         /// 
         /// </summary>
         /// <param name="nums"></param>
@@ -112,11 +112,11 @@
                 // 每一輪都添加一個新元素 num
                 for(int i = 0; i < size; i++)
                 {
-                    // 暫存集合; 複製res[i]
+                    // 暫存子集合; 注意是 複製res[i]
                     IList<int> temp = new List<int>(res[i]);
                     // 暫存加入新元素 num
                     temp.Add(num);
-                    // 再把暫存集合 加入res, 先前List加入一個新的元素
+                    // 再把新的子集合 加入res
                     res.Add(temp);
                 }
             }
