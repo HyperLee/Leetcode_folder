@@ -128,6 +128,7 @@ namespace leetcode_070
         /// <returns></returns>
         public static int ClimbStairs3(int n)
         {
+            /*
             if (n == 1)
             {
                 return 1;
@@ -136,6 +137,12 @@ namespace leetcode_070
             if (n == 2)
             {
                 return 2;
+            }
+            */
+            // 上述寫法優化
+            if(n <= 2)
+            {
+                return n;
             }
 
             int result = 0;
