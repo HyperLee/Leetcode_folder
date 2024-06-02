@@ -8,6 +8,13 @@ namespace leetocde_344
 {
     class Program
     {
+        /// <summary>
+        /// 344. Reverse String
+        /// https://leetcode.com/problems/reverse-string/?envType=daily-question&envId=2024-06-02
+        /// 344. 反转字符串
+        /// https://leetcode.cn/problems/reverse-string/description/
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             char[] arr = new char[6];
@@ -27,17 +34,20 @@ namespace leetocde_344
 
 
         /// <summary>
-        /// https://leetcode.com/problems/reverse-string/submissions/
-        /// leetcode _344
+        /// ref:
+        /// https://leetcode.cn/problems/reverse-string/solutions/439034/fan-zhuan-zi-fu-chuan-by-leetcode-solution/
+        /// https://leetcode.cn/problems/reverse-string/solutions/2376290/ji-chong-bu-tong-de-xie-fa-pythonjavacgo-9trb/
+        /// https://leetcode.cn/problems/reverse-string/solutions/1765738/by-stormsunshine-n3w4/
         /// 
-        /// https://leetcode-cn.com/problems/reverse-string/solution/fan-zhuan-zi-fu-chuan-by-leetcode-solution/
-        /// 官方解法
+        /// 雙指針方式
+        /// left < right 時候停止 迴圈
+        /// 
         /// </summary>
         /// <param name="s"></param>
         public static void ReverseString(char[] s)
         {
             int n = s.Length;
-            for (int left = 0, right = n - 1; left < right; ++left, --right)
+            for (int left = 0, right = n - 1; left < right; left++, right--)
             {
                 char tmp = s[left];
                 s[left] = s[right];
@@ -46,7 +56,6 @@ namespace leetocde_344
                 //Console.WriteLine(s);
             }
             Console.WriteLine(s);
-
 
         }
     }

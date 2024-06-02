@@ -4,3 +4,10 @@ D:\TestFolder\leetocde_344\leetocde_344\bin\Debug\leetocde_344.pdb
 D:\TestFolder\leetocde_344\leetocde_344\obj\Debug\leetocde_344.csprojResolveAssemblyReference.cache
 D:\TestFolder\leetocde_344\leetocde_344\obj\Debug\leetocde_344.exe
 D:\TestFolder\leetocde_344\leetocde_344\obj\Debug\leetocde_344.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_344\leetocde_344\bin\Debug\leetocde_344.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_344\leetocde_344\bin\Debug\leetocde_344.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_344\leetocde_344\bin\Debug\leetocde_344.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_344\leetocde_344\obj\Debug\leetocde_344.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_344\leetocde_344\obj\Debug\leetocde_344.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_344\leetocde_344\obj\Debug\leetocde_344.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_344\leetocde_344\obj\Debug\leetocde_344.pdb
