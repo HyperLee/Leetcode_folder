@@ -19,6 +19,20 @@ namespace leetcode_142
                 next = null;
             }
         }
+
+
+        /// <summary>
+        /// 142. Linked List Cycle II
+        /// https://leetcode.com/problems/linked-list-cycle-ii/
+        /// 142. 环形链表 II
+        /// https://leetcode.cn/problems/linked-list-cycle-ii/description/
+        /// 
+        /// 題目141延伸題目
+        /// 141是考試不是一個 linklist
+        /// 142考試哪一個node造成 linklist
+        /// 
+        /// </summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             ListNode l1 = new ListNode(3);
@@ -32,14 +46,12 @@ namespace leetcode_142
 
             //Console.WriteLine(DetectCycle(l1));
             DetectCycle(l1);
+            DetectCycle2(l1);
             Console.ReadKey();
         }
 
 
         /// <summary>
-        /// https://leetcode.com/problems/linked-list-cycle-ii/
-        /// leetcode 142
-        /// 
         /// https://ithelp.ithome.com.tw/articles/10223721
         /// 
         /// slow * 2 = fast;
@@ -78,7 +90,7 @@ namespace leetcode_142
                         {
                             if (oneStep == oneStep2)
                             {
-                                Console.WriteLine("result: " +  oneStep.val);
+                                Console.WriteLine("result1: " +  oneStep.val);
                                 return oneStep;
                             }
 
@@ -95,6 +107,61 @@ namespace leetcode_142
                 return null;
             }
         }
+
+
+
+        /// <summary>
+        /// 優化上方 方法
+        /// 省略 try catch
+        /// 找出錯誤點在哪裡
+        /// 
+        /// 
+        /// 快針能走, 那麼慢針也肯定能走
+        /// 因為快針走比較快
+        /// </summary>
+        /// <param name="head"></param>
+        /// <returns></returns>
+        public static ListNode DetectCycle2(ListNode head)
+        {
+            if (head == null)
+            {
+                return head;
+            }
+
+            var oneStep = head;
+            var twoStep = head;
+
+            // 這邊改判斷 快指針的 就可以不用寫 try catch
+            // 判斷慢指針 會出現error
+            while (twoStep != null && twoStep.next != null)
+            {
+                oneStep = oneStep.next;
+                twoStep = twoStep.next.next;
+
+                if (oneStep == twoStep)
+                {
+                    // oneStep2 從頭走為a路徑, 
+                    // 原先的oneStep繼續走為c路徑
+                    // 兩者交會 就是答案
+                    var oneStep2 = head;
+                    while (oneStep.next != null && oneStep2.next != null)
+                    {
+                        if (oneStep == oneStep2)
+                        {
+                            Console.WriteLine("result2: " + oneStep.val);
+                            return oneStep;
+                        }
+
+                        oneStep = oneStep.next;
+                        oneStep2 = oneStep2.next;
+                    }
+                }
+
+            }
+
+            return null;
+        }
+
 
 
     }
