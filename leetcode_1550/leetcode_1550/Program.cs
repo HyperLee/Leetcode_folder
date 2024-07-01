@@ -11,8 +11,9 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] input = { 1, 2, 34, 3, 4, 5, 7, 23, 12 };
+            int[] input = { 1, 3, 5 };
             ThreeConsecutiveOdds(input);
+            ThreeConsecutiveOdds2(input);
             Console.ReadKey();
         }
 
@@ -29,6 +30,11 @@
         /// for迴圈 直接跑三個值
         /// 下去測試
         /// 
+        /// ------------------
+        /// arr[right] % 2 == 1
+        /// 也可以替換成
+        /// (arr[right] & 1) != 0
+        /// 用 bit operation
         /// </summary>
         /// <param name="arr"></param>
         /// <returns></returns>
@@ -42,9 +48,65 @@
                 // 數字 除 2 為1 代表是奇數
                 if (arr[i - 2] % 2 == 1 && arr[i - 1] % 2 == 1 && arr[i] % 2 == 1)
                 {
-                    Console.WriteLine("[" + arr[i - 2] + ", " +  arr[i - 1] + ", " +  arr[i] + "]");
+                    Console.WriteLine("Method1: [" + arr[i - 2] + ", " +  arr[i - 1] + ", " +  arr[i] + "]");
                     return true;
                 }
+            }
+
+            return false;
+        }
+
+
+        /// <summary>
+        /// 滑動窗口
+        /// 
+        /// left為視窗左邊界
+        /// right為視窗右邊界
+        /// 
+        /// right持續往右走
+        /// left用來判斷視窗最左邊的奇數位置
+        /// 
+        /// 
+        /// ------------------
+        /// arr[right] % 2 == 0
+        /// 也可以替換成
+        /// (arr[right] & 1) == 0
+        /// 用 bit operation
+        /// 
+        /// </summary>
+        /// <param name="arr"></param>
+        /// <returns></returns>
+        public static bool ThreeConsecutiveOdds2(int[] arr)
+        {
+            int n = arr.Length;
+
+            if(n < 3)
+            {
+                return false;
+            }
+
+            int left = 0, right = 0;
+
+            while(right < n)
+            {
+                // 如果為偶數, 左邊界需要移動往右走
+                if (arr[right] % 2 == 0)
+                {
+                    left = right + 1;
+                }
+
+                // 連續3個奇數
+                if(right - left + 1 == 3)
+                {
+                    // 位置
+                    //Console.WriteLine("left: " + left + ", right: " + right);
+                    // 數值
+                    Console.WriteLine("Method2: [" + arr[left] + ", " + arr[left + 1] + ", " + arr[right] + "]");
+                    return true;
+                }
+
+                // 持續往右走
+                right++;
             }
 
             return false;
