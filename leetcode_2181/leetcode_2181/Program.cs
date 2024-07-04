@@ -45,6 +45,7 @@
         /// <summary>
         /// https://leetcode.cn/problems/merge-nodes-in-between-zeros/solutions/1301107/he-bing-ling-zhi-jian-de-jie-dian-by-lee-zo9b/
         /// https://leetcode.cn/problems/merge-nodes-in-between-zeros/solutions/2613668/2181-he-bing-ling-zhi-jian-de-jie-dian-b-fcg8/
+        /// https://leetcode.cn/problems/merge-nodes-in-between-zeros/solutions/1278813/di-281chang-zhou-sai-hong-hai-you-xi-zhu-6qcc/
         /// 
         /// 要注意看題目說明
         /// 1. 頭尾皆為0
@@ -55,13 +56,22 @@
         /// 直到遇到下一個0為止
         /// 
         /// 遇到0就把node.next指向下個目標
+        /// 
+        /// 本解法為原地修改
+        /// 沒有開額外的新的List來當結果用
+        /// 
         /// </summary>
         /// <param name="head"></param>
         /// <returns></returns>
         public static ListNode MergeNodes(ListNode head)
         {
+            if(head == null)
+            {
+                return null;
+            }
+
             // 開頭node.val為0, 故直接指向下一個node
-            // 暫存用 node
+            // 用來遍歷head的當前節點位置
             ListNode temp = head.next;
 
             while (temp != null && temp.next != null)
@@ -70,7 +80,7 @@
                 {
                     // 累加 當下node.val與下個node.val
                     temp.val += temp.next.val;
-                    // 指向下下個目標
+                    // temp已經累加next.val, 所以直接指向下下個目標
                     temp.next = temp.next.next;
                 }
                 else
