@@ -37,7 +37,7 @@
             Console.ReadKey();
         }
 
-        // 題目結論, 計算 有幾對
+        // 計算 有幾對
         static int pairs = 0;
 
         /// <summary>
@@ -64,7 +64,7 @@
         /// 1. node為空 無距離
         /// 2. node無左右子樹, 距離為0 ( node到葉節點距離為0 )
         /// 3. 分別計算左子樹距離與右子樹距離
-        ///    再來把左+右距離加總
+        ///    再來把左+右距離加總 (葉節點要求必須包含左右子樹節點, 不能只有單邊節點)
         /// 4. 上述三種case分別計算出 題目要求的 好叶子节点对的数量
         /// 
         /// 我們只需要紀錄 <= distance 的距離即可
@@ -93,39 +93,41 @@
                 return distances;
             }
 
+            // 分別計算出左右子樹(非空樹, 子樹根節點至葉節點距離)距離 <= distance的距離
             IList<int> leftdistances = GetDistances(node.left, distance);
             IList<int> rightdistances = GetDistances(node.right, distance);
-            // 分別計算出左右子樹(非空樹)距離 <= distance的距離
             int leftsize = leftdistances.Count;
             int rightsize = rightdistances.Count;
 
-            // 計算左子樹距離
+            // 計算左子樹距離(左子樹根節點至葉節點距離)
             for(int i = 0; i < leftsize; i++)
             {
-                // 葉節點到左子樹根跌點距離+1
+                // tree 每往下一層距離就要+1
                 leftdistances[i]++;
 
-                // 小於 distance
+                // 找出小於 distance
                 if (leftdistances[i] <= distance)
                 {
                     distances.Add(leftdistances[i]);
                 }
             }
 
-            // 計算右子樹距離
+            // 計算右子樹距離(右子樹根節點至葉節點距離)
             for (int i = 0; i < rightsize; i++)
             {
-                // 葉節點到右子樹根跌點距離+1
+                // tree 每往下一層距離就要+1
                 rightdistances[i]++;
 
+                // 找出小於 distance
                 if (rightdistances[i] <= distance)
                 {
                     distances.Add(rightdistances[i]);
                 }
             }
 
-            // 計算 左到右子樹葉節點距離
-            foreach(int leftdistance in leftdistances)
+            // 上方分別將左右子樹距離個別計算出來
+            // 這邊要將 兩邊的距離加總 找出 <= distance 好叶子节点对的数量
+            foreach (int leftdistance in leftdistances)
             {
                 foreach (int rightdistance in rightdistances)
                 {
