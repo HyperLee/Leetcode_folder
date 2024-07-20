@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "leetode_1605/1.0.0": {
+        "runtime": {
+          "leetode_1605.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "leetode_1605/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
