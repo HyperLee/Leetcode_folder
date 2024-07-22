@@ -22,14 +22,14 @@ namespace 不規則陣列
         {
             // 輸入 座標 範例, 也可輸入其他方式 參考MSDN
             int[][] input = new int[][]
-{
+            {
                  new int[]{ 1, 2 },
                  new int[]{ 2, 3 },
                  new int[]{ 3, 4 },
                  new int[]{ 4, 5 },
                  new int[]{ 5, 6 },
                  new int[]{ 6, 7 }
-};
+            };
 
             //Console.WriteLine(input);
 
@@ -49,7 +49,10 @@ namespace 不規則陣列
                 }
                 System.Console.WriteLine();
             }
+
+            // 輸出總和
             Console.WriteLine("sum: " + sum);
+
             Console.ReadKey();
         }
     }
