@@ -15,9 +15,10 @@
             
             var res = FrequencySort(input);
 
+            Console.WriteLine("ans: ");
             foreach (int i in res)
             {
-                Console.WriteLine("res: " + i);
+                Console.Write(i + ", ");
             }
 
             Console.ReadKey();
@@ -48,43 +49,29 @@
         public static int[] FrequencySort(int[] nums)
         {
             // key: array input,  value: frequency
-            // 統計頻率
+            // 統計nums頻率
             Dictionary<int, int> dic = new Dictionary<int, int>();
+            // nums依順序加入list
+            List<int> list = new List<int>();
+            
+            // 兩個同時執行, 就不用分開寫兩個foreach
             foreach (int num in nums)
             {
                 if(!dic.ContainsKey(num))
                 {
+                    // 不存在就新增頻率
                     dic.Add(num, 1);
                 }
                 else
                 {
+                    // 存在就增加頻率次數
                     dic[num]++;
                 }
-            }
 
-            /*
-            var frequency = dic.OrderByDescending(x => x.Value);
-            List<int> list = new List<int>();
-
-            foreach(var item in frequency)
-            {
-                for(int i = 0; i < item.Value; i++)
-                {
-                    list.Add(item.Key);
-                }
-            }
-
-            list.Reverse();
-            */
-
-            // 輸入原始數值
-            List<int> list = new List<int>();
-            foreach (int num in nums)
-            {
                 list.Add(num);
             }
 
-            // *** 排序
+            // *依照題目要求來排序
             // cnt1,2 是頻率
             // a, b   是比較數字
             list.Sort((a, b) => {
