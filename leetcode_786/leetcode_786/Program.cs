@@ -51,18 +51,19 @@ namespace leetcode_786
             int n = arr.Length;
             List<int[]> list = new List<int[]>();
 
+            // 枚舉arr中 所有排列組合資料, 塞入 list裡面
             for (int i = 0; i < n; i++)
             {
                 for(int j = i + 1; j < n; j++)
                 {
-                    // list裡面的int[][] 陣列是二維陣列; 將 int[] arr 資料塞入 list[] 裡面 
                     list.Add(new int[] { arr[i], arr[j] });
                 }
             }
 
-            // 排序 升序排序 小至大; a * d < b * c
+            // 分數; 排序 遞增排序 小至大; a * d < b * c
             list.Sort((x, y) => x[0] * y[1] - y[0] * x[1]);
 
+            ////////////////////// console輸出//////////////////////////
             int count = 0;
             // 使用 foreach 迴圈來迭代 List 中的每個陣列
             foreach (int[] array in list)
@@ -80,7 +81,9 @@ namespace leetcode_786
                 count++;
                 //Console.WriteLine(); // 換行以分隔每個陣列
             }
+            //////////////////////////////////////////////////////////////
             
+            // 回傳第 k 個
             return list[k - 1];
         }
     }
