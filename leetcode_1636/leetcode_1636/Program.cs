@@ -43,6 +43,12 @@
         /// 
         /// 1.頻率不同, 依據"頻率"遞增排序
         /// 2.頻率相同, 依據"數字"遞減排序
+        /// 
+        /// lisr sort 排序ref:
+        /// https://dotblogs.com.tw/shanna/2019/09/09/213800
+        /// https://www.cnblogs.com/tomin/archive/2011/09/20/2182483.html
+        /// https://www.hicsharp.com/a/7620ddb5eb644e448b06e0b8bbb97f41
+        /// https://hackmd.io/@jiesen/r1awIjwlF
         /// </summary>
         /// <param name="nums"></param>
         /// <returns></returns>
@@ -76,7 +82,22 @@
             // a, b   是比較數字
             list.Sort((a, b) => {
                 int cnt1 = dic[a], cnt2 = dic[b];
-                return cnt1 != cnt2 ? cnt1 - cnt2 : b - a;
+                //return cnt1 != cnt2 ? cnt1 - cnt2 : b - a;
+                if (cnt1 != cnt2)
+                {
+                    // 頻率; 遞增
+                    return cnt1.CompareTo(cnt2);
+                }
+                else
+                {
+                    // 數字; 遞減
+
+                    // a在前面, 開頭要取負號
+                    // return -a.CompareTo(b);
+
+                    // b在前面, 這樣就不用取負號
+                    return b.CompareTo(a);
+                }
             });
 
             return list.ToArray();
