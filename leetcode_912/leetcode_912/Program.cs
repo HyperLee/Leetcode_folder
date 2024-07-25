@@ -23,6 +23,7 @@ namespace leetcode_912
 
             //Console.WriteLine(SortArray(nums));
             SortArray2(nums);
+            SortArray3(nums);
             Console.ReadKey();
         }
 
@@ -76,6 +77,7 @@ namespace leetcode_912
                 }
             }
 
+            Console.WriteLine("SortArray2: ");
             foreach (int i in nums)
             {
                 Console.Write(i + " ");
@@ -83,6 +85,52 @@ namespace leetcode_912
 
             return nums;
 
+        }
+
+
+
+        /// <summary>
+        /// 插入排序
+        /// 每次将一个数字插入一个有序的数组里，成为一个长度更长的有序数组，有限次操作以后，数组整体有序。
+        /// 
+        /// 1. 初始狀態： 將第一個元素視為已經排序。
+        /// 2. 取下未排序的元素： 從待排序的元素中取出第一個元素。
+        /// 3. 插入到已排序的序列： 從後向前掃描已排序的序列，找到比它小的元素，將所有比
+        ///    它大的元素向後移一位。
+        /// 4. 插入元素： 將新元素插入到找到的位置後。
+        /// 5. 重複步驟2-4： 直到所有元素都被插入。
+        /// 
+        /// https://leetcode.cn/problems/sort-an-array/solutions/178305/pai-xu-shu-zu-by-leetcode-solution/
+        /// https://leetcode.cn/problems/sort-an-array/solutions/179489/fu-xi-ji-chu-pai-xu-suan-fa-java-by-liweiwei1419/
+        /// https://leetcode.cn/problems/sort-an-array/solutions/1496053/by-stormsunshine-mjb5/
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <returns></returns>
+        public static int[] SortArray3(int[] nums)
+        {
+            int n = nums.Length;
+            for (int i = 1; i < n; ++i)
+            {
+                int key = nums[i];
+                int j = i - 1;
+
+                // 将大于key的元素向右移动
+                while (j >= 0 && nums[j] > key)
+                {
+                    nums[j + 1] = nums[j];
+                    j--;
+                }
+                nums[j + 1] = key;
+            }
+
+            Console.WriteLine(" ");
+            Console.WriteLine("SortArray3: ");
+            foreach (int i in nums)
+            {
+                Console.Write(i + " ");
+            }
+
+            return nums;
         }
 
     }
