@@ -2,7 +2,6 @@ D:\Leetcode_folder\Leetcode_folder\leetcode_912\leetcode_912\bin\Debug\leetcode_
 D:\Leetcode_folder\Leetcode_folder\leetcode_912\leetcode_912\bin\Debug\leetcode_912.exe
 D:\Leetcode_folder\Leetcode_folder\leetcode_912\leetcode_912\bin\Debug\leetcode_912.pdb
 D:\Leetcode_folder\Leetcode_folder\leetcode_912\leetcode_912\obj\Debug\leetcode_912.csproj.AssemblyReference.cache
-D:\Leetcode_folder\Leetcode_folder\leetcode_912\leetcode_912\obj\Debug\leetcode_912.csproj.SuggestedBindingRedirects.cache
 D:\Leetcode_folder\Leetcode_folder\leetcode_912\leetcode_912\obj\Debug\leetcode_912.csproj.CoreCompileInputs.cache
 D:\Leetcode_folder\Leetcode_folder\leetcode_912\leetcode_912\obj\Debug\leetcode_912.exe
 D:\Leetcode_folder\Leetcode_folder\leetcode_912\leetcode_912\obj\Debug\leetcode_912.pdb
