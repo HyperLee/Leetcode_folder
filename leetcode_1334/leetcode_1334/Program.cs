@@ -116,6 +116,7 @@
             // 可以更新為 (i, j) = (i, k) + (k, j)
             for (int k = 0; k < n; k++)
             {
+                // 每個城市到自己距離為0
                 map[k][k] = 0;
                 for(int i = 0; i < n; i++)
                 {
@@ -139,6 +140,7 @@
                 {
                     if (map[i][j] <= distanceThreshold)
                     {
+                        // 計算 i 出發的共有多少符合要求城市
                         // 累計 distanceThreshold 內可到達城市數量
                         cnt++;
                     }
