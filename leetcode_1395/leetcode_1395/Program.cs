@@ -10,17 +10,21 @@ namespace leetcode_1395
         /// 1395. 统计作战单位数
         /// https://leetcode.cn/problems/count-number-of-teams/description/
         /// 
-        /// 簡單說就是找出3個數字(評分)是 遞增 或是 遞減的組合 
-        /// 3個index分別是 i, j, k,  0 <= i < j < k < n
-        /// 3個index不需要連續的index
+        /// 有 n 個士兵排成一列。每位士兵都有獨特的評分值。
+        /// 
+        /// 簡單說就是找出 3 個評分是 遞增 或是 遞減的組合 
+        /// 3 個index分別是 i, j, k,  0 <= i < j < k < n
+        /// index 可以是非連續
         /// 
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] input = { 2, 5, 3, 4, 1 };
-            Console.WriteLine("枚舉方式: " + NumTeams(input));
-            Console.WriteLine("枚舉中間點: " + NumTeams(input));
+            int[] input = { 1, 2, 3, 4 };
+
+            Console.WriteLine("枚舉  方式: " + NumTeams(input));
+            Console.WriteLine("枚舉中間點: " + NumTeams2(input));
+            
             Console.ReadKey();
         }
 
@@ -32,14 +36,16 @@ namespace leetcode_1395
         /// https://leetcode.cn/problems/count-number-of-teams/solutions/1460260/by-flix-3lu9/
         /// 
         /// 枚舉方式  將可能組合 都列出來
-        /// 3個index為一個組合
-        /// 數字組合順序為 遞增 || 遞減
+        /// 3 個index為一個組合
+        /// 評分組合順序為 遞增 || 遞減
         /// 符合就 res++
         /// i, j, k 可為非連續 index.
         /// 0 <= i < j < k < n
         /// 
-        /// 时间复杂度：O(N^3), 3個for迴圈。
-        /// 空间复杂度：O(1)。
+        /// i, j, k 分段判斷
+        /// 
+        /// 時間複雜度：O(N^3), 3個for迴圈。
+        /// 空間複雜度：O(1)。
         /// </summary>
         /// <param name="rating"></param>
         /// <returns></returns>
@@ -54,7 +60,7 @@ namespace leetcode_1395
                 {
                     for(int k = j + 1; k < n; k++)
                     {
-                        // 數字組合為 遞增 || 遞減 組合, i, j, k 可為非連續
+                        // 評分組合為 遞增 || 遞減 組合, i, j, k 可為非連續
                         if ((rating[i] < rating[j] && rating[j] < rating[k]) || (rating[i] > rating[j] && rating[j] > rating[k]))
                         {
                             res++;
@@ -84,8 +90,8 @@ namespace leetcode_1395
         /// (i_low, j, k_height) => 遞增
         /// (i_height, j, k_low) => 遞減
         /// 
-        /// 时间复杂度：O(N^2), 2個for迴圈
-        /// 空间复杂度：O(1)。
+        /// 時間複雜度：O(N^2), 2個for迴圈
+        /// 空間複雜度：O(1)。
         /// </summary>
         /// <param name="rating"></param>
         /// <returns></returns>
@@ -106,17 +112,17 @@ namespace leetcode_1395
                 {
                     if (rating[i] < rating[j])
                     {
-                        // 遞減
+                        // 遞增
                         i_low++;
                     }
                     else if (rating[i] > rating[j])
                     {
-                        // 遞增
+                        // 遞減
                         i_high++;
                     }
                 }
 
-                // 找出 k 的 遞增與遞減, k 在 j 後面
+                // 找出 k 的 遞減與遞增, k 在 j 後面
                 for (int k = j + 1; k < n; k++)
                 {
                     if (rating[k] < rating[j])
