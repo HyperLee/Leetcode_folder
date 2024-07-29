@@ -1,0 +1,15 @@
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\bin\Debug\net8.0\leetcode_1395.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\bin\Debug\net8.0\leetcode_1395.deps.json
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\bin\Debug\net8.0\leetcode_1395.runtimeconfig.json
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\bin\Debug\net8.0\leetcode_1395.dll
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\bin\Debug\net8.0\leetcode_1395.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\obj\Debug\net8.0\leetcode_1395.GeneratedMSBuildEditorConfig.editorconfig
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\obj\Debug\net8.0\leetcode_1395.AssemblyInfoInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\obj\Debug\net8.0\leetcode_1395.AssemblyInfo.cs
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\obj\Debug\net8.0\leetcode_1395.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\obj\Debug\net8.0\leetcode_1395.sourcelink.json
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\obj\Debug\net8.0\leetcode_1395.dll
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\obj\Debug\net8.0\refint\leetcode_1395.dll
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\obj\Debug\net8.0\leetcode_1395.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\obj\Debug\net8.0\leetcode_1395.genruntimeconfig.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_1395\leetcode_1395\obj\Debug\net8.0\ref\leetcode_1395.dll
