@@ -60,11 +60,11 @@
             for(int i = 0; i < 26; i++)
             {
                 dis[i] = new int[26];
-                // 填入預設數值
+                // 填入預設數值, 無限大
                 Array.Fill(dis[i], int.MaxValue / 2);
             }
 
-            // 雙向圖. 填入來源資料
+            // 雙向圖. 填入 cost 花費資料
             // original向changed 替換所需的 cost
             for (int i = 0; i < cost.Length; i++)
             {
@@ -90,7 +90,8 @@
                 }
             }
 
-            // 計算答案
+            // 上方已經換算出每個char替換需要花費, 
+            // 這邊來計算答案, 每個位置替換的花費
             long ans = 0;
             for(int i = 0; i < source.Length; i++)
             {
@@ -109,6 +110,7 @@
                 int x = source[i] - 'a';
                 int y = target[i] - 'a';
 
+                // 不同字母替換
                 if(x != y)
                 {
                     if (dis[x][y] >= int.MaxValue / 2)
@@ -117,7 +119,8 @@
                         // 無限大, 代表沒替換成功
                         return -1;
                     }
-
+                    
+                    // 否則答案增加把 x 替換成 y 的最小花費
                     ans += dis[x][y];
                 }
                 */
