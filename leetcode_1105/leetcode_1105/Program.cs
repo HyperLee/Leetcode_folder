@@ -41,7 +41,9 @@
         /// ref: DP 動態規劃
         /// https://leetcode.cn/problems/filling-bookcase-shelves/solutions/2239727/tian-chong-shu-jia-by-leetcode-solution-b7py/
         /// 這個聯結有圖示說明, 比較好理解
-        /// https://leetcode.cn/problems/filling-bookcase-shelves/solutions/11480/dong-tai-gui-hua-python3-by-smoon1989/    
+        /// https://leetcode.cn/problems/filling-bookcase-shelves/solutions/11480/dong-tai-gui-hua-python3-by-smoon1989/   
+        /// https://leetcode.cn/problems/filling-bookcase-shelves/solutions/2252363/1105-tian-chong-shu-jia-by-stormsunshine-8y12/
+        /// 
         /// https://leetcode.cn/problems/filling-bookcase-shelves/solutions/11508/1105-tian-chong-shu-jia-dong-tai-gui-hua-by-ivan_a/
         /// https://leetcode.cn/problems/filling-bookcase-shelves/solutions/2240688/jiao-ni-yi-bu-bu-si-kao-dong-tai-gui-hua-0vg6/
         /// 
@@ -100,10 +102,10 @@
                         break;
                     }
 
-                    // 更新 j 到 i 的最大高度
+                    // 更新 j 到 i 的最大高度; [j, i - 1]
                     maxheight = Math.Max(maxheight, books[j][1]);
 
-                    // dp[i] 的高度 與 前 j 個高度 + 當前高度 取出最小值
+                    // dp[i] 的高度 與 前 j 個高度 + 當前資料高度 取出最小值
                     dp[i + 1] = Math.Min(dp[i + 1], dp[j] + maxheight);
                 }
             }
