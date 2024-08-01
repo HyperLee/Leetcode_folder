@@ -60,11 +60,11 @@ namespace leetcode_049
 
             for (int i = 0; i < strs.Length; i++)
             {
-                // 遍歷每個輸入的單字
+                // 遍歷每個輸入的單字, 型態轉為char
                 char[] a = strs[i].ToArray();
-                // 重新排序
+                // 排序
                 Array.Sort(a);
-                // 暫存至 str中
+                // 型態轉換回字串
                 string str = new string(a);
 
                 if (dic.ContainsKey(str))
@@ -81,13 +81,22 @@ namespace leetcode_049
             }
 
             // 依序將dic.Keys裡面的value取出來, 放到res輸出
+            /* // 方法1:
             foreach (var item in dic.Keys)
             {
                 res.Add(dic[item]);
             }
+            */
 
-            // Console 輸出
-            Console.Write("[ ");
+            // 依序將dic.Keys裡面的value取出來, 放到res輸出
+            // 方法2:
+            foreach (KeyValuePair<string, IList<string>> kvp in dic)
+            {
+                res.Add(kvp.Value);
+            }
+
+            // Console 輸出 res
+            Console.Write("res: [ ");
             foreach (var item in res) 
             {
                 Console.Write("[");
