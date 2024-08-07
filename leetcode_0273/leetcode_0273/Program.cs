@@ -10,20 +10,50 @@ namespace leetcode_0273
         /// 
         /// 273. 整数转换英文表示
         /// https://leetcode.cn/problems/integer-to-english-words/description/
+        /// 
+        /// 要解這一題, 需要知道 英文數字表達方式
+        /// 如過不理解, 會錯誤
+        /// 要先枚舉, 會用到的表達文字
+        /// 都先宣告放到陣列裡面
+        /// 之後取出來
+        /// 
+        /// 數字轉英文 線上轉換網站, 可以參考
+        /// https://tw.piliapp.com/converter/english-numbers/
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int num = 1234;
+            int num = 13401;
 
             Console.WriteLine(NumberToWords(num));
             Console.ReadKey();
         }
 
+
+        /// <summary>
+        /// 個位數 1 ~ 9
+        /// </summary>
         static string[] singles = { "", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine" };
+
+
+        /// <summary>
+        /// 十位數 10 ~ 19
+        /// </summary>
         static string[] teens = { "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
+
+
+        /// <summary>
+        /// 十位數
+        /// 10, 20, 30, ... , 90
+        /// </summary>
         static string[] tens = { "", "Ten", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
+
+
+        /// <summary>
+        /// 千, 百萬, 十億
+        /// </summary>
         static string[] thousands = { "", "Thousand", "Million", "Billion" };
+
 
         /// <summary>
         /// ref:
@@ -31,14 +61,27 @@ namespace leetcode_0273
         /// https://leetcode.cn/problems/integer-to-english-words/solutions/1040978/gong-shui-san-xie-zi-fu-chuan-da-mo-ni-b-0my6/
         /// https://leetcode.cn/problems/integer-to-english-words/solutions/1844462/by-stormsunshine-6a2y/
         /// 
+        /// 將英文數字呈現文字, 所有可能用到的都先枚舉出來
+        /// 如上方的 singles, teens, tens, thousands
         /// 
         /// 非負整數 2^31 - 1 最多 10 位數
-        /// 以三位數(想像成計算機顯示方式, 3個位數一個逗號) 唯一單位 來處理 數字問題
-        /// 所以 i 從 3 開始
-        /// 剛好夠用處理 10 位數
+        /// 已最多三位數(想像成計算機顯示方式, 3個位數一個逗號) 唯一單位 來處理 數字問題
         /// 輸入的 num 從高位數(左邊), 開始轉換英文
         /// 由左至右 處理
-        /// 3 位數單位 來慢慢拼接出 英文
+        /// 所以 i 從 3 開始
+        /// 剛好夠用處理 10 位數
+        /// 
+        /// 位數對應
+        /// 10^9、10^6、10^3、1
+        /// => Billion, Million, Thousand
+        /// 
+        /// 
+        /// 2 ^ 31 - 1 = 1111111111111111111111111111111 = 2147483647
+        /// 這個數表示為二進位為1111111111111111111111111111111（即31個1），是作業系統中最大的32位元符號型整型常數，
+        /// 
+        /// 如果 num == 0
+        /// 直接回傳 Zero
+        /// 
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
@@ -68,6 +111,7 @@ namespace leetcode_0273
                 }
             }
 
+            // 結尾沒有空白
             return sb.ToString().Trim();
         }
 
