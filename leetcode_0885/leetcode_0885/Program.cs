@@ -14,7 +14,7 @@
         {
             int rows = 1, cols = 4, rstart = 0, cstart = 0;
 
-            var res = SpiralMatrixIII2(rows, cols, rstart, cstart);
+            var res = SpiralMatrixIII(rows, cols, rstart, cstart);
 
             for (int i = 0; i < res.Length; i++)
             {
@@ -33,71 +33,19 @@
 
         /// <summary>
         /// ref:
-        /// https://leetcode.cn/problems/spiral-matrix-iii/solutions/3546/luo-xuan-ju-zhen-iii-by-leetcode/
+        /// 這方法比較好理解
         /// https://leetcode.cn/problems/spiral-matrix-iii/solutions/660264/dongge-de-jie-fa-si-lu-qing-xi-by-victor-gmmz/
+        /// 
+        /// https://leetcode.cn/problems/spiral-matrix-iii/solutions/3546/luo-xuan-ju-zhen-iii-by-leetcode/
         /// https://leetcode.cn/problems/spiral-matrix-iii/solutions/1984188/by-stormsunshine-m9yn/
         /// 
         /// 題目要求
         /// 順時鐘方向 走 螺旋方式
         /// 就會是:右, 下, 左, 上 這樣走
         /// 
-        /// 此方法有可能會走超出範圍
-        /// 不再網格內
-        /// </summary>
-        /// <param name="rows">行</param>
-        /// <param name="cols">列</param>
-        /// <param name="rStart">row 起始位置</param>
-        /// <param name="cStart">col 起始位置</param>
-        /// <returns></returns>
-        public static int[][] SpiralMatrixIII(int rows, int cols, int rStart, int cStart)
-        {
-            // 右, 下, 左, 上
-            int[][] dirs = { new int[] { 0, 1 }, new int[] { 1, 0 }, new int[] { 0, -1 }, new int[] { -1, 0 } };
-            // 輸入網格數量
-            int total = rows * cols;
-            int[][] order = new int[total][];
-            int index = 0;
-            // 移動編號, 改變移動方向就++
-            int linecount = 1;
-            int row = rStart, col = cStart;
-            int dirindex = 0;
-
-            while(index < total)
-            {
-                // dir 方向移動步數
-                int step = (linecount + 1) / 2;
-
-                for(int i = 0; i < step; i++)
-                {
-                    if(row >= 0 && row < rows && col >= 0 && col < cols)
-                    {
-                        // 位置處於網格內才會加入答案
-                        order[index] = new int[] { row, col };
-                        index++;
-                    }
-
-                    // 下一個節點
-                    row += dirs[dirindex][0];
-                    col += dirs[dirindex][1];
-                }
-
-                // 換 dir
-                linecount++;
-                // % 4 ? 四個方向?
-                dirindex = (dirindex + 1) % 4;
-            }
-
-            return order;
-        }
-
-
-        /// <summary>
-        /// 這方法 似乎比較好理解
-        /// https://leetcode.cn/problems/spiral-matrix-iii/solutions/660264/dongge-de-jie-fa-si-lu-qing-xi-by-victor-gmmz/
-        /// 
         /// 大原則就是 遍歷整個網格(Grid)
-        /// 但是有可能會超出題目輸入的網格範圍
-        /// 所以 res 結果, 我們只會把 範圍內的給加入而已
+        /// 但是有可能會超出題目輸入的網格範圍邊界
+        /// 所以 res 結果, 我們只會把範圍邊界內的給加入而已
         /// 
         /// 螺旋狀的走路方向,遍歷整個網格
         /// 1. 先確定 四個邊界
@@ -118,7 +66,7 @@
         /// <param name="rStart">row 起始位置</param>
         /// <param name="cStart">col 起始位置</param>
         /// <returns></returns>
-        public static int[][] SpiralMatrixIII2(int rows, int cols, int rStart, int cStart)
+        public static int[][] SpiralMatrixIII(int rows, int cols, int rStart, int cStart)
         {
             // 共 rows * cols 筆資料
             int[][] res = new int[rows * cols][];
