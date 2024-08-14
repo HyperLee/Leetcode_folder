@@ -10,13 +10,16 @@ namespace leetcode_027
     internal class Program
     {
         /// <summary>
-        /// leetcode 027
+        /// 27. Remove Element
         /// https://leetcode.com/problems/remove-element/
+        /// 
+        /// 27. 移除元素
+        /// https://leetcode.cn/problems/remove-element/description/
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] nums = {3,2,2,3 };
+            int[] nums = { 3, 2, 2, 3 };
             int val = 3;
 
             //Console.WriteLine(RemoveElement(nums, val));
@@ -37,6 +40,12 @@ namespace leetcode_027
         ///
         /// 右指針指向下一個要比對的位置
         /// 左指針指向下一個要替換的位置
+        /// 
+        /// 原地替換
+        /// 把 != val 的 element 往前移動
+        /// = val 往後
+        /// 最終 回傳 前 k 個 數量
+        /// 也是新的 nums[k] 的 index 位置
         /// </summary>
         /// <param name="nums"></param>
         /// <param name="val"></param>
@@ -64,6 +73,7 @@ namespace leetcode_027
                 Console.Write(value + ", ");
             }
             Console.Write("]");
+
             return left;
 
         }
