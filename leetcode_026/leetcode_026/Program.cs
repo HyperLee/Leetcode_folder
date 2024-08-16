@@ -9,16 +9,24 @@ namespace leetcode_026
     internal class Program
     {
         /// <summary>
-        /// leetcode 026
+        /// 26. Remove Duplicates from Sorted Array
         /// https://leetcode.cn/problems/remove-duplicates-from-sorted-array/
+        /// 
+        /// 26. 删除有序数组中的重复项
+        /// https://leetcode.cn/problems/remove-duplicates-from-sorted-array/description/
+        /// 
+        /// 刪除重覆的 element
+        /// 並且要保持原先輸入順序
+        /// 每個 element 只能出現一次
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
             int[] nums = { 1, 1, 2 };
-
-            //Console.WriteLine(RemoveDuplicates(nums));
             RemoveDuplicates(nums);
+
+            int[] nums2 = { 1, 1, 2 };
+            RemoveDuplicates2(nums2);
 
             Console.ReadKey();
         }
@@ -34,6 +42,9 @@ namespace leetcode_026
         /// 返回的長度,
         /// 只需要該長度內不重複即可
         /// 後續不用理會
+        /// 
+        /// 回傳長度 index 從 1 開始不是 0
+        /// 所以 slow 指向 下一個要取代的 index
         /// </summary>
         /// <param name="nums"></param>
         /// <returns></returns>
@@ -47,31 +58,75 @@ namespace leetcode_026
                 return 0;
             }
 
+            // slow 從 1 開始, 指向下一個需要取代的 index
             int fast = 1, slow = 1;
 
             while (fast < n)
             {
-                // 说明 nums[fast] 和之前的元素都不同, 不要連續兩個一樣的
+                // 不要連續兩個 element 都相同
                 if (nums[fast] != nums[fast - 1])
                 {
                     // 不重複的數字取代原先出現重複的項目位置
                     nums[slow] = nums[fast];
-                    ++slow;
+                    slow++;
                 }
-                ++fast;
+
+                fast++;
             }
 
+            Console.WriteLine("方法1: ");
             Console.WriteLine("更新後陣列長度: " + slow);
-            Console.WriteLine();
-
             Console.Write("修正後 nums[");
             foreach (int i in nums) 
             {
                 Console.Write(i + ", ");
             }
             Console.Write("]");
+            Console.WriteLine();
+            Console.WriteLine();
 
             return slow;
+        }
+
+
+        /// <summary>
+        /// for 迴圈寫法
+        /// 要注意 起始位置從 1 開始
+        /// 因為要與 前一個比對 是不是 element 相同
+        /// 所以從 1 開始 不是 0
+        /// 
+        /// 回傳長度 index 從 1 開始不是 0
+        /// 所以 left 指向 下一個要取代的 index
+        /// </summary>
+        /// <param name="nums"></param>
+        /// <returns></returns>
+        public static int RemoveDuplicates2(int[] nums)
+        {
+            int n = nums.Length;
+            // 從 1 開始, 指向下一個需要取代的 index
+            int left = 1;
+
+            for (int right = 1; right < n; right++)
+            {
+                // 不要連續兩個 element 都相同
+                if (nums[right] != nums[right - 1])
+                {
+                    // 不重複的數字取代原先出現重複的項目位置
+                    nums[left] = nums[right];
+                    left++;
+                }
+            }
+
+            Console.WriteLine("方法2: ");
+            Console.WriteLine("更新後陣列長度: " + left);
+            Console.Write("修正後 nums[");
+            foreach (var value in nums)
+            {
+                Console.Write(value + ", ");
+            }
+            Console.Write("]");
+
+            return left;
         }
 
 
