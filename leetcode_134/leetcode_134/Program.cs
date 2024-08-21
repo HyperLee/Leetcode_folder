@@ -9,8 +9,16 @@ namespace leetcode_134
     internal class Program
     {
         /// <summary>
-        /// leetcode 134
+        /// 134. Gas Station
         /// https://leetcode.com/problems/gas-station/description/
+        /// 
+        /// 134. 加油站
+        /// https://leetcode.cn/problems/gas-station/description/
+        /// 
+        /// 順時鐘走一圈
+        /// 如果可以走完 回傳 起始位置
+        /// 不行就回傳 -1
+        /// 
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -31,26 +39,37 @@ namespace leetcode_134
         /// 2. 如果 remain<0，则将 start 更新为 i+1，将 remain 更新为 0。
         /// 遍历结束之后，如果 sum≥0 则返回 start，否则返回 −1。
         /// </summary>
-        /// <param name="gas"></param>
-        /// <param name="cost"></param>
+        /// <param name="gas">汽油 公升</param>
+        /// <param name="cost">消耗汽油公升</param>
         /// <returns></returns>
         public static int CanCompleteCircuit(int[] gas, int[] cost)
         {
             int start = 0;
             int sum = 0, remain = 0;
             int n = gas.Length;
+
             for (int i = 0; i < n; i++)
             {
+                // 這段路程消耗多少汽油
                 int difference = gas[i] - cost[i];
+                // 汽油變化總和
                 sum += difference;
+                // 剩餘汽油
                 remain += difference;
+
                 if (remain < 0)
                 {
+                    // 汽油不夠, 換下一個位置起始試試看
                     start = i + 1;
+                    // 歸零
                     remain = 0;
                 }
             }
+
+            // 變化總和 > 0 代表可以走一圈 回傳 起始位置 start
+            // 否則 回傳 -1
             return sum >= 0 ? start : -1;
+
         }
 
     }
