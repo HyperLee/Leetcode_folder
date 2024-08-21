@@ -10,7 +10,6 @@ D:\Leetcode_folder\Leetcode_folder\leetcode_055\leetcode_055\bin\Debug\leetcode_
 D:\Leetcode_folder\Leetcode_folder\leetcode_055\leetcode_055\bin\Debug\leetcode_055.exe
 D:\Leetcode_folder\Leetcode_folder\leetcode_055\leetcode_055\bin\Debug\leetcode_055.pdb
 D:\Leetcode_folder\Leetcode_folder\leetcode_055\leetcode_055\obj\Debug\leetcode_055.csproj.AssemblyReference.cache
-D:\Leetcode_folder\Leetcode_folder\leetcode_055\leetcode_055\obj\Debug\leetcode_055.csproj.SuggestedBindingRedirects.cache
 D:\Leetcode_folder\Leetcode_folder\leetcode_055\leetcode_055\obj\Debug\leetcode_055.csproj.CoreCompileInputs.cache
 D:\Leetcode_folder\Leetcode_folder\leetcode_055\leetcode_055\obj\Debug\leetcode_055.exe
 D:\Leetcode_folder\Leetcode_folder\leetcode_055\leetcode_055\obj\Debug\leetcode_055.pdb

@@ -9,15 +9,22 @@ namespace leetcode_055
     internal class Program
     {
         /// <summary>
-        /// leetcode 055 Jump Game
+        /// 55. Jump Game
         /// https://leetcode.com/problems/jump-game/
+        /// 55. 跳跃游戏
+        /// https://leetcode.cn/problems/jump-game/description/
+        /// 
+        /// 計算能不能走完路程, 走到底 or 超過都可以
+        /// 可以就回傳 true
+        /// 不行就回傳 false
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
             int[] num = new int[] { 2, 3, 1, 1, 4 };
 
-            Console.WriteLine(CanJump2(num));
+            Console.WriteLine("方法1: " + CanJump(num));
+            Console.WriteLine("方法2: " + CanJump2(num));
             Console.ReadKey();
         }
 
@@ -32,14 +39,15 @@ namespace leetcode_055
         public static bool CanJump(int[] nums)
         {
             int n = nums.Length;
-            int rightmost = 0; // 最右邊位置
+            // 最右邊位置
+            int rightmost = 0; 
 
-            for (int i = 0; i < n; ++i)
+            for (int i = 0; i < n; i++)
             {
                 // 當前位置 不能大於 最右邊之位置 否則就是失敗
                 if (i <= rightmost)
                 {
-                    // 取出可走到隻最右邊位置;  i + nums[i] 原本第 i 位置 + i這個蘊含可以走的數值
+                    // 取出可走到隻最右邊位置;  i + nums[i] 原本第 i 位置 + i 這個蘊含可以走的數值
                     rightmost = Math.Max(rightmost, i + nums[i]);
 
                     // 可以走到最右邊之數值 比 總長度大或等於 就代表可以走完
@@ -49,6 +57,7 @@ namespace leetcode_055
                     }
                 }
             }
+
             return false;
 
         }
@@ -76,25 +85,28 @@ namespace leetcode_055
         /// <returns></returns>
         public static bool CanJump2(int[] nums)
         {
-            int length = nums.Length;
-            if (length == 0)
+            int n = nums.Length;
+            if (n == 0)
             {
                 return false;
             }
 
             int max = 0;
-            for (int i = 0; i < length; i++)
+            for (int i = 0; i < n; i++)
             {
                 if (i > max)
                 {
                     // 走不完, false
                     return false;
                 }
-                if (max > length)
+
+                if (max > n)
                 {
                     // 提早走完, return
                     return true;
                 }
+
+                // 找出能走的最大步數
                 max = Math.Max(max, nums[i] + i);
             }
 
