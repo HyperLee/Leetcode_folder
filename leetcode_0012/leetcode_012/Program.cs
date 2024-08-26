@@ -19,7 +19,7 @@ namespace leetcode_012
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int input = 3749;
+            int input = 13;
 
             Console.WriteLine("res: " + IntToRoman(input));
             Console.ReadKey();
@@ -44,15 +44,31 @@ namespace leetcode_012
         /// T1: 數字 int
         /// T2: 羅馬數字 string
         /// 
-        /// 羅馬數字規則需要注意, 尤其是 4, 9開頭轉換
+        /// 羅馬數字規則需要注意, 尤其是 4, 9 開頭轉換
         /// ex:
         /// 5 => V
-        /// 4 => IV, 小的數字後面接上一個大數. 代表減法
+        /// 4 => IV
         /// 
         /// 10 => X
         ///  9 => IX
+        ///  
+        /// II => 2
+        /// VII => 7
+        /// VIII => 8
+        /// 
+        /// 相同符號連續最多三次
+        /// 不會有四次
+        /// 如
+        /// 4 => IV
+        /// IIII => 這是錯誤的,沒有這種表示方法
+        ///  
+        /// 羅馬數字判讀:
+        /// 前面 < 後面 => 減法
+        /// 前面 > 後面 => 加法
+        /// 
         /// </summary>
-        static Tuple<int, string>[] valueSymbols = {
+        static Tuple<int, string>[] valueSymbols = 
+        {
             new Tuple<int, string>(1000, "M"),
             new Tuple<int, string>(900, "CM"),
             new Tuple<int, string>(500, "D"),
@@ -82,6 +98,11 @@ namespace leetcode_012
         /// 
         /// 搞懂 Tuple 這題就好解很多
         /// 
+        /// 轉換成羅馬數字
+        /// 所以從位數大的開始轉換
+        /// 大 -> 小
+        /// 阿拉伯數字判讀也是大至小剛好符合
+        /// 
         /// </summary>
         /// <param name="num"></param>
         /// <returns></returns>
@@ -90,7 +111,7 @@ namespace leetcode_012
             StringBuilder sb = new StringBuilder();
 
             // 從 valueStmbols 取出 每一組 tuple 給 num 查詢對應使用
-            // 數字 會由大開始到小
+            // 位數 會由大開始到小
             foreach (Tuple<int, string> tuple in valueSymbols)
             {
                 int value = tuple.Item1;
