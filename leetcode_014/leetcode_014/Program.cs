@@ -9,50 +9,70 @@ namespace leetcode_014
     internal class Program
     {
         /// <summary>
-        /// leetcode 014
+        /// 14. Longest Common Prefix
         /// https://leetcode.com/problems/longest-common-prefix/
         /// 
+        /// 14. 最长公共前缀
+        /// https://leetcode.cn/problems/longest-common-prefix/description/
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string[] input = { "flow", "flower" };
+            string[] input = { "flower", "flow", "flight" };
             Console.WriteLine(LongestCommonPrefix(input));
             Console.ReadKey();
         }
 
         /// <summary>
+        /// ref:
         /// https://leetcode.cn/problems/longest-common-prefix/solution/by-lockzipeel-q64w/
+        /// 
+        /// 先找出輸入 strs 陣列中, 最短的字串
+        /// 利用 最短字串長度 與 最短字串
+        /// 去跟 "其他組字串" 來做文字比對
+        /// 找出 相同的 文字出來
+        /// 找到相同就加入 共同前綴 
         /// </summary>
         /// <param name="strs"></param>
         /// <returns></returns>
         public static string LongestCommonPrefix(string[] strs)
         {
-            int a = int.MaxValue;//求最短字符串长度
-            int b = 0;//最长相同的字符串长度
-            string d = "";//最短字符段的显示
-            string c = "";
-            //通过下面的for循环，可以求出最短字符串及其长度
+            // 求出最短字串長度
+            int shortlength = int.MaxValue;
+            // 最短字串
+            string shortstring = "";
+            string res = "";
+
+            // 找出最短字串以及長度
             for (int i = 0; i < strs.Length; i++)
             {
-                if (strs[i].Length < a)
+                if (strs[i].Length < shortlength)
                 {
-                    a = strs[i].Length;
-                    d = strs[i];
+                    // 最短字串長度
+                    shortlength = strs[i].Length;
+                    // 最短字串
+                    shortstring = strs[i];
                 }
             }
-            for (int i = 0; i < a; i++)//遍历最短的字符串和其他字符串相比较，比较次数上限为最短字符串的长度
+
+            // 遍歷 "最短的字串" 和陣列中 "其他字串" 相比較, 比較次數上限為 "最短字串的長度"
+            for (int i = 0; i < shortlength; i++)
             {
+                // j: strs 陣列中, 第 j 個字串
                 for (int j = 0; j < strs.Length; j++)
                 {
-                    if (d[i] != strs[j][i])
+                    if (shortstring[i] != strs[j][i])
                     {
-                        return c;
+                        // 不存在回傳空字串
+                        return res;
                     }
                 }
-                c += d[i];
+
+                // 找到共同前綴字, 加入
+                res += shortstring[i];
             }
-            return c;
+
+            return res;
         }
 
 
