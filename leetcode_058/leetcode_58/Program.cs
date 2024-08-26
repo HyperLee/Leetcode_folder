@@ -9,13 +9,16 @@ namespace leetcode_58
     internal class Program
     {
         /// <summary>
-        /// leetcode 058
+        /// 58. Length of Last Word
         /// https://leetcode.com/problems/length-of-last-word/
+        /// 
+        /// 58. 最后一个单词的长度
+        /// https://leetcode.cn/problems/length-of-last-word/description/
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string s = "a b     ";
+            string s = "Hello Worldxx ";
 
             Console.WriteLine(LengthOfLastWord(s));
             Console.ReadKey();
@@ -24,9 +27,10 @@ namespace leetcode_58
 
         /// <summary>
         /// https://leetcode.cn/problems/length-of-last-word/solution/zui-hou-yi-ge-dan-ci-de-chang-du-by-leet-51ih/
-        /// 從後面往前面找
-        /// 从最后一个字母开始继续反向遍历字符串，直到遇到空格或者到达字符串的起始位置。遍历到的每个字母都
-        /// 是最后一个单词中的字母，因此遍历到的字母数量即为最后一个单词的长度。
+        /// 從後面往前面找从最后一个字母开始继续反向遍历字符串
+        /// ，直到遇到空格或者到达字符串的起始位置。
+        /// 遍历到的每个字母都是最后一个单词中的字母，
+        /// 因此遍历到的字母数量即为最后一个单词的长度。
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
@@ -38,14 +42,16 @@ namespace leetcode_58
             {
                 index--;
             }
+
             int wordLength = 0;
+            // 反向(後往前)遍歷字串 s, 且不為空
             while (index >= 0 && s[index] != ' ')
             {
                 wordLength++;
                 index--;
             }
-            return wordLength;
 
+            return wordLength;
         }
 
     }

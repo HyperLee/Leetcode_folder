@@ -14,3 +14,10 @@ D:\Leetcode_folder\leetcode_058\leetcode_58\obj\Debug\leetcode_58.csproj.Suggest
 D:\Leetcode_folder\leetcode_058\leetcode_58\obj\Debug\leetcode_58.csproj.CoreCompileInputs.cache
 D:\Leetcode_folder\leetcode_058\leetcode_58\obj\Debug\leetcode_58.exe
 D:\Leetcode_folder\leetcode_058\leetcode_58\obj\Debug\leetcode_58.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_058\leetcode_58\bin\Debug\leetcode_58.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_058\leetcode_58\bin\Debug\leetcode_58.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_058\leetcode_58\bin\Debug\leetcode_58.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_058\leetcode_58\obj\Debug\leetcode_58.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_058\leetcode_58\obj\Debug\leetcode_58.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_058\leetcode_58\obj\Debug\leetcode_58.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_058\leetcode_58\obj\Debug\leetcode_58.pdb
