@@ -28,9 +28,15 @@ namespace leetcode_028
 
 
         /// <summary>
+        /// ref: 暴力法
         /// https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/solutions/732236/shi-xian-strstr-by-leetcode-solution-ds6y/
         /// 
-        /// 暴力法
+        /// 從 haystack 裡面 找到與 needle 相同的字串; 簡單說就是要在 haystack 子字串中找到與 needle 字串相同
+        /// 回傳 haystack 第一次出現的起始位置( index ); 可能會出現多次相同子字串, 所以回傳第一次出現的位置即可
+        /// 找不到就回傳 -1
+        /// 
+        /// 注意外層迴圈
+        /// i + m <= n
         /// 
         /// 進階一點就是KMP演算法
         /// https://zh.wikipedia.org/zh-tw/KMP%E7%AE%97%E6%B3%95
@@ -53,11 +59,11 @@ namespace leetcode_028
 
                 for(int j = 0; j < m; j++)
                 {
-                    string tempa = haystack[i + j].ToString();
-                    string tempb = needle[j].ToString();
+                    //string tempa = haystack[i + j].ToString();
+                    //string tempb = needle[j].ToString();
 
-                    // haystack 與needle 有相同才需要比對;否則就直接下一輪比對
-                    // 減少非必要之比對
+                    // haystack 與 needle 有相同才需要比對;否則就直接下一輪(下一個 i)比對
+                    // 減少非必要之比對, 避免浪費時間
                     if (haystack[i + j] != needle[j])
                     {
                         flag = false;
@@ -65,7 +71,7 @@ namespace leetcode_028
                     }
                 }
 
-                if (flag)
+                if (flag == true)
                 {
                     return i;
                 }
