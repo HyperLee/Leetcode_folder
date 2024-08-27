@@ -5,3 +5,10 @@ D:\Leetcode_folder\leetcode_151\leetcode_151\bin\Debug\leetcode_151.pdb
 D:\Leetcode_folder\leetcode_151\leetcode_151\obj\Debug\leetcode_151.csprojResolveAssemblyReference.cache
 D:\Leetcode_folder\leetcode_151\leetcode_151\obj\Debug\leetcode_151.exe
 D:\Leetcode_folder\leetcode_151\leetcode_151\obj\Debug\leetcode_151.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_151\leetcode_151\bin\Debug\leetcode_151.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_151\leetcode_151\bin\Debug\leetcode_151.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_151\leetcode_151\bin\Debug\leetcode_151.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_151\leetcode_151\obj\Debug\leetcode_151.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_151\leetcode_151\obj\Debug\leetcode_151.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_151\leetcode_151\obj\Debug\leetcode_151.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_151\leetcode_151\obj\Debug\leetcode_151.pdb
