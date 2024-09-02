@@ -9,9 +9,10 @@ namespace leetcode_015
     class Program
     {
         /// <summary>
-        /// leetcode _ 015 3Sum
+        /// 15. 3Sum
         /// https://leetcode.com/problems/3sum/
-        /// 三数之和
+        /// 
+        /// 15. 三数之和
         /// https://leetcode.cn/problems/3sum/
         /// </summary>
         /// <param name="args"></param>
@@ -43,6 +44,13 @@ namespace leetcode_015
         /// => 排序
         /// 
         /// 可搭配網址圖片比較好理解, 三個相對位置
+        /// 
+        /// 排序是為了避免枚舉重覆
+        /// a <= b <= c
+        /// 只需要 (a, b, c)
+        /// 如果出現 (b, a, c) or (c, b, a)
+        /// 就是為了避免這問題
+        /// 
         /// </summary>
         /// <param name="nums"></param>
         /// <returns></returns>
@@ -51,43 +59,42 @@ namespace leetcode_015
             List<IList<int>> result = new List<IList<int>>();
             List<int> temp;
 
+            // 排序 asc; 避免枚舉重覆
             Array.Sort(nums);
 
-            // first不會與second與third重疊
+            // first不會與second與third重疊; 枚舉 first
             for (int first = 0; first < nums.Length - 2; first++)
             {
                 // The numbers of first, second, third should be indexes.
                 if (first > 0 && nums[first] == nums[first - 1])
                 {
                     // 項目7 另外判斷 first 是否已經重複，若重複則跳過此次迴圈，因為答案也會是一樣的
+                    // 需要和上一次枚舉的數不同
                     continue;
                 }
-
-                /* // 需要注意 first > 0 需要寫在前面 否則會 出錯 邊界有問題
-                if (nums[first] == nums[first - 1] && first > 0)
-                {
-                    // 項目7 另外判斷 first 是否已經重複，若重複則跳過此次迴圈，因為答案也會是一樣的
-                    continue;
-                }
-                */
 
                 // second 起始位置在first右邊
                 int second = first + 1;
 
-                // third 起始位置在 nums最後
+                // third 起始位置在 nums最後(最右邊)
                 int third = nums.Length - 1;
 
+                // 枚舉 second, 雙指針
                 while (second < third)
                 {
                     // 項目8 另外判斷 second 是否已經重複，若重複則 second++，並跳過此次迴圈，因為答案也會是一樣的 
+                    // 如果遇到 連續相同數字 pass
                     if (nums[second] == nums[second - 1] && second > first + 1)
                     {
+                        // 需要和上一次枚舉的數不同
                         second++;
                         continue;
                     }
+
                     int sum = nums[first] + nums[second] + nums[third];
                     if (sum == 0)
                     {
+                        // == 0 為解答
                         temp = new List<int>
                         {
                             nums[first],
@@ -100,28 +107,16 @@ namespace leetcode_015
                     }
                     else if (sum < 0)
                     {
+                        // < 0 代表負數太大，需要將 second 移至下一個較小的負數 (second++)
                         second++;
                     }
                     else
                     {
+                        // > 0 代表正數太大，需要將 third 移至上一個較小的正數 (third--)
                         third--;
                     }
                 }
             }
-            //List<string> strings = result.ConvertAll<string>(x => x.ToString());
-            //Console.WriteLine(String.Join(", ", strings));
-
-            //List<string> strings = result.Select(i => i.ToString()).ToList();
-            //Console.WriteLine(String.Join(", ", strings));
-
-            //foreach (var dinosaur in result)
-            //{
-            //    Console.WriteLine("After: " + dinosaur);
-            //}
-            //for (int i = 0; i < result.Count; i++)
-            //{
-            //    Console.WriteLine($" {result[i]}");
-            //}
 
             // result 裡面 還有一組 temp的list
             // 所以要跑兩次 才能輸出
