@@ -10,9 +10,9 @@ namespace leetcode_003
     internal class Program
     {
         /// <summary>
-        /// leetcode 003 Longest Substring Without Repeating Characters
+        /// 3. Longest Substring Without Repeating Characters
         /// https://leetcode.com/problems/longest-substring-without-repeating-characters/
-        /// 无重复字符的最长子串
+        /// 3. 无重复字符的最长子串
         /// https://leetcode.cn/problems/longest-substring-without-repeating-characters/
         /// 滑動視窗 解題觀念
         /// 
@@ -82,14 +82,19 @@ namespace leetcode_003
         /// https://leetcode.cn/problems/longest-substring-without-repeating-characters/solution/hua-dong-chuang-kou-by-powcai/
         /// 
         /// 滑動視窗 解題觀念:
-        /// 如果list集合中没有重覆出现字符，则right不断往右滑即right++并將當前字符添加到集合中
-        /// ，如果出现重覆字符則left++缩小窗口。
+        /// 如果 list 集合中没有重覆出现字符，则 right 不断往右滑即 right++ 並將當前字符添加到集合中
+        /// ，如果出现重覆字符則 left++ 缩小窗口。
         /// 直到滿足題目需求
         /// 
         /// 從左往右把字母加進去
         /// 如果遇到相同重複就把最左邊扣除,
         /// 右邊繼續往前進
         /// 直到跑完整個輸入字串為止
+        /// 
+        /// list 可以取代 HashSet
+        /// 因加入時候就會判斷是否存在, 
+        /// 已存在就會去除
+        /// 故不使用 HashSet 也無礙
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
@@ -100,24 +105,32 @@ namespace leetcode_003
                 return 0;
             }
 
-            //HashSet<char> letter = new HashSet<char>();// 哈希集合，记录每个字符是否出现过
+            // 紀錄每個 char 是否存在
             List<char> letter = new List<char>();
-            int left = 0, right = 0;//初始化左右指针，指向字符串首尾字符
+            // 初始化左右指针，預設 0 開始
+            int left = 0, right = 0;
             int length = s.Length;
-            int count = 0, max = 0;//count记录每次指针移动后的子串长度
+            // count 紀錄每次移動後字串長度
+            int count = 0, max = 0;
 
             while (right < length)
             {
-                if (!letter.Contains(s[right]))//右指针字符未重覆
+                // 右指針 char 未重複
+                if (!letter.Contains(s[right]))
                 {
-                    letter.Add(s[right]);//将该字符添加进集合
-                    right++;//右指针继续右移
+                    // 將該 char 加入 list
+                    letter.Add(s[right]);
+                    // 右指針右移
+                    right++;
                     count++;
                 }
-                else//右指针字符重覆，左指针开始右移，直到不含重覆字符（即左指针移动到重覆字符(左)的右边一位）
+                else
                 {
-                    letter.Remove(s[left]);//去除集合中当前左指针字符
-                    left++;//左指针右移
+                    // 右指針重複, 左指針開始右移.直到不含重複 char (即左指針移動到重複 char(左) 的右邊一位)
+                    // 去除 list 中當前左指針 char
+                    letter.Remove(s[left]);
+                    // 左指針右移
+                    left++;
                     count--;
                 }
                 max = Math.Max(max, count);
