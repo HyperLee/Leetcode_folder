@@ -1,5 +1,4 @@
 D:\Leetcode_folder\Leetcode_folder\leetcode_228\leetcode_228\obj\Debug\leetcode_228.csproj.AssemblyReference.cache
-D:\Leetcode_folder\Leetcode_folder\leetcode_228\leetcode_228\obj\Debug\leetcode_228.csproj.SuggestedBindingRedirects.cache
 D:\Leetcode_folder\Leetcode_folder\leetcode_228\leetcode_228\obj\Debug\leetcode_228.csproj.CoreCompileInputs.cache
 D:\Leetcode_folder\Leetcode_folder\leetcode_228\leetcode_228\bin\Debug\leetcode_228.exe.config
 D:\Leetcode_folder\Leetcode_folder\leetcode_228\leetcode_228\bin\Debug\leetcode_228.exe
