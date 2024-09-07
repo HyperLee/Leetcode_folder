@@ -22,7 +22,7 @@ namespace leetcode_020
 
             bool r = false;
             r = IsValid(a);
-            Console.WriteLine("the program result:" + r);
+            Console.WriteLine("result:" + r);
             Console.ReadKey();
         }
 
@@ -41,12 +41,15 @@ namespace leetcode_020
         ///    https://docs.microsoft.com/zh-tw/dotnet/api/system.collections.stack.peek?view=net-6.0
         ///    
         /// 每當遇到一個 左括號 就會期待 一個右括號 組合成一組
-        /// 所以遇到一左就push一右 為一組
-        /// 等後續有右括號進來就pop
+        /// 所以遇到一左括號就 push 一右括號 為一組
+        /// 等後續有右括號進來就 pop 出去
         /// 因為括號為偶數
         /// 故最後 stack.count 為0
         /// 就代表true 皆為兩兩一組
         /// 反之false
+        /// 
+        /// 需要注意 左括號 對 右括號 兩兩一組
+        /// 順序大小都需要相同層級才可以
         /// 
         /// 其他方法可以參考
         /// https://ithelp.ithome.com.tw/articles/10217603
@@ -58,9 +61,10 @@ namespace leetcode_020
         /// <returns></returns>
         public static bool IsValid(string s)
         {
+            // 字串取每個單字宣告為 char
             Stack<char> _stack = new Stack<char>();
 
-            // 長度需要是2的倍數 因為括號是兩個為一對. 必須是偶數
+            // 長度需要是 2 的倍數 因為括號是兩個為一對. 必須是偶數
             if (s.Length % 2 != 0)
             {
                 return false;
@@ -101,7 +105,7 @@ namespace leetcode_020
 
             }
 
-            // 為0 代表 全部括號 都是合法的
+            // 為 0 代表全部括號都是成對的且方向與順序都沒問題
             if (_stack.Count == 0)
             {
                 return true;
