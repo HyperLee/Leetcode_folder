@@ -35,7 +35,7 @@ namespace leetcode_150
             string[] input = { "2", "1", "+", "3", "*" };
             Console.WriteLine(EvalRPN(input));
             Console.ReadKey();
-        }
+         }
 
 
         /// <summary>
@@ -48,6 +48,7 @@ namespace leetcode_150
         /// <returns></returns>
         public static int EvalRPN(string[] tokens)
         {
+            // 回傳答案是 int 型態
             Stack<int> stack = new Stack<int>();    
             int length = tokens.Length;
 
@@ -62,12 +63,14 @@ namespace leetcode_150
                 }
                 else
                 {
-                    // 遇到符號就要運算
+                    // 遇到符號就要運算( 將數字 pop 出來, 再進行符號運算後.
+                    // 在計算完畢數字 push 進入 stack)
                     // 最上方(後進入)兩個數字抓出來運算
                     // stack 先進後出, 所以宣告先大在小合理
                     int num2 = stack.Pop();
                     int num1 = stack.Pop();
 
+                    // 注意 num1 與 num2 順序不能互換. 計算會出錯
                     switch(token)
                     {
                         case "+":
@@ -94,6 +97,14 @@ namespace leetcode_150
 
         /// <summary>
         /// 判斷是不是數字
+        /// 在 C# 中，char.IsDigit 方法用于判断指定字符是否是一个数字。它返回一个布尔值，表示字符是否是 0 到 9 之间的数字。
+        ///
+        /// 輸入是 string, 要轉 char 才能判斷
+        /// 所以用 陣列方式表達
+        /// 
+        /// ex:
+        /// string str = "A";
+        /// char c = str[0]; 
         /// </summary>
         /// <param name="token"></param>
         /// <returns></returns>
