@@ -26,6 +26,12 @@ namespace leetcode_112
         /// https://leetcode.com/problems/path-sum/
         /// 112. 路径总和
         /// https://leetcode.cn/problems/path-sum/
+        /// 
+        /// 本題目簡單說就是找出一條路徑
+        /// 從 root 走到 lead node
+        /// 加總 node value 要與 targetSum 相同
+        /// 有就是 true
+        /// 反之就是 false
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -33,8 +39,8 @@ namespace leetcode_112
             TreeNode root = new TreeNode(1);
             root.left = new TreeNode(2);
             root.right = new TreeNode(3);
-            int targetSum = 5;
-            Console.WriteLine(HasPathSum(root, 5));
+            int targetSum = 4;
+            Console.WriteLine(HasPathSum(root, targetSum));
             Console.ReadKey();
         }
 
@@ -44,8 +50,17 @@ namespace leetcode_112
         /// https://leetcode.cn/problems/path-sum/solutions/318487/lu-jing-zong-he-by-leetcode-solution/
         /// 方法二 遞迴
         /// 
-        /// 当题目中提到了 叶子节点 时，正确的做法一定要同时判断节点的 左右子
-        /// 树同时为空 才是叶子节点。
+        /// 当题目中提到了 叶子节点 时，正确的做法一定要同时判断节点的 左右子树同时为空 才是叶子节点。
+        /// 叶子节点 是指没有子节点的节点。
+        /// 
+        /// 簡單說就是 路徑總和 要與 targetSum 相同
+        /// 所以
+        /// 從 root 往下走 每走到一個 node 就扣減該 node value 
+        /// => targetSum - root.val
+        /// 直到 走到 leaf node 為止
+        /// 此時判斷 targetSum == root.val 是否相同
+        /// 相同即是 true
+        /// 反之則是 false
         /// </summary>
         /// <param name="root"></param>
         /// <param name="targetSum"></param>
@@ -56,8 +71,8 @@ namespace leetcode_112
             {
                 return false;
             }
-
-            // 叶子节点
+            
+            // 沒有左右子樹的節點 => 葉子節點
             if (root.left == null && root.right == null)
             {
                 return targetSum == root.val;
