@@ -56,7 +56,8 @@ namespace leetcode_222
         /// 遞迴 作法
         /// 
         /// 注意 要加 1
-        /// 0 開始 要加上自己
+        /// 每遇到一個 node 就 + 1
+        /// 累加 加總意思
         /// </summary>
         /// <param name="root"></param>
         /// <returns></returns>
