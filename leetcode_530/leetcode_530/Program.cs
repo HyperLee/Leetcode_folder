@@ -46,6 +46,9 @@ namespace leetcode_530
             Console.ReadKey();
         }
 
+        public static int pre;
+        public static int ans;
+
         /// <summary>
         /// https://leetcode.cn/problems/minimum-distance-between-bst-nodes/solution/gong-shui-san-xie-yi-ti-san-jie-shu-de-s-7r17/
         /// 懶人字串解法（DFS）
@@ -65,25 +68,11 @@ namespace leetcode_530
         /// <returns></returns>
         public static int GetMinimumDifference(TreeNode root)
         {
-            List<int> list = new List<int>();
-
-            Inorder_traversal(root, list);
-
-            // sort; 使用中序, 不需要在排序大小. 因輸入是二元樹且中序是由小至大排序特性
-            //Array.Sort(list.ToArray());
-
-            int n = list.Count;
-            int ans = int.MaxValue;
-
-            // 找出最小數值
-            for (int i = 1; i < n; i++)
-            {
-                int cur = Math.Abs(list[i] - list[i - 1]);
-                ans = Math.Min(ans, cur);
-            }
+            pre = -1;
+            ans = int.MaxValue;
+            Inorder_traversal(root);
 
             return ans;
-
         }
 
 
@@ -96,49 +85,25 @@ namespace leetcode_530
         /// </summary>
         /// <param name="root"></param>
         /// <param name="list"></param>
-        public static void Inorder_traversal(TreeNode root, List<int> list)
+        public static void Inorder_traversal(TreeNode root)
         {
-
-            if (root.left != null)
+            if(root == null)
             {
-                Inorder_traversal(root.left, list);
+                return;
             }
 
-            list.Add(root.val);
+            Inorder_traversal(root.left);
+            if(pre == -1)
+            {
+                pre = root.val;
+            }
+            else
+            {
+                ans = Math.Min(ans, Math.Abs(root.val - pre));
+                pre = root.val;
+            }
 
-            if (root.right != null)
-            {
-                Inorder_traversal(root.right, list);
-            }
-        }
-
-
-        /// <summary>
-        /// DFS
-        /// 在 C# 中，深度優先搜索（DFS，Depth-First Search）是一種圖的遍歷演算法。
-        /// DFS 優先沿著每條可能的路徑探索到底，再回溯並尋找其他路徑。
-        /// DFS 適用於樹或圖的遍歷，也可用於解決像是迷宮問題、連通性問題等。
-        /// 
-        /// </summary>
-        /// <param name="root"></param>
-        /// <param name="list"></param>
-        public static void DFS(TreeNode root, List<int> list)
-        {
-            // 訪問根節點
-            if(root != null)
-            {
-                list.Add(root.val);
-            }
-            // 訪問左子樹
-            if (root.left != null)
-            {
-                DFS(root.left, list);
-            }
-            // 訪問右子樹
-            if (root.right != null)
-            {
-                DFS(root.right, list);
-            }
+            Inorder_traversal(root.right);
         }
 
     }
