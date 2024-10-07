@@ -9,14 +9,21 @@ namespace leetcode_035
     internal class Program
     {
         /// <summary>
-        /// leetcode 035  Search Insert Position
+        /// 35. Search Insert Position
         /// https://leetcode.com/problems/search-insert-position/description/
+        /// 
+        /// 35. 搜索插入位置
+        /// https://leetcode.cn/problems/search-insert-position/description/
+        /// 
+        /// 找出 target 在陣列中的 第幾個 index
+        /// 要是找不到就回傳可以插入的 index 位置
+        /// 輸入的陣列不會重複且已經過排序
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] nums = new int[] { 11, 33, 55, 66 };
-            int target = 77;
+            int[] nums = new int[] { 1, 3, 5, 6 };
+            int target = 5;
 
             Console.WriteLine(SearchInsert(nums, target));
             Console.ReadKey();
@@ -50,23 +57,27 @@ namespace leetcode_035
         public static int SearchInsert(int[] nums, int target)
         {
             int low = 0, high = nums.Length - 1;
+
             while (low <= high)
             {
-                // 防止溢出 等同于(left + right)/2
-                int mid = low + ((high - low) / 2);
-                if (nums[mid] == target)
+                // + low => 防止溢出 等同于 (left + right) / 2
+                int mid = low + (high - low) / 2;
+                if(nums[mid] == target)
                 {
                     return mid;
                 }
-                else if (nums[mid] > target)
+                else if(nums[mid] > target)
                 {
+                    // 數字太大, high 往左縮小
                     high = mid - 1;
                 }
                 else
                 {
+                    // 數字太小, low 往右放大
                     low = mid + 1;
                 }
             }
+
             return low;
 
         }
