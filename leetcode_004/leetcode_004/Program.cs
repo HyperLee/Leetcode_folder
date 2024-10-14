@@ -9,8 +9,17 @@ namespace leetcode_004
     class Program
     {
         /// <summary>
-        /// leetcode 004
+        /// 4. Median of Two Sorted Arrays
         /// https://leetcode.com/problems/median-of-two-sorted-arrays/
+        /// 
+        /// 4. 寻找两个正序数组的中位数
+        /// https://leetcode.cn/problems/median-of-two-sorted-arrays/description/
+        /// 
+        /// 將題目提供個兩個陣列, 求出中位數 數值是多少
+        /// 不是陣列 index, 是求出平均數值
+        /// 
+        /// 對於有限的數集，可以通過把所有觀察值高低排序後找出正中間的一個作爲中位數。
+        /// 如果觀察值有偶數個，則中位數不唯一，通常取最中間的兩個數值的平均數作爲中位數。
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -44,6 +53,12 @@ namespace leetcode_004
         /// 
         /// 中位數定義 wiki
         /// https://zh.wikipedia.org/wiki/%E4%B8%AD%E4%BD%8D%E6%95%B8
+        /// 
+        /// 解法:
+        /// 1. 宣告 int[] merged 用來暫存
+        /// 2. 將 nums1 與 nums2 合併 (nums1 尾端串接 nums2) 放到 merged
+        /// 3. 因要計算中位數, 所以要將 merged 排序
+        /// 4. 根據長度奇偶數不同, 有不同計算方式
         /// </summary>
         /// <param name="nums1"></param>
         /// <param name="nums2"></param>
@@ -62,18 +77,21 @@ namespace leetcode_004
             // Version2 combine
             merged = arr1.Concat(arr2).ToArray();
             
-            // sort
+            // sort 小至大 asc
             Array.Sort(merged);
+
+            // 求出中位數
             int length = merged.Length;
             if (length % 2 == 0)
             {
-                // 偶數, * 1.0 ==>轉double. 小數點下位數顯示
+                // 偶數
                 int index = length / 2;
+                // * 1.0 ==> 轉 double. 小數點下位數顯示
                 return (merged[index - 1] + merged[index]) * 1.0 / 2;
             }
             else
             {
-                // 奇數
+                // 奇數, (length - 1) => 去除小數點, 取整數 index 
                 int index = (length - 1) / 2;
                 return merged[index];
             }
