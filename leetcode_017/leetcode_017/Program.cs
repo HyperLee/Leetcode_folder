@@ -49,18 +49,21 @@ namespace leetcode_017
             digits2 = digits;
             combinations = new List<string>();
 
+            // 輸入為空, 直接返回
             if (digits2.Length == 0)
             {
                 return combinations;
             }
 
+            // 不為空, 就去回朔找資料
             Backtrack(0, new StringBuilder());
 
 
             // 答案輸出
+            Console.Write("res: ");
             foreach(var item in combinations)
             {
-                Console.WriteLine(item);
+                Console.Write(item + ", ");
             }
 
             return combinations;
@@ -77,31 +80,38 @@ namespace leetcode_017
         /// 
         /// 当给定的字符串遍历结束时，可变字符串即为一个可能的字母组合，
         /// 将该字母组合添加到结果列表中，然后回退并遍历其他可能的字母
+        /// 
+        /// 1.依據題目輸入順序取出該鍵盤數字
+        /// 2.取出該數字對應的的英文字母
+        /// 3.將該字母加入 combination (預選, 候選), 再來透過 index + 1 找出下一個按鈕的字母
+        /// 4.當長度符合題目需求(digits2) 就將該字母組合加入至 combinations
+        /// 5.退回原先長度, 繼續找下一個組合
+        /// 
         /// </summary>
-        /// <param name="index"></param>
-        /// <param name="combination"></param>
+        /// <param name="index">index</param>
+        /// <param name="combination">加入預選(候選)字母組合</param>
         public static void Backtrack(int index, StringBuilder combination)
         {
-            // 排列暫存的 組合長度符合digits2長度(題目輸入) 就加入
+            // 排列暫存的組合長度符合 digits2 長度(題目輸入長度) 就加入答案
             if (index == digits2.Length)
             {
                 combinations.Add(combination.ToString());
             }
             else
             {
-                // 找出是 鍵盤數字多少
+                // 取出 digits2 數字; 取出 digits2 中第 index 位置資料
                 int digit = digits2[index] - '0';
-                // 取出 該鍵盤數字內含之英文字母
+                // 取出數字映射的英文字母
                 string letters = lettersArr[digit];
 
                 // 找出所有可能之組合
                 foreach (char c in letters)
                 {
-                    // 加入排列暫存
+                    // 將對應的字母加入排列暫存(預選;候選)
                     combination.Append(c);
-                    // 加入之後, 計算下一種之組合(index + 1)
+                    // 遞迴; 加入之後, 計算下一種之組合(index + 1) (找下個預選者)
                     Backtrack(index + 1, combination);
-                    // , 扣除長度. 
+                    // 回歸; 退回原先狀態(字母), 再找下個新的組合
                     combination.Length--;
                 }
 
