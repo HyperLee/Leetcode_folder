@@ -13,6 +13,16 @@ namespace leetcode_046
         /// https://leetcode.com/problems/permutations/
         /// 46. 全排列
         /// https://leetcode.cn/problems/permutations/
+        /// 
+        /// 给定一个不含重复数字的数组 nums ，返回其 所有可能的全排列 。你可以 按任意顺序 返回答案。
+        /// 
+        /// 想像成輸入的陣列是一直行裡面儲存數字
+        /// 我們做的是拼出各種排列組合
+        /// 數字本身都不重複, 所以我們就把數字依據 index 
+        /// 來做交換. 組合出各種不同的組合
+        /// https://leetcode.cn/problems/permutations/solutions/218275/quan-pai-lie-by-leetcode-solution-2/
+        /// 建議看官方解法裡面的類似 ppt 的報表
+        /// 有圖示說明 比較好理解
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -23,10 +33,12 @@ namespace leetcode_046
             Console.ReadKey();
         }
 
-
+        // 儲存答案
         public static IList<IList<int>> permutations = new List<IList<int>>();
-        public static IList<int> temp = new List<int>(); //  用于存储当前排列; 將nums依序塞入temp生成全排列
-        public static int n; // nums長度
+        // 用于存储当前排列; 將 nums 依序塞入 temp 生成全排列
+        public static IList<int> temp = new List<int>();
+        // nums 長度
+        public static int n; 
 
 
         /// <summary>
@@ -49,7 +61,7 @@ namespace leetcode_046
 
             Backtrack(0);
 
-
+            // 答案輸出
             foreach(var value in permutations)
             {
                 Console.Write("[");
@@ -72,7 +84,7 @@ namespace leetcode_046
         /// 
         /// 如果 index = n，则当前排列中的所有元素都已经确定，将当前排列添加到结果列表中。
         /// 如果 index < n，则对于每个 index ≤ i < n，执行如下操作。
-        /// 1. 将 temp[index] 和 temp[i] 的值交换，然后将 index+1 作为当前下标继续搜索。
+        /// 1. 将 temp[index] 和 temp[i] 的值交换，然后将 index + 1 作为当前下标继续搜索。
         /// 2. 将 temp[index] 和 temp[i] 的值再次交换，恢复到交换之前的状态。
         /// 
         /// https://leetcode.cn/problems/permutations/solution/quan-pai-lie-by-leetcode-solution-2/
@@ -82,6 +94,7 @@ namespace leetcode_046
         /// <param name="index"></param>
         public static void Backtrack(int index)
         {
+            // 排列組合長度符合題目要求
             if (index == n)
             {
                 // 排列組合完成加入
@@ -93,11 +106,10 @@ namespace leetcode_046
                 {
                     // 找出可能排列
                     Swap(temp, index, i);
-                    // index+1 作为当前下标继续搜索
+                    // index + 1 作为当前下标继续搜索
                     Backtrack(index + 1);
                     // 撤銷排列; 狀態重置
                     Swap(temp, index, i);
-
                 }
 
             }
@@ -118,7 +130,6 @@ namespace leetcode_046
             int curr = temp[index1];
             temp[index1] = temp[index2];
             temp[index2] = curr;
-
         }
 
 
