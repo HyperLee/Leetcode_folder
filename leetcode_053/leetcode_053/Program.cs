@@ -25,10 +25,10 @@ namespace leetcode_053
 
 
         /// <summary>
-        /// /https://leetcode.cn/problems/maximum-subarray/solutions/228009/zui-da-zi-xu-he-by-leetcode-solution/?envType=daily-question&envId=Invalid+Date
-        /// 題目要求是要找出連續的位置
+        /// https://leetcode.cn/problems/maximum-subarray/solutions/228009/zui-da-zi-xu-he-by-leetcode-solution/?envType=daily-question&envId=Invalid+Date
+        /// 題目要求是要找出連續的位置總和
         /// 
-        /// 前面總和 + 現在 i位置 數值 與 現在 i 位置 取出最大者
+        /// 前 i 個數值總和(前面總和) 與 現在 i 位置(當前數值) 對比取出最大者
         /// 即可當作是連續加總找出最大總和
         /// 
         /// </summary>
@@ -37,12 +37,13 @@ namespace leetcode_053
         public static int MaxSubArray(int[] nums)
         {
             int pre = 0;
+            // 取第一個數值當作預設
             int maxans = nums[0];
 
-            foreach(int x in nums)
+            foreach(int num in nums)
             {
                 // 連續加總
-                pre = Math.Max(pre + x, x);
+                pre = Math.Max(pre + num, num);
                 // 記錄最大
                 maxans = Math.Max(pre, maxans);
             }
