@@ -6,3 +6,10 @@ D:\Leetcode_folder\leetcode_108\leetcode_108\obj\Debug\leetcode_108.csproj.Sugge
 D:\Leetcode_folder\leetcode_108\leetcode_108\obj\Debug\leetcode_108.csproj.CoreCompileInputs.cache
 D:\Leetcode_folder\leetcode_108\leetcode_108\obj\Debug\leetcode_108.exe
 D:\Leetcode_folder\leetcode_108\leetcode_108\obj\Debug\leetcode_108.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_108\leetcode_108\bin\Debug\leetcode_108.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_108\leetcode_108\bin\Debug\leetcode_108.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_108\leetcode_108\bin\Debug\leetcode_108.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_108\leetcode_108\obj\Debug\leetcode_108.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_108\leetcode_108\obj\Debug\leetcode_108.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_108\leetcode_108\obj\Debug\leetcode_108.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_108\leetcode_108\obj\Debug\leetcode_108.pdb
