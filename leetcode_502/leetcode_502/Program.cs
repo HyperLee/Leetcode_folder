@@ -10,9 +10,9 @@ namespace leetcode_502
     internal class Program
     {
         /// <summary>
-        /// leetcode 502 IPO
+        /// 502. IPO
         /// https://leetcode.com/problems/ipo/
-        /// 中文題目
+        /// 502. IPO
         /// https://leetcode.cn/problems/ipo/
         /// </summary>
         /// <param name="args"></param>
@@ -31,27 +31,33 @@ namespace leetcode_502
         /// <summary>
         /// https://leetcode.com/problems/ipo/solutions/131379/c-beats-100/?q=c%23&orderBy=most_relevant
         /// 
-        /// 有tryadd方法 無法執行
+        /// 有 tryadd 方法 無法執行
         /// 
         /// https://leetcode.cn/problems/ipo/solution/wo-ye-bu-zhi-dao-shi-yao-suan-fa-dan-shi-xq38/
         /// 目前使用之方法; 無註解與說明
         /// 靠自己中斷 測試出來 得知
+        /// 
+        /// profits 與 capital 題目初始已由小至大排序
+        /// 但是要找出 k 個最大獲利
+        /// 所以當然是要反向排序
+        /// 由大至小, 高額度才高獲利
         /// </summary>
         /// <param name="k">最多能完成之項目</param>
-        /// <param name="w">目前資本</param>
+        /// <param name="w">目前資金</param>
         /// <param name="profits">純利潤</param>
-        /// <param name="capital">最小資本(啟動資金)</param>
+        /// <param name="capital">專案資本額度(啟動資金/低消)</param>
         /// <returns></returns>
         public static int FindMaximizedCapital(int k, int w, int[] profits, int[] capital)
         {
-            // 資本不能比 最小啟動資金還低, 這樣專案一個都不能跑
-            // 啟動資本 已經排序 大至小 最小都不能跑 那就可以結案了
+            // 手上當前資金不能比 最小專案資本額還低, 這樣專案一個都不能跑
+            // 專案資本 已經排序 小至大 最小都不能跑 那就可以結案了
             if (w < capital.Min())
             {
                 return 0;
             }
 
             int n = profits.Length;
+            // Key: index, Value: array value
             Dictionary<int, int> dicP = new Dictionary<int, int>();
             Dictionary<int, int> dicC = new Dictionary<int, int>();
             
@@ -61,33 +67,36 @@ namespace leetcode_502
                 dicC.Add(i, capital[i]);
             }
 
-            // 排序方式是 逆向 反轉 排序; 目前還不清楚反向 用意
+            // 排序方式是 逆向 反轉 排序;
             // 看題目範例 這兩個排序似乎是 小到大, 所以反轉就可以直接從大的開始拿
             dicP = dicP.OrderBy(d => d.Value).Reverse().ToDictionary(d => d.Key, d => d.Value);
             dicC = dicC.OrderBy(d => d.Value).Reverse().ToDictionary(d => d.Key, d => d.Value);
 
-            //項目與利潤 都要 > 0
+            // 當沒有項目或是沒有獲利 就終止條件
             while (k > 0 && dicP.Count() > 0)
             {
-                // 資本不能比 啟動資金小
+                // 手上當前資金不能比最小的 專案資本還要小, 這樣無法啟動專案
                 if (w < dicC.Last().Value)
                 {
                     break;
                 }
 
-                // 資本大於 啟動資本最大那一個, 也就是說 全部都可以選
-                // 資本 > 啟動資本
-                // 基本上 一開始都是先跑下面那個foreach 加入初始的 item.key => 0 那一個之後
+                // 手上當前資金 大於 專案資本最大那一個, 也就是說 全部都可以選
+                // 手上當前資金 > 專案資本
+                // 基本上 一開始都是先跑下面那個 foreach 加入初始的 item.key => 0 那一個之後
                 // 就有基本 value 就會來跑這邊了
                 if (w >= dicC.Max(c => c.Value))
                 {
                     // 找到最大利潤, 項目就減少一項
-                    // 把利潤加入 資本裡面
+                    // 把利潤加入 當前資金裡面
                     // 利潤排序是大至小, 故會是最大獲利
                     foreach (var item in dicP)
                     {
+                        // 賺到獲利
                         w += item.Value;
+                        // 移除項目
                         --k;
+
                         if (k <= 0)
                         {
                             // 項目不能為空, 為空就跳出
@@ -98,18 +107,23 @@ namespace leetcode_502
                 }
 
 
-                // 找出 可以使用的 啟動資本
+                // 找出 可以使用的 專案資本
                 foreach (var item in dicP)
                 {
-                    // 一開始 w基本上都是0 所以 item.Key基本上 都要找到最小那一個 才能加入
-                    // 除非一開始 題目就給 w > 0 了, item.Key => 0那一個 加入他所蘊含的value;
-                    // 找出 資本 >  可使用啟動資金, 就把value加入 然後 從dictionary 剔除
+                    // 找出 手上當前資金 >  可使用專案資本, 就把 value 加入 然後 從 dictionary 剔除
+                    // 一開始 w 基本上都是 0 所以 item.Key 基本上 都要找到最小那一個 才能加入
+                    // 除非一開始 題目就給 w > 0 了, item.Key => 0 那一個 加入他所蘊含的 value;
                     if (w >= dicC[item.Key])
                     {
+                        // 賺到獲利
                         w += item.Value;
+                        // 移除項目
                         --k;
+                        // 移除項目
                         dicC.Remove(item.Key);
+                        // 移除項目
                         dicP.Remove(item.Key);
+
                         break;
                     }
 
