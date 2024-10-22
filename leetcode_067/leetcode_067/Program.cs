@@ -29,6 +29,8 @@ namespace leetcode_067
         /// <summary>
         /// https://leetcode.cn/problems/add-binary/solution/er-jin-zhi-qiu-he-by-yicheng2020/
         /// 從兩個 string 的尾端開始往前計算
+        /// 二進位從低位開始往高位做計算 <右邊往左邊計算>
+        /// 低位遇到進位問題,要給高位來進位
         /// 
         /// </summary>
         /// <param name="a"></param>
@@ -36,15 +38,14 @@ namespace leetcode_067
         /// <returns></returns>
         public static string AddBinary(string a, string b)
         {
-            // 宣告長度為 a.Length + 1 (例如："11" + "1") , 避免溢位/進位問題
-            List<char> result = new List<char>(a.Length + 1);
+            List<char> result = new List<char>();
 
             // carry 紀錄相加之後是否需要進位
             int carry = 0;
 
+            // i--, j-- 後往前  右往左 低位往高位
             for (int i = a.Length - 1, j = b.Length - 1; i >= 0 || j >= 0; i--, j--)
             {
-                // i--, j-- 後往前  右往左
                 int aElement = i >= 0 ? int.Parse(a[i].ToString()) : 0;
                 int bElement = j >= 0 ? int.Parse(b[j].ToString()) : 0;
                 int tempResult = carry + aElement + bElement;
@@ -61,7 +62,7 @@ namespace leetcode_067
 
             // 因當初是反向計算, 所以答案輸出要反轉
             result.Reverse();
-            return new string(result.ToArray<char>());
+            return new string(result.ToArray());
         }
 
         /// <summary>
@@ -77,6 +78,8 @@ namespace leetcode_067
         /// 
         /// 二進位相加最多就上述幾種 case
         /// 
+        /// 二進位從低位開始往高位做計算 <右邊往左邊計算>
+        /// 低位遇到進位問題,要給高位來進位
         /// </summary>
         /// <param name="result">儲存答案</param>
         /// <param name="tempResult">加總後數值</param>
