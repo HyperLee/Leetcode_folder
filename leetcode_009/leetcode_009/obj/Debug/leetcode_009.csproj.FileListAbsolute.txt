@@ -3,3 +3,10 @@ D:\TestFolder\leetcode_009\leetcode_009\bin\Debug\leetcode_009.exe
 D:\TestFolder\leetcode_009\leetcode_009\bin\Debug\leetcode_009.pdb
 D:\TestFolder\leetcode_009\leetcode_009\obj\Debug\leetcode_009.exe
 D:\TestFolder\leetcode_009\leetcode_009\obj\Debug\leetcode_009.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_009\leetcode_009\bin\Debug\leetcode_009.exe.config
+D:\Leetcode_folder\Leetcode_folder\leetcode_009\leetcode_009\bin\Debug\leetcode_009.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_009\leetcode_009\bin\Debug\leetcode_009.pdb
+D:\Leetcode_folder\Leetcode_folder\leetcode_009\leetcode_009\obj\Debug\leetcode_009.csproj.AssemblyReference.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_009\leetcode_009\obj\Debug\leetcode_009.csproj.CoreCompileInputs.cache
+D:\Leetcode_folder\Leetcode_folder\leetcode_009\leetcode_009\obj\Debug\leetcode_009.exe
+D:\Leetcode_folder\Leetcode_folder\leetcode_009\leetcode_009\obj\Debug\leetcode_009.pdb
