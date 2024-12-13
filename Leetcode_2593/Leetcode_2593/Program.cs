@@ -52,8 +52,8 @@ namespace Leetcode_2593
                 numIndices[i][1] = i;
             }
 
-            // 排序, 排序的方法为首先按照元素值升序排序
-            // ，当元素值相等时按照下标升序排序。
+            // 排序，排序的方式為首先按照 element value 升序 (ASC) 排序
+            //，當 element value 相同時按照 index 升序 (ASC) 排序
             Array.Sort(numIndices, (a, b) =>
             {
                 if (a[0] != b[0])
