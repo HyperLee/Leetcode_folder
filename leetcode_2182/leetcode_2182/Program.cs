@@ -43,6 +43,8 @@ namespace leetcode_2182
         /// 大的 char (j)加到字符串末尾，随后继续选择当前剩余的字典序最大的 char (i)加到字符串末尾
         /// ，直至使用完 char 或没有新的 char 可以合法加入。
         /// 
+        /// i 與 j 互換時候 m 重製
+        /// 當 持續加入時候 m 累積
         /// </summary>
         /// <param name="s">string 輸入字串</param>
         /// <param name="repeatLimit">integer 限制每個char 使用最大次數</param>
@@ -80,6 +82,7 @@ namespace leetcode_2182
                 }
                 else if (j >= i || count[j] == 0)
                 {
+                    // i 這邊次數達到上限, 換 j 這邊使用
                     // 當前 char 已經超過限制, 查找可填入的其他 char 
                     j--;
                 }
