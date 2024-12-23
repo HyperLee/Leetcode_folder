@@ -56,7 +56,7 @@
         /// 這樣可以避免重覆搜尋
         /// 
         /// 將每層的 node.val 找出來後
-        /// 1. 將資料遞增排序
+        /// 1. 將原始資料做遞增排序
         /// 2. 未排序原始資料
         /// 3. 將 1 與 2 比對
         /// 4. 不同就進行 swap
@@ -77,9 +77,9 @@
             while (queue.Count > 0)
             {
                 int size = queue.Count;
-                // 每層 node.value; 未排序
+                // 每層 node.value; 未排序資料
                 int[] arr = new int[size];
-                // 每層 node.value, 遞增排序後狀態
+                // 每層 node.value, 遞增排序後資料
                 int[] sorted = new int[size];
                 for(int i = 0; i < size; i++)
                 {
@@ -103,7 +103,7 @@
                 }
                 // 排序
                 Array.Sort(sorted);
-                // 儲存排序後每個 node.val 以及位置 index; 預期正確位置
+                // hash table!?; 儲存排序後每個 node.val 以及位置 index; 預期正確位置
                 IDictionary<int, int> targetIndices = new Dictionary<int, int>();
                 for(int i = 0; i < size; i++)
                 {
