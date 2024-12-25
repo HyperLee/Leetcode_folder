@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace leetcode_1768
 {
@@ -19,7 +15,7 @@ namespace leetcode_1768
         /// 
         /// ex:  
         /// w1 = abc, w2 = pqr
-        ///  new =>  apbqr
+        /// new => apbqr
         ///  
         /// w1 = abc4, w2 = pqr
         /// new => apbqcr4
@@ -28,16 +24,21 @@ namespace leetcode_1768
         static void Main(string[] args)
         {
             string w1 = "abc";
-            string w2 = "pqr77";
+            string w2 = "pqr";
 
-            Console.WriteLine(MergeAlternately(w1, w2));
+            Console.WriteLine("res: " + MergeAlternately(w1, w2));
 
-            Console.ReadKey();
         }
 
 
         /// <summary>
-        /// 利用 StringBuilder來整合成新字串
+        /// 利用 StringBuilder sb 來整合成新字串
+        /// 
+        /// 1.先計算出兩個輸入字串都有交集的共通長度
+        /// 2.取出 n 之後先交叉寫入 sb
+        /// 3.計算各字串超出共通長度部分
+        /// 4. 承上3, 寫入 sb
+        /// 
         /// </summary>
         /// <param name="word1"></param>
         /// <param name="word2"></param>
@@ -47,10 +48,10 @@ namespace leetcode_1768
             int n1 = word1.Length;
             int n2 = word2.Length;
 
-            // 取兩者共同都有的長度 出來跑迴圈
+            // 取兩者最大共同長度, 出來跑迴圈
             int n = Math.Min(n1, n2);
 
-            // 交叉寫入 sb
+            // 1.先交叉寫入兩者共同長度部分文字
             StringBuilder sb = new StringBuilder();
             for(int i = 0; i < n; i++)
             {
@@ -58,25 +59,23 @@ namespace leetcode_1768
                 sb.Append(word2[i]);
             }
 
-
-            // 超長部分 擷取出來之後 再放到字尾
-            // 基於共同都有的長度(n)之下 再組合 多出的 diff 長度
+            // 2. 再來處理超出共同長度部分
+            // 計算出超長部分長度 diff, 在寫入 sb 裡面
             if(n1 > n)
             {
                 int diff = n1 - n;
-
+                // 擷取長度: n 到 diff
                 sb.Append(word1.Substring(n, diff));
             }
 
             if(n2 > n)
             {
                 int diff = n2 - n;
+                // 擷取長度: n 到 diff
                 sb.Append(word2.Substring(n, diff));
             }
 
             return sb.ToString();
-
         }
-
     }
 }
