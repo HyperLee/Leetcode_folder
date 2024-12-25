@@ -13,6 +13,9 @@ namespace leetcode_1071
         /// 
         /// 对于字符串 s 和 t，只有在 s = t + t + t + ... + t + t（t 自身连接 1 次或多次）时，我们才认定 “t 能除尽 s”。
         /// 给定两个字符串 str1 和 str2 。返回 最长字符串 x，要求满足 x 能除尽 str1 且 x 能除尽 str2 。
+        /// 
+        /// 最大公因數（英語：highest common factor，hcf）也稱最大公約數（英語：greatest common divisor，gcd）是數學詞彙，
+        /// 指能夠整除多個非零整數的最大正整數。例如8和12的最大公因數為4。
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -46,22 +49,14 @@ namespace leetcode_1071
         public static string GcdOfStrings(string str1, string str2)
         {
             int len1 = str1.Length, len2 = str2.Length;
-
-            // 從兩字串中取出較短的字串長度出來, 找出最長共同字串長度(由大至小縮減找出來)
-            for (int i = Math.Min(len1, len2); i >= 1; i--)
+            // 找出公因數字串
+            string GCDWord = str1.Substring(0, GCD(len1, len2));
+            // 公因數字串與原輸入字串比對
+            if (check(GCDWord, str1) && check(GCDWord, str2))
             {
-                // 長度需要能夠 %(mod) 兩字串為 0 才是兩者共同公因數長度
-                if (len1 % i == 0 && len2 % i == 0)
-                {
-                    // 更新公因數字串
-                    string x = str1.Substring(0, i);
-                    // 與兩輸入字串比對是否都能成立
-                    if (check(x, str1) && check(x, str2))
-                    {
-                        return x;
-                    }
-                }
+                return GCDWord;    
             }
+
             return "";
         }
 
@@ -95,5 +90,26 @@ namespace leetcode_1071
             //return ans.ToString().Equals(s);
         }
 
+
+        /// <summary>
+        /// GCD 最大公因數長度 計算
+        /// 辗转相除法求得两个字符串长度的最大公约数 gcd(len1​,len2​)
+        /// </summary>
+        /// <param name="a"></param>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static int GCD(int a, int b)
+        {
+            int remainder = a % b;
+            // 輾轉相除法
+            while(remainder != 0)
+            {
+                a = b;
+                b = remainder;
+                remainder = a % b;
+            }
+
+            return b;
+        }
     }
 }
