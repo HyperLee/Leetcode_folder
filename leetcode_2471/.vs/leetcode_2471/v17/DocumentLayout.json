@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_2471\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{8E0CB387-5159-405F-98F8-82048FB706B0}|leetcode_2471\\leetcode_2471.csproj|d:\\leetcode_folder\\leetcode_folder\\leetcode_2471\\leetcode_2471\\leetcode_2471.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{8E0CB387-5159-405F-98F8-82048FB706B0}|leetcode_2471\\leetcode_2471.csproj|solutionrelative:leetcode_2471\\leetcode_2471.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{8E0CB387-5159-405F-98F8-82048FB706B0}|leetcode_2471\\leetcode_2471.csproj|d:\\leetcode_folder\\leetcode_folder\\leetcode_2471\\leetcode_2471\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8E0CB387-5159-405F-98F8-82048FB706B0}|leetcode_2471\\leetcode_2471.csproj|solutionrelative:leetcode_2471\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
@@ -19,6 +23,18 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "leetcode_2471",
+              "DocumentMoniker": "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_2471\\leetcode_2471\\leetcode_2471.csproj",
+              "RelativeDocumentMoniker": "leetcode_2471\\leetcode_2471.csproj",
+              "ToolTip": "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_2471\\leetcode_2471\\leetcode_2471.csproj",
+              "RelativeToolTip": "leetcode_2471\\leetcode_2471.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-12-25T02:10:06.062Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_2471\\leetcode_2471\\Program.cs",
               "RelativeDocumentMoniker": "leetcode_2471\\Program.cs",
