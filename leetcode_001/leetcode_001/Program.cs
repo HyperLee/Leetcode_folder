@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_001
+﻿namespace leetcode_001
 {
-    class Program
+    internal class Program
     {
         /// <summary>
         ///  LeetCode 1. Two Sum
@@ -23,14 +17,13 @@ namespace leetcode_001
         static void Main(string[] args)
         {
             int[] nums = { 2, 7, 11, 15 };
-            var res = TwoSum(nums, 9);
-            Console.WriteLine($"[{res[0]},{res[1]}]");
-            Console.ReadKey();
+            int target = 9;
+            var res = TwoSum(nums, target);
+            Console.WriteLine($"ref: [{res[0]},{res[1]}]");
         }
 
 
         /// <summary>
-        ///  
         /// https://www.itread01.com/content/1543410439.html
         /// https://ithelp.ithome.com.tw/articles/10217042
         /// ContainsKey
@@ -49,24 +42,28 @@ namespace leetcode_001
         /// <returns></returns>
         public static int[] TwoSum(int[] nums, int target)
         {
+            // 當作 hash table 使用, key: nums.Value;  value: nums.index
             Dictionary<int, int> dic = new Dictionary<int, int>();
-            for (int i = 0; i < nums.Length; i++)
+            for(int i = 0; i < nums.Length; i++)
             {
+                // 相減之後餘數.
                 int left = target - nums[i];
-
-                if (dic.ContainsKey(left))
+                
+                // left 存在就直接呼叫出來取出該 key 的 value
+                if(dic.ContainsKey(left))
                 {
                     // dic[left] : dic.Value
                     // string aa = dic[left].ToString();
-                    // key: nums.Value;  value: nums.index
                     return new int[] { dic[left], i };
                 }
 
+                // 該 nums[i] 不存在就加入 dic.
                 if (!dic.ContainsKey(nums[i]))
                 {
                     dic.Add(nums[i], i);
                 }
             }
+
             return null;
         }
     }
