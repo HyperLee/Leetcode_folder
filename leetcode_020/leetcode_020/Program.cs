@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_020
+﻿namespace leetcode_020
 {
-    class Program
+    internal class Program
     {
         /// <summary>
         /// 20. Valid Parentheses
@@ -20,10 +14,9 @@ namespace leetcode_020
             string a = "";
             a = "()[]{}";
 
-            bool r = false;
-            r = IsValid(a);
-            Console.WriteLine("result:" + r);
-            Console.ReadKey();
+            //bool r = false;
+            //r = IsValid(a);
+            Console.WriteLine("result:" + IsValid(a));
         }
 
 
@@ -55,7 +48,6 @@ namespace leetcode_020
         /// https://ithelp.ithome.com.tw/articles/10217603
         /// https://leetcode.cn/problems/valid-parentheses/solution/you-xiao-de-gua-hao-by-leetcode-solution/
         /// https://leetcode.cn/problems/valid-parentheses/solution/you-xiao-de-gua-hao-by-leetcode-learning-p2qg/
-        /// 
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
@@ -113,6 +105,5 @@ namespace leetcode_020
 
             return false;
         }
-
     }
 }
