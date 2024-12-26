@@ -1,28 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_021
+﻿namespace leetcode_021
 {
-    class Program
+    internal class Program
     {
-
-
         /// <summary>
         /// 
         /// </summary>
         public class ListNode
         {
-          public int val;
-          public ListNode next;
-          public ListNode(int val = 0, ListNode next = null)
-                {
-                    this.val = val;
-                    this.next = next;
-                }
+            public int val;
+            public ListNode next;
+            public ListNode(int val = 0, ListNode next = null)
+            {
+                this.val = val;
+                this.next = next;
+            }
         }
+
 
         /// <summary>
         /// 21. Merge Two Sorted Lists
@@ -51,15 +44,15 @@ namespace leetcode_021
 
             var res = MergeTwoLists(l1, l2);
 
+            Console.Write("res: [" );
             while (res != null)
             {
-                Console.WriteLine("Ans:" + res.val);
+                Console.Write(res.val + ", ");
                 res = res.next;
             }
-
-            Console.ReadKey();
-
+            Console.WriteLine("]");
         }
+
 
         /// <summary>
         /// ref:
@@ -95,18 +88,16 @@ namespace leetcode_021
                 // 去比較 l1.next 及 l2 的大小並串接
                 l1.next = MergeTwoLists(l1.next, l2);
                 // 因為 l1 比較小要先串接
-                return l1; 
+                return l1;
             }
             else
             {
                 // 去比較 l2.next 及 l1 的大小並串接
                 l2.next = MergeTwoLists(l1, l2.next);
                 // 因為 l2 比較小要先串接
-                return l2; 
+                return l2;
             }
 
         }
-
-
     }
 }
