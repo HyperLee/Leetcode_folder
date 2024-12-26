@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_125
+﻿namespace leetcode_125
 {
     internal class Program
     {
@@ -13,15 +7,19 @@ namespace leetcode_125
         /// https://leetcode.com/problems/valid-palindrome/
         /// 125. 验证回文串
         /// https://leetcode.cn/problems/valid-palindrome/
+        /// 
+        /// 回文判斷, 將大寫轉小寫
+        /// 以及將非文字部分忽略不比對
+        /// 從左邊 或是右邊 開始 文字要相同
+        /// 
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
             string s = "A man, a plan, a canal: Panama";
 
-            Console.WriteLine(IsPalindrome(s));
+            Console.WriteLine("res: " + IsPalindrome(s));
 
-            Console.ReadKey();
         }
 
 
@@ -33,7 +31,7 @@ namespace leetcode_125
         /// https://leetcode.cn/problems/valid-palindrome/solutions/292148/yan-zheng-hui-wen-chuan-by-leetcode-solution/
         /// 
         /// 1.轉小寫
-        /// 2.指比對數字 or 字母
+        /// 2.只比對數字 or 字母
         /// 
         /// 直接在原始字串上比對
         /// 不另開新的暫存
@@ -44,10 +42,10 @@ namespace leetcode_125
         {
             int left = 0, right = s.Length - 1;
 
-            while(left < right)
+            while (left < right)
             {
                 // 非 數字 or 字母 直接跳過
-                while(left < right && !char.IsLetterOrDigit(s[left]))
+                while (left < right && !char.IsLetterOrDigit(s[left]))
                 {
                     left++;
                 }
@@ -71,6 +69,5 @@ namespace leetcode_125
 
             return true;
         }
-
     }
 }
