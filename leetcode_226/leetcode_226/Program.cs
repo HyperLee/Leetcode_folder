@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_226
+﻿namespace leetcode_226
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class TreeNode
     {
         public int val;
@@ -19,9 +16,9 @@ namespace leetcode_226
         }
     }
 
+
     internal class Program
     {
-
         /// <summary> 
         /// 226. Invert Binary Tree
         /// https://leetcode.com/problems/invert-binary-tree/description/?envType=study-plan-v2&envId=top-interview-150
@@ -34,19 +31,22 @@ namespace leetcode_226
         /// InvertTree 是 翻轉後的 答案
         /// 但是 tree 輸出顯示 要依靠
         /// 前中後序遍歷才能輸出樹狀結構
-        /// 本題使用 中序遍歷 輸出顯示
+        /// 本題分別使用三種遍歷 展示輸出答案
         /// 
+        /// 前中後序, 所謂的前中後是指根節點位置在哪裡
+        /// 前序就是 前面
+        /// 依此類蓷
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
             TreeNode root = new TreeNode(4);
-            
+
             root.left = new TreeNode(2);
             root.right = new TreeNode(7);
-            
+
             root.left.left = new TreeNode(1);
-            root.left.right= new TreeNode(3);
+            root.left.right = new TreeNode(3);
             root.right.left = new TreeNode(6);
             root.right.right = new TreeNode(9);
 
@@ -54,9 +54,15 @@ namespace leetcode_226
 
             Console.WriteLine("輸出採用中序遍歷, 訪問順序：左子樹 -> 根節點 -> 右子樹");
             InOrder(res);
-
-            Console.ReadKey();
-
+            Console.WriteLine("");
+            
+            Console.WriteLine("輸出採用前序遍歷, 訪問順序：根節點 -> 左子樹 -> 右子樹");
+            PreOrder(res);
+            Console.WriteLine("");
+            
+            Console.WriteLine("輸出採用後序遍歷, 訪問順序：左子樹 -> 右子樹 -> 根節點");
+            PostOrder(res);
+            Console.WriteLine("");
         }
 
 
@@ -67,8 +73,8 @@ namespace leetcode_226
         /// 採用 遞迴 作法
         /// 將 tree 反轉, 
         /// 1. 判斷 root 是否為 null，若為 null 回傳 root;
-        /// 2. 宣告 TreeNode tmpLeft 為 root.left;
-        /// 3. 宣告 TreeNode tmpRight 為 root.right;
+        /// 2. 宣告 TreeNode tmpLeft 為 root.left 暫存;
+        /// 3. 宣告 TreeNode tmpRight 為 root.right 暫存;
         /// 4. 此時使用遞迴將所有 TreeNode 對調 
         ///     root.left = InvertTree(tmpRight);
         ///     root.right = InvertTree(tmpLeft);
@@ -81,6 +87,7 @@ namespace leetcode_226
         {
             if (root == null)
             {
+                // 也可以 return null, 一樣意思
                 return root;
             }
 
@@ -98,9 +105,9 @@ namespace leetcode_226
 
 
         /// <summary>
-        /// 中序遍歷
+        /// 中序遍歷 InOrder Traversal
         /// 訪問順序：左子樹 -> 根節點 -> 右子樹
-        /// 特點：對於二元搜尋樹，中序遍歷可以得到一個升序的序列。
+        /// 特點：對於二元搜尋樹，這種遍歷方式可以用來生成二叉樹的排序序列。
         /// </summary>
         /// <param name="node"></param>
         public static void InOrder(TreeNode node)
@@ -117,12 +124,12 @@ namespace leetcode_226
 
 
         /// <summary>
-        /// 前序遍歷
+        /// 前序遍歷 PreOrder Traversal
         /// 訪問順序：根節點 -> 左子樹 -> 右子樹
-        /// 特點：通常用於複製樹的結構。
+        /// 特點：通常用於複製樹結構或計算樹的高度。
         /// </summary>
         /// <param name="node"></param>
-        public void PreOrder(TreeNode node)
+        public static void PreOrder(TreeNode node)
         {
             if (node == null)
             {
@@ -136,12 +143,12 @@ namespace leetcode_226
 
 
         /// <summary>
-        /// 後序遍歷
+        /// 後序遍歷 PostOrder Traversal
         /// 訪問順序：左子樹 -> 右子樹 -> 根節點
-        /// 特點：通常用於刪除樹。
+        /// 特點：通常用於刪除樹或計算樹的高度。
         /// </summary>
         /// <param name="node"></param>
-        public void PostOrder(TreeNode node)
+        public static void PostOrder(TreeNode node)
         {
             if (node == null)
             {
@@ -153,5 +160,4 @@ namespace leetcode_226
             Console.Write(node.val + " ");
         }
     }
-
 }
