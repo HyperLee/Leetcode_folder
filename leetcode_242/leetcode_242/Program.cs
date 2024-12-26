@@ -1,4 +1,6 @@
-﻿namespace leetcode_242
+﻿using System.Collections.Generic;
+
+namespace leetcode_242
 {
     internal class Program
     {
@@ -15,8 +17,8 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string s = "anagram";
-            string t = "nagaram";
+            string s = "aacc";
+            string t = "ccac";
 
             Console.WriteLine("方法1: " + IsAnagram(s, t));
             Console.WriteLine("方法2: " + IsAnagram2(s, t));
@@ -85,6 +87,8 @@
         /// 輸入的是字串但是比對的是 char
         /// 所以要把 string 轉 char[]
         /// 
+        /// 用了三次 foreach 效率不是很佳
+        /// 但是這方法好理解
         /// </summary>
         /// <param name="s"></param>
         /// <param name="t"></param>
@@ -101,7 +105,7 @@
             char[] a = s.ToCharArray();
             char[] b = t.ToCharArray();
 
-            // 統計字串 s 出現的字母與頻率
+            // 1. 統計字串 s 出現的字母與頻率
             foreach (char c in a)
             {
                 if (dic.ContainsKey(c))
@@ -114,8 +118,7 @@
                 }
             }
 
-            // s 與 t 比對, char 相同就扣除.
-            // s 沒有 t 才有, 直接給負數
+            // 2. s 與 t 比對, char 相同就扣除.
             foreach (char c in b)
             {
                 if (dic.ContainsKey(c))
@@ -124,28 +127,41 @@
                 }
                 else
                 {
-                    // s 中沒出現, t 出現的直接預設就給負數
-                    //dic.Add(c, -1);
-
-                    // s 中沒出現, t 出現的直接報錯誤, 負數就是錯誤
+                    // s 中沒出現, t 出現的直接報錯誤
+                    // s 與 t 兩邊要一致
                     return false;
                 }
             }
 
-            // 找出負數就是不同
+            // 3. 合理狀況下, 次數都要為 0 (上個步驟會扣除, 要扣光至 0 才對)
+            // 當不為 0, 就是 s 或是 t 兩邊字母或是頻率有不同.
+            // 正數/負數 都是錯誤 有一邊多/少
+            /*
             foreach (var item in dic)
             {
-                //if (item.Value < 0)
-                //{
-                //    return false;
-                //}
-
-                // 合理狀況下, 次數都要為 0
-                // 當不為 0, 就是兩邊字母或是頻率有不同.
                 if (item.Value != 0)
                 {
                     return false;
                 }
+            }
+            */
+
+            // 3. 換個思維, 最大與最小都要是 0 才對. 不用跑 foreach
+            /*
+            int dicmin = dic.Values.Min();
+            int dicmax = dic.Values.Max();
+            if (dicmax != 0 || dicmin != 0)
+            {
+                return false;
+            }
+            */
+
+            // 3. 判斷所有值是否都為 0
+            // 輸出: 所有值都為 0: True
+            bool allValuesAreZero = dic.Values.All(value => value == 0);
+            if(allValuesAreZero == false)
+            {
+                return false;
             }
 
             return true;
