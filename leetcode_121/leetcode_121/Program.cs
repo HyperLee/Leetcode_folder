@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_121
+﻿namespace leetcode_121
 {
     internal class Program
     {
@@ -18,15 +12,19 @@ namespace leetcode_121
         static void Main(string[] args)
         {
             int[] input = new int[] { 7, 1, 5, 3, 6, 4 };
-            Console.WriteLine(MaxProfit2(input));
-            Console.ReadKey();
+
+            Console.WriteLine("method1: " + MaxProfit(input));
+            Console.WriteLine("method2: " + MaxProfit2(input));
+            Console.WriteLine("method3: " + MaxProfit3(input));
         }
 
 
         /// <summary>
+        /// 方法1:
+        /// 
         /// 兩層迴圈
         /// 找出最大獲利者
-        /// 缺點: 超時
+        /// 缺點: 效能差, 超時
         /// 
         /// 最小值 預設給 最大
         /// 最大值 預設給 最小
@@ -37,15 +35,15 @@ namespace leetcode_121
         public static int MaxProfit(int[] prices)
         {
             int maxprofits = 0;
-            for(int i = 0; i < prices.Length - 1; i++)
+            for (int i = 0; i < prices.Length - 1; i++)
             {
-                for(int j = i + 1; j < prices.Length; j ++)
+                for (int j = i + 1; j < prices.Length; j++)
                 {
                     int profits = prices[j] - prices[i];
                     maxprofits = Math.Max(maxprofits, profits);
                 }
             }
-            
+
             return maxprofits;
         }
 
@@ -64,7 +62,9 @@ namespace leetcode_121
         /// <returns></returns>
         public static int MaxProfit2(int[] prices)
         {
-            int minprice = int.MaxValue; // int.MaxValue = 2147483647
+            // int.MaxValue = 2147483647
+            int minprice = int.MaxValue; 
+            // 最大獲利 初始為 0
             int maxprofit = 0;
 
             for (int i = 0; i < prices.Length; i++)
@@ -86,6 +86,7 @@ namespace leetcode_121
 
 
         /// <summary>
+        /// 方法3:
         /// 概念類似 方法二
         /// 
         /// 最大獲利 = 當前價格 - 最小價格
@@ -98,10 +99,12 @@ namespace leetcode_121
         /// <returns></returns>
         public static int MaxProfit3(int[] prices)
         {
-            int minprice = int.MaxValue;  // int.MaxValue = 2147483647
+            // int.MaxValue = 2147483647
+            int minprice = int.MaxValue;
+            // 最大獲利 初始為 0
             int maxprofit = 0;
-            
-            foreach(int price in prices)
+
+            foreach (int price in prices)
             {
                 // 最大獲利; 
                 maxprofit = Math.Max(maxprofit, price - minprice);
