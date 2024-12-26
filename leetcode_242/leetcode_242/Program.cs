@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_242
+﻿namespace leetcode_242
 {
     internal class Program
     {
@@ -23,10 +17,9 @@ namespace leetcode_242
         {
             string s = "anagram";
             string t = "nagaram";
+
             Console.WriteLine("方法1: " + IsAnagram(s, t));
             Console.WriteLine("方法2: " + IsAnagram2(s, t));
-            Console.ReadKey();
-
         }
 
 
@@ -54,7 +47,7 @@ namespace leetcode_242
         {
             // 這個其實可以不用寫, 但是先做判斷,
             // 可以節省時間
-            if(s.Length != t.Length)
+            if (s.Length != t.Length)
             {
                 return false;
             }
@@ -66,7 +59,7 @@ namespace leetcode_242
             Array.Sort(a);
             Array.Sort(b);
 
-            if(a.SequenceEqual(b))
+            if (a.SequenceEqual(b))
             {
                 return true;
             }
@@ -98,19 +91,20 @@ namespace leetcode_242
         /// <returns></returns>
         public static bool IsAnagram2(string s, string t)
         {
-            if(s.Length != t.Length)
+            if (s.Length != t.Length)
             {
                 return false;
             }
 
+            // key: char, value: 次數(頻率)
             Dictionary<char, int> dic = new Dictionary<char, int>();
             char[] a = s.ToCharArray();
             char[] b = t.ToCharArray();
 
             // 統計字串 s 出現的字母與頻率
-            foreach(char c in a) 
+            foreach (char c in a)
             {
-                if(dic.ContainsKey(c)) 
+                if (dic.ContainsKey(c))
                 {
                     dic[c]++;
                 }
@@ -122,23 +116,33 @@ namespace leetcode_242
 
             // s 與 t 比對, char 相同就扣除.
             // s 沒有 t 才有, 直接給負數
-            foreach(char c in b)
+            foreach (char c in b)
             {
-                if(dic.ContainsKey(c))
+                if (dic.ContainsKey(c))
                 {
                     dic[c]--;
                 }
                 else
                 {
                     // s 中沒出現, t 出現的直接預設就給負數
-                    dic.Add(c, -1);
+                    //dic.Add(c, -1);
+
+                    // s 中沒出現, t 出現的直接報錯誤, 負數就是錯誤
+                    return false;
                 }
             }
 
             // 找出負數就是不同
-            foreach(var item in dic)
+            foreach (var item in dic)
             {
-                if(item.Value < 0)
+                //if (item.Value < 0)
+                //{
+                //    return false;
+                //}
+
+                // 合理狀況下, 次數都要為 0
+                // 當不為 0, 就是兩邊字母或是頻率有不同.
+                if (item.Value != 0)
                 {
                     return false;
                 }
@@ -147,7 +151,6 @@ namespace leetcode_242
             return true;
 
         }
-
-
     }
+
 }
