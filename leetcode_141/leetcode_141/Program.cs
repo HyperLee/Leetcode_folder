@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_141
+﻿namespace leetcode_141
 {
     class Program
     {
@@ -27,6 +20,7 @@ namespace leetcode_141
         /// https://leetcode.com/problems/linked-list-cycle/description/
         /// 141. 环形链表
         /// https://leetcode.cn/problems/linked-list-cycle/description/
+        /// 
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -37,93 +31,59 @@ namespace leetcode_141
             l1.next.next.next = new ListNode(-4);
             l1.next.next.next.next = l1.next;
 
-            Console.WriteLine("method1: " + HasCycle(l1));
-            Console.WriteLine("method2: " + HasCycle2(l1));
-            Console.ReadKey();
+            Console.WriteLine("res: " + HasCycle(l1));
+
         }
 
 
         /// <summary>
+        /// 雙指針, 
+        /// 慢針: 一次走一步
+        /// 快針: 一次走兩步
+        /// 
         /// ref:
+        /// https://leetcode.cn/problems/linked-list-cycle/solutions/440042/huan-xing-lian-biao-by-leetcode-solution/
+        /// https://leetcode.cn/problems/linked-list-cycle/solutions/1458267/by-stormsunshine-46rm/
         /// https://ithelp.ithome.com.tw/articles/10223417
         /// https://leetcode.cn/problems/linked-list-cycle/solution/huan-xing-lian-biao-by-leetcode-solution/
+        /// 
+        /// 鏈結串列循環的基本概念
+        /// 定義：鏈結串列循環是指在鏈結串列中存在一個節點，其 next 指針指向之前的某個節點，從而形成一個環。
+        /// 檢測方法：常見的檢測方法是使用「龜兔賽跑」算法（Floyd's Cycle-Finding Algorithm），即使用兩個指針以不同速度遍歷鏈結串列。
+        /// 
+        /// 檢測循環 (HasCycle)：使用兩個指針（slow 和 fast），slow 每次移動一步，fast 每次移動兩步。如果 slow 和 fast 相遇，則表示存在循環。
+        /// 這個方法的時間複雜度為 O(n)，空間複雜度為 O(1)，非常高效。
+        /// 
+        /// 可以詢問 GPT 說明解法與介紹
         /// </summary>
         /// <param name="head"></param>
         /// <returns></returns>
         public static bool HasCycle(ListNode head)
         {
-            try
-            {
-                if (head == null)
-                {
-                    return false;
-                }
-
-                var oneStep = head;
-                var twoStep = head;
-
-                // 這邊是判斷 慢指針 + 快指針的next
-                // 才需要加上 try catch
-                while (oneStep.next != null && twoStep.next != null)
-                {
-                    oneStep = oneStep.next;
-                    twoStep = twoStep.next.next;
-
-                    if (oneStep == twoStep)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-            catch (Exception)
+            // 如果鏈結串列為空或只有一個節點，則不可能存在循環，直接返回 false。
+            if (head == null || head.next == null)
             {
                 return false;
             }
 
-        }
+            // slow：每次移動一步。
+            ListNode slow = head;
+            // fast：每次移動兩步。
+            ListNode fast = head.next;
 
-
-
-        /// <summary>
-        /// 參考解法
-        /// 一樣是 雙指針
-        /// Floyd判圈算法(Floyd Cycle Detection Algorithm)，又稱龜兔賽跑算法(Tortoise and Hare Algorithm)
-        /// a
-        /// 優化寫法, 忽略 try catch
-        /// 找出錯誤點在哪裡
-        /// 
-        /// https://leetcode.cn/problems/linked-list-cycle/solutions/440042/huan-xing-lian-biao-by-leetcode-solution/
-        /// https://leetcode.cn/problems/linked-list-cycle/solutions/1458267/by-stormsunshine-46rm/
-        /// 
-        /// </summary>
-        /// <param name="head"></param>
-        /// <returns></returns>
-        public static bool HasCycle2(ListNode head)
-        {
-            if(head == null || head.next == null)
+            // 如果 slow 和 fast 相遇，表示存在循環，返回 true。
+            while (fast != null && fast.next != null)
             {
-                return false;
-            }
-
-            ListNode onestep = head;
-            ListNode twostep = head;
-
-            // 這邊改判斷 快指針 就可以不用寫 try catch
-            // 快針比慢針還要快, 換句話說 快針沒有出現 null 那麼 慢針也不會
-            // 判斷慢指針 會出現error
-            while (twostep != null && twostep.next != null)
-            {
-                onestep = onestep.next;
-                twostep = twostep.next.next;
-
-                if(onestep == twostep)
+                if (slow == fast)
                 {
                     return true;
                 }
+
+                slow = slow.next;
+                fast = fast.next.next;
             }
 
+            // 如果 fast 到達鏈結串列的末端，表示不存在循環，返回 false。
             return false;
         }
 
