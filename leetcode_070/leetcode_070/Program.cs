@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_070
+﻿namespace leetcode_070
 {
-    class Program
+    internal class Program
     {
         /// <summary>
         /// 70. Climbing Stairs
@@ -26,8 +20,7 @@ namespace leetcode_070
             Console.WriteLine("Method1, total step:" + ClimbStairs(n));
             Console.WriteLine("Method2, total step:" + ClimbStairs2(n));
             Console.WriteLine("Method3, total step:" + ClimbStairs3(n));
-            
-            Console.ReadKey();
+
         }
 
 
@@ -73,7 +66,7 @@ namespace leetcode_070
         /// <returns></returns>
         public static int ClimbStairs2(int n)
         {
-            if(n <= 2)
+            if (n <= 2)
             {
                 return n;
             }
@@ -84,7 +77,8 @@ namespace leetcode_070
 
         /// <summary>
         /// 方法3
-        /// 比方法2 遞迴方法 優化
+        /// 
+        /// 為方法2 遞迴方法 優化
         /// 在 n 非常大時候 比較明顯
         /// 也比單純公式推理簡單
         /// 
@@ -95,18 +89,23 @@ namespace leetcode_070
         /// 要小心迴圈計算開始位置
         /// i 從 2 開始, 如果從 3 開始就會計算不到 3 的答案了
         /// 迴圈是從前一個開始計算
+        /// 
+        /// n 範圍: [1, n], 沒有 0
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
         public static int ClimbStairs3(int n)
         {
-            if(n <= 2)
+            // i: 0, 1 直接回傳 n
+            if (n <= 2)
             {
                 return n;
             }
 
             int result = 0;
+            // i == 0
             int pre = 1;
+            // i == 1
             int next = 2;
 
             // i 從 2 開始, 需要注意
@@ -119,6 +118,5 @@ namespace leetcode_070
 
             return result;
         }
-
     }
 }
