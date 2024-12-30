@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_383
+﻿namespace leetcode_383
 {
-    class Program
+    internal class Program
     {
         /// <summary>
-        /// leetcode 383
+        /// 383. Ransom Note
         /// https://leetcode.com/problems/ransom-note/
+        /// 
+        /// 383. 赎金信
+        /// https://leetcode.cn/problems/ransom-note/description/
+        /// 
         /// 给你两个字符串：ransomNote 和 magazine ，判断 ransomNote 能不能由 magazine 里面的字符构成。
         /// 如果可以，返回 true ；否则返回 false 。
         /// magazine 中的每个字符只能在 ransomNote 中使用一次。
@@ -23,9 +21,9 @@ namespace leetcode_383
         static void Main(string[] args)
         {
             string ransomNote = "ab", magazine = "adcb";
-            Console.WriteLine(CanConstruct(ransomNote, magazine));
-            Console.ReadKey();
+            Console.WriteLine("res: " + CanConstruct(ransomNote, magazine));
         }
+
 
         /// <summary>
         /// https://www.delftstack.com/zh-tw/howto/csharp/how-to-remove-item-from-list-in-csharp/
@@ -59,30 +57,34 @@ namespace leetcode_383
         /// <returns></returns>
         public static bool CanConstruct(string ransomNote, string magazine)
         {
+            // 雜誌文字比劫匪信還少, 直接回傳錯誤
             if (magazine.Length < ransomNote.Length)
             {
                 return false;
             }
 
+            // 轉成 char list 比對用
             var ransomNotes = ransomNote.ToCharArray().ToList();
             var magazines = magazine.ToCharArray().ToList();
 
+            // 判斷 劫匪信件 每個文字
             foreach (var s in ransomNotes)
             {
+                // 能不能從 雜誌中 找出相對應
                 int index = magazines.IndexOf(s);
 
                 if (index >= 0)
                 {
+                    // 有找到就移除
                     magazines.RemoveAt(index);
                 }
                 else
                 {
+                    // 找不到就錯誤
                     return false;
                 }
             }
             return true;
         }
-
-
     }
 }
