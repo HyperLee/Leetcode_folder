@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_067
+﻿namespace leetcode_067
 {
     internal class Program
     {
@@ -21,8 +15,7 @@ namespace leetcode_067
             string a = "11";
             string b = "01";
 
-            Console.WriteLine(AddBinary(a, b));
-            Console.ReadKey();
+            Console.WriteLine("res: " + AddBinary(a, b));
         }
 
 
@@ -32,6 +25,9 @@ namespace leetcode_067
         /// 二進位從低位開始往高位做計算 <右邊往左邊計算>
         /// 低位遇到進位問題,要給高位來進位
         /// 
+        /// result.ToArray()
+        /// ToArray() 方法的作用是將集合（如 List<char> 或其他支持 IEnumerable 的集合）轉換為一個字符陣列（char[]）。
+        /// result.ToArray() 會將 List<char> 轉換為 char[] 陣列
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -60,10 +56,12 @@ namespace leetcode_067
                 result.Add('1');
             }
 
-            // 因當初是反向計算, 所以答案輸出要反轉
+            // 因當初是反向計算(右邊開始先計算, 由右至左加入答案), 所以答案輸出要反轉
             result.Reverse();
+
             return new string(result.ToArray());
         }
+
 
         /// <summary>
         /// 副程式
@@ -71,6 +69,8 @@ namespace leetcode_067
         /// 以及相加之後
         /// 數值是多少
         /// 
+        /// *** 
+        /// tempResult 加總後數值, 可區分下列幾種 case
         /// case 0: 答案 0, 不需進位
         /// case 1: 答案 1, 不需進位
         /// case 2: 答案 0 (1 + 1 要進位), 進位
@@ -86,10 +86,10 @@ namespace leetcode_067
         /// <returns></returns>
         private static int GetCarryAndUpdateResult(List<char> result, int tempResult)
         {
-            // carry为进位
+            // 進位
             int carry = 0;
 
-            switch(tempResult)
+            switch (tempResult)
             {
                 case 0:
                     carry = 0;
@@ -111,6 +111,5 @@ namespace leetcode_067
 
             return carry;
         }
-
     }
 }
