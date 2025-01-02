@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_104
+﻿namespace leetcode_104
 {
     internal class Program
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public class TreeNode
         {
             public int val;
@@ -21,12 +18,16 @@ namespace leetcode_104
             }
         }
 
-        /// <summary>104. Maximum Depth of Binary Tree
+
+        /// <summary>
+        /// 104. Maximum Depth of Binary Tree
         /// https://leetcode.com/problems/maximum-depth-of-binary-tree/
         /// 
         /// 104. 二叉树的最大深度
         /// https://leetcode.cn/problems/maximum-depth-of-binary-tree/description/
         /// 
+        /// A binary tree's maximum depth is the number of nodes along the longest path from the root node down to the farthest leaf node.
+        /// 計算方式從 root 為起始點, 找出子樹最大深度
         /// 
         /// build tree sample
         /// http://e-troy.blogspot.com/2015/02/c-binary-search-tree.html
@@ -35,18 +36,15 @@ namespace leetcode_104
         static void Main(string[] args)
         {
             TreeNode root = new TreeNode(3);
-            //root.val = 3;
+
             root.left = new TreeNode(9);
             root.right = new TreeNode(20);
-            //root.left.val = 9;
-            //root.right.val = 20;
+
             root.right.right = new TreeNode(7);
             root.right.left = new TreeNode(15);
-            //root.right.left.val = 7;
 
             Console.WriteLine("MaxDepth: " + MaxDepth(root));
             Console.WriteLine("MaxDepth2: " + MaxDepth2(root));
-            Console.ReadKey();
         }
 
 
@@ -93,31 +91,29 @@ namespace leetcode_104
                 return 0;
             }
 
-            // 只有root 沒有左右子樹
+            // 只有 root 沒有左右子樹
             if (root.left == null && root.right == null)
             {
                 return 1;
             }
 
-            // 紀錄深度
-            int mindepth = int.MinValue;
-            
+            // 紀錄最大深度
+            int maxDepth = int.MinValue;
+
             // 找出左子樹最大深度
             if (root.left != null)
             {
-                mindepth = Math.Max(MaxDepth2(root.left), mindepth);
+                maxDepth = Math.Max(MaxDepth2(root.left), maxDepth);
             }
-            
+
             // 找出右子樹最大深度
             if (root.right != null)
             {
-                mindepth = Math.Max(MaxDepth2(root.right), mindepth);
+                maxDepth = Math.Max(MaxDepth2(root.right), maxDepth);
             }
 
             // 最後並 + 1，代表需要往上多加這一層
-            return mindepth + 1;
+            return maxDepth + 1;
         }
-
-
     }
 }

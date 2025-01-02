@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_217
+﻿namespace leetcode_217
 {
     internal class Program
     {
@@ -17,39 +11,33 @@ namespace leetcode_217
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] nums = {1, 2, 3, 1};
-            Console.WriteLine(ContainsDuplicate2(nums));
-            Console.ReadKey();
+            int[] nums = { 1, 2, 3, 1 };
+
+            Console.WriteLine("method1: " + ContainsDuplicate(nums));
+            Console.WriteLine("method2: " + ContainsDuplicate2(nums));
         }
 
 
         /// <summary>
-        /// 使用Dictionary 統計每個輸入的 數字 出現的次數(頻率)
+        /// 陣列相鄰位置比對
         /// 
-        /// 有超過2就回傳true
-        /// 反之false
+        /// 1. 陣列先排序，排序後相同數字會在相鄰位置
+        /// 2. 因為已經排序過，所以找出相鄰 index 是不是相同數字即可
+        /// 3. 因題目說至少連續兩次(含)，所以只需要比對 i 與 i + 1
+        /// 
+        /// 時間複雜度: O(NlogN)，其中 N 陣列長度。需要對陣列排序。
+        /// 空間複雜度: O(logN)，其中 N 陣列長度。
         /// </summary>
         /// <param name="nums"></param>
         /// <returns></returns>
         public static bool ContainsDuplicate(int[] nums)
         {
-            Dictionary<int, int> dic = new Dictionary<int, int>();
-
-            foreach (int i in nums) 
+            Array.Sort(nums);
+            // 迴圈條件要注意, nums.Length - 1
+            // 不要造成溢位問題
+            for (int i = 0; i < nums.Length - 1; i++)
             {
-                if(dic.ContainsKey(i))
-                {
-                    dic[i]++;
-                }
-                else
-                {
-                    dic.Add(i, 1);
-                }
-            }
-
-            foreach(KeyValuePair<int, int> kp in dic)
-            {
-                if(kp.Value >= 2)
+                if (nums[i] == nums[i + 1])
                 {
                     return true;
                 }
@@ -60,13 +48,14 @@ namespace leetcode_217
 
 
         /// <summary>
-        /// 此方法較佳
-        /// 
-        /// 
-        /// 只要遇到 加總一到2
+        /// 使用 Dictionary 統計每個輸入的數字出現的次數(頻率)
+        /// 只要遇到次數(頻率)為 2
         /// 就停止運算
         /// 直接回傳 true
         /// 節省時間
+        /// 
+        /// 時間複雜度: O(N)，其中 N 陣列長度。
+        /// 空間複雜度: O(N)，其中 N 陣列長度。
         /// </summary>
         /// <param name="nums"></param>
         /// <returns></returns>
@@ -75,31 +64,21 @@ namespace leetcode_217
         {
             Dictionary<int, int> dic = new Dictionary<int, int>();
 
-            for(int i = 0; i < nums.Length; i++) 
+            foreach(int num in nums)
             {
-                if (dic.ContainsKey(nums[i]))
+                if (dic.ContainsKey(num))
                 {
-                    //dic[nums[i]]++;
-                    //break;
+                    // 次數(頻率)為 2, 即可停止. 回傳答案
+                    // 不需要持續累加
                     return true;
                 }
                 else
                 {
-                    dic.Add(nums[i], 1);
-                }
-            }
-
-            foreach (KeyValuePair<int, int> kp in dic)
-            {
-                if (kp.Value >= 2)
-                {
-                    return true;
+                    dic.Add(num, 1);
                 }
             }
 
             return false;
-
         }
-
     }
 }
