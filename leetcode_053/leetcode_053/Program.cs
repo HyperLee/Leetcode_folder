@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_053
+﻿namespace leetcode_053
 {
     internal class Program
     {
@@ -18,19 +12,21 @@ namespace leetcode_053
         static void Main(string[] args)
         {
             int[] input = { -2, 1, -3, 4, -1, 2, 1, -5, 4 };
-            Console.WriteLine(MaxSubArray(input));
-            Console.ReadKey();
 
+            Console.WriteLine("res: " + MaxSubArray(input));
         }
 
 
         /// <summary>
+        /// ref:
         /// https://leetcode.cn/problems/maximum-subarray/solutions/228009/zui-da-zi-xu-he-by-leetcode-solution/?envType=daily-question&envId=Invalid+Date
         /// 題目要求是要找出連續的位置總和
         /// 
         /// 前 i 個數值總和(前面總和) 與 現在 i 位置(當前數值) 對比取出最大者
         /// 即可當作是連續加總找出最大總和
         /// 
+        /// pre = Math.Max(pre + num, num);
+        /// 當遇到某個 index 特別大時候, 後續就會從這 index 開始往後累加計算
         /// </summary>
         /// <param name="nums"></param>
         /// <returns></returns>
@@ -40,16 +36,15 @@ namespace leetcode_053
             // 取第一個數值當作預設
             int maxans = nums[0];
 
-            foreach(int num in nums)
+            foreach (int num in nums)
             {
-                // 連續加總
+                // 前 i 個連續加總 與 當下這個數值相比對. 找出連續子數組
                 pre = Math.Max(pre + num, num);
-                // 記錄最大
+                // 持續更新最大值
                 maxans = Math.Max(pre, maxans);
             }
 
             return maxans;
         }
-
     }
 }
