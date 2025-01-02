@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_876
+﻿namespace leetcode_876
 {
     internal class Program
     {
-         public class ListNode
-         {
+        /// <summary>
+        /// 
+        /// </summary>
+        public class ListNode
+        {
             public int val;
             public ListNode next;
             public ListNode(int val = 0, ListNode next = null)
@@ -17,7 +14,7 @@ namespace leetcode_876
                 this.val = val;
                 this.next = next;
             }
-         }
+        }
 
 
         /// <summary>
@@ -37,26 +34,48 @@ namespace leetcode_876
             listNode.next.next = new ListNode(3);
             listNode.next.next.next = new ListNode(4);
 
-            //Console.WriteLine(MiddleNode(listNode));
-            var res = MiddleNode2(listNode);
+            var res = MiddleNode(listNode);
+            Console.Write("method1: ");
             while (res != null)
             {
-                Console.WriteLine("Ans:" + res.val);
+                Console.Write(res.val + ", ");
                 res = res.next;
             }
-            Console.ReadKey();
+
+            Console.WriteLine("");
+            Console.Write("method2: ");
+            ListNode listNode2 = new ListNode(1);
+            listNode2.next = new ListNode(2);
+            listNode2.next.next = new ListNode(3);
+            listNode2.next.next.next = new ListNode(4);
+
+            var res2 = MiddleNode2(listNode2);
+            while (res2 != null)
+            {
+                Console.Write(res2.val + ", ");
+                res2 = res2.next;
+            }
+            Console.WriteLine("");
+
         }
 
 
         /// <summary>
+        /// ref:
         /// https://leetcode.cn/problems/middle-of-the-linked-list/solution/lian-biao-de-zhong-jian-jie-dian-by-leetcode-solut/
-        /// method3 快慢針
-        /// slow每次走一步
-        /// fast每次走兩步
-        /// 這樣當fast走到結束時候
-        /// slow走道中間
-        /// 
         /// https://leetcode.cn/problems/middle-of-the-linked-list/solution/kuai-man-zhi-zhen-zhu-yao-zai-yu-diao-shi-by-liwei/
+        /// 
+        /// method2 快慢針
+        /// slow 每次走一步
+        /// fast 每次走兩步
+        /// 這樣當 fast 走到結束時候
+        /// slow 走到中間
+        /// 
+        /// while 停止條件判斷: 快針不能為空且能繼續走
+        ///  要注意這邊不要寫錯, 快針不為空, 就代表能繼續走
+        /// 
+        /// 時間複雜度: O(N), N 是節點數量
+        /// 空間複雜度: O(1), 常數空間變數 slow, fast
         /// </summary>
         /// <param name="head"></param>
         /// <returns></returns>
@@ -64,8 +83,8 @@ namespace leetcode_876
         {
             ListNode slow = head, fast = head;
 
-            // 快針不能為空且能繼續走
-            while(fast != null && fast.next !=null)
+            // 快針不能為空且下一步能繼續走
+            while (fast != null && fast.next != null)
             {
                 // 每次走一步
                 slow = slow.next;
@@ -78,9 +97,14 @@ namespace leetcode_876
 
 
         /// <summary>
-        /// 先統計總長度 n
-        /// 再去運算 中間節點  n / 2 位置
+        /// 單指針法:
         /// 
+        /// 1. 第一次遍歷, 先統計總長度 n
+        /// 2. 第二次遍歷, 再去運算 中間節點  n / 2 位置
+        /// 2-1. ListNode index 從 0 開始, 所以走到 n / 2 剛好是中間位置
+        /// 
+        /// 時間複雜度: O(N), N 是節點數量
+        /// 空間複雜度: O(1), 常數空間變數
         /// </summary>
         /// <param name="head"></param>
         /// <returns></returns>
@@ -96,8 +120,9 @@ namespace leetcode_876
             }
 
             int k = 0;
+            // cur 重置
             cur = head;
-            // 取 中間值位置出來
+            // 取中間值位置出來
             while (k < n / 2)
             {
                 k++;
@@ -105,6 +130,5 @@ namespace leetcode_876
             }
             return cur;
         }
-
     }
 }
