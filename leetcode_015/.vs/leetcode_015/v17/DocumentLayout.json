@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_015\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{7DA1D51E-C180-40E0-926F-B6A570E3B213}|leetcode_015\\leetcode_015.csproj|d:\\leetcode_folder\\leetcode_folder\\leetcode_015\\leetcode_015\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{7DA1D51E-C180-40E0-926F-B6A570E3B213}|leetcode_015\\leetcode_015.csproj|solutionrelative:leetcode_015\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{00555ED9-038A-4E05-BDC0-BF4F0DB2B619}|leetcode_015\\leetcode_015.csproj|d:\\leetcode_folder\\leetcode_folder\\leetcode_015\\leetcode_015\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{00555ED9-038A-4E05-BDC0-BF4F0DB2B619}|leetcode_015\\leetcode_015.csproj|solutionrelative:leetcode_015\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -24,9 +24,9 @@
               "RelativeDocumentMoniker": "leetcode_015\\Program.cs",
               "ToolTip": "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_015\\leetcode_015\\Program.cs",
               "RelativeToolTip": "leetcode_015\\Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAnAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAMAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2023-02-27T02:22:46.665Z",
+              "WhenOpened": "2025-01-14T06:04:48.71Z",
               "EditorCaption": ""
             }
           ]

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_015
+﻿namespace leetcode_015
 {
-    class Program
+    internal class Program
     {
         /// <summary>
         /// 15. 3Sum
@@ -14,15 +8,28 @@ namespace leetcode_015
         /// 
         /// 15. 三数之和
         /// https://leetcode.cn/problems/3sum/
+        /// 
+        /// 給定一個整數陣列 nums，返回所有滿足以下條件的三元組 [nums[i], nums[j], nums[k]]：
+        ///  i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
+        /// 請注意，解集合中不得包含重複的三元組。
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
             int[] array1 = new int[] { -1, 0, 1, 2, -1, -4 };
             //Console.WriteLine(ThreeSum(array1));
-            ThreeSum(array1);
-            Console.ReadKey();
+            var res = ThreeSum(array1);
 
+            // res 是 IList<IList<int>>
+            // list 裡面還有 list 所以要跑兩次 才能輸出
+            foreach (var temp2 in res)
+            {
+                Console.WriteLine("====================");
+                foreach (var out2 in temp2)
+                {
+                    Console.WriteLine("輸出結果: " + out2);
+                }
+            }
         }
 
 
@@ -102,37 +109,27 @@ namespace leetcode_015
                             nums[third]
                         };
                         result.Add(temp);
+                        // 繼續找下一組
                         second++;
                         third--;
                     }
                     else if (sum < 0)
                     {
-                        // < 0 代表負數太大，需要將 second 移至下一個較小的負數 (second++)
+                        // < 0 代表負數太大，需要將 second 右移 (second++)
+                        // 已排序過, 右移數字越大
                         second++;
                     }
                     else
                     {
-                        // > 0 代表正數太大，需要將 third 移至上一個較小的正數 (third--)
+                        // > 0 代表正數太大，需要將 third 左移 (third--)
+                        // 已排序過, 左移數字越小
                         third--;
                     }
-                }
-            }
-
-            // result 裡面 還有一組 temp的list
-            // 所以要跑兩次 才能輸出
-            foreach (var temp2 in result)
-            {
-                Console.WriteLine("====================");
-                foreach(var out2 in temp2)
-                {
-                    Console.WriteLine("輸出結果: " + out2);
                 }
             }
 
             return result;
 
         }
-
-
     }
 }
