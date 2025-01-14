@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections;
 
 namespace leetcode_003
 {
@@ -24,17 +19,20 @@ namespace leetcode_003
         {
             string s = "abcabcbb";
 
-            Console.WriteLine(LengthOfLongestSubstring2(s));
-            Console.ReadKey();
+            Console.WriteLine("method1: " + LengthOfLongestSubstring(s));
+            Console.WriteLine("method2: " + LengthOfLongestSubstring2(s));
         }
 
 
         /// <summary>
+        /// 方法1
         /// 这道题关键在于利用 BitArray来记录字母是否首次出现。时间复杂度O(n)
         /// https://blog.csdn.net/qq_39643935/article/details/78169424
         /// 
         /// 
         /// https://leetcode.cn/problems/longest-substring-without-repeating-characters/solution/wu-zhong-fu-zi-fu-de-zui-chang-zi-chuan-by-leetc-2/
+        /// 
+        /// 此解法比較不推薦 BitArray 對我來說比較冷門 少使用
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
@@ -45,7 +43,7 @@ namespace leetcode_003
             int l = 0, r = 0;
             int n = s.Length;
 
-            while(r < n)
+            while (r < n)
             {
                 // 是否已存在
                 if (map[s[r]])
@@ -75,6 +73,7 @@ namespace leetcode_003
 
 
         /// <summary>
+        /// 方法2
         /// 滑動視窗, 左右指針概念
         /// 
         /// https://leetcode.cn/problems/longest-substring-without-repeating-characters/solution/hua-dong-chuang-kou-cban-by-seerjjj/
@@ -86,9 +85,9 @@ namespace leetcode_003
         /// ，如果出现重覆字符則 left++ 缩小窗口。
         /// 直到滿足題目需求
         /// 
-        /// 從左往右把字母加進去
-        /// 如果遇到相同重複就把最左邊扣除,
-        /// 右邊繼續往前進
+        /// 依據書輸入字串 s 的 char 順序把 element 加進去 list
+        /// 如果右指針遇到相同重複 element 就從左邊界開始扣除 element ,直到重複的 element 被移出為止
+        /// 然後右指針繼續往前進
         /// 直到跑完整個輸入字串為止
         /// 
         /// list 可以取代 HashSet
@@ -100,7 +99,7 @@ namespace leetcode_003
         /// <returns></returns>
         public static int LengthOfLongestSubstring2(string s)
         {
-            if(s.Length == 0)
+            if (s.Length == 0)
             {
                 return 0;
             }
@@ -126,7 +125,7 @@ namespace leetcode_003
                 }
                 else
                 {
-                    // 右指針重複, 左指針開始右移.直到不含重複 char (即左指針移動到重複 char(左) 的右邊一位)
+                    // 右指針 element 重複(此時右指針不移動), 左指針開始右移把 element 移出, 直到不含重複 char (即左指針移動到重複 char(左) 的右邊一位)
                     // 去除 list 中當前左指針 char
                     letter.Remove(s[left]);
                     // 左指針右移
@@ -138,7 +137,6 @@ namespace leetcode_003
 
             return max;
         }
-
 
     }
 }
