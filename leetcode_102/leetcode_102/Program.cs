@@ -46,7 +46,8 @@ namespace leetcode_102
             root.right.right = new TreeNode(7);
 
             var res = LevelOrder(root);
-            foreach(var item in res)
+            Console.Write("res: ");
+            foreach (var item in res)
             {
                 Console.Write("[");
                 foreach(var value in item)
@@ -78,23 +79,25 @@ namespace leetcode_102
                 return res;
             }
 
+            // 儲存待訪問的節點
             Queue<TreeNode> queue = new Queue<TreeNode>();
             // root 加入 queue, 儲存待訪問的節點(node)
             queue.Enqueue(root);
             // 逐層搜尋
             while(queue.Count > 0)
             {
+                // 儲存每一層訪問的 node.val
                 IList<int> levelvalues = new List<int>();
                 int size = queue.Count;
                 // 遍歷該層每個 node
                 for(int i = 0; i < size; i++)
                 {
-                    // 將該 node 移出
+                    // 從 queue 取出 待訪問的節點(node)
                     TreeNode node = queue.Dequeue();
-                    // 該層 node.value
+                    // 待訪問的節點(node) 加入該搜尋層
                     levelvalues.Add(node.val);
-                    // 該 node 左右非空子節點, 加入 queue
-                    if(node.left != null)
+                    // 待訪問的節點(node) 左右非空子節點, 加入 queue, 等待搜尋
+                    if (node.left != null)
                     {
                         // 下一輪待搜尋 node
                         queue.Enqueue(node.left);
@@ -106,7 +109,7 @@ namespace leetcode_102
                     }
                 }
 
-                // 搜尋到之 node.value 加入結果
+                // 該層搜尋到之 node.value 加入結果
                 res.Add(levelvalues);
             }
 
