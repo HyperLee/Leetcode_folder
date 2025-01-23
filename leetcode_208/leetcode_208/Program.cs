@@ -12,26 +12,40 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            //Console.WriteLine("Hello, World!");
-
             Trie obj = new Trie();
             obj.Insert("apple");
-            bool param_2 = obj.Search("apple");
-            bool param_3 = obj.StartsWith("app");
 
+            bool param_2 = obj.Search("apple");
             Console.WriteLine("param_2: " + param_2);
+
+            bool param_3 = obj.StartsWith("app");
             Console.WriteLine("param_3: " + param_3);
+
+            bool param_4 = obj.Search("app");
+            Console.WriteLine("param_4: " + param_4);
+
+            obj.Insert("app");
+
+            bool param_5 = obj.Search("app");
+            Console.WriteLine("param_5: " + param_5);
         }
 
     }
 
-
+    /// <summary>
+    /// 实现 Trie (前缀树)
+    /// 
+    /// ref:
+    /// https://leetcode.cn/problems/implement-trie-prefix-tree/solutions/717239/shi-xian-trie-qian-zhui-shu-by-leetcode-ti500/
+    /// https://leetcode.cn/problems/implement-trie-prefix-tree/solutions/2993894/cong-er-cha-shu-dao-er-shi-liu-cha-shu-p-xsj4/
+    /// Copilot 產生的程式碼與註解
+    /// </summary>
     public class Trie
     {
         // 表示当前节点是否是一个单词的结束节点
         private bool isEnd;
         // 子节点
-        private IDictionary<char, Trie> children;
+        private Trie[] children;
 
 
         /// <summary>
@@ -39,8 +53,10 @@
         /// </summary>
         public Trie()
         {
+            // 初始化
             isEnd = false;
-            children = new Dictionary<char, Trie>();
+            // 26 个字母
+            children = new Trie[26];
         }
 
 
@@ -55,11 +71,16 @@
             for(int i = 0; i < length; i++)
             {
                 char c = word[i];
-                // 如果当前节点的子节点中不包含当前字符，则添加
-                node.children.TryAdd(c, new Trie());
-                // 移动到子节点
-                node = node.children[c];
+                // 如果当前节点的子节点中不包含当前字符，则创建一个新的子节点
+                int index = c - 'a';
+                if (node.children[index] == null)
+                {
+                    // 创建一个新的子节点
+                    node.children[index] = new Trie();
+                }
+                node = node.children[index];
             }
+            node.isEnd = true;
         }
 
 
@@ -103,13 +124,12 @@
             for(int i = 0; i < length; i++)
             {
                 char c = prefix[i];
-                // 如果当前节点的子节点中不包含当前字符，则返回 null
-                if (!node.children.ContainsKey(c))
+                int index = c - 'a';
+                if (node.children[index] == null)
                 {
                     return null;
                 }
-                // 移动到子节点
-                node = node.children[c];
+                node = node.children[index];
             }
 
             return node;
