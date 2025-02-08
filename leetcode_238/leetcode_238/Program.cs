@@ -8,6 +8,10 @@
         /// 
         /// 238. 除自身以外数组的乘积
         /// https://leetcode.cn/problems/product-of-array-except-self/description/
+        /// 
+        /// 解題方式 很特殊
+        /// 左右分別計算乘積
+        /// 要注意的是，這個解法不使用除法，並且時間複雜度為 O(n)。
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -44,32 +48,34 @@
         /// <returns></returns>
         public static int[] ProductExceptSelf(int[] nums)
         {
-            // 数组长度
+            // 陣列長度
             int length = nums.Length;
-            // 初始化数组 res
+            // 初始化陣列 res
             int[] res = new int[length];
 
-            // res[i] 表示索引 i 左侧所有元素的乘积
-            // 因为索引为 0 的元素左侧没有元素，所以 res[0] = 1
+            // res[i] 表示 index i 左側所有元素的乘積
+            // 因為 index 為 0 的元素左側沒有元素, 所以 res[0] = 1
             res[0] = 1;
-            for(int i = 1; i < length; i++)
+            //由左至右計算左側乘積
+            for (int i = 1; i < length; i++)
             {
                 // 計算左側乘積
                 res[i] = nums[i - 1] * res[i - 1];
             }
 
-            // R 为右侧所有元素的乘积
-            // 刚开始右边没有元素，所以 R = 1
+            // R 為右側所有元素的乘積
+            // 剛開始右邊沒有元素, 所以 R = 1
             int R = 1;
+            // 由右至左計算右側乘積
             for (int i = length - 1; i >= 0; i--)
             {
                 // 計算右側乘積並更新結果
-                // R 为索引 i 右侧所有元素的乘积
-                // res[i] 为索引 i 左侧所有元素的乘积
-                // 两者相乘即为索引 i 处的乘积
-                // 更新 res[i] 的值，然后 R 更新为索引 i 右侧所有元素的乘积
+                // R 為 index i 右側所有元素的乘積
+                // res[i] 為 index i 左側所有元素的乘積
+                // 兩者相乘即為 index i 處的乘積
+                // 更新 res[i] 的值，然後 R 更新為 index i 右側的所有元素的乘積
                 res[i] = res[i] * R;
-                // R 更新为索引 i 右侧所有元素的乘积
+                // R 更新為 index i 右側的所有元素的乘積
                 R *= nums[i];
             }
 
