@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace leetcode_046
+﻿namespace leetcode_046
 {
     internal class Program
     {
@@ -16,122 +10,93 @@ namespace leetcode_046
         /// 
         /// 给定一个不含重复数字的数组 nums ，返回其 所有可能的全排列 。你可以 按任意顺序 返回答案。
         /// 
-        /// 想像成輸入的陣列是一直行裡面儲存數字
-        /// 我們做的是拼出各種排列組合
-        /// 數字本身都不重複, 所以我們就把數字依據 index 
-        /// 來做交換. 組合出各種不同的組合
-        /// https://leetcode.cn/problems/permutations/solutions/218275/quan-pai-lie-by-leetcode-solution-2/
-        /// 建議看官方解法裡面的類似 ppt 的報表
-        /// 有圖示說明 比較好理解
+        /// 本題目是求出"所有可能的排列"，因此需要使用回溯法。
+        /// 
+        /// 39. Combination Sum 是求出不重複的題型(順序不同視為相同組合), 有必要對輸入的陣列先進行排序 
+        /// 46. Permutations是求出"所有可能的排列"(全部列舉出來), 不需要排序
+        /// 所以兩題有差異
+        /// 
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] nums = { 1, 2};
-            //Console.WriteLine(Permute(nums));
-            Permute(nums);
-            Console.ReadKey();
-        }
+            int[] nums = { 1, 2, 3 };
 
-        // 儲存答案
-        public static IList<IList<int>> permutations = new List<IList<int>>();
-        // 用于存储当前排列; 將 nums 依序塞入 temp 生成全排列
-        public static IList<int> temp = new List<int>();
-        // nums 長度
-        public static int n; 
+            var result = Permute(nums);
+            foreach (var item in result)
+            {
+                Console.WriteLine(string.Join(",", item));
+            }
+            Console.WriteLine();
+        }
 
 
         /// <summary>
-        /// https://leetcode.cn/problems/permutations/solution/by-stormsunshine-rw7r/
-        /// 
-        /// https://leetcode.cn/problems/permutations/solution/quan-pai-lie-by-leetcode-solution-2/
-        /// 回到上一層節點時候需要狀態重置, 請看影片04:00
-        /// 
+        /// Backtrack 需要先對 nums 排序嗎?
+        /// 在 LeetCode 46: Permutations 這題中，排序 nums 不會影響最終的結果，也不會提升效能，因為：
+        /// 1. 不影響遞迴樹的結構：
+        ///  排列（Permutations）問題是要找出所有可能的順序，而無論 nums 是否排序，所有排列的數量和遞迴樹的結構都相同。
+        ///  例如，nums = {3,1,2} 和 nums = {1,2,3} 都會產生 6 種排列。
+        /// 2. 不影響回溯過程的剪枝：
+        ///  如果這題是 組合（Combinations），我們可以透過排序來減少不必要的遞迴（如 Combination Sum 類題）。
+        ///  但 排列問題不涉及「選擇過的數不能再選」的情況，所以排序不會讓 Backtrack() 早點返回。
+        /// 3. 程式運行時間相同：
+        ///  排列問題的時間複雜度是 O(N * N!)，遠大於排序的 O(N log N)，所以排序的影響可以忽略不計。
+        ///  排序後，遞迴仍然會嘗試所有可能的排列，所以效能沒有實質提升。
         /// </summary>
         /// <param name="nums"></param>
         /// <returns></returns>
         public static IList<IList<int>> Permute(int[] nums)
         {
-            foreach (int num in nums)
-            {
-                temp.Add(num);
-            }
-
-            n = nums.Length;
-
-            Backtrack(0);
-
-            // 答案輸出
-            foreach(var value in permutations)
-            {
-                Console.Write("[");
-                foreach(var item in value)
-                {
-                    Console.Write(item + ", ");
-                }
-                Console.Write("]");
-                Console.WriteLine(" ");
-
-            }
-
-            return permutations;
-
+            // 初始化 result 來存儲所有排列
+            IList<IList<int>> result = new List<IList<int>>();
+            // 建立 list（用來存放當前排列）
+            List<int> list = new List<int>();
+            Backtrack(nums, list, result);
+            return result;
         }
 
 
         /// <summary>
-        /// 遞迴, 回朔 排列 
+        /// 回溯法：透過 選擇 → 遞迴 → 回溯 產生排列
+        /// 避免重複：使用 list.Contains(nums[i])
+        /// 時間複雜度 O(N * N!)
         /// 
-        /// 如果 index = n，则当前排列中的所有元素都已经确定，将当前排列添加到结果列表中。
-        /// 如果 index < n，则对于每个 index ≤ i < n，执行如下操作。
-        /// 1. 将 temp[index] 和 temp[i] 的值交换，然后将 index + 1 作为当前下标继续搜索。
-        /// 2. 将 temp[index] 和 temp[i] 的值再次交换，恢复到交换之前的状态。
-        /// 
-        /// https://leetcode.cn/problems/permutations/solution/quan-pai-lie-by-leetcode-solution-2/
-        /// 回到上一層節點時候需要狀態重置, 請看影片04:00
-        /// 類似樹狀結構的DFS, 回到上一層,從上一層再往其他層推 所以需要 資料重製
+        /// 回溯步驟:
+        /// 選擇 數字
+        /// 遞迴 探索
+        /// 回溯 撤銷選擇，嘗試其他可能性
         /// </summary>
-        /// <param name="index"></param>
-        public static void Backtrack(int index)
+        /// <param name="nums"></param>
+        /// <param name="list"></param>
+        /// <param name="result"></param>
+        private static void Backtrack(int[] nums, List<int> list, IList<IList<int>> result)
         {
-            // 排列組合長度符合題目要求
-            if (index == n)
+            // 若 list 長度等於 nums.Length，表示找到一組排列，加入 result
+            if (list.Count == nums.Length)
             {
-                // 排列組合完成加入
-                permutations.Add(new List<int>(temp));
+                // 存入結果（要建立新 List 避免引用問題, 新的一組）
+                result.Add(new List<int>(list));
+                return;
             }
-            else
+
+            // 遍歷所有數字
+            for (int i = 0; i < nums.Length; i++)
             {
-                for (int i = index; i < n; i++)
+                // 若 list 已經包含該數字，則跳過（避免重複）
+                if (list.Contains(nums[i]))
                 {
-                    // 找出可能排列
-                    Swap(temp, index, i);
-                    // index + 1 作为当前下标继续搜索
-                    Backtrack(index + 1);
-                    // 撤銷排列; 狀態重置
-                    Swap(temp, index, i);
+                    continue; // 剪枝：避免重复选择
                 }
 
+                // 選擇當前數字
+                list.Add(nums[i]);
+                // 遞迴繼續
+                Backtrack(nums, list, result);
+                // 回溯：移除最後一個數字
+                list.RemoveAt(list.Count - 1);
             }
-
         }
-
-
-        /// <summary>
-        /// 为了得到数组 nums 的全排列，需要依次确定排列中的每个位置的元素
-        /// ，可以通过交换 temp 中的元素实现。
-        /// 
-        /// </summary>
-        /// <param name="temp"></param>
-        /// <param name="index1"></param>
-        /// <param name="index2"></param>
-        public static void Swap(IList<int> temp, int index1, int index2)
-        {
-            int curr = temp[index1];
-            temp[index1] = temp[index2];
-            temp[index2] = curr;
-        }
-
 
     }
 }

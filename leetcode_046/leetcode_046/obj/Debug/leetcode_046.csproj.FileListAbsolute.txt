@@ -1,7 +1,0 @@
-D:\Leetcode_folder\Leetcode_folder\leetcode_046\leetcode_046\bin\Debug\leetcode_046.exe.config
-D:\Leetcode_folder\Leetcode_folder\leetcode_046\leetcode_046\bin\Debug\leetcode_046.exe
-D:\Leetcode_folder\Leetcode_folder\leetcode_046\leetcode_046\bin\Debug\leetcode_046.pdb
-D:\Leetcode_folder\Leetcode_folder\leetcode_046\leetcode_046\obj\Debug\leetcode_046.csproj.AssemblyReference.cache
-D:\Leetcode_folder\Leetcode_folder\leetcode_046\leetcode_046\obj\Debug\leetcode_046.csproj.CoreCompileInputs.cache
-D:\Leetcode_folder\Leetcode_folder\leetcode_046\leetcode_046\obj\Debug\leetcode_046.exe
-D:\Leetcode_folder\Leetcode_folder\leetcode_046\leetcode_046\obj\Debug\leetcode_046.pdb
