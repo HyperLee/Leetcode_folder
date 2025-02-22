@@ -61,6 +61,20 @@
         ///  i = 3：未訪問，DFS 收集 "mary@mail.com"。
         /// 3. 結果：
         ///  [["John", "john00@mail.com", "john_newyork@mail.com", "johnsmith@mail.com"],["John", "johnnybravo@mail.com"], ["Mary", "mary@mail.com"]]
+        ///  
+        /// 注意重點之一是，我們需要將郵件地址按字母順序排序(ASCII 編碼順序)，以便在最終答案中按字母順序顯示。
+        /// string.CompareOrdinal 使用 字典順序 (ASCII 編碼順序) 來比較字串，這樣能確保 john00@mail.com 在 johnsmith@mail.com 之前，符合 LeetCode 要求。
+        /// StringComparer.Ordinal 是用於按 ASCII 碼順序比較字符串的方法，這與文化無關，能夠避免因為不同語言環境導致的字母順序問題。
+        /// 
+        /// 這裡使用了 string.CompareOrdinal 作為比較方法，這是 逐字節的排序（ordinal sorting），它的特點是：
+        /// 1.基於字符的 Unicode 值（code point）進行比較，不考慮文化規則
+        /// 2.大小寫敏感：大寫字母（A-Z）的 Unicode 值小於小寫字母（a-z）
+        /// 3.結果一致：無論在什麼語言環境下運行，排序結果都是相同的
+        /// 4.符合大多數編程問題（包括 LeetCode）的期望，即簡單的字典序
+        /// 
+        /// string.CompareOrdinal 的工作原理
+        /// 它直接比較兩個字符串的 Unicode 值，從左到右逐個字符比較
+        /// 
         /// </summary>
         /// <param name="accounts"></param>
         /// <returns></returns>
@@ -118,8 +132,8 @@
 
                 // 將 emailSet 轉為 List 並排序
                 List<string> res = new List<string>(emailSet);
-                // 對郵件地址按字母順序排序。
-                res.Sort(); 
+                // 對郵件地址按字母順序排序。 **修正排序方式**
+                res.Sort(string.CompareOrdinal);
                 // 將當前帳戶的名稱 (索引 0 的元素) 插入到 res 列表的開頭。
                 res.Insert(0, accounts[i][0]); 
 
