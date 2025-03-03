@@ -14,18 +14,22 @@
         static void Main(string[] args)
         {
             string s = "leetcode";
-            IList<string> wordDict = new List<string>();
-            wordDict.Add("leet");
-            wordDict.Add("code");
+            // IList<string> wordDict = new List<string>();
+            // wordDict.Add("leet");
+            // wordDict.Add("code");
 
-            Console.WriteLine("res: " + WordBreak(s, wordDict));
+            List<string> wordDict = new List<string> { "leet", "code" };
 
+            Console.WriteLine("res1: " + WordBreak(s, wordDict));
+            Console.WriteLine("res2: " + WordBreak2(s, wordDict));
         }
 
 
         /// <summary>
         /// ref: 動態規劃
         /// https://leetcode.cn/problems/word-break/solution/dan-ci-chai-fen-by-leetcode-solution/
+        /// https://leetcode.cn/problems/word-break/solutions/2968135/jiao-ni-yi-bu-bu-si-kao-dpcong-ji-yi-hua-chrs/
+        /// 
         /// 
         /// 注意：不要求字典中出现的单词全部都使用，并且字典中的单词可以重复使用。
         /// 
@@ -64,11 +68,14 @@
         /// 
         /// 判斷和更新：
         /// dp[j]：表示 s[0..j-1] 是否可以分割成字典中的單詞。
-        /// s.Substring(j, i - j)：取子字符串 s[j..i-1]。
+        /// s.Substring(j, i - j)：取子字符串 s[j..i-1]。也可以視為 s[j..i]，長度為 i - j。
         /// wordsDictSet.Contains(...)：檢查這個子字符串是否在字典中。
         /// wordsDictSet.Contains(s.Substring(j, i - j)) 為 true：表示從索引 j 到 i 的子字串（長度為 i - j）是一個字典中的單字。
         /// 如果 s[0..j-1] 可以分割（dp[j] == true），且 s[j..i-1] 是字典中的單詞，則 s[0..i-1] 可以分割，設 dp[i] = true。
         /// 一旦找到一個可行的分割點，break 跳出內層迴圈，因為 dp[i] 已確定。
+        /// 
+        /// 1.輸入的字串必須可以拆分
+        /// 2.拆分的單詞必須在字典中
         /// </summary>
         /// <param name="s">要比對字串</param>
         /// <param name="wordDict">字典</param>
@@ -98,7 +105,7 @@
                     // 判斷和更新： 檢查 dp[j] 是否為 true 且 s.Substring(j, i - j) 是否存在於 wordsDictSet 中
                     if (dp[j] && wordsDictSet.Contains(s.Substring(j, i - j)))
                     {
-                        // 更新 dp 狀態, 存在為 true
+                        // 更新 dp[i] 為 true，表示 s[0:i] 可被拆分
                         dp[i] = true;
                         break;
                     }
@@ -106,6 +113,69 @@
             }
 
             return dp[s.Length];
+        }
+
+
+        /// <summary>
+        /// ref: BFS
+        /// 使用 BFS（廣度優先搜尋） 來解 Word Break 問題，是另一種有效的解法。
+        /// 這種方法的主要思路是將 s 視為一張圖，每個可能的切割點 i 都是一個節點，若 s[j:i] 在 wordDict 中，則有邊從 j 連到 i。
+        /// 
+        /// 我們使用一個佇列 queue 來實現 BFS。初始時，將 0 加入 queue，表示從 s[0] 開始進行切割。
+        /// 每次取出 queue 中的頂部元素 start，對於每個以 start 為起點的切割點 end，如果 s[start:end] 在 wordDict 中，則將 end 加入 queue。
+        /// 思路
+        /// 1. 使用佇列（Queue） 來儲存當前可以開始檢查的索引 start。
+        /// 2. 從 0 開始，不斷嘗試從 start 到 end 的子字串 s[start:end] 是否在 wordDict。
+        /// 3. 如果 end == s.Length，則代表 s 可以完全被拆分，返回 true。
+        /// 4. 使用 visited 集合 來記錄已經檢查過的索引 start，避免重複計算。 
+        /// </summary>
+        /// <param name="s">要比對字串</param>
+        /// <param name="wordDict">字典</param>
+        /// <returns></returns>
+        public static bool WordBreak2(string s, IList<string> wordDict)
+        {
+            // 儲存字典單詞，查詢速度 O(1)
+            var wordSet = new HashSet<string>(wordDict);
+            // 佇列用於 BFS
+            var queue = new Queue<int>();
+            // 記錄已經訪問過的索引，避免重複計算
+            var visited = new HashSet<int>();
+            // 初始狀態：從索引 0 開始嘗試
+            queue.Enqueue(0);
+
+            while (queue.Count > 0)
+            {
+                // 取出當前要檢查的起點索引
+                int start = queue.Dequeue();
+
+                // 避免重複檢查相同的 start
+                // 若已訪問過該索引，跳過，避免重複計算
+
+                if (visited.Contains(start))
+                {
+                    continue;
+                }
+
+                // 標記為已訪問
+                visited.Add(start);
+                // 嘗試所有可能的結束索引
+                for (int end = start + 1; end <= s.Length; end++)
+                {
+                    string sub = s.Substring(start, end - start); // 擷取子字串 s[start:end]
+
+                    if (wordSet.Contains(sub)) // 如果子字串存在於字典
+                    {
+                        if (end == s.Length) // 如果剛好走到字串末尾，代表成功拆分
+                            return true;
+
+                        queue.Enqueue(end); // 將新的索引點加入佇列，繼續探索
+                    }
+                }
+
+            }
+
+            // 若 BFS 完全結束仍未找到可行的拆分，則返回 false
+            return false;
         }
     }
 }
