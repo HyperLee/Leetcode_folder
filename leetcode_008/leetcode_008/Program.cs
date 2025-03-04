@@ -32,7 +32,7 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string s = " -42";
+            string s = " -*42";
 
             Console.WriteLine("res: " + MyAtoi(s));
         }
@@ -73,6 +73,11 @@
             else if (s[i] == '+')
             {
                 i++;
+            }
+            else if (char.IsLetter(s[i]))
+            {
+                // 符號之後只能是數字，否則不合法（回傳0）
+                return 0;
             }
 
             // 轉換數字並處理溢出
