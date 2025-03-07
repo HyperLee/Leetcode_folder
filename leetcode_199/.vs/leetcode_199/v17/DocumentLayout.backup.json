@@ -1,0 +1,37 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_199\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{A1CA742A-47D1-4F94-BCEE-13983C79937D}|leetcode_199\\leetcode_199.csproj|d:\\leetcode_folder\\leetcode_folder\\leetcode_199\\leetcode_199\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A1CA742A-47D1-4F94-BCEE-13983C79937D}|leetcode_199\\leetcode_199.csproj|solutionrelative:leetcode_199\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 0,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_199\\leetcode_199\\Program.cs",
+              "RelativeDocumentMoniker": "leetcode_199\\Program.cs",
+              "ToolTip": "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_199\\leetcode_199\\Program.cs*",
+              "RelativeToolTip": "leetcode_199\\Program.cs*",
+              "ViewState": "AgIAABoAAAAAAAAAAAA5wCUAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-03-07T07:29:18.122Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
