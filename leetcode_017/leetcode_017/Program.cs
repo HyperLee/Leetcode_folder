@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
-namespace leetcode_017
+namespace leetcode_017;
+
+class Program
 {
-    internal class Program
-    {
         // 電話鍵盤上 0 ~ 9 按鈕, 但是只有2 ~ 9才有蘊含英文字母
         public static string[] lettersArr = { "", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
         // 
@@ -23,27 +19,84 @@ namespace leetcode_017
         /// 
         /// 列舉 回朔 題目
         /// 類似 題目 046
+        /// 
+        /// 電話號碼字母組合的特性
+        /// 1. 順序性
+        ///     輸入是 "23"，其中：
+        ///     2 對應 "abc"
+        ///     3 對應 "def"
+        ///     組合必須按照輸入數字的順序來生成
+        /// 2. 示例說明
+        ///     輸入 "23" 時：
+        ///     第一個位置只能是 2 對應的字母 (a,b,c)
+        ///     第二個位置只能是 3 對應的字母 (d,e,f)
+        /// 所以合法的組合是：
+        /// ad, ae, af
+        /// bd, be, bf
+        /// cd, ce, cf
+        ///
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string digits = "23";
-            LetterCombinations(digits);
-            Console.ReadKey();
+            // 測試案例 1: 兩個數字組合
+            Console.WriteLine("\n測試案例 1 - 輸入: \"23\"");
+            string digits1 = "23";
+            var res =  LetterCombinations(digits1);
+            Console.WriteLine($"res: {string.Join(", ", res)}");
 
+            // 測試案例 2: 空字串
+            Console.WriteLine("\n測試案例 2 - 輸入: \"\"");
+            string digits2 = "";
+            var res2 =  LetterCombinations(digits2);
+            Console.WriteLine($"res: {string.Join(", ", res2)}");
 
+            // 測試案例 3: 單個數字
+            Console.WriteLine("\n測試案例 3 - 輸入: \"2\"");
+            string digits3 = "2";
+            var res3 = LetterCombinations(digits3);
+            Console.WriteLine($"res: {string.Join(", ", res3)}");
+
+            // 測試案例 4: 三個數字組合
+            Console.WriteLine("\n測試案例 4 - 輸入: \"234\"");
+            string digits4 = "234";
+            var res4 = LetterCombinations(digits4);
+            Console.WriteLine($"res: {string.Join(", ", res4)}");
+
+            // 測試案例 5: 包含 7 和 9 (四個字母的按鍵)
+            Console.WriteLine("\n測試案例 5 - 輸入: \"79\"");
+            string digits5 = "79";
+            var res5 = LetterCombinations(digits5);
+            Console.WriteLine($"res: {string.Join(", ", res5)}");
         }
 
 
         /// <summary>
         /// https://leetcode.cn/problems/letter-combinations-of-a-phone-number/solution/by-stormsunshine-k2dm/
         /// 
+        /// 解題概念:
+        /// 1. 使用回溯法(Backtracking)來解決此問題
+        /// 2. 建立電話按鍵對應字母的映射表(lettersArr)
+        /// 3. 利用遞迴方式逐個處理每個數字對應的字母
+        /// 
+        /// 解題想法:
+        /// 1. 先檢查輸入是否為空，空則直接返回空列表
+        /// 2. 對每個數字:
+        ///    - 找出對應的字母集合
+        ///    - 遍歷字母集合中的每個字母
+        ///    - 將字母加入當前組合
+        ///    - 遞迴處理下一個數字
+        ///    - 回溯，移除最後加入的字母
+        /// 3. 當處理完所有數字時，將當前組合加入結果集
+        /// 
+        /// 时间复杂度：O(4^n)，其中 n 是輸入數字的長度
+        /// 空间复杂度：O(n)，遞迴調用棧的深度最大為 n
+        /// 
         /// 当给定的字符串 digits 为空时，不存在可以表示的字母组合，因此返回空列表。
         /// 给定的字符串 digits 不为空时，由于每个数字都是 2 到 9，因此都存在对应的字母。
-        /// 
         /// </summary>
-        /// <param name="digits"></param>
-        /// <returns></returns>
+        /// <param name="digits">輸入的數字字串</param>
+        /// <returns>所有可能的字母組合</returns>
         public static IList<string> LetterCombinations(string digits)
         {
             digits2 = digits;
@@ -58,13 +111,6 @@ namespace leetcode_017
             // 不為空, 就去回朔找資料
             Backtrack(0, new StringBuilder());
 
-
-            // 答案輸出
-            Console.Write("res: ");
-            foreach(var item in combinations)
-            {
-                Console.Write(item + ", ");
-            }
 
             return combinations;
         }
@@ -89,36 +135,40 @@ namespace leetcode_017
         /// 
         /// </summary>
         /// <param name="index">index</param>
-        /// <param name="combination">加入預選(候選)字母組合</param>
-        public static void Backtrack(int index, StringBuilder combination)
+        /// <param name="sb">加入預選(候選)字母組合</param>
+        public static void Backtrack(int index, StringBuilder sb)
         {
-            // 排列暫存的組合長度符合 digits2 長度(題目輸入長度) 就加入答案
+            // Step 1: 檢查是否完成組合
+            // 當遞迴深度(index)等於輸入字串長度時，表示已經形成一個完整組合
             if (index == digits2.Length)
             {
-                combinations.Add(combination.ToString());
+                combinations.Add(sb.ToString());
             }
             else
             {
-                // 取出 digits2 數字; 取出 digits2 中第 index 位置資料
+                // Step 2: 取得當前數字對應的字母
+                // 2.1 將字符轉換為數字 (例如: '2' -> 2)
                 int digit = digits2[index] - '0';
-                // 取出數字映射的英文字母
+                // 2.2 從字母映射數組中獲取對應的字母字串
                 string letters = lettersArr[digit];
 
-                // 找出所有可能之組合
+                // Step 3: 遍歷當前數字對應的所有可能字母
                 foreach (char c in letters)
                 {
-                    // 將對應的字母加入排列暫存(預選;候選)
-                    combination.Append(c);
-                    // 遞迴; 加入之後, 計算下一種之組合(index + 1) (找下個預選者)
-                    Backtrack(index + 1, combination);
-                    // 回歸; 退回原先狀態(字母), 再找下個新的組合
-                    combination.Length--;
+                    // Step 4: 構建組合
+                    // 4.1 將當前字母加入組合中
+                    sb.Append(c);
+                    
+                    // Step 5: 遞迴處理下一個數字
+                    // 5.1 透過增加索引(index + 1)處理下一個數字的字母
+                    Backtrack(index + 1, sb);
+                    
+                    // Step 6: 回溯
+                    // 6.1 移除最後加入的字母，還原組合狀態
+                    // 6.2 這樣可以在下一次迭代中嘗試其他字母
+                    sb.Length--;
                 }
-
             }
-
         }
 
-
-    }
 }
