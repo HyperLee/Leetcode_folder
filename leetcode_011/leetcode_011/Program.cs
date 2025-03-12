@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿namespace leetcode_011;
 
-namespace leetcode_011
+class Program
 {
-    internal class Program
-    {
         /// <summary>
         /// 11. Container With Most Water
         /// https://leetcode.com/problems/container-with-most-water/
@@ -20,8 +14,7 @@ namespace leetcode_011
         {
             int[] height = new int[] { 1, 8, 6, 2, 5, 4, 8, 3, 7 };
 
-            Console.WriteLine(MaxArea(height));
-            Console.ReadKey();
+            Console.WriteLine("res: " + MaxArea(height));
         }
 
 
@@ -68,7 +61,7 @@ namespace leetcode_011
             while(left < right)
             {
                 // 這兩行可縮成下面寫法.但是兩行比較好理解
-                // 面積公式: 高度 * 長度
+                // 面積公式: Min(左右高度) * 長度(左右邊界距離)
                 int area = Math.Min(height[left], height[right]) * (right - left);
                 // 持續更新 最大面積
                 max = Math.Max(max, area);
@@ -89,5 +82,4 @@ namespace leetcode_011
             return max;
         }
 
-    }
 }
