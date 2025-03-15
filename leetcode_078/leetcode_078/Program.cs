@@ -15,26 +15,38 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] input = {1, 2};
-            var res =  Subsets2(input);
+            // 測試案例 1: [1,2]
+            Console.WriteLine("測試案例 1: [1,2]");
+            int[] input1 = { 1, 2 };
+            var res1 = Subsets2(input1);
+            PrintResult(res1);
 
-            //foreach(var i in res)
-            //{
-            //    for(int j = 0; j < i.Count; j++)
-            //    {
-            //        Console.Write(i[j] + ", ");
-            //    }
-            //    Console.WriteLine();
-            //}
+            // 測試案例 2: [1,2,3]
+            Console.WriteLine("\n測試案例 2: [1,2,3]");
+            int[] input2 = { 1, 2, 3 };
+            var res2 = Subsets2(input2);
+            PrintResult(res2);
 
-            // 寫法2; string.Join, 比較簡潔
-            foreach (var item in res)
+            // 測試案例 3: 空陣列
+            Console.WriteLine("\n測試案例 3: []");
+            int[] input3 = { };
+            var res3 = Subsets2(input3);
+            PrintResult(res3);
+
+            // 測試案例 4: 單一元素
+            Console.WriteLine("\n測試案例 4: [5]");
+            int[] input4 = { 5 };
+            var res4 = Subsets2(input4);
+            PrintResult(res4);
+        }
+
+        private static void PrintResult(IList<IList<int>> result)
+        {
+            foreach (var item in result)
             {
                 Console.WriteLine(string.Join(",", item));
             }
-
         }
-
 
         /// <summary>
         /// ref:解法二 使用迭代的方法生成所有子集
