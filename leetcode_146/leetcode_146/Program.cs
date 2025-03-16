@@ -48,7 +48,7 @@ class Program
     /// - 雜湊表用於實現O(1)時間的查詢操作
     /// 空間複雜度：O(capacity)
     /// 
-    /// ref:
+    /// ref:建議看連結圖示說明 比較好初步理解題目需求
     /// https://leetcode.cn/problems/lru-cache/solutions/2456294/tu-jie-yi-zhang-tu-miao-dong-lrupythonja-czgt/
     /// https://leetcode.cn/problems/lru-cache/solutions/259678/lruhuan-cun-ji-zhi-by-leetcode-solution/
     /// https://leetcode.cn/problems/lru-cache/solutions/1449572/by-stormsunshine-d7c6/
@@ -77,6 +77,16 @@ class Program
         private readonly int _capacity;
         // 使用哨兵節點 (_dummy) 簡化鏈結串列的操作
         private readonly Node _dummy = new Node(0, 0); // 哨兵節點
+
+        /// <summary>
+        /// 建立一個雜湊表（Dictionary），用來儲存 key-value 對：
+        /// Key: 整數型別 (int)，代表快取中的鍵值
+        /// Value: Node 型別，指向雙向鏈結串列中對應的節點
+
+        /// </summary>
+        /// <typeparam name="int"></typeparam>
+        /// <typeparam name="Node"></typeparam>
+        /// <returns></returns>
         private readonly Dictionary<int, Node> _keyToNode = new Dictionary<int, Node>();
 
         public LRUCache(int capacity)
@@ -100,7 +110,14 @@ class Program
         /// <returns>如果鍵存在則返回對應的值，否則返回-1</returns>
         public int Get(int key)
         {
-            Node node = GetNode(key); // GetNode 會將對應節點移到鏈結串列頭部
+            // 步驟 1: 呼叫 GetNode 取得節點
+            // - 如果節點存在，GetNode 會將其移至最前端
+            // - 如果不存在，GetNode 會返回 null
+            Node node = GetNode(key);
+            
+            // 步驟 2: 返回結果
+            // - 如果節點存在（非 null），返回其值
+            // - 如果節點不存在（null），返回 -1
             return node != null ? node.Value : -1;
         }
 
@@ -123,35 +140,64 @@ class Program
         /// <param name="value">要插入的值</param>
         public void Put(int key, int value)
         {
+            // 步驟 1: 檢查 key 是否存在
             Node node = GetNode(key);
+            
+            // 步驟 2a: 如果 key 已存在
             if (node != null)
             {
-                node.Value = value; // 更新值
+                // - 更新節點的值
+                // - GetNode 已經將節點移至最前端
+                node.Value = value;
                 return;
             }
-            node = new Node(key, value); // 新節點
+
+            // 步驟 2b: 如果 key 不存在
+            // - 建立新節點
+            node = new Node(key, value);
+            // - 將節點加入雜湊表
             _keyToNode[key] = node;
-            PushFront(node); // 放到最前面
+            // - 將節點加入鏈結串列最前端
+            PushFront(node);
+
+            // 步驟 3: 檢查容量是否超過上限
             if (_keyToNode.Count > _capacity)
             {
+                // - 取得最後一個節點（最久未使用）
                 Node backNode = _dummy.Prev;
+                // - 從雜湊表中移除
                 _keyToNode.Remove(backNode.Key);
-                Remove(backNode); // 移除最後一個節點
+                // - 從鏈結串列中移除
+                Remove(backNode);
             }
         }
 
         /// <summary>
         /// 獲取鍵對應的節點，如果存在則將其移到鏈結串列的前端
+        /// 
+        /// 注意此段程式碼的步驟3.
+        /// 先移除再加入, 所以原先存入的順序要改變
+        /// 被移除會消失,再加入會讓順序在儲存的Dic裡面的最後面位置
+        /// 這行為恰巧就是LRU的行為
         /// </summary>
         private Node GetNode(int key)
         {
+            // 步驟 1: 檢查 key 是否存在於雜湊表中
             if (!_keyToNode.ContainsKey(key))
             {
                 return null;
             }
+
+            // 步驟 2: 從雜湊表中取得節點
             Node node = _keyToNode[key];
+
+            // 步驟 3: 將節點移到最前端
+            // - 從當前位置移除節點
             Remove(node);
+            // - 將節點加入最前端
             PushFront(node);
+
+            // 步驟 4: 返回節點
             return node;
         }
 
@@ -160,18 +206,32 @@ class Program
         /// </summary>
         private void Remove(Node x)
         {
+            // 步驟 1: 將前一個節點的 Next 指向後一個節點
             x.Prev.Next = x.Next;
+            // 步驟 2: 將後一個節點的 Prev 指向前一個節點
             x.Next.Prev = x.Prev;
         }
 
         /// <summary>
         /// 將節點添加到雙向鏈結串列的前端
+        /// [前端(最新使用), 後端(久未使用)]
+        /// 開頭是 dummy 後面接上各 node
+        /// 最前端（最新）的節點總是接在 dummy 節點後面
+        /// 最後端（最舊）的節點總是在鏈結串列的尾部
         /// </summary>
         private void PushFront(Node x)
         {
+            // 步驟 1: 設定新節點的前後連結
+            // - 新節點的前節點指向哨兵節點
             x.Prev = _dummy;
+            // - 新節點的後節點指向原本的第一個節點
             x.Next = _dummy.Next;
+
+            // 步驟 2: 更新相鄰節點的連結
+            // - 更新哨兵節點的 Next
+            // dummy 的下一個變成新節點
             x.Prev.Next = x;
+            // - 更新原本第一個節點的 Prev
             x.Next.Prev = x;
         }
     }
