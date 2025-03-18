@@ -7,6 +7,10 @@ class Program
     /// https://leetcode.com/problems/minimum-window-substring/description/
     /// 76. 最小覆蓋子串
     /// https://leetcode.cn/problems/minimum-window-substring/description/
+    /// 
+    /// 要在字符串 S 中找出包含所有目標字符串 t 中字符的最小子串
+    /// 子串必須包含 t 中所有字符，包括重複的字符
+    /// 需要找出最小長度的符合條件子串 
     /// </summary>
     /// <param name="args"></param> 
     static void Main(string[] args)
@@ -45,6 +49,39 @@ class Program
         Console.WriteLine("測試案例 5 (單字符):");
         Console.WriteLine($"輸入: s = {s5}, t = {t5}");
         Console.WriteLine($"輸出: {MinWindow(s5, t5)}");
+
+        Console.WriteLine("\n===== 測試優化版本 MinWindowOptimized =====\n");
+
+        // 測試案例 1: 一般情況
+        Console.WriteLine("測試案例 1 (一般情況) - 優化版本:");
+        Console.WriteLine($"輸入: s = {s1}, t = {t1}");
+        Console.WriteLine($"輸出: {MinWindowOptimized(s1, t1)}\n");
+
+        // 測試案例 2: 目標字串包含重複字符
+        Console.WriteLine("測試案例 2 (重複字符) - 優化版本:");
+        Console.WriteLine($"輸入: s = {s2}, t = {t2}");
+        Console.WriteLine($"輸出: {MinWindowOptimized(s2, t2)}\n");
+
+        // 測試案例 3: 找不到符合的子串
+        Console.WriteLine("測試案例 3 (無解情況) - 優化版本:");
+        Console.WriteLine($"輸入: s = {s3}, t = {t3}");
+        Console.WriteLine($"輸出: {MinWindowOptimized(s3, t3)}\n");
+
+        // 測試效能比較案例
+        string longS = "ADOBECODEBANCBANCBANCBANCBANC";
+        string longT = "ABC";
+        Console.WriteLine("效能比較測試案例:");
+        Console.WriteLine($"輸入: s = {longS}, t = {longT}");
+        
+        var sw = System.Diagnostics.Stopwatch.StartNew();
+        var result1 = MinWindow(longS, longT);
+        sw.Stop();
+        Console.WriteLine($"原始版本耗時: {sw.ElapsedTicks} ticks");
+
+        sw.Restart();
+        var result2 = MinWindowOptimized(longS, longT);
+        sw.Stop();
+        Console.WriteLine($"優化版本耗時: {sw.ElapsedTicks} ticks");
     }
 
     /// <summary>
@@ -65,12 +102,13 @@ class Program
         int m = s.Length;
         int ansLeft = -1;           // 最小窗口的左邊界
         int ansRight = m;           // 最小窗口的右邊界
-        int[] cntS = new int[128];  // 記錄窗口中每個字符的出現次數
+        int[] cntS = new int[128];  // 記錄當前窗口中每個字符的出現次數
         int[] cntT = new int[128];  // 記錄目標字符串中每個字符的出現次數
 
         // 統計目標字符串中每個字符的出現次數
         foreach(char c in t.ToCharArray())
         {
+            // 視窗擴展
             cntT[c]++;
         }
 
@@ -86,6 +124,7 @@ class Program
             while(isCovered(cntS, cntT))  
             {
                 // 更新最小窗口的位置
+                // 更新最佳解
                 if(right - left < ansRight - ansLeft)  
                 {
                     ansLeft = left;
@@ -128,5 +167,74 @@ class Program
             }
         }
         return true;
+    }
+
+    /// <summary>
+    /// 優化的滑動視窗解法 (計數優化版)
+    /// 核心概念：
+    /// 1. 使用單一計數數組，同時記錄目標字符和當前窗口的字符統計
+    /// 2. 通過計數器(count)追蹤待匹配的字符數量
+    /// 3. 當 count 為 0 時，表示找到有效窗口
+    /// 
+    /// 優化重點：
+    /// 1. 使用單一數組減少空間使用
+    /// 2. 減少額外的字符匹配檢查
+    /// 3. 使用計數器代替完整的數組比較
+    /// 
+    /// 時間複雜度：O(n)，其中 n 是字符串 s 的長度
+    /// 空間複雜度：O(1)，使用固定大小的數組(128)
+    /// </summary>
+    public static string MinWindowOptimized(string s, string t)
+    {
+        if(string.IsNullOrEmpty(s) || string.IsNullOrEmpty(t))
+        {
+            return "";
+        }
+
+        int[] map = new int[128];
+        int count = t.Length;
+        // 當前視窗左邊界
+        int start = 0;
+        // 當前視窗右邊界
+        int end = 0;
+        int minStart = 0;
+        // 要找最小,所以初始化給最大
+        int minLen = int.MaxValue;
+
+        // 記錄目標字符串中每個字符的出現次數
+        foreach(char c in t)
+        {
+            map[c]++;  // 正值表示目標字符需要的數量
+        }
+
+        while(end < s.Length)
+        {
+            // 當遇到目標字符時，減少待匹配數量
+            if(map[s[end]]-- > 0)  // 遇到目標字符時 map 值會 > 0
+            {
+                count--;  // 待匹配字符減少
+            }
+            end++;
+
+            // count 為 0 表示找到所有目標字符
+            while(count == 0)
+            {
+                // 更新最小窗口位置和長度
+                if(end - start < minLen)
+                {
+                    minStart = start;
+                    minLen = end - start;
+                }
+
+                // 移動左邊界時，如果遇到目標字符，增加待匹配數量
+                if(map[s[start]]++ == 0)  // 遇到目標字符時 map 值會 == 0
+                {
+                    count++;  // 待匹配字符增加
+                }
+                start++;
+            }
+        }
+
+        return minLen == int.MaxValue ? "" : s.Substring(minStart, minLen);
     }
 }
