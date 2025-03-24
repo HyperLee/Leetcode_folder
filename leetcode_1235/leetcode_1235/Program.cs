@@ -47,6 +47,10 @@ class Program
     }
 
     /// <summary>
+    /// ref:動態規劃 ＋二分法查找
+    /// https://leetcode.cn/problems/maximum-profit-in-job-scheduling/solutions/1910416/gui-hua-jian-zhi-gong-zuo-by-leetcode-so-gu0e/
+    /// https://leetcode.cn/problems/maximum-profit-in-job-scheduling/solutions/1913089/dong-tai-gui-hua-er-fen-cha-zhao-you-hua-zkcg/
+    /// https://leetcode.cn/problems/maximum-profit-in-job-scheduling/solutions/1913143/by-ac_oier-rgup/
     /// 使用動態規劃解決工作規劃問題
     /// 解題思路：
     /// 1. 將工作按結束時間排序，方便我們進行後續的動態規劃
@@ -55,6 +59,13 @@ class Program
     ///    - 不做：保持前一個狀態的利潤 dp[i-1]
     ///    - 做：當前工作的利潤 + 不衝突工作的最大利潤
     /// 4. 使用二分查找找到不衝突的工作
+    /// 5. 返回 dp[n] 即為最大利潤
+    /// 
+    /// dp[i] = Math.Max(dp[i - 1], dp[k] + jobs[i - 1][2]);
+    /// dp[i - 1]: 不做當前工作的最大利潤, 直接繼承前一個狀態的最大利潤
+    /// dp[k] + jobs[i - 1][2]: 做當前工作的最大利潤
+    /// dp[k]: 前 k 個工作的最大利潤（k 是最後一個不衝突的工作）
+    /// jobs[i - 1][2]: 當前工作的利潤（陣列中的第三個元素是 profit）
     /// </summary>
     /// <param name="startTime">每個工作的開始時間陣列</param>
     /// <param name="endTime">每個工作的結束時間陣列</param>
@@ -76,12 +87,16 @@ class Program
         //Array.Sort(jobs, (a, b) => a[1].CompareTo(b[1])); // 使用 CompareTo
 
         // 步驟3：動態規劃求解
+        // dp[0] 代表不選擇任何工作時的利潤（即為 0; 這是動態規劃的基礎情況（base case）
         int[] dp = new int[n + 1];
+
+        // jobs[i-1] 對應到原始工作的索引
+        // dp[i] 對應到考慮前 i 個工作的最大利潤
         for(int i = 1; i <= n; i++)
         {
             // 找到當前工作不衝突的最近工作
             int k = BinarySearch(jobs, i - 1, jobs[i - 1][0]);
-            // 選擇做或不做當前工作，取最大值
+            // 選擇不做當前工作與做當前工作，兩者取最大值
             dp[i] = Math.Max(dp[i - 1], dp[k] + jobs[i - 1][2]);
         }
         
@@ -111,14 +126,17 @@ class Program
         int left = 0;
         while(left < right)
         {
-            int mid = (left + right) / 2;
+            // 避免溢位, 常見二分法寫法
+            int mid = left + (right - left) / 2;
             if(jobs[mid][1] <= target)  // 如果中間位置的工作結束時間小於等於目標時間
             {
-                left = mid + 1;         // 可能還有更後面的相容工作
+                // 可能還有更後面的相容工作, 向右尋找(往右可能可以找到更適合的工作)
+                left = mid + 1;         
             }
             else
             {
-                right = mid;            // 需要在前半部分尋找
+                // 需要在前半部分尋找, 向左尋找(發生衝突, 需要找到不衝突的工作)
+                right = mid;            
             }
         }
         return left;
