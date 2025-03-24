@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "leetcode_1235/1.0.0": {
+        "runtime": {
+          "leetcode_1235.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "leetcode_1235/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
