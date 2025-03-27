@@ -1,7 +1,7 @@
-﻿namespace leetcode_001
+﻿namespace leetcode_001;
+
+class Program
 {
-    internal class Program
-    {
         /// <summary>
         ///  LeetCode 1. Two Sum
         ///  https://leetcode.com/problems/two-sum/
@@ -24,47 +24,57 @@
 
 
         /// <summary>
+        /// 解題思路：
+        /// 1. 使用 Dictionary 作為 Hash Table，儲存已遍歷過的數字及其索引
+        /// 2. 對於每個數字 nums[i]，計算目標值與當前數字的差值 (target - nums[i])
+        /// 3. 如果差值存在於 Dictionary 中，表示找到配對，返回兩個數字的索引
+        /// 4. 如果沒找到，將當前數字和索引加入 Dictionary
+        /// 
+        /// 時間複雜度：O(n) - 只需遍歷一次數組
+        /// 空間複雜度：O(n) - 需要額外的 Dictionary 儲存已遍歷的數字
+        /// 
+        /// 優化重點：
+        /// - 使用 Dictionary 將查找時間從 O(n) 降至 O(1)
+        /// - 一邊遍歷一邊存儲，避免重複遍歷
+        /// - 使用索引器替代 Add 方法，程式碼更簡潔
+        /// 
         /// https://www.itread01.com/content/1543410439.html
         /// https://ithelp.ithome.com.tw/articles/10217042
-        /// ContainsKey
-        /// https://vimsky.com/zh-tw/examples/usage/c-sharp-dictionary-containskey-method.html
-        /// 
-        /// 使用哈希表，可以将寻找 target - x 的时间复杂度降低到从 O(N)降低到 O(1)。
-        /// 这样我们创建一个哈希表，对于每一个 x，我们首先查询哈希表中是否存在 target - x，然后将 x 插
-        /// 入到哈希表中，即可保证不会让 x 和自己匹配。
-        /// 
-        /// int[] nums 相同 element 只能使用一次
-        /// 透過 Dictionary 去紀錄 元素
-        /// 也可以使用 Hashset 取代
         /// </summary>
-        /// <param name="nums"></param>
-        /// <param name="target"></param>
-        /// <returns></returns>
+        /// <param name="nums">輸入的整數陣列</param>
+        /// <param name="target">目標和</param>
+        /// <returns>符合目標和的兩個數字的索引陣列</returns>
         public static int[] TwoSum(int[] nums, int target)
         {
-            // 當作 hash table 使用, key: nums.Value;  value: nums.index
+            // 建立 Dictionary 作為 Hash Table，key 為數字值，value 為索引位置
             Dictionary<int, int> dic = new Dictionary<int, int>();
+            
+            // 遍歷整個數組
             for(int i = 0; i < nums.Length; i++)
             {
-                // 相減之後餘數.
+                // 計算需要尋找的配對數字 (目標值減去當前數字)
                 int left = target - nums[i];
                 
-                // left 存在就直接呼叫出來取出該 key 的 value
+                // 檢查是否已經存在配對的數字
                 if(dic.ContainsKey(left))
                 {
-                    // dic[left] : dic.Value
-                    // string aa = dic[left].ToString();
+                    // 找到配對！返回兩個數字的索引
+                    // dic[left] 是之前存入的索引，i 是當前索引
                     return new int[] { dic[left], i };
                 }
 
-                // 該 nums[i] 不存在就加入 dic.
+                // 若當前數字不在 Dictionary 中，將其加入
+                // 這裡使用判斷是為了避免重複值覆蓋原有的索引
+                // 只存儲第一次出現的索引
                 if (!dic.ContainsKey(nums[i]))
                 {
-                    dic.Add(nums[i], i);
+                    // dic.Add(nums[i], i);
+                    dic[nums[i]] = i; // 使用索引器語法，較 Add 方法更簡潔
                 }
             }
 
-            return null;
+            // 若找不到符合的配對，返回空陣列
+            // return null;
+            return Array.Empty<int>(); // 使用 Empty<int>() 替代 null，更安全
         }
-    }
 }
