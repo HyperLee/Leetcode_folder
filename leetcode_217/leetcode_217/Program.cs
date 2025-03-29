@@ -7,14 +7,50 @@
         /// https://leetcode.com/problems/contains-duplicate/
         /// 217. 存在重复元素
         /// https://leetcode.cn/problems/contains-duplicate/
+        /// 
+        /// 給你一個整數陣列nums。如果任一值在數組中出現至少兩次，則返回true；如果數組中每個元素互不相同，則返回false。
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] nums = { 1, 2, 3, 1 };
+            // 測試案例1: 有重複元素
+            int[] nums1 = { 1, 2, 3, 1 };
+            Console.WriteLine("測試案例1 (有重複元素):");
+            Console.WriteLine($"Input: [{string.Join(", ", nums1)}]");
+            Console.WriteLine("method1: " + ContainsDuplicate(nums1));
+            Console.WriteLine("method2: " + ContainsDuplicate2(nums1));
+            Console.WriteLine();
 
-            Console.WriteLine("method1: " + ContainsDuplicate(nums));
-            Console.WriteLine("method2: " + ContainsDuplicate2(nums));
+            // 測試案例2: 沒有重複元素
+            int[] nums2 = { 1, 2, 3, 4 };
+            Console.WriteLine("測試案例2 (沒有重複元素):");
+            Console.WriteLine($"Input: [{string.Join(", ", nums2)}]");
+            Console.WriteLine("method1: " + ContainsDuplicate(nums2));
+            Console.WriteLine("method2: " + ContainsDuplicate2(nums2));
+            Console.WriteLine();
+
+            // 測試案例3: 所有元素都重複
+            int[] nums3 = { 1, 1, 1, 1 };
+            Console.WriteLine("測試案例3 (所有元素都重複):");
+            Console.WriteLine($"Input: [{string.Join(", ", nums3)}]");
+            Console.WriteLine("method1: " + ContainsDuplicate(nums3));
+            Console.WriteLine("method2: " + ContainsDuplicate2(nums3));
+            Console.WriteLine();
+
+            // 測試案例4: 空陣列
+            int[] nums4 = { };
+            Console.WriteLine("測試案例4 (空陣列):");
+            Console.WriteLine($"Input: [{string.Join(", ", nums4)}]");
+            Console.WriteLine("method1: " + ContainsDuplicate(nums4));
+            Console.WriteLine("method2: " + ContainsDuplicate2(nums4));
+            Console.WriteLine();
+
+            // 測試案例5: 單一元素
+            int[] nums5 = { 1 };
+            Console.WriteLine("測試案例5 (單一元素):");
+            Console.WriteLine($"Input: [{string.Join(", ", nums5)}]");
+            Console.WriteLine("method1: " + ContainsDuplicate(nums5));
+            Console.WriteLine("method2: " + ContainsDuplicate2(nums5));
         }
 
 
@@ -74,7 +110,8 @@
                 }
                 else
                 {
-                    dic.Add(num, 1);
+                    //dic.Add(num, 1);
+                    dic[num] = 1;  // 改用索引器寫法
                 }
             }
 
