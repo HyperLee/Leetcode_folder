@@ -1,25 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.4.33205.214
+VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "leetcode_100", "leetcode_100\leetcode_100.csproj", "{F5A84D9E-355A-4B8E-94F9-9B52B39E0B97}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "leetcode_100", "leetcode_100\leetcode_100.csproj", "{7A064E5A-38EA-4F18-8065-2886A729698B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
-	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F5A84D9E-355A-4B8E-94F9-9B52B39E0B97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F5A84D9E-355A-4B8E-94F9-9B52B39E0B97}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F5A84D9E-355A-4B8E-94F9-9B52B39E0B97}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F5A84D9E-355A-4B8E-94F9-9B52B39E0B97}.Release|Any CPU.Build.0 = Release|Any CPU
-	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {07733EA0-B57E-4D04-9CFB-7C8FF6CD0BE3}
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7A064E5A-38EA-4F18-8065-2886A729698B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7A064E5A-38EA-4F18-8065-2886A729698B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7A064E5A-38EA-4F18-8065-2886A729698B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7A064E5A-38EA-4F18-8065-2886A729698B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
