@@ -4,15 +4,15 @@ class Program
 {
      public class TreeNode 
      {
-     public int val;
-     public TreeNode left;
-     public TreeNode right;
-     public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) 
-     {
-         this.val = val;
-         this.left = left;
-         this.right = right;
-     }
+        public int val;
+        public TreeNode left;
+        public TreeNode right;
+        public TreeNode(int val=0, TreeNode left=null, TreeNode right=null) 
+        {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
     }
 
     /// <summary>
@@ -29,6 +29,8 @@ class Program
     /// - subRoot 樹的節點數範圍為 [1, 1000]
     /// - -10^4 <= root.val <= 10^4
     /// - -10^4 <= subRoot.val <= 10^4
+    /// 
+    /// 建議先去寫 100. Same Tree, 再過來解這題.
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)
@@ -96,35 +98,46 @@ class Program
     }
 
     /// <summary>
+    /// 這邊function 從 100. Same Tree 複製過來.
+    /// 
+    /// 判斷兩棵二元樹是否完全相同的輔助函數
     /// 解題思路：
-    /// 1. 遞迴比較兩棵樹是否完全相同
-    /// 2. 兩棵樹相同的條件：
-    ///    - 根節點值相同
-    ///    - 左子樹相同
-    ///    - 右子樹相同
-    /// 3. 時間複雜度：O(min(m,n))，其中m和n是兩棵樹的節點數
+    /// 1. 使用遞迴方式，同時遍歷兩棵樹的對應節點
+    /// 2. 遞迴終止條件：
+    ///    - 當兩個節點都是 null 時，表示到達葉子節點之後，返回 true
+    ///    - 當其中一個節點是 null 時，表示結構不同，返回 false
+    ///    - 當兩個節點值不相等時，返回 false
+    /// 3. 遞迴處理：
+    ///    - 同時檢查左子樹是否相同 (p.left 和 q.left)
+    ///    - 同時檢查右子樹是否相同 (p.right 和 q.right)
+    ///    - 只有當左右子樹都相同時，才返回 true
+    /// 4. 時間複雜度：O(min(m,n))，空間複雜度：O(min(h1,h2))，其中 h1,h2 為樹高
     /// </summary>
-    /// <param name="p">第一棵樹的根節點</param>
-    /// <param name="q">第二棵樹的根節點</param>
-    /// <returns>如果兩棵樹完全相同則返回true，否則返回false</returns>
+    /// <param name="p">第一棵樹的當前節點</param>
+    /// <param name="q">第二棵樹的當前節點</param>
+    /// <returns>若兩棵樹結構和節點值完全相同則返回 true，否則返回 false</returns>
     private static bool isSameTree(TreeNode p, TreeNode q)
     {
-        // 如果兩個節點都為空，則兩棵樹相同
-        if(p == null && q == null)
+        // 基礎案例 1：兩節點都為 null，表示已到達葉子節點之後
+        if (p == null && q == null)
         {
             return true;
         }
-        // 如果其中一個節點為空，則兩棵樹不同
-        if(p == null || q == null)
+        // 基礎案例 2：其中一個節點為 null，表示樹的結構不同
+        else if (p == null || q == null)
         {
             return false;
         }
-        // 比較當前節點的值
-        if(p.val != q.val)
+        // 基礎案例 3：節點值不相等，表示樹不同
+        else if (p.val != q.val)
         {
             return false;
         }
-        // 遞迴比較左右子樹
-        return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+        // 遞迴案例：同時比較左右子樹
+        else
+        {
+            // 只有當左右子樹都相同時，才返回 true
+            return isSameTree(p.left, q.left) && isSameTree(p.right, q.right);
+        }
     }
 }
