@@ -111,6 +111,21 @@ class Program
     /// - 不需要合併陣列
     /// - 不需要額外的儲存空間
     /// - 比第一個解法更有效率
+    /// 
+    /// 這個判斷式是整個二分搜尋算法的核心，確保我們能找到正確的中位數位置。
+    ///  if (maxLeftX <= minRightY && maxLeftY <= minRightX)
+    /// 這個判斷式確保了 nums1 的左半部分的最大值小於等於 nums2 的右半部分的最小值，
+    /// 並且 nums2 的左半部分的最大值小於等於 nums1 的右半部分的最小值。
+    /// 這樣才能確保中位數的正確性。
+    /// example:
+    /// nums1: [1, 3 | 5, 7]
+    /// nums2: [2, 4 | 6, 8]
+    /// maxLeftX = 3, minRightX = 5
+    /// maxLeftY = 4, minRightY = 6
+    /// 3 <= 6 (true) && 4 <= 5 (true) -> 條件成立
+    /// 如果條件不滿足，表示切割點需要調整：
+    /// 1.如果 maxLeftX > minRightY，表示 nums1 的左半部分太大，需要向左移動切割點。
+    /// 2.如果 maxLeftY > minRightX，表示 nums1 左半部太小，需要向右移動切割點。
     /// </summary>
     public static double FindMedianSortedArrays2(int[] nums1, int[] nums2)
     {

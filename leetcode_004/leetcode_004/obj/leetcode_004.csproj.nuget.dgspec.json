@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\Leetcode_folder\\Leetcode_folder\\leetcode_004\\leetcode_004\\leetcode_004.csproj": {}
+    "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_004\\leetcode_004\\leetcode_004.csproj": {}
   },
   "projects": {
-    "d:\\Leetcode_folder\\Leetcode_folder\\leetcode_004\\leetcode_004\\leetcode_004.csproj": {
+    "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_004\\leetcode_004\\leetcode_004.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\Leetcode_folder\\Leetcode_folder\\leetcode_004\\leetcode_004\\leetcode_004.csproj",
+        "projectUniqueName": "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_004\\leetcode_004\\leetcode_004.csproj",
         "projectName": "leetcode_004",
-        "projectPath": "d:\\Leetcode_folder\\Leetcode_folder\\leetcode_004\\leetcode_004\\leetcode_004.csproj",
+        "projectPath": "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_004\\leetcode_004\\leetcode_004.csproj",
         "packagesPath": "C:\\Users\\A6005\\.nuget\\packages\\",
-        "outputPath": "d:\\Leetcode_folder\\Leetcode_folder\\leetcode_004\\leetcode_004\\obj\\",
+        "outputPath": "D:\\Leetcode_folder\\Leetcode_folder\\leetcode_004\\leetcode_004\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
