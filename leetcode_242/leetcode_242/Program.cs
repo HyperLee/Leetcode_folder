@@ -7,7 +7,7 @@ namespace leetcode_242
         /// <summary>
         /// 242. Valid Anagram
         /// https://leetcode.com/problems/valid-anagram/
-        /// 242. 有效的字母异位词
+        /// 242. 有效的字母異位詞
         /// https://leetcode.cn/problems/valid-anagram/
         /// 
         /// 比對兩輸入字串是否相同
@@ -26,146 +26,129 @@ namespace leetcode_242
 
 
         /// <summary>
-        /// 方法1 
-        /// 最直覺方式
-        /// 直接使用內建api
+        /// 方法1 - 使用陣列計數解法
         /// 
-        /// 1.排序
-        /// 2.排序後兩字串比對
+        /// 解題概念：
+        /// 1. 使用陣列記錄字母出現次數，利用 ASCII 字元轉換計算索引
+        /// 2. 同時處理兩個字串，一個加一個減，最後檢查是否所有計數都為零
         /// 
-        /// 使用 SequenceEqual 比對
+        /// 時間複雜度：O(n)，只需遍歷一次字串
+        /// 空間複雜度：O(1)，使用固定大小的陣列(26個小寫字母)
         /// 
-        /// 在 C# 中，SequenceEqual 是用于比较两个序列（如数组、列表等）是否相等的 LINQ 方法。它会逐个比较两个序列中的元素，检查它们的长度是否相同，且每个位置的元素是否相等。
-        /// 使用场景：
-        /// 比较两个数组是否相等。
-        /// 比较两个列表是否包含相同的元素（顺序和内容必须相同）。
+        /// 優點：
+        /// - 不需要排序，效率較高
+        /// - 空間使用固定，不受輸入大小影響
         /// 
-        /// 如果两个序列的长度不同，或者任意位置的元素不同，SequenceEqual 返回 false，否则返回 true。
+        /// 此方法為優化方法2
         /// </summary>
-        /// <param name="s"></param>
-        /// <param name="t"></param>
-        /// <returns></returns>
+        /// <param name="s">第一個輸入字串</param>
+        /// <param name="t">第二個輸入字串</param>
+        /// <returns>兩個字串是否為有效的字母異位詞</returns>
         public static bool IsAnagram(string s, string t)
         {
-            // 這個其實可以不用寫, 但是先做判斷,
-            // 可以節省時間
-            if (s.Length != t.Length)
+            // 步驟1：先檢查兩個字串長度是否相等，不相等直接返回 false
+            if(s.Length != t.Length)
             {
                 return false;
             }
 
-            char[] a = s.ToCharArray();
-            char[] b = t.ToCharArray();
+            // 步驟2：建立一個長度為26的整數陣列，用於記錄每個字母出現的次數
+            int[] charCount = new int[26];
 
-            // 排序英文順序 asc
-            Array.Sort(a);
-            Array.Sort(b);
-
-            if (a.SequenceEqual(b))
+            // 步驟3：遍歷兩個字串，對s中的字母計數加1，對t中的字母計數減1
+            for (int i = 0; i < s.Length; i++)
             {
-                return true;
-            }
-            else
-            {
-                return false;
+                charCount[s[i] - 'a']++;  // s字串中的字母計數加1
+                charCount[t[i] - 'a']--;  // t字串中的字母計數減1
             }
 
+            // 步驟4：檢查計數陣列，如果有非0的值，表示字母出現次數不一致
+            for (int i = 0; i < charCount.Length; i++)
+            {
+                if (charCount[i] != 0)
+                {
+                    return false;
+                }
+            }
 
+            // 步驟5：所有計數都為0，表示兩個字串互為字母異位詞
+            return true;
         }
 
 
         /// <summary>
-        /// Dictionary 統計 字串 s 中 出現字母 與 出現頻率
-        /// 然後去 t 中相同就扣除
-        /// 出現負數代表 不同
+        /// 方法2 - 使用 Dictionary 計數解法
         /// 
-        ///  s 中沒出現, t 出現的 直接預設就給負數
-        ///  
-        /// 此方法也不太需要預先排序了
-        /// 畢竟都枚舉 統計 char 與 次數了
+        /// 解題概念：
+        /// 1. 使用 Dictionary 儲存字母出現次數，key 為字母，value 為出現次數
+        /// 2. 分三步驟處理：
+        ///    - 統計第一個字串(s)中字母出現頻率
+        ///    - 遍歷第二個字串(t)進行比對和扣除
+        ///    - 最後檢查所有計數是否歸零
+        /// 3. 無需預先排序，直接統計字母頻率即可判斷
         /// 
-        /// 輸入的是字串但是比對的是 char
-        /// 所以要把 string 轉 char[]
+        /// 時間複雜度：O(n)，需要三次遍歷
+        /// 空間複雜度：O(k)，k 為不同字母的數量，最多 26 個字母
         /// 
-        /// 用了三次 foreach 效率不是很佳
-        /// 但是這方法好理解
+        /// 優點：
+        /// - 邏輯清晰，容易理解
+        /// - 可以快速判斷字母是否存在
+        /// 
+        /// 缺點：
+        /// - 需要三次遍歷，效率較方法1低
+        /// - 使用 Dictionary 需要額外的記憶體空間
         /// </summary>
-        /// <param name="s"></param>
-        /// <param name="t"></param>
-        /// <returns></returns>
+        /// <param name="s">第一個輸入字串</param>
+        /// <param name="t">第二個輸入字串</param>
+        /// <returns>兩個字串是否為有效的字母異位詞</returns>
         public static bool IsAnagram2(string s, string t)
         {
+            // 步驟1：檢查兩個字串長度是否相等，不相等直接返回 false
             if (s.Length != t.Length)
             {
                 return false;
             }
 
-            // key: char, value: 次數(頻率)
+            // 建立 Dictionary 用於儲存字母出現次數
             Dictionary<char, int> dic = new Dictionary<char, int>();
-            char[] a = s.ToCharArray();
-            char[] b = t.ToCharArray();
 
-            // 1. 統計字串 s 出現的字母與頻率
-            foreach (char c in a)
+            // 步驟2：統計第一個字串(s)中每個字母出現的次數
+            foreach (char c in s)
             {
                 if (dic.ContainsKey(c))
                 {
-                    dic[c]++;
+                    dic[c]++;  // 字母已存在，次數加1
                 }
                 else
                 {
-                    dic.Add(c, 1);
+                    dic.Add(c, 1);  // 字母首次出現，新增至Dictionary
                 }
             }
 
-            // 2. s 與 t 比對, char 相同就扣除.
-            foreach (char c in b)
+            // 步驟3：比對第二個字串(t)，逐一扣除字母出現次數
+            foreach (char c in t)
             {
                 if (dic.ContainsKey(c))
                 {
-                    dic[c]--;
+                    dic[c]--;  // 找到相同字母，扣除一次
                 }
                 else
                 {
-                    // s 中沒出現, t 出現的直接報錯誤
-                    // s 與 t 兩邊要一致
+                    // 發現t中出現但s中沒有的字母，直接返回false
                     return false;
                 }
             }
 
-            // 3. 合理狀況下, 次數都要為 0 (上個步驟會扣除, 要扣光至 0 才對)
-            // 當不為 0, 就是 s 或是 t 兩邊字母或是頻率有不同.
-            // 正數/負數 都是錯誤 有一邊多/少
-            /*
+            // 步驟4：檢查所有字母的計數是否都為0
             foreach (var item in dic)
             {
-                if (item.Value != 0)
+                if (item.Value != 0)  // 若有非0值，表示字母出現次數不一致
                 {
                     return false;
                 }
-            }
-            */
-
-            // 3. 換個思維, 最大與最小都要是 0 才對. 不用跑 foreach
-            /*
-            int dicmin = dic.Values.Min();
-            int dicmax = dic.Values.Max();
-            if (dicmax != 0 || dicmin != 0)
-            {
-                return false;
-            }
-            */
-
-            // 3. 判斷所有值是否都為 0
-            // 輸出: 所有值都為 0: True
-            bool allValuesAreZero = dic.Values.All(value => value == 0);
-            if(allValuesAreZero == false)
-            {
-                return false;
             }
 
             return true;
-
         }
     }
 
