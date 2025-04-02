@@ -2,21 +2,29 @@
 
 class Program
 {
+    /// <summary>
+    // IList<T> 的方法：Add(T item): 添加元素到列表的末尾
+    // Remove(T item): 移除元素
+    // Count: 獲取元素數量
+    // this[int index]: 索引器存取
+    // clear(): 清空列表
+    // Contains(T item): 判斷列表中是否包含某個元素
+    /// </summary>
     public class Node 
     {
         public int val;
         public IList<Node> neighbors;
-
+        // 建構函式 1: 無參數
         public Node() {
             val = 0;
             neighbors = new List<Node>();
         }
-
+        // 建構函式 2: 只有值參數 (程式中使用的是這個)
         public Node(int _val) {
             val = _val;
             neighbors = new List<Node>();
         }
-
+        // 建構函式 3: 值和鄰居列表參數 (在這個程式中沒有被使用)
         public Node(int _val, List<Node> _neighbors) {
             val = _val;
             neighbors = _neighbors;
@@ -60,7 +68,8 @@ class Program
     static void Main(string[] args)
     {
         // 創建測試用的圖
-        Node node1 = new Node(1);
+        // 使用建構函式 2: 只有值參數
+        Node node1 = new Node(1); // 創建值為 1 的節點，neighbors 被初始化為空列表
         Node node2 = new Node(2);
         Node node3 = new Node(3);
         Node node4 = new Node(4);
@@ -139,7 +148,7 @@ class Program
         }
         
         // 建立字典來儲存已複製的節點，避免重複建立
-        // key: 原圖的節點，value: 複製後的新節點
+        // key: 原圖的節點物件，value: 複製後的新節點物件
         // 這樣可以避免在環形圖中陷入無限遞迴
         Dictionary<Node, Node> visited = new Dictionary<Node, Node>();
         
@@ -160,6 +169,15 @@ class Program
     /// - 避免在環形圖中陷入無限遞迴
     /// - 確保相同的節點只被複製一次
     /// - 維護原圖的連接關係
+    /// 
+    /// if (visited.ContainsKey(node))
+    /// 為什麼用 node 物件？
+    /// 唯一性保證
+    ///     每個 Node 物件都是唯一的，這意味著即使它們的值相同，它們的記憶體位址也不同。
+    ///     這樣可以確保我們在字典中使用物件本身作為鍵，而不是它的值。
+    /// --反之
+    ///     如果使用 node.val 作為鍵，則可能會導致不同的節點被視為相同的鍵，從而導致錯誤的行為。
+    ///     例如，兩個節點的值都是 1，但它們實際上是不同的節點。
     /// </summary>
     /// <param name="node">當前要處理的節點</param>
     /// <param name="visited">記錄已訪問節點的字典</param>
@@ -167,6 +185,8 @@ class Program
     private Node DFS(Node node, Dictionary<Node, Node> visited)
     {
         // 如果節點已經被訪問過，直接返回對應的新節點
+        // 注意:這邊是 node 不是 node.val
+        // 因為 node.val 可能會重複，所以不能用 val 作為 key
         if (visited.ContainsKey(node))
         {
             return visited[node];
