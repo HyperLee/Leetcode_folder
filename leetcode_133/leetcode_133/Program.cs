@@ -37,6 +37,12 @@ class Program
     /// 133. 克隆图
     /// https://leetcode.cn/problems/clone-graph/description/ 
     /// 
+    /// wiki 說明 Deep copy
+    /// https://zh.wikipedia.org/zh-tw/%E5%85%8B%E9%9A%86_(%E7%BC%96%E7%A8%8B)
+    /// https://en.wikipedia.org/wiki/Object_copying
+    /// 克隆图是指在計算機科學中，將一個圖的結構和數據複製到另一個圖中。
+    /// 克隆圖的目的是為了在不改變原始圖的情況下，對其進行操作或分析。
+    /// 
 	/// 題目說明
 	/// 這是一道關於圖(Graph)的深度拷貝題目。要求我們對一個無向連通圖進行
 	/// 深度拷貝（Deep Copy），即創建一個與原圖結構和值都相同，但是記憶體
