@@ -62,6 +62,12 @@ class Program
     /// DFS(i, n-1, ...)   右邊界（最後一欄）	  大西洋
     /// DFS(0, j, ...)	   上邊界（第0列）	      太平洋
     /// DFS(m-1, j, ...)   下邊界（最後一列）	  大西洋
+    /// 
+    /// 方法一與方法二比較：
+    /// 差別	            第一種	               第二種
+    /// 分組邏輯	         以海洋分段	            以方向（橫 / 直）分段
+    /// 可讀性	             清楚分太平洋 & 大西洋	 更精簡交錯處理
+    /// 效果與正確性	      ✅ 相同	           ✅ 相同
     /// </summary>
     /// <param name="heights">表示地形高度的二維數組</param>
     /// <returns>返回能同時流向太平洋和大西洋的座標列表</returns>
@@ -73,18 +79,41 @@ class Program
         bool[,] atlanticVisited = new bool[m, n];
         IList<IList<int>> result = new List<IList<int>>();
 
-        // 從太平洋邊界（左邊和上邊）開始DFS
+        /* 方法1: 從邊界開始DFS，分別對太平洋和大西洋進行搜索
+        // 從太平洋邊界（左邊和上邊）開始DFS; 太平洋（左） + 大西洋（右）
         for (int i = 0; i < m; i++) 
         {
-            DFS(heights, i, 0, pacificVisited, heights[i][0]);  // 從左邊（第0欄）出發
-            DFS(heights, i, n - 1, atlanticVisited, heights[i][n - 1]);  // 從右邊（最後一欄）出發
+            DFS(heights, i, 0, pacificVisited, heights[i][0]);  // 從左邊（第0欄）出發; 左 → 太平洋
+            DFS(heights, i, n - 1, atlanticVisited, heights[i][n - 1]);  // 從右邊（最後一欄）出發; 右 → 大西洋
         }
 
-        // 從大西洋邊界（右邊和下邊）開始DFS
+        // 從大西洋邊界（右邊和下邊）開始DFS; 太平洋（上） + 大西洋（下）
         for (int j = 0; j < n; j++) 
         {
-            DFS(heights, 0, j, pacificVisited, heights[0][j]);  // 上邊界（第0列）
-            DFS(heights, m - 1, j, atlanticVisited, heights[m - 1][j]);  // 下邊界（最後一列）
+            DFS(heights, 0, j, pacificVisited, heights[0][j]);  // 上邊界（第0列; 上 → 太平洋
+            DFS(heights, m - 1, j, atlanticVisited, heights[m - 1][j]);  // 下邊界（最後一列; 下 → 大西洋
+        }
+        */
+
+        // 方法2：從邊界開始DFS，分別對太平洋和大西洋進行搜索
+        // Step 1: 太平洋 - 左邊 + 上邊
+        for (int i = 0; i < m; i++)    
+        {
+            DFS(heights, i, 0, pacificVisited, heights[i][0]);    // 左
+        }
+        for (int j = 0; j < n; j++)    
+        {
+            DFS(heights, 0, j, pacificVisited, heights[0][j]);    // 上
+        }
+
+        // Step 2: 大西洋 - 右邊 + 下邊
+        for (int i = 0; i < m; i++)    
+        {
+            DFS(heights, i, n - 1, atlanticVisited, heights[i][n - 1]); // 右
+        }
+        for (int j = 0; j < n; j++)    
+        {
+            DFS(heights, m - 1, j, atlanticVisited, heights[m - 1][j]); // 下
         }
 
         // 找出同時可以流向兩個海洋的位置
@@ -133,9 +162,13 @@ class Program
         visited[r, c] = true;
 
         // 向四個方向繼續搜索
+        // 向下（往下一列）搜尋：row + 1
         DFS(heights, r + 1, c, visited, heights[r][c]);
+        // 向上（往上一列）搜尋：row - 1
         DFS(heights, r - 1, c, visited, heights[r][c]);
+        // 向右（往右一欄）搜尋：col + 1
         DFS(heights, r, c + 1, visited, heights[r][c]);
+        // 向左（往左一欄）搜尋：col - 1
         DFS(heights, r, c - 1, visited, heights[r][c]);
     }
 }
