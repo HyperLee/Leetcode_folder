@@ -120,6 +120,11 @@ class Program
     }
 
 
+    /// <summary>
+    /// 遍歷方向, 四個方向順序可以變更. 不影響結果
+    /// 方向陣列只是定義搜索的方向
+    /// DFS 會遍歷所有可能的路徑
+    /// </summary> 
     public static int[][] directions = new int[][]
     {
         new int[] {1, 0},   // 下
@@ -154,7 +159,7 @@ class Program
         int n = heights[0].Length;
         
         // 邊界檢查：超出範圍、已訪問、或不符合流動條件時返回
-        // 不會每個 cell 都走過，符合下列條件才可以
+        // 不會每個 cell 都走過，符合下列條件才可以, 減少複雜度
         if (r < 0 || r >= m || c < 0 || c >= n || visited[r, c] || heights[r][c] < prevHeight)
         {
             return;
@@ -162,18 +167,6 @@ class Program
 
         // 標記當前位置為已訪問
         visited[r, c] = true;
-
-        // 向四個方向繼續搜索
-        /*
-        // 向下（往下一列）搜尋：row + 1
-        DFS(heights, r + 1, c, visited, heights[r][c]);
-        // 向上（往上一列）搜尋：row - 1
-        DFS(heights, r - 1, c, visited, heights[r][c]);
-        // 向右（往右一欄）搜尋：col + 1
-        DFS(heights, r, c + 1, visited, heights[r][c]);
-        // 向左（往左一欄）搜尋：col - 1
-        DFS(heights, r, c - 1, visited, heights[r][c]);
-        */
 
         // 使用方向數組進行四個方向的搜索
         // directions[0] = 下; directions[1] = 上; directions[2] = 右; directions[3] = 左
