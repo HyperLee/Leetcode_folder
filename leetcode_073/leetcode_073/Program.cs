@@ -102,6 +102,7 @@ class Program
         bool firstColZero = false;
 
         // 檢查第一行是否有0
+        // 注意迴圈大小
         for (int j = 0; j < cols; j++)
         {
             if (matrix[0][j] == 0)
@@ -112,6 +113,7 @@ class Program
         }
 
         // 檢查第一列是否有0
+        // 注意迴圈大小
         for (int i = 0; i < rows; i++)
         {
             if (matrix[i][0] == 0)
