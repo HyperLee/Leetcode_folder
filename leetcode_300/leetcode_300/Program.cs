@@ -100,13 +100,19 @@ class Program
         int n = nums.Length;
         
         // 處理邊界情況：如果數組為空，最長遞增子序列長度為0
-        if (n == 0) return 0;
+        if (n == 0) 
+        {
+            return 0;
+        }
         
         // 初始化動態規劃數組，dp[i] 表示以 nums[i] 結尾的最長遞增子序列的長度
         int[] dp = new int[n];
         
         // 初始化所有位置的最長遞增子序列長度為1（至少包含自身元素）
         Array.Fill(dp, 1);
+
+        // 初始最長長度為1（至少包含一個元素）
+        int maxLength = 1; 
         
         // 從第二個元素開始遍歷數組
         for (int i = 1; i < n; i++)
@@ -120,12 +126,15 @@ class Program
                     // 更新dp[i]：取原值與「dp[j] + 1」中的較大者
                     // dp[j] + 1 表示將nums[i]加到以nums[j]結尾的最長遞增子序列後面
                     dp[i] = Math.Max(dp[i], dp[j] + 1);
+                    // 更新當前的最長遞增子序列長度
+                    maxLength = Math.Max(maxLength, dp[i]); 
                 }
             }
         }
         
         // 返回整個dp數組中的最大值，即為最長遞增子序列的長度
-        return dp.Max();
+        // 也可以用 dp.Max() 來獲取最大值
+        return maxLength;
     }
 
 
@@ -145,30 +154,30 @@ class Program
     public int LengthOfLIS2(int[] nums)
     {
         // 創建一個動態陣列 g，用於存儲目前為止的「最長遞增子序列候選」
-        List<int> g = new List<int>();
+        List<int> res = new List<int>();
         
         // 遍歷輸入陣列中的每個元素
         foreach (var num in nums)
         {
-            // 情況1: g 為空或當前數字大於 g 的最後一個元素
-            // 可以直接將當前數字添加到 g 尾部，形成更長的遞增序列
-            if (g.Count == 0 || num > g[g.Count - 1])
+            // 情況1: res 為空或當前數字大於 res 的最後一個元素
+            // 可以直接將當前數字添加到 res 尾部，形成更長的遞增序列
+            if (res.Count == 0 || num > res[res.Count - 1])
             {
-                g.Add(num);
+                res.Add(num);
             }
             else
             {
-                // 情況2: 當前數字不大於 g 的最後一個元素
-                // 使用二分搜尋找到 g 中第一個大於等於 num 的位置
-                int index = LowerBound(g, num);
-                // 用 num 替換該位置的值，保持 g 的遞增特性
+                // 情況2: 當前數字不大於 res 的最後一個元素
+                // 使用二分搜尋找到 res 中第一個大於等於 num 的位置
+                int index = LowerBound(res, num);
+                // 用 num 替換該位置的值，保持 res 的遞增特性
                 // 這樣可以為未來可能出現的更長序列創造潛力
-                g[index] = num;
+                res[index] = num;
             }
         }
 
-        // g 的長度即為最長遞增子序列的長度
-        return g.Count;
+        // res 的長度即為最長遞增子序列的長度
+        return res.Count;
     }
 
     /// <summary>
@@ -182,10 +191,10 @@ class Program
     /// <param name="g">遞增有序的整數陣列</param>
     /// <param name="target">要查找的目標值</param>
     /// <returns>第一個大於等於目標值的元素位置</returns>
-    private int LowerBound(List<int> g, int target)
+    private int LowerBound(List<int> res, int target)
     {
         // 初始化左右指針
-        int left = 0, right = g.Count - 1;
+        int left = 0, right = res.Count - 1;
         
         // 使用二分搜尋循環，當左指針超過右指針時結束
         while (left <= right)
@@ -194,7 +203,7 @@ class Program
             int mid = left + (right - left) / 2;
             
             // 如果中間元素小於目標值，目標位置在右半部
-            if (g[mid] < target)
+            if (res[mid] < target)
             {
                 // 將搜尋範圍縮小到右半部
                 left = mid + 1;
