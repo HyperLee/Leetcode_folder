@@ -111,9 +111,9 @@ class Program
     /// <summary>
     /// 深度優先搜尋函式，用於從指定位置探索可能的單詞路徑
     /// DFS + 回溯法
-    /// 1. 檢查當前字元是否存在於 Trie 的下一層子節點中
+    /// 1. 檢查當前字元是否存在於 Trie 的下一層子節點中 (這段程式碼的作用是進行早期剪枝，快速排除不可能構成有效單詞的路徑，從而提升搜尋效率。)
     /// 2. 儲存當前字元並移動到 Trie 的下一層節點
-    /// 3. 檢查當前節點是否是一個完整的單詞，如果是則加入結果集合
+    /// 3. 檢查當前節點是否是一個完整的單詞，如果是則加入結果集合(Trie 中的 word 屬性用於標記當前節點是否為完整單詞)
     /// 4. 標記當前單元格已訪問，避免重複使用
     /// 5. 向四個方向探索下一個可能的字元
     /// 6. 檢查下一個位置是否有效（在網格範圍內且未被訪問）
@@ -122,20 +122,20 @@ class Program
     /// </summary>
     /// <param name="board">字母網格</param>
     /// <param name="node">當前 Trie 節點</param>
-    /// <param name="i1">當前行座標</param>
-    /// <param name="j1">當前列座標</param>
+    /// <param name="row">當前行座標</param>
+    /// <param name="col">當前列座標</param>
     /// <param name="res">結果集合，用於儲存找到的單詞</param>
-    public void DFS(char[][] board, Trie node, int i1, int j1, HashSet<string> res) 
+    public void DFS(char[][] board, Trie node, int row, int col, HashSet<string> res) 
     {
         // 步驟 1: 檢查當前網格字元是否存在於 Trie 的下一層子節點中
-        int index = board[i1][j1] - 'a';
+        int index = board[row][col] - 'a';
         if(node.children[index] == null)
         {
             return; // 如果不存在，表示無法構成有效單詞路徑，直接返回
         }
         
         // 步驟 2: 儲存當前字元並移動到 Trie 的下一層節點
-        char c = board[i1][j1];
+        char c = board[row][col];
         node = node.children[index];
         
         // 步驟 3: 檢查當前節點是否是一個完整的單詞
@@ -145,23 +145,23 @@ class Program
         }
         
         // 步驟 4: 標記當前單元格已訪問，避免重複使用
-        board[i1][j1] = '#'; 
+        board[row][col] = '#'; 
         
         // 步驟 5: 向四個方向探索下一個可能的字元
         for(int i = 0; i < dirs.Length; i++)
         {
-            int x = i1 + dirs[i][0]; // 計算下一個位置的行座標
-            int y = j1 + dirs[i][1]; // 計算下一個位置的列座標
+            int newrow = row + dirs[i][0]; // 計算下一個位置的行座標
+            int newcol = col + dirs[i][1]; // 計算下一個位置的列座標
             
             // 步驟 6: 檢查下一個位置是否有效（在網格範圍內且未被訪問）
-            if(x >= 0 && x < board.Length && y >= 0 && y < board[0].Length && board[x][y] != '#')
+            if(newrow >= 0 && newrow < board.Length && newcol >= 0 && newcol < board[0].Length && board[newrow][newcol] != '#')
             {
-                DFS(board, node, x, y, res); // 遞迴探索下一個位置
+                DFS(board, node, newrow, newcol, res); // 遞迴探索下一個位置
             }
         }
         
         // 步驟 7: 回溯，恢復當前單元格的原始字元，以便其他路徑可以使用
-        board[i1][j1] = c; 
+        board[row][col] = c; 
     }
 }
 
