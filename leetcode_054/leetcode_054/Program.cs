@@ -40,7 +40,7 @@
         /// https://leetcode.cn/problems/spiral-matrix/solutions/1984171/by-stormsunshine-cq4c/ 
         /// 
         /// Returns the elements of the matrix in spiral order.
-        /// 解題概念：直接依據提目描述方式,螺旋走矩陣
+        /// 解題概念：直接依據提目描述方式,(模擬)螺旋走矩陣
         /// 使用方向數組 DIRS 來表示四個方向（右、下、左、上），
         /// 並用 di 來追蹤當前方向。每次走一步後，檢查下一步是否出界或已訪問過，
         /// 如果是，則右轉 90°。重複這個過程直到遍歷完整個矩陣。
