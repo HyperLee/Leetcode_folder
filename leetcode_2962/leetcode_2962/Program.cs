@@ -64,7 +64,7 @@ class Program
     /// 滑動視窗概念題型
     /// [start, end] 整體視窗往右滑動
     /// 
-    /// end 先往右, 如果 end 元素為 maxmun 就累加其次數
+    /// end 先往右, 如果 end 元素為 maxnum 就累加其次數
     /// 當 次數達到 k 時候
     /// 此時需要考慮把 最左邊 start 的元素移除
     /// 這樣才能納入新的子陣列組合
@@ -81,11 +81,11 @@ class Program
     /// <returns></returns>
     public static long CountSubarrays(int[] nums, int k)
     {
-        int maxmun = 0;
+        int maxnum = 0;
         foreach (int i in nums) 
         {
             // 找出 nums 中最大的 element
-            maxmun = Math.Max(maxmun, i);
+            maxnum = Math.Max(maxnum, i);
         }
 
         long res = 0;
@@ -96,7 +96,7 @@ class Program
 
         while(end < length)
         {
-            if (nums[end] == maxmun) 
+            if (nums[end] == maxnum) 
             {
                 // element 數值為 最大元素,
                 // 累加 出現次數
@@ -107,8 +107,8 @@ class Program
             {
                 // 當最大元素 出現次數達到 k
                 // 要讓視窗 start 往右滑動
-                // 如果 start 符合 maxmun 就要扣除 次數累加
-                if (nums[start] == maxmun) 
+                // 如果 start 符合 maxnum 就要扣除 次數累加
+                if (nums[start] == maxnum) 
                 {
                     maxcount--;
                 }
@@ -125,7 +125,7 @@ class Program
 
     /// <summary>
     /// 此解法是解決「最大元素出現至少 k 次的子陣列計數」問題的優化版本
-    /// 其實這兩方法差異不大, 但是這個方法更簡化了邏輯可讀性比較好
+    /// 其實這兩方法差異不大(forach 換成 for)，但是這個方法更簡化了邏輯可讀性比較好
     /// 
     /// 解題思路：
     /// 1. 使用優化的滑動視窗技術，透過一次遍歷解決問題
