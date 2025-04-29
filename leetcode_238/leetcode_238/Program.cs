@@ -12,6 +12,9 @@
         /// 解題方式 很特殊
         /// 左右分別計算乘積
         /// 要注意的是，這個解法不使用除法，並且時間複雜度為 O(n)。
+        /// 
+        /// 如果可以使用除法，就可以把全部數字相乘，然後除以 index i 的數字，就可以得到 index i 的乘積
+        /// 但是如果某個 index 數值為 0 就會導致錯誤。
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -43,14 +46,14 @@
         /// 使用一個迴圈從右到左遍歷 nums 陣列，計算每個元素右側的乘積並更新 res 陣列。
         /// res[i] = res[i] * R 表示將當前的 res[i] 乘以右側的乘積 R。
         /// 更新 R 為 R * nums[i]，以便在下一次迴圈中使用。
+        /// 
+        /// .md 檔案有一個簡易圖解說明，說明為什麼要做兩側乘積取結果。
         /// </summary>
         /// <param name="nums"></param>
         /// <returns></returns>
         public static int[] ProductExceptSelf(int[] nums)
         {
-            // 陣列長度
             int length = nums.Length;
-            // 初始化陣列 res
             int[] res = new int[length];
 
             // res[i] 表示 index i 左側所有元素的乘積
