@@ -183,7 +183,14 @@ class Program
     /// 
     /// 時間複雜度：O(n)，其中 n 是字符串 s 的長度
     /// 空間複雜度：O(1)，使用固定大小的數組(128)
+    /// 
+    /// line 232 ~ 236 if(map[s[start]]++ == 0)
+    /// 當進入這判斷式時候，如果該 char 是目標字符此時數量會為 0，如果不是目標字符數量為 -1
+    /// 
     /// </summary>
+    /// <param name="S">源字符串</param>
+    /// <param name="t">目標字符串</param>
+    /// <returns>包含所有目標字符的最小子串</returns>
     public static string MinWindowOptimized(string s, string t)
     {
         if(string.IsNullOrEmpty(s) || string.IsNullOrEmpty(t))
