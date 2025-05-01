@@ -7,8 +7,12 @@ class Program
     /// https://leetcode.com/problems/longest-consecutive-sequence/description/?envType=problem-list-v2&envId=oizxjoit
     /// 128. 最长连续序列
     /// https://leetcode.cn/problems/longest-consecutive-sequence/description/
+    /// 
+    /// 題目說明：
+    /// 給定一個未排序的整數數組，找出其中最長的連續序列的長度。
+    /// 要求時間複雜度為 O(n)。
+    /// 測試案例涵蓋基本情況、空陣列、重複數字、不連續數字及包含負數的情況。
     /// </summary>
-    /// <param name="args"></param>
     static void Main(string[] args)
     {
         // 測試案例 1: 基本案例
@@ -48,18 +52,18 @@ class Program
     /// 1. 使用 HashSet 優化查詢時間，將數組轉換為集合，去除重複值
     /// 2. 只從連續序列的起點開始計算（若 n-1 不存在，則 n 為起點）
     /// 3. 對每個起點，往後查找連續的數字，並記錄最長序列
-    /// 時間複雜度：O(n)，雖有巢狀迴圈，但每個數字最多被訪問2次
-    /// 空間複雜度：O(n)，需要 HashSet 存儲所有數字
+    /// 時間複雜度：O (n)，雖有巢狀迴圈，但每個數字最多被訪問 2 次
+    /// 空間複雜度：O (n)，需要 HashSet 存儲所有數字
     /// 
     /// 檢查 num-1 的原因：
     /// 1. 目的是找到每個連續序列的起點，避免重複計算
     /// 2. 舉例：對於序列 [1,2,3,4]
-    ///    - 當檢查4時，因為3存在，所以4不是起點
-    ///    - 當檢查3時，因為2存在，所以3不是起點
-    ///    - 當檢查2時，因為1存在，所以2不是起點
-    ///    - 當檢查1時，因為0不存在，所以1是起點
+    ///    - 當檢查 4 時，因為 3 存在，所以 4 不是起點
+    ///    - 當檢查 3 時，因為 2 存在，所以 3 不是起點
+    ///    - 當檢查 2 時，因為 1 存在，所以 2 不是起點
+    ///    - 當檢查 1 時，因為 0 不存在，所以 1 是起點
     /// 3. 這樣可以確保每個連續序列只被計算一次，從最小的數字開始
-    /// 4. 如果不檢查num-1，每個數字都會計算一次，會導致重複計算
+    /// 4. 如果不檢查 num-1，每個數字都會計算一次，會導致重複計算
     /// </summary>
     /// <param name="nums">輸入的整數數組</param>
     /// <returns>最長連續序列的長度</returns>
@@ -75,23 +79,23 @@ class Program
         // 步驟2: 初始化最長序列長度為0
         int longestStreak = 0;
 
-        // 步驟3: 遍歷 HashSet 中的每個數字
+        // 步驟3: 遍歷 HashSet 中的每個數字，這邊是題目重點之一
         foreach (int num in numSet)
         {
-            // 步驟4: 檢查是否為序列的起始數字
-            // 如果當前數字減1不在集合中，表示這是一個序列的起點
+            // 步驟 4: 檢查是否為序列的起始數字，這邊是題目重點之一
+            // 如果當前數字減 1 不在集合中，表示這是一個序列的起點
             if (!numSet.Contains(num - 1))
             {
                 // 步驟5: 初始化當前數字和當前序列長度
                 int currentNum = num;
                 int currentStreak = 1;
 
-                // 步驟6: 向後尋找連續的數字
+                // 步驟6: 向後尋找連續的數字，這邊是題目重點之一
                 // 當集合中存在下一個連續的數字時，繼續計數
                 while (numSet.Contains(currentNum + 1))
                 {
-                    currentNum += 1;    // 更新當前數字
-                    currentStreak += 1; // 序列長度加1
+                    currentNum++;    // 更新當前數字
+                    currentStreak++; // 序列長度加1
                 }
 
                 // 步驟7: 更新最長序列長度
