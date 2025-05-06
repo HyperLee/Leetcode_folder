@@ -11,20 +11,20 @@ class Program
     /// 
     /// 題目說明：
     /// 給定一個 0 索引的整數陣列 nums，長度為 n。
-    /// 要求建立一個和 nums 相同長度的陣列 ans，使得 ans[i] = nums[nums[i]]。
-    /// 題目保證 nums 是一個排列，即 0 <= nums[i] < n。
+    /// 要求建立一個和 nums 相同長度的陣列 ans，使得 ans [i] = nums [nums [i]]。
+    /// 題目保證 nums 是一個排列，即 0 <= nums [i] < n。
     /// 
     /// 重點理解：
-    /// 1. 排列的定義：陣列中包含所有從0到n-1的整數，每個數字恰好出現一次。
-    /// 2. 因為nums是一個排列，所以nums[i]一定是一個有效的索引，不會超出範圍。
-    /// 3. ans[i] = nums[nums[i]]意味著要進行兩次索引查找：
-    ///    - 第一次找到nums[i]的值
-    ///    - 第二次用這個值作為索引，找到nums[nums[i]]
+    /// 1. 排列的定義：陣列中包含所有從 0 到 n-1 的整數，每個數字恰好出現一次。
+    /// 2. 因為 nums 是一個排列，所以 nums [i] 一定是一個有效的索引，不會超出範圍。
+    /// 3. ans [i] = nums [nums [i]] 意味著要進行兩次索引查找：
+    ///    - 第一次找到 nums [i] 的值
+    ///    - 第二次用這個值作為索引，找到 nums [nums [i]]
     /// 
     /// 解法出發點：
-    /// 直接使用 for 迴圈，對每個索引 i，計算 nums[nums[i]] 並填入結果陣列中。
+    /// 直接使用 for 迴圈，對每個索引 i，計算 nums [nums [i]] 並填入結果陣列中。
     /// 因為題目保證 nums 是一個排列，所以所有索引都是合法的，不會出現越界錯誤。
-    /// 時間複雜度為 O(n)，空間複雜度為 O(n)。
+    /// 時間複雜度為 O (n)，空間複雜度為 O (n)。
     /// </summary>
     /// <param name="args">命令列引數（在此程式中未使用）</param>
     static void Main(string[] args)
@@ -102,24 +102,24 @@ class Program
     }
 
     /// <summary>
-    /// 依照題目要求建立一個陣列，其中 ans[i] = nums[nums[i]]
+    /// 依照題目要求建立一個陣列，其中 ans [i] = nums [nums [i]]
     /// 
     /// 詳細流程解釋：
     /// 例如：如果 nums = [0,2,1,5,3,4]，則
-    /// ans[0] = nums[nums[0]] = nums[0] = 0
-    /// ans[1] = nums[nums[1]] = nums[2] = 1
-    /// ans[2] = nums[nums[2]] = nums[1] = 2
-    /// ans[3] = nums[nums[3]] = nums[5] = 4
-    /// ans[4] = nums[nums[4]] = nums[3] = 5
-    /// ans[5] = nums[nums[5]] = nums[4] = 3
+    /// ans [0] = nums [nums [0]] = nums [0] = 0
+    /// ans [1] = nums [nums [1]] = nums [2] = 1
+    /// ans [2] = nums [nums [2]] = nums [1] = 2
+    /// ans [3] = nums [nums [3]] = nums [5] = 4
+    /// ans [4] = nums [nums [4]] = nums [3] = 5
+    /// ans [5] = nums [nums [5]] = nums [4] = 3
     /// 
     /// for 迴圈會遍歷 nums 陣列中的每個位置 i，然後:
-    /// 1. 找到 nums[i] 這個值
-    /// 2. 用 nums[i] 作為索引，查詢 nums[nums[i]]
-    /// 3. 將這個值放入 ans[i] 中
+    /// 1. 找到 nums [i] 這個值
+    /// 2. 用 nums [i] 作為索引，查詢 nums [nums [i]]
+    /// 3. 將這個值放入 ans [i] 中
     /// 
-    /// 時間複雜度：O(n) - 只需遍歷陣列一次
-    /// 空間複雜度：O(n) - 需要建立一個新的陣列來儲存結果
+    /// 時間複雜度：O (n) - 只需遍歷陣列一次
+    /// 空間複雜度：O (n) - 需要建立一個新的陣列來儲存結果
     /// </summary>
     /// <param name="nums">輸入的整數陣列，大小為 n，0 <= nums[i] < n</param>
     /// <returns>建立的新陣列結果</returns>
