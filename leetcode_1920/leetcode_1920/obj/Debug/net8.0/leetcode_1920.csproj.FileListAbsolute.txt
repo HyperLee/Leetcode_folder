@@ -1,0 +1,15 @@
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/obj/Debug/net8.0/leetcode_1920.GeneratedMSBuildEditorConfig.editorconfig
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/obj/Debug/net8.0/leetcode_1920.AssemblyInfoInputs.cache
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/obj/Debug/net8.0/leetcode_1920.AssemblyInfo.cs
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/obj/Debug/net8.0/leetcode_1920.csproj.CoreCompileInputs.cache
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/obj/Debug/net8.0/leetcode_1920.sourcelink.json
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/bin/Debug/net8.0/leetcode_1920
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/bin/Debug/net8.0/leetcode_1920.deps.json
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/bin/Debug/net8.0/leetcode_1920.runtimeconfig.json
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/bin/Debug/net8.0/leetcode_1920.dll
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/bin/Debug/net8.0/leetcode_1920.pdb
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/obj/Debug/net8.0/leetcode_1920.dll
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/obj/Debug/net8.0/refint/leetcode_1920.dll
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/obj/Debug/net8.0/leetcode_1920.pdb
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/obj/Debug/net8.0/leetcode_1920.genruntimeconfig.cache
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_1920/leetcode_1920/obj/Debug/net8.0/ref/leetcode_1920.dll
