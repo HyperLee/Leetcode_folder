@@ -18,6 +18,10 @@ class Program
     /// https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/
     /// 105. 从前序与中序遍历序列构造二叉树
     /// https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/
+    /// 
+    /// 題目描述：
+    /// 根據前序和中序遍歷序列構造二叉樹。
+    /// 
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)
@@ -44,8 +48,8 @@ class Program
     /// https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/solutions/2646359/tu-jie-cong-on2-dao-onpythonjavacgojsrus-aob8/
     /// https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/solutions/255811/cong-qian-xu-yu-zhong-xu-bian-li-xu-lie-gou-zao-9/
     /// https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/solutions/1456907/105-cong-qian-xu-yu-zhong-xu-bian-li-xu-po3w6/
-    /// 建議看ref第一個連結 有圖示說明
-    /// 比較好理解左右子樹取範圍index計算
+    /// 建議看 ref 第一個連結 有圖示說明
+    /// 比較好理解左右子樹取範圍 index 計算
     /// 
     /// 前序遍歷特點：
     ///     順序為：根節點 → 左子樹 → 右子樹
@@ -56,12 +60,12 @@ class Program
     ///     根節點右邊是右子樹所有節點
     /// 
     /// 解題步驟
-    /// 1.從前序遍歷中取第一個元素作為根節點
-    /// 2.在中序遍歷中找到該根節點位置
-    /// 3.根據中序遍歷中根節點的位置，可以確定：
+    /// 1. 從前序遍歷中取第一個元素作為根節點
+    /// 2. 在中序遍歷中找到該根節點位置
+    /// 3. 根據中序遍歷中根節點的位置，可以確定：
     ///     左子樹的節點數量
     ///     左右子樹在兩個數組中的範圍
-    /// 4.遞迴處理左右子樹
+    /// 4. 遞迴處理左右子樹
     /// 
     /// 主要建樹方法，處理初始參數檢查
     /// 解題概念：
@@ -71,8 +75,8 @@ class Program
     ///    - 利用前序遍歷找到根節點
     ///    - 在中序遍歷中找到根節點位置，可分割出左右子樹
     ///    - 遞迴處理左右子樹
-    /// 4. 時間複雜度：O(n)，其中 n 為節點數量
-    /// 5. 空間複雜度：O(n)，主要是遞迴調用棧的空間
+    /// 4. 時間複雜度：O (n)，其中 n 為節點數量
+    /// 5. 空間複雜度：O (n)，主要是遞迴調用棧的空間
     /// 
     /// </summary>
     public static TreeNode BuildTree(int[] preorder, int[] inorder)
@@ -107,18 +111,19 @@ class Program
         // 2. 在中序遍歷中找到根節點的位置 
         // (被搜尋的目標數組, 我們需要在中序遍歷中找到這個根節點的位置, 指定搜尋的起始位置, 指定要搜尋的元素數量)
         int rootIndex = Array.IndexOf(inorder, preorder[preStart], inStart, inEnd - inStart + 1);
+        
         // 3. 計算左子樹的節點數量
         int leftSubtreeSize = rootIndex - inStart;
 
         // 4. 遞迴構建左子樹
-        // 左子樹在前序遍歷中的範圍：[preStart + 1, preStart + leftSubtreeSize]
-        // 左子樹在中序遍歷中的範圍：[inStart, rootIndex - 1]
+        // 左子樹在前序遍歷中的範圍：[preStart + 1, preStart + leftSubtreeSize] （跳過根節點）
+        // 左子樹在中序遍歷中的範圍：[inStart, rootIndex - 1] （根節點左邊的所有節點）
         root.left = BuildTreeHelper(preorder, preStart + 1, preStart + leftSubtreeSize,
                                   inorder, inStart, rootIndex - 1);
 
         // 5. 遞迴構建右子樹
-        // 右子樹在前序遍歷中的範圍：[preStart + leftSubtreeSize + 1, preEnd]
-        // 右子樹在中序遍歷中的範圍：[rootIndex + 1, inEnd]
+        // 右子樹在前序遍歷中的範圍：[preStart + leftSubtreeSize + 1, preEnd] （跳過根節點和左子樹）
+        // 右子樹在中序遍歷中的範圍：[rootIndex + 1, inEnd] （根節點右邊的所有節點）
         root.right = BuildTreeHelper(preorder, preStart + leftSubtreeSize + 1, preEnd,
                                    inorder, rootIndex + 1, inEnd);
 
