@@ -12,21 +12,31 @@ class Program
     /// https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU
     /// https://zh.wikipedia.org/zh-tw/%E5%BF%AB%E5%8F%96%E6%96%87%E4%BB%B6%E7%BD%AE%E6%8F%9B%E6%A9%9F%E5%88%B6
     /// https://ithelp.ithome.com.tw/articles/10244749
+    /// 
+    /// 題目說明：
+    /// 實作一個 LRU (Least Recently Used) 快取機制，支援 get 和 put 兩種操作，要求時間複雜度皆為 O(1)。
+    /// 
+    /// - get(key)：如果 key 存在於快取中，則返回其值，否則返回 -1。
+    ///   並且每次 get 操作都會將該 key 對應的資料移動到最近使用的位置。
+    /// - put(key, value)：如果 key 已存在，更新其值，否則插入新資料。
+    ///   當快取容量超過上限時，會移除最久未使用的資料。
+    /// 
+    /// 你必須設計一個資料結構，使這兩個操作的時間複雜度皆為 O(1)。
+    /// 
     /// </summary>
-    /// <param name="args"></param>
     static void Main(string[] args)
     {
         // 測試案例
-        LRUCache lRUCache = new LRUCache(2);
-        lRUCache.Put(1, 1);               // cache is {1=1}
-        lRUCache.Put(2, 2);               // cache is {1=1, 2=2}
-        Console.WriteLine(lRUCache.Get(1));       // 返回 1
-        lRUCache.Put(3, 3);               // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
-        Console.WriteLine(lRUCache.Get(2));       // 返回 -1 (未找到)
-        lRUCache.Put(4, 4);               // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
-        Console.WriteLine(lRUCache.Get(1));       // 返回 -1 (未找到)
-        Console.WriteLine(lRUCache.Get(3));       // 返回 3
-        Console.WriteLine(lRUCache.Get(4));       // 返回 4
+        LRUCache lRUCache = new LRUCache(2);  // 建立容量為 2 的 LRU 快取
+        lRUCache.Put(1, 1);                   // cache is {1=1}
+        lRUCache.Put(2, 2);                   // cache is {1=1, 2=2}
+        Console.WriteLine(lRUCache.Get(1));   // 返回 1
+        lRUCache.Put(3, 3);                   // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
+        Console.WriteLine(lRUCache.Get(2));   // 返回 -1 (未找到)
+        lRUCache.Put(4, 4);                   // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
+        Console.WriteLine(lRUCache.Get(1));   // 返回 -1 (未找到)
+        Console.WriteLine(lRUCache.Get(3));   // 返回 3
+        Console.WriteLine(lRUCache.Get(4));   // 返回 4
     }
 
     /// <summary>
@@ -75,7 +85,15 @@ class Program
         }
 
         private readonly int _capacity;
-        // 使用哨兵節點 (_dummy) 簡化鏈結串列的操作
+
+        ///<summary>
+        /// 使用哨兵節點 (_dummy) 簡化鏈結串列的操作
+        /// 放在 linklist 的最前面 第一個
+        /// 但是記住 這是雙向的
+        /// 既然是第一個,
+        /// _dummy.prev 會是結尾
+        /// </summary>
+        /// <returns></returns>
         private readonly Node _dummy = new Node(0, 0); // 哨兵節點
 
         /// <summary>
@@ -175,10 +193,10 @@ class Program
         /// <summary>
         /// 獲取鍵對應的節點，如果存在則將其移到鏈結串列的前端
         /// 
-        /// 注意此段程式碼的步驟3.
+        /// 注意此段程式碼的步驟 3.
         /// 先移除再加入, 所以原先存入的順序要改變
-        /// 被移除會消失,再加入會讓順序在儲存的Dic裡面的最後面位置
-        /// 這行為恰巧就是LRU的行為
+        /// 被移除會消失, 再加入會讓順序在儲存的 Dic 裡面的最後面位置
+        /// 這行為恰巧就是 LRU 的行為
         /// </summary>
         private Node GetNode(int key)
         {
@@ -203,6 +221,9 @@ class Program
 
         /// <summary>
         /// 從雙向鏈結串列中移除指定節點
+        /// 圖示說明:
+        /// [0] <-> x <-> [1] 刪除節點 x 之前
+        /// [0] <-> [1] 刪除後
         /// </summary>
         private void Remove(Node x)
         {
@@ -218,6 +239,9 @@ class Program
         /// 開頭是 dummy 後面接上各 node
         /// 最前端（最新）的節點總是接在 dummy 節點後面
         /// 最後端（最舊）的節點總是在鏈結串列的尾部
+        /// 圖示說明:
+        /// [哨] <-> [0] 插入節點 x 之前
+        /// [哨] <-> [x] <-> [0]
         /// </summary>
         private void PushFront(Node x)
         {
