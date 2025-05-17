@@ -1,0 +1,15 @@
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/bin/Debug/net8.0/leetcode_75
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/bin/Debug/net8.0/leetcode_75.deps.json
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/bin/Debug/net8.0/leetcode_75.runtimeconfig.json
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/bin/Debug/net8.0/leetcode_75.dll
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/bin/Debug/net8.0/leetcode_75.pdb
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/obj/Debug/net8.0/leetcode_75.GeneratedMSBuildEditorConfig.editorconfig
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/obj/Debug/net8.0/leetcode_75.AssemblyInfoInputs.cache
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/obj/Debug/net8.0/leetcode_75.AssemblyInfo.cs
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/obj/Debug/net8.0/leetcode_75.csproj.CoreCompileInputs.cache
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/obj/Debug/net8.0/leetcode_75.sourcelink.json
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/obj/Debug/net8.0/leetcode_75.dll
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/obj/Debug/net8.0/refint/leetcode_75.dll
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/obj/Debug/net8.0/leetcode_75.pdb
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/obj/Debug/net8.0/leetcode_75.genruntimeconfig.cache
+/Users/qiuzili/Leetcode/Leetcode_folder/leetcode_75/leetcode_75/obj/Debug/net8.0/ref/leetcode_75.dll
