@@ -154,10 +154,11 @@ class Program
             }
             else
             {
-                // 解析多位數字
+                // 解析多位連續數字
                 int t = 0;
                 while (i < expression.Length && char.IsDigit(expression[i]))
                 {
+                    // 這個運算相當於將目前累積的數值乘以 10（相當於向左移一位），然後加上新讀取的數字。
                     t = t * 10 + (expression[i] - '0');
                     i++;
                 }
@@ -196,11 +197,11 @@ class Program
     /// 4. 計算左右部分的所有可能結果，然後根據運算符組合它們
     /// 5. 如果沒有找到運算符，確保能處理整個區間為單一數字的情況
     /// </summary>
-    /// <param name="dp">記憶化數組，存儲已計算過的子問題結果</param>
-    /// <param name="l">左邊界索引</param>
-    /// <param name="r">右邊界索引</param>
-    /// <param name="ops">運算符和數字序列</param>
-    /// <returns>所有可能的計算結果列表</returns>
+    /// <param name="dp"> 記憶化數組，存儲已計算過的子問題結果 </param>
+    /// <param name="l"> 左邊界索引 </param>
+    /// <param name="r"> 右邊界索引 </param>
+    /// <param name="ops"> 運算符和數字序列 </param>
+    /// <returns > 所有可能的計算結果列表 </returns>
     public IList<int> DFS(IList<int>[][] dp, int l, int r, IList<int> ops)
     {
         // 若已計算過該子問題，直接返回結果
@@ -217,6 +218,8 @@ class Program
         }
 
         // 遍歷區間內的每一個位置
+        // 已預先將表達式轉換為數字和運算符的序列，且運算符位置在表達式中不能是最後一個元素
+        // 所以這裡的迴圈從 l 到 r-1，因為 r 是最後一個數字的位置
         for (int i = l; i < r; i++)
         {
             // 只處理運算符位置（運算符以負數表示）
@@ -261,18 +264,18 @@ class Program
 
         return dp[l][r];  // 返回計算結果
     }
-
+    
 
     /// <summary>
     /// 解法二：動態規劃 (Dynamic Programming)
     /// 自底向上的動態規劃方法，避免遞迴調用的開銷
     /// 
     /// 1. 先將表達式轉換為數字和運算符的序列（同樣使用負數表示運算符）
-    /// 2. dp[i][j] 表示從第 i 個位置到第 j 個位置的所有可能的結果
-    /// 3. 填充基本情況：dp[i][i] 包含單個數字的結果
-    /// 4. 按照子問題長度遞增，考慮所有可能的分割點k（必須是運算符）
-    /// 5. 對每個分割點，合併左側 dp[i][k-1] 和右側 dp[k+1][j] 的結果
-    /// 6. 時間複雜度 O(n^3)，空間複雜度 O(n^2)
+    /// 2. dp [i][j] 表示從第 i 個位置到第 j 個位置的所有可能的結果
+    /// 3. 填充基本情況：dp [i][i] 包含單個數字的結果
+    /// 4. 按照子問題長度遞增，考慮所有可能的分割點 k（必須是運算符）
+    /// 5. 對每個分割點，合併左側 dp [i][k-1] 和右側 dp [k+1][j] 的結果
+    /// 6. 時間複雜度 O (n^3)，空間複雜度 O (n^2)
     /// 
     /// 特別處理：只有負數值（運算符）才能作為分割點，正數（數字）被跳過
     /// 
@@ -281,31 +284,33 @@ class Program
     /// 
     /// https://leetcode.cn/problems/different-ways-to-add-parentheses/solutions/125144/xiang-xi-tong-su-de-si-lu-fen-xi-duo-jie-fa-by-5-5/
     /// </summary>
-    /// <param name="expression">待計算的算術表達式字串</param>
-    /// <returns>所有可能的計算結果列表</returns>
+    /// <param name="expression"> 待計算的算術表達式字串 </param>
+    /// <returns > 所有可能的計算結果列表 </returns>
     public IList<int> DiffWaysToCompute_DP(string expression)
-    {        // 將表達式轉換為數字和運算符序列
+    {
+        // 第一步：將表達式轉換為數字和運算符序列
         IList<int> ops = new List<int>();
 
-        // 解析表達式字串
+        // 解析表達式字串，與記憶化搜索方法相同的解析邏輯
         for (int i = 0; i < expression.Length;)
         {
-            // 如果當前字元是運算符
+            // 判斷當前字元是否為運算符
             if (!char.IsDigit(expression[i]))
             {
+                // 用負數常數表示不同的運算符
                 if (expression[i] == '+')
                 {
-                    ops.Add(Add);
+                    ops.Add(Add);  // 加法用 -1 表示
                 }
                 else if (expression[i] == '-')
                 {
-                    ops.Add(Sub);
+                    ops.Add(Sub);  // 減法用 -2 表示
                 }
                 else if (expression[i] == '*')
                 {
-                    ops.Add(Mul);
+                    ops.Add(Mul);  // 乘法用 -3 表示
                 }
-                i++;
+                i++;  // 處理完運算符後前進一位
             }
             else
             {
@@ -313,19 +318,23 @@ class Program
                 int t = 0;
                 while (i < expression.Length && char.IsDigit(expression[i]))
                 {
+                    // 將字元轉為數字並合併多位數
                     t = t * 10 + (expression[i] - '0');
                     i++;
                 }
-                ops.Add(t);
+                ops.Add(t);  // 將數字加入序列
             }
         }
 
-        // 初始化動態規劃數組
+        // 第二步：初始化動態規劃二維陣列
+        // dp[i][j] 儲存從索引 i 到索引 j 的表達式片段所有可能的計算結果
         IList<int>[][] dp = new IList<int>[ops.Count][];
         for (int i = 0; i < ops.Count; i++)
         {
             dp[i] = new IList<int>[ops.Count];
         }
+
+        // 為每個子問題建立空的結果列表
         for (int i = 0; i < ops.Count; i++)
         {
             for (int j = 0; j < ops.Count; j++)
@@ -333,52 +342,63 @@ class Program
                 dp[i][j] = new List<int>();
             }
         }
-        // 填充單個數字的基本情況
+
+        // 第三步：填充基本情況 - 處理單個數字
+        // 對於每個位置 i，如果 ops[i] 是數字（非負值），則 dp[i][i] 就只有這個數字作為結果
         for (int i = 0; i < ops.Count; i++)
         {
-            // 只處理數字（正數或零）
-            if (ops[i] >= 0)
+            if (ops[i] >= 0)  // 數字為非負值
             {
                 dp[i][i].Add(ops[i]);
             }
         }
-        // 自底向上計算所有子問題
-        for (int len = 2; len <= ops.Count; len++) // 子問題長度從2開始
-        {
-            for (int i = 0; i <= ops.Count - len; i++) // 起始位置
-            {
-                int j = i + len - 1;  // 終止位置
-                for (int k = i; k < j; k++)  // 遍歷可能的中間位置
-                {
-                    // 只有運算符才能作為分割點
-                    if (ops[k] >= 0) continue; // 跳過數字
 
-                    foreach (int left in dp[i][k - 1])  // 左側表達式的所有結果
+        // 第四步：自底向上計算所有子問題
+        // 參數 i 表示當前考慮的子問題長度
+        for (int len = 3; len <= ops.Count; len += 2)  // 長度必須是奇數（數字-運算符-數字...）
+        {
+            // j 是子問題的起始位置，每次跳過2個位置（一個數字一個運算符）
+            for (int j = 0; j + len <= ops.Count; j += 2)
+            {
+                // 確定當前子問題的左右邊界
+                int left = j;            // 左邊界
+                int right = j + len - 1; // 右邊界
+
+                // 嘗試所有可能的分割點 k
+                // k 必須是運算符的位置（數字-運算符-數字），因此 k 從 left+1 開始，每次加 2
+                for (int k = left + 1; k < right; k += 2)
+                {
+                    // 獲取分割點左側所有可能的結果
+                    IList<int> leftResults = dp[left][k - 1];
+                    // 獲取分割點右側所有可能的結果
+                    IList<int> rightResults = dp[k + 1][right];
+
+                    // 根據運算符組合左右兩側的所有可能結果
+                    foreach (int leftVal in leftResults)
                     {
-                        foreach (int right in dp[k + 1][j])  // 右側表達式的所有結果
+                        foreach (int rightVal in rightResults)
                         {
-                            int res = 0;
-                            // 根據運算符進行相應運算
+                            // 根據當前運算符執行相應的運算
                             if (ops[k] == Add)
                             {
-                                res = left + right;
+                                dp[left][right].Add(leftVal + rightVal);  // 加法運算
                             }
                             else if (ops[k] == Sub)
                             {
-                                res = left - right;
+                                dp[left][right].Add(leftVal - rightVal);  // 減法運算
                             }
-                            else
+                            else if (ops[k] == Mul)
                             {
-                                res = left * right;
+                                dp[left][right].Add(leftVal * rightVal);  // 乘法運算
                             }
-                            dp[i][j].Add(res);
                         }
                     }
                 }
             }
         }
 
-        return dp[0][ops.Count - 1];  // 返回整個表達式的計算結果
+        // 最終結果是整個表達式的所有可能計算值，即從索引0到最後一個索引
+        return dp[0][ops.Count - 1];
     }
 
 
@@ -394,18 +414,18 @@ class Program
     /// 5. 根據當前運算符，組合左右兩部分的所有結果
     /// 
     /// 特點：
-    /// - 實作簡潔，邏輯直觀
-    /// - 無需額外數據結構轉換表達式
-    /// - 直接使用字串切割處理左右子表達式
+    ///- 實作簡潔，邏輯直觀
+    ///- 無需額外數據結構轉換表達式
+    ///- 直接使用字串切割處理左右子表達式
     /// 
-    /// 時間複雜度：理論上是 O(2^n)，但實際上由於子問題重疊情況較多，表現會好一些
-    /// 空間複雜度：O(n)，主要是遞迴調用棧的開銷
+    /// 時間複雜度：理論上是 O (2^n)，但實際上由於子問題重疊情況較多，表現會好一些
+    /// 空間複雜度：O (n)，主要是遞迴調用棧的開銷
     /// 
     /// ref:
     /// https://leetcode.cn/problems/different-ways-to-add-parentheses/solutions/44108/pythongolang-fen-zhi-suan-fa-by-jalan/
     /// </summary>
-    /// <param name="expression">待計算的表達式</param>
-    /// <returns>所有可能的計算結果</returns>
+    /// <param name="expression"> 待計算的表達式 </param>
+    /// <returns > 所有可能的計算結果 </returns>
     public IList<int> DiffWaysToCompute(string expression)
     {
         // 如果只有數字，直接返回
@@ -462,8 +482,8 @@ class Program
 
 
     /// <summary>
-    /// 解法四：DFS演算法 (Depth-First Search)
-    /// 使用字元陣列與遞迴DFS方法解決問題
+    /// 解法四：DFS 演算法 (Depth-First Search)
+    /// 使用字元陣列與遞迴 DFS 方法解決問題
     /// 
     /// 實作特點：
     /// 1. 將表達式轉換為字元陣列，避免重複字串操作
@@ -474,18 +494,18 @@ class Program
     /// 6. 特別處理沒有運算符的情況，將整個數字作為結果
     /// 
     /// 優勢：
-    /// - 直接處理字元級別，不需要預處理表達式
-    /// - 能正確處理多位數字
-    /// - 實作簡潔明瞭
+    ///- 直接處理字元級別，不需要預處理表達式
+    ///- 能正確處理多位數字
+    ///- 實作簡潔明瞭
     /// 
-    /// 時間複雜度：與分治法相似，理論 O(2^n)，實際表現較好
-    /// 空間複雜度：O(n)，用於遞迴調用棧
-    /// 
+    /// 時間複雜度：與分治法相似，理論 O (2^n)，實際表現較好
+    /// 空間複雜度：O (n)，用於遞迴調用棧
+    ///
     /// ref:
     /// https://leetcode.cn/problems/different-ways-to-add-parentheses/solutions/1637092/by-ac_oier-z07i/
     /// </summary>
-    /// <param name="expression">待計算的表達式</param>
-    /// <returns>所有可能的計算結果</returns>
+    /// <param name="expression"> 待計算的表達式 </param>
+    /// <returns > 所有可能的計算結果 </returns>
     public IList<int> DiffWaysToCompute_DFS(string expression)
     {
         char[] cs = expression.ToCharArray();
@@ -494,7 +514,7 @@ class Program
 
 
     /// <summary>
-    /// DFS遞迴函式，計算字元陣列表達式從l到r區間的所有可能結果
+    /// DFS 遞迴函式，計算字元陣列表達式從 l 到 r 區間的所有可能結果
     /// 
     /// 此函式主要步驟：
     /// 1. 遍歷當前區間 [l,r] 的每個字元
@@ -505,13 +525,15 @@ class Program
     /// 
     /// 注意：此函式能正確處理多位數字，將連續數字字元轉換為一個整數值
     /// </summary>
-    /// <param name="cs">表達式的字元陣列</param>
-    /// <param name="l">左邊界索引</param>
-    /// <param name="r">右邊界索引</param>
-    /// <returns>所有可能的計算結果列表</returns>
+    /// <param name="cs"> 表達式的字元陣列 </param>
+    /// <param name="l"> 左邊界索引 </param>
+    /// <param name="r"> 右邊界索引 </param>
+    /// <returns > 所有可能的計算結果列表 </returns>
     private IList<int> DFS(char[] cs, int l, int r)
     {
         IList<int> ans = new List<int>();
+        // 遍歷當前區間的每個字元
+        // 注意：這裡的迴圈是從 l 到 r，因為 r 是最後一個數字的位置
         for (int i = l; i <= r; i++)
         {
             // 跳過數字字元，只處理運算符
