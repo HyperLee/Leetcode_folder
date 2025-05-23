@@ -1,188 +1,153 @@
 ﻿namespace leetcode_3362;
 
 class Program
-{    /// <summary>
+{
+    /// <summary>
     /// 3362. Zero Array Transformation III
     /// https://leetcode.com/problems/zero-array-transformation-iii/description/?envType=daily-question&envId=2025-05-22
-    /// 3362. 零数组变换 III
+    /// 3362. 零數組變換 III
     /// https://leetcode.cn/problems/zero-array-transformation-iii/description/?envType=daily-question&envId=2025-05-22
     /// 
     /// 題目說明：
-    /// 給定一個整數陣列 nums 和一個二維整數陣列 queries，其中 queries[i] = [threshold_i, limit_i]。
-    /// 對於每個查詢，你可以將不超過 limit_i 個小於或等於 threshold_i 的元素從 nums 中移除。
-    /// 返回在執行所有查詢後能夠從 nums 中移除的最大元素數量。
+    /// 給定一個長度為 n 的整數陣列 nums 和一個二維陣列 queries，其中 queries[i] = [li, ri]。
     /// 
-    /// 解題思路：
-    /// 1. 排序 nums 陣列和 queries 陣列（按照 threshold 排序）
-    /// 2. 使用雙指針技術計算每個查詢能移除的元素數量
-    /// 3. 追蹤累計移除的元素總數
-    /// 4. 返回能夠移除的最大元素數量
-    /// </summary>    /// <param name="args">命令列參數</param>
+    /// 每個 queries[i] 代表對 nums 執行以下操作：
+    ///     將 nums 中索引範圍 [li, ri] 內的每個值最多減少 1。
+    ///     對於每個索引，減少的數值可以獨立選擇。
+    /// 
+    /// 零陣列是指所有元素均為 0 的陣列。
+    /// 
+    /// 返回可以從 queries 中移除的最大元素數量，使得使用剩餘的查詢仍然可以將 nums 轉換為零陣列。
+    /// 如果無法將 nums 轉換為零陣列，則返回 -1。
+    /// </summary>    
+    /// <param name="args">命令列參數</param>
     static void Main(string[] args)
     {
         // 建立 Program 實例以呼叫非靜態方法
         Program program = new Program();
-        
-        // 測試案例 1：簡單範例
-        Console.WriteLine("測試案例 1：");
-        int[] nums1 = { 1, 2, 3, 4, 5 };
+
+        Console.WriteLine("===== 零數組變換 III (Zero Array Transformation III) 測試 =====\n");
+
+        // 測試案例 1：基本測試
+        Console.WriteLine("測試案例 1 - 基本測試：");
+        int[] nums1 = { 2, 3, 1, 4 };
         int[][] queries1 = new int[][] {
-            new int[] { 3, 2 },  // 閾值為 3，限制為 2
-            new int[] { 4, 3 }   // 閾值為 4，限制為 3
+            new int[] { 1, 3 },   // [1,3] 範圍內的元素最多減少 1
+            new int[] { 0, 2 }  // [0,2] 範圍內的元素最多減少 1
         };
         
+        Console.WriteLine("輸入: nums = [2,3,1,4], queries = [[0,2],[1,3]]");
         Console.WriteLine("MaxRemoval 結果: " + program.MaxRemoval(nums1, queries1));
         Console.WriteLine("MaxRemoval2 結果: " + program.MaxRemoval2(nums1, queries1));
         Console.WriteLine();
         
-        // 測試案例 2：較複雜範例
-        Console.WriteLine("測試案例 2：");
-        int[] nums2 = { 5, 3, 2, 7, 1, 6, 4 };
+        // 測試案例 2：需要所有查詢
+        Console.WriteLine("測試案例 2 - 需要所有查詢：");
+        int[] nums2 = { 3, 2, 1, 4 };
         int[][] queries2 = new int[][] {
-            new int[] { 4, 3 },  // 閾值為 4，限制為 3
-            new int[] { 6, 2 },  // 閾值為 6，限制為 2
-            new int[] { 2, 1 }   // 閾值為 2，限制為 1
+            new int[] { 0, 1 },
+            new int[] { 1, 2 },
+            new int[] { 2, 3 }
         };
         
+        Console.WriteLine("輸入: nums = [3,2,1,4], queries = [[0,1],[1,2],[2,3]]");
         Console.WriteLine("MaxRemoval 結果: " + program.MaxRemoval(nums2, queries2));
         Console.WriteLine("MaxRemoval2 結果: " + program.MaxRemoval2(nums2, queries2));
         Console.WriteLine();
         
-        // 測試案例 3：邊界案例
-        Console.WriteLine("測試案例 3 - 邊界案例：");
-        int[] nums3 = { 10, 20, 30 };
+        // 測試案例 3：無解案例
+        Console.WriteLine("測試案例 3 - 無解案例：");
+        int[] nums3 = { 3, 3, 3 };
         int[][] queries3 = new int[][] {
-            new int[] { 15, 1 },  // 閾值為 15，限制為 1
-            new int[] { 25, 2 }   // 閾值為 25，限制為 2
+            new int[] { 0, 1 },
+            new int[] { 1, 2 }
         };
         
+        Console.WriteLine("輸入: nums = [3,3,3], queries = [[0,1],[1,2]]");
         Console.WriteLine("MaxRemoval 結果: " + program.MaxRemoval(nums3, queries3));
         Console.WriteLine("MaxRemoval2 結果: " + program.MaxRemoval2(nums3, queries3));
         Console.WriteLine();
         
-        // 測試案例 4：無解案例
-        Console.WriteLine("測試案例 4 - 可能無解案例：");
-        int[] nums4 = { 5, 5, 5 };
+        // 測試案例 4：可移除部分查詢
+        Console.WriteLine("測試案例 4 - 可移除部分查詢：");
+        int[] nums4 = { 1, 2, 3, 1 };
         int[][] queries4 = new int[][] {
-            new int[] { 3, 1 },  // 閾值為 3，限制為 1
-            new int[] { 4, 1 }   // 閾值為 4，限制為 1
+            new int[] { 0, 2 },
+            new int[] { 1, 3 },
+            new int[] { 0, 3 },
+            new int[] { 2, 3 }
         };
         
+        Console.WriteLine("輸入: nums = [1,2,3,1], queries = [[0,2],[1,3],[0,3],[2,3]]");
         Console.WriteLine("MaxRemoval 結果: " + program.MaxRemoval(nums4, queries4));
         Console.WriteLine("MaxRemoval2 結果: " + program.MaxRemoval2(nums4, queries4));
-    }
-    /// <summary>
-    /// 零數組變換 III 的主要解法
-    /// 
-    /// 題目概述：
-    /// 給定一個整數陣列 nums 和一組查詢 queries，其中 queries[i] = [threshold_i, limit_i]
-    /// 每個查詢允許移除不超過 limit_i 個小於或等於 threshold_i 的元素
-    /// 
-    /// 解題思路：
-    /// 1. 先排序 nums 陣列以便高效處理查詢
-    /// 2. 將原始查詢的 limit 值儲存到答案陣列，同時記錄每個查詢的原始索引
-    /// 3. 依據 threshold 值排序查詢陣列，以便使用單次掃描處理所有查詢
-    /// 4. 使用雙指針技術計算每個閾值下的元素總和
-    /// 5. 計算每個查詢的結果值（可用於移除的最大元素數量）
-    /// 6. 返回所有查詢結果中的最大值
-    /// 
-    /// 時間複雜度：O(n log n + m log m)，其中 n 是 nums 長度，m 是查詢數量
-    /// 空間複雜度：O(m)，用於儲存結果陣列
-    /// </summary>
-    /// <param name="nums">一個整數陣列</param>
-    /// <param name="queries">二維查詢陣列，每個查詢包含 [threshold, limit]</param>
-    /// <returns>所有查詢後能夠移除的最大元素數量</returns>
-    public int MaxRemoval(int[] nums, int[][] queries)
-    {
-        // 取得輸入陣列的長度
-        int n = nums.Length;
-        int m = queries.Length;
+        Console.WriteLine();
         
-        // 初始化答案陣列，用於存儲每個查詢的結果
-        int[] ans = new int[m];
+        // 測試案例 5：邊界情況
+        Console.WriteLine("測試案例 5 - 邊界情況：");
+        int[] nums5 = { 5 };
+        int[][] queries5 = new int[][] {
+            new int[] { 0, 0 },
+            new int[] { 0, 0 },
+            new int[] { 0, 0 },
+            new int[] { 0, 0 },
+            new int[] { 0, 0 }
+        };
         
-        // 對 nums 陣列進行排序，以便後續高效處理查詢
-        Array.Sort(nums);
-        
-        // 預處理查詢：
-        // 1. 將每個查詢的 limit 值（queries[i][1]）儲存到答案陣列
-        // 2. 將每個查詢的原始索引 i 存入 queries[i][1]，以便之後還原順序
-        for (int i = 0; i < m; i++)
-        {
-            ans[i] = queries[i][1]; // 儲存 limit 值
-            queries[i][1] = i;      // 記錄原始索引
-        }
-        
-        // 根據閾值 (threshold) 對查詢進行排序
-        Array.Sort(queries, (a, b) => a[0] - b[0]);
-        
-        // 初始化變數：
-        // j：用於遍歷 nums 陣列的指針
-        // sum：表示到目前為止所有不大於當前查詢閾值的數字總和
-        int j = 0;
-        int sum = 0;
-        
-        // 處理每個排序後的查詢
-        for (int i = 0; i < m; i++)
-        {
-            // 找出所有小於等於當前查詢閾值的數字，並將它們加入總和
-            while (j < n && nums[j] <= queries[i][0])
-            {
-                sum += nums[j];
-                j++;
-            }
-            
-            // 計算結果：原始 limit 減去累計總和，並存入對應的原始索引位置
-            ans[queries[i][1]] -= sum;
-        }
-        
-        // 返回所有查詢結果中的最大值
-        return ans.Max();
+        Console.WriteLine("輸入: nums = [5], queries = [[0,0],[0,0],[0,0],[0,0],[0,0]]");
+        Console.WriteLine("MaxRemoval 結果: " + program.MaxRemoval(nums5, queries5));
+        Console.WriteLine("MaxRemoval2 結果: " + program.MaxRemoval2(nums5, queries5));
     }
 
+
     /// <summary>
-    /// 零數組變換 III 的替代解法，使用優先佇列
+    /// 零數組變換 III 解法，使用優先佇列
     /// 
-    /// 此解法使用不同的策略來解決相同問題：
-    /// 1. 使用優先佇列(堆疊)來追蹤可用的操作限制
-    /// 2. 利用增量數組(deltaArray)來維護不同位置的操作計數
-    /// 3. 對每個元素執行必要的操作使其為零
+    /// 此解法針對題目要求：
+    /// 1. 使用優先佇列來管理對索引範圍 [li, ri] 的操作
+    /// 2. 利用差分數組 (deltaArray) 來追蹤範圍操作的效果
+    /// 3. 最大化可移除的查詢數量，同時確保仍能將數組轉為零數組
     /// 
     /// 時間複雜度：O(n log m)，其中 n 是 nums 長度，m 是查詢數量
-    /// 空間複雜度：O(n + m)，用於存儲優先佇列和增量數組
+    /// 空間複雜度：O(n + m)，用於存儲優先佇列和差分數組
+    /// 
+    /// ref:
+    /// https://leetcode.cn/problems/zero-array-transformation-iii/solutions/3674726/ling-shu-zu-bian-huan-iii-by-leetcode-so-ptvl/?envType=daily-question&envId=2025-05-22
+    /// 
     /// </summary>
     /// <param name="nums">一個整數陣列</param>
-    /// <param name="queries">二維查詢陣列，每個查詢包含 [threshold, limit]</param>
-    /// <returns>可執行的最大操作次數，如無法將所有元素變為零則返回 -1</returns>
-    public int MaxRemoval2(int[] nums, int[][] queries)
-    {        // 根據閾值 (threshold) 對查詢進行排序
+    /// <param name="queries">二維查詢陣列，每個查詢包含 [li, ri]，表示操作範圍</param>
+    /// <returns>可以從 queries 中移除的最大元素數量，如無法將陣列轉為零陣列則返回 -1</returns>
+    public int MaxRemoval(int[] nums, int[][] queries)
+    {
+        // 根據左邊界 (li) 對查詢進行排序
         Array.Sort(queries, (a, b) => a[0] - b[0]);
-        
-        // 建立一個優先佇列，用於儲存查詢的 limit 值
+
+        // 建立一個優先佇列，用於儲存查詢的右邊界 (ri) 值
         // 設定比較器讓較大的值優先出佇列
         var heap = new PriorityQueue<int, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
-        
-        // 建立增量數組，用於追蹤操作在不同位置的影響
+
+        // 建立差分陣列，用於追蹤操作在不同位置的影響
         int[] deltaArray = new int[nums.Length + 1];
-        
+
         // 追蹤已執行的操作數量
         int operations = 0;
 
         // 遍歷 nums 陣列，同時處理查詢
         for (int i = 0, j = 0; i < nums.Length; i++)
         {
-            // 增加當前位置的操作數量
+            // 更新當前有效操作數
             operations += deltaArray[i];
-
-            // 處理所有閾值為 i 的查詢
+            // 處理所有左邊界為 i 的查詢
             while (j < queries.Length && queries[j][0] == i)
             {
-                // 將查詢的 limit 值加入優先佇列
+                // 將查詢的右邊界 (ri) 值加入優先佇列
                 heap.Enqueue(queries[j][1], queries[j][1]);
                 j++;
             }
 
             // 執行必要的操作使 nums[i] 為零
+            // 貪婪選擇：使用必要的操作
             while (operations < nums[i] && heap.Count > 0 && heap.Peek() >= i)
             {
                 // 增加操作計數
@@ -197,8 +162,77 @@ class Program
                 return -1;
             }
         }
-        
         // 返回剩餘的可用操作數量
+        return heap.Count;
+    }
+
+    
+    /// <summary>
+    /// 零數組變換 III 的另一種解法（從 Java 轉換）
+    /// 
+    /// 此解法基於原題目描述：
+    /// 1. 將範圍 [li, ri] 內的每個元素最多減少 1
+    /// 2. 透過優先佇列來選擇右邊界最大的操作區間
+    /// 3. 利用差分數組 (diff) 來追蹤各個位置的操作效果
+    /// 
+    /// 時間複雜度：O(n log m)，其中 n 是 nums 長度，m 是查詢數量
+    /// 空間複雜度：O(n + m)，用於存儲優先佇列和差分數組
+    /// 
+    /// ref:
+    /// https://leetcode.cn/problems/zero-array-transformation-iii/solutions/2998650/tan-xin-zui-da-dui-chai-fen-shu-zu-pytho-35o6/?envType=daily-question&envId=2025-05-22
+    /// 
+    /// </summary>
+    /// <param name="nums">一個整數陣列</param>
+    /// <param name="queries">二維查詢陣列，每個查詢包含 [li, ri]，表示操作範圍</param>
+    /// <returns>可以從 queries 中移除的最大元素數量，如無法將陣列轉為零陣列則返回 -1</returns>
+    public int MaxRemoval2(int[] nums, int[][] queries)
+    {
+        // 根據左邊界對查詢進行排序
+        Array.Sort(queries, (a, b) => a[0] - b[0]);
+
+        // 建立一個優先佇列，用於儲存查詢的右邊界值
+        // 設定比較器讓較大的值優先出佇列
+        var heap = new PriorityQueue<int, int>(Comparer<int>.Create((a, b) => b.CompareTo(a)));
+
+        int n = nums.Length;
+
+        // 建立差分數組，用於追蹤操作在不同位置的影響
+        int[] diff = new int[n + 1];
+
+        // 追蹤已執行的操作總數
+        int operations = 0;
+
+        // 用於遍歷查詢的指標
+        int j = 0;
+
+        // 遍歷原始數組
+        for (int i = 0; i < n; i++)
+        {
+            // 更新當前位置的操作數量
+            operations += diff[i];
+
+            // 處理所有左邊界 <= i 的查詢
+            while (j < queries.Length && queries[j][0] <= i)
+            {
+                heap.Enqueue(queries[j][1], queries[j][1]);
+                j++;
+            }
+
+            // 選擇右邊界最大的區間進行操作
+            while (operations < nums[i] && heap.Count > 0 && heap.Peek() >= i)
+            {
+                operations++;
+                diff[heap.Dequeue() + 1]--;
+            }
+
+            // 如果操作不足以將 nums[i] 變為零，則無解
+            if (operations < nums[i])
+            {
+                return -1;
+            }
+        }
+
+        // 返回未使用的查詢數量
         return heap.Count;
     }
 }
