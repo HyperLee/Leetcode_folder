@@ -77,6 +77,69 @@ public long DistributeCandies(int n, int limit)
 
 ---
 
+## b 的範圍數學推導與範例
+
+### b 的條件整理
+
+- b + c = remaining
+- 0 ≤ b ≤ k
+- 0 ≤ c ≤ k
+
+### b 的範圍推導
+
+1. b ≥ 0
+2. b ≤ k
+3. c = remaining - b ⇒ c ≤ k ⇒ b ≥ remaining - k
+
+合併條件：
+
+- b ≥ max(0, remaining - k)
+- b ≤ min(k, remaining)
+
+對應程式碼：
+
+```csharp
+int minB = Math.Max(0, remaining - k);
+int maxB = Math.Min(k, remaining);
+```
+
+### 範例說明
+
+假設：
+
+- n = 7, k = 3, a = 2
+- remaining = 7 - 2 = 5
+
+要分 5 顆糖果給 b 和 c，且每人最多 3 顆。
+
+- b 的下界：`b ≥ max(0, 5 - 3) = 2`
+- b 的上界：`b ≤ min(3, 5) = 3`
+
+合法的 b 為：2、3
+對應的 c 為：3、2
+
+總共 2 種可能組合。
+
+### 計算方式
+
+計算有幾個合法的 b 值 (也就是幾種分法)：
+
+```csharp
+int ways = Math.Max(0, maxB - minB + 1);
+```
+
+- 如果 maxB < minB，沒有合法解，ways = 0。
+- 否則，範圍內有 maxB - minB + 1 個整數，就是有效的分法數。
+
+---
+
+### 核心邏輯總結
+
+- 只要知道一個人 (b) 拿多少糖果，就能決定另一個人 (c) 該拿多少。
+- 只要枚舉所有可能的 b，並確保 c 不超過 k，就可以算出所有合法 (b, c) 組合。
+
+---
+
 ## 測試資料
 
 ```
