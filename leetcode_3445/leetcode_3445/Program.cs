@@ -20,7 +20,8 @@ class Program
     /// </summary>    /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Program program = new Program();        // 測試案例 1: 基本測試
+        Program program = new Program();
+        // 測試案例 1: 基本測試
         string test1 = "01234";
         int k1 = 3;
         int result1_1 = program.MaxDifference(test1, k1);
@@ -75,32 +76,33 @@ class Program
         TestPerformance();
     }
     
+    
     /// <summary>
     /// 效能比較測試方法
     /// </summary>
     static void TestPerformance()
     {
         Program program = new Program();
-        
+
         // 建立大規模測試資料
         string largeTestCase = new string('0', 10000) + new string('1', 10000) + new string('2', 5000);
         int k = 5000;
-        
+
         Console.WriteLine($"大規模測試：字串長度 = {largeTestCase.Length}, k = {k}");
-        
+
         // 測試方法一的執行時間
         var sw1 = System.Diagnostics.Stopwatch.StartNew();
         int result1 = program.MaxDifference(largeTestCase, k);
         sw1.Stop();
-        
+
         // 測試方法二的執行時間
         var sw2 = System.Diagnostics.Stopwatch.StartNew();
         int result2 = program.MaxDifference2(largeTestCase, k);
         sw2.Stop();
-        
+
         Console.WriteLine($"方法一結果: {result1}, 執行時間: {sw1.ElapsedMilliseconds}ms");
         Console.WriteLine($"方法二結果: {result2}, 執行時間: {sw2.ElapsedMilliseconds}ms");
-        
+
         if (result1 == result2)
         {
             Console.WriteLine("✅ 結果一致性驗證通過");
@@ -109,7 +111,7 @@ class Program
         {
             Console.WriteLine("❌ 結果不一致！");
         }
-        
+
         double ratio = (double)sw1.ElapsedMilliseconds / sw2.ElapsedMilliseconds;
         if (ratio > 1.1)
         {
@@ -117,13 +119,14 @@ class Program
         }
         else if (ratio < 0.9)
         {
-            Console.WriteLine($"方法一比方法二快 {1/ratio:F2} 倍");
+            Console.WriteLine($"方法一比方法二快 {1 / ratio:F2} 倍");
         }
         else
         {
             Console.WriteLine("兩種方法效能接近");
         }
     }
+
 
     /// <summary>
     /// ref:https://leetcode.cn/problems/maximum-difference-between-even-and-odd-frequency-ii/solutions/3061845/mei-ju-qian-zhui-he-hua-dong-chuang-kou-6cwsm/?envType=daily-question&envId=2025-06-11
@@ -185,16 +188,19 @@ class Program
                         // 移動左邊界，更新前綴頻率統計
                         preS[charArray[left] - '0']++;
                         left++;
-                    }                    // 計算當前的最大差值 - 這裡才真正處理奇偶性要求
+                    }
+
+                    // 計算當前的最大差值 - 這裡才真正處理奇偶性要求
                     // curS[x] - curS[y]: 當前 x 和 y 的頻率差
                     // minS[curS[x] & 1 ^ 1, curS[y] & 1]: 對應奇偶組合的最小歷史差值
                     // curS[x] & 1 ^ 1：當前 x 字元的互補奇偶性
                     if (minS[curS[x] & 1 ^ 1, curS[y] & 1] != INF)
                     {
                         ans = Math.Max(ans, curS[x] - curS[y] - minS[curS[x] & 1 ^ 1, curS[y] & 1]);
+                        //                                        ↑關鍵：透過 & 1 ^ 1 找互補狀態
                     }
-                    //                                        ↑關鍵：透過 & 1 ^ 1 找互補狀態
-                }            }
+                }
+            }
         }
 
         return ans == -INF ? -1 : ans;
@@ -221,7 +227,7 @@ class Program
     public int MaxDifference2(string s, int k)    {
         int n = s.Length;
         int ans = int.MinValue;
-        
+
         // 枚舉所有可能的字元對 (a, b)，其中 a 需要奇數頻率，b 需要偶數頻率
         foreach (char a in new char[] { '0', '1', '2', '3', '4' })
         {
@@ -232,18 +238,18 @@ class Program
                 {
                     continue;
                 }
-                
+
                 // best[status]: 記錄每種奇偶性組合下 (prevA - prevB) 的最小值
                 // status 編碼：00(偶偶), 01(偶奇), 10(奇偶), 11(奇奇)
                 int[] best = new int[4];
                 Array.Fill(best, int.MaxValue);
-                
+
                 // cntA, cntB: 從字串開始到 right 位置，字元 a 和 b 的出現次數
                 int cntA = 0, cntB = 0;
                 // prevA, prevB: 從字串開始到 left 位置，字元 a 和 b 的出現次數
                 int prevA = 0, prevB = 0;
                 int left = -1;  // 左指針，初始化為 -1
-                
+
                 // 右指針遍歷整個字串
                 for (int right = 0; right < n; right++)
                 {
@@ -256,7 +262,7 @@ class Program
                     {
                         cntB++;
                     }
-                    
+
                     // 移動左指針的條件：
                     // 1. 子字串長度 >= k
                     // 2. 字元 b 在子字串中出現次數 >= 2（確保為偶數且非0）
@@ -264,10 +270,10 @@ class Program
                     {
                         // 計算左邊界的奇偶性狀態
                         int leftStatus = GetStatus(prevA, prevB);
-                        
+
                         // 更新該狀態下的最小差值
                         best[leftStatus] = Math.Min(best[leftStatus], prevA - prevB);
-                        
+
                         // 移動左指針
                         left++;
                         if (s[left] == a)
@@ -279,10 +285,10 @@ class Program
                             prevB++;
                         }
                     }
-                    
+
                     // 計算當前右邊界的奇偶性狀態
                     int rightStatus = GetStatus(cntA, cntB);
-                    
+
                     // 我們需要找狀態為 10 的子字串（a奇數，b偶數）
                     // 因此需要左端點的狀態是 rightStatus ⊕ 0b10
                     // 0b10 = 2（二進制：10）
@@ -293,9 +299,11 @@ class Program
                         ans = Math.Max(ans, (cntA - cntB) - best[rightStatus ^ 0b10]);
                     }
                 }
-            }        }
+            }
+        }
         return ans == int.MinValue ? -1 : ans;
     }
+
 
     /// <summary>
     /// 獲取字元頻率的奇偶性狀態
