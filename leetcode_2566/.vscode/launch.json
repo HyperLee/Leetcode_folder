@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "coreclr",
+      "request": "launch",
+      "name": "Launch .NET Core Console App",
+      "program": "${workspaceFolder}/leetcode_2566/bin/Debug/net8.0/leetcode_2566.dll",
+      "preLaunchTask": "build"
+    }
+  ]
+}
