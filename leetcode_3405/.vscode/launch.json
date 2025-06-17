@@ -1,0 +1,36 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch LeetCode 3405 - Debug",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/leetcode_3405/bin/Debug/net8.0/leetcode_3405.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/leetcode_3405",
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "preLaunchTask": "build",
+            "justMyCode": true,
+            "requireExactSource": false
+        },
+        {
+            "name": "Launch LeetCode 3405 - Release",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/leetcode_3405/bin/Release/net8.0/leetcode_3405.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/leetcode_3405",
+            "console": "internalConsole",
+            "stopAtEntry": false,
+            "preLaunchTask": "build-release",
+            "justMyCode": true,
+            "requireExactSource": false
+        },
+        {
+            "name": "Attach to Process",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
+}

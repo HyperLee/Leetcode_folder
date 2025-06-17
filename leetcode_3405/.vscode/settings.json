@@ -1,0 +1,18 @@
+{
+    "dotnet.defaultSolution": "leetcode_3405.sln",
+    "files.exclude": {
+        "**/bin": true,
+        "**/obj": true
+    },
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit",
+        "source.organizeImports": "explicit"
+    },
+    "csharp.semanticHighlighting.enabled": true,
+    "csharp.format.enable": true,
+    "omnisharp.enableEditorConfigSupport": true,
+    "omnisharp.enableRoslynAnalyzers": true,
+    "debug.console.fontSize": 14,
+    "debug.console.fontFamily": "Monaco, 'Courier New', monospace"
+}

@@ -1,0 +1,10 @@
+{
+    "recommendations": [
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.vscode-dotnet-runtime",
+        "ms-vscode.vscode-json",
+        "formulahendry.code-runner",
+        "ms-vscode.powershell",
+        "editorconfig.editorconfig"
+    ]
+}
