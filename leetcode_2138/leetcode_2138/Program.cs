@@ -105,7 +105,9 @@ class Program
         string lastGroup = res[res.Count - 1];
         if (lastGroup.Length < k)
         {
+            // 用填充字元補齊
             lastGroup += new string(fill, k - lastGroup.Length);
+            // 更新最後一組
             res[res.Count - 1] = lastGroup;
         }
         // 轉為陣列回傳
