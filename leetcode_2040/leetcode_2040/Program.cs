@@ -17,7 +17,20 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        // 測試資料
+        int[] nums1 = {2, 5};
+        int[] nums2 = {3, 4};
+        long k = 2;
+        // 預期結果：10 (乘積有6個: 2*3=6, 2*4=8, 5*3=15, 5*4=20，排序後第2小是8)
+        var prog = new Program();
+        long result = prog.KthSmallestProduct(nums1, nums2, k);
+        Console.WriteLine($"第{k}小乘積: {result}");
+        // 其他測試
+        int[] nums3 = {-4, -2, 0, 3};
+        int[] nums4 = {2, 4};
+        k = 6;
+        // 預期結果：16
+        Console.WriteLine($"第{k}小乘積: {prog.KthSmallestProduct(nums3, nums4, k)}");
     }
 
 
@@ -33,13 +46,15 @@ class Program
         int n2 = nums2.Length;
         int left = 0;
         int right = n2 - 1;
+        
         // 二分搜尋
         while (left <= right)
         {
             int mid = (left + right) / 2;
             long prod = (long)nums2[mid] * x1;
-            // x1 >= 0 時，nums2[j]*x1 單調遞增，找 <= v 的個數
-            // x1 < 0 時，nums2[j]*x1 單調遞減，找 > v 的個數
+
+            // x1 >= 0 時，nums2[j]*x1 單調遞增(正數 * 正數 = 越來越大)，找 <= v 的個數
+            // x1 < 0 時，nums2[j]*x1 單調遞減(負數 * 正數 = 越來越小)，找 > v 的個數
             if ((x1 >= 0 && prod <= v) || (x1 < 0 && prod > v))
             {
                 left = mid + 1;
@@ -49,6 +64,7 @@ class Program
                 right = mid - 1;
             }
         }
+        
         // x1 >= 0 時，left 為 <= v 的個數
         // x1 < 0 時，n2 - left 為 <= v 的個數
         if (x1 >= 0)
@@ -83,16 +99,19 @@ class Program
     {
         int n1 = nums1.Length;
         long left = -10000000000L, right = 10000000000L;
+
         // 二分搜尋答案
         while (left <= right)
         {
             long mid = (left + right) / 2;
             long count = 0;
+
             // 統計所有 nums1[i] 對應小於等於 mid 的乘積數目
             for (int i = 0; i < n1; i++)
             {
                 count += F(nums2, nums1[i], mid);
             }
+
             if (count < k)
             {
                 left = mid + 1;
