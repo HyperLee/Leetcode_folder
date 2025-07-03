@@ -52,7 +52,7 @@ class Program
     {
         // res 統計經過幾次加一操作
         int res = 0;
-        int t;
+        int t = 0;
         // 反推直到回到第 1 個字元
         while (k != 1)
         {
