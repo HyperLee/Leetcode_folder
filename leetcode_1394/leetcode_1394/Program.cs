@@ -29,9 +29,15 @@ class Program
         Console.WriteLine($"arr3: {p.FindLucky(arr3)}"); // 預期: -1
         Console.WriteLine($"arr4: {p.FindLucky(arr4)}"); // 預期: 7
         Console.WriteLine($"arr5: {p.FindLucky(arr5)}"); // 預期: -1
+        Console.WriteLine($"arr1 (array解): {p.FindLuckyByArray(arr1)}"); // 預期: 2
+        Console.WriteLine($"arr2 (array解): {p.FindLuckyByArray(arr2)}"); // 預期: 3
+        Console.WriteLine($"arr3 (array解): {p.FindLuckyByArray(arr3)}"); // 預期: -1
+        Console.WriteLine($"arr4 (array解): {p.FindLuckyByArray(arr4)}"); // 預期: 7
+        Console.WriteLine($"arr5 (array解): {p.FindLuckyByArray(arr5)}"); // 預期: -1
     }
 
     /// <summary>
+    /// 解法一: Dictionary
     /// 題目解說：
     /// 給定一個整數陣列，找出所有「幸運數」：數值等於其在陣列中出現次數的數字。
     /// 若有多個幸運數，回傳其中最大者；若沒有則回傳 -1。
@@ -76,5 +82,40 @@ class Program
         }
         // 回傳最大幸運數，若無則回傳 -1
         return maxLucky;
+    }
+
+    /// <summary>
+    /// 解法二: 使用陣列
+    /// 題目解說：
+    /// 給定一個整數陣列，找出所有「幸運數」：數值等於其在陣列中出現次數的數字。
+    /// 若有多個幸運數，回傳其中最大者；若沒有則回傳 -1。
+    /// 解題思路：
+    /// 1. 由於題目給定數字範圍有限（1~500），可直接建立一個長度為501的計數陣列。
+    /// 2. 統計每個數字出現次數。
+    /// 3. 從大到小遍歷，若數值等於其出現次數則回傳該數值。
+    /// 4. 若無則回傳 -1。
+    /// </summary>
+    /// <param name="arr">輸入的整數陣列</param>
+    /// <returns>最大幸運數，若無則回傳 -1</returns>
+    public int FindLuckyByArray(int[] arr)
+    {
+        // 建立一個長度為501的計數陣列（題目數字範圍1~500）
+        int[] count = new int[501];
+        // 統計每個數字出現的次數
+        foreach(int num in arr)
+        {
+            count[num]++;
+        }
+
+        // 從大到小遍歷，找出最大且數值等於出現次數的幸運數
+        for(int i = 500; i >= 1; i--)
+        {
+            if(count[i] == i)
+            {
+                return i;
+            }
+        } 
+        // 若無幸運數則回傳 -1
+        return -1;    
     }
 }
