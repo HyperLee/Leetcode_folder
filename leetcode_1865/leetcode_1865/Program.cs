@@ -38,11 +38,11 @@ class Program
 public class FindSumPairs
 {
     // nums1 原始陣列，僅查詢不變動
-    private readonly int[] nums1;
+    private int[] nums1;
     // nums2 陣列，允許被修改
-    private readonly int[] nums2;
+    private int[] nums2;
     // cnt: 哈希表，記錄 nums2 各數字出現次數
-    private readonly Dictionary<int, int> cnt;
+    private Dictionary<int, int> cnt;
 
     /// <summary>
     /// 初始化 FindSumPairs 物件，儲存 nums1、nums2 並建立 nums2 的計數哈希表。
@@ -70,6 +70,7 @@ public class FindSumPairs
 
     /// <summary>
     /// 將 val 加到 nums2[index]，並即時更新哈希表 cnt。
+    /// 若舊值次數減為 0，仍保留 key 但值為 0（可依需求移除）。
     /// </summary>
     /// <param name="index">nums2 的索引</param>
     /// <param name="val">要加的正整數</param>
