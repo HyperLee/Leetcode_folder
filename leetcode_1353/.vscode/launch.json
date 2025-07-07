@@ -1,0 +1,17 @@
+{
+    // 這個檔案定義了 VS Code 的偵錯組態，適用於 .NET/C# 專案
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/leetcode_1353/bin/Debug/net8.0/leetcode_1353.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/leetcode_1353",
+            "stopAtEntry": false,
+            "console": "internalConsole"
+        }
+    ]
+}
