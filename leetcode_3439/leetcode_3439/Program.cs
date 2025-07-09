@@ -38,6 +38,9 @@ class Program
     /// 將 n 個會議分割出 n+1 個空閒時間段，最優策略是合併連續 k+1 個空閒時間段，
     /// 也就是將 k 個會議盡量移動，使 k+1 個空閒區間合併成一段，取得最大長度。
     /// 以滑動視窗計算所有連續 k+1 個空閒區間的總長度，取最大值即為答案。
+    /// 
+    /// ref:https://leetcode.cn/problems/reschedule-meetings-for-maximum-free-time-i/solutions/3061619/zhuan-huan-cheng-ding-chang-hua-dong-chu-1kg1/?envType=daily-question&envId=2025-07-09
+    /// 
     /// </summary>
     /// <param name="eventTime">事件總時長</param>
     /// <param name="k">最多可重新安排的會議數</param>
@@ -47,17 +50,21 @@ class Program
     public int MaxFreeTime(int eventTime, int k, int[] startTime, int[] endTime)
     {
         int ans = 0;
+        // 視窗總和
         int s = 0;
         int n = startTime.Length;
         // 使用滑動視窗，合併連續 k+1 個空閒區間
         for (int i = 0; i <= n; i++)
         {
             s += GetGap(i, eventTime, startTime, endTime);
+            // 當視窗大小小於 k+1 時，無法計算最大空閒時間
+            // 因為需要至少 k+1 個空閒區間來計算
             if (i < k)
             {
                 continue;
             }
             ans = Math.Max(ans, s);
+            // 當視窗大小超過 k+1 時，移除最左側的空閒區間
             s -= GetGap(i - k, eventTime, startTime, endTime);
         }
         return ans;
