@@ -1,0 +1,18 @@
+{
+	"configurations": [
+		{
+			"type": "coreclr",
+			"request": "launch",
+			"name": "Launch .NET Program",
+			"program": "${workspaceFolder}/leetcode_3136/bin/Debug/net8.0/${input:executableName}.dll",
+			"preLaunchTask": "build"
+		}
+	],
+	"inputs": [
+		{
+			"type": "promptString",
+			"id": "executableName",
+			"description": "請輸入要執行的 DLL 名稱 (不含副檔名，例如 leetcode_3136)"
+		}
+	]
+}
