@@ -20,7 +20,17 @@ class Program
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        // 測試資料 1
+        int[] nums1 = { 1, 2, 3, 4 };
+        Console.WriteLine($"Input: [1,2,3,4]  Output: {new Program().MaximumLength(nums1)}");
+
+        // 測試資料 2
+        int[] nums2 = { 1, 2, 1, 1, 2, 1, 2 };
+        Console.WriteLine($"Input: [1,2,1,1,2,1,2]  Output: {new Program().MaximumLength(nums2)}");
+
+        // 測試資料 3
+        int[] nums3 = { 1, 3 };
+        Console.WriteLine($"Input: [1,3]  Output: {new Program().MaximumLength(nums3)}");
     }
 
     /// <summary>
@@ -30,43 +40,27 @@ class Program
     /// <returns>最長有效子序列長度</returns>
     public int MaximumLength(int[] nums)
     {
-        // 根據題意，枚舉起始奇偶性，遍歷 nums，找出最長有效子序列長度
+        // dp[i, p]: 以 nums[i] 結尾，且子序列 parity 為 p 的最長長度
+        // p: 0 或 1，分別代表 (sub[x-2] + sub[x-1]) % 2 == 0 或 1
         if (nums is null || nums.Length == 0)
         {
             return 0;
         }
-        int maxLen = 0;
-        for (int parity = 0; parity <= 1; parity++)
+        int n = nums.Length;
+        int[,] dp = new int[n, 2];
+        int maxLen = 1;
+        for (int i = 0; i < n; i++)
         {
-            int len = 1;
-            int last = nums[0];
-            for (int i = 1; i < nums.Length; i++)
+            // 單一元素子序列，尚未有 parity，初始化為 1
+            dp[i, 0] = 1;
+            dp[i, 1] = 1;
+            for (int j = 0; j < i; j++)
             {
-                if (((last + nums[i]) % 2) == parity)
-                {
-                    len++;
-                    last = nums[i];
-                }
+                int parity = (nums[j] + nums[i]) % 2;
+                // 只有當 j 之前已經有 parity，且 parity 一致時才能延長
+                dp[i, parity] = Math.Max(dp[i, parity], dp[j, parity] + 1);
             }
-            maxLen = Math.Max(maxLen, len);
-        }
-        // 也要考慮從每個起點開始的情況
-        for (int parity = 0; parity <= 1; parity++)
-        {
-            for (int start = 0; start < nums.Length; start++)
-            {
-                int len = 1;
-                int last = nums[start];
-                for (int i = start + 1; i < nums.Length; i++)
-                {
-                    if (((last + nums[i]) % 2) == parity)
-                    {
-                        len++;
-                        last = nums[i];
-                    }
-                }
-                maxLen = Math.Max(maxLen, len);
-            }
+            maxLen = Math.Max(maxLen, Math.Max(dp[i, 0], dp[i, 1]));
         }
         return maxLen;
     }
