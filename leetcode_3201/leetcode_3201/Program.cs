@@ -33,35 +33,56 @@ class Program
         Console.WriteLine($"Input: [1,3]  Output: {new Program().MaximumLength(nums3)}");
     }
 
+ 
     /// <summary>
-    /// 回傳 nums 最長有效子序列的長度。
+    /// 求最長有效子序列長度，解題思路如下：
+    /// 
+    /// 題目要求 (sub[i] + sub[i+1]) % 2 在所有相鄰元素都相等。
+    /// 透過模運算移項可得 (sub[i] - sub[i+2]) % 2 == 0，代表偶數項彼此同餘、奇數項彼此同餘。
+    /// 因此問題等價於：求一個子序列，其偶數位都同餘、奇數位都同餘。
+    /// 
+    /// 本方法採用動態規劃，維護一個二維陣列 f[y, x]，表示最後兩項模 2 分別為 y 和 x 的子序列長度。
+    /// 遍歷 nums，每次根據餘數組合更新最長長度：
+    ///   f[y, x] = f[x, y] + 1
+    /// 最終答案為所有 f[y, x] 的最大值。
+    /// 
+    /// 簡單說我們考慮的就是 (a−c)modk=0, 也就是 a 和 c 的餘數相同。
+    /// 考慮最後兩項時候, 就分別加上奇數或是偶數 idx 的值。
+    /// 也就是因為有加上奇數或偶數 idx 的值，所以 f[y, x] = f[x, y] + 1 => 最終要 + 1 (長度 + 1)
+    /// <example>
+    /// <code>
+    /// int[] nums = { 1, 2, 1, 2, 1, 2 };
+    /// int result = new Program().MaximumLength(nums); // result = 6
+    /// </code>
+    /// </example>
+    /// 參考：
+    /// https://leetcode.cn/problems/find-the-maximum-length-of-valid-subsequence-i/solutions/2826593/deng-jie-zhuan-huan-dong-tai-gui-hua-pyt-7l4b/?envType=daily-question&envId=2025-07-16
+    /// https://leetcode.cn/problems/find-the-maximum-length-of-valid-subsequence-ii/solutions/2826591/deng-jie-zhuan-huan-dong-tai-gui-hua-pyt-z2fs/
     /// </summary>
     /// <param name="nums">整數陣列</param>
     /// <returns>最長有效子序列長度</returns>
     public int MaximumLength(int[] nums)
     {
-        // dp[i, p]: 以 nums[i] 結尾，且子序列 parity 為 p 的最長長度
-        // p: 0 或 1，分別代表 (sub[x-2] + sub[x-1]) % 2 == 0 或 1
+        int k = 2; // 只考慮餘數 0 和 1
         if (nums is null || nums.Length == 0)
         {
+            // 邊界檢查，空陣列直接回傳 0
             return 0;
         }
-        int n = nums.Length;
-        int[,] dp = new int[n, 2];
-        int maxLen = 1;
-        for (int i = 0; i < n; i++)
+        int ans = 0; // 最終答案
+        int[,] f = new int[k, k]; // f[y, x]: 最後兩項模 k 分別為 y 和 x 的子序列長度
+        foreach (var num in nums)
         {
-            // 單一元素子序列，尚未有 parity，初始化為 1
-            dp[i, 0] = 1;
-            dp[i, 1] = 1;
-            for (int j = 0; j < i; j++)
+            int x = num % k; // 取得目前元素的模 k
+            for (int y = 0; y < k; y++)
             {
-                int parity = (nums[j] + nums[i]) % 2;
-                // 只有當 j 之前已經有 parity，且 parity 一致時才能延長
-                dp[i, parity] = Math.Max(dp[i, parity], dp[j, parity] + 1);
+                // 動態規劃轉移：在「最後兩項模 k 分別為 x 和 y」的子序列末尾加上 num
+                // 得到「最後兩項模 k 分別為 y 和 x」的子序列長度
+                f[y, x] = f[x, y] + 1;
+                ans = Math.Max(ans, f[y, x]); // 更新最長長度
             }
-            maxLen = Math.Max(maxLen, Math.Max(dp[i, 0], dp[i, 1]));
         }
-        return maxLen;
+        // 最長有效子序列長度
+        return ans;
     }
 }
