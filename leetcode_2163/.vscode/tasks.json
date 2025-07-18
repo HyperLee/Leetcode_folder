@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "command": "dotnet",
+      "type": "process",
+      "args": [
+        "build",
+        "${workspaceFolder}/leetcode_2163/leetcode_2163.csproj"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}
