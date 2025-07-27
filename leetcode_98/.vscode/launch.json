@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "coreclr",
+      "request": "launch",
+      "name": "Launch .NET Program",
+      "program": "${workspaceFolder}/leetcode_98/bin/Debug/net8.0/leetcode_98.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_98",
+      "stopAtEntry": false,
+      "preLaunchTask": "build"
+    }
+  ]
+}
