@@ -63,13 +63,9 @@ class Program
         // 從第二個到倒數第二個，判斷是否為峰或谷
         for (int i = 1; i < filtered.Count - 1; i++)
         {
-            // 判斷「峰」：左鄰居 < 當前 > 右鄰居
-            if (filtered[i] > filtered[i - 1] && filtered[i] > filtered[i + 1])
-            {
-                res++;
-            }
-            // 判斷「谷」：左鄰居 > 當前 < 右鄰居
-            else if (filtered[i] < filtered[i - 1] && filtered[i] < filtered[i + 1])
+            // 一次判斷「峰」或「谷」：左鄰居 < 當前 > 右鄰居 或 左鄰居 > 當前 < 右鄰居
+            if ((filtered[i] > filtered[i - 1] && filtered[i] > filtered[i + 1]) ||
+                (filtered[i] < filtered[i - 1] && filtered[i] < filtered[i + 1]))
             {
                 res++;
             }

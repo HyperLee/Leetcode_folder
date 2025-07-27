@@ -21,8 +21,7 @@
    - 題目規定相鄰且相等的元素屬於同一個峰或谷，因此只保留每段連續相同元素的第一個。
    - 例如：`[1,1,2,2,1,1]` 去重後為 `[1,2,1]`。
 2. **判斷峰與谷**：
-   - 峰：`filtered[i-1] < filtered[i] > filtered[i+1]`
-   - 谷：`filtered[i-1] > filtered[i] < filtered[i+1]`
+   - 只需一次判斷：`(filtered[i-1] < filtered[i] > filtered[i+1]) || (filtered[i-1] > filtered[i] < filtered[i+1])`
    - 只統計左右都有不相等鄰居的元素（即不包含頭尾）。
 
 ### 實作細節
@@ -45,13 +44,9 @@ public int CountHillValley(int[] nums)
     // 從第二個到倒數第二個，判斷是否為峰或谷
     for (int i = 1; i < filtered.Count - 1; i++)
     {
-        // 判斷「峰」：左鄰居 < 當前 > 右鄰居
-        if (filtered[i] > filtered[i - 1] && filtered[i] > filtered[i + 1])
-        {
-            res++;
-        }
-        // 判斷「谷」：左鄰居 > 當前 < 右鄰居
-        else if (filtered[i] < filtered[i - 1] && filtered[i] < filtered[i + 1])
+        // 一次判斷「峰」或「谷」：左鄰居 < 當前 > 右鄰居 或 左鄰居 > 當前 < 右鄰居
+        if ((filtered[i] > filtered[i - 1] && filtered[i] > filtered[i + 1]) ||
+            (filtered[i] < filtered[i - 1] && filtered[i] < filtered[i + 1]))
         {
             res++;
         }
