@@ -9,6 +9,17 @@
         /// https://leetcode.cn/problems/min-stack/description/
         /// 
         /// 在 C# 中，Stack<T> 是一種 後進先出（LIFO, Last-In-First-Out） 的資料結構，類似於現實中的疊盤子，最後放上去的物品會最先被取出。
+        /// 
+        /// Leetcode 155. Min Stack 最小堆疊
+        /// 設計一個支援 push、pop、top 及在常數時間內取得最小元素的堆疊。
+        /// 
+        /// 實作 MinStack 類別：
+        /// MinStack() 建立堆疊物件。
+        /// void Push(int val) 將元素 val 推入堆疊。
+        /// void Pop() 移除堆疊頂端元素。
+        /// int Top() 取得堆疊頂端元素。
+        /// int GetMin() 取得堆疊中的最小元素。
+        /// 所有操作必須為 O(1) 時間複雜度。
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -50,8 +61,8 @@
     /// </summary>
     public class MinStack
     {
-        private Stack<int> stack;      // Main stack for values
-        private Stack<int> minStack;   // Stack to track minimums
+        private readonly Stack<int> stack;      // Main stack for values
+        private readonly Stack<int> minStack;   // Stack to track minimums
 
         /// <summary>
         /// initialize your data structure here.
@@ -110,11 +121,7 @@
         /// <returns></returns>
         public int Top()
         {
-            if (stack.Count > 0)
-            {
-                return stack.Peek();
-            }
-            throw new InvalidOperationException("stack is empty");
+            return stack.Peek();
         }
 
 
@@ -127,11 +134,7 @@
         /// <returns></returns>
         public int GetMin()
         {
-            if (minStack.Count > 0)
-            {
-                return minStack.Peek();
-            }
-            throw new InvalidOperationException("minStack is empty");
+            return minStack.Peek();
         }
     }
 
