@@ -1,0 +1,13 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "coreclr",
+			"request": "launch",
+			"name": "Launch leetcode_898",
+			"program": "${workspaceFolder}/leetcode_898/bin/Debug/net8.0/leetcode_898.dll",
+			"cwd": "${workspaceFolder}/leetcode_898",
+			"preLaunchTask": "build"
+		}
+	]
+}
