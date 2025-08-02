@@ -51,7 +51,7 @@ class Program
     /// <returns>最小交換成本，若無法重排則回傳 -1</returns>
     public long MinCost(int[] basket1, int[] basket2)
     {
-        // 統計每個數字的總出現次數，basket1 count++，basket2 count--
+        // 統計每個數字的總出現次數，並直接產生 extra1/extra2
         var count = new Dictionary<int, int>();
         foreach (var num in basket1)
         {
@@ -63,41 +63,26 @@ class Program
             count.TryGetValue(num, out var val);
             count[num] = val - 1;
         }
-        // 若有任何數字出現次數為奇數（非 0），無法重排
+
+        var extra1 = new List<int>(); // basket1 多出來要換出去的
+        var extra2 = new List<int>(); // basket2 多出來要換進來的
         foreach (var kv in count)
         {
+            // 若有任何數字出現次數為奇數（非 0），無法重排
             if (kv.Value % 2 != 0)
             {
                 return -1;
             }
-        }
-
-        // 計算 basket1、basket2 多出來的部分
-        var extra1 = new List<int>(); // basket1 多出來要換出去的
-        var extra2 = new List<int>(); // basket2 多出來要換進來的
-        var freq1 = new Dictionary<int, int>();
-        var freq2 = new Dictionary<int, int>();
-        foreach (var num in basket1)
-        {
-            freq1.TryGetValue(num, out var val);
-            freq1[num] = val + 1;
-        }
-        foreach (var num in basket2)
-        {
-            freq2.TryGetValue(num, out var val);
-            freq2[num] = val + 1;
-        }
-        foreach (var kv in count)
-        {
-            int num = kv.Key;
-            int diff = (freq1.GetValueOrDefault(num) - freq2.GetValueOrDefault(num)) / 2;
-            if (diff > 0)
+            // value > 0: basket1 多出來的
+            // value < 0: basket2 多出來的
+            int half = Math.Abs(kv.Value) / 2;
+            if (kv.Value > 0)
             {
-                for (int i = 0; i < diff; i++) extra1.Add(num);
+                for (int i = 0; i < half; i++) extra1.Add(kv.Key);
             }
-            else if (diff < 0)
+            else if (kv.Value < 0)
             {
-                for (int i = 0; i < -diff; i++) extra2.Add(num);
+                for (int i = 0; i < half; i++) extra2.Add(kv.Key);
             }
         }
 
