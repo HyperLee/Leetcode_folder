@@ -51,7 +51,7 @@ class Program
     /// <returns>最小交換成本，若無法重排則回傳 -1</returns>
     public long MinCost(int[] basket1, int[] basket2)
     {
-        // 統計每個數字的總出現次數
+        // 統計每個數字的總出現次數，basket1 count++，basket2 count--
         var count = new Dictionary<int, int>();
         foreach (var num in basket1)
         {
@@ -61,10 +61,9 @@ class Program
         foreach (var num in basket2)
         {
             count.TryGetValue(num, out var val);
-            count[num] = val + 1;
+            count[num] = val - 1;
         }
-
-        // 若有任何數字出現次數為奇數，無法重排
+        // 若有任何數字出現次數為奇數（非 0），無法重排
         foreach (var kv in count)
         {
             if (kv.Value % 2 != 0)
