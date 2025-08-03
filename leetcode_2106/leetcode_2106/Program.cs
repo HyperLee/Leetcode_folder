@@ -134,16 +134,19 @@ class Program
         int sum = 0;
         int ans = 0;
         // 每次固定住視窗右邊界
+        // 右邊界從 0 開始，直到 n; 遍歷右邊界
         while (right < n)
         {
             sum += fruits[right][1];
             // 動態調整左邊界，直到步數不超過 k
+            // 滑動視窗右移動, 左邊界扣除縮小水果數量
             while (left <= right && Step(fruits, startPos, left, right) > k)
             {
                 sum -= fruits[left][1];
                 left++;
             }
             ans = Math.Max(ans, sum);
+            // 右邊界向右移動
             right++;
         }
         return ans;
