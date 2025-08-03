@@ -53,35 +53,38 @@ class Program
         }
 
         int res = 0;
-        // 先往左再往右
+        // 先往左再往右（滑動視窗）
+        int right = 0;
         for (int left = 0; left < n; left++)
         {
-            // 從 left 出發，往右能走到的最遠位置
-            int lPos = fruits[left][0];
-            // 最多能往右走的距離
-            int remain = k - Math.Abs(startPos - lPos);
-            if (remain < 0) continue;
-            // 右邊界：最多能走 remain 步，找最遠能到的 right
-            int right = left;
-            while (right + 1 < n && Math.Min(Math.Abs(startPos - fruits[left][0]), Math.Abs(startPos - fruits[right + 1][0])) + fruits[right + 1][0] - fruits[left][0] <= k)
+            // 移動 right，直到步數超過 k
+            while (right < n &&
+                Math.Min(Math.Abs(startPos - fruits[left][0]), Math.Abs(startPos - fruits[right][0])) + fruits[right][0] - fruits[left][0] <= k)
             {
                 right++;
             }
-            // 計算區間水果總數
-            res = Math.Max(res, prefix[right + 1] - prefix[left]);
-        }
-        // 先往右再往左
-        for (int right = 0; right < n; right++)
-        {
-            int rPos = fruits[right][0];
-            int remain = k - Math.Abs(startPos - rPos);
-            if (remain < 0) continue;
-            int left = right;
-            while (left - 1 >= 0 && Math.Min(Math.Abs(startPos - fruits[right][0]), Math.Abs(startPos - fruits[left - 1][0])) + fruits[right][0] - fruits[left - 1][0] <= k)
+            // right 指向第一個不合法的位置，區間 [left, right-1] 合法
+            if (right > left)
             {
-                left--;
+                res = Math.Max(res, prefix[right] - prefix[left]);
             }
-            res = Math.Max(res, prefix[right + 1] - prefix[left]);
+        }
+
+        // 先往右再往左（滑動視窗）
+        int left2 = 0;
+        for (int right2 = 0; right2 < n; right2++)
+        {
+            // 移動 left2，直到步數超過 k
+            while (left2 <= right2 &&
+                Math.Min(Math.Abs(startPos - fruits[left2][0]), Math.Abs(startPos - fruits[right2][0])) + fruits[right2][0] - fruits[left2][0] > k)
+            {
+                left2++;
+            }
+            // left2~right2 合法
+            if (left2 <= right2)
+            {
+                res = Math.Max(res, prefix[right2 + 1] - prefix[left2]);
+            }
         }
         return res;
     }
