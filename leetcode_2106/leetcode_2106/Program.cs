@@ -24,7 +24,21 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        // 測試資料
+        int[][] fruits = new int[][] {
+            new int[] {2, 8},
+            new int[] {6, 3},
+            new int[] {9, 5}
+        };
+        int startPos = 5;
+        int k = 4;
+
+        var solution = new Program();
+        int res1 = solution.MaxTotalFruits(fruits, startPos, k);
+        int res2 = solution.MaxTotalFruits2(fruits, startPos, k);
+
+        Console.WriteLine($"解法一（滑動視窗+前綴和）：最多可收穫水果數 = {res1}");
+        Console.WriteLine($"解法二（滑動視窗+動態步數）：最多可收穫水果數 = {res2}");
     }
 
     /// <summary>
@@ -87,5 +101,80 @@ class Program
             }
         }
         return res;
+    }
+
+    /// <summary>
+    /// 解法二：滑動視窗 + 動態步數計算
+    /// 
+    /// 思路與算法：
+    /// 假設已知區間 [left, right]，從起點 startPos 出發，最少需要多少步才能遍歷該區間？
+    /// 分三種情況：
+    /// 1. 區間在 startPos 左側：step = startPos - left
+    /// 2. 區間在 startPos 右側：step = right - startPos
+    /// 3. startPos 在區間內：
+    ///    - 先往左再往右：step = (startPos - left) + (right - left)
+    ///    - 先往右再往左：step = (right - startPos) + (right - left)
+    ///    - 綜合公式：step = (right - left) + min(|right - startPos|, |startPos - left|)
+    /// 
+    /// 隨著 left 減小，step 可能會減小但不會增大，因此可用滑動視窗遍歷所有合法區間，
+    /// 找到區間內水果數最大值。
+    /// 
+    /// ref:https://leetcode.cn/problems/maximum-fruits-harvested-after-at-most-k-steps/solutions/2254268/zhai-shui-guo-by-leetcode-solution-4j9v/?envType=daily-question&envId=2025-08-03
+    /// 
+    /// </summary>
+    /// <param name="fruits">已排序的水果位置與數量陣列</param>
+    /// <param name="startPos">起始位置</param>
+    /// <param name="k">最多可走步數</param>
+    /// <returns>可收穫的最多水果總數</returns>
+    public int MaxTotalFruits2(int[][] fruits, int startPos, int k)
+    {
+        int left = 0;
+        int right = 0;
+        int n = fruits.Length;
+        int sum = 0;
+        int ans = 0;
+        // 每次固定住視窗右邊界
+        while (right < n)
+        {
+            sum += fruits[right][1];
+            // 動態調整左邊界，直到步數不超過 k
+            while (left <= right && Step(fruits, startPos, left, right) > k)
+            {
+                sum -= fruits[left][1];
+                left++;
+            }
+            ans = Math.Max(ans, sum);
+            right++;
+        }
+        return ans;
+    }
+
+    /// <summary>
+    /// 計算從 startPos 覆蓋區間 [left, right] 的最小步數。
+    /// step(left, right) = (fruits[right][0] - fruits[left][0]) + min(|fruits[right][0] - startPos|, |startPos - fruits[left][0]|)
+    /// </summary>
+    /// <param name="fruits">水果位置與數量陣列</param>
+    /// <param name="startPos">起始位置</param>
+    /// <param name="left">區間左端點</param>
+    /// <param name="right">區間右端點</param>
+    /// <returns>最小步數</returns>
+    private int Step(int[][] fruits, int startPos, int left, int right)
+    {
+        if (fruits[right][0] <= startPos)
+        {
+            // 區間全在左側，直接往左
+            return startPos - fruits[left][0];
+        }
+        else if (fruits[left][0] >= startPos)
+        {
+            // 區間全在右側，直接往右
+            return fruits[right][0] - startPos;
+        }
+        else
+        {
+            // 區間跨越 startPos，取最小步數
+            // step = (right - left) + min(|right - startPos|, |startPos - left|)
+            return (fruits[right][0] - fruits[left][0]) + Math.Min(Math.Abs(fruits[right][0] - startPos), Math.Abs(startPos - fruits[left][0]));
+        }
     }
 }
