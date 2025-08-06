@@ -3,6 +3,7 @@ root = true
 # All files
 [*]
 indent_style = space
+insert_final_newline = true
 
 # Xml files
 [*.xml]
@@ -19,7 +20,6 @@ tab_width = 4
 
 # New line preferences
 end_of_line = crlf
-insert_final_newline = false
 
 #### .NET Coding Conventions ####
 [*.{cs,vb}]
@@ -361,4 +361,8 @@ dotnet_naming_style.s_camelcase.required_prefix = s_
 dotnet_naming_style.s_camelcase.required_suffix = 
 dotnet_naming_style.s_camelcase.word_separator = 
 dotnet_naming_style.s_camelcase.capitalization = camel_case
+
+# 設定預設字元集為 UTF-8-bom
+[*.{cs, csx, vb, vbx, txt, htnl, css, js, json, yml, yaml, xml, config, ini, sh, ps1, psm1, ps1mxl, csproj, sln, gitignore, gitattributes, editorconfig, md, markdown, txt, asciidoc, adoc, asc, asciidoc, txt, ipynb, py}]
+charset = utf-8-bom
 
