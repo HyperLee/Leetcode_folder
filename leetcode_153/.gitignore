@@ -482,3 +482,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# 強制忽略 leetcode_153 專案內的 bin/ 與 obj/ 目錄
+leetcode_153/bin/
+leetcode_153/obj/

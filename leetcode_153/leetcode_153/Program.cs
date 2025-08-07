@@ -1,4 +1,6 @@
-﻿namespace leetcode_153;
+﻿using System.Linq;
+
+namespace leetcode_153;
 
 class Program
 {
@@ -13,7 +15,6 @@ class Program
     static void Main(string[] args)
     {
         Program solution = new Program();
-        
         // 測試案例
         int[][] testCases = new int[][]
         {
@@ -28,7 +29,10 @@ class Program
         {
             int result = solution.FindMin(testCases[i]);
             Console.WriteLine($"測試案例 {i + 1}: [{string.Join(", ", testCases[i])}]");
-            Console.WriteLine($"最小值為: {result}\n");
+            Console.WriteLine($"[解法一] 二分法 最小值為: {result}\n");
+            // 解法二：直接用 LINQ Min()
+            int resultLinq = solution.FindMinLinq(testCases[i]);
+            Console.WriteLine($"[解法二] LINQ Min() 最小值為: {resultLinq}\n");
         }
     }
 
@@ -64,11 +68,24 @@ class Program
             // 代表最小值在左半部（包含中間值），將右邊界移到中間值
             else
             {
+                // 縮小邊界範圍, 靠近左邊界
                 right = mid;
             }
         }
         
         // 當左右邊界相遇時，即找到最小值
         return nums[left];
+    }
+
+    /// <summary>
+    /// 解法二：直接使用 LINQ Min() 找出陣列中的最小值。
+    /// 此方法時間複雜度為 O(n)，效能較差，僅適合一般找最小值需求，
+    /// 不適合用於練習二分搜尋法或 LeetCode O(log n) 題型。
+    /// </summary>
+    /// <param name="nums">任意整數陣列</param>
+    /// <returns>陣列中的最小值</returns>
+    public int FindMinLinq(int[] nums)
+    {
+        return nums.Min();
     }
 }
