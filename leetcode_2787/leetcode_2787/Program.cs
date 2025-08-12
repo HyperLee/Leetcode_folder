@@ -19,20 +19,20 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-    // 測試資料
-    var program = new Program();
-    int n1 = 10, x1 = 2;
-    int n2 = 160, x2 = 3;
-    int n3 = 100, x3 = 2;
+        // 測試資料
+        var program = new Program();
+        int n1 = 10, x1 = 2;
+        int n2 = 160, x2 = 3;
+        int n3 = 100, x3 = 2;
 
-    Console.WriteLine($"NumberOfWays(n={n1}, x={x1}) = {program.NumberOfWays(n1, x1)}"); // 預期: 1
-    Console.WriteLine($"NumberOfWays2(n={n1}, x={x1}) = {program.NumberOfWays2(n1, x1)}");
+        Console.WriteLine($"NumberOfWays(n={n1}, x={x1}) = {program.NumberOfWays(n1, x1)}"); // 預期: 1
+        Console.WriteLine($"NumberOfWays2(n={n1}, x={x1}) = {program.NumberOfWays2(n1, x1)}");
 
-    Console.WriteLine($"NumberOfWays(n={n2}, x={x2}) = {program.NumberOfWays(n2, x2)}"); // 範例: 2^3+3^3+5^3
-    Console.WriteLine($"NumberOfWays2(n={n2}, x={x2}) = {program.NumberOfWays2(n2, x2)}");
+        Console.WriteLine($"NumberOfWays(n={n2}, x={x2}) = {program.NumberOfWays(n2, x2)}"); // 範例: 2^3+3^3+5^3
+        Console.WriteLine($"NumberOfWays2(n={n2}, x={x2}) = {program.NumberOfWays2(n2, x2)}");
 
-    Console.WriteLine($"NumberOfWays(n={n3}, x={x3}) = {program.NumberOfWays(n3, x3)}");
-    Console.WriteLine($"NumberOfWays2(n={n3}, x={x3}) = {program.NumberOfWays2(n3, x3)}");
+        Console.WriteLine($"NumberOfWays(n={n3}, x={x3}) = {program.NumberOfWays(n3, x3)}");
+        Console.WriteLine($"NumberOfWays2(n={n3}, x={x3}) = {program.NumberOfWays2(n3, x3)}");
     }
 
 
@@ -127,5 +127,52 @@ class Program
         }
         // 回傳將 n 表示為若干個不同正整數的 x 次冪之和的方案數
         return (int)dp[n, n];
+    }
+
+
+    /// <summary>
+    /// 空間優化版動態規劃：計算將 n 表示為若干個不同正整數的 x 次冪之和的方案數。
+    /// 
+    /// 解題說明：
+    /// 本質為 0-1 背包問題，將 n 視為背包容量，[1^x, 2^x, 3^x, ...] 視為物品。
+    /// 空間優化：
+    ///   - 設 dp[j] 表示使用若干個互不相同的數，其 x 次冪的和為 j 的方案數。
+    ///   - 當嘗試加入數字 i 時，若 j >= i^x，則 dp[j] = dp[j] + dp[j - i^x]。
+    ///   - 需倒序枚舉 j，確保每個數字只被選一次（0-1 背包特性）。
+    ///   - 最終 dp[n] 即為答案。
+    /// 
+    /// <example>
+    /// <code>
+    /// NumberOfWays3(10, 2) // 回傳 1
+    /// NumberOfWays3(160, 3) // 回傳 1 (例如 2^3+3^3+5^3)
+    /// </code>
+    /// </example>
+    /// </summary>
+    /// <param name="n">目標數字</param>
+    /// <param name="x">冪次</param>
+    /// <returns>方案數 (取模 10^9+7)</returns>
+    public int NumberOfWays3(int n, int x)
+    {
+        const int MOD = 1000000007; // 取模常數
+        long[] dp = new long[n + 1]; // dp[j]: 和為 j 的方案數
+        dp[0] = 1; // 初始狀態：和為 0 的方案數為 1
+
+        // 枚舉所有可選數字 i
+        for (int i = 1; i <= n; i++)
+        {
+            int val = (int)Math.Pow(i, x); // 當前數字的 x 次冪
+            if (val > n)
+            {
+                break; // 若 i^x 已超過 n，後續無需再考慮
+            }
+            // 倒序枚舉 j，確保每個數字只被選一次（0-1 背包）
+            for (int j = n; j >= val; j--)
+            {
+                // 狀態轉移：若 j >= val，則可由 j-val 狀態轉移而來
+                dp[j] = (dp[j] + dp[j - val]) % MOD;
+            }
+        }
+        // 回傳將 n 表示為若干個不同正整數的 x 次冪之和的方案數
+        return (int)dp[n];
     }
 }
