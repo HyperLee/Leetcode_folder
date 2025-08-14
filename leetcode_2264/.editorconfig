@@ -3,6 +3,7 @@ root = true
 # All files
 [*]
 indent_style = space
+insert_final_newline = true
 
 # Xml files
 [*.xml]
@@ -361,4 +362,10 @@ dotnet_naming_style.s_camelcase.required_prefix = s_
 dotnet_naming_style.s_camelcase.required_suffix = 
 dotnet_naming_style.s_camelcase.word_separator = 
 dotnet_naming_style.s_camelcase.capitalization = camel_case
+
+# 合併：在專案範圍強制插入最後換行並設定檔案預設字元集
+[*.{cs,csx,vb,vbx,txt,html,css,js,json,yml,yaml,xml,config,ini,sh,
+ps1,psm1,csproj,sln,gitignore,gitattributes,editorconfig,md,markdown,asciidoc,adoc,asc,ipynb,py}]
+insert_final_newline = true
+charset = utf-8-bom
 
