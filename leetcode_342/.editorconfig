@@ -4,6 +4,9 @@ root = true
 [*]
 indent_style = space
 
+# Ensure files end with a newline by default
+insert_final_newline = true
+
 # Xml files
 [*.xml]
 indent_size = 2
@@ -170,6 +173,12 @@ csharp_space_between_square_brackets = false
 # Wrapping preferences
 csharp_preserve_single_line_blocks = true
 csharp_preserve_single_line_statements = true
+
+# Force charset to UTF-8 with BOM for a wide set of text/code files
+[*.{cs, csx, vb, vbx, txt, html, css, js, json, yml, yaml, xml, config, ini, sh,
+ps1, psm1, ps1mxl, csproj, sln, gitignore, gitattributes,
+editorconfig, md, markdown, txt, asciidoc, adoc, asc, asciidoc, txt, ipynb, py}]
+charset = utf-8-bom
 
 #### Naming styles ####
 [*.{cs,vb}]
