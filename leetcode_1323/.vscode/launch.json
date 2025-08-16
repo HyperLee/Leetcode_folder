@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch leetcode_1323 (.NET)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_1323/bin/Debug/net8.0/leetcode_1323.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_1323",
+      "stopAtEntry": false
+    }
+  ]
+}
