@@ -18,13 +18,21 @@ class Program
     static void Main(string[] args)
     {
         // 測試資料
-        int[] tests = new int[] {9669, 9996, 9999, 6666, 6, 9};
+        int[] tests = new int[] { 9669, 9996, 9999, 6666, 6, 9 };
 
         var p = new Program();
+        Console.WriteLine("--- 方法一（字串處理） ---");
         foreach (var t in tests)
         {
             int result = p.Maximum69Number(t);
             Console.WriteLine($"輸入: {t} -> 最大值: {result}");
+        }
+
+        Console.WriteLine("--- 方法二（數學運算） ---");
+        foreach (var t in tests)
+        {
+            int result2 = p.Maximum69Number2(t);
+            Console.WriteLine($"輸入: {t} -> 最大值: {result2}");
         }
     }
 
@@ -60,4 +68,46 @@ class Program
         // 將修改後的字元陣列轉回整數並回傳
         return int.Parse(new string(digits));
     }
+
+
+    /// <summary>
+    /// <summary>
+    /// 另一種解法：數學運算
+    /// 解題說明：
+    /// 不需將數字轉為字串，直接用數學方式遍歷每個數位。
+    /// 從最低位（個位）開始，每次取 num % 10 得到當前位數，num /= 10 去掉最低位。
+    /// 用 base 變數記錄目前位數（1, 10, 100...），每遇到 6 就更新 maxBase。
+    /// 最終 maxBase 即最高位的 6 所在的 base。
+    /// 回傳 num + maxBase * 3，即將最高位的 6 換成 9。
+    /// 最後 * 3 是因為將 6 變為 9 相當於增加了 3 倍的 base 值。
+    /// <example>
+    /// <code>
+    /// Maximum69Number2(9669) // 回傳 9969
+    /// Maximum69Number2(9999) // 回傳 9999
+    /// </code>
+    /// </example>
+    /// </summary>
+    /// <param name="num">只包含 6 和 9 的正整數</param>
+    /// <returns>最大可能值</returns>
+    public int Maximum69Number2(int num)
+    {
+        int maxBase = 0; // 記錄最高位的 6 的 base
+        int baseValue = 1; // 當前位數（1, 10, 100...）
+        for (int x = num; x > 0; x /= 10)
+        {
+            // 取最低位
+            int digit = x % 10;
+            // 若該位為 6，更新 maxBase
+            if (digit == 6)
+            {
+                maxBase = baseValue;
+            }
+            // baseValue 進位
+            baseValue *= 10;
+        }
+        // 若有 6，將最高位的 6 換成 9，num + maxBase * 3
+        // 若沒有 6，maxBase 為 0，直接回傳原數
+        return num + maxBase * 3;
+    }
+
 }
