@@ -34,6 +34,12 @@ class Program
     /// 當 i < k，需等概率抽取 [1, maxPts]，狀態轉移：
     /// dp[i] = (dp[i+1] + dp[i+2] + ... + dp[i+maxPts]) / maxPts。
     /// 利用滑動窗口優化計算。
+    /// 
+    /// ref:
+    /// https://leetcode.cn/problems/new-21-game/solutions/3755107/hua-dong-chuang-kou-you-hua-dpjian-ji-xi-lybl/?envType=daily-question&envId=2025-08-17
+    /// https://leetcode.cn/problems/new-21-game/solutions/273085/huan-you-bi-zhe-geng-jian-dan-de-ti-jie-ma-tian-ge/?envType=daily-question&envId=2025-08-17
+    /// https://leetcode.cn/problems/new-21-game/solutions/272858/zen-yang-de-dao-guan-fang-ti-jie-zhong-de-zhuang-t/?envType=daily-question&envId=2025-08-17
+    /// 
     /// <example>
     /// <code>
     /// var prob = New21Game(21, 17, 10); // 機率約 0.73278
