@@ -67,3 +67,18 @@
 ---
 
 如果要我再同時 建立 一份英文版 README 或把這份內容加入專案的說明文件（例如 `.github`），我可以繼續協助。
+
+## 替代實作：滑動視窗（ZeroFilledSubarray2）
+
+專案中另外提供 `ZeroFilledSubarray2` 作為替代實作，使用「枚舉右端點 + 記錄最近非0 索引 last」的滑動視窗思路：當右端點為 i 時，若 nums[i] == 0，則以 i 為右端點的全0 子陣列數量為 i - last（last 為最近一個非0 的索引，初始化為 -1）。時間複雜度同樣為 O(n)，空間 O(1)。
+
+注意：`ZeroFilledSubarray` 會對 null 輸入拋出 `ArgumentNullException`；`ZeroFilledSubarray2` 在程式中未額外做 null 檢查，呼叫時請確保參數非 null（或可在呼叫前自行檢查）。
+
+要在本機執行範例：
+
+```bash
+dotnet build /Users/qiuzili/Leetcode/Leetcode_folder/leetcode_2348/leetcode_2348.csproj
+dotnet run --project /Users/qiuzili/Leetcode/Leetcode_folder/leetcode_2348/leetcode_2348.csproj
+```
+
+執行後 `Program.Main` 會印出每個測試案例的 `ZeroFilledSubarray` 與 `ZeroFilledSubarray2` 的結果，便於比較與驗證。

@@ -28,8 +28,9 @@ class Program
         {
             var input = tests[i];
             var repr = input.Length == 0 ? "" : string.Join(",", input);
-            var ans = program.ZeroFilledSubarray(input);
-            Console.WriteLine($"Test {i + 1}: [{repr}] => {ans}");
+            var ans1 = program.ZeroFilledSubarray(input);
+            var ans2 = program.ZeroFilledSubarray2(input);
+            Console.WriteLine($"Test {i + 1}: [{repr}] => ZeroFilledSubarray: {ans1}, ZeroFilledSubarray2: {ans2}");
         }
 
         // 示範 null 輸入會拋出 ArgumentNullException
@@ -97,6 +98,51 @@ class Program
             {
                 // 遇到非0，重置連續 0 的計數
                 count = 0;
+            }
+        }
+
+        return res;
+    }
+
+    /// <summary>
+    /// 使用「滑動視窗（枚舉右端點）」的技巧計算全0 子陣列的總數。
+    ///
+    /// 解題說明：
+    /// - 維護變數 last 為最近一個非 0 元素的索引；若尚未遇到非0，則 last = -1。
+    /// - 當枚舉子陣列的右端點為 i 時，所有以 i 為右端點且全為 0 的子陣列，
+    ///   左端點可以是 last+1, last+2, ..., i，共有 i - last 個；因此每次把 i - last 加到答案。
+    /// - 這屬於「越短越合法」型的滑動視窗：右端點增加時，左端點（由 last 控制）只會向右移動或不變。
+    ///
+    /// 複雜度：時間 O(n)，額外記憶體 O(1)。
+    /// 
+    /// ref:
+    /// https://leetcode.cn/problems/number-of-zero-filled-subarrays/solutions/1693356/by-endlesscheng-men8/?envType=daily-question&envId=2025-08-19
+    /// </summary>
+    /// <param name="nums">輸入整數陣列；呼叫端應保證非 null（此方法不做參數 null 檢查以維持行為一致）。</param>
+    /// <returns>所有全0 子陣列的總數（long，避免溢位）。</returns>
+    public long ZeroFilledSubarray2(int[] nums)
+    {
+        // 最終答案：所有以各個右端點為終點的全 0 子陣列數量總和
+        long res = 0;
+
+        // last = 最近一個非 0 元素的索引；初始化為 -1，代表目前還沒遇到非 0（方便處理陣列開頭為 0 的情況）
+        int last = -1;
+
+        // 枚舉右端點 i
+        for (int i = 0; i < nums.Length; i++)
+        {
+            int x = nums[i];
+
+            if (x != 0)
+            {
+                // 遇到非 0，更新最近非0 的位置為當前索引 i
+                last = i;
+            }
+            else
+            {
+                // 當 nums[i] == 0 時，以 i 為右端點的合法全 0 子陣列數量為 i - last
+                // （左端點可以從 last+1 到 i，共 i-last 種選法）
+                res += i - last;
             }
         }
 
