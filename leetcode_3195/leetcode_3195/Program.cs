@@ -78,7 +78,7 @@ class Program
     {
     var runner = new Program();
     int actual1 = runner.MinimumArea(grid);
-    int actual2 = runner.MinimumAreaBinary(grid);
+    int actual2 = runner.MinimumArea2(grid);
     string status1 = actual1 == expected ? "PASS" : "FAIL";
     string status2 = actual2 == expected ? "PASS" : "FAIL";
     Console.WriteLine($"{name}: expected={expected}, MinimumArea={actual1} => {status1}, MinimumAreaBinary={actual2} => {status2}");
@@ -140,10 +140,20 @@ class Program
     }
 
     /// <summary>
-    /// 
+    /// 計算包含所有 1 的最小軸平行矩形面積（四次掃描版本）。
+    ///
+    /// 解題說明：如果我們將單次完整掃描展開為四次掃描（從上、下、左、右各掃描一次），
+    /// 分別找到第一個/最後一個出現 1 的列與欄索引（top, bottom, left, right）。
+    /// 找到每個邊界後立即 break 退出該方向的搜尋，可避免不必要的中間搜尋；
+    /// 對於稀疏矩陣或能較早定位邊界的情況，通常會比單次完整掃描更快。
+    ///
+    /// 時間複雜度：最壞情況仍為 O(n * m)，但每個方向可以提前退出。
+    /// 空間複雜度：O(1)。
+    ///
+    /// 邊界情況：若輸入為 null、空矩陣或矩陣中沒有任何 1，回傳 0。
     /// </summary>
-    /// <param name="grid"></param>
-    /// <returns></returns>
+    /// <param name="grid">輸入的二元陣列（只含 0 和 1）</param>
+    /// <returns>包含所有 1 的最小矩形面積；若無 1 或輸入無效，回傳 0</returns>
     public int MinimumArea2(int[][] grid)
     {
         // 輸入驗證：處理 null 或空陣列的情況
@@ -155,7 +165,7 @@ class Program
         int n = grid.Length;
         int m = grid[0].Length;
 
-        // 從上往下找第一個含有 1 的行
+        // 從上往下找第一個含有 1 的行（top boundary）
         int top = -1;
         for (int i = 0; i < n; i++)
         {
@@ -173,7 +183,7 @@ class Program
             }
         }
 
-        // 從下往上找第一個含有 1 的行
+        // 從下往上找第一個含有 1 的行（bottom boundary）
         int bottom = -1;
         for (int i = n - 1; i >= 0; i--)
         {
@@ -191,7 +201,7 @@ class Program
             }
         }
 
-        // 從左往右找到第一個含有 1 的列
+        // 從左往右找到第一個含有 1 的列（left boundary）
         int left = -1;
         for (int i = 0; i < m; i++)
         {
@@ -209,7 +219,7 @@ class Program
             }
         }
 
-        // 從右往左找到第一個含有 1 的列
+        // 從右往左找到第一個含有 1 的列（right boundary）
         int right = -1;
         for (int i = m - 1; i >= 0; i--)
         {
@@ -225,6 +235,12 @@ class Program
             {
                 break; // 找到最後一個含有 1 的列
             }
+        }
+
+        // 如果任一邊界為 -1，代表矩陣中沒有任何 1
+        if (top == -1 || bottom == -1 || left == -1 || right == -1)
+        {
+            return 0;
         }
 
         int height = bottom - top + 1;
