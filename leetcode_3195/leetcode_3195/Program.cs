@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace leetcode_3195;
 
@@ -75,10 +76,12 @@ class Program
     /// <param name="name">測試名稱</param>
     static void RunTest(int[][] grid, int expected, string name)
     {
-        var runner = new Program();
-        int actual = runner.MinimumArea(grid);
-        string status = actual == expected ? "PASS" : "FAIL";
-        Console.WriteLine($"{name}: expected={expected}, actual={actual} => {status}");
+    var runner = new Program();
+    int actual1 = runner.MinimumArea(grid);
+    int actual2 = runner.MinimumAreaBinary(grid);
+    string status1 = actual1 == expected ? "PASS" : "FAIL";
+    string status2 = actual2 == expected ? "PASS" : "FAIL";
+    Console.WriteLine($"{name}: expected={expected}, MinimumArea={actual1} => {status1}, MinimumAreaBinary={actual2} => {status2}");
     }
 
     /// <summary>
@@ -134,5 +137,98 @@ class Program
         // 計算面積（包含邊界的格子數）
         int area = (maxRow - minRow + 1) * (maxCol - minCol + 1);
         return area;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="grid"></param>
+    /// <returns></returns>
+    public int MinimumArea2(int[][] grid)
+    {
+        // 輸入驗證：處理 null 或空陣列的情況
+        if (grid is null || grid.Length == 0 || grid[0] is null || grid[0].Length == 0)
+        {
+            return 0;
+        }
+
+        int n = grid.Length;
+        int m = grid[0].Length;
+
+        // 從上往下找第一個含有 1 的行
+        int top = -1;
+        for (int i = 0; i < n; i++)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                if (grid[i][j] == 1)
+                {
+                    top = i;
+                    break;
+                }
+            }
+            if (top != -1)
+            {
+                break; // 找到第一個含有 1 的行
+            }
+        }
+
+        // 從下往上找第一個含有 1 的行
+        int bottom = -1;
+        for (int i = n - 1; i >= 0; i--)
+        {
+            for (int j = 0; j < m; j++)
+            {
+                if (grid[i][j] == 1)
+                {
+                    bottom = i;
+                    break;
+                }
+            }
+            if (bottom != -1)
+            {
+                break; // 找到最後一個含有 1 的行
+            }
+        }
+
+        // 從左往右找到第一個含有 1 的列
+        int left = -1;
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (grid[j][i] == 1)
+                {
+                    left = i;
+                    break;
+                }
+            }
+            if (left != -1)
+            {
+                break; // 找到第一個含有 1 的列
+            }
+        }
+
+        // 從右往左找到第一個含有 1 的列
+        int right = -1;
+        for (int i = m - 1; i >= 0; i--)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (grid[j][i] == 1)
+                {
+                    right = i;
+                    break;
+                }
+            }
+            if (right != -1)
+            {
+                break; // 找到最後一個含有 1 的列
+            }
+        }
+
+        int height = bottom - top + 1;
+        int width = right - left + 1;
+        return height * width;
     }
 }
