@@ -96,6 +96,9 @@ class Program
     /// 邊界情況：
     /// - 若輸入為 null 或大小為 0，回傳 0。
     /// - 若矩陣中沒有任何 1，回傳 0。
+    /// 
+    /// 簡單記法：上 = minRow、下 = maxRow、左 = minCol、右 = maxCol。計算面積時用 max - min + 1。
+    /// 不要忘了用哨兵檢查「沒找到 1」的情況以免回傳錯誤結果。
     /// </summary>
     /// <param name="grid">輸入的二元陣列（只含 0 和 1）</param>
     /// <returns>最小矩形的面積；若無 1 或輸入無效，則回傳 0</returns>
