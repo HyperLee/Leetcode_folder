@@ -82,22 +82,41 @@ class Program
     }
 
     /// <summary>
-    /// 
+    /// 計算包含所有 1 的最小軸平行矩形面積。
+    ///
+    /// 解題說明：遍歷整個 `grid`，記錄出現 1 的最小/最大列與欄索引 (minRow, maxRow, minCol, maxCol)。
+    /// 這四個邊界即可唯一決定包含所有 1 的最小矩形，面積為 (maxRow - minRow + 1) * (maxCol - minCol + 1)。
+    ///
+    /// 時間複雜度：O(n * m)（需掃描整個矩陣）。
+    /// 空間複雜度：O(1)。
+    ///
+    /// 邊界情況：
+    /// - 若輸入為 null 或大小為 0，回傳 0。
+    /// - 若矩陣中沒有任何 1，回傳 0。
     /// </summary>
-    /// <param name="grid"></param>
-    /// <returns></returns>
+    /// <param name="grid">輸入的二元陣列（只含 0 和 1）</param>
+    /// <returns>最小矩形的面積；若無 1 或輸入無效，則回傳 0</returns>
     public int MinimumArea(int[][] grid)
     {
-        int n = grid.Length;
-        int m = grid[0].Length;
+        // 輸入驗證：處理 null 或空陣列的情況
+        if (grid is null || grid.Length == 0 || grid[0] is null || grid[0].Length == 0)
+        {
+            return 0;
+        }
+
+        int n = grid.Length; // 列數
+        int m = grid[0].Length; // 欄數
+        // 初始化邊界，min 設為極大值，max 設為極小值
         int minRow = n, maxRow = -1, minCol = m, maxCol = -1;
 
+        // 掃描整個矩陣，更新出現 1 的最小/最大索引
         for (int i = 0; i < n; i++)
         {
             for (int j = 0; j < m; j++)
             {
                 if (grid[i][j] == 1)
                 {
+                    // 找到 1，更新四個邊界
                     minRow = Math.Min(minRow, i);
                     maxRow = Math.Max(maxRow, i);
                     minCol = Math.Min(minCol, j);
@@ -106,11 +125,13 @@ class Program
             }
         }
 
+        // 如果 maxRow 未被修改代表沒有任何 1
         if (maxRow == -1)
         {
-            return 0; // No 1's found
+            return 0; // 矩陣內沒有 1
         }
 
+        // 計算面積（包含邊界的格子數）
         int area = (maxRow - minRow + 1) * (maxCol - minCol + 1);
         return area;
     }
