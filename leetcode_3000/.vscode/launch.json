@@ -1,0 +1,14 @@
+{
+	"configurations": [
+		{
+			"type": "coreclr",
+			"request": "launch",
+			"name": "Launch .NET Core Console App",
+			"program": "${workspaceFolder}/leetcode_3000/bin/Debug/net8.0/leetcode_3000.dll",
+			"cwd": "${workspaceFolder}/leetcode_3000",
+			"stopAtEntry": false,
+			"console": "internalConsole",
+			"preLaunchTask": "build"
+		}
+	]
+}
