@@ -39,7 +39,29 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        // 範例測資 1: LeetCode 常見範例
+        int[][] classes1 = new int[][]
+        {
+            new int[] {1, 2},
+            new int[] {3, 5},
+            new int[] {2, 2}
+        };
+        int extra1 = 2;
+
+        var program = new Program();
+        double result1 = program.MaxAverageRatio(classes1, extra1);
+        Console.WriteLine($"Test1 - result: {result1:F6}");
+
+        // 範例測資 2: 進一步測試較大的值
+        int[][] classes2 = new int[][]
+        {
+            new int[] {2, 4},
+            new int[] {3, 9},
+            new int[] {4, 5}
+        };
+        int extra2 = 3;
+        double result2 = program.MaxAverageRatio(classes2, extra2);
+        Console.WriteLine($"Test2 - result: {result2:F6}");
     }
 
     /// <summary>
