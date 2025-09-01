@@ -56,18 +56,17 @@ class Program
         }
 
         // 優先佇列：存放 tuple(pass, total) 並依邊際增益遞減排序
-        // .NET 的 PriorityQueue 是以 priority 的小值優先彈出 (min-heap)，
-        // 因此我們在 Enqueue 時使用 -delta 作為 priority 讓 delta 最大的項目先被 Dequeue。
-        var pq = new PriorityQueue<(int pass, int total), double>();
+        // 這裡用 Comparer<double> 反轉預設排序，使得 delta 大的項目先被 Dequeue（語意更明確）
+        var descComparer = Comparer<double>.Create((a, b) => b.CompareTo(a));
+        var pq = new PriorityQueue<(int pass, int total), double>(descComparer);
 
-        // 初始化：把每個班的狀態與其當前的 delta 推進堆中
+        // 初始化：把每個班的狀態與其當前的 delta 推進堆中（不需要取負號）
         foreach (var c in classes)
         {
             int p = c[0];
             int t = c[1];
-            // 若 total == 0 不會出現在合法輸入中，但保險處理
             double delta = Delta(p, t);
-            pq.Enqueue((p, t), -delta);
+            pq.Enqueue((p, t), delta);
         }
 
         // 每次取出當前增益最大的班級，分配一名學生，計算新的 delta 並放回堆
@@ -78,7 +77,7 @@ class Program
             int p = top.pass + 1;
             int t = top.total + 1;
             double delta = Delta(p, t);
-            pq.Enqueue((p, t), -delta);
+            pq.Enqueue((p, t), delta);
         }
 
         // 將堆中所有班級的最終通過率相加以計算平均
