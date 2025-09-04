@@ -22,7 +22,21 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        // 範例測試資料
+        var tests = new (int x, int y, int z)[]
+        {
+            (1, 2, 3),
+            (2, 1, 3),
+            (1, 3, 2),
+            (5, 5, 5),
+            (-2, 4, 1)
+        };
+
+        foreach (var (x, y, z) in tests)
+        {
+            int result = new Program().FindClosest(x, y, z);
+            Console.WriteLine($"x={x}, y={y}, z={z} => result: {result}");
+        }
     }
 
 
