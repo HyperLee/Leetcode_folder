@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch leetcode_1304",
+      "type": "coreclr",
+      "request": "launch",
+      "program": "${workspaceFolder}/leetcode_1304/bin/Debug/net8.0/leetcode_1304.dll",
+      "preLaunchTask": "build",
+      "cwd": "${workspaceFolder}/leetcode_1304",
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    }
+  ]
+}
