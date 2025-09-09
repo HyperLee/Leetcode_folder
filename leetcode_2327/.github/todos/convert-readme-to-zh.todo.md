@@ -1,0 +1,1 @@
+- [ ] 將 README.md 內容完整翻譯為中文並更新檔案：d:\Leetcode_folder\Leetcode_folder\leetcode_2327\README.md

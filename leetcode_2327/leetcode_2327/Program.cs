@@ -65,7 +65,7 @@ class Program
             // 更新 shareableSum：當 day - delay >= 1 時，新增那些剛好到分享期的人
             if (day - delay >= 1)
             {
-                int shareFromDay = day - delay; // 這一天學到的人開始分享
+                int shareFromDay = day - delay; // 這一天學到的人開始分享;「剛好到達分享期的人（day - delay）」
                 int shareIdx = (shareFromDay - 1) % forget;
                 shareableSum = (shareableSum + buf[shareIdx]) % MOD;
             }
@@ -73,7 +73,7 @@ class Program
             // 同時如果有人在今天忘記，且他們先前已經在 shareableSum 中，需要從 shareableSum 中移除
             if (day - forget >= 1)
             {
-                int forgotDay = day - forget;
+                int forgotDay = day - forget; // 「剛好在今天忘記的人（day - forget）」
                 int forgotIdx = (forgotDay - 1) % forget;
                 shareableSum = (shareableSum - buf[forgotIdx] + MOD) % MOD;
             }
