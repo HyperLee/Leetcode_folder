@@ -28,10 +28,15 @@ class Program
         int n = 6, delay = 2, forget = 4;
         var program = new Program();
         int result = program.PeopleAwareOfSecret(n, delay, forget);
-        Console.WriteLine($"People aware on day {n}: {result}");
+        Console.WriteLine($"解法B: People aware on day {n}: {result}");
+
+        int result2 = program.PeopleAwareOfSecret1(n, delay, forget);
+        Console.WriteLine($"解法A: People aware on day {n}: {result2}");
     }
 
     /// <summary>
+    /// 解法 B — O(n) 時間, O(forget) 空間（環形緩衝 + 滑動和）
+    /// 
     /// 計算在第 n 天結束時知道秘密的人數，對 1_000_000_007 取模。
     /// 輸入: n, delay, forget
     /// 輸出: 知道秘密的人數 (int)
@@ -87,5 +92,56 @@ class Program
         }
 
         return (int)totalRemembering;
+    }
+
+
+    /// <summary>
+    /// 解法 A — O(n) 時間, O(n) 空間（前綴和）
+    /// </summary>
+    /// <param name="n"></param>
+    /// <param name="delay"></param>
+    /// <param name="forget"></param>
+    /// <returns></returns>
+    public int PeopleAwareOfSecret1(int n, int delay, int forget)
+    {
+        const int MOD = 1_000_000_007;
+        // 使用 O(n) 的滑動窗與前綴和思路：
+        // keep[i] 表示第 i 天新知道的人數（1-based day），只需長度 n+1 的陣列。
+        // newLearners(day) = sum_{t=1..day-delay} keep[t] - sum_{t=1..day-forget} keep[t]
+        // 我們可以透過 prefix sum 快速取得區間和。
+        long[] keep = new long[n + 1];
+        keep[1] = 1;
+        long[] prefix = new long[n + 1];
+        prefix[1] = 1;
+
+        for (int day = 2; day <= n; day++)
+        {
+            // 分享者來自那些在 [1, day-delay] 天學到，且尚未在 day 忘記的人。
+            if (day - delay >= 1)
+            {
+                int l = 1;
+                int r = day - delay;
+                long totalCanShare = (prefix[r] - prefix[l - 1] + MOD) % MOD;
+                // 減去已經忘記的人：那些在 [1, day-forget] 的人已經忘記
+                if (day - forget >= 1)
+                {
+                    int fr = day - forget;
+                    totalCanShare = (totalCanShare - prefix[fr] + MOD) % MOD;
+                }
+                keep[day] = totalCanShare % MOD;
+            }
+            else
+            {
+                keep[day] = 0;
+            }
+
+            prefix[day] = (prefix[day - 1] + keep[day]) % MOD;
+        }
+
+        // 統計在第 n 天仍然記得的人：這些人是在天數區間 (n-forget+1 .. n) 內學到的
+        long ans = 0;
+        int start = Math.Max(1, n - forget + 1);
+        for (int t = start; t <= n; t++) ans = (ans + keep[t]) % MOD;
+        return (int)ans;
     }
 }
