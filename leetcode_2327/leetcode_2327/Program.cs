@@ -46,43 +46,46 @@ class Program
     public int PeopleAwareOfSecret(int n, int delay, int forget)
     {
         const int MOD = 1_000_000_007;
-        // 使用 O(n) 的滑動窗與前綴和思路：
-        // keep[i] 表示第 i 天新知道的人數（1-based day），只需長度 n+1 的陣列。
-        // newLearners(day) = sum_{t=1..day-delay} keep[t] - sum_{t=1..day-forget} keep[t]
-        // 我們可以透過 prefix sum 快速取得區間和。
-        long[] keep = new long[n + 1];
-        keep[1] = 1;
-        long[] prefix = new long[n + 1];
-        prefix[1] = 1;
+        // 使用 O(forget) 空間的環形緩衝與滑動和
+        if (n == 0) return 0;
+        long[] buf = new long[forget]; // buf[i] = 第 (day) 天新知道的人數，保留最近 forget 天
+        // day 1
+        buf[0] = 1;
+        long totalRemembering = 1; // 當前仍記得秘密的總人數
+        long shareableSum = 0; // 當天可以分享的人數（進入分享期且尚未忘記）
 
+        // 初始化 shareableSum 在 day=1 時為 0（因為 delay >=1 通常），迴圈從 day=2
         for (int day = 2; day <= n; day++)
         {
-            // 分享者來自那些在 [1, day-delay] 天學到，且尚未在 day 忘記的人。
+            int idx = (day - 1) % forget; // 對應要覆寫的 slot，這個 slot 的值是 day-forget 的新知道值
+
+            // 先移除今天忘記的人（如果有）
+            totalRemembering = (totalRemembering - buf[idx] + MOD) % MOD;
+
+            // 更新 shareableSum：當 day - delay >= 1 時，新增那些剛好到分享期的人
             if (day - delay >= 1)
             {
-                int l = 1;
-                int r = day - delay;
-                long totalCanShare = (prefix[r] - prefix[l - 1] + MOD) % MOD;
-                // 減去已經忘記的人：那些在 [1, day-forget] 的人已經忘記
-                if (day - forget >= 1)
-                {
-                    int fr = day - forget;
-                    totalCanShare = (totalCanShare - prefix[fr] + MOD) % MOD;
-                }
-                keep[day] = totalCanShare % MOD;
-            }
-            else
-            {
-                keep[day] = 0;
+                int shareFromDay = day - delay; // 這一天學到的人開始分享
+                int shareIdx = (shareFromDay - 1) % forget;
+                shareableSum = (shareableSum + buf[shareIdx]) % MOD;
             }
 
-            prefix[day] = (prefix[day - 1] + keep[day]) % MOD;
+            // 同時如果有人在今天忘記，且他們先前已經在 shareableSum 中，需要從 shareableSum 中移除
+            if (day - forget >= 1)
+            {
+                int forgotDay = day - forget;
+                int forgotIdx = (forgotDay - 1) % forget;
+                shareableSum = (shareableSum - buf[forgotIdx] + MOD) % MOD;
+            }
+
+            // 今天新知道的人數就是當前可分享的人數
+            long newLearners = shareableSum % MOD;
+
+            // 放入 buffer（覆寫 day-forget 的 slot）
+            buf[idx] = newLearners;
+            totalRemembering = (totalRemembering + newLearners) % MOD;
         }
 
-        // 統計在第 n 天仍然記得的人：這些人是在天數區間 (n-forget+1 .. n) 內學到的
-        long ans = 0;
-        int start = Math.Max(1, n - forget + 1);
-        for (int t = start; t <= n; t++) ans = (ans + keep[t]) % MOD;
-        return (int)ans;
+        return (int)totalRemembering;
     }
 }
