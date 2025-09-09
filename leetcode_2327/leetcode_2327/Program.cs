@@ -45,49 +45,43 @@ class Program
     static int PeopleAware(int n, int delay, int forget)
     {
         const int MOD = 1_000_000_007;
-        // arr[i] = 在 day i 那天新知道秘密的人數（1-based day）。我們只需要保留最後 forget 天。
-        long[] window = new long[forget];
-        // 第 1 天，有 1 人知道秘密
-        window[0] = 1;
-        long totalAware = 1; // 在目前天數仍記得秘密的人數總和
+        // 使用 O(n) 的滑動窗與前綴和思路：
+        // keep[i] 表示第 i 天新知道的人數（1-based day），只需長度 n+1 的陣列。
+        // newLearners(day) = sum_{t=1..day-delay} keep[t] - sum_{t=1..day-forget} keep[t]
+        // 我們可以透過 prefix sum 快速取得區間和。
+        long[] keep = new long[n + 1];
+        keep[1] = 1;
+        long[] prefix = new long[n + 1];
+        prefix[1] = 1;
 
         for (int day = 2; day <= n; day++)
         {
-            // index for the new day in circular buffer
-            int idx = (day - 1) % forget;
-
-            // people who forget today are window[idx]
-            totalAware = (totalAware - window[idx] + MOD) % MOD;
-
-            // compute new people who learn the secret today:
-            // 他們來自於那些已經知道且進入分享期的人：也就是 totalAware 相減掉尚未進入分享期的人
-            long newLearners = 0;
+            // 分享者來自那些在 [1, day-delay] 天學到，且尚未在 day 忘記的人。
             if (day - delay >= 1)
             {
-                // sum of people who learned on days [1 .. day-delay] but still haven't forgotten
-                // 這等價於總體仍記得的人 totalAware 加上即將被移除的 window[idx]，
-                // 再減去那些尚未到分享期的人 (在最近 delay-1 天內新知道的人)。
-                // 更簡潔的做法：計算分享者為在 buffer 中那些 index 對應到 day-shareDay >= delay
-                int startShareDay = Math.Max(1, day - forget + 1);
-                int shareThresholdDay = day - delay;
-
-                // sum over days t in [startShareDay .. shareThresholdDay] of window[(t-1)%forget]
-                // 直接遍歷小於 forget 的範圍
-                long sum = 0;
-                int from = startShareDay;
-                int to = shareThresholdDay;
-                for (int t = from; t <= to; t++)
+                int l = 1;
+                int r = day - delay;
+                long totalCanShare = (prefix[r] - prefix[l - 1] + MOD) % MOD;
+                // 減去已經忘記的人：那些在 [1, day-forget] 的人已經忘記
+                if (day - forget >= 1)
                 {
-                    sum = (sum + window[(t - 1) % forget]) % MOD;
+                    int fr = day - forget;
+                    totalCanShare = (totalCanShare - prefix[fr] + MOD) % MOD;
                 }
-                newLearners = sum;
+                keep[day] = totalCanShare % MOD;
+            }
+            else
+            {
+                keep[day] = 0;
             }
 
-            // place new learners into buffer slot idx
-            window[idx] = newLearners % MOD;
-            totalAware = (totalAware + window[idx]) % MOD;
+            prefix[day] = (prefix[day - 1] + keep[day]) % MOD;
         }
 
-        return (int)(totalAware % MOD);
+        // 統計在第 n 天仍然記得的人：這些人是在天數區間 (n-forget+1 .. n) 內學到的
+        long ans = 0;
+        int start = Math.Max(1, n - forget + 1);
+        for (int t = start; t <= n; t++) ans = (ans + keep[t]) % MOD;
+        return (int)ans;
     }
 }
