@@ -24,9 +24,10 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        // 簡單範例測試
+        // 簡單範例測試，改為建立 Program 物件後呼叫實例方法
         int n = 6, delay = 2, forget = 4;
-        int result = PeopleAware(n, delay, forget);
+        var program = new Program();
+        int result = program.PeopleAwareOfSecret(n, delay, forget);
         Console.WriteLine($"People aware on day {n}: {result}");
     }
 
@@ -42,7 +43,7 @@ class Program
     /// 時間複雜度: O(n * forget) 或 O(n) 使用滑動窗最佳化
     /// 空間複雜度: O(forget)
     /// </summary>
-    static int PeopleAware(int n, int delay, int forget)
+    public int PeopleAwareOfSecret(int n, int delay, int forget)
     {
         const int MOD = 1_000_000_007;
         // 使用 O(n) 的滑動窗與前綴和思路：
