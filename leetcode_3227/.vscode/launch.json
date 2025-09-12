@@ -6,7 +6,7 @@
       "request": "launch",
       "name": "Launch leetcode_3227",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/leetcode_3227/bin/Debug/net9.0/leetcode_3227.dll",
+  "program": "${workspaceFolder}/leetcode_3227/bin/Debug/net8.0/leetcode_3227.dll",
       "args": [],
       "cwd": "${workspaceFolder}/leetcode_3227",
       "console": "integratedTerminal",

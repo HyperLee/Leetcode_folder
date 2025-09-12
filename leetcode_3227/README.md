@@ -1,6 +1,6 @@
 # leetcode_3227 — Vowels Game in a String
 
-此專案收錄 LeetCode 題目 3227：Vowels Game in a String 的解題實作與說明（C# 9+/.NET 9）。
+此專案收錄 LeetCode 題目 3227：Vowels Game in a String 的解題實作與說明（C# 9+/.NET 8）。
 
 ## 題目描述（中文翻譯）
 
@@ -54,16 +54,18 @@ Alice 與 Bob 在一個字串 s 上玩遊戲，兩人輪流操作，Alice 先手
 
 ## 專案內容與如何執行
 
-此專案使用 .NET 9 / C#，主程式在 `leetcode_3227/Program.cs`。範例執行：
+此專案使用 .NET 8 / C#，主程式在 `leetcode_3227/Program.cs`。範例執行（跨平台）：
 
-```powershell
-dotnet run --project d:\Leetcode_folder\Leetcode_folder\leetcode_3227\leetcode_3227.csproj
+在專案根目錄下執行：
+
+```bash
+dotnet run --project ./leetcode_3227/leetcode_3227.csproj
 ```
 
-或在專案資料夾中：
+或進入專案資料夾再執行：
 
-```powershell
-cd d:\Leetcode_folder\Leetcode_folder\leetcode_3227
+```bash
+cd ./leetcode_3227
 dotnet run
 ```
 
