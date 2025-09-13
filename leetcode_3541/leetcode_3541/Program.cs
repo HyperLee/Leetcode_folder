@@ -34,7 +34,10 @@ class Program
         {
             int res = Solution.MaxFrequencySum(t);
             Console.WriteLine($"s = \"{t}\", result = {res}");
+        }
 
+        foreach (var t in tests)
+        {
             int res2 = Solution.MaxFrequencySum2(t);
             Console.WriteLine($"s = \"{t}\", result2 = {res2}");
         }
@@ -70,6 +73,18 @@ public static class Solution
             }
             counts[ch - 'a']++;
         }
+
+        /*
+        // 使用 counts（例如輸出或進一步處理）
+        for (int i = 0; i < counts.Length; i++)
+        {
+            if (counts[i] != 0)
+            {
+                // 輸出每個字母統計的次數
+                Console.WriteLine($"{(char)('a' + i)}: {counts[i]}");
+            }
+        }   
+        */     
 
         int maxVowel = 0;
         int maxConsonant = 0;
@@ -137,12 +152,19 @@ public static class Solution
             // 判斷是否為元音並更新最大頻率
             if ("aeiou".Contains(letter))
             {
-                if (frequency > maxVowel) maxVowel = frequency;
+                // 元音
+                if (frequency > maxVowel)
+                {
+                    maxVowel = frequency;
+                }
             }
             else
             {
                 // 輔音
-                if (frequency > maxConsonant) maxConsonant = frequency;
+                if (frequency > maxConsonant)
+                {
+                    maxConsonant = frequency;
+                }
             }
         }
 
