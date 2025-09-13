@@ -34,6 +34,9 @@ class Program
         {
             int res = Solution.MaxFrequencySum(t);
             Console.WriteLine($"s = \"{t}\", result = {res}");
+
+            int res2 = Solution.MaxFrequencySum2(t);
+            Console.WriteLine($"s = \"{t}\", result2 = {res2}");
         }
     }
 }
@@ -93,6 +96,57 @@ public static class Solution
             }
         }
 
+        return maxVowel + maxConsonant;
+    }
+
+
+    /// <summary>
+    /// 方法二：使用 Dictionary 計數字母頻率，邏輯與方法一相似。
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
+    public static int MaxFrequencySum2(string s)
+    {
+        Dictionary<char, int> counts = new Dictionary<char, int>();
+        foreach (char ch in s)
+        {
+            // 跳過非小寫字母（題目保證為小寫，但此處保護性處理）
+            if (ch < 'a' || ch > 'z')
+            {
+                continue;
+            }
+            // 計數字母出現次數
+            if (counts.ContainsKey(ch))
+            {
+                counts[ch]++;
+            }
+            else
+            {
+                counts[ch] = 1;
+            }
+        }
+
+        int maxVowel = 0;
+        int maxConsonant = 0;
+
+        foreach (var kvp in counts)
+        {
+            char letter = kvp.Key;
+            int frequency = kvp.Value;
+
+            // 判斷是否為元音並更新最大頻率
+            if ("aeiou".Contains(letter))
+            {
+                if (frequency > maxVowel) maxVowel = frequency;
+            }
+            else
+            {
+                // 輔音
+                if (frequency > maxConsonant) maxConsonant = frequency;
+            }
+        }
+
+        // 回傳最高元音頻率與最高輔音頻率的總和
         return maxVowel + maxConsonant;
     }
 }
