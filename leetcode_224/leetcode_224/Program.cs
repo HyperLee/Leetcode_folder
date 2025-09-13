@@ -53,19 +53,19 @@ class Program
     /// https://leetcode.cn/problems/basic-calculator/solutions/646369/ji-ben-ji-suan-qi-by-leetcode-solution-jvir/ 
     /// 基本計算器實現
     /// 解題思路：
-    /// 1. 使用兩個堆棧：nums存放數字，ops存放運算符和括號
+    /// 1. 使用兩個堆棧：nums 存放數字，ops 存放運算符和括號
     /// 2. 遇到左括號直接入棧
     /// 3. 遇到右括號時，計算到對應的左括號為止
     /// 4. 遇到數字時，需要考慮多位數的情況
     /// 5. 遇到運算符時，需要先處理堆棧中的運算，再將新的運算符入棧
     /// </summary>
-    /// <param name="s">包含數字、+、-、括號和空格的字符串</param>
+    /// <param name="s"> 包含數字、+、-、括號和空格的字符串 </param>
     /// <returns>計算結果</returns>
     public static int Calculate(string s)
     {
         // 存放數字
         Stack<int> nums = new Stack<int>();
-        // 預處理：補充0，避免第一個數字前面是運算符的情況
+        // 預處理：補充 0，避免第一個數字前面是運算符的情況
         nums.Push(0);
         // 預處理：去除所有空格，簡化後續處理
         s = s.Replace(" ", ""); // remove all spaces
@@ -162,7 +162,7 @@ class Program
     /// Stack（堆疊）確實是一個先進後出（LIFO, Last In First Out）的資料結構。
     /// 所以取出數字時候, 先取出來的是運算符右邊的數字, 後取出來的是運算符左邊的數字
     /// 這裡是基本的加減運算, 所以運算符的左右數字是有順序的 
-    /// 例如: 1(a) + 2(b), 先取出來的是2(b), 後取出來的是1(a)
+    /// 例如: 1 (a) + 2 (b), 先取出來的是 2 (b), 後取出來的是 1 (a)
     /// 這樣才能保證運算的正確性
     /// <param name="nums">儲存數字的堆棧</param>
     /// <param name="ops">儲存運算符的堆棧</param>
@@ -173,10 +173,14 @@ class Program
         {
             return;
         }
-        // 取出兩個數字和運算符
+
+        // 取出兩個數字
         // 注意：後彈出的數字是運算符右邊的數字
         int b = nums.Pop(), a = nums.Pop();
+
+        // 取出運算符
         char op = ops.Pop();
+
         // 執行運算並將結果壓回堆棧
         nums.Push(op == '+' ? a + b : a - b);
     }
