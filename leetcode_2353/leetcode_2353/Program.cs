@@ -268,6 +268,13 @@ class Program
         /// Key: 料理類型
         /// Value: 該料理類型下所有食物的優先佇列（按評分和名稱排序）
         /// 注意：佇列可能包含過期的評分項目，需要在查詢時進行延遲清理
+        /// 
+        /// 前半部 (TElement) = (string Food, int Rating)：這是佇列中實際儲存（payload）的元素，
+        /// 也就是你從 Peek() / Dequeue() 得到的物件（包含食物名稱與當時的評分）。
+        /// 
+        /// 後半部 (TPriority) = (int Rating, string Food)：這是用來排序的「優先權」值。
+        /// PriorityQueue 根據優先權（以及你提供的 comparer）來決定元素的先後順序，
+        /// element 本身並不參與排序（除非你把 element 的資料也當作 priority 傳入）
         /// </summary>
         private Dictionary<string, PriorityQueue<(string Food, int Rating), (int Rating, string Food)>> ratingMap;
 
@@ -355,6 +362,8 @@ class Program
         /// <returns>評分最高的食物名稱，若料理類型不存在或無食物則返回空字串</returns>
         public string HighestRated(string cuisine)
         {
+            // 取出對應料理類型的優先佇列,
+            // 也就是 value (宣告時候是 PriorityQueue<(string Food, int Rating), (int Rating, string Food)>)
             var q = ratingMap[cuisine];
             
             // 持續檢查佇列頂端，直到找到有效項目
