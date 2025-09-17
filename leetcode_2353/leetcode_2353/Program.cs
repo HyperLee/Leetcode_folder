@@ -315,7 +315,7 @@ class Program
                                 return b.Rating.CompareTo(a.Rating);
                             }
                             // 次要條件：評分相同時，字典序小的優先（升序）
-                            return a.Item2.CompareTo(b.Item2);
+                            return a.Food.CompareTo(b.Food);
                         })
                     );
                 }
