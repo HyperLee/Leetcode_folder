@@ -340,7 +340,18 @@ class Program
         public void ChangeRating(string food, int newRating)
         {
             // 取得食物的舊評分和料理類型
-            var (oldRating, cuisine) = foodMap[food];
+            //var (oldRating, cuisine) = foodMap[food];
+
+            // 只需要取出舊資料的評分不需要 cuisine, 所以改這種寫法
+            // 同時增加保護機制
+            // 若 food 不存在則安全返回，避免 KeyNotFoundException
+            if (!foodMap.TryGetValue(food, out var info))
+            {
+                return;
+            }
+
+            // 只需要 cuisine，舊評分不必使用
+            string cuisine = info.Cuisine;
             
             // 關鍵策略：不移除舊項目，直接加入新的評分項目
             // 舊項目成為「過期項目」，會在查詢時被清理
