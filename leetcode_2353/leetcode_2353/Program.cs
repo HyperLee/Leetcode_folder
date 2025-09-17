@@ -8,11 +8,20 @@ class Program
     /// 2353. 设计食物评分系统
     /// https://leetcode.cn/problems/design-a-food-rating-system/description/
     /// 
+    /// 題目中文翻譯：
+    /// 設計一個食物評分系統，需支援下列操作：
+    /// 1. 更改系統中某項食物的評分（changeRating）
+    /// 2. 回傳指定料理類型中評分最高的食物（highestRated）。若有評分相同，回傳字典序較小的名稱。
+    /// 
+    /// 介面規格：
+    /// - FoodRatings(string[] foods, string[] cuisines, int[] ratings)：用 foods, cuisines, ratings 初始化系統，三者長度皆為 n。
+    ///   foods[i] 為第 i 個食物名稱；cuisines[i] 為其料理類型；ratings[i] 為其初始評分。
+    /// - void changeRating(string food, int newRating)：更改名為 food 的食物評分為 newRating。
+    /// - string highestRated(string cuisine)：回傳 cuisine 的最高評分食物名稱；若有並列，回傳字典序較小者。
+    /// 
+    /// 字典序說明：字串 x 在字典序上小於 y 當且僅當 x 為 y 的前綴，或在第一個不同的位置 x[i] 的字元小於 y[i] 的字元。
     /// </summary>
     /// <param name="args"></param> <summary>
-    /// 
-    /// </summary>
-    /// <param name="args"></param>
     static void Main(string[] args)
     {
         // 範例測試：根據 LeetCode 題目的行為示範 FoodRatings
@@ -241,8 +250,10 @@ class Program
     /// 
     /// 優點：更新操作簡潔高效，實作直觀
     /// 缺點：可能累積過期項目導致記憶體開銷增加
+    /// 
+    /// ref:https://leetcode.cn/problems/design-a-food-rating-system/solutions/3078910/she-ji-shi-wu-ping-fen-xi-tong-by-leetco-vk42/
+    /// 
     /// </summary>
-    // === 解法二：PriorityQueue + lazy deletion（官方風格） ===
     public class FoodRatings2
     {
         /// <summary>
