@@ -316,6 +316,8 @@ class Program
                             }
                             // 次要條件：評分相同時，字典序小的優先（升序）
                             return a.Food.CompareTo(b.Food);
+                            // 次要：使用明確的不區分文化的字元序比較（升序）
+                            //return StringComparer.Ordinal.Compare(a.Food, b.Food);
                         })
                     );
                 }
