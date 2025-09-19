@@ -8,6 +8,38 @@ class Program
     /// 3408. 设计任务管理器
     /// https://leetcode.cn/problems/design-task-manager/description/
     /// 
+    /// 題目描述：
+    /// 有一個任務管理系統允許使用者管理他們的任務，每個任務都有關聯的優先級。
+    /// 系統應該高效處理新增、修改、執行和刪除任務的操作。
+    /// 
+    /// 實現 TaskManager 類別：
+    /// 1. TaskManager(vector<vector<int>>& tasks) 使用使用者-任務-優先級三元組清單初始化任務管理器。
+    ///    輸入清單中的每個元素形式為 [userId, taskId, priority]，將具有給定優先級的任務添加到指定使用者。
+    /// 
+    /// 2. void add(int userId, int taskId, int priority) 將具有指定 taskId 和優先級的任務添加到 userId 使用者。
+    ///    保證 taskId 在系統中不存在。
+    /// 
+    /// 3. void edit(int taskId, int newPriority) 將現有 taskId 的優先級更新為 newPriority。
+    ///    保證 taskId 在系統中存在。
+    /// 
+    /// 4. void rmv(int taskId) 從系統中刪除由 taskId 識別的任務。
+    ///    保證 taskId 在系統中存在。
+    /// 
+    /// 5. int execTop() 執行所有使用者中具有最高優先級的任務。
+    ///    如果有多個具有相同最高優先級的任務，執行具有最高 taskId 的任務。
+    ///    執行後，taskId 從系統中刪除。返回與執行任務關聯的 userId。
+    ///    如果沒有可用任務，返回 -1。
+    /// 
+    /// 注意：使用者可能被分配多個任務。
+    /// 
+    /// 約束條件：
+    /// - 1 <= tasks.length <= 10^5
+    /// - 0 <= userId <= 10^5
+    /// - 0 <= taskId <= 10^5
+    /// - 0 <= priority <= 10^9
+    /// - 0 <= newPriority <= 10^9
+    /// - add, edit, rmv, execTop 方法總共最多被呼叫 2 * 10^5 次
+    /// - 輸入保證 taskId 是有效的
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)
@@ -161,13 +193,15 @@ public class TaskManager
     /// 添加新任務到管理器
     /// 時間複雜度：O(log n)，插入堆的時間複雜度
     /// 空間複雜度：O(1)
+    /// 
+    /// 注意：題目保證 taskId 不存在於系統中，因此不需要重複檢查
     /// </summary>
     /// <param name="userId">任務所屬的使用者ID</param>
     /// <param name="taskId">任務的唯一標識符</param>
     /// <param name="priority">任務的優先級</param>
     public void Add(int userId, int taskId, int priority)
     {
-        // 將任務資訊儲存到雜湊表中
+        // 題目保證 taskId 不存在，直接將任務資訊儲存到雜湊表中
         taskInfo[taskId] = new int[] { userId, priority };
         
         // 將任務加入優先佇列，確保能夠按優先級排序
@@ -179,21 +213,19 @@ public class TaskManager
     /// 使用懶刪除機制：不直接修改堆中的元素，而是添加新記錄
     /// 時間複雜度：O(log n)，插入堆的時間複雜度
     /// 空間複雜度：O(1)
+    /// 
+    /// 注意：題目保證 taskId 存在，因此不需要額外驗證
     /// </summary>
     /// <param name="taskId">要編輯的任務ID</param>
     /// <param name="newPriority">新的優先級</param>
     public void Edit(int taskId, int newPriority)
     {
-        // 檢查任務是否存在
-        if (taskInfo.ContainsKey(taskId))
-        {
-            // 更新雜湊表中的優先級資訊
-            int userId = taskInfo[taskId][0]; // 保持使用者ID不變
-            taskInfo[taskId] = new int[] { userId, newPriority };
-            
-            // 向堆中添加新的記錄（舊記錄通過懶刪除處理）
-            heap.Enqueue(new int[] { newPriority, taskId }, new int[] { newPriority, taskId });
-        }
+        // 題目保證 taskId 存在，直接更新雜湊表中的優先級資訊
+        int userId = taskInfo[taskId][0]; // 保持使用者ID不變
+        taskInfo[taskId] = new int[] { userId, newPriority };
+        
+        // 向堆中添加新的記錄（舊記錄通過懶刪除處理）
+        heap.Enqueue(new int[] { newPriority, taskId }, new int[] { newPriority, taskId });
     }
 
     /// <summary>
@@ -201,11 +233,13 @@ public class TaskManager
     /// 使用懶刪除：只從雜湊表中移除，堆中的記錄將在後續操作中被跳過
     /// 時間複雜度：O(1)
     /// 空間複雜度：O(1)
+    /// 
+    /// 注意：題目保證 taskId 存在於系統中，因此直接執行刪除操作
     /// </summary>
     /// <param name="taskId">要刪除的任務ID</param>
     public void Rmv(int taskId)
     {
-        // 直接從雜湊表中移除任務
+        // 題目保證 taskId 存在，直接從雜湊表中移除任務
         // 堆中對應的記錄會在 ExecTop 方法中被識別為無效並跳過
         taskInfo.Remove(taskId);
     }
