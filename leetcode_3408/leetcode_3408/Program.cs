@@ -165,12 +165,13 @@ public class TaskManager
             Comparer<int[]>.Create((a, b) =>
             {
                 // 首先比較優先級（降序）
-                if (a[0] == b[0])
+                if (a[0] != b[0])
                 {
-                    // 優先級相同時，比較任務ID（降序）
-                    return b[1].CompareTo(a[1]);
+                    // 優先級不同時，比較優先級（降序）
+                    return b[0].CompareTo(a[0]);
                 }
-                return b[0].CompareTo(a[0]); // 優先級降序排列
+                // 優先級相同時，比較任務ID（降序）
+                return b[1].CompareTo(a[1]);
             })
         );
 

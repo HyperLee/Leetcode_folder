@@ -171,12 +171,13 @@ heap = new PriorityQueue<int[], int[]>(
     Comparer<int[]>.Create((a, b) =>
     {
         // 首先比較優先級（降序）
-        if (a[0] == b[0])
+        if (a[0] != b[0])
         {
-            // 優先級相同時，比較任務ID（降序）
-            return b[1].CompareTo(a[1]);
+            // 優先級不同時，比較優先級（降序）
+            return b[0].CompareTo(a[0]);
         }
-        return b[0].CompareTo(a[0]);
+        // 優先級相同時，比較任務ID（降序）
+        return b[1].CompareTo(a[1]);
     })
 );
 ```
@@ -185,6 +186,7 @@ heap = new PriorityQueue<int[], int[]>(
 
 通過在 `ExecTop` 中驗證 `taskInfo.TryGetValue(taskId, out var info) && info[1] == priority`，
 確保：
+
 1. 任務仍然存在（未被刪除）
 2. 優先級匹配（未被修改）
 
