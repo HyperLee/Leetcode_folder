@@ -12,7 +12,89 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Console.WriteLine("=== LeetCode 3408: Design Task Manager 測試 ===\n");
+
+        // 測試案例 1：基本功能測試
+        Console.WriteLine("測試案例 1：基本功能測試");
+        var tasks1 = new List<IList<int>>
+        {
+            new List<int> { 1, 101, 10 }, // [userId=1, taskId=101, priority=10]
+            new List<int> { 2, 102, 20 }, // [userId=2, taskId=102, priority=20]
+            new List<int> { 3, 103, 15 }  // [userId=3, taskId=103, priority=15]
+        };
+
+        var taskManager1 = new TaskManager(tasks1);
+        
+        Console.WriteLine($"執行最高優先級任務: 使用者ID = {taskManager1.ExecTop()}"); // 預期: 2 (priority=20)
+        Console.WriteLine($"執行最高優先級任務: 使用者ID = {taskManager1.ExecTop()}"); // 預期: 3 (priority=15)
+        Console.WriteLine($"執行最高優先級任務: 使用者ID = {taskManager1.ExecTop()}"); // 預期: 1 (priority=10)
+        Console.WriteLine($"執行最高優先級任務: 使用者ID = {taskManager1.ExecTop()}"); // 預期: -1 (無任務)
+
+        Console.WriteLine("\n" + new string('-', 50) + "\n");
+
+        // 測試案例 2：完整操作測試
+        Console.WriteLine("測試案例 2：完整操作測試 (Add, Edit, Remove)");
+        var tasks2 = new List<IList<int>>
+        {
+            new List<int> { 1, 201, 5 },  // [userId=1, taskId=201, priority=5]
+            new List<int> { 2, 202, 8 }   // [userId=2, taskId=202, priority=8]
+        };
+
+        var taskManager2 = new TaskManager(tasks2);
+        
+        // 添加新任務
+        taskManager2.Add(3, 203, 12);
+        Console.WriteLine("添加任務: userId=3, taskId=203, priority=12");
+        
+        // 編輯任務優先級
+        taskManager2.Edit(201, 15);
+        Console.WriteLine("編輯任務: taskId=201, newPriority=15");
+        
+        // 刪除任務
+        taskManager2.Rmv(202);
+        Console.WriteLine("刪除任務: taskId=202");
+        
+        Console.WriteLine($"執行最高優先級任務: 使用者ID = {taskManager2.ExecTop()}"); // 預期: 1 (priority=15)
+        Console.WriteLine($"執行最高優先級任務: 使用者ID = {taskManager2.ExecTop()}"); // 預期: 3 (priority=12)
+        Console.WriteLine($"執行最高優先級任務: 使用者ID = {taskManager2.ExecTop()}"); // 預期: -1 (任務202已刪除)
+
+        Console.WriteLine("\n" + new string('-', 50) + "\n");
+
+        // 測試案例 3：相同優先級測試（taskId 排序）
+        Console.WriteLine("測試案例 3：相同優先級測試 (taskId 較大者優先)");
+        var tasks3 = new List<IList<int>>
+        {
+            new List<int> { 1, 301, 10 }, // [userId=1, taskId=301, priority=10]
+            new List<int> { 2, 305, 10 }, // [userId=2, taskId=305, priority=10]
+            new List<int> { 3, 303, 10 }  // [userId=3, taskId=303, priority=10]
+        };
+
+        var taskManager3 = new TaskManager(tasks3);
+        
+        Console.WriteLine($"執行最高優先級任務: 使用者ID = {taskManager3.ExecTop()}"); // 預期: 2 (taskId=305最大)
+        Console.WriteLine($"執行最高優先級任務: 使用者ID = {taskManager3.ExecTop()}"); // 預期: 3 (taskId=303次大)
+        Console.WriteLine($"執行最高優先級任務: 使用者ID = {taskManager3.ExecTop()}"); // 預期: 1 (taskId=301最小)
+
+        Console.WriteLine("\n" + new string('-', 50) + "\n");
+
+        // 測試案例 4：懶刪除機制測試
+        Console.WriteLine("測試案例 4：懶刪除機制測試");
+        var tasks4 = new List<IList<int>>
+        {
+            new List<int> { 1, 401, 5 }
+        };
+
+        var taskManager4 = new TaskManager(tasks4);
+        
+        // 多次編輯同一任務
+        taskManager4.Edit(401, 8);
+        taskManager4.Edit(401, 12);
+        taskManager4.Edit(401, 6);
+        Console.WriteLine("多次編輯任務 401: 5 -> 8 -> 12 -> 6");
+        
+        Console.WriteLine($"執行最高優先級任務: 使用者ID = {taskManager4.ExecTop()}"); // 預期: 1 (最終priority=6)
+
+        Console.WriteLine("\n=== 測試完成 ===");
     }
 }
 
@@ -30,8 +112,9 @@ public class TaskManager
 {
     // 雜湊表：儲存任務ID到[使用者ID, 優先級]的對應關係
     private readonly Dictionary<int, int[]> taskInfo; // taskId -> [userId, priority]
-    
+
     // 優先佇列：以優先級為主要排序依據，任務ID為次要排序依據的最大堆
+    // priorityQueue 元素格式：[priority, taskId]
     private readonly PriorityQueue<int[], int[]> heap;
 
     /// <summary>
