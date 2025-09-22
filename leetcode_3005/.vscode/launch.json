@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "coreclr",
+      "request": "launch",
+      "name": "Launch leetcode_3005 (.NET)",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_3005/bin/Debug/net8.0/leetcode_3005.dll",
+      "cwd": "${workspaceFolder}/leetcode_3005",
+      "args": [],
+      "stopAtEntry": false
+    }
+  ]
+}
