@@ -113,20 +113,20 @@ public int CompareVersion(string version1, string version2)
 ```mermaid
 graph TD
     A[開始] --> B[初始化雙指針 i=0, j=0]
-    B --> C{i < n 或 j < m?}
+    B --> C{i 小於 n 或 j 小於 m?}
     C -->|是| D[初始化修訂號 x=0, y=0]
     D --> E[解析 version1 當前修訂號]
-    E --> F[while i < n 且 version1[i] != '.']
+    E --> F[while 迴圈處理 version1 字元]
     F --> G[x = x * 10 + digit, i++]
     G --> F
     F --> H[解析 version2 當前修訂號]
-    H --> I[while j < m 且 version2[j] != '.']
+    H --> I[while 迴圈處理 version2 字元]
     I --> J[y = y * 10 + digit, j++]
     J --> I
     I --> K[比較修訂號 x 和 y]
-    K --> L{x < y?}
+    K --> L{x 小於 y?}
     L -->|是| M[回傳 -1]
-    L -->|否| N{x > y?}
+    L -->|否| N{x 大於 y?}
     N -->|是| O[回傳 1]
     N -->|否| P[跳過點號 i++, j++]
     P --> C
