@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch leetcode_812",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_812/bin/Debug/net8.0/leetcode_812.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_812",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    }
+  ]
+}
