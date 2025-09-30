@@ -65,6 +65,56 @@ class Program
         Console.WriteLine($"方法 1 結果: {solution.TriangularSum_Method1((int[])nums5.Clone())}");
         Console.WriteLine($"方法 2 結果: {solution.TriangularSum_Method2((int[])nums5.Clone())}");
         Console.WriteLine($"方法 3 結果: {solution.TriangularSum_Method3((int[])nums5.Clone())}");
+        Console.WriteLine();
+
+        // 效能比較測試
+        Console.WriteLine("========== 效能比較測試 ==========");
+        PerformanceBenchmark();
+    }
+
+    /// <summary>
+    /// 效能基準測試：比較陣列版本 vs List 版本
+    /// </summary>
+    static void PerformanceBenchmark()
+    {
+        Solution solution = new();
+        int[] testSizes = [10, 50, 100, 500, 1000];
+        const int iterations = 10000;
+
+        foreach (int size in testSizes)
+        {
+            // 建立測試資料
+            int[] testData = new int[size];
+            for (int i = 0; i < size; i++)
+            {
+                testData[i] = i % 10;
+            }
+
+            // 測試方法 1（陣列版本）
+            var sw1 = System.Diagnostics.Stopwatch.StartNew();
+            for (int i = 0; i < iterations; i++)
+            {
+                solution.TriangularSum_Method1((int[])testData.Clone());
+            }
+            sw1.Stop();
+
+            // 測試 List 版本
+            var sw2 = System.Diagnostics.Stopwatch.StartNew();
+            for (int i = 0; i < iterations; i++)
+            {
+                solution.TriangularSum_ListVersion((int[])testData.Clone());
+            }
+            sw2.Stop();
+
+            // 計算差異百分比
+            double diff = ((double)sw2.ElapsedMilliseconds - sw1.ElapsedMilliseconds) / sw1.ElapsedMilliseconds * 100;
+            string winner = sw1.ElapsedMilliseconds < sw2.ElapsedMilliseconds ? "陣列版本更快" : "List 版本更快";
+
+            Console.WriteLine($"\n陣列大小: {size,4} | 迭代次數: {iterations,6}");
+            Console.WriteLine($"  方法 1 (陣列): {sw1.ElapsedMilliseconds,6} ms");
+            Console.WriteLine($"  List 版本:    {sw2.ElapsedMilliseconds,6} ms");
+            Console.WriteLine($"  效能差異: {diff,6:F2}% ({winner})");
+        }
     }
 
     /// <summary>
@@ -199,6 +249,36 @@ class Program
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// List 版本：使用 List&lt;int&gt; 而非陣列
+        /// 這是題目提供的參考解法
+        /// 時間複雜度: O(n²)
+        /// 空間複雜度: O(n)
+        /// 
+        /// 與方法 1 的主要差異：
+        /// 1. 使用 List&lt;int&gt; 而非 int[]
+        /// 2. List 需要動態擴容，可能造成額外的記憶體配置和複製
+        /// 3. List.Add() 和 List.Count 有輕微的效能開銷
+        /// </summary>
+        public int TriangularSum_ListVersion(int[] nums)
+        {
+            List<int> current = new List<int>(nums);
+
+            while (current.Count > 1)
+            {
+                List<int> newNums = new List<int>();
+
+                for (int i = 0; i < current.Count - 1; ++i)
+                {
+                    newNums.Add((current[i] + current[i + 1]) % 10);
+                }
+
+                current = newNums;
+            }
+
+            return current[0];
         }
     }
 }
