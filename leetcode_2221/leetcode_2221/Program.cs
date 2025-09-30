@@ -67,6 +67,14 @@ class Program
         Console.WriteLine($"方法 3 結果: {solution.TriangularSum_Method3((int[])nums5.Clone())}");
         Console.WriteLine();
 
+        // 測試案例 6: 大陣列（修復溢位問題）
+        int[] nums6 = [0, 3, 3, 4, 1, 2, 6, 4, 9, 3, 5, 1, 7, 7, 3, 0, 3, 2, 5, 1, 9, 0, 2, 6, 3, 9, 2, 5, 9, 2, 6, 4, 2, 9, 7, 2, 0, 3, 0, 1, 1, 2, 7, 8, 6, 4, 4, 5];
+        Console.WriteLine($"測試 6 - 大陣列測試（長度 {nums6.Length}）");
+        Console.WriteLine($"方法 1 結果: {solution.TriangularSum_Method1((int[])nums6.Clone())}");
+        Console.WriteLine($"方法 2 結果: {solution.TriangularSum_Method2((int[])nums6.Clone())}");
+        Console.WriteLine($"方法 3 結果: {solution.TriangularSum_Method3((int[])nums6.Clone())} (預期: 5)");
+        Console.WriteLine();
+
         // 效能比較測試
         Console.WriteLine("========== 效能比較測試 ==========");
         PerformanceBenchmark();
@@ -199,9 +207,9 @@ class Program
         }
 
         /// <summary>
-        /// 方法 3: 數學解法（二項式係數 / 楊輝三角）
-        /// 時間複雜度: O(n²) - 需要計算 n 個組合數
-        /// 空間複雜度: O(n) - 儲存組合數係數
+        /// 方法 3: 數學解法（二項式係數 / 楊輝三角）- 使用模運算優化
+        /// 時間複雜度: O(n²) - 計算楊輝三角需要 n(n-1)/2 次操作
+        /// 空間複雜度: O(n) - 儲存一行楊輝三角係數
         /// 
         /// 數學原理:
         /// 觀察發現，最終結果實際上是各元素乘以對應的二項式係數後相加
@@ -214,6 +222,17 @@ class Program
         /// 係數為 C(4,0), C(4,1), C(4,2), C(4,3), C(4,4)
         /// 即: 1, 4, 6, 4, 1
         /// result = (1*1 + 2*4 + 3*6 + 4*4 + 5*1) % 10 = 48 % 10 = 8
+        /// 
+        /// 實作策略：
+        /// 1. 使用楊輝三角的加法性質逐行計算，避免乘除法可能的溢位
+        /// 2. 利用模運算性質：(a+b) % m = ((a%m) + (b%m)) % m
+        /// 3. 在計算過程中就取模 10，確保數值不會過大
+        /// 4. 從右往左更新陣列，避免覆蓋還需使用的值
+        /// 
+        /// 注意事項：
+        /// - 若使用 C(n,k) = C(n,k-1) * (n-k+1) / k 公式會有溢位風險
+        /// - 當 n 較大時（如 n=48），C(47,23) 會超過 int 範圍
+        /// - 本實作使用楊輝三角性質完全避免溢位問題
         /// </summary>
         public int TriangularSum_Method3(int[] nums)
         {
@@ -225,30 +244,32 @@ class Program
                 return nums[0];
             }
 
-            // 建立陣列儲存二項式係數
-            // coefficients[i] 代表 C(n-1, i)
-            int[] coefficients = new int[n];
-            coefficients[0] = 1; // C(n-1, 0) = 1
+            // 使用楊輝三角的性質：每一行可以從上一行計算得出
+            // 我們直接用一維陣列滾動計算，節省空間
+            // 因為最終只需要 mod 10，我們在過程中就保持 mod 10
+            long[] coefficients = new long[n];
+            coefficients[0] = 1;
 
-            // 計算第 n-1 行的所有二項式係數
-            // 使用遞推公式: C(n, k) = C(n, k-1) * (n - k + 1) / k
-            for (int i = 1; i < n; i++)
+            // 逐行計算楊輝三角，直到第 n-1 行
+            for (int row = 1; row < n; row++)
             {
-                // 為了避免整數除法問題，先乘後除
-                // C(n-1, i) = C(n-1, i-1) * (n-i) / i
-                coefficients[i] = coefficients[i - 1] * (n - i) / i;
+                // 從右往左計算，避免覆蓋還需要使用的值
+                for (int col = row; col > 0; col--)
+                {
+                    // 楊輝三角性質：每個數等於上一行相鄰兩數之和
+                    // 為了避免大數溢位，我們在這裡取模
+                    coefficients[col] = (coefficients[col] + coefficients[col - 1]) % 10;
+                }
             }
 
             // 計算加權和
-            int result = 0;
+            long result = 0;
             for (int i = 0; i < n; i++)
             {
-                // 每個元素乘以對應的二項式係數
-                // 因為只需要最後的個位數，所以每次都取模 10
-                result = (result + nums[i] * coefficients[i]) % 10;
+                result = (result + (long)nums[i] * coefficients[i]) % 10;
             }
 
-            return result;
+            return (int)result;
         }
 
         /// <summary>
