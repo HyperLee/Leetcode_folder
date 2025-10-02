@@ -1,0 +1,12 @@
+{
+  "configurations": [
+    {
+      "type": "coreclr",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/leetcode_3100/bin/Debug/net8.0/leetcode_3100.exe",
+      "cwd": "${workspaceFolder}/leetcode_3100",
+      "preLaunchTask": "build"
+    }
+  ]
+}
