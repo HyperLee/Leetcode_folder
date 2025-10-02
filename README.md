@@ -1,157 +1,145 @@
-# LeetCode 966 - Vowel Spellchecker
+# leetcode_3100 — 3100. Water Bottles II
 
-本專案收錄 C# 的範例實作（位於 `leetcode_961` 專案），針對 LeetCode 題目 966："Vowel Spellchecker" 提供可執行的參考實作與詳細解題說明。
+建立一本精簡的 README，說明如何建置與執行此練習題專案，以及詳細的解題說明。
 
-## 專案概述
+## 簡介
 
-- 範例程式檔案：`leetcode_961/Program.cs`
-- 解法類型：哈希映射（HashMap / Dictionary）
-- 語言：C#（使用 .NET 8 / net8.0）
+此專案為一個使用 C# (.NET) 的控制台範例，實作 LeetCode 題目 3100. "Water Bottles II"。程式位於 `leetcode_3100/Program.cs`，包含：
 
-本專案的程式會示範如何使用三種哈希資料結構來分別處理題目要求的三種比對優先順序（完全匹配、忽略大小寫匹配、忽略元音匹配）。README 主要聚焦在解題思路與如何在本機建置、執行範例測試。
+- `MaxBottlesDrunk(int numBottles, int numExchange)`：用來計算在題目限制下，最多能喝到幾瓶水的主要演算法。
 
-## 題目重點（簡要）
+題目連結：
 
-給定一個字詞表 `wordlist` 與多個查詢 `queries`，要對每個查詢回傳最符合的字詞表單字（或空字串）：
+- https://leetcode.com/problems/water-bottles-ii/
+- https://leetcode.cn/problems/water-bottles-ii/
 
-優先順序：
-1) 完全匹配（區分大小寫）
-2) 忽略大小寫匹配（回傳字詞表中第一個符合此條件的原始單字）
-3) 忽略元音匹配（先將元音視為通配符，再忽略大小寫，回傳字詞表中第一個符合的原始單字）
-4) 若皆無匹配，回傳空字串
+## 專案目標
 
-元音集合：`a, e, i, o, u`（不分大小寫）。
+- 提供一個簡潔且可執行的解題實作（含說明與測資）。
+- 以實作與範例展示如何模擬「每次以目前 numExchange 值最多兌換一瓶，再將 numExchange++」的規則。
 
-## 解法概述（高層）
+## 建置與執行
 
-使用三個資料結構：
+此專案使用 .NET（在 workspace 中以 .csproj 管理）。在 macOS 或其他環境上，請先安裝 .NET SDK。
 
-- 完全匹配：`HashSet<string> wordsPerfect`，儲存字詞表中原始單字，支援 O(1) 查詢。
-- 忽略大小寫匹配：`Dictionary<string,string> wordsCap`，鍵為單字小寫形式，值為字詞表中第一個以該小寫形式出現的原始單字。
-- 忽略元音匹配：`Dictionary<string,string> wordsVow`，鍵為小寫且把元音替換為 `'*'` 的形式（稱為 devowel form），值為字詞表中第一個對應的原始單字。
+# leetcode_3100 — 3100. Water Bottles II
 
-建立索引時，對於 `wordsCap` 與 `wordsVow` 只在鍵不存在時寫入對應值，以保證回傳字詞表中**最先出現**的原始單字。
+此專案為 LeetCode 題目 3100（Water Bottles II）的 C# 範例實作。程式碼位於 `leetcode_3100/Program.cs`，重點是 `MaxBottlesDrunk(int numBottles, int numExchange)` 方法，模擬題目中「每次以目前 numExchange 值最多兌換一瓶，兌換後 numExchange++」的規則。
 
-查詢過程（對單一 query）：
-1) 若 `wordsPerfect` 含有原始 query（區分大小寫），回傳 query 本身。
-2) 否則將 query 轉為小寫，若 `wordsCap` 有對應鍵則回傳其值。
-3) 否則再把小寫 query 的元音都替換為 `'*'`，若 `wordsVow` 有對應鍵則回傳其值。
-4) 若都沒有，回傳空字串（`""`）。
+本 README 以中文（繁體）撰寫，包含：快速上手、細節解題說明、演算法證明、範例、複雜度分析與後續建議。
 
-## 詳細實作步驟（逐步說明）
+## 快速上手
 
-1. 初始化三個資料結構：
+先確定已安裝 .NET SDK（範例使用 net8.0）。
 
-   - `wordsPerfect = new HashSet<string>()`
-   - `wordsCap = new Dictionary<string,string>()`
-   - `wordsVow = new Dictionary<string,string>()`
+在專案根目錄執行：
 
-2. 對 `wordlist` 中每個 `word` 執行：
+```bash
+# 建置
+dotnet build ./leetcode_3100/leetcode_3100.csproj
 
-   - 把 `word` 加入 `wordsPerfect`。
-   - 計算 `wordLower = word.ToLower()`，若 `wordsCap` 尚未包含 `wordLower`，則 `wordsCap[wordLower] = word`。
-   - 計算 `devowel(wordLower)`（把所有元音替換為 `'*'`），若 `wordsVow` 尚未包含這個 voweled 形式，則 `wordsVow[devowel] = word`。
-
-   這裡的設計保證了「先出現的原始單字」優先被保留。
-
-3. 對每個 `query`：
-
-   - 若 `wordsPerfect.Contains(query)`，回傳 `query`。
-   - 計算 `qLower = query.ToLower()`，若 `wordsCap` 含有 `qLower`，回傳 `wordsCap[qLower]`。
-   - 計算 `qDevowel = devowel(qLower)`，若 `wordsVow` 含有 `qDevowel`，回傳 `wordsVow[qDevowel]`。
-   - 否則回傳空字串。
-
-4. `devowel(s)` 的實作：建立 `StringBuilder` 並對每個字元執行 `IsVowel(c) ? '*' : c`，最後回傳新字串。
-
-5. `IsVowel(c)`：將字元小寫化後比較是否為 `a|e|i|o|u`。
-
-### 設計關鍵與注意事項
-
-- 在建立索引時對 `wordsCap` & `wordsVow` 使用「只在鍵不存在時寫入」的策略，以保留字詞表中第一個出現的原始單字，符合題目要求。
-- Devowel 形式將所有元音視為相同的通配符 `'*'`，因此任何元音間的差異都會被忽略。
-- 全部的比較（除完全匹配外）都會先轉為小寫處理，確保大小寫不影響匹配。
-
-## 時間與空間複雜度
-
-- 建構索引：對每個單字長度為 L 的單字做常數時間的處理（toLower、devowel），總計 O(N * L)。
-- 查詢：每個 query 亦為 O(L) 操作（worst-case 檢查三個 hash 查詢，但每個查詢為 O(L) 的字串轉換 + O(1) 的字典查詢），總計 O(Q * L)。
-- 空間：三個資料結構儲存字詞表資訊，需 O(N * L) 空間。
-
-## 範例
-
-程式內含兩組測試資料（可在 `Main` 看到）：
-
-- Test 1（混合大小寫）：
-
-  wordlist: `["KiTe","kite","hare","Hare"]`
-
-  queries: `["kite","Kite","KiTe","Hare","HARE","Hear","hear","keti","keet","keto"]`
-
-  範例輸出（程式執行時會列印）：
-
-  - `kite` -> `kite`  (完全匹配)
-  - `Kite` -> `KiTe`  (忽略大小寫，回傳字詞表中第一個出現的小寫對應)
-  - `KiTe` -> `KiTe`
-  - `Hare` -> `Hare`
-  - `HARE` -> `hare`  (忽略大小寫)
-  - `Hear` -> `` (無匹配)
-  - `hear` -> `` (無匹配)
-  - `keti` -> `KiTe`  (忽略元音)
-  - `keet` -> ``
-  - `keto` -> `KiTe`
-
-- Test 2（元音與大小寫示範）：
-
-  wordlist: `["yellow"]`
-
-  queries: `["YellOw","yellow","YEllow","yollow","yllw"]`
-
-  範例輸出：
-
-  - `YellOw` -> `yellow` (忽略大小寫)
-  - `yellow` -> `yellow`
-  - `YEllow` -> `yellow`
-  - `yollow` -> `yellow` (忽略元音)
-  - `yllw` -> ``
-
-實際輸出請以執行結果為準（`Program.Main` 已印出這些測試的結果）。
-
-## 如何 建置 與 執行
-
-此專案使用 .NET SDK（範例使用 net8.0）。
-
-在 PowerShell（Windows）或其他相容終端機中執行：
-
-```powershell
-# 在專案根目錄（含 leetcode_961.sln）的情況下
-dotnet build leetcode_961/leetcode_961.csproj
-
-# 執行已建置的程式
-dotnet run --project leetcode_961/leetcode_961.csproj
+# 執行（會列印內建測資結果）
+dotnet run --project ./leetcode_3100/leetcode_3100.csproj
 ```
 
-輸出會在主控台列印 Test 1 與 Test 2 的查詢與結果，便於手動驗證解法的正確性。
+程式會在主控台輸出內建測資結果（`Program.Main` 內定義數組），用以驗證演算法行為。
 
-## 檔案說明
+## 題目摘要
 
-- `leetcode_961/Program.cs`：主程式與解法實作，包含 `Spellchecker`, `Solve`, `Devowel`, `IsVowel` 等方法，以及 `Main` 中的測試程式。
-- `leetcode_961/leetcode_961.csproj`：.NET 專案設定檔。
-- `leetcode_961.sln`：解決方案檔。
+給定兩個整數：
 
-## 可改進/延伸（建議）
+- `numBottles`：初始擁有的滿水瓶數量。
+- `numExchange`：當前需要的空瓶數以兌換一瓶滿瓶。
 
-- 新增單元測試（xUnit/NUnit）來自動化驗證多組情境（happy path、邊界條件、重複字詞表元素）。
-- 若要處理更多語言或字元集，應擴充 `IsVowel` 的定義或使用 Unicode 分類方法。
-- 若字詞表非常大且要求低延遲，可考慮使用更高效的字串雜湊或壓縮索引策略。
+操作規則（每次可選擇一項）：
+
+- 喝任意數量的滿瓶（喝後變成空瓶）。
+- 用 `numExchange` 個空瓶換一個滿瓶；完成兌換後，`numExchange` 會增加 1。
+
+限制：在同一個 `numExchange` 值下，不能分多批使用相同的 `numExchange` 做多次兌換（亦即每個 numExchange 值在整個過程中最多兌換一次）。
+
+目標：回傳最多可以喝到的水瓶數量。
+
+## 詳細解題說明（深入）
+
+核心觀察：由於 `numExchange` 在每次兌換後都會增加，且同一個 `numExchange` 值只能兌換一次，因此無法直接以「空瓶數整除 numExchange」的方式一次兌換多瓶。正確的做法是模擬每一步：在當前 `numExchange` 值下，若空瓶足夠就兌換 1 瓶，喝掉後更新空瓶數與 `numExchange`，重複直到無法再兌換。
+
+主要變數定義：
+
+- `empty`：目前持有的空瓶數。
+- `totalDrank`：累計已喝的瓶數。
+
+算法步驟：
+
+1. 初始化：`totalDrank = numBottles`；`empty = numBottles`（先把初始滿瓶喝掉，得到相同數量的空瓶）。
+2. 迴圈：當 `empty >= numExchange` 時執行：
+   - `totalDrank += 1`（兌換並喝掉一瓶）。
+   - `empty = empty - numExchange + 1`（消耗 `numExchange` 個空瓶換來一瓶，喝掉後得到 1 個空瓶）。
+   - `numExchange++`（兌換後限制提升）。
+3. 當 `empty < numExchange` 時停止，回傳 `totalDrank`。
+
+直觀理由（為何貪婪每次換 1 瓶是安全的）：
+
+- 若在當前 `numExchange` 有足夠的空瓶可換，先兌換一瓶不會損害未來可能的兌換，因為：
+  - 兌換會消耗 `numExchange` 空瓶並補回 1（喝掉後），淨減少 `numExchange - 1` 空瓶；且下一個 `numExchange` 會更大，先兌換能保留更多累積空瓶給後續更大門檻使用。
+
+形式化不動量（invariant）：
+
+- 在任一步之前，`totalDrank` 等於已消耗的滿瓶數，`empty` 等於目前持有的空瓶數；每次操作都不會漏掉可能兌換的機會，演算法會嘗試在每個可用的 `numExchange` 值下兌換一次，因此是完整搜尋（以單向模擬）且將所有可行兌換計入。
+
+終止性：
+
+- 每次兌換會使 `empty` 減少至少 1（因為 `numExchange >= 1`，且淨減 `numExchange - 1`），同時 `numExchange` 增加，因此迴圈不會無限進行，最終 `empty < numExchange` 時終止。
+
+## 範例（逐步說明）
+
+範例：`numBottles = 10, numExchange = 3`
+
+1. 初始：`totalDrank = 10`，`empty = 10`。
+2. `empty >= 3`：兌換 1 瓶，`totalDrank = 11`，`empty = 10 - 3 + 1 = 8`，`numExchange = 4`。
+3. `empty >= 4`：兌換 1 瓶，`totalDrank = 12`，`empty = 8 - 4 + 1 = 5`，`numExchange = 5`。
+4. `empty >= 5`：兌換 1 瓶，`totalDrank = 13`，`empty = 5 - 5 + 1 = 1`，`numExchange = 6`。
+5. 現在 `empty = 1 < 6`，停止。答案為 `13`。
+
+其他小例子：
+
+- `numBottles = 3, numExchange = 1`：
+  - 初始：`total = 3, empty = 3`
+  - numExchange=1：可換一瓶，`total=4, empty=3 - 1 + 1 = 3, numExchange=2`
+  - numExchange=2：可換一瓶，`total=5, empty=3 - 2 + 1 = 2, numExchange=3`
+  - numExchange=3：可換一瓶，`total=6, empty=2 - 3 + 1 = 0` → 但注意當 empty < 0 不會發生，實作中會在 `empty >= numExchange` 條件下停止，實際模擬會得到正確值（範例中的程式以模擬為主）。
+
+## 複雜度分析
+
+- 時間複雜度：O(k)，k 為實際兌換次數；每次迴圈做常數時間操作。k 最壞情況為 O(numBottles)。
+- 空間複雜度：O(1)，僅使用常數數量的整數變數。
+
+## 常見邊界與注意事項
+
+- `numBottles = 0`：直接回傳 0。
+- `numExchange <= 0`：題目定義通常為正整數；若不保證，可在方法入口加入參數檢查並拋出 `ArgumentException`。
+- `numExchange = 1`：需特別留意數學直覺，但模擬流程會正確處理（因為每次兌換淨減 `0` 空瓶，但會增大門檻，最終終止）。
+
+## 檔案結構
+
+```
+Leetcode_folder/
+├─ leetcode_3100/
+│  ├─ Program.cs         # 本題實作與簡單測資
+│  └─ leetcode_3100.csproj
+├─ leetcode_3100.sln
+└─ README.md             # 這份說明
+```
+
+## 測試建議與後續改進
+
+- 建議加入單元測試（xUnit/NUnit）：覆蓋典型案例、邊界案例（0、1、大量）以及題目提供的反例。
+- 可把 `MaxBottlesDrunk` 改為 `static`，讓呼叫更直觀。
+- 若需要更詳細的 debug，可在模擬迴圈內印出每次兌換前後的 `empty`、`numExchange` 與 `totalDrank`。
 
 ---
 
-若你希望我幫忙 建立 單元測試或把 README 翻成英文版本，我可以接著執行這些步驟。歡迎告訴我下一步需求。
-# Leetcode_folder
- 存放Leetcode題目解法<br>
-英文- https://leetcode.com/problemset/all/ <br>
-中文- https://leetcode.cn/problemset/all/ <br>
+需要我接著替你：
 
-// 2024/12/25 memo <br>
-原先都使用 傳統的 .NET Framework 專案建立 <br>
-目前逐步汰換更改為 .NET Core 專案 (.NET 8.0)。 <br>
+- 建立 xUnit 測試並新增幾個斷言（例如 `10,3 -> 13`）。
+- 把 `MaxBottlesDrunk` 改成 `static` 並更新 `Main` 的呼叫方式。

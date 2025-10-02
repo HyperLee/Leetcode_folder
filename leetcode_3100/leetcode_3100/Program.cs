@@ -22,15 +22,49 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        // 測試資料 (numBottles, numExchange)
+        var tests = new (int numBottles, int numExchange)[]
+        {
+            (9, 3),    // 一般情況
+            (3, 1),    // 特殊交換為 1 的情況
+            (5, 5),    // 等量交換
+            (10, 2),   // 小交換數
+            (1, 2),    // 無法兌換
+            (100, 1)   // 大量、numExchange = 1
+        };
+
+        var solver = new Program();
+        foreach (var (numBottles, numExchange) in tests)
+        {
+            int drank = solver.MaxBottlesDrunk(numBottles, numExchange);
+            Console.WriteLine($"Input: numBottles={numBottles}, numExchange={numExchange} => Max drank = {drank}");
+        }
     }
 
     /// <summary>
-    /// 
+    /// 計算最多可以喝到的水瓶數量。
+    ///
+    /// 解題說明：
+    /// 1. 先將初始的所有滿瓶喝掉，這會產生等量的空瓶。
+    /// 2. 根據題目限制：在同一個 <c>numExchange</c> 值下，最多只能進行一次空瓶兌換（換一瓶）；兌換後
+    ///    會將 <c>numExchange</c> 增加 1。故此處直接模擬「每次以目前的 <c>numExchange</c> 兌換最多一瓶、喝掉並
+    ///    更新空瓶與 <c>numExchange</c>」的流程，直到空瓶不足以以當前的 <c>numExchange</c> 再兌換為止。
+    ///
+    /// 範例：numBottles = 10, numExchange = 3
+    /// - 初始喝 10 瓶，空瓶 = 10
+    /// - 用 3 個空瓶換 1 瓶（只能換一次），喝後空瓶 = 10 - 3 + 1 = 8，numExchange -> 4，總喝 = 11
+    /// - 用 4 個空瓶換 1 瓶，喝後空瓶 = 8 - 4 + 1 = 5，numExchange -> 5，總喝 = 12
+    /// - 用 5 個空瓶換 1 瓶，喝後空瓶 = 5 - 5 + 1 = 1，numExchange -> 6，總喝 = 13
+    /// - 空瓶 1 少於 6，停止。答案為 13。
+    ///
+    /// 時間複雜度：O(k)，k 為實際兌換次數；在最壞情況下 k = O(numBottles)。空間複雜度：O(1)。
+    ///
+    /// 注意：此方法假設輸入為合理的正整數（numBottles >= 0, numExchange >= 1）。若需嚴格輸入驗證，可在入口
+    /// 加入參數檢查並拋出例外。
     /// </summary>
-    /// <param name="numBottles"></param>
-    /// <param name="numExchange"></param>
-    /// <returns></returns>
+    /// <param name="numBottles">初始滿水瓶數量。</param>
+    /// <param name="numExchange">當前需要的空瓶數以兌換一瓶（每次兌換後會自動 +1）。</param>
+    /// <returns>能喝到的最大水瓶數量。</returns>
     public int MaxBottlesDrunk(int numBottles, int numExchange)
     {
         // 當前手上的空瓶數（開始時喝完初始滿瓶會形成空瓶）
@@ -42,17 +76,15 @@ class Program
         totalDrank += numBottles;
         empty += numBottles;
 
-        // 當空瓶數夠換新的一瓶時，持續兌換並喝
+        // 當空瓶數夠換新的一瓶時，持續以「每次 numExchange 只兌換一次」的規則兌換並喝
         while (empty >= numExchange)
         {
-            // 用空瓶兌換到的新瓶數
-            int newFull = empty / numExchange;
-            // 更新總喝瓶數
-            totalDrank += newFull;
-            // 兌換後剩下的空瓶數（餘數）加上新喝完會得到的空瓶
-            empty = (empty % numExchange) + newFull;
-            
-            numExchange++; // 每次兌換後，numExchange 增加 1
+            // 每個 numExchange 值只能兌換一次（一瓶）
+            totalDrank += 1;
+            // 使用 numExchange 個空瓶兌換一瓶，喝掉後會得到一個空瓶
+            empty = empty - numExchange + 1;
+            // 每次兌換後，numExchange 增加 1
+            numExchange++;
         }
 
         return totalDrank;
