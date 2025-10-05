@@ -1,0 +1,18 @@
+{
+  "configurations": [
+    {
+      "type": "coreclr",
+      "request": "launch",
+      "name": "Launch leetcode_417",
+      "program": "${workspaceFolder}/leetcode_417/bin/Debug/net8.0/leetcode_417.exe",
+      "cwd": "${workspaceFolder}/leetcode_417",
+      "preLaunchTask": "build"
+    },
+    {
+      "type": "coreclr",
+      "request": "launch",
+      "name": "Launch Program",
+      "program": "${workspaceFolder}/leetcode_417/bin/Debug/net8.0/leetcode_417.exe"
+    }
+  ]
+}
