@@ -34,8 +34,13 @@ class Program
     {
         // 測試範例
         int[] rains = { 1, 2, 0, 0, 2, 1 };
-        int[] result = AvoidFlood(rains);
-        Console.WriteLine("Result: " + string.Join(", ", result));
+        // 呼叫解法1
+        int[] result1 = AvoidFlood(rains);
+        Console.WriteLine("AvoidFlood: " + string.Join(", ", result1));
+
+        // 呼叫解法2（優先隊列）
+        int[] result2 = AvoidFlood2(rains);
+        Console.WriteLine("AvoidFlood2: " + string.Join(", ", result2));
     }
 
 
@@ -91,6 +96,89 @@ class Program
 
             // 更新該湖最近一次變滿的日子
             fullDay[lake] = i;
+        }
+
+        return ans;
+    }
+
+    /// <summary>
+    /// 解法2（優先隊列 / 貪心）
+    ///
+    /// 思路和演算法：
+    /// 當沒有湖泊下雨的時候，可以選擇抽乾一個湖泊。根據貪心策略，為了避免任一湖泊發生洪水，每次選擇抽乾湖泊的方法如下：
+    /// - 如果沒有裝滿水的湖泊，則可以抽乾任何一個湖泊（這裡預設抽乾編號為 1）。
+    /// - 如果有裝滿水的湖泊，則應該抽乾一個裝滿水的湖泊中「下次下雨日期最近」的那個湖泊。
+    ///
+    /// 實作細節：
+    /// 1. 反向遍歷 rains，為每個下雨的日子計算該湖泊的下次下雨日期（若無則為 int.MaxValue 或留為 length 表示無下一次下雨）。
+    /// 2. 正向遍歷 rains，維護一個集合 fullLakes 保存目前已經裝滿水的湖泊，並用優先隊列 pq 儲存 (lake, nextRainIndex)，優先依 nextRainIndex 最小排序。
+    /// 3. 遇到 rains[i] == 0 時：若 pq 為空則任意抽乾湖泊（填 1），否則從 pq 取出 nextRain 最近的湖泊並抽乾它，同時從 fullLakes 移除該湖。
+    /// 4. 遇到 rains[i] > 0 時：若該 lake 已在 fullLakes 中，表示會發生洪水，回傳空陣列；否則將該 lake 加入 fullLakes，並把 (lake, nextRain) 推入 pq（如果存在下一次下雨）。
+    ///
+    /// 此解法運用了貪心：每次抽乾最緊迫（下次下雨最近）的湖泊，可以保證給後面更晚下雨的湖泊更多彈性，避免不必要的洪水。
+    /// </summary>
+    /// <param name="rains">輸入陣列</param>
+    /// <returns>回傳 ans 陣列或空陣列表示無解</returns>
+    public static int[] AvoidFlood2(int[] rains)
+    {
+        int length = rains.Length;
+        int[] ans = new int[length];
+        Array.Fill(ans, -1);
+
+        int[] nextRains = new int[length];
+        IDictionary<int, int> lakeDays = new Dictionary<int, int>();
+
+        // 反向遍歷，計算每個下雨日的下一次下雨位置
+        for (int i = length - 1; i >= 0; i--)
+        {
+            int lake = rains[i];
+            if (lake > 0)
+            {
+                // 若 dictionary 中不存在，先插入一個預設值（代表無下一次下雨）
+                if (!lakeDays.ContainsKey(lake))
+                {
+                    lakeDays[lake] = int.MaxValue;
+                }
+                nextRains[i] = lakeDays[lake] == int.MaxValue ? length : lakeDays[lake];
+                lakeDays[lake] = i;
+            }
+        }
+
+        ISet<int> fullLakes = new HashSet<int>();
+        // 優先佇列元素為 int[] { lake, nextIndex }，優先權為 nextIndex（越小越先出列）
+        var pq = new PriorityQueue<int[], int>();
+
+        for (int i = 0; i < length; i++)
+        {
+            int lake = rains[i];
+            if (lake > 0)
+            {
+                // 如果該湖已經是滿的，代表洪水發生
+                if (!fullLakes.Add(lake))
+                {
+                    return new int[0];
+                }
+                // 若該湖之後還會下雨，則將 (lake, nextRains[i]) 放入優先隊列
+                if (nextRains[i] < length)
+                {
+                    pq.Enqueue(new int[] { lake, nextRains[i] }, nextRains[i]);
+                }
+            }
+            else
+            {
+                // 今天可以抽乾一個湖泊
+                if (pq.Count == 0)
+                {
+                    ans[i] = 1; // 任意抽乾第1個湖泊（無害）
+                }
+                else
+                {
+                    int[] pair = pq.Dequeue();
+                    int nextLake = pair[0];
+                    ans[i] = nextLake;
+                    fullLakes.Remove(nextLake);
+                }
+            }
         }
 
         return ans;
