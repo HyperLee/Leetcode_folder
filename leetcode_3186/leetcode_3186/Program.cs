@@ -31,7 +31,7 @@ class Program
         {
             new int[] { 1, 1, 3, 4 },        // Expected: 6 (1+1+4 or 3+3)
             new int[] { 7, 1, 6, 6 },        // Expected: 13 (7+6)
-            new int[] { 1, 2, 3, 4, 5 },     // Expected: 9 (1+3+5)
+            new int[] { 1, 2, 3, 4, 5 },     // Expected: 7 (2+5)
             new int[] { 5, 9, 4, 6 },        // Expected: 15 (9+6)
         };
 
