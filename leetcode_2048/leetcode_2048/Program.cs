@@ -71,7 +71,6 @@ class Program
 
         Console.WriteLine("測試完成！");
         Console.WriteLine("按任意鍵繼續...");
-        Console.ReadKey();
     }
 
     #region 方法一：暴力枚舉（Brute Force）
