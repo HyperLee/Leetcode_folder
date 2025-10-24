@@ -152,24 +152,34 @@ class Program
         List<int> balancedNumbers = GetCachedBalancedNumbers();
 
         // 使用二分搜尋找到第一個大於 n 的數值平衡數
+        // 初始化左右指標，左指標指向列表開頭，右指標指向列表結尾
         int left = 0, right = balancedNumbers.Count - 1;
+        // 初始化結果為最大整數值，確保任何找到的數值都會更新結果
         int result = int.MaxValue;
 
+        // 標準二分搜尋循環：當左指標不大於右指標時繼續搜尋
         while (left <= right)
         {
+            // 計算中間位置索引，使用 left + (right - left) / 2 避免整數溢位
             int mid = left + (right - left) / 2;
 
+            // 如果中間位置的數值大於 n
             if (balancedNumbers[mid] > n)
             {
+                // 這可能是我們要找的答案，先記錄下來
                 result = balancedNumbers[mid];
+                // 繼續在左半部分搜尋，看是否有更小的數值平衡數
                 right = mid - 1;
             }
             else
             {
+                // 如果中間位置的數值小於或等於 n
+                // 答案一定在右半部分，移動左指標
                 left = mid + 1;
             }
         }
 
+        // 返回找到的第一個大於 n 的數值平衡數
         return result;
     }
 
