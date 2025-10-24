@@ -2,6 +2,10 @@
 
 class Program
 {
+    // 靜態欄位：預先生成的數值平衡數列表（只生成一次，重複使用）
+    private static List<int>? _cachedBalancedNumbers = null;
+    private static readonly object _lockObject = new object();
+
     /// <summary>
     /// 2048. Next Greater Numerically Balanced Number
     /// https://leetcode.com/problems/next-greater-numerically-balanced-number/description/?envType=daily-question&envId=2025-10-24
@@ -133,18 +137,19 @@ class Program
     #region 方法二：預先生成所有數值平衡數
 
     /// <summary>
-    /// 方法二：預先生成所有數值平衡數
+    /// 方法二：預先生成所有數值平衡數（優化版）
     /// 觀察到數值平衡數的數量有限，預先生成所有可能的平衡數，然後用二分搜尋找到答案。
     /// 在 [1, 10^6] 範圍內，數值平衡數非常少（約 80 個）。
-    /// 時間複雜度：O(log k)，k 為平衡數的總數
+    /// 優化：使用靜態快取，只生成一次列表，之後重複使用。
+    /// 時間複雜度：首次 O(n)，後續 O(log k)，k 為平衡數的總數
     /// 空間複雜度：O(k)
     /// </summary>
     /// <param name="n">給定的整數</param>
     /// <returns>嚴格大於 n 的最小數值平衡數</returns>
     public int NextBeautifulNumber_PreGenerated(int n)
     {
-        // 預先生成的數值平衡數列表（已排序）
-        List<int> balancedNumbers = GenerateBalancedNumbers();
+        // 使用快取的數值平衡數列表（只生成一次）
+        List<int> balancedNumbers = GetCachedBalancedNumbers();
 
         // 使用二分搜尋找到第一個大於 n 的數值平衡數
         int left = 0, right = balancedNumbers.Count - 1;
@@ -169,11 +174,36 @@ class Program
     }
 
     /// <summary>
+    /// 取得快取的數值平衡數列表（Lazy Initialization）
+    /// 使用雙重檢查鎖定模式確保執行緒安全
+    /// </summary>
+    /// <returns>排序後的數值平衡數列表</returns>
+    private static List<int> GetCachedBalancedNumbers()
+    {
+        // 第一次檢查：避免每次都進入鎖定區域
+        if (_cachedBalancedNumbers == null)
+        {
+            lock (_lockObject)
+            {
+                // 第二次檢查：確保只生成一次
+                if (_cachedBalancedNumbers == null)
+                {
+                    Console.WriteLine("🔄 首次生成數值平衡數列表（之後會重複使用）...");
+                    _cachedBalancedNumbers = GenerateBalancedNumbers();
+                    Console.WriteLine($"✅ 生成完成！共 {_cachedBalancedNumbers.Count} 個數值平衡數");
+                }
+            }
+        }
+
+        return _cachedBalancedNumbers;
+    }
+
+    /// <summary>
     /// 生成所有可能的數值平衡數
     /// 直接枚舉所有可能的數值平衡數
     /// </summary>
     /// <returns>排序後的數值平衡數列表</returns>
-    private List<int> GenerateBalancedNumbers()
+    private static List<int> GenerateBalancedNumbers()
     {
         List<int> result = new List<int>();
 
@@ -181,13 +211,44 @@ class Program
         // 在 10^6 範圍內，數值平衡數很少
         for (int num = 1; num <= 1000000; num++)
         {
-            if (IsBalanced(num))
+            if (IsBalancedStatic(num))
             {
                 result.Add(num);
             }
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// 檢查一個數字是否為數值平衡數（靜態版本）
+    /// </summary>
+    /// <param name="num">要檢查的數字</param>
+    /// <returns>是否為數值平衡數</returns>
+    private static bool IsBalancedStatic(int num)
+    {
+        // 統計每個數字的出現次數（0-9）
+        int[] count = new int[10];
+        int temp = num;
+
+        // 統計各位數字的出現次數
+        while (temp > 0)
+        {
+            count[temp % 10]++;
+            temp /= 10;
+        }
+
+        // 檢查是否滿足數值平衡條件
+        for (int digit = 0; digit < 10; digit++)
+        {
+            // 如果數字 digit 出現了，但出現次數不等於 digit 本身
+            if (count[digit] > 0 && count[digit] != digit)
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     #endregion
