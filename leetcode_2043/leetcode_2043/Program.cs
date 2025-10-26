@@ -86,75 +86,119 @@ class Program
 
 
 /// <summary>
+/// 簡易銀行系統
 /// 
+/// 解題思路：模擬
+/// 已有的帳號為 1 到 n，分別對三種操作進行分析：
+/// 
+/// transfer 操作：
+/// 如果要進行操作的帳號不在已有的帳號中，即 account1 > n 或者 account2 > n，那麼交易無效。
+/// 如果帳號 account1 的餘額小於 money，那麼交易無效。
+/// 交易有效時，我們將帳號 account1 的餘額減少 money，帳號 account2 的餘額增加 money。
+/// 
+/// deposit 操作：
+/// 如果要進行操作的帳號不在已有的帳號中，即 account > n，那麼交易無效。
+/// 交易有效時，我們將帳號 account 的餘額增加 money。
+/// 
+/// withdraw 操作：
+/// 如果要進行操作的帳號不在已有的帳號中，即 account > n，那麼交易無效。
+/// 如果帳號 account 的餘額小於 money，那麼交易無效。
+/// 交易有效時，我們將帳號 account 的餘額減少 money。
+/// 
+/// 時間複雜度：O(1)，每次操作都是常數時間
+/// 空間複雜度：O(n)，需要儲存 n 個帳戶的餘額
 /// </summary>
 public class Bank
 {
+    /// <summary>
+    /// 儲存所有帳戶的餘額陣列，索引 i 對應帳號 i+1
+    /// </summary>
     public long[] balances;
 
     /// <summary>
-    /// 
+    /// 初始化銀行系統
     /// </summary>
-    /// <param name="balance"></param>
+    /// <param name="balance">0 索引的整數陣列，第 (i + 1) 個帳戶的初始餘額為 balance[i]</param>
     public Bank(long[] balance)
     {
         this.balances = balance;
     }
 
     /// <summary>
-    /// 
+    /// 轉帳操作：從 account1 轉帳 money 到 account2
+    /// 驗證條件：
+    /// 1. 兩個帳號都必須在有效範圍內 (1 到 n)
+    /// 2. account1 的餘額必須大於等於轉帳金額
     /// </summary>
-    /// <param name="account1"></param>
-    /// <param name="account2"></param>
-    /// <param name="money"></param>
-    /// <returns></returns>
+    /// <param name="account1">轉出帳號 (1-based)</param>
+    /// <param name="account2">轉入帳號 (1-based)</param>
+    /// <param name="money">轉帳金額</param>
+    /// <returns>交易成功返回 true，否則返回 false</returns>
     public bool Transfer(int account1, int account2, long money)
     {
+        // 驗證帳號是否有效：帳號必須在 1 到 n 的範圍內
         if (account1 < 1 || account1 > balances.Length || account2 < 1 || account2 > balances.Length)
         {
             return false;
         }
+        
+        // 驗證餘額是否足夠：轉出帳號的餘額必須大於等於轉帳金額
         if (balances[account1 - 1] < money)
         {
             return false;
         }
+        
+        // 執行轉帳：從 account1 扣除金額，並增加到 account2
         balances[account1 - 1] -= money;
         balances[account2 - 1] += money;
         return true;
     }
 
     /// <summary>
-    /// 
+    /// 存款操作：向指定帳號存入金額
+    /// 驗證條件：
+    /// 1. 帳號必須在有效範圍內 (1 到 n)
     /// </summary>
-    /// <param name="account"></param>
-    /// <param name="money"></param>
-    /// <returns></returns>
+    /// <param name="account">存款帳號 (1-based)</param>
+    /// <param name="money">存款金額</param>
+    /// <returns>交易成功返回 true，否則返回 false</returns>
     public bool Deposit(int account, long money)
     {
+        // 驗證帳號是否有效：帳號必須在 1 到 n 的範圍內
         if (account < 1 || account > balances.Length)
         {
             return false;
         }
+        
+        // 執行存款：將金額增加到指定帳號
         balances[account - 1] += money;
         return true;
     }
 
     /// <summary>
-    /// 
+    /// 提款操作：從指定帳號提取金額
+    /// 驗證條件：
+    /// 1. 帳號必須在有效範圍內 (1 到 n)
+    /// 2. 帳號餘額必須大於等於提款金額
     /// </summary>
-    /// <param name="account"></param>
-    /// <param name="money"></param>
-    /// <returns></returns>
+    /// <param name="account">提款帳號 (1-based)</param>
+    /// <param name="money">提款金額</param>
+    /// <returns>交易成功返回 true，否則返回 false</returns>
     public bool Withdraw(int account, long money)
     {
+        // 驗證帳號是否有效：帳號必須在 1 到 n 的範圍內
         if (account < 1 || account > balances.Length)
         {
             return false;
         }
+        
+        // 驗證餘額是否足夠：帳號餘額必須大於等於提款金額
         if (balances[account - 1] < money)
         {
             return false;
         }
+        
+        // 執行提款：從指定帳號扣除金額
         balances[account - 1] -= money;
         return true;
     }
