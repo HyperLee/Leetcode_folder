@@ -287,9 +287,20 @@ dotnet run --project leetcode_1526/leetcode_1526.csproj
 
 ## 相關資源
 
+### 題目連結
+
 - [LeetCode 1526 題目連結](https://leetcode.com/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/)
 - [LeetCode 1526 中文題目](https://leetcode.cn/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/)
-- [差分陣列詳解](https://oi-wiki.org/basic/prefix-sum/#差分)
+
+### 解法參考
+
+- [官方解法](https://leetcode.cn/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/solutions/371326/xing-cheng-mu-biao-shu-zu-de-zi-shu-zu-zui-shao-ze/?envType=daily-question&envId=2025-10-30)
+- [他人解法 - 用差分思考（簡潔寫法）](https://leetcode.cn/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/solutions/3808716/yong-chai-fen-si-kao-jian-ji-xie-fa-pyth-0v7x/?envType=daily-question&envId=2025-10-30)
+
+### 差分陣列相關
+
+- [差分陣列詳解 - OI Wiki](https://oi-wiki.org/basic/prefix-sum/#差分)
+- [算法小課堂：差分陣列](https://leetcode.cn/problems/car-pooling/solutions/2550264/suan-fa-xiao-ke-tang-chai-fen-shu-zu-fu-9d4ra/)
 
 ## 關鍵技巧總結
 
