@@ -3,19 +3,15 @@
   "tasks": [
     {
       "label": "build",
-      "type": "process",
       "command": "dotnet",
+      "type": "process",
       "args": [
         "build",
         "${workspaceFolder}/leetcode_1526/leetcode_1526.csproj",
-        "-c",
-        "Debug"
+        "/property:GenerateFullPaths=true",
+        "/consoleloggerparameters:NoSummary"
       ],
-      "problemMatcher": "$msCompile",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
+      "problemMatcher": "$msCompile"
     }
   ]
 }
