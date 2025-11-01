@@ -26,7 +26,8 @@ class Program
     /// 方法一：哈希表 + 哨兵節點 (dummy node)
     /// 解題說明：
     /// 1. 將陣列 `nums` 中的元素放入一個雜湊集合 (HashSet) 中，以便 O(1) 時間判斷某個值是否需要被移除。
-    /// 2. 因為鍊錶的頭節點可能會被移除，為了簡化邊界處理，我們在原鍊錶頭之前建立一個「哨兵節點 (dummy node)」，並讓 dummy.next 指向原本的頭節點。
+    /// 2. 因為鍊錶的頭節點可能會被移除，為了簡化邊界處理，我們在原鍊錶頭之前建立一個「哨兵節點 (dummy node)」，
+    ///    並讓 dummy.next 指向原本的頭節點。
     /// 3. 使用一個指標 `current` 從 dummy 開始遍歷。每次檢查 `current.next` 的值是否存在於集合中：
     ///    - 若存在，表示該節點需要刪除，則把 `current.next` 指向 `current.next.next`，相當於跳過該節點。
     ///    - 若不存在，則把 `current` 往前移動一格 (current = current.next)。
