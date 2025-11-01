@@ -94,6 +94,22 @@ class Program
         Console.WriteLine(string.Join(" -> ", parts));
     }
 
+    /// <summary>
+    /// 3217. Delete Nodes From Linked List Present in Array
+    /// 3217. 從鍊錶移除在陣列中存在的節點
+    ///
+    /// Problem (English):
+    /// You are given an array of integers nums and the head of a linked list. 
+    /// Return the head of the modified linked list after removing all nodes from the linked list that have a value that exists in nums.
+    ///
+    /// 題目（中文翻譯）：
+    /// 給定一個整數陣列 nums 與一個鍊錶的頭節點 head，請移除鍊錶中所有節點，其節點值存在於 nums 中，並回傳移除後的鍊錶頭節點。
+    ///
+    /// Links:
+    /// https://leetcode.com/problems/delete-nodes-from-linked-list-present-in-array/description/?envType=daily-question&envId=2025-11-01
+    /// https://leetcode.cn/problems/delete-nodes-from-linked-list-present-in-array/description/?envType=daily-question&envId=2025-11-01
+    /// </summary>
+    /// <param name="args"></param>
     static void Main(string[] args)
     {
         // 範例 1
