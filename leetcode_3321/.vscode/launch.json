@@ -1,0 +1,15 @@
+{
+  "configurations": [
+    {
+      "name": ".NET Core Launch (console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_3321/bin/Debug/net8.0/leetcode_3321.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_3321",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    }
+  ]
+}
