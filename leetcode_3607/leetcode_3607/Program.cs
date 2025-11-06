@@ -145,7 +145,7 @@ class Program
     /// int[][] connections = [[1, 2], [2, 3], [3, 4]];
     /// int[][] queries = [[1, 1], [2, 2], [1, 2], [1, 1]];
     /// int[] result = ProcessQueries(c, connections, queries);
-    /// // result = [1, 1, 1]
+    /// result = [1, 1, 1]
     /// </code>
     /// </example>
     public int[] ProcessQueries(int c, int[][] connections, int[][] queries)
