@@ -98,7 +98,7 @@ class Program
         {
             numWithIndex[i] = new int[2];
             numWithIndex[i][0] = nums[i]; // 元素值
-            numWithIndex[i][1] = i;        // 原始索引
+            numWithIndex[i][1] = i;       // 原始索引
         }
 
         // 自訂排序規則：
