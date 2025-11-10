@@ -21,7 +21,7 @@ class Program
     static void Main(string[] args)
     {
         var solution = new Program();
-        
+
         // 測試案例 1: nums = [1,2,1,2,1,2]
         // 預期輸出: 4
         // 解釋: 第一次操作將所有 1 變成 0,然後需要 3 次操作分別處理三個 2
@@ -30,7 +30,7 @@ class Program
         Console.WriteLine($"方法一結果: {solution.MinOperations(test1)}");
         Console.WriteLine($"方法二結果: {solution.MinOperations2([1, 2, 1, 2, 1, 2])}");
         Console.WriteLine($"預期結果: 4\n");
-        
+
         // 測試案例 2: nums = [2,5,3,8,3]
         // 預期輸出: 4
         int[] test2 = [2, 5, 3, 8, 3];
@@ -38,7 +38,7 @@ class Program
         Console.WriteLine($"方法一結果: {solution.MinOperations(test2)}");
         Console.WriteLine($"方法二結果: {solution.MinOperations2([2, 5, 3, 8, 3])}");
         Console.WriteLine($"預期結果: 4\n");
-        
+
         // 測試案例 3: nums = [0]
         // 預期輸出: 0
         // 解釋: 陣列已經全為 0,不需要任何操作
@@ -47,7 +47,7 @@ class Program
         Console.WriteLine($"方法一結果: {solution.MinOperations(test3)}");
         Console.WriteLine($"方法二結果: {solution.MinOperations2([0])}");
         Console.WriteLine($"預期結果: 0\n");
-        
+
         // 測試案例 4: nums = [1,2,3,2,1]
         // 預期輸出: 3
         int[] test4 = [1, 2, 3, 2, 1];
@@ -55,7 +55,7 @@ class Program
         Console.WriteLine($"方法一結果: {solution.MinOperations(test4)}");
         Console.WriteLine($"方法二結果: {solution.MinOperations2([1, 2, 3, 2, 1])}");
         Console.WriteLine($"預期結果: 3\n");
-        
+
         // 測試案例 5: nums = [5,4,3,2,1]
         // 預期輸出: 5
         // 解釋: 遞減序列,每個元素都需要單獨操作
@@ -64,7 +64,7 @@ class Program
         Console.WriteLine($"方法一結果: {solution.MinOperations(test5)}");
         Console.WriteLine($"方法二結果: {solution.MinOperations2([5, 4, 3, 2, 1])}");
         Console.WriteLine($"預期結果: 5\n");
-        
+
         // 測試案例 6: nums = [1,1,1,1]
         // 預期輸出: 1
         // 解釋: 所有元素相同,一次操作即可將所有元素變為 0
@@ -89,6 +89,9 @@ class Program
     /// 
     /// 時間複雜度: O(n) - 每個元素最多入堆疊和出堆疊各一次
     /// 空間複雜度: O(n) - 堆疊最壞情況下儲存所有元素
+    /// 
+    /// ref:
+    /// https://leetcode.cn/problems/minimum-operations-to-convert-all-elements-to-zero/solutions/3819899/jiang-suo-you-yuan-su-bian-wei-0-de-zui-6f2r3/?envType=daily-question&envId=2025-11-10
     /// </summary>
     /// <param name="nums">非負整數陣列</param>
     /// <returns>使所有元素變為 0 所需的最少操作數</returns>
@@ -96,7 +99,7 @@ class Program
     {
         var s = new List<int>(); // 單調遞增堆疊
         int res = 0; // 操作次數
-        
+
         foreach (int a in nums)
         {
             // 如果堆疊頂元素大於當前元素,彈出堆疊頂
@@ -105,13 +108,13 @@ class Program
             {
                 s.RemoveAt(s.Count - 1);
             }
-            
+
             // 如果當前元素已經為 0,跳過
             if (a == 0)
             {
                 continue;
             }
-            
+
             // 如果堆疊為空或堆疊頂元素小於當前元素
             // 說明需要新的一次操作來覆蓋當前元素
             if (s.Count == 0 || s[s.Count - 1] < a)
@@ -122,7 +125,7 @@ class Program
             // 如果堆疊頂元素等於當前元素,則不需要入堆疊
             // 因為可以在同一次操作中將它們都變為 0
         }
-        
+
         return res;
     }
     
@@ -146,6 +149,9 @@ class Program
     /// 
     /// 時間複雜度: O(n) - 每個元素最多入堆疊和出堆疊各一次
     /// 空間複雜度: O(1) - 直接使用輸入陣列作為堆疊,不需要額外空間
+    /// 
+    /// ref:
+    /// https://leetcode.cn/problems/minimum-operations-to-convert-all-elements-to-zero/solutions/3673804/cong-fen-zhi-dao-dan-diao-zhan-jian-ji-x-mzbl/?envType=daily-question&envId=2025-11-10
     /// </summary>
     /// <param name="nums">非負整數陣列</param>
     /// <returns>使所有元素變為 0 所需的最少操作數</returns>
