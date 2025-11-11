@@ -1,4 +1,6 @@
-﻿namespace leetcode_474;
+﻿using System.Net.Http.Headers;
+
+namespace leetcode_474;
 
 class Program
 {
@@ -15,6 +17,125 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new Program();
+
+        // 測試案例 1
+        // 輸入：strs = ["10","0001","111001","1","0"], m = 5, n = 3
+        // 輸出：4
+        // 解釋：最多有 5 個 0 和 3 個 1 的最大子集是 {"10","0001","1","0"}，因此答案是 4
+        string[] strs1 = ["10", "0001", "111001", "1", "0"];
+        int m1 = 5, n1 = 3;
+        int result1 = solution.FindMaxForm(strs1, m1, n1);
+        Console.WriteLine($"測試案例 1:");
+        Console.WriteLine($"輸入：strs = [{string.Join(", ", strs1.Select(s => $"\"{s}\""))}], m = {m1}, n = {n1}");
+        Console.WriteLine($"輸出：{result1}");
+        Console.WriteLine($"預期：4");
+        Console.WriteLine();
+
+        // 測試案例 2
+        // 輸入：strs = ["10","0","1"], m = 1, n = 1
+        // 輸出：2
+        // 解釋：最大子集是 {"0", "1"}，因此答案是 2
+        string[] strs2 = ["10", "0", "1"];
+        int m2 = 1, n2 = 1;
+        int result2 = solution.FindMaxForm(strs2, m2, n2);
+        Console.WriteLine($"測試案例 2:");
+        Console.WriteLine($"輸入：strs = [{string.Join(", ", strs2.Select(s => $"\"{s}\""))}], m = {m2}, n = {n2}");
+        Console.WriteLine($"輸出：{result2}");
+        Console.WriteLine($"預期：2");
+        Console.WriteLine();
+
+        // 測試案例 3
+        // 輸入：strs = ["10","0001","111001","1","0"], m = 3, n = 4
+        // 輸出：3
+        string[] strs3 = ["10", "0001", "111001", "1", "0"];
+        int m3 = 3, n3 = 4;
+        int result3 = solution.FindMaxForm(strs3, m3, n3);
+        Console.WriteLine($"測試案例 3:");
+        Console.WriteLine($"輸入：strs = [{string.Join(", ", strs3.Select(s => $"\"{s}\""))}], m = {m3}, n = {n3}");
+        Console.WriteLine($"輸出：{result3}");
+        Console.WriteLine($"預期：3");
+    }
+
+
+    /// <summary>
+    /// 使用動態規劃求解 0/1 背包問題的變體
+    /// 
+    /// 解題思路：
+    /// 1. 定義三維 DP 陣列：dp[i,j,k] 表示在前 i 個字串中，使用 j 個 0 和 k 個 1 的情況下最多可以得到的字串數量
+    /// 2. 狀態轉移方程：
+    ///    - 如果 j < zeros 或 k < ones：dp[i,j,k] = dp[i-1,j,k]（無法選擇當前字串）
+    ///    - 如果 j >= zeros 且 k >= ones：dp[i,j,k] = max(dp[i-1,j,k], dp[i-1,j-zeros,k-ones] + 1)
+    /// 3. 時間複雜度：O(lmn)，其中 l 是字串陣列長度
+    /// 4. 空間複雜度：O(lmn)
+    /// </summary>
+    /// <param name="strs">二進位字串陣列</param>
+    /// <param name="m">最多可使用的 0 的數量</param>
+    /// <param name="n">最多可使用的 1 的數量</param>
+    /// <returns>符合條件的最大子集大小</returns>
+    public int FindMaxForm(string[] strs, int m, int n)
+    {
+        int length = strs.Length;
+        
+        // 建立三維 DP 陣列：dp[i,j,k] 表示前 i 個字串使用 j 個 0 和 k 個 1 時的最大字串數量
+        int[,,] dp = new int[length + 1, m + 1, n + 1];
+        
+        // 遍歷每個字串
+        for (int i = 1; i <= length; i++)
+        {
+            // 計算當前字串中 0 和 1 的數量
+            int[] zerosOnes = GetZerosOnes(strs[i - 1]);
+            int zeros = zerosOnes[0];  // 當前字串的 0 的數量
+            int ones = zerosOnes[1];   // 當前字串的 1 的數量
+            
+            // 遍歷所有可能的 0 的容量
+            for (int j = 0; j <= m; j++)
+            {
+                // 遍歷所有可能的 1 的容量
+                for (int k = 0; k <= n; k++)
+                {
+                    // 預設不選擇當前字串
+                    dp[i, j, k] = dp[i - 1, j, k];
+                    
+                    // 如果容量足夠，考慮選擇當前字串
+                    if (j >= zeros && k >= ones)
+                    {
+                        // 選擇當前字串：前 i-1 個字串用 j-zeros 個 0 和 k-ones 個 1 的最大數量 + 1
+                        dp[i, j, k] = Math.Max(dp[i, j, k], dp[i - 1, j - zeros, k - ones] + 1);
+                    }
+                }
+            }
+        }
+        
+        // 返回使用所有字串、m 個 0 和 n 個 1 的最大字串數量
+        return dp[length, m, n];
+    }
+
+    /// <summary>
+    /// 計算字串中 0 和 1 的數量
+    /// 
+    /// 解題思路：
+    /// 1. 建立一個長度為 2 的陣列，索引 0 存放 '0' 的數量，索引 1 存放 '1' 的數量
+    /// 2. 遍歷字串，使用字元與 '0' 的 ASCII 差值作為索引，統計數量
+    /// 3. 時間複雜度：O(len)，其中 len 是字串長度
+    /// 4. 空間複雜度：O(1)
+    /// </summary>
+    /// <param name="str">二進位字串（僅包含 '0' 和 '1'）</param>
+    /// <returns>長度為 2 的陣列，[0] 存放 0 的數量，[1] 存放 1 的數量</returns>
+    public int[] GetZerosOnes(string str)
+    {
+        // zerosOnes[0] 存放 '0' 的數量，zerosOnes[1] 存放 '1' 的數量
+        int[] zerosOnes = new int[2];
+        int length = str.Length;
+        
+        // 遍歷字串中的每個字元
+        for (int i = 0; i < length; i++)
+        {
+            // str[i] - '0' 的結果：'0' -> 0, '1' -> 1
+            // 直接使用計算結果作為陣列索引，統計對應字元的數量
+            zerosOnes[str[i] - '0']++;
+        }
+        
+        return zerosOnes;
     }
 }
