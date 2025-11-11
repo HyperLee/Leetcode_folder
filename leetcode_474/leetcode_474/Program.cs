@@ -55,6 +55,37 @@ class Program
         Console.WriteLine($"輸入：strs = [{string.Join(", ", strs3.Select(s => $"\"{s}\""))}], m = {m3}, n = {n3}");
         Console.WriteLine($"輸出：{result3}");
         Console.WriteLine($"預期：3");
+        Console.WriteLine();
+
+        // ===== 測試優化版本 =====
+        Console.WriteLine("===== 使用滾動陣列優化版本測試 =====");
+        Console.WriteLine();
+
+        // 優化版本測試案例 1
+        int resultOpt1 = solution.FindMaxFormOptimized(strs1, m1, n1);
+        Console.WriteLine($"優化測試案例 1:");
+        Console.WriteLine($"輸入：strs = [{string.Join(", ", strs1.Select(s => $"\"{s}\""))}], m = {m1}, n = {n1}");
+        Console.WriteLine($"輸出：{resultOpt1}");
+        Console.WriteLine($"預期：4");
+        Console.WriteLine($"結果：{(resultOpt1 == result1 ? "✓ 與原版本一致" : "✗ 結果不一致")}");
+        Console.WriteLine();
+
+        // 優化版本測試案例 2
+        int resultOpt2 = solution.FindMaxFormOptimized(strs2, m2, n2);
+        Console.WriteLine($"優化測試案例 2:");
+        Console.WriteLine($"輸入：strs = [{string.Join(", ", strs2.Select(s => $"\"{s}\""))}], m = {m2}, n = {n2}");
+        Console.WriteLine($"輸出：{resultOpt2}");
+        Console.WriteLine($"預期：2");
+        Console.WriteLine($"結果：{(resultOpt2 == result2 ? "✓ 與原版本一致" : "✗ 結果不一致")}");
+        Console.WriteLine();
+
+        // 優化版本測試案例 3
+        int resultOpt3 = solution.FindMaxFormOptimized(strs3, m3, n3);
+        Console.WriteLine($"優化測試案例 3:");
+        Console.WriteLine($"輸入：strs = [{string.Join(", ", strs3.Select(s => $"\"{s}\""))}], m = {m3}, n = {n3}");
+        Console.WriteLine($"輸出：{resultOpt3}");
+        Console.WriteLine($"預期：3");
+        Console.WriteLine($"結果：{(resultOpt3 == result3 ? "✓ 與原版本一致" : "✗ 結果不一致")}");
     }
 
 
@@ -137,5 +168,53 @@ class Program
         }
         
         return zerosOnes;
+    }
+
+    /// <summary>
+    /// 使用滾動陣列優化的動態規劃解法
+    /// 
+    /// 解題思路：
+    /// 1. 使用二維 DP 陣列代替三維陣列，省略字串索引維度
+    /// 2. 從後往前遍歷，確保每次使用的是上一輪的狀態值
+    /// 3. 狀態轉移：dp[j,k] = max(dp[j,k], dp[j-zeros,k-ones] + 1)
+    /// 4. 時間複雜度：O(lmn)，其中 l 是字串陣列長度
+    /// 5. 空間複雜度：O(mn)，大幅降低空間使用
+    /// 
+    /// 優化原理：
+    /// - 每次計算 dp[i] 只依賴 dp[i-1]，不需要保存所有歷史狀態
+    /// - 從後往前更新可避免覆蓋本輪需要使用的上一輪數據
+    /// </summary>
+    /// <param name="strs">二進位字串陣列</param>
+    /// <param name="m">最多可使用的 0 的數量</param>
+    /// <param name="n">最多可使用的 1 的數量</param>
+    /// <returns>符合條件的最大子集大小</returns>
+    public int FindMaxFormOptimized(string[] strs, int m, int n)
+    {
+        // 建立二維 DP 陣列，省略字串索引維度
+        int[,] dp = new int[m + 1, n + 1];
+        
+        // 遍歷每個字串
+        foreach (string str in strs)
+        {
+            // 計算當前字串中 0 和 1 的數量
+            int[] zerosOnes = GetZerosOnes(str);
+            int zeros = zerosOnes[0];
+            int ones = zerosOnes[1];
+            
+            // 從後往前更新，避免覆蓋未使用的狀態
+            // 這是滾動陣列的核心技巧：確保 dp[j-zeros, k-ones] 是上一輪的值
+            for (int j = m; j >= zeros; j--)
+            {
+                for (int k = n; k >= ones; k--)
+                {
+                    // 選擇當前字串：上一輪的 dp[j-zeros, k-ones] + 1
+                    // 不選擇當前字串：保持 dp[j, k] 不變
+                    dp[j, k] = Math.Max(dp[j, k], dp[j - zeros, k - ones] + 1);
+                }
+            }
+        }
+        
+        // 返回最終結果
+        return dp[m, n];
     }
 }
