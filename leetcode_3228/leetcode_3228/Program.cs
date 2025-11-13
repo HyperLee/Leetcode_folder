@@ -34,8 +34,9 @@ class Program
         {
             try
             {
-                int result = program.MaxOperations(t);
-                Console.WriteLine($"s = \"{t}\", MaxOperations = {result}");
+                int result1 = program.MaxOperations(t);
+                int result2 = program.MaxOperations2(t);
+                Console.WriteLine($"s = \"{t}\", MaxOperations = {result1}, MaxOperations2 = {result2}");
             }
             catch (Exception ex)
             {
@@ -108,33 +109,30 @@ class Program
     /// </remarks>
     public int MaxOperations2(string s)
     {
-        // 注意：未對 null 做明確檢查，呼叫端若傳入 null 會導致 NullReferenceException。
-        // 保持原本實作，僅加入說明性註解（如需可在此加入：if (s is null) throw new ArgumentNullException(nameof(s));）。
-
         // 將字串轉為字元陣列以加快索引存取（此步會產生 O(n) 的額外空間）
-        char[] arr = s.ToCharArray();
+        char[] chars = s.ToCharArray();
 
-        // ans：累計的最大操作次數；cnt1：至目前位置為止已見的 '1' 數量
-        int ans = 0;
-        int cnt1 = 0;
+        // operations2：累計的最大操作次數；onesSeen：至目前位置為止已見的 '1' 數量
+        int operations2 = 0;
+        int onesSeen = 0;
 
         // 從左到右掃描字元陣列
-        for (int i = 0; i < arr.Length; i++)
+        for (int i = 0; i < chars.Length; i++)
         {
             // 如果當前字元為 '1'，把它加入已見的 '1' 數量
-            if (s[i] == '1')
+            if (chars[i] == '1')
             {
-                cnt1++;
+                onesSeen++;
             }
             // 如果當前字元為 '0' 且前一字元為 '1'，代表找到一段零的開始（1 -> 0），
             // 對每一段零只需將左側已見的 '1' 數量加一次到答案（不論該零段長度為何）
-            else if (i > 0 && arr[i - 1] == '1')
+            else if (i > 0 && chars[i - 1] == '1')
             {
-                ans += cnt1;
+                operations2 += onesSeen;
             }
         }
 
-        // 回傳計算結果。若有溢位疑慮，可將 ans 與 cnt1 改為 long。
-        return ans;
+        // 回傳計算結果。若有溢位疑慮，可將 operations2 與 onesSeen 改為 long。
+        return operations2;
     }
 }
