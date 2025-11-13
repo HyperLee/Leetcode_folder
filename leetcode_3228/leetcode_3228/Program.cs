@@ -109,24 +109,21 @@ class Program
     /// </remarks>
     public int MaxOperations2(string s)
     {
-        // 將字串轉為字元陣列以加快索引存取（此步會產生 O(n) 的額外空間）
-        char[] chars = s.ToCharArray();
-
         // operations2：累計的最大操作次數；onesSeen：至目前位置為止已見的 '1' 數量
         int operations2 = 0;
         int onesSeen = 0;
 
         // 從左到右掃描字元陣列
-        for (int i = 0; i < chars.Length; i++)
+        for (int i = 0; i < s.Length; i++)
         {
             // 如果當前字元為 '1'，把它加入已見的 '1' 數量
-            if (chars[i] == '1')
+            if (s[i] == '1')
             {
                 onesSeen++;
             }
             // 如果當前字元為 '0' 且前一字元為 '1'，代表找到一段零的開始（1 -> 0），
             // 對每一段零只需將左側已見的 '1' 數量加一次到答案（不論該零段長度為何）
-            else if (i > 0 && chars[i - 1] == '1')
+            else if (i > 0 && s[i - 1] == '1')
             {
                 operations2 += onesSeen;
             }
