@@ -2,29 +2,22 @@
 
 class Program
 {
+    /// <summary>
+    /// 3234. Count the Number of Substrings With Dominant Ones
+    /// https://leetcode.com/problems/count-the-number-of-substrings-with-dominant-ones/description/?envType=daily-question&envId=2025-11-15
+    /// 3234. 统计 1 显著的字符串的数量
+    /// https://leetcode.cn/problems/count-the-number-of-substrings-with-dominant-ones/description/?envType=daily-question&envId=2025-11-15
+    ///
+    /// 题目描述：给定一个二进位字串 s，返回具有“1 顯著”的子字串數量。
+    /// 子字串若滿足 '1' 的數量 >= ('0' 的數量)^2，則稱其為“1 顯著”的子字串。
+    ///
+    /// 例如：s = "001101"，請統計所有子字串中符合上述條件的個數。
+    ///
+    /// </summary>
+    /// <param name="args"></param>
     static void Main(string[] args)
     {
-        // If args are provided we treat them as input; otherwise use a default sample input
-        string input;
-        if (args != null && args.Length > 0)
-        {
-            input = string.Join(" ", args);
-        }
-        else
-        {
-            // 設定預設輸入 (可依題目需要修改為 JSON / 多個行)
-            input = "Alice"; // <- 預設範例，不需要互動輸入
-        }
-
-        // 輸出處理結果 (請把 Solve 改為你的題解邏輯)
-        var result = Solve(input);
-        Console.WriteLine(result);
+        Console.WriteLine("Hello World!");  
     }
 
-    // 範例 Solve，會返回已處理的字串，請替換為你的題解
-    static string Solve(string input)
-    {
-        // 假設題目要回傳 "Hello, <name>!" 之類的處理
-        return $"Hello, {input}!";
-    }
 }
