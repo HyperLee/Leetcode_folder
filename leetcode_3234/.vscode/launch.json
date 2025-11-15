@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Core Launch (console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_3234/bin/Debug/net8.0/leetcode_3234.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_3234",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": ".NET Core Launch (with sample args)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_3234/bin/Debug/net8.0/leetcode_3234.dll",
+      "args": ["Alice"],
+      "cwd": "${workspaceFolder}/leetcode_3234",
+      "console": "integratedTerminal"
+    }
+  ]
+}
