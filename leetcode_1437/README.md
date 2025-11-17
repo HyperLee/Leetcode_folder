@@ -119,6 +119,41 @@ public bool KLengthApartZerosCounter(int[] nums, int k)
 
 ---
 
+### 為什麼使用 `else if (seenOne)` 而不是 `else`
+
+在 `KLengthApartZerosCounter` 的實作中，`zeros` 的計數只有在已經看到第一個 `1` 之後才有實際意義，因此程式使用 `else if (seenOne)` 來表明「只有在看到過 `1` 後才進行 `zeros++`」。這有幾個好處：
+
+- 可讀性：程式碼自我註解（self-documenting），讀者能一眼看出 `zeros` 僅針對兩個 `1` 之間的 `0` 進行計數。
+- 安全性：若未來把 `zeros` 設為 sentinel（例如 `Int32.MaxValue`）或使用不同的初始化策略，`else if (seenOne)` 可以避免 sentinel 被無意間 `++` 而產生 overflow 或邏輯錯誤。
+- 效能：避免不必要的 `zeros++` 運算，尤其在大量前置零（leading zeros）時，可節省一些 CPU 開銷；雖然在這題中差異微小，但仍是良好的微優化與保護措施。
+
+舉例說明：
+
+1. 當 `zeros` 初始為 `0`（目前程式的狀況），使用 `else` 與 `else if (seenOne)` 的最終結果在大多數情況是相同的，因為第一次看到 `1` 時會 `zeros = 0` 進行重置，導致前置零不影響最終判斷。但 `else if (seenOne)` 的語義更明確。
+
+2. 若 `zeros` 初始設定為 `Int32.MaxValue`（作為 sentinel），使用 `else` 會導致在第一次遇到 `0` 時 `zeros++`，使其從 sentinel 溢位為負數並造成後續判斷錯誤，而 `else if (seenOne)` 則能避免這個問題。
+
+示意程式碼（差異比較）：
+
+```csharp
+// A: 可能錯誤或不必要的方式（會在未見過 1 時也累加）
+if (nums[i] == 1) {
+    // ...
+} else {
+    zeros++; // 對 leading zeros 也會累加（在某些初始化下會有風險）
+}
+
+// B: 更嚴謹、語義清楚的方式（僅在見過第一個 1 後才累加）
+if (nums[i] == 1) {
+    // ...
+} else if (seenOne) {
+    zeros++; // 只對兩個 1 之間的 0 計數
+}
+```
+
+總結：使用 `else if (seenOne)` 強化了程式的自我文件化與穩健性，避免未來修改導致 subtle bugs，並在某些情境下帶來微小效能優勢。
+
+
 
 ## 執行與建置
 此專案為簡單的 .NET console 專案。
