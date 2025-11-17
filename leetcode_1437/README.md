@@ -56,15 +56,81 @@ public bool KLengthApart(int[] nums, int k)
 
 ---
 
+## 方法二：滑動視窗 / 零計數（zeros counter）
+
+思路：
+從左到右遍歷陣列，使用一個整數 `zeros` 來記錄自上次遇到 `1` 之後的連續 `0` 的數量，並用布林 `seenOne` 紀錄是否已經碰過 `1`。
+
+- 遇到 `1` 時：
+  - 若 `seenOne == false`：表示第一個 `1`，設定 `seenOne = true` 並將 `zeros = 0`。
+  - 若 `seenOne == true`：檢查 `zeros >= k`，若小於 `k` 則回傳 `false`；否則 `zeros = 0` 繼續。
+- 遇到 `0` 時：若 `seenOne == true` 則 `zeros++`，否則不處理。
+
+時間複雜度: O(n)，空間複雜度: O(1)
+
+優點：
+
+- 與 `prev` 方案等效，仍是單趟掃描，使用常數空間。數學上可證明 `zeros` 的計數等價於 `i - prev - 1`。
+
+- 實作上更直接地以「中間 0 數」做思考，較直觀。能夠在不追蹤索引的情況下正確判定。
+
+缺點：
+
+- 與 `prev` 方案相比沒有實質效能差異；兩者都是 O(n) 並使用 O(1) 空間。
+
+範例程式碼:
+
+```csharp
+public bool KLengthApartZerosCounter(int[] nums, int k)
+{
+    bool seenOne = false;
+    int zeros = 0;
+    for (int i = 0; i < nums.Length; i++)
+    {
+        if (nums[i] == 1)
+        {
+            if (!seenOne)
+            {
+                seenOne = true;
+                zeros = 0;
+            }
+            else
+            {
+                if (zeros < k) return false;
+                zeros = 0;
+            }
+        }
+        else if (seenOne)
+        {
+            zeros++;
+        }
+    }
+    return true;
+}
+```
+
+---
+
+## 建議
+
+- 對於 LeetCode 題目與一般日常需求，建議使用 `prev` 或 `zeros` 方案（單趟掃描 O(n) 與 O(1) 空間），兩者可互換視覺化與實作喜好而定。
+
+- 僅在效能或特殊場景（大量資料、需要向量化、或跨 word bit 操作）時考慮進一步的位元/向量化優化。
+
+---
+
+
 ## 執行與建置
 此專案為簡單的 .NET console 專案。
 
 建置
+
 ```pwsh
 dotnet build ./leetcode_1437/leetcode_1437.csproj -c Debug
 ```
 
 執行
+
 ```pwsh
 # 於專案資料夾下執行
 dotnet run --project ./leetcode_1437/leetcode_1437.csproj -c Debug
@@ -72,10 +138,12 @@ dotnet run --project ./leetcode_1437/leetcode_1437.csproj -c Debug
 
 ---
 
+
 ## 範例測試
 在 `Program.cs` 的 `Main` 中有簡單的測試範例，可在本地直接執行程式檢視結果。
 
----
+ 
 
 ## 備註
+
 - 本檔案簡明說明如何在本專案中理解與執行題目解法。若需要新增測試或單元測試，建議加入 xUnit 或 MSTest 範例以便自動化驗證。

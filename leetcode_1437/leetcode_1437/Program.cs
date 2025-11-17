@@ -22,6 +22,26 @@ class Program
         Console.WriteLine($"nums1 -> k=2 : {program.KLengthApart(nums1, 2)} (expected True)");
         int[] nums2 = new int[] { 1, 0, 0, 1, 0, 1 };
         Console.WriteLine($"nums2 -> k=2 : {program.KLengthApart(nums2, 2)} (expected False)");
+
+        // 更多測試資料（比較兩個方法的輸出：prev-index vs zeros-counter）
+        var tests = new (int[] nums, int k, string desc)[]
+        {
+            (new int[] { 1, 0, 0, 0, 1, 0, 0, 1 }, 2, "sparse ones - valid"),
+            (new int[] { 1, 0, 0, 1, 0, 1 }, 2, "violates k=2"),
+            (new int[] { 0, 0, 0, 0 }, 1, "all zeros"),
+            (new int[] { 1 }, 0, "single one, k=0"),
+            (new int[] { }, 1, "empty array"),
+            (new int[] { 1, 0, 1 }, 1, "borderline k=1 valid"),
+            (new int[] { 1, 0, 1 }, 2, "borderline k=2 invalid"),
+        };
+
+        Console.WriteLine();
+        foreach (var (nums, k, desc) in tests)
+        {
+            var r1 = program.KLengthApart(nums, k);
+            var r2 = program.KLengthApartZerosCounter(nums, k);
+            Console.WriteLine($"{desc,-30} k={k,-2} -> prev-method: {r1,-5} zeros-method: {r2,-5}");
+        }
     }
 
     /// <summary>
@@ -69,6 +89,56 @@ class Program
         }
 
         // 若整個陣列檢查完沒有違規，則回傳 true
+        return true;
+    }
+
+    /// <summary>
+    /// 方法二：滑動視窗 / 零計數（zeros counter）
+    /// 思路：
+    /// 從左到右維護一個記錄自上次出現 1 之後的連續零數量 zeros。
+    /// - 初始 zeros = Int32.MaxValue (或使用一個 boolean 表示是否已出現過 1)
+    /// - 當遇到 0 時，如果之前已出現過 1，則 zeros++。
+    /// - 當遇到 1 時，如果是第一次遇到，先標記已出現 1，否則檢查 zeros 是否至少為 k。
+    /// - 如果 zeros < k，則回傳 false；否則重置 zeros = 0，繼續遍歷。
+    /// 時間複雜度：O(n)，空間複雜度：O(1)
+    /// </summary>
+    /// <param name="nums">二進位陣列</param>
+    /// <param name="k">最少間隔的 0 的數目</param>
+    /// <returns>若所有 1 之間至少相隔 k 個元素則回傳 true，否則 false</returns>
+    public bool KLengthApartZerosCounter(int[] nums, int k)
+    {
+        // 使用 boolean 來追蹤是否已經看到第一個 1
+        bool seenOne = false;
+        int zeros = 0;
+
+        for (int i = 0; i < nums.Length; i++)
+        {
+            if (nums[i] == 1)
+            {
+                if (!seenOne)
+                {
+                    // 第一次看到 1，標記並繼續
+                    seenOne = true;
+                    zeros = 0;
+                }
+                else
+                {
+                    // 若之前已看到 1，檢查是否有足夠的 0
+                    if (zeros < k)
+                    {
+                        return false;
+                    }
+                    // 重置零計數
+                    zeros = 0;
+                }
+            }
+            else if (seenOne)
+            {
+                // 遇到 0 並且已經看到過 1，才開始計數
+                zeros++;
+            }
+        }
+
         return true;
     }
 }
