@@ -64,7 +64,6 @@ class Program
             if (prev != -1)
             {
                 // 兩個 1 中間的 0 的數目 = i - prev - 1
-                // 若小於 k 表示不合法，直接回傳 false
                 if (i - prev - 1 < k)
                 {
                     return false;
