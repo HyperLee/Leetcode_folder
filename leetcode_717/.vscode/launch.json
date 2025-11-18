@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Leetcode717",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build project",
+      "program": "${workspaceFolder}/leetcode_717/bin/Debug/net8.0/leetcode_717.dll",
+      "cwd": "${workspaceFolder}/leetcode_717",
+      "args": [],
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "neverOpen",
+      "justMyCode": true
+    }
+  ]
+}
