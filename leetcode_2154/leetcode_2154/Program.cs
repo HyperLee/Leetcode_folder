@@ -1,6 +1,6 @@
 ﻿namespace leetcode_2154;
 
-class Program
+public class Program
 {
     /// <summary>
     /// 2154. Keep Multiplying Found Values by Two
@@ -36,6 +36,13 @@ class Program
     /// <param name="nums">輸入陣列，可能包含重複值。</param>
     /// <param name="original">要持續搜尋並倍增的起始值。</param>
     /// <returns>流程結束後的 original 值。</returns>
+    /// <example>
+    /// <code>
+    /// Program solver = new Program();
+    /// int result = solver.FindFinalValue(new[] { 5, 3, 6, 1, 12 }, 3);
+    /// // result == 24
+    /// </code>
+    /// </example>
     public int FindFinalValue(int[] nums, int original) 
     {
         HashSet<int> numSet = new HashSet<int>(nums);
@@ -56,6 +63,13 @@ class Program
     /// <param name="nums">輸入陣列，會被就地排序。</param>
     /// <param name="original">要持續搜尋並倍增的起始值。</param>
     /// <returns>流程結束後的 original 值。</returns>
+    /// <example>
+    /// <code>
+    /// Program solver = new Program();
+    /// int result = solver.FindFinalValue_Array(new[] { 5, 3, 6, 1, 12 }, 3);
+    /// // result == 24
+    /// </code>
+    /// </example>
     public int FindFinalValue_Array(int[] nums, int original) 
     {
         Array.Sort(nums);
