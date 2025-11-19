@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Launch (console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "dotnet build",
+      "program": "${workspaceFolder}/leetcode_2154/bin/Debug/net8.0/leetcode_2154.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_2154",
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "name": ".NET Launch (default args — no prompt)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "dotnet build",
+      "program": "${workspaceFolder}/leetcode_2154/bin/Debug/net8.0/leetcode_2154.dll",
+      "args": ["DefaultName"],
+      "cwd": "${workspaceFolder}/leetcode_2154",
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
