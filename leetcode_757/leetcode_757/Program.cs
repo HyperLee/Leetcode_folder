@@ -70,6 +70,26 @@ class Program
         Console.WriteLine($"測試案例 3: [[1,3],[3,7],[8,9]]");
         Console.WriteLine($"結果: {result3}");
         Console.WriteLine($"預期: 5");
+        
+        Console.WriteLine("\n=== 解法二：堆疊 + 二分搜尋法 ===");
+        
+        // 測試案例 1 (解法二)
+        int result1_v2 = solution.IntersectionSizeTwoStack(test1);
+        Console.WriteLine($"\n測試案例 1: [[1,3],[1,4],[2,5],[3,5]]");
+        Console.WriteLine($"結果: {result1_v2}");
+        Console.WriteLine($"預期: 3");
+        
+        // 測試案例 2 (解法二)
+        int result2_v2 = solution.IntersectionSizeTwoStack(test2);
+        Console.WriteLine($"\n測試案例 2: [[1,2],[2,3],[2,4],[4,5]]");
+        Console.WriteLine($"結果: {result2_v2}");
+        Console.WriteLine($"預期: 5");
+        
+        // 測試案例 3 (解法二)
+        int result3_v2 = solution.IntersectionSizeTwoStack(test3);
+        Console.WriteLine($"\n測試案例 3: [[1,3],[3,7],[8,9]]");
+        Console.WriteLine($"結果: {result3_v2}");
+        Console.WriteLine($"預期: 5");
     }
 
     /// <summary>
@@ -159,5 +179,155 @@ class Program
             // num 在區間 [intervals[i][0], intervals[i][1]] 內,記錄此相交元素
             temp[i].Add(num);
         }
+    }
+
+    /// <summary>
+    /// 解法二：使用堆疊與二分搜尋解決集合交集大小至少為 2 的問題
+    /// 
+    /// 核心思路：
+    /// 1. 排序策略：按區間右端點升序排列
+    ///    - 優先處理右端點較小的區間，確保貪心選擇的正確性
+    ///    - 右端點小的區間限制更強，應該先滿足
+    /// 
+    /// 2. 堆疊維護已選擇的區間段：
+    ///    - 堆疊中每個元素包含 [left, right, sum]
+    ///      * left: 區間段的左端點
+    ///      * right: 區間段的右端點
+    ///      * sum: 從堆疊底到該元素的累積元素總數
+    ///    - 使用哨兵 [-2, -2, 0] 避免邊界判斷
+    /// 
+    /// 3. 貪心選擇與區間合併：
+    ///    - 對每個新區間，計算需要額外添加的元素數量 d
+    ///    - 使用二分搜尋快速找到與當前區間重疊的堆疊位置
+    ///    - 從區間右端點往左填充 d 個元素（貪心策略）
+    ///    - 如果新元素會覆蓋堆疊頂部的區間，則合併它們
+    /// 
+    /// 4. 時間複雜度：O(n log n)
+    ///    - 排序：O(n log n)
+    ///    - 每個區間處理：O(log n) 二分搜尋 + O(1) 平攤堆疊操作
+    ///    - 總體：O(n log n)
+    /// 
+    /// 5. 空間複雜度：O(n)
+    ///    - 堆疊最多儲存 O(n) 個區間段
+    /// </summary>
+    /// <param name="intervals">二維整數陣列，每個元素代表一個區間 [start, end]</param>
+    /// <returns>滿足條件的最小交集集合大小</returns>
+    public int IntersectionSizeTwoStack(int[][] intervals)
+    {
+        // 按右端點升序排序
+        // 右端點小的區間限制更強，應優先處理
+        Array.Sort(intervals, (a, b) => a[1] - b[1]);
+        
+        // 堆疊保存已選擇的閉區間 [left, right] 及累積總和
+        // 每個元素格式：[left, right, sum]
+        // sum 表示從堆疊底到當前元素的所有區間長度總和
+        List<int[]> st = new List<int[]>();
+        
+        // 哨兵：保證不與任何區間相交
+        // 使用 -2 是因為區間端點最小為 0，-2 確保不會重疊
+        st.Add(new int[] { -2, -2, 0 });
+        
+        // 遍歷每個區間
+        foreach (int[] t in intervals)
+        {
+            int start = t[0];
+            int end = t[1];
+            
+            // 使用二分搜尋找到第一個 left >= start 的位置
+            // 然後取前一個元素 e，表示與當前區間可能重疊的最後一個堆疊元素
+            int[] e = st[LowerBound(st, start) - 1];
+            
+            // 計算需要添加的元素數量 d
+            // 2 是每個區間需要的最小交集大小
+            // st[^1][2] - e[2] 是堆疊頂部到 e 之間的累積元素數（已在當前區間右側的元素）
+            int d = 2 - (st[st.Count - 1][2] - e[2]);
+            
+            // 如果 start 落在區間 e 內，需要扣除重疊部分
+            // e[1] - start + 1 表示重疊的元素個數
+            if (start <= e[1])
+            {
+                d -= e[1] - start + 1;
+            }
+            
+            // 如果 d <= 0，表示當前區間已經被滿足，無需添加新元素
+            if (d <= 0)
+            {
+                continue;
+            }
+            
+            // 貪心策略：從區間右端點往左填充 d 個元素
+            // 如果新添加的區間會覆蓋堆疊頂部的區間，則合併它們
+            // end - st[^1][1] <= d 表示新區間的左邊界會覆蓋或超過堆疊頂部的右邊界
+            while (end - st[st.Count - 1][1] <= d)
+            {
+                // 彈出堆疊頂部元素並合併
+                e = st[st.Count - 1];
+                st.RemoveAt(st.Count - 1);
+                
+                // 將被覆蓋的區間長度加回 d
+                // 這樣可以將多個小區間合併成一個大區間
+                d += e[1] - e[0] + 1;
+            }
+            
+            // 將新區間段加入堆疊
+            // [end - d + 1, end] 是新添加的區間段
+            // st[^1][2] + d 是累積總和
+            st.Add(new int[] { end - d + 1, end, st[st.Count - 1][2] + d });
+        }
+        
+        // 返回堆疊頂部的累積總和，即交集集合的大小
+        return st[st.Count - 1][2];
+    }
+
+    /// <summary>
+    /// 開區間二分搜尋：在堆疊中尋找第一個左端點 >= target 的位置
+    /// 
+    /// 使用開區間二分搜尋模板：
+    /// - 搜尋範圍：(left, right) 開區間
+    /// - 循環不變量：
+    ///   * st[left][0] < target
+    ///   * st[right][0] >= target
+    /// - 最終返回 right，即第一個滿足條件的位置
+    /// 
+    /// 開區間二分搜尋的優勢：
+    /// - 不需要處理邊界情況（left = 0 或 right = n-1）
+    /// - 循環條件簡單：left + 1 < right
+    /// - 不會出現死循環
+    /// 
+    /// 參考資料：https://www.bilibili.com/video/BV1AP41137w7/
+    /// </summary>
+    /// <param name="st">堆疊（包含區間資訊的列表）</param>
+    /// <param name="target">目標值</param>
+    /// <returns>第一個左端點 >= target 的位置索引</returns>
+    private int LowerBound(List<int[]> st, int target)
+    {
+        // 開區間 (left, right)
+        int left = -1;
+        int right = st.Count;
+        
+        // 當區間不為空時繼續搜尋
+        while (left + 1 < right)
+        {
+            // 使用無符號右移避免溢位
+            // 等同於 (left + right) / 2
+            int mid = (left + right) >> 1;
+            
+            // 循環不變量：
+            // st[left][0] < target
+            // st[right][0] >= target
+            if (st[mid][0] < target)
+            {
+                // 範圍縮小到 (mid, right)
+                left = mid;
+            }
+            else
+            {
+                // 範圍縮小到 (left, mid)
+                right = mid;
+            }
+        }
+        
+        // 返回第一個 >= target 的位置
+        return right;
     }
 }
