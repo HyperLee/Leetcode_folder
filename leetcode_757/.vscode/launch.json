@@ -1,0 +1,21 @@
+{
+  // Configurations for debugging .NET Core console app
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch .NET Core (Console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      // Point to the compiled dll of the project
+      "program": "${workspaceFolder}/leetcode_757/bin/Debug/net8.0/leetcode_757.dll",
+      // No arguments by default so you don't need to type an input name
+      "args": [],
+      // Working directory for debug session
+      "cwd": "${workspaceFolder}/leetcode_757",
+      // Choose the integrated terminal to view I/O if needed
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    }
+  ]
+}
