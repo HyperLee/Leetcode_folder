@@ -198,3 +198,4 @@ dotnet run --project leetcode_757/leetcode_757.csproj
 
 - [LeetCode 757 - Set Intersection Size At Least Two](https://leetcode.com/problems/set-intersection-size-at-least-two/)
 - [LeetCode 757 - 設置交集大小至少為2 (中文)](https://leetcode.cn/problems/set-intersection-size-at-least-two/)
+- [官方解法](https://leetcode.cn/problems/set-intersection-size-at-least-two/solutions/1686623/she-zhi-jiao-ji-da-xiao-zhi-shao-wei-2-b-vuiv/?envType=daily-question&envId=2025-11-20)
