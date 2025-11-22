@@ -1,35 +1,41 @@
 {
-  "version": "2.0.0",
-  "tasks": [
-    {
-      "label": "build",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "build",
-        "${workspaceFolder}/leetcode_3190/leetcode_3190.csproj",
-        "-c",
-        "Debug"
-      ],
-      "problemMatcher": "$msCompile",
-      "group": {
-        "kind": "build",
-        "isDefault": true
-      }
-    },
-    {
-      "label": "run (without debug)",
-      "command": "dotnet",
-      "type": "process",
-      "args": [
-        "run",
-        "--project",
-        "${workspaceFolder}/leetcode_3190/leetcode_3190.csproj",
-        "-c",
-        "Debug"
-      ],
-      "problemMatcher": [],
-      "group": "none"
-    }
-  ]
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "build",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"build",
+				"${workspaceFolder}/leetcode_3190/leetcode_3190.csproj",
+				"-c",
+				"Debug"
+			],
+			"problemMatcher": "$msCompile",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		},
+		{
+			"label": "run (without debug)",
+			"command": "dotnet",
+			"type": "process",
+			"args": [
+				"run",
+				"--project",
+				"${workspaceFolder}/leetcode_3190/leetcode_3190.csproj",
+				"-c",
+				"Debug"
+			],
+			"problemMatcher": [],
+			"group": "none"
+		},
+		{
+			"label": "run with tests",
+			"type": "shell",
+			"command": "dotnet run --project ${workspaceFolder}/leetcode_3190/leetcode_3190.csproj",
+			"group": "none"
+		}
+	]
 }
