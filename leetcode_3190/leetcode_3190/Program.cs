@@ -35,6 +35,24 @@ class Program
         int[] nums3 = new int[] { 1, 2, 4, 5, 7, 8 };
         Console.WriteLine($"測試案例 3: [{string.Join(", ", nums3)}]");
         Console.WriteLine($"結果: {program.MinimumOperations(nums3)}");
+        Console.WriteLine();
+        
+        Console.WriteLine("========== 方法二測試 ==========");
+        Console.WriteLine();
+        
+        // 方法二測試案例 1: [1,2,3,4]
+        Console.WriteLine($"測試案例 1: [{string.Join(", ", nums1)}]");
+        Console.WriteLine($"結果: {program.MinimumOperations2(nums1)}");
+        Console.WriteLine();
+        
+        // 方法二測試案例 2: [3,6,9]
+        Console.WriteLine($"測試案例 2: [{string.Join(", ", nums2)}]");
+        Console.WriteLine($"結果: {program.MinimumOperations2(nums2)}");
+        Console.WriteLine();
+        
+        // 方法二測試案例 3: [1,2,4,5,7,8]
+        Console.WriteLine($"測試案例 3: [{string.Join(", ", nums3)}]");
+        Console.WriteLine($"結果: {program.MinimumOperations2(nums3)}");
     }
 
     /// <summary>
@@ -66,5 +84,32 @@ class Program
         }
         
         return res;
+    }
+
+
+    /// <summary>
+    /// 解題思路（方法二）:
+    /// 對於任意整數 x，要使其被 3 整除，有兩種操作方案：
+    /// 1. 將 x 增加至下一個最近的 3 的倍數，所需操作次數是 3 - (x % 3)
+    /// 2. 將 x 減少至上一個 3 的倍數，所需操作次數是 x % 3
+    /// 
+    /// 選擇操作次數較少的方案：Math.Min(x % 3, 3 - (x % 3))
+    /// 對 nums 中的每個數計算最小操作次數並累計，即為結果。
+    /// 
+    /// 時間複雜度: O(n)，其中 n 是陣列長度
+    /// 空間複雜度: O(1)
+    /// </summary>
+    /// <param name="nums">整數陣列</param>
+    /// <returns>使所有元素都可以被 3 整除所需的最少操作次數</returns>
+    public int MinimumOperations2(int[] nums)
+    {
+        return nums.Select(x =>
+        {
+            // 計算兩種操作方案的操作次數：
+            // x % 3: 減少到 3 的倍數所需次數
+            // 3 - (x % 3): 增加到 3 的倍數所需次數
+            // 取最小值作為該元素的最少操作次數
+            return Math.Min(x % 3, 3 - (x % 3));
+        }).Sum(); 
     }
 }
