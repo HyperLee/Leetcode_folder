@@ -175,3 +175,4 @@ dotnet run
 - [LeetCode 原題 (英文)](https://leetcode.com/problems/maximum-subarray-sum-with-length-divisible-by-k/)
 - [力扣 原題 (中文)](https://leetcode.cn/problems/maximum-subarray-sum-with-length-divisible-by-k/)
 - [力扣官方題解](https://leetcode.cn/problems/maximum-subarray-sum-with-length-divisible-by-k/solutions/3837035/chang-du-ke-bei-k-zheng-chu-de-zi-shu-zu-dzxb/)
+- [灵茶山艾府](https://leetcode.cn/problems/maximum-subarray-sum-with-length-divisible-by-k/solutions/3013897/qian-zhui-he-mei-ju-you-wei-hu-zuo-pytho-0t8p/?envType=daily-question&envId=2025-11-27)
