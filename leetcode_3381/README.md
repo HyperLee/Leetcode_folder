@@ -55,6 +55,36 @@ $$prefixSum[i] = \sum_{j=0}^{i} nums[j] = nums[0] + nums[1] + \cdots + nums[i]$$
 
 $$sum(j, i) = prefixSum[i] - prefixSum[j-1]$$
 
+### 補充說明：為什麼是 prefixSum[j - 1] 而不是 prefixSum[j]
+
+這裡的前綴和 `prefixSum[p]` 被定義為包含索引 `p` 的元素，也就是 `prefixSum[p] = nums[0] + nums[1] + ... + nums[p]`。
+
+- 若要計算區間 `[j, i]` 的和，我們可以把 `0..i` 的總和減去 `0..(j-1)` 的總和，剩下的即為 `j..i` 的元素和：
+
+$$sum(j, i) = prefixSum[i] - prefixSum[j-1].$$
+
+- 如果改用 `prefixSum[i] - prefixSum[j]`，則會變成：
+
+$$prefixSum[i] - prefixSum[j] = \sum_{t=j+1}^{i} nums[t],$$
+
+這表示區間是從 `j+1` 開始，而不是包含 `j`，因此會少算 `nums[j]`。
+
+實際範例（方便理解）：
+
+假設 `nums = [3, 2, 1, 4]`，則
+
+- `prefixSum[0] = 3`
+- `prefixSum[1] = 5`
+- `prefixSum[2] = 6`
+- `prefixSum[3] = 10`
+
+若我們要計算區間 `[1, 2]`（即 `2 + 1 = 3`）：
+
+- 正確：`prefixSum[2] - prefixSum[0] = 6 - 3 = 3`
+- 錯誤：`prefixSum[2] - prefixSum[1] = 6 - 5 = 1`（只算了 `index 2`）
+
+備註：另一種常見的定義是將前綴和陣列往右移一格（多一個起始 0），也就是 `prefix[0] = 0`、`prefix[1] = nums[0]`，在這種情況下，區間 `[l, r]` 的和可寫為 `prefix[r+1] - prefix[l]`。本專案使用的是「含當前索引的前綴和」的定義，因此對應的公式需要 `j - 1`。
+
 ### 長度條件推導
 
 題目要求子陣列的長度可以被 $k$ 整除，即：
