@@ -1,0 +1,19 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Core Launch (console) - leetcode_3381",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_3381/bin/Debug/net8.0/leetcode_3381.dll",
+      "args": ["TestUser"],
+      "cwd": "${workspaceFolder}/leetcode_3381",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "env": {
+        "NAME": "TestUser"
+      }
+    }
+  ]
+}
