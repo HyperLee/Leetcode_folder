@@ -69,7 +69,9 @@ class Program
         // pointCount: 統計每個 y 值出現的點個數 p_y
         Dictionary<int, int> pointCount = new Dictionary<int, int>();
         const int MOD = 1000000007;
+        // 最終結果
         long res = 0;
+        // 已處理邊之和
         long sum = 0;
 
         // 統計每個 y 對應的點數
