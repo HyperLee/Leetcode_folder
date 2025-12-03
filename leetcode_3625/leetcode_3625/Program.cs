@@ -74,7 +74,7 @@ class Program
     /// <code>
     /// int[][] points = [[0,0], [1,1], [1,0], [2,0]];
     /// int result = CountTrapezoids(points);
-    /// // result = 1，表示可組成 1 個梯形
+    /// result = 1，表示可組成 1 個梯形
     /// </code>
     /// </example>
     public int CountTrapezoids(int[][] points)
