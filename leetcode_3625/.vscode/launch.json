@@ -1,0 +1,34 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch leetcode_3625 (F5)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      // 設定工作目錄為 csproj 所在目錄
+      "cwd": "${workspaceFolder}/leetcode_3625",
+      // 若您的專案會輸出到 net10.0 資料夾，可以按照下列範例
+      "program": "${workspaceFolder}/leetcode_3625/bin/Debug/net10.0/leetcode_3625.dll",
+      // 若您想在啟動時傳入命令列參數（例如避免在程式中要求輸入名稱），請在 args 塞入字串
+      // (範例: "args": ["Alice"] 可避免程式要求輸入名稱)
+      "args": [],
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "justMyCode": true
+    },
+    {
+      "name": "Launch with default name arg",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "cwd": "${workspaceFolder}/leetcode_3625",
+      "program": "${workspaceFolder}/leetcode_3625/bin/Debug/net10.0/leetcode_3625.dll",
+      // 將下面參數改成您想要的預設 "名稱"，執行時就不需在 console 輸入
+      "args": ["Alice"],
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "justMyCode": true
+    }
+  ]
+}

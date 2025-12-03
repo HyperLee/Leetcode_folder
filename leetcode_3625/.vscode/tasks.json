@@ -1,0 +1,33 @@
+{
+  // See https://go.microsoft.com/fwlink/?linkid=830387 for the documentation about the tasks.json format
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "build",
+      "type": "shell",
+      "command": "dotnet build ${workspaceFolder}/leetcode_3625/leetcode_3625.csproj",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": ["$msCompile"]
+    },
+    {
+      "label": "run",
+      "type": "shell",
+      "command": "dotnet run --project ${workspaceFolder}/leetcode_3625/leetcode_3625.csproj",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
+}
