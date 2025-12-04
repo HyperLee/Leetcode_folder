@@ -1,4 +1,7 @@
-﻿namespace leetcode_2211;
+﻿using System;
+using System.Collections.Generic;
+
+namespace leetcode_2211;
 
 class Program
 {
@@ -21,7 +24,32 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        var solver = new Program();
+
+        // 已知的 LeetCode 測資與期望值
+        var tests = new Dictionary<string, int>
+        {
+            { "RLRSLL", 5 },
+            { "LLRRS", 2 },
+            { "SSSS", 0 }
+        };
+
+        Console.WriteLine("\nCountCollisions 範例測試:");
+        foreach (var kv in tests)
+        {
+            var input = kv.Key;
+            var expected = kv.Value;
+            var result = solver.CountCollisions(input);
+            Console.WriteLine($"Input: {input} -> Output: {result} (Expected: {expected})");
+        }
+
+        // 額外示範幾個不同輸入
+        var samples = new[] { "R", "L", "RS", "LR", "RRSLL" };
+        Console.WriteLine("\n其他測試:");
+        foreach (var s in samples)
+        {
+            Console.WriteLine($"Input: {s} -> Output: {solver.CountCollisions(s)}");
+        }
     }
 
     /// <summary>
@@ -36,18 +64,22 @@ class Program
         int n = directions.Length;
 
         int l = 0;
+        // 最左側連續向左移動的車永遠不會與其他車相撞，因為它們只會向左離開其他車
         while(l < n && directions[l] == 'L')
         {
             l++;
         }
 
         int r = n;
+        // 最右側連續向右移動的車永遠也不會與其他車相撞，因為它們只會向右離開其他車
         while(r > l && directions[r - 1] == 'R')
         {
             r--;
         }
 
         int cnt = 0;
+        // 在剩餘的區間內，任何非 'S'（也就是 'L' 或 'R'）的車最終都會與其他車發生碰撞
+        // 因此只要統計該區間內非靜止車的數量即可
         for (int i = l; i < r; i++)
         {
             if (directions[i] != 'S')
@@ -55,6 +87,8 @@ class Program
                 cnt++;
             }
         }
+        // 時間複雜度: O(n)，僅需遍歷字串一次
+        // 空間複雜度: O(1)，僅使用常數額外空間
         return cnt;
     }
 }
