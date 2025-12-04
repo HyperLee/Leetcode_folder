@@ -69,6 +69,37 @@ dotnet run --project ./leetcode_2211/leetcode_2211.csproj --configuration Debug
 
 ---
 
+### 補充說明：為何在 `L` 判斷使用 `>= 0`，在 `S` 判斷使用 `> 0`
+
+以下補充說明 `CountCollisions2` 中 `pendingRightCount` 的語意，以及為什麼在 `L` 與 `S` 的處理分支使用不同的條件判斷：
+
+- `pendingRightCount` 的語意
+  - `-1`：尚未看到任何待處理的 `R`（尚未開始計數）。
+  - `0`：前方沒有尚待處理的 `R`，但前方有靜止車（例如前面出現過 `S`，或先前的碰撞使車輛變為 `S`）。
+  - `> 0`：目前有 N 輛尚未處理的 `R`（仍往右移動）。
+
+- 為什麼 `L` 使用 `>= 0`
+  - 如果 `pendingRightCount >= 0`，代表前方要麼有一段還在往右移動的 `R`（> 0），要麼前方已經有靜止車（== 0）。
+  - 這兩種情況都會導致 `L` 發生碰撞：
+    - 若前方是 `R`：`L` 與多個 `R` 會相撞，碰撞次數為 `pendingRightCount + 1`（所有 `R` 各 1 次，且 `L` 也與至少一輛車相撞算 1）。
+    - 若前方是靜止車：`L` 會撞上該靜止車，造成 1 次碰撞（`pendingRightCount == 0` 時相當於 `0 + 1`）。
+  - 因此在 `L` 的分支使用 `>= 0` 可以涵蓋上述兩個情況。
+
+- 為什麼 `S` 使用 `> 0`
+  - 當遇到 `S` 時，只有前方仍往右移動、尚未處理的 `R`（`pendingRightCount > 0`）會撞上 `S`，而造成碰撞；每個 `R` 都算 1 次碰撞。
+  - 若 `pendingRightCount == 0`，代表前方沒有尚未處理的 `R`，只有靜止車（`S`），因此新的 `S` 不會產生碰撞（靜止車不會與靜止車相撞）。
+  - 所以只需要在 `pendingRightCount > 0` 時，把 `pendingRightCount` 加到結果中。
+
+簡短範例：
+
+- `"RL"`：`R` -> pending=1；`L` -> pending>=0 => res += 1 + 1 = 2。
+- `"RS"`：`R` -> pending=1；`S` -> pending>0 => res += 1（R 撞 S）。
+- `"SS"`：第一次 `S` -> pending = 0；第二次 `S` -> pending>0 為假，無碰撞。
+
+此補充說明能幫助理解程式碼中 `>= 0` 與 `> 0` 的差別與使用情境，並保持邏輯清晰。
+
+---
+
 ## 範例推演（一次流程示範）
 
 使用測資：`"RLRSLL"`，期望輸出：`5`。
@@ -116,8 +147,8 @@ var tests = new Dictionary<string, int>
 
 ## 參考與備註
 
-- 題目連結（英文）：https://leetcode.com/problems/count-collisions-on-a-road/
-- 題目連結（中文）：https://leetcode.cn/problems/count-collisions-on-a-road/
+- 題目連結（英文）：[Count Collisions on a Road - LeetCode](https://leetcode.com/problems/count-collisions-on-a-road/)
+- 題目連結（中文）：[道路上的碰撞次數 - LeetCode 中文](https://leetcode.cn/problems/count-collisions-on-a-road/)
 
 ---
 
