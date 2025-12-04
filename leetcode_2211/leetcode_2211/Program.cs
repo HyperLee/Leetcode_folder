@@ -139,7 +139,7 @@ class Program
             {
                 // 遇到 'L'：若之前有一段 'R'（pendingRightCount >= 0），那麼該段所有 'R' 與此 'L' 會發生碰撞。
                 // 其產生的碰撞數為 pendingRightCount + 1（pendingRightCount 個 R 各與 L 相撞，且 L 本身也與一部車相撞算 1 次）
-                    if(pendingRightCount >= 0)
+                if(pendingRightCount >= 0)
                 {
                     res += pendingRightCount + 1;
                     // 碰撞後都變成靜止（或已處理），重置 pendingRightCount
@@ -149,7 +149,7 @@ class Program
             else if(c =='S')
             {
                 // 遇到 'S'：若之前有一段 'R'（pendingRightCount > 0），則每個 R 都會撞上此 S，各算一次碰撞
-                    if(pendingRightCount > 0)
+                if(pendingRightCount > 0)
                 {
                     res += pendingRightCount;
                 }
@@ -160,7 +160,7 @@ class Program
             {
                 // 遇到 'R'：若 pendingRightCount >= 0，代表上一個字元也是 'R' 或已開始計數，則累加 R 的數量；
                 // 否則（pendingRightCount == -1）代表開始一段新的 R
-                    if(pendingRightCount >= 0)
+                if(pendingRightCount >= 0)
                 {
                     pendingRightCount++;
                 }
