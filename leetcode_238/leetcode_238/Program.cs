@@ -9,6 +9,10 @@
         /// 238. 除自身以外数组的乘积
         /// https://leetcode.cn/problems/product-of-array-except-self/description/
         /// 
+        /// 繁體中文題目說明:
+        /// 給定一個整數陣列 nums，請回傳一個陣列 answer，其中 answer[i] 等於 nums 中除 nums[i] 之外所有元素的乘積。
+        /// 要求算法在 O(n) 時間複雜度內完成，且不得使用除法運算。此題保證任一前綴或後綴的乘積可放入 32-bit 整數中。
+        /// 
         /// 解題方式 很特殊
         /// 左右分別計算乘積
         /// 要注意的是，這個解法不使用除法，並且時間複雜度為 O(n)。
