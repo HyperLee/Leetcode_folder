@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch leetcode_151 (with default name)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_151/bin/Debug/net10.0/leetcode_151.dll",
+      "args": ["HyperLee"],
+      "cwd": "${workspaceFolder}/leetcode_151",
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "justMyCode": true
+    },
+    {
+      "name": "Launch leetcode_151 (no args, run project)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_151/bin/Debug/net10.0/leetcode_151.dll",
+      "cwd": "${workspaceFolder}/leetcode_151",
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "justMyCode": true
+    }
+  ]
+}
