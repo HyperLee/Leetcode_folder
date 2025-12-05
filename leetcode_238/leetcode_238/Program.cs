@@ -57,14 +57,14 @@
         /// <returns></returns>
         public static int[] ProductExceptSelf(int[] nums)
         {
-            int length = nums.Length;
-            int[] res = new int[length];
+            int n = nums.Length;
+            int[] res = new int[n];
 
             // res[i] 表示 index i 左側所有元素的乘積
             // 因為 index 為 0 的元素左側沒有元素, 所以 res[0] = 1
             res[0] = 1;
             //由左至右計算左側乘積
-            for (int i = 1; i < length; i++)
+            for (int i = 1; i < n; i++)
             {
                 // 計算左側乘積
                 res[i] = nums[i - 1] * res[i - 1];
@@ -74,7 +74,7 @@
             // 剛開始右邊沒有元素, 所以 R = 1
             int R = 1;
             // 由右至左計算右側乘積
-            for (int i = length - 1; i >= 0; i--)
+            for (int i = n - 1; i >= 0; i--)
             {
                 // 計算右側乘積並更新結果
                 // R 為 index i 右側所有元素的乘積
