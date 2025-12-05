@@ -127,11 +127,6 @@ class Program
         // 正規化 去除 兩個以上空白
         Regex replaceSpace = new Regex(@"\s{2,}", RegexOptions.IgnoreCase);
 
-        // 注意：若想要保留單詞之間的單一空格，應把兩個以上空白替換成單一空白 " " 而不是空字串 ""。
-        // 但由於我們在此已先使用 Split() 取得單詞陣列，下面這行是多餘的；
-        // 若要讓 replace 出現在後面組合，應該把 replace 的替換目標改為 " "。
-        s = replaceSpace.Replace(s, "").Trim();
-
         StringBuilder sb = new StringBuilder();
         // 從字串陣列後端取來組合反轉順序
         for (int i = split.Length - 1; i >= 0; i--)
