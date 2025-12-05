@@ -7,7 +7,7 @@ class Program
     /// https://leetcode.com/problems/count-partitions-with-even-sum-difference/description/?envType=daily-question&envId=2025-12-05
     /// 3432. 统计元素和差值为偶数的分区方案
     /// https://leetcode.cn/problems/count-partitions-with-even-sum-difference/description/?envType=daily-question&envId=2025-12-05
-    /// 繁體中文翻譯：
+    /// 
     /// 給定一個長度為 n 的整數陣列 nums。
     /// 分割（partition）定義為索引 i，其中 0 <= i < n - 1，將陣列拆成兩個非空子陣列：
     /// 左子陣列包含索引 [0, i]。
@@ -17,7 +17,6 @@ class Program
     /// <param name="args">命令列引數（未使用）</param>
     static void Main(string[] args)
     {
-        // Basic runner / test harness for CountPartitions
         var program = new Program();
 
         var tests = new (int[] nums, int expected)[]
