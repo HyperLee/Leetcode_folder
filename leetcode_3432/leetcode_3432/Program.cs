@@ -5,7 +5,7 @@ class Program
     /// <summary>
     /// 3432. Count Partitions with Even Sum Difference
     /// https://leetcode.com/problems/count-partitions-with-even-sum-difference/description/?envType=daily-question&envId=2025-12-05
-    /// 3432. 统计元素和差值为偶数的分区方案（簡體中文）
+    /// 3432. 统计元素和差值为偶数的分区方案
     /// https://leetcode.cn/problems/count-partitions-with-even-sum-difference/description/?envType=daily-question&envId=2025-12-05
     /// 繁體中文翻譯：
     /// 給定一個長度為 n 的整數陣列 nums。
