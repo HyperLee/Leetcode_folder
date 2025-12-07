@@ -100,14 +100,13 @@ class Program
     }
 
     /// <summary>
-    /// 
+    /// 將 (x + 1) / 2 改寫為位移運算：等同於整數除以 2
+    /// Pre(x) 返回 [0,x] 範圍內奇數的數量。例：x=0 -> 0, x=1 -> 1, x=2 -> 1, x=3 -> 2
     /// </summary>
     /// <param name="x"></param>
     /// <returns></returns>
     public int Pre(int x)
     {
-        // 將 (x + 1) / 2 改寫為位移運算：等同於整數除以 2
-        // Pre(x) 返回 [0,x] 範圍內奇數的數量。例：x=0 -> 0, x=1 -> 1, x=2 -> 1, x=3 -> 2
         return (x + 1) >> 1;
     }
 }
