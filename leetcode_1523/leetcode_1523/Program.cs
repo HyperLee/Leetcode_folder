@@ -85,10 +85,24 @@ class Program
     }
 
     /// <summary>
-    /// <summary>
     /// 計算區間 [low, high] 中奇數的數量（前綴計數方法）。
     /// 解法說明：先定義 Pre(x) 回傳區間 [0, x] 中奇數的數量，則區間 [low, high] 中奇數數量為 Pre(high) - Pre(low - 1)。
     /// 由於 Pre(x) 等於 (x + 1) / 2，因此整體時間複雜度 O(1)，空間複雜度 O(1)。
+    /// 
+    /// 簡單說分兩階段計算:
+    /// 1. 計算 0 到 high 的奇數數量 Pre(high)
+    /// 2. 計算 0 到 low-1 的奇數數量 Pre(low - 1)
+    /// 3. 用 Pre(high) 減去 Pre(low - 1) 得到區間 [low, high] 的奇數數量
+    /// 
+    /// 舉例說明:
+    /// - 假設 low = 3, high = 7
+    /// - Pre(7) 計算 0 到 7 的奇數數
+    /// - Pre(2) 計算 0 到 2 的奇數數
+    /// - 區間 [3, 7] 的奇數數量 = Pre(7) - Pre(2)
+    /// 
+    /// 注意為什麼是 Pre(low - 1) 而不是 Pre(low)：
+    /// - Pre(low) 包含了 low 本身，如果 low 是奇數，會多計算一次 low。
+    /// - 因此我們用 Pre(low - 1) 來確保只計算到 low 之前的奇數數量，避免重複計算 low。
     /// </summary>
     /// <param name="low"></param>
     /// <param name="high"></param>
