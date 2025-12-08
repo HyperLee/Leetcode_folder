@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch leetcode_283",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_283/bin/Debug/net10.0/leetcode_283.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_283",
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "neverOpen"
+    },
+    {
+      "name": "Launch leetcode_283 (With Default Arg)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_283/bin/Debug/net10.0/leetcode_283.dll",
+      "args": ["Qiuzili"],
+      "cwd": "${workspaceFolder}/leetcode_283",
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
