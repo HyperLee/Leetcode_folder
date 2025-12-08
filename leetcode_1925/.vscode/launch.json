@@ -1,0 +1,21 @@
+{
+  // 使用 .NET Core / .NET 的 Launch 模式
+  // 按 F5 即可啟動，不會要求輸入名稱
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch leetcode_1925",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      // 執行輸出位置：若是 framework dependent 會產生 dll，若是 self-contained 會產生 exe
+      "program": "${workspaceFolder}/leetcode_1925/bin/Debug/net10.0/leetcode_1925.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_1925",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "env": {},
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
