@@ -5,8 +5,12 @@ class Program
     /// <summary>
     /// 1925. Count Square Sum Triples
     /// https://leetcode.com/problems/count-square-sum-triples/
-    /// 1925. 统计平方和三元组的数目
+    /// 1925. 统计平方和三元组的数目 (中文繁體翻譯下方)
     /// https://leetcode.cn/problems/count-square-sum-triples/
+    /// 
+    /// 一個平方和三元組 (a, b, c) 是指三個整數 a、b、c 滿足 a^2 + b^2 = c^2。
+    /// 給定整數 n，請回傳所有滿足 1 <= a, b, c <= n 的平方和三元組的數目。
+    /// 
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)
