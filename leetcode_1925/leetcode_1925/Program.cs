@@ -20,8 +20,8 @@ class Program
         foreach (int n in testCases)
         {
             Console.WriteLine($"n = {n}");
-            Console.WriteLine($"CountTriples (優化版): {CountTriples(n)}");
-            Console.WriteLine($"CountTriples2 (暴力法): {CountTriples2(n)}");
+            Console.WriteLine($"CountTriples (優化版, 有序計數): {CountTriples(n)}");
+            Console.WriteLine($"CountTriples2 (暴力法, 有序計數): {CountTriples2(n)}");
             Console.WriteLine();
         }
     }
@@ -38,7 +38,7 @@ class Program
     /// 空間複雜度：O(1)。
     /// </summary>
     /// <param name="n">上限值 n（1 <= a,b,c <= n）</param>
-    /// <returns>滿足 a^2 + b^2 = c^2 的三元組數目（不包含 a,b 的排列重複）</returns>
+    /// <returns>滿足 a^2 + b^2 = c^2 的三元組數目（視為有序 (a,b) 與 (b,a) 為不同；也就是 LeetCode 題目所要求的有序計數）</returns>
     public static int CountTriples(int n)
     {
         int count = 0;
@@ -55,7 +55,10 @@ class Program
                 }
             }
         }
-        return count;
+        // 由於迴圈中我們僅遍歷 a <= b 以避免重複，因此適用於無序計數
+        // 但題目要求計算有序三元組 (a,b,c) 且 (a,b) 與 (b,a) 視為不同，
+        // 因此我們可以把無序計數乘以 2 來得到有序計數（因為不會有 a == b 時 a^2 + b^2 = c^2 的情況）。
+        return count * 2;
     }
 
     /// <summary>
