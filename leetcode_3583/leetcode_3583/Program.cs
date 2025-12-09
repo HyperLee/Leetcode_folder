@@ -74,7 +74,10 @@ class Program
         int mx = 0;
         foreach (var v in nums)
         {
-            if (v > mx) mx = v;
+            if (v > mx)
+            {
+                mx = v;
+            }
         }
 
         // 右側出現次數（rightSideCount）先統計整個陣列
@@ -105,7 +108,10 @@ class Program
                 // 左側出現次數 * 右側出現次數並累加
                 ans += (long)leftSideCount[(int)target] * rightSideCount[(int)target];
                 // 盡量避免 long 值過大，定期取模
-                if (ans >= MOD) ans %= MOD;
+                if (ans >= MOD)
+                {
+                    ans %= MOD;
+                }
             }
 
             // 將當前元素加入左側出現次數
