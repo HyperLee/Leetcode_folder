@@ -54,7 +54,7 @@ class Program
 
     /// <summary>
     /// 計算「特殊三元組」的數量。
-    /// 方法：枚舉中間位置 j，統計 nums[j]*2 在 j 左側與右側的出現次數，左側計數 (`leftSideCount`) * 右側計數 (`rightSideCount`) 即為以 j 為中間的特殊三元組數量。
+    /// 方法：枚舉中間位置 j，統計 nums[j] * 2 在 j 左側與右側的出現次數，左側計數 (`leftSideCount`) * 右側計數 (`rightSideCount`) 即為以 j 為中間的特殊三元組數量。
     /// 使用陣列作為計數器（leftSideCount / rightSideCount），時間複雜度 O(n + m)，m = max(nums)；空間複雜度 O(m)。
     /// 回傳值會在最後對 1e9+7 取模。
     /// </summary>
@@ -71,19 +71,19 @@ class Program
             return 0;
         }
 
-        // 先找出陣列中最大值，用來建立出現次數陣列（等同於 Java 中的 mx）
-        int mx = 0;
+        // 先找出陣列中最大值，用來建立出現次數陣列
+        int maxValue = 0;
         foreach (var v in nums)
         {
-            if (v > mx)
+            if (v > maxValue)
             {
-                mx = v;
+                maxValue = v;
             }
         }
 
         // 右側出現次數（rightSideCount）先統計整個陣列
         // 初始化 rightSideCount 為整個陣列的出現次數，代表在 j 之後（包含當前）元素的出現次數
-        var rightSideCount = new int[mx + 1];
+        var rightSideCount = new int[maxValue + 1];
         foreach (var v in nums)
         {
             rightSideCount[v]++;
@@ -93,7 +93,7 @@ class Program
 
         // 左側出現次數（leftSideCount），初始全為 0
         // leftSideCount 代表在 j 之前元素的出現次數
-        var leftSideCount = new int[mx + 1];
+        var leftSideCount = new int[maxValue + 1];
 
         // 枚舉中間位置 j；對於每個 nums[j]，計算左右兩側 nums[j]*2 的次數相乘
         foreach (var v in nums)
@@ -103,7 +103,7 @@ class Program
 
             // 目標值為 nums[j]*2
             long target = (long)v * 2L;
-            if (target <= mx)
+            if (target <= maxValue)
             {
                 // 乘法計算左側出現次數 * 右側出現次數並累加
                 // 左側出現次數 * 右側出現次數並累加
