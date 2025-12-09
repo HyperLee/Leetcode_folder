@@ -53,8 +53,8 @@ class Program
 
     /// <summary>
     /// 計算「特殊三元組」的數量。
-    /// 方法：枚舉中間位置 j，統計 nums[j]*2 在 j 左側與右側的出現次數，左邊 count * 右邊 count 即為以 j 為中間的特殊三元組數量。
-    /// 使用陣列作為計數器（等同 Java 解法中的 pre / suf 陣列），時間複雜度 O(n + m)，m = max(nums)；空間複雜度 O(m)。
+    /// 方法：枚舉中間位置 j，統計 nums[j]*2 在 j 左側與右側的出現次數，左側計數 (`leftCount`) * 右側計數 (`rightCount`) 即為以 j 為中間的特殊三元組數量。
+    /// 使用陣列作為計數器（leftCount / rightCount），時間複雜度 O(n + m)，m = max(nums)；空間複雜度 O(m)。
     /// 回傳值會在最後對 1e9+7 取模。
     /// </summary>
     /// <param name="nums">輸入整數陣列</param>
@@ -77,40 +77,39 @@ class Program
             if (v > mx) mx = v;
         }
 
-        // 此變數名為 `leftCount`（原本為 `suf`），但在此實作中用來記錄「在當前 j 右側」的出現次數
-        // 我們採用使用者要求的命名映射：原 `suf` -> `leftCount`，因此請依照變數註解理解其語意
-        var leftCount = new int[mx + 1];
+        // 右側出現次數（rightCount）先統計整個陣列
+        // 初始化 rightCount 為整個陣列的出現次數，代表在 j 之後（包含當前）元素的出現次數
+        var rightCount = new int[mx + 1];
         foreach (var v in nums)
         {
-            leftCount[v]++;
+            rightCount[v]++;
         }
 
         long ans = 0;
 
-        // 此變數名為 `rightCount`（原本為 `pre`），在此實作中用來記錄「在當前 j 左側」的出現次數
-        // 我們採用使用者要求的命名映射：原 `pre` -> `rightCount`，因此請依照變數註解理解其語意
-        var rightCount = new int[mx + 1];
+        // 左側出現次數（leftCount），初始全為 0
+        // leftCount 代表在 j 之前元素的出現次數
+        var leftCount = new int[mx + 1];
 
         // 枚舉中間位置 j；對於每個 nums[j]，計算左右兩側 nums[j]*2 的次數相乘
         foreach (var v in nums)
         {
-            // 將當前元素從「右側」的出現次數中移除（因為 j 已經在中間）
-            leftCount[v]--;
+            // 將當前元素從右側出現次數中移除（因為 j 已經在中間）
+            rightCount[v]--;
 
             // 目標值為 nums[j]*2
             long target = (long)v * 2L;
             if (target <= mx)
             {
                 // 乘法計算左側出現次數 * 右側出現次數並累加
-                // 使用新的變數名稱：因為變數名稱與原本的 pre/suf 做了映射，這裡的 leftCount 對應原本的 suf(右側)，
-                // rightCount 對應原本的 pre(左側)，因此乘法仍為：左側出現次數 * 右側出現次數 = rightCount * leftCount
-                ans += (long)rightCount[(int)target] * leftCount[(int)target];
+                // 左側出現次數 * 右側出現次數並累加
+                ans += (long)leftCount[(int)target] * rightCount[(int)target];
                 // 盡量避免 long 值過大，定期取模
                 if (ans >= MOD) ans %= MOD;
             }
 
-            // 將當前元素加入「左側」的出現次數
-            rightCount[v]++;
+            // 將當前元素加入左側出現次數
+            leftCount[v]++;
         }
 
         // 最終回傳對 MOD 取模後的 int 值
