@@ -53,8 +53,8 @@ class Program
 
     /// <summary>
     /// 計算「特殊三元組」的數量。
-    /// 方法：枚舉中間位置 j，統計 nums[j]*2 在 j 左側與右側的出現次數，左側計數 (`leftCount`) * 右側計數 (`rightCount`) 即為以 j 為中間的特殊三元組數量。
-    /// 使用陣列作為計數器（leftCount / rightCount），時間複雜度 O(n + m)，m = max(nums)；空間複雜度 O(m)。
+    /// 方法：枚舉中間位置 j，統計 nums[j]*2 在 j 左側與右側的出現次數，左側計數 (`leftSideCount`) * 右側計數 (`rightSideCount`) 即為以 j 為中間的特殊三元組數量。
+    /// 使用陣列作為計數器（leftSideCount / rightSideCount），時間複雜度 O(n + m)，m = max(nums)；空間複雜度 O(m)。
     /// 回傳值會在最後對 1e9+7 取模。
     /// </summary>
     /// <param name="nums">輸入整數陣列</param>
@@ -77,25 +77,25 @@ class Program
             if (v > mx) mx = v;
         }
 
-        // 右側出現次數（rightCount）先統計整個陣列
-        // 初始化 rightCount 為整個陣列的出現次數，代表在 j 之後（包含當前）元素的出現次數
-        var rightCount = new int[mx + 1];
+        // 右側出現次數（rightSideCount）先統計整個陣列
+        // 初始化 rightSideCount 為整個陣列的出現次數，代表在 j 之後（包含當前）元素的出現次數
+        var rightSideCount = new int[mx + 1];
         foreach (var v in nums)
         {
-            rightCount[v]++;
+            rightSideCount[v]++;
         }
 
         long ans = 0;
 
-        // 左側出現次數（leftCount），初始全為 0
-        // leftCount 代表在 j 之前元素的出現次數
-        var leftCount = new int[mx + 1];
+        // 左側出現次數（leftSideCount），初始全為 0
+        // leftSideCount 代表在 j 之前元素的出現次數
+        var leftSideCount = new int[mx + 1];
 
         // 枚舉中間位置 j；對於每個 nums[j]，計算左右兩側 nums[j]*2 的次數相乘
         foreach (var v in nums)
         {
             // 將當前元素從右側出現次數中移除（因為 j 已經在中間）
-            rightCount[v]--;
+            rightSideCount[v]--;
 
             // 目標值為 nums[j]*2
             long target = (long)v * 2L;
@@ -103,13 +103,13 @@ class Program
             {
                 // 乘法計算左側出現次數 * 右側出現次數並累加
                 // 左側出現次數 * 右側出現次數並累加
-                ans += (long)leftCount[(int)target] * rightCount[(int)target];
+                ans += (long)leftSideCount[(int)target] * rightSideCount[(int)target];
                 // 盡量避免 long 值過大，定期取模
                 if (ans >= MOD) ans %= MOD;
             }
 
             // 將當前元素加入左側出現次數
-            leftCount[v]++;
+            leftSideCount[v]++;
         }
 
         // 最終回傳對 MOD 取模後的 int 值
