@@ -97,6 +97,72 @@ dotnet run --project leetcode_3583.csproj
 - 若希望在記憶體與時間間做權衡，可在資料量小時使用 `Dictionary`，在數值域穩定且不大的情況下使用陣列加速。
 - 針對輸入非常大且稀疏的情況，可考慮先壓縮座標（coordinate compression）以減少計數陣列大小。
 
+## 方法二：使用 Dictionary（哈希表）詳細說明 🔍
+
+### 概念說明
+- 當陣列 `nums` 的值含有負數或值域很大時，使用陣列作為計數器會造成大量記憶體浪費，或無法處理負數。
+- `SpecialTripletsWithDictionary` 透過兩個 `Dictionary<int, long>`（`left` 與 `right`）維護左右兩側各數值的出現次數，達成與陣列計數相同的邏輯，但更通用。
+- `right` 初始為整個陣列的出現次數；遍歷每個元素 `nums[j]` 時，先把 `nums[j]` 從 `right` 減少（表示 j 已從右側移除），再以 `nums[j]*2` 當作 `target`，若 `left` 與 `right` 中都含有 `target`，則以 `left[target] * right[target]` 累加到答案；最後把 `nums[j]` 加回 `left`。
+
+### 詳細步驟（伪程式化描述）
+1. 若 `nums == null` 或 `nums.Length < 3`，回傳 0。
+2. 建立兩個 `Dictionary<int, long>`：`left`（初始空）與 `right`（用來統計整個 `nums`）。
+3. 先用迴圈把整個陣列的出現次數填入 `right`。
+4. 初始化 `ans = 0L`。
+5. 對於陣列中的每個值 `v = nums[j]`：
+   - 把 `right[v]--`，若為 0 則移除 `right[v]` 的鍵值，因為右側已不再包含該個體。
+   - 計算 `targetLong = (long)v * 2L`（用 `long` 以避免溢位），確保 `targetLong` 落在 `int.MinValue..int.MaxValue` 的範圍內後再轉回 `int target = (int)targetLong`。
+   - 若 `left.TryGetValue(target, out leftCnt)` 與 `right.TryGetValue(target, out rightCnt)` 都回傳 true，則 `ans += leftCnt * rightCnt`（用 `long` 作乘法）；為避免 `ans` 過大，並在迴圈內定期對 `MOD` 取模。
+   - 把 `v` 加入 `left`：`left[v]++`。
+6. 回傳 `(int)(ans % MOD)`。
+
+### 程式碼重點說明（為何如此實作）
+- 使用 `long` 做為 `Dictionary` 的 value：當元素重複次數很大（例如陣列長度非常大），`leftCnt * rightCnt` 可能超過 `int` 範圍，使用 `long` 可以避免中間結果溢位情況。
+- 在計算 `target` 時先轉 `v` 到 `long` 再乘 2，可以避免在極端數值時出現整數溢位（例如 `v = int.MaxValue`），並透過邊界檢查來確保只把在 `int` 範圍內的 `target` 當作字典鍵。
+- 使用 `TryGetValue` 可避免多次查找，提高效率。
+- 在每次加入 `left` 之前先從 `right` 扣除，以保證 `left` 代表索引 < j，`right` 代表索引 > j（中間 j 不算在左右側）。
+
+### 範例
+- 輸入：`nums = new int[] { 2, 1, 2 }`。
+  - `right` 初始為 {2:2, 1:1}；當遍歷到 `j=1`（v=1）時：
+    - `right` 減為 {2:2, 1:0}（移除 1），`left` 尚空。
+    - `target = 2`，`left[target] = 1`?（否），`right[target] = 2`，累加為 0；最後把 `1` 加入 `left`。
+  - 當遍歷到 `j=2`（v=2）之前，若有符合狀況則會累計到 `ans`，最終得到 `ans = 1`。
+
+### 時間 / 空間複雜度分析
+- 時間複雜度：平均 O(n)，其中 n = `nums.Length`。字典的查找與插入平均為 O(1)；最壞情況為 O(n)（哈希碰撞/退化）。
+- 空間複雜度：O(u)，u = `nums` 中不同數值的數量（獨特值數量）。
+
+### 優點與注意事項
+- 優點：
+  - 支援負數、超大範圍或稀疏值域；不需要額外做座標壓縮。
+  - 空間只依賴於不同元素的數量，當值域很大但不同值少時很節省記憶體。
+- 注意事項：
+  - 因為使用 `Dictionary`，對極端輸入會有哈希碰撞風險而影響效能；若值域小、且皆為非負數，陣列計數法會比 `Dictionary` 更快。
+  - 計算 `target` 時要小心整數溢位，因此必須先以 `long` 儲存，並判斷是否在 `int` 範圍內。
+  - 當 `leftCnt` 與 `rightCnt` 都很大時，二者相乘可能超出 32-bit，因此使用 `long` 以確保正確性。
+
+---
+
+## 方法比較：陣列計數 vs. Dictionary（簡表） 📊
+
+| 特性 | 陣列計數 (`SpecialTriplets`) | Dictionary (`SpecialTripletsWithDictionary`) |
+|---|---:|---:|
+| 值域限制 | 需值為非負且最大值 `mx` 不大（須建立 `mx+1` 的陣列） | 支援負數與稀疏、超大範圍值 | 
+| 時間複雜度 | O(n + m)（m = mx） | 平均 O(n)；最差 O(n * 哈希退化) |
+| 空間複雜度 | O(m)（mx + 1） | O(u)（唯一值數量） |
+| 記憶體使用 | 當 `mx` 大時浪費；但若 `mx` 小且非負則最快 | 僅占獨特值空間，稀疏或有負數時更優 |
+| 實作複雜度 | 稍微簡單且高效 | 稍微通用，需注意溢位與鍵值判斷 |
+| 何時選用 | 值域合理、非負、執行時間需最快 | 值域包含負數或非常大、或稀疏分布 |
+
+### 選擇建議 💡
+- 若 `nums` 的值域已知為非負、且最大值 `mx` 在可接受的記憶體範圍內（例如 `mx` 幾億以內會造成記憶體問題），則使用陣列計數 `SpecialTriplets` 會更快且更簡潔。
+- 若 `nums` 可能包含負數、或分布稀疏、或值域過大導致建立陣列不切實際時，請改用 `SpecialTripletsWithDictionary`。
+
+---
+
+若你希望我把 `Dictionary` 版本的單元測試也加入專案（包含負數、極端範例與大筆重複值），請告訴我，我可以再幫你建立測試檔案並加入 `dotnet test` 的範例指令。
+
 ---
 
 ## 來源與參考

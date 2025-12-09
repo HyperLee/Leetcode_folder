@@ -41,13 +41,14 @@ class Program
 
         int[] expects = new int[] { 1, 0, 4, 4, 4, 0 };
 
-        // 執行所有測試並輸出結果
+        // 執行所有測試並輸出結果（兩種方法）
         for (int i = 0; i < tests.Length; i++)
         {
             var arr = tests[i];
             int expected = expects[i];
-            int result = solution.SpecialTriplets(arr);
-            Console.WriteLine($"Test #{i + 1}: nums=[{string.Join(", ", arr)}] => got={result}, expected={expected} => {(result == expected ? "PASS" : "FAIL")}");
+            int result1 = solution.SpecialTriplets(arr);
+            int result2 = solution.SpecialTripletsWithDictionary(arr);
+            Console.WriteLine($"Test #{i + 1}: nums=[{string.Join(", ", arr)}] => method1={result1}, method2={result2}, expected={expected} => {(result1 == expected && result2 == expected ? "PASS" : "FAIL")}");
         }
     }
 
@@ -119,6 +120,74 @@ class Program
         }
 
         // 最終回傳對 MOD 取模後的 int 值
+        return (int)(ans % MOD);
+    }
+    
+    /// <summary>
+    /// 方法二：使用 Dictionary 作為計數器來解題
+    /// time: O(n) average, space: O(unique(nums))
+    /// 這個方法更通用，可處理負數或散佈在大的範圍中的值
+    /// </summary>
+    /// <param name="nums">輸入整數陣列</param>
+    /// <returns>特殊三元組的數量（對 1e9+7 取模）</returns>
+    public int SpecialTripletsWithDictionary(int[] nums)
+    {
+        const long MOD = 1_000_000_007;
+
+        if (nums is null || nums.Length < 3)
+        {
+            return 0;
+        }
+
+        var right = new Dictionary<int, long>();
+        var left = new Dictionary<int, long>();
+
+        // 計算右側（初始為整個陣列）出現次數
+        foreach (var v in nums)
+        {
+            if (right.ContainsKey(v))
+            {
+                right[v]++;
+            }
+            else
+            {
+                right[v] = 1;
+            }
+        }
+
+        long ans = 0;
+
+        foreach (var v in nums)
+        {
+            // 移除當前 j 從 right
+            right[v]--;
+            if (right[v] == 0)
+            {
+                right.Remove(v);
+            }
+
+            long targetLong = (long)v * 2L;
+            if (targetLong <= int.MaxValue && targetLong >= int.MinValue)
+            {
+                int target = (int)targetLong;
+                if (left.TryGetValue(target, out var leftCnt) && right.TryGetValue(target, out var rightCnt))
+                {
+                    ans += leftCnt * rightCnt;
+                    if (ans >= MOD) ans %= MOD;
+                }
+            }
+
+            // 將當前 v 加入 left
+            if (left.ContainsKey(v))
+            {
+                left[v]++;
+            }
+            else
+            {
+                left[v] = 1;
+            }
+        }
+
         return (int)(ans % MOD);
     }
   
