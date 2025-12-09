@@ -77,36 +77,40 @@ class Program
             if (v > mx) mx = v;
         }
 
-        // 右側出現次數（suf）先統計整個陣列
-        var suf = new int[mx + 1];
+        // 此變數名為 `leftCount`（原本為 `suf`），但在此實作中用來記錄「在當前 j 右側」的出現次數
+        // 我們採用使用者要求的命名映射：原 `suf` -> `leftCount`，因此請依照變數註解理解其語意
+        var leftCount = new int[mx + 1];
         foreach (var v in nums)
         {
-            suf[v]++;
+            leftCount[v]++;
         }
 
         long ans = 0;
 
-        // 左側出現次數（pre），初始全為 0
-        var pre = new int[mx + 1];
+        // 此變數名為 `rightCount`（原本為 `pre`），在此實作中用來記錄「在當前 j 左側」的出現次數
+        // 我們採用使用者要求的命名映射：原 `pre` -> `rightCount`，因此請依照變數註解理解其語意
+        var rightCount = new int[mx + 1];
 
         // 枚舉中間位置 j；對於每個 nums[j]，計算左右兩側 nums[j]*2 的次數相乘
         foreach (var v in nums)
         {
-            // 將當前元素從右側出現次數中移除（因為 j 已經在中間）
-            suf[v]--;
+            // 將當前元素從「右側」的出現次數中移除（因為 j 已經在中間）
+            leftCount[v]--;
 
             // 目標值為 nums[j]*2
             long target = (long)v * 2L;
             if (target <= mx)
             {
                 // 乘法計算左側出現次數 * 右側出現次數並累加
-                ans += (long)pre[(int)target] * suf[(int)target];
+                // 使用新的變數名稱：因為變數名稱與原本的 pre/suf 做了映射，這裡的 leftCount 對應原本的 suf(右側)，
+                // rightCount 對應原本的 pre(左側)，因此乘法仍為：左側出現次數 * 右側出現次數 = rightCount * leftCount
+                ans += (long)rightCount[(int)target] * leftCount[(int)target];
                 // 盡量避免 long 值過大，定期取模
                 if (ans >= MOD) ans %= MOD;
             }
 
-            // 將當前元素加入左側出現次數
-            pre[v]++;
+            // 將當前元素加入「左側」的出現次數
+            rightCount[v]++;
         }
 
         // 最終回傳對 MOD 取模後的 int 值
