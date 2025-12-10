@@ -116,6 +116,8 @@ class Program
     /// 範例 2：complexity = [3, 1, 2]
     /// 電腦 1 的複雜度 (1) ≤ 電腦 0 的複雜度 (3)，無法解鎖
     /// 排列數 = 0
+    /// 
+    /// 注意題目只要求計算出排序組數, 不需要列出所有排列。所以階層算法足夠
     /// </code>
     /// </example>
     public int CountPermutations(int[] complexity)
