@@ -175,3 +175,6 @@ y 0  [0,0] [1,0] [2,0] [3,0] [4,0]
 ---
 
 **相關題目**：[LeetCode 3531 - Count Covered Buildings](https://leetcode.com/problems/count-covered-buildings/description/?envType=daily-question&envId=2025-12-11)
+**參考解題文章**：
+ - [力扣官方题解](https://leetcode.cn/problems/count-covered-buildings/solutions/3843942/tong-ji-bei-fu-gai-de-jian-zhu-by-leetco-x6q3/?envType=daily-question&envId=2025-12-11)
+ - [灵茶山艾府](https://leetcode.cn/problems/count-covered-buildings/solutions/3663296/pai-xu-er-fen-cha-zhao-pythonjavacgo-by-z2c5d/?envType=daily-question&envId=2025-12-11)
