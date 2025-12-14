@@ -1,7 +1,0 @@
-D:\Leetcode_folder\Leetcode_folder\leetcode_392\leetcode_392\bin\Debug\leetcode_392.exe.config
-D:\Leetcode_folder\Leetcode_folder\leetcode_392\leetcode_392\bin\Debug\leetcode_392.exe
-D:\Leetcode_folder\Leetcode_folder\leetcode_392\leetcode_392\bin\Debug\leetcode_392.pdb
-D:\Leetcode_folder\Leetcode_folder\leetcode_392\leetcode_392\obj\Debug\leetcode_392.csproj.AssemblyReference.cache
-D:\Leetcode_folder\Leetcode_folder\leetcode_392\leetcode_392\obj\Debug\leetcode_392.csproj.CoreCompileInputs.cache
-D:\Leetcode_folder\Leetcode_folder\leetcode_392\leetcode_392\obj\Debug\leetcode_392.exe
-D:\Leetcode_folder\Leetcode_folder\leetcode_392\leetcode_392\obj\Debug\leetcode_392.pdb
