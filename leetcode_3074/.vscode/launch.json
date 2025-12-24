@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Core Launch (leetcode_3074)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_3074/bin/Debug/net9.0/leetcode_3074.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_3074",
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "env": {}
+    }
+  ]
+}
