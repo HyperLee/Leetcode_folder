@@ -37,6 +37,11 @@ class Program
     /// <summary>
     /// 計算在 k 回合中可以取得的快樂值總和最大值。策略：對 `happiness` 由大到小排序，依序選擇最大的值，
     /// 第 i 次選擇的實得值為 max(0, sorted[i] - i)。
+    /// 
+    /// long val = (long)happiness[i] - i;
+    /// 為什麼是減 i？因為每次選擇後，其他未被選中的小孩快樂值都會減少 1。
+    /// 因為沒有減一且把數值塞回去所以直接用減 i 來計算實得值。
+    /// i 是遞增的，每次都 + 1 而已。
     /// </summary>
     /// <param name="happiness">各小孩的快樂值陣列</param>
     /// <param name="k">要選擇的次數</param>
