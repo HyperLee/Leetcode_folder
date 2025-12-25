@@ -16,11 +16,27 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        var solver = new Program();
+        var tests = new (int[] happiness, int k, long expected)[]
+        {
+            (new int[]{5,2,2}, 2, 6),
+            (new int[]{1,1,1}, 3, 1),
+            (new int[]{5,0,0}, 2, 5),
+            (new int[]{4,3,3,2}, 3, 7),
+            (new int[]{10,8,6,4,2}, 5, 22),
+        };
+
+        for (int i = 0; i < tests.Length; i++)
+        {
+            var (h, k, exp) = tests[i];
+            long ans = solver.MaximumHappinessSum(h, k);
+            Console.WriteLine($"Test {i + 1}: happiness=[{string.Join(',', h)}], k={k}, expected={exp}, actual={ans}");
+        }
     }
 
     /// <summary>
-    /// 計算在 k 回合中可以取得的快樂值總和最大值。策略：對 `happiness` 由大到小排序，依序選擇最大的值，第 i 次選擇的實得值為 max(0, sorted[i] - i)。
+    /// 計算在 k 回合中可以取得的快樂值總和最大值。策略：對 `happiness` 由大到小排序，依序選擇最大的值，
+    /// 第 i 次選擇的實得值為 max(0, sorted[i] - i)。
     /// </summary>
     /// <param name="happiness">各小孩的快樂值陣列</param>
     /// <param name="k">要選擇的次數</param>
@@ -38,7 +54,11 @@ class Program
         for (int i = 0; i < k && i < n; i++)
         {
             long val = (long)happiness[i] - i;
-            if (val <= 0) break;
+            if (val <= 0)
+            {
+                break;
+            }
+
             total += val;
         }
         return total;
