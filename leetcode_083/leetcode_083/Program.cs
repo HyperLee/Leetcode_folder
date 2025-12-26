@@ -85,8 +85,8 @@ class Program
     /// <returns>刪除重複元素後的鏈結串列頭節點</returns>
     /// <example>
     /// <code>
-    /// // 輸入: [1,1,2] -> 輸出: [1,2]
-    /// // 輸入: [1,1,2,3,3] -> 輸出: [1,2,3]
+    ///  輸入: [1,1,2] -> 輸出: [1,2]
+    ///  輸入: [1,1,2,3,3] -> 輸出: [1,2,3]
     /// </code>
     /// </example>
     public static ListNode? DeleteDuplicates(ListNode? head)
