@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Core Launch (直接執行, 預設名稱)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_083/bin/Debug/net10.0/leetcode_083.dll",
+      "args": ["DefaultName"],
+      "cwd": "${workspaceFolder}/leetcode_083",
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "neverOpen",
+      "env": {}
+    }
+  ]
+}
