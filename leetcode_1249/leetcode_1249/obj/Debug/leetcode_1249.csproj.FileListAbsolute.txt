@@ -1,6 +1,0 @@
-D:\TestFolder\leetcode_1249\leetcode_1249\bin\Debug\leetcode_1249.exe.config
-D:\TestFolder\leetcode_1249\leetcode_1249\bin\Debug\leetcode_1249.exe
-D:\TestFolder\leetcode_1249\leetcode_1249\bin\Debug\leetcode_1249.pdb
-D:\TestFolder\leetcode_1249\leetcode_1249\obj\Debug\leetcode_1249.csprojResolveAssemblyReference.cache
-D:\TestFolder\leetcode_1249\leetcode_1249\obj\Debug\leetcode_1249.exe
-D:\TestFolder\leetcode_1249\leetcode_1249\obj\Debug\leetcode_1249.pdb
