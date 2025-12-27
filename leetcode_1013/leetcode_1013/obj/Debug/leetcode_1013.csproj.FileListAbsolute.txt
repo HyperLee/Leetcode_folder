@@ -1,8 +1,0 @@
-D:\Leetcode_folder\leetcode_1013\leetcode_1013\bin\Debug\leetcode_1013.exe.config
-D:\Leetcode_folder\leetcode_1013\leetcode_1013\bin\Debug\leetcode_1013.exe
-D:\Leetcode_folder\leetcode_1013\leetcode_1013\bin\Debug\leetcode_1013.pdb
-D:\Leetcode_folder\leetcode_1013\leetcode_1013\obj\Debug\leetcode_1013.csproj.AssemblyReference.cache
-D:\Leetcode_folder\leetcode_1013\leetcode_1013\obj\Debug\leetcode_1013.csproj.SuggestedBindingRedirects.cache
-D:\Leetcode_folder\leetcode_1013\leetcode_1013\obj\Debug\leetcode_1013.csproj.CoreCompileInputs.cache
-D:\Leetcode_folder\leetcode_1013\leetcode_1013\obj\Debug\leetcode_1013.exe
-D:\Leetcode_folder\leetcode_1013\leetcode_1013\obj\Debug\leetcode_1013.pdb
