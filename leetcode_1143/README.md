@@ -292,3 +292,16 @@ dotnet run
 
 - [LeetCode 1143 - Longest Common Subsequence](https://leetcode.com/problems/longest-common-subsequence/)
 - [LeetCode 1143 - 最長公共子序列（中文版）](https://leetcode.cn/problems/longest-common-subsequence/)
+
+## 參考解法
+
+以下為值得參考的中文解法與教學：
+
+- 力扣官方題解：
+  https://leetcode.cn/problems/longest-common-subsequence/solutions/696763/zui-chang-gong-gong-zi-xu-lie-by-leetcod-y7u0/
+- 負雪明燭（二維動態規劃解法、步驟詳解）：
+  https://leetcode.cn/problems/longest-common-subsequence/solutions/696989/fu-xue-ming-zhu-er-wei-dong-tai-gui-hua-r5ez6/
+- 灵茶山艾府（思路引導與舉例）：
+  https://leetcode.cn/problems/longest-common-subsequence/solutions/2133188/jiao-ni-yi-bu-bu-si-kao-dong-tai-gui-hua-lbz5/
+
+> 建議閱讀順序：先看 **力扣官方題解** 理解基礎與演算法，接著閱讀 **負雪明燭** 與 **灵茶山艾府** 的實作和進階說明以加深理解。
