@@ -96,16 +96,16 @@ class Program
     /// </remarks>
     /// <example>
     /// <code>
-    /// // 範例 1：可以三等分
+    ///  範例 1：可以三等分
     /// int[] arr1 = [0, 2, 1, -6, 6, -7, 9, 1, 2, 0, 1];
     /// bool result1 = CanThreePartsEqualSum(arr1); // 回傳 true
-    /// // 前綴和：[0, 2, 3, -3, 3, -4, 5, 6, 8, 8, 9]
-    /// // 總和 9，目標值 3，分割點在索引 2 和 6
+    ///  前綴和：[0, 2, 3, -3, 3, -4, 5, 6, 8, 8, 9]
+    ///  總和 9，目標值 3，分割點在索引 2 和 6
     /// 
-    /// // 範例 2：無法三等分
+    ///  範例 2：無法三等分
     /// int[] arr2 = [0, 2, 1, -6, 6, 7, 9, -1, 2, 0, 1];
     /// bool result2 = CanThreePartsEqualSum(arr2); // 回傳 false
-    /// // 總和 21，無法被 3 整除
+    ///  總和 21，無法被 3 整除
     /// </code>
     /// </example>
     public bool CanThreePartsEqualSum(int[] arr)
