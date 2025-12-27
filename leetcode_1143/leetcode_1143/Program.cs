@@ -90,7 +90,7 @@ class Program
     /// <code>
     /// var solution = new Program();
     /// int result = solution.LongestCommonSubsequence("abcde", "ace");
-    /// // result = 3，因為 "ace" 是最長公共子序列
+    ///  result = 3，因為 "ace" 是最長公共子序列
     /// </code>
     /// </example>
     public int LongestCommonSubsequence(string text1, string text2)
