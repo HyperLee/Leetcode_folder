@@ -75,37 +75,79 @@ public int NumberOfSteps(int num)
 - **時間複雜度**：O(log n) — 偶數時除以 2，數值會快速減少
 - **空間複雜度**：O(1) — 只使用常數額外空間
 
-### 方法二：位元運算優化
+### 方法二：數學（二進位性質）
 
-利用位元運算可以更有效率地判斷奇偶：
+從二進位角度分析，兩種操作的影響：
+
+- **偶數除以 2**：相當於二進位整體右移一位
+- **奇數減 1**：相當於消減最低位的 1
+
+因此整個模擬過程其實是：不斷右移直到最低位為 1，然後消減最低位的 1，直到結果為 0。
+
+**總操作次數 = 右移次數 + 消減次數**：
+
+- **右移次數**：`num` 中最高位 1 所在的位置
+- **消減次數**：`num` 中 1 的個數
+
+由於最後一步右移和消減同時完成，需減 1。
 
 ```csharp
-public int NumberOfSteps(int num)
+public int NumberOfStepsV2(int num)
 {
-    int steps = 0;
-    
-    while (num > 0)
+    return Math.Max(GetHighestBitPosition(num) + GetBitCount(num) - 1, 0);
+}
+
+/// <summary>
+/// 取得數字二進位表示中最高位 1 的位置（從 1 開始計數）。
+/// </summary>
+private static int GetHighestBitPosition(int x)
+{
+    for (int i = 31; i >= 0; i--)
     {
-        if ((num & 1) == 0)
+        if (((x >> i) & 1) == 1)
         {
-            num >>= 1;   // 偶數：右移一位
+            return i + 1;
         }
-        else
-        {
-            num -= 1;    // 奇數：減 1
-        }
-        steps++;
     }
-    
-    return steps;
+
+    return 0;
+}
+
+/// <summary>
+/// 計算數字二進位表示中 1 的個數（使用 lowbit 技巧）。
+/// </summary>
+private static int GetBitCount(int x)
+{
+    int count = 0;
+
+    while (x != 0)
+    {
+        // lowbit: x & -x 取得最低位的 1
+        x -= x & -x;
+        count++;
+    }
+
+    return count;
 }
 ```
+
+**以 `num = 14` 為例：**
+
+- 二進位：`1110`
+- 最高位 1 在第 4 位 → 右移次數 = 4
+- 有 3 個 1 → 消減次數 = 3
+- 總步數 = 4 + 3 - 1 = **6**
+
+**複雜度分析：**
+
+- **時間複雜度**：O(log n) — 遍歷二進位位數
+- **空間複雜度**：O(1) — 只使用常數額外空間
 
 ## 範例演示流程
 
 以 `num = 14` 為例，逐步演示整個過程：
 
-```
+```text
 初始值: 14 (二進位: 1110)
 步驟 1: 14 是偶數 → 14 ÷ 2 = 7  (二進位: 0111)
 步驟 2:  7 是奇數 →  7 - 1 = 6  (二進位: 0110)
@@ -119,7 +161,7 @@ public int NumberOfSteps(int num)
 
 ### 流程圖
 
-```
+```text
 ┌─────────────────────────────────────────────────────┐
 │                    開始                              │
 │                   num = 14                          │
