@@ -36,6 +36,25 @@ class Program
         int[] arr3 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         Console.WriteLine($"測試 3: arr = [{string.Join(", ", arr3)}]");
         Console.WriteLine($"結果: {solution.MinSetSize(arr3)}, 預期: 5");
+        Console.WriteLine();
+
+        // ========== MinSetSize2 方法測試 (List 排序優化版本) ==========
+        Console.WriteLine("===== MinSetSize2 方法測試 (List 排序優化版本) =====");
+        Console.WriteLine();
+
+        // 測試範例 1
+        Console.WriteLine($"測試 1: arr = [{string.Join(", ", arr1)}]");
+        Console.WriteLine($"結果: {solution.MinSetSize2(arr1)}, 預期: 2");
+        Console.WriteLine();
+
+        // 測試範例 2
+        Console.WriteLine($"測試 2: arr = [{string.Join(", ", arr2)}]");
+        Console.WriteLine($"結果: {solution.MinSetSize2(arr2)}, 預期: 1");
+        Console.WriteLine();
+
+        // 測試範例 3
+        Console.WriteLine($"測試 3: arr = [{string.Join(", ", arr3)}]");
+        Console.WriteLine($"結果: {solution.MinSetSize2(arr3)}, 預期: 5");
     }
 
     /// <summary>
@@ -109,6 +128,93 @@ class Program
         {
             removedCount += kv.Value;  // 累加當前元素的出現次數
             setSize++;                  // 集合大小 +1
+
+            // 當移除的元素數量達到或超過目標時，即可停止
+            if (removedCount >= targetCount)
+            {
+                break;
+            }
+        }
+
+        return setSize;
+    }
+
+    /// <summary>
+    /// 解決 LeetCode 1338: 數組大小減半問題（優化版本）
+    /// 
+    /// <para>
+    /// <b>解題思路：貪婪演算法 + List 排序優化</b>
+    /// </para>
+    /// 
+    /// <para>
+    /// 與 <see cref="MinSetSize"/> 的主要差異：
+    /// <list type="bullet">
+    ///   <item>只提取頻率值到 List，不保留鍵值對</item>
+    ///   <item>使用 List.Sort() 原地排序，避免 LINQ 的額外記憶體配置</item>
+    ///   <item>減少迭代時的物件存取開銷</item>
+    /// </list>
+    /// </para>
+    /// 
+    /// <para>
+    /// <b>演算法步驟：</b>
+    /// <list type="number">
+    ///   <item>統計每個元素的出現次數（使用 Dictionary）</item>
+    ///   <item>將頻率值提取到 List 並進行降序排序</item>
+    ///   <item>從最高頻率開始累加，直到達到目標移除數量</item>
+    /// </list>
+    /// </para>
+    /// 
+    /// <para>
+    /// <b>時間複雜度：</b> O(n log n)，其中 n 為陣列長度
+    /// </para>
+    /// <para>
+    /// <b>空間複雜度：</b> O(n)，但實際記憶體使用比 MinSetSize 更少
+    /// </para>
+    /// </summary>
+    /// <param name="arr">輸入的整數陣列</param>
+    /// <returns>最小的整數集合大小，使得移除該集合中所有整數後，陣列至少減少一半</returns>
+    /// <example>
+    /// <code>
+    /// var solution = new Program();
+    /// int[] arr = [3, 3, 3, 3, 5, 5, 5, 2, 2, 7];
+    /// int result = solution.MinSetSize2(arr); // 返回 2
+    /// // 選擇頻率最高的兩個元素，移除 4 + 3 = 7 個元素，7 >= 10/2 = 5
+    /// </code>
+    /// </example>
+    public int MinSetSize2(int[] arr)
+    {
+        // 步驟 1: 建立頻率計數表
+        // 使用 Dictionary 統計每個元素出現的次數
+        Dictionary<int, int> countMap = new Dictionary<int, int>();
+
+        for (int i = 0; i < arr.Length; i++)
+        {
+            // 如果元素已存在於字典中，次數 +1；否則初始化為 1
+            if (countMap.ContainsKey(arr[i]))
+            {
+                countMap[arr[i]]++;
+            }
+            else
+            {
+                countMap[arr[i]] = 1;
+            }
+        }
+
+        // 步驟 2: 提取頻率值到 List 並進行降序排序
+        // 優化點：只需要頻率值，不需要保留原始元素值
+        // 使用 List.Sort() 原地排序，比 LINQ OrderByDescending 更有效率
+        List<int> frequencies = new List<int>(countMap.Values);
+        frequencies.Sort((a, b) => b.CompareTo(a)); // 降序排序：大的在前
+
+        // 步驟 3: 貪婪選擇，累計移除元素直到達到目標
+        int removedCount = 0;  // 已移除的元素總數
+        int setSize = 0;       // 已選擇的整數集合大小
+        int targetCount = arr.Length / 2;  // 目標：至少移除陣列一半的元素
+
+        foreach (var freq in frequencies)
+        {
+            removedCount += freq;  // 累加當前頻率
+            setSize++;              // 集合大小 +1
 
             // 當移除的元素數量達到或超過目標時，即可停止
             if (removedCount >= targetCount)

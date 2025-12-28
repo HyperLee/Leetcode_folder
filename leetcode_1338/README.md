@@ -136,6 +136,81 @@ public int MinSetSize(int[] arr)
 
 ---
 
+## 方法比較：MinSetSize vs MinSetSize2
+
+本專案提供了兩種實現方式，核心演算法相同，但在資料結構的使用上有所不同：
+
+### 方法一：MinSetSize（LINQ OrderByDescending）
+
+```csharp
+var countMapOrdered = countMap.OrderByDescending(kv => kv.Value);
+foreach (var kv in countMapOrdered)
+{
+    removedCount += kv.Value;
+    setSize++;
+    if (removedCount >= targetCount) break;
+}
+```
+
+**特點：**
+
+- 使用 LINQ `OrderByDescending` 進行排序
+- 保留完整的鍵值對（Key-Value Pair）
+- 程式碼簡潔易讀
+
+### 方法二：MinSetSize2（List 原地排序優化）
+
+```csharp
+List<int> frequencies = new List<int>(countMap.Values);
+frequencies.Sort((a, b) => b.CompareTo(a)); // 降序排序
+foreach (var freq in frequencies)
+{
+    removedCount += freq;
+    setSize++;
+    if (removedCount >= targetCount) break;
+}
+```
+
+**特點：**
+
+- 只提取頻率值（Values），不保留鍵（Keys）
+- 使用 `List.Sort()` 原地排序，避免額外記憶體配置
+- 迭代時直接存取整數值，減少物件存取開銷
+
+### 效能比較
+
+| 比較項目 | MinSetSize (LINQ) | MinSetSize2 (List) |
+| ---------- | ------------------- | --------------------- |
+| 時間複雜度 | O(n log n) | O(n log n) |
+| 空間複雜度 | O(n) | O(n)，但實際更少 |
+| 排序方式 | 延遲執行（Lazy） | 原地排序（In-place） |
+| 迭代物件 | KeyValuePair<int, int> | int |
+| 記憶體配置 | 較多（LINQ 迭代器） | 較少（單一 List） |
+| 程式碼可讀性 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
+| 實際效能 | 較慢 | 較快 |
+
+### 選擇建議
+
+```text
+┌─────────────────────────────────────────────────────────────┐
+│  如果你需要...                         │  建議使用...        │
+├─────────────────────────────────────────────────────────────┤
+│  程式碼簡潔、易於維護                    │  MinSetSize        │
+│  LeetCode 競賽、追求效能                 │  MinSetSize2       │
+│  需要知道選擇了哪些元素                   │  MinSetSize        │
+│  大規模資料處理                          │  MinSetSize2       │
+└─────────────────────────────────────────────────────────────┘
+```
+
+> [!NOTE]
+> 在 LeetCode 的測試環境中，`MinSetSize2` 通常能獲得更好的執行時間，因為：
+>
+> 1. 避免了 LINQ 的延遲執行和迭代器開銷
+> 2. List.Sort() 使用 IntroSort 演算法，對整數排序效率高
+> 3. 直接迭代整數值比迭代 KeyValuePair 更快
+
+---
+
 ## 範例演示流程
 
 以 `arr = [3,3,3,3,5,5,5,2,2,7]` 為例：
@@ -236,7 +311,18 @@ dotnet run --project leetcode_1338
 
 ### 預期輸出
 
-```
+```text
+測試 1: arr = [3, 3, 3, 3, 5, 5, 5, 2, 2, 7]
+結果: 2, 預期: 2
+
+測試 2: arr = [7, 7, 7, 7, 7, 7]
+結果: 1, 預期: 1
+
+測試 3: arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+結果: 5, 預期: 5
+
+===== MinSetSize2 方法測試 (List 排序優化版本) =====
+
 測試 1: arr = [3, 3, 3, 3, 5, 5, 5, 2, 2, 7]
 結果: 2, 預期: 2
 
