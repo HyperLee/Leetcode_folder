@@ -178,7 +178,7 @@ class Program
     /// var solution = new Program();
     /// int[] arr = [3, 3, 3, 3, 5, 5, 5, 2, 2, 7];
     /// int result = solution.MinSetSize2(arr); // 返回 2
-    /// // 選擇頻率最高的兩個元素，移除 4 + 3 = 7 個元素，7 >= 10/2 = 5
+    ///  選擇頻率最高的兩個元素，移除 4 + 3 = 7 個元素，7 >= 10/2 = 5
     /// </code>
     /// </example>
     public int MinSetSize2(int[] arr)
