@@ -96,6 +96,43 @@ public bool HasAllCodes(string s, int k)
 }
 ```
 
+### 程式碼細節說明
+
+#### 迴圈條件：`i + k <= s.Length`
+
+迴圈條件 `i + k <= s.Length` 是為了**防止索引超出範圍**。
+
+**具體範例說明：**
+
+假設 `s = "0110"`, `k = 2`：
+- `s.Length = 4`
+- `s.Substring(i, k)` 會從索引 `i` 開始取 `k` 個字元
+
+迴圈執行過程：
+
+```text
+i = 0: 取 s.Substring(0, 2) = "01" ✓  (0 + 2 = 2 ≤ 4)
+i = 1: 取 s.Substring(1, 2) = "11" ✓  (1 + 2 = 3 ≤ 4)
+i = 2: 取 s.Substring(2, 2) = "10" ✓  (2 + 2 = 4 ≤ 4)
+i = 3: 停止，因為 3 + 2 = 5 > 4 (會超出字串範圍)
+```
+
+**關鍵點：**
+- 如果從索引 `i` 開始取 `k` 個字元，最後一個字元的索引是 `i + k - 1`
+- 這個索引必須 `< s.Length`，即 `i + k - 1 < s.Length`
+- 整理後就是 `i + k ≤ s.Length`
+
+**等價寫法：**
+
+```csharp
+// 以下三種寫法邏輯相同
+i + k <= s.Length      // 目前使用的寫法
+i <= s.Length - k      // 常見的替代寫法
+i < s.Length - k + 1   // 另一種表示方式
+```
+
+這樣可以確保 `Substring` 方法不會拋出 `ArgumentOutOfRangeException` 例外。
+
 ### 複雜度分析
 
 | 複雜度     | 數值       | 說明                                   |
