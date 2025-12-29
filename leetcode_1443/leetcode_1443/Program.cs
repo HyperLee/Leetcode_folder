@@ -56,6 +56,7 @@ class Program
         Console.WriteLine($"測試範例 3: {result3}"); // 預期輸出：0
     }
 
+    #region 第一種解法
     IList<int>[] adjacentNodes = [];
     int[] parents = [];
     bool[] visited = [];
@@ -199,4 +200,72 @@ class Program
 
         return time;
     }
+    #endregion
+
+    #region 第二種解法
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="n"></param>
+    /// <param name="edges"></param>
+    /// <param name="hasApple"></param>
+    /// <returns></returns>
+    public int MinTime2(int n, int[][] edges, IList<bool> hasApple)
+    {
+        var graph = new Dictionary<int, HashSet<int>>();
+        for(int i = 0; i < n; i++)
+        {
+            graph[i] = new HashSet<int>();
+        }
+
+        foreach(var edge in edges)
+        {
+            int nodeA = edge[0];
+            int nodeB = edge[1];
+            graph[nodeA].Add(nodeB);
+            graph[nodeB].Add(nodeA);
+        }
+
+        return DFS(graph, 0, hasApple, new bool[n])[1];
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="graph"></param>
+    /// <param name="current"></param>
+    /// <param name="hasApple"></param>
+    /// <param name="visited"></param>
+    /// <returns></returns> <summary>
+    /// 
+    /// </summary>
+    /// <param name="graph"></param>
+    /// <param name="current"></param>
+    /// <param name="hasApple"></param>
+    /// <param name="visited"></param>
+    /// <returns></returns>
+    private int[] DFS(Dictionary<int, HashSet<int>> graph, int current, IList<bool> hasApple, bool[] visited)
+    {
+        int[] res = new int[2];
+        if(hasApple[current])
+        {
+            res[0] = 1;
+        }
+        visited[current] = true;
+        foreach(var next in graph[current])
+        {
+            if (!visited[next])
+            {
+                var nextResult = DFS(graph, next, hasApple, visited);
+                if (nextResult[0] == 1)
+                {
+                    res[0] = 1;
+                    res[1] += nextResult[1] + 2;
+                }
+            }
+        }
+        return res;
+    }
+
+    #endregion
 }
