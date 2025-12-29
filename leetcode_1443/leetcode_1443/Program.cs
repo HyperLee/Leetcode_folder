@@ -54,6 +54,22 @@ class Program
         IList<bool> hasApple3 = [false, false, false, false, false, false, false];
         int result3 = program.MinTime(n3, edges3, hasApple3);
         Console.WriteLine($"測試範例 3: {result3}"); // 預期輸出：0
+
+        // ==================== 解法二測試 ====================
+        Console.WriteLine();
+        Console.WriteLine("===== 解法二 (DFS 後序遍歷) =====");
+
+        // 解法二 - 測試範例 1
+        int result1_v2 = program.MinTime2(n1, edges1, hasApple1);
+        Console.WriteLine($"測試範例 1: {result1_v2}"); // 預期輸出：8
+
+        // 解法二 - 測試範例 2
+        int result2_v2 = program.MinTime2(n2, edges2, hasApple2);
+        Console.WriteLine($"測試範例 2: {result2_v2}"); // 預期輸出：6
+
+        // 解法二 - 測試範例 3
+        int result3_v2 = program.MinTime2(n3, edges3, hasApple3);
+        Console.WriteLine($"測試範例 3: {result3_v2}"); // 預期輸出：0
     }
 
     #region 第一種解法
@@ -204,12 +220,35 @@ class Program
 
     #region 第二種解法
     /// <summary>
+    /// 計算收集樹上所有蘋果所需的最少時間（解法二：DFS 後序遍歷）。
     /// 
+    /// 解題思路：
+    /// 此解法採用後序遍歷（Post-order Traversal）的方式，從葉節點向根節點彙總結果。
+    /// 
+    /// 核心概念：
+    /// 1. 使用 DFS 後序遍歷，先處理所有子節點，再處理當前節點
+    /// 2. 每個節點回傳兩個值：[是否有蘋果需要收集, 子樹所需時間]
+    /// 3. 若子樹中有蘋果（含自身），則該子樹的邊需要走兩次（去 + 回）
+    /// 
+    /// 與解法一的差異：
+    /// - 解法一：先建立父子關係，再從蘋果節點向根節點回溯
+    /// - 解法二：直接在 DFS 過程中計算，由下往上彙總時間
+    /// 
+    /// 時間複雜度：O(n)，每個節點只訪問一次。
+    /// 空間複雜度：O(n)，用於圖的鄰接表和遞迴堆疊。
     /// </summary>
-    /// <param name="n"></param>
-    /// <param name="edges"></param>
-    /// <param name="hasApple"></param>
-    /// <returns></returns>
+    /// <param name="n">樹的節點數量</param>
+    /// <param name="edges">樹的邊，edges[i] = [ai, bi] 表示 ai 和 bi 之間有一條邊</param>
+    /// <param name="hasApple">hasApple[i] = true 表示節點 i 有蘋果</param>
+    /// <returns>收集所有蘋果所需的最少時間（秒）</returns>
+    /// <example>
+    /// <code>
+    /// int n = 7;
+    /// int[][] edges = [[0,1], [0,2], [1,4], [1,5], [2,3], [2,6]];
+    /// IList&lt;bool&gt; hasApple = [false, false, true, false, true, true, false];
+    /// int result = MinTime2(n, edges, hasApple); // 回傳 8
+    /// </code>
+    /// </example>
     public int MinTime2(int n, int[][] edges, IList<bool> hasApple)
     {
         var graph = new Dictionary<int, HashSet<int>>();
@@ -226,44 +265,70 @@ class Program
             graph[nodeB].Add(nodeA);
         }
 
+        // 從根節點 0 開始 DFS，回傳結果陣列的 [1] 即為所需總時間
         return DFS(graph, 0, hasApple, new bool[n])[1];
     }
 
     /// <summary>
+    /// 深度優先搜尋（後序遍歷），計算以當前節點為根的子樹收集蘋果所需時間。
     /// 
-    /// </summary>
-    /// <param name="graph"></param>
-    /// <param name="current"></param>
-    /// <param name="hasApple"></param>
-    /// <param name="visited"></param>
-    /// <returns></returns> <summary>
+    /// 回傳值說明：
+    /// - res[0]：標記位，1 表示此子樹（含當前節點）有蘋果需要收集，0 表示無
+    /// - res[1]：收集此子樹所有蘋果所需的時間（不含進入此子樹的邊）
     /// 
+    /// 演算法流程：
+    /// 1. 若當前節點有蘋果，設定標記 res[0] = 1
+    /// 2. 遞迴處理所有子節點
+    /// 3. 若子節點的子樹有蘋果（nextResult[0] == 1）：
+    ///    - 將當前節點標記為有蘋果（因為需要經過此節點才能到達子樹中的蘋果）
+    ///    - 累加子樹時間 + 2（進入子樹的邊需要走兩次：去 + 回）
+    /// 
+    /// 範例：若節點 4 有蘋果，路徑為 0 → 1 → 4
+    /// - 處理節點 4：res = [1, 0]（有蘋果，子樹時間 0）
+    /// - 處理節點 1：因子節點 4 有蘋果，res = [1, 0+2] = [1, 2]
+    /// - 處理節點 0：因子節點 1 的子樹有蘋果，res[1] += 2+2 = 4
     /// </summary>
-    /// <param name="graph"></param>
-    /// <param name="current"></param>
-    /// <param name="hasApple"></param>
-    /// <param name="visited"></param>
-    /// <returns></returns>
+    /// <param name="graph">以鄰接表表示的無向圖</param>
+    /// <param name="current">當前正在處理的節點編號</param>
+    /// <param name="hasApple">hasApple[i] = true 表示節點 i 有蘋果</param>
+    /// <param name="visited">訪問標記陣列，避免重複訪問（處理無向圖）</param>
+    /// <returns>長度為 2 的陣列：[是否有蘋果標記, 子樹所需時間]</returns>
     private int[] DFS(Dictionary<int, HashSet<int>> graph, int current, IList<bool> hasApple, bool[] visited)
     {
+        // res[0]: 是否有蘋果需要收集的標記（1=有, 0=無）
+        // res[1]: 收集此子樹蘋果所需的時間
         int[] res = new int[2];
-        if(hasApple[current])
+
+        // 若當前節點有蘋果，設定標記
+        if (hasApple[current])
         {
             res[0] = 1;
         }
+
+        // 標記當前節點為已訪問，避免在無向圖中重複訪問
         visited[current] = true;
-        foreach(var next in graph[current])
+
+        // 遍歷所有相鄰節點（子節點）
+        foreach (var next in graph[current])
         {
+            // 只處理尚未訪問的節點（即子節點，非父節點）
             if (!visited[next])
             {
+                // 遞迴處理子節點，取得子樹的結果
                 var nextResult = DFS(graph, next, hasApple, visited);
+
+                // 若子樹中有蘋果需要收集
                 if (nextResult[0] == 1)
                 {
+                    // 標記當前節點的子樹有蘋果
                     res[0] = 1;
+
+                    // 累加子樹時間，並加上進入該子樹的邊的時間（去 1 秒 + 回 1 秒 = 2 秒）
                     res[1] += nextResult[1] + 2;
                 }
             }
         }
+
         return res;
     }
 
