@@ -143,4 +143,39 @@ class Program
         // 步驟 3：最後將當前節點的值加入結果清單（後序的關鍵）
         list.Add(node.val);
     }
+
+    /// <summary>
+    /// 迭代法（使用堆疊）進行後序遍歷
+    /// 如果題目要求不使用遞迴，可以使用堆疊來模擬
+    /// </summary>
+    /// <param name="root"></param>
+    /// <returns></returns>
+    public IList<int> PostorderTraversalIterative(TreeNode root)
+    {
+        List<int> result = new List<int>();
+        if (root is null) return result;
+        
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        stack.Push(root);
+        
+        while (stack.Count > 0)
+        {
+            TreeNode node = stack.Pop();
+            // 將值插入到結果的最前面
+            result.Insert(0, node.val);
+            
+            // 先推入左子節點，再推入右子節點
+            // 這樣右子節點會先被處理
+            if (node.left is not null)
+            {
+                stack.Push(node.left);
+            }
+            if (node.right is not null)
+            {
+                stack.Push(node.right);
+            }
+        }
+        
+        return result;
+    }
 }
