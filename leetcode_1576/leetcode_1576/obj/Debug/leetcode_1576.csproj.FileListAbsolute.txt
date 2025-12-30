@@ -1,8 +1,0 @@
-D:\Leetcode_folder\leetcode_1576\leetcode_1576\bin\Debug\leetcode_1576.exe.config
-D:\Leetcode_folder\leetcode_1576\leetcode_1576\bin\Debug\leetcode_1576.exe
-D:\Leetcode_folder\leetcode_1576\leetcode_1576\bin\Debug\leetcode_1576.pdb
-D:\Leetcode_folder\leetcode_1576\leetcode_1576\obj\Debug\leetcode_1576.csproj.AssemblyReference.cache
-D:\Leetcode_folder\leetcode_1576\leetcode_1576\obj\Debug\leetcode_1576.csproj.SuggestedBindingRedirects.cache
-D:\Leetcode_folder\leetcode_1576\leetcode_1576\obj\Debug\leetcode_1576.csproj.CoreCompileInputs.cache
-D:\Leetcode_folder\leetcode_1576\leetcode_1576\obj\Debug\leetcode_1576.exe
-D:\Leetcode_folder\leetcode_1576\leetcode_1576\obj\Debug\leetcode_1576.pdb
