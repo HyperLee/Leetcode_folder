@@ -37,6 +37,16 @@ class Program
         // 測試案例 5：n = 7，預期結果為 4（7 = 1 + 1 + 1 + 4）
         int n5 = 7;
         Console.WriteLine($"n = {n5}, 最少完全平方數數量 = {program.NumSquares(n5)}"); // 輸出: 4
+
+        Console.WriteLine();
+        Console.WriteLine("=== 方法二：數學解法（四平方和定理）===");
+
+        // 使用 NumSquares2 驗證相同測試案例
+        Console.WriteLine($"n = {n1}, 最少完全平方數數量 = {program.NumSquares2(n1)}"); // 輸出: 3
+        Console.WriteLine($"n = {n2}, 最少完全平方數數量 = {program.NumSquares2(n2)}"); // 輸出: 2
+        Console.WriteLine($"n = {n3}, 最少完全平方數數量 = {program.NumSquares2(n3)}"); // 輸出: 1
+        Console.WriteLine($"n = {n4}, 最少完全平方數數量 = {program.NumSquares2(n4)}"); // 輸出: 1
+        Console.WriteLine($"n = {n5}, 最少完全平方數數量 = {program.NumSquares2(n5)}"); // 輸出: 4
     }
 
     /// <summary>
@@ -95,5 +105,151 @@ class Program
 
         // 回傳組成 n 所需的最少完全平方數數量
         return f[n];
+    }
+
+    /// <summary>
+    /// 使用數學方法（四平方和定理）求解「完全平方數」問題。
+    /// <para>
+    /// <b>解題思路：</b>
+    /// </para>
+    /// <para>
+    /// 根據「四平方和定理」（Lagrange's four-square theorem），任意正整數都可以表示為至多四個正整數的平方和。
+    /// </para>
+    /// <para>
+    /// 更進一步，根據「三平方和定理」，當且僅當 n = 4^k × (8m + 7) 時，n 無法表示為三個平方數之和，
+    /// 此時答案必為 4。
+    /// </para>
+    /// <para>
+    /// 排除答案為 4 的情況後，依序檢查答案是否為 1（n 本身是完全平方數）或 2（n 可表示為兩個平方數之和），
+    /// 若都不是則答案為 3。
+    /// </para>
+    /// <para>
+    /// <b>時間複雜度：</b> O(√n)，主要耗費在枚舉檢查答案是否為 2。
+    /// </para>
+    /// <para>
+    /// <b>空間複雜度：</b> O(1)，僅使用常數空間。
+    /// </para>
+    /// </summary>
+    /// <param name="n">目標整數，需要被分解為完全平方數之和</param>
+    /// <returns>組成 n 所需的最少完全平方數數量</returns>
+    /// <example>
+    /// <code>
+    /// var solution = new Program();
+    /// int result = solution.NumSquares2(12); // 回傳 3，因為 12 = 4 + 4 + 4
+    /// int result2 = solution.NumSquares2(7); // 回傳 4，因為 7 = 4^0 × (8×0 + 7)
+    /// </code>
+    /// </example>
+    public int NumSquares2(int n)
+    {
+        // 情況 1：檢查 n 本身是否為完全平方數
+        // 若是，則只需要 1 個完全平方數
+        if (IsPerfectSquare(n))
+        {
+            return 1;
+        }
+
+        // 情況 4：根據三平方和定理，檢查 n 是否符合 4^k × (8m + 7) 的形式
+        // 若符合，則 n 無法用少於 4 個平方數表示，答案必為 4
+        if (CheckAnswer4(n))
+        {
+            return 4;
+        }
+
+        // 情況 2：檢查 n 是否可以表示為兩個平方數之和
+        // 枚舉第一個平方數 i²，檢查 n - i² 是否為完全平方數
+        for (int i = 1; i * i <= n; i++)
+        {
+            int j = n - i * i;
+            if (IsPerfectSquare(j))
+            {
+                return 2;
+            }
+        }
+
+        // 情況 3：排除以上情況後，答案必為 3
+        return 3;
+    }
+
+    /// <summary>
+    /// 判斷一個整數是否為完全平方數。
+    /// <para>
+    /// <b>解題思路：</b>
+    /// </para>
+    /// <para>
+    /// 完全平方數是某個整數的平方，例如 1、4、9、16、25 等。
+    /// </para>
+    /// <para>
+    /// 透過計算 x 的平方根並取整數部分，再將該整數平方後與原數比較，
+    /// 若相等則 x 為完全平方數。
+    /// </para>
+    /// <para>
+    /// <b>時間複雜度：</b> O(1)，僅需一次平方根運算。
+    /// </para>
+    /// <para>
+    /// <b>空間複雜度：</b> O(1)，僅使用常數空間。
+    /// </para>
+    /// </summary>
+    /// <param name="x">待判斷的整數</param>
+    /// <returns>若 x 為完全平方數則回傳 true，否則回傳 false</returns>
+    /// <example>
+    /// <code>
+    /// var solution = new Program();
+    /// bool result1 = solution.IsPerfectSquare(16); // 回傳 true，因為 16 = 4²
+    /// bool result2 = solution.IsPerfectSquare(14); // 回傳 false
+    /// </code>
+    /// </example>
+    public bool IsPerfectSquare(int x)
+    {
+        // 計算 x 的平方根並取整數部分
+        int y = (int)Math.Sqrt(x);
+
+        // 若 y² == x，則 x 為完全平方數
+        return y * y == x;
+    }
+
+    /// <summary>
+    /// 判斷整數是否符合 4^k × (8m + 7) 的形式。
+    /// <para>
+    /// <b>解題思路：</b>
+    /// </para>
+    /// <para>
+    /// 根據數論中的「三平方和定理」（Legendre's three-square theorem），
+    /// 一個正整數 n 可以表示為三個平方數之和，當且僅當 n 不是 4^k × (8m + 7) 的形式。
+    /// </para>
+    /// <para>
+    /// 因此，若 n 符合此形式，則 n 必須用至少 4 個平方數來表示。
+    /// </para>
+    /// <para>
+    /// 演算法步驟：
+    /// 1. 持續將 x 除以 4，直到 x 不再是 4 的倍數（消除 4^k 因子）
+    /// 2. 檢查剩餘的數是否對 8 取餘等於 7（即符合 8m + 7 的形式）
+    /// </para>
+    /// <para>
+    /// <b>時間複雜度：</b> O(log n)，最多需要 log₄(n) 次除法。
+    /// </para>
+    /// <para>
+    /// <b>空間複雜度：</b> O(1)，僅使用常數空間。
+    /// </para>
+    /// </summary>
+    /// <param name="x">待判斷的整數</param>
+    /// <returns>若 x 符合 4^k × (8m + 7) 的形式則回傳 true，否則回傳 false</returns>
+    /// <example>
+    /// <code>
+    /// var solution = new Program();
+    /// bool result1 = solution.CheckAnswer4(7);  // 回傳 true，因為 7 = 4^0 × (8×0 + 7)
+    /// bool result2 = solution.CheckAnswer4(28); // 回傳 true，因為 28 = 4^1 × 7 = 4^1 × (8×0 + 7)
+    /// bool result3 = solution.CheckAnswer4(12); // 回傳 false
+    /// </code>
+    /// </example>
+    public bool CheckAnswer4(int x)
+    {
+        // 持續除以 4，消除所有 4^k 因子
+        while (x % 4 == 0)
+        {
+            x /= 4;
+        }
+
+        // 檢查剩餘的數是否符合 8m + 7 的形式
+        return x % 8 == 7;
     }
 }
