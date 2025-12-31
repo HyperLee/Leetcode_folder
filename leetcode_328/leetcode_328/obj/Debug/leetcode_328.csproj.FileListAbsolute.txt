@@ -1,8 +1,0 @@
-D:\Leetcode_folder\leetcode_328\leetcode_328\bin\Debug\leetcode_328.exe.config
-D:\Leetcode_folder\leetcode_328\leetcode_328\bin\Debug\leetcode_328.exe
-D:\Leetcode_folder\leetcode_328\leetcode_328\bin\Debug\leetcode_328.pdb
-D:\Leetcode_folder\leetcode_328\leetcode_328\obj\Debug\leetcode_328.csproj.AssemblyReference.cache
-D:\Leetcode_folder\leetcode_328\leetcode_328\obj\Debug\leetcode_328.csproj.SuggestedBindingRedirects.cache
-D:\Leetcode_folder\leetcode_328\leetcode_328\obj\Debug\leetcode_328.csproj.CoreCompileInputs.cache
-D:\Leetcode_folder\leetcode_328\leetcode_328\obj\Debug\leetcode_328.exe
-D:\Leetcode_folder\leetcode_328\leetcode_328\obj\Debug\leetcode_328.pdb
