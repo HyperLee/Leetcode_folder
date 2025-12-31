@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Core Launch (Console)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_374/bin/Debug/net10.0/leetcode_374.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_374",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "env": {},
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
