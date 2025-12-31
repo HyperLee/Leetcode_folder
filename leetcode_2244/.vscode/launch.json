@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Launch (leetcode_2244)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_2244/bin/Debug/net10.0/leetcode_2244.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_2244",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "env": {
+        "NAME": "VS_Debug_User"
+      },
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
