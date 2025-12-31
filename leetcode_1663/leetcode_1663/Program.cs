@@ -193,7 +193,7 @@ class Program
     /// <code>
     /// var solution = new Program();
     /// string result = solution.GetSmallestString2(3, 27);
-    /// // result = "aay" (1 + 1 + 25 = 27)
+    ///  result = "aay" (1 + 1 + 25 = 27)
     /// </code>
     /// </example>
     public string GetSmallestString2(int n, int k)
