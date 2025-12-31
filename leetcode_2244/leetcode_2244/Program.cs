@@ -154,10 +154,13 @@ class Program
             }
 
             // 計算該難度需要的輪數：⌈v / 3⌉
-            res += v / 3;
-            if (v % 3 != 0)
+            if(v % 3 == 0)
             {
-                res++;
+                res += v / 3;
+            }
+            else
+            {
+                res += v / 3 + 1;
             }
         }
 
