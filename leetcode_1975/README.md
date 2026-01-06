@@ -35,8 +35,6 @@ C# 實作解決 LeetCode 1975 問題的專案。
 
 雖然題目規定我們只能操作**相鄰的元素**，但我們可以通過多次操作，把**任意兩個元素**都乘以 -1。
 
-![操作示意圖](https://leetcode.cn/problems/maximum-matrix-sum/solutions/3007661/tan-xin-zheng-ming-pythonjavacgo-by-endl-umpx/figures/1975/1.png)
-
 **關鍵性質**：
 1. 每次操作恰好改變**兩個數**的正負號
 2. 多次操作恰好改變**偶數個數**的正負號
