@@ -76,6 +76,28 @@ class Program
                     new TreeNode(-32127))));
         
         Console.WriteLine($"測試案例 2 結果: {MaxLevelSum(root2)}"); // 預期輸出: 2
+        
+        Console.WriteLine("\n=== 測試 BFS 方法 ===");
+        
+        // BFS 測試案例 1
+        TreeNode root3 = new TreeNode(1,
+            new TreeNode(7,
+                new TreeNode(7),
+                new TreeNode(-8)),
+            new TreeNode(0));
+        
+        Console.WriteLine($"測試案例 1 (BFS) 結果: {MaxLevelSum_BFS(root3)}"); // 預期輸出: 2
+        
+        // BFS 測試案例 2
+        TreeNode root4 = new TreeNode(989,
+            default!,
+            new TreeNode(10250,
+                new TreeNode(98693),
+                new TreeNode(-89388,
+                    default!,
+                    new TreeNode(-32127))));
+        
+        Console.WriteLine($"測試案例 2 (BFS) 結果: {MaxLevelSum_BFS(root4)}"); // 預期輸出: 2
     }
 
     private static readonly IList<int> sum = new List<int>();
@@ -170,5 +192,90 @@ class Program
         {
             DFS(node.right, level + 1);
         }
+    }
+
+    /// <summary>
+    /// 使用廣度優先搜索 (BFS) 計算二元樹中節點值總和最大的層級
+    /// 
+    /// 解題思路：
+    /// 1. 使用佇列 (Queue) 實作廣度優先搜索
+    /// 2. 使用兩個動態陣列：queue 儲存當前層的節點，nextQueue 儲存下一層的節點
+    /// 3. 逐層遍歷樹，同時計算每層的節點值總和
+    /// 4. 追蹤最大總和及其對應的層級
+    /// 5. 遍歷完當前層後，將 queue 更新為 nextQueue
+    /// 
+    /// 演算法流程：
+    /// 1. 初始化 res = 1（結果層級），maxSum = int.MinValue（最大總和）
+    /// 2. 初始化 queue 包含根節點，從第 1 層開始
+    /// 3. 對於每一層：
+    ///    - 建立 nextQueue 儲存下一層節點
+    ///    - 遍歷當前層所有節點，累加節點值到 sum
+    ///    - 將子節點（left 和 right）加入 nextQueue
+    ///    - 如果 sum > maxSum，更新 maxSum 和 res
+    ///    - 將 queue 設為 nextQueue，進入下一層
+    /// 4. 回傳 res（總和最大的層級）
+    /// 
+    /// 優點：
+    /// - 自然的層級遍歷方式，符合題目要求
+    /// - 不需要額外記錄層號，直接在迴圈中追蹤
+    /// - 程式碼結構清晰，易於理解
+    /// 
+    /// 時間複雜度：O(n)，其中 n 是節點數量，每個節點訪問一次
+    /// 空間複雜度：O(w)，其中 w 是樹的最大寬度（某一層的最大節點數）
+    /// </summary>
+    /// <param name="root">二元樹的根節點</param>
+    /// <returns>節點值總和最大的最小層級（層級從 1 開始計算）</returns>
+    public static int MaxLevelSum_BFS(TreeNode root)
+    {
+        // 初始化結果層級為 1
+        int res = 1;
+        
+        // 初始化最大總和為 int 的最小值
+        int maxSum = int.MinValue;
+        
+        // 初始化佇列，包含根節點
+        IList<TreeNode> queue = new List<TreeNode> { root };
+        
+        // 從第 1 層開始遍歷，當佇列不為空時繼續
+        for(int level = 1; queue.Count > 0; level++)
+        {
+            // 建立下一層的節點佇列
+            IList<TreeNode> nextQueue = new List<TreeNode>();
+            
+            // 初始化當前層的總和
+            int sum = 0;
+            
+            // 遍歷當前層的所有節點
+            foreach(var node in queue)
+            {
+                // 累加當前節點的值到總和
+                sum += node.val;
+                
+                // 將左子節點加入下一層佇列
+                if(node.left != null)
+                {
+                    nextQueue.Add(node.left);
+                }
+                
+                // 將右子節點加入下一層佇列
+                if(node.right != null)
+                {
+                    nextQueue.Add(node.right);
+                }
+            }
+            
+            // 如果當前層的總和大於最大總和，更新結果
+            if(sum > maxSum)
+            {
+                maxSum = sum;  // 更新最大總和
+                res = level;   // 更新結果層級
+            }
+            
+            // 將當前佇列更新為下一層佇列
+            queue = nextQueue;
+        }
+        
+        // 回傳總和最大的層級
+        return res;
     }
 }
