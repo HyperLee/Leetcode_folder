@@ -193,3 +193,5 @@ dotnet run --project leetcode_1975/leetcode_1975.csproj
 
 - [LeetCode 1975 - 英文](https://leetcode.com/problems/maximum-matrix-sum/description/?envType=daily-question&envId=2026-01-05)
 - [LeetCode 1975 - 中文](https://leetcode.cn/problems/maximum-matrix-sum/description/?envType=daily-question&envId=2026-01-05)
+- [灵茶山艾府](https://leetcode.cn/problems/maximum-matrix-sum/solutions/950421/go-tan-xin-by-endlesscheng-opwm/?envType=daily-question&envId=2026-01-05)
+- [官方解法](https://leetcode.cn/problems/maximum-matrix-sum/solutions/951896/zui-da-fang-zhen-he-by-leetcode-solution-5xnx/?envType=daily-question&envId=2026-01-05)
