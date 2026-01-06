@@ -66,7 +66,7 @@ class Program
         // 第 2 層: 10250
         // 第 3 層: 98693 + (-89388) = 9305
         // 第 4 層: -32127
-        // 預期輸出: 3 (第 3 層總和最大)
+        // 預期輸出: 2 (第 2 層總和最大)
         TreeNode root2 = new TreeNode(989,
             default!,
             new TreeNode(10250,
@@ -75,7 +75,7 @@ class Program
                     default!,
                     new TreeNode(-32127))));
         
-        Console.WriteLine($"測試案例 2 結果: {MaxLevelSum(root2)}"); // 預期輸出: 3
+        Console.WriteLine($"測試案例 2 結果: {MaxLevelSum(root2)}"); // 預期輸出: 2
     }
 
     private static readonly IList<int> sum = new List<int>();
