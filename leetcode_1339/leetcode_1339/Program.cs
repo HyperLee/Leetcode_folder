@@ -1,4 +1,6 @@
-﻿namespace leetcode_1339;
+﻿using System.Reflection.Metadata;
+
+namespace leetcode_1339;
 
 class Program
 {
@@ -54,19 +56,47 @@ class Program
         //       2
         //      / \
         //     3   4
-        //    / \
-        //   5   6
+        //        / \
+        //       5   6
         TreeNode root2 = new TreeNode(1,
             null!,
             new TreeNode(2,
-                new TreeNode(3,
+                new TreeNode(3),
+                new TreeNode(4,
                     new TreeNode(5),
-                    new TreeNode(6)),
-                new TreeNode(4)));
+                    new TreeNode(6))));
         
         Program solution2 = new Program();
         int result2 = solution2.MaxProduct(root2);
         Console.WriteLine($"測試範例 2 結果: {result2}"); // 預期輸出: 90
+        
+        Console.WriteLine("\n===== 解法二測試 =====");
+        
+        // 測試範例 1 - 解法二
+        TreeNode root3 = new TreeNode(1,
+            new TreeNode(2,
+                new TreeNode(4),
+                new TreeNode(5)),
+            new TreeNode(3,
+                null!,
+                new TreeNode(6)));
+        
+        Program solution3 = new Program();
+        int result3 = solution3.MaxProduct_V2(root3);
+        Console.WriteLine($"測試範例 1 結果 (解法二): {result3}"); // 預期輸出: 110
+        
+        // 測試範例 2 - 解法二
+        TreeNode root4 = new TreeNode(1,
+            null!,
+            new TreeNode(2,
+                new TreeNode(3),
+                new TreeNode(4,
+                    new TreeNode(5),
+                    new TreeNode(6))));
+        
+        Program solution4 = new Program();
+        int result4 = solution4.MaxProduct_V2(root4);
+        Console.WriteLine($"測試範例 2 結果 (解法二): {result4}"); // 預期輸出: 90
     }
 
     private int sum = 0;
@@ -161,4 +191,120 @@ class Program
         // 返回當前子樹的總和，供父節點使用
         return cur;
     }
+
+    // ===== 解法二：直接計算所有可能的乘積 =====
+    
+    private const int MOD = 1_000_000_007;
+    private long ans = 0;
+
+    /// <summary>
+    /// 計算分裂二叉樹後兩個子樹節點和的最大乘積（解法二）
+    /// 
+    /// 解題思路：
+    /// 1. 第一次 DFS：計算整棵樹的點權和 total
+    /// 2. 第二次 DFS：計算每個子樹的點權和 s
+    ///    - 當移除當前節點到其父節點的邊後，樹被分成兩部分
+    ///    - 一部分的和為 s（當前子樹）
+    ///    - 另一部分的和為 total - s（剩餘部分）
+    ///    - 二者乘積為 s * (total - s)
+    /// 3. 用每次計算的乘積更新答案的最大值
+    /// 
+    /// 與解法一的差異：
+    /// - 解法一：基於均值不等式，找最接近 total/2 的子樹和（優化策略）
+    /// - 解法二：直接計算所有可能的乘積，取最大值（暴力列舉）
+    /// 
+    /// 特殊情況處理：
+    /// - 當前節點是根節點時，s = total，乘積為 0，不影響答案
+    /// - 由於題目保證點權非負，無需特殊判斷
+    /// - 若有負數點權，需跳過根節點的情況
+    /// 
+    /// 時間複雜度：O(n)，n 為節點數量，需要遍歷兩次樹
+    /// 空間複雜度：O(h)，h 為樹的高度，遞迴呼叫堆疊空間
+    /// </summary>
+    /// <param name="root">二叉樹的根節點</param>
+    /// <returns>兩個子樹節點和的最大乘積，對 10^9+7 取餘</returns>
+    public int MaxProduct_V2(TreeNode root)
+    {
+        // 重置成員變數（因為可能多次呼叫此方法）
+        ans = 0;
+        
+        // 第一次 DFS：計算整棵樹的總和
+        int total = DFS1(root);
+        
+        // 第二次 DFS：計算每個子樹的乘積，更新最大值
+        DFS2_V2(root, total);
+        
+        // 返回答案，對 10^9+7 取餘
+        return (int)(ans % MOD);
+    }
+
+    /// <summary>
+    /// 第一次深度優先搜尋：計算整棵二叉樹所有節點值的總和
+    /// 
+    /// 使用遞迴方式遍歷整棵樹，計算所有節點值的總和。
+    /// 這是一個簡潔的後序遍歷實作。
+    /// </summary>
+    /// <param name="node">當前遍歷的節點</param>
+    /// <returns>以當前節點為根的子樹的節點值總和</returns>
+    private int DFS1(TreeNode node)
+    {
+        // 遞迴終止條件：節點為空，返回 0
+        if (node is null)
+        {
+            return 0;
+        }
+        
+        // 返回：當前節點值 + 左子樹和 + 右子樹和
+        return node.val + DFS1(node.left) + DFS1(node.right);
+    }
+
+    /// <summary>
+    /// 第二次深度優先搜尋：計算每個子樹的節點和，並計算分裂後的乘積
+    /// 
+    /// 對於每個子樹：
+    /// 1. 計算子樹和 s = 當前節點值 + 左子樹和 + 右子樹和
+    /// 2. 計算分裂乘積 = s * (total - s)
+    ///    - s：當前子樹的和
+    ///    - total - s：移除當前子樹後剩餘部分的和
+    /// 3. 用此乘積更新全域最大值 ans
+    /// 
+    /// 範例說明（以範例 1 為例）：
+    /// 樹結構：      1
+    ///             / \
+    ///            2   3
+    ///           / \   \
+    ///          4   5   6
+    /// 
+    /// total = 21
+    /// 遍歷過程：
+    /// - 節點 4: s=4, 乘積=4*(21-4)=68
+    /// - 節點 5: s=5, 乘積=5*(21-5)=80
+    /// - 節點 2: s=11, 乘積=11*(21-11)=110 ✓ 最大
+    /// - 節點 6: s=6, 乘積=6*(21-6)=90
+    /// - 節點 3: s=9, 乘積=9*(21-9)=108
+    /// - 節點 1: s=21, 乘積=21*(21-21)=0
+    /// </summary>
+    /// <param name="node">當前遍歷的節點</param>
+    /// <param name="total">整棵樹的節點值總和</param>
+    /// <returns>以當前節點為根的子樹的節點值總和</returns>
+    private int DFS2_V2(TreeNode node, int total)
+    {
+        // 遞迴終止條件：節點為空，返回 0
+        if (node is null)
+        {
+            return 0;
+        }
+        
+        // 計算當前子樹的總和 = 當前節點值 + 左子樹和 + 右子樹和
+        int s = node.val + DFS2_V2(node.left, total) + DFS2_V2(node.right, total);
+        
+        // 計算分裂後兩部分的乘積：s * (total - s)
+        // 使用 long 避免整數溢位
+        // 更新全域最大值
+        ans = Math.Max(ans, (long)s * (total - s));
+        
+        // 返回當前子樹的總和，供父節點使用
+        return s;
+    }
+
 }
