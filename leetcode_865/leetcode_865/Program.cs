@@ -75,8 +75,8 @@ class Program
     /// <returns>包含所有最深節點的最小子樹的根節點</returns>
     public TreeNode SubtreeWithAllDeepest(TreeNode root)
     {
-        // 呼叫輔助函式 f，返回的 Tuple 的第一個元素即為所求的 LCA 節點
-        return f(root).Item1;
+        // 呼叫輔助函式 dfs，返回的 Tuple 的第一個元素即為所求的 LCA 節點
+        return dfs(root).Item1;
     }
 
     /// <summary>
@@ -96,7 +96,7 @@ class Program
     /// </summary>
     /// <param name="root">當前處理的節點</param>
     /// <returns>Tuple，包含 LCA 節點和深度</returns>
-    private Tuple<TreeNode, int> f(TreeNode root)
+    private Tuple<TreeNode, int> dfs(TreeNode root)
     {
         // 基礎情況：空節點的深度為 0
         if(root == null)
@@ -105,9 +105,9 @@ class Program
         }
 
         // 遞迴處理左子樹，獲取左子樹的 LCA 和深度
-        Tuple<TreeNode, int> left = f(root.left);
+        Tuple<TreeNode, int> left = dfs(root.left);
         // 遞迴處理右子樹，獲取右子樹的 LCA 和深度
-        Tuple<TreeNode, int> right = f(root.right);
+        Tuple<TreeNode, int> right = dfs(root.right);
 
         // 情況 1：左子樹更深，最深葉節點都在左子樹中
         if(left.Item2 > right.Item2)

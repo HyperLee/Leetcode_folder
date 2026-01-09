@@ -108,7 +108,7 @@ public TreeNode SubtreeWithAllDeepest(TreeNode root)
     return f(root).Item1;
 }
 
-private Tuple<TreeNode, int> f(TreeNode root)
+private Tuple<TreeNode, int> dfs(TreeNode root)
 {
     // 基礎情況：空節點的深度為 0
     if(root == null)
@@ -117,8 +117,8 @@ private Tuple<TreeNode, int> f(TreeNode root)
     }
 
     // 遞迴處理左右子樹
-    Tuple<TreeNode, int> left = f(root.left);
-    Tuple<TreeNode, int> right = f(root.right);
+    Tuple<TreeNode, int> left = dfs(root.left);
+    Tuple<TreeNode, int> right = dfs(root.right);
 
     // 情況 1：左子樹更深
     if(left.Item2 > right.Item2)
@@ -254,15 +254,15 @@ int depth = result.Item2;          // 取得深度
 
 ```csharp
 // 使用值 Tuple
-private (TreeNode lca, int depth) f(TreeNode root)
+private (TreeNode lca, int depth) dfs(TreeNode root)
 {
     if(root == null)
     {
         return (null, 0);
     }
 
-    var left = f(root.left);
-    var right = f(root.right);
+    var left = dfs(root.left);
+    var right = dfs(root.right);
 
     if(left.depth > right.depth)
     {
