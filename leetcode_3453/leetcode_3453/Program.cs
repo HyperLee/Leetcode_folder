@@ -89,9 +89,7 @@ class Program
             double mid = (right + left) / 2.0;  // 取中點
             
             // 檢查 mid 以下的面積是否 >= 總面積的一半
-            // 預先計算總面積的一半
-            double halfArea = total_area / 2.0;
-            if(Check(mid, squares, halfArea))
+            if(Check(mid, squares, total_area))
             {
                 right = mid;  // 面積足夠，嘗試更小的 y 值
             }
@@ -116,9 +114,9 @@ class Program
     /// </summary>
     /// <param name="limit_y">水平分割線的 y 座標</param>
     /// <param name="squares">所有正方形的陣列</param>
-    /// <param name="halfArea">所有正方形的總面積一半</param>
+    /// <param name="total_area">所有正方形的總面積</param>
     /// <returns>如果 limit_y 以下的面積 >= 總面積的一半，返回 true</returns>
-    private bool Check(double limit_y, int[][] squares, double halfArea)
+    private bool Check(double limit_y, int[][] squares, double total_area)
     {
         double area = 0;
         foreach(int[] sq in squares)
@@ -133,7 +131,7 @@ class Program
                 // Math.Min(limit_y - y, l) 確保不會超過正方形本身的高度
                 area += (double)l * Math.Min(limit_y - y, (double)l);
 
-                if(area >= halfArea)
+                if(area >= total_area / 2.0)
                 {
                     // 提前返回，避免不必要的計算
                     return true;
@@ -142,6 +140,6 @@ class Program
         }
         
         // 檢查累計面積是否達到總面積的一半
-        return area >= halfArea;
+        return area >= total_area / 2.0;
     }
 }
