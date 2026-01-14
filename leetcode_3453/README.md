@@ -462,3 +462,4 @@ y=3: 結束事件，邊長=2，delta=-1
 
 - [二分查找詳解](https://zh.wikipedia.org/wiki/%E4%BA%8C%E5%88%86%E6%90%9C%E7%B4%A2%E7%AE%97%E6%B3%95)
 - [LeetCode 官方題解](https://leetcode.com/problems/separate-squares-i/)
+- [掃描線解法圖示說明](https://oi-wiki.org/geometry/scanning/)
