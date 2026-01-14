@@ -179,8 +179,8 @@ class Program
     /// area + width × (y'' - y')
     /// 
     /// 當滿足：
-    /// area &lt; totalArea / 2
-    /// area + width × (y'' - y') &gt;= totalArea / 2
+    /// area < totalArea / 2
+    /// area + width × (y'' - y') >= totalArea / 2
     /// 
     /// 時，則可以知道目標值 y 一定處於區間 [y', y'']。
     /// 由於兩個掃描線之間的被覆蓋區域中所有矩形的高度相同，
