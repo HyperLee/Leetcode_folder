@@ -46,6 +46,24 @@ class Program
         double result3 = program.SeparateSquares(squares3);
         Console.WriteLine($"測試案例 3: {result3}");
         Console.WriteLine($"預期結果: 1.16667\n");
+
+        // ========== 方法二：掃描線解法測試 ==========
+        Console.WriteLine("========== 掃描線解法 ==========");
+
+        // 測試案例 1
+        double result1_v2 = program.SeparateSquares2(squares1);
+        Console.WriteLine($"測試案例 1: {result1_v2}");
+        Console.WriteLine($"預期結果: 1.00000\n");
+
+        // 測試案例 2
+        double result2_v2 = program.SeparateSquares2(squares2);
+        Console.WriteLine($"測試案例 2: {result2_v2}");
+        Console.WriteLine($"預期結果: 1.00000\n");
+
+        // 測試案例 3
+        double result3_v2 = program.SeparateSquares2(squares3);
+        Console.WriteLine($"測試案例 3: {result3_v2}");
+        Console.WriteLine($"預期結果: 1.16667\n");
     }
 
     /// <summary>
@@ -141,5 +159,108 @@ class Program
         
         // 檢查累計面積是否達到總面積的一半
         return area >= total_area / 2.0;
+    }
+
+    /// <summary>
+    /// 方法二：掃描線
+    /// 
+    /// 思路與演算法：
+    /// 我們可以參考「掃描線」的解法。首先計算出所有正方形的總面積 totalArea，
+    /// 接著從下往上進行掃描，設掃描線 y = y' 下方的覆蓋面積和為 area，
+    /// 那麼掃描線上方的面積和為 totalArea - area。
+    /// 
+    /// 題目要求 y = y' 下面的面積與上方的面積相等，即：
+    /// area = totalArea - area
+    /// 即：area = totalArea / 2
+    /// 
+    /// 設當前經過正方形上/下邊界的掃描線為 y = y'，此時掃描線以下的覆蓋面積為 area；
+    /// 向上移動時下一個需要經過的正方形上/下邊界的掃描線為 y = y''，
+    /// 此時被正方形覆蓋的底邊長之和為 width，則此時在掃描線 y = y'' 以下覆蓋的面積之和為：
+    /// area + width × (y'' - y')
+    /// 
+    /// 當滿足：
+    /// area &lt; totalArea / 2
+    /// area + width × (y'' - y') &gt;= totalArea / 2
+    /// 
+    /// 時，則可以知道目標值 y 一定處於區間 [y', y'']。
+    /// 由於兩個掃描線之間的被覆蓋區域中所有矩形的高度相同，
+    /// 掃描線在區間 [y', y''] 移動長度為 Δ 時，被覆蓋區域的面積變化即為 Δ × width。
+    /// 此時被覆蓋的面積只需增加 totalArea / 2 - area，即可滿足上下面積相等。
+    /// 我們可以直接求出目標值 y 為：
+    /// y = y' + (totalArea / 2 - area) / width = y' + (totalArea - 2 × area) / (2 × width)
+    /// 
+    /// 時間複雜度：O(n log n)，其中 n 為正方形數量（排序的時間複雜度）
+    /// 空間複雜度：O(n)，用於儲存事件列表
+    /// 
+    /// ref: [掃描線解法] - https://oi-wiki.org/geometry/scanning/
+    /// </summary>
+    /// <param name="squares">2D 整數陣列，每個元素 [xi, yi, li] 表示一個正方形</param>
+    /// <returns>水平分割線的 y 座標值</returns>
+    /// <example>
+    /// <code>
+    /// int[][] squares = new int[][] { new int[] { 0, 0, 2 }, new int[] { 2, 0, 2 } };
+    /// double result = SeparateSquares2(squares); // 返回 1.0
+    /// </code>
+    /// </example>
+    public double SeparateSquares2(int[][] squares)
+    {
+        // 計算所有正方形的總面積
+        long totalArea = 0;
+        // 事件列表：每個事件為 [y座標, 邊長, delta]
+        // delta = 1 表示正方形下邊界（開始事件）
+        // delta = -1 表示正方形上邊界（結束事件）
+        List<int[]> events = [];
+
+        // 遍歷所有正方形，建立事件列表
+        foreach (var sq in squares)
+        {
+            int y = sq[1];  // 正方形左下角 y 座標
+            int l = sq[2];  // 正方形邊長
+            totalArea += (long)l * l;  // 累加面積
+            // 下邊界事件：進入正方形區域，增加覆蓋寬度
+            events.Add([y, l, 1]);
+            // 上邊界事件：離開正方形區域，減少覆蓋寬度
+            events.Add([y + l, l, -1]);
+        }
+
+        // 按 y 座標由小到大排序事件
+        events.Sort((a, b) => a[0].CompareTo(b[0]));
+
+        double coveredWidth = 0;  // 當前掃描線下所有正方形底邊長度之和
+        double currArea = 0;      // 當前累計面積（掃描線以下的面積）
+        double prevHeight = 0;    // 前一個掃描線的 y 座標
+
+        // 從下往上掃描每個事件
+        foreach (var eventItem in events)
+        {
+            int y = eventItem[0];      // 當前事件的 y 座標
+            int l = eventItem[1];      // 正方形邊長
+            int delta = eventItem[2];  // 事件類型（+1 開始，-1 結束）
+
+            // 計算從前一個掃描線到當前掃描線的高度差
+            double diff = y - prevHeight;
+            // 兩條掃描線之間新增的面積 = 覆蓋寬度 × 高度差
+            double area = coveredWidth * diff;
+
+            // 檢查是否達到總面積的一半
+            // 如果加上這部分面積後 >= 總面積的一半，表示目標 y 在 [prevHeight, y] 區間內
+            if (2.0 * (currArea + area) >= totalArea)
+            {
+                // 直接計算精確的 y 值
+                // y = prevHeight + (totalArea / 2 - currArea) / coveredWidth
+                //   = prevHeight + (totalArea - 2 * currArea) / (2 * coveredWidth)
+                return prevHeight + (totalArea - 2.0 * currArea) / (2.0 * coveredWidth);
+            }
+
+            // 更新覆蓋寬度：開始事件加上邊長，結束事件減去邊長
+            coveredWidth += delta * l;
+            // 累加當前區間的面積
+            currArea += area;
+            // 更新前一個掃描線的位置
+            prevHeight = y;
+        }
+
+        // 理論上不會執行到這裡，除非輸入為空
+        return 0.0;
     }
 }

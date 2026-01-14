@@ -353,12 +353,110 @@ dotnet run
 預期結果: 2.82843
 ```
 
+---
+
+## 方法二：掃描線解法
+
+### 掃描線核心概念
+
+掃描線演算法透過從下往上掃描，追蹤每個高度位置的覆蓋寬度，直接計算出精確的分割線位置，避免了二分查找的多次迭代。
+
+### 數學推導
+
+設當前經過正方形上/下邊界的掃描線為 $y = y'$，此時掃描線以下的覆蓋面積為 $\text{area}$；向上移動時下一個需要經過的正方形上/下邊界的掃描線為 $y = y''$，此時被正方形覆蓋的底邊長之和為 $\text{width}$，則此時在掃描線 $y = y''$ 以下覆蓋的面積之和為：
+
+$$\text{area} + \text{width} \times (y'' - y')$$
+
+當滿足以下條件時：
+
+$$\text{area} < \frac{\text{totalArea}}{2}$$
+
+$$\text{area} + \text{width} \times (y'' - y') \geq \frac{\text{totalArea}}{2}$$
+
+則可以知道目標值 $y$ 一定處於區間 $[y', y'']$。
+
+由於兩個掃描線之間的被覆蓋區域中所有的矩形高度相同，我們可以直接求出目標值 $y$ 為：
+
+$$y = y' + \frac{\frac{\text{totalArea}}{2} - \text{area}}{\text{width}} = y' + \frac{\text{totalArea} - 2 \times \text{area}}{2 \times \text{width}}$$
+
+### 事件驅動的掃描線
+
+掃描線演算法使用「事件」來追蹤正方形的邊界：
+
+| 事件類型 | y 座標 | delta | 說明 |
+| --------- | -------- | ------- | ------ |
+| 開始事件 | $y_i$ | +1 | 進入正方形區域，增加覆蓋寬度 |
+| 結束事件 | $y_i + l_i$ | -1 | 離開正方形區域，減少覆蓋寬度 |
+
+### 掃描線演算法流程
+
+```text
+1. 計算總面積 totalArea = Σ(li²)
+2. 建立事件列表：每個正方形產生兩個事件
+   - 下邊界事件 (yi, li, +1)
+   - 上邊界事件 (yi + li, li, -1)
+3. 按 y 座標排序所有事件
+4. 初始化：coveredWidth = 0, currArea = 0, prevHeight = 0
+5. 遍歷每個事件：
+   - 計算新增面積 = coveredWidth × (y - prevHeight)
+   - 如果 currArea + 新增面積 >= totalArea / 2：
+     - 返回 prevHeight + (totalArea/2 - currArea) / coveredWidth
+   - 更新 coveredWidth += delta × l
+   - 更新 currArea += 新增面積
+   - 更新 prevHeight = y
+```
+
+### 視覺化範例
+
+以 `squares = [[0,0,2], [1,1,2]]` 為例：
+
+```text
+事件列表（排序後）：
+y=0: 開始事件，邊長=2，delta=+1
+y=1: 開始事件，邊長=2，delta=+1
+y=2: 結束事件，邊長=2，delta=-1
+y=3: 結束事件，邊長=2，delta=-1
+
+掃描過程：
+  3 +-------+-------+
+    |       |  ▓▓   |  ← y=3: 結束事件（第二個正方形）
+  2 +-------+  ▓▓   |  ← y=2: 結束事件（第一個正方形）
+    |   ▓▓  |  ▓▓   |
+  1 |   ▓▓  +-------+  ← y=1: 開始事件（第二個正方形）
+    |   ▓▓  |          width 從 2 變成 4
+  0 +-------+          ← y=0: 開始事件（第一個正方形）
+    0   1   2   3      width 從 0 變成 2
+```
+
+### 掃描線複雜度分析
+
+- **時間複雜度**：$O(n \log n)$
+  - 建立事件列表：$O(n)$
+  - 排序事件：$O(n \log n)$
+  - 遍歷事件：$O(n)$
+
+- **空間複雜度**：$O(n)$
+  - 事件列表儲存 $2n$ 個事件
+
+### 與二分查找的比較
+
+| 特性 | 二分查找 | 掃描線 |
+| ------ | --------- | -------- |
+| 時間複雜度 | $O(n \times \log(L \times 10^5))$ | $O(n \log n)$ |
+| 空間複雜度 | $O(1)$ | $O(n)$ |
+| 精度控制 | 需要設定 eps | 直接計算精確值 |
+| 實作難度 | 較簡單 | 中等 |
+
+---
+
 ## 相關主題
 
 - 二分查找 (Binary Search)
+- 掃描線演算法 (Sweep Line Algorithm)
 - 幾何計算 (Computational Geometry)
 - 浮點數精度 (Floating Point Precision)
 - 單調性 (Monotonicity)
+- 事件驅動處理 (Event-Driven Processing)
 
 ## 參考資料
 
