@@ -27,25 +27,25 @@ class Program
         };
         double result1 = program.SeparateSquares(squares1);
         Console.WriteLine($"測試案例 1: {result1}");
-        Console.WriteLine($"預期結果: 2.00000\n");
+        Console.WriteLine($"預期結果: 1.00000\n");
 
         // 測試案例 2
         int[][] squares2 = new int[][] {
-            new int[] { 0, 0, 3 },
-            new int[] { 0, 3, 3 }
+            new int[] { 0, 0, 1 },
+            new int[] { 2, 2, 1 }
         };
         double result2 = program.SeparateSquares(squares2);
         Console.WriteLine($"測試案例 2: {result2}");
-        Console.WriteLine($"預期結果: 3.00000\n");
+        Console.WriteLine($"預期結果: 1.00000\n");
 
         // 測試案例 3
         int[][] squares3 = new int[][] {
-            new int[] { 0, 0, 4 },
-            new int[] { 4, 0, 2 }
+            new int[] { 0, 0, 2 },
+            new int[] { 1, 1, 1 }
         };
         double result3 = program.SeparateSquares(squares3);
         Console.WriteLine($"測試案例 3: {result3}");
-        Console.WriteLine($"預期結果: 2.82843\n");
+        Console.WriteLine($"預期結果: 1.16667\n");
     }
 
     /// <summary>
