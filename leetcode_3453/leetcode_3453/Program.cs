@@ -209,7 +209,7 @@ class Program
         // 事件列表：每個事件為 [y座標, 邊長, delta]
         // delta = 1 表示正方形下邊界（開始事件）
         // delta = -1 表示正方形上邊界（結束事件）
-        List<int[]> events = [];
+        List<int[]> events = new List<int[]>();
 
         // 遍歷所有正方形，建立事件列表
         foreach (var sq in squares)
@@ -218,9 +218,9 @@ class Program
             int l = sq[2];  // 正方形邊長
             totalArea += (long)l * l;  // 累加面積
             // 下邊界事件：進入正方形區域，增加覆蓋寬度
-            events.Add([y, l, 1]);
+            events.Add(new int[] { y, l, 1 });
             // 上邊界事件：離開正方形區域，減少覆蓋寬度
-            events.Add([y + l, l, -1]);
+            events.Add(new int[] { y + l, l, -1 });
         }
 
         // 按 y 座標由小到大排序事件
