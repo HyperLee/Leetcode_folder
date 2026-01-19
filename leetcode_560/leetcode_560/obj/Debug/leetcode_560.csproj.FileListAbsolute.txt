@@ -1,8 +1,0 @@
-D:\Leetcode_folder\leetcode_560\leetcode_560\bin\Debug\leetcode_560.exe.config
-D:\Leetcode_folder\leetcode_560\leetcode_560\bin\Debug\leetcode_560.exe
-D:\Leetcode_folder\leetcode_560\leetcode_560\bin\Debug\leetcode_560.pdb
-D:\Leetcode_folder\leetcode_560\leetcode_560\obj\Debug\leetcode_560.csproj.AssemblyReference.cache
-D:\Leetcode_folder\leetcode_560\leetcode_560\obj\Debug\leetcode_560.csproj.SuggestedBindingRedirects.cache
-D:\Leetcode_folder\leetcode_560\leetcode_560\obj\Debug\leetcode_560.csproj.CoreCompileInputs.cache
-D:\Leetcode_folder\leetcode_560\leetcode_560\obj\Debug\leetcode_560.exe
-D:\Leetcode_folder\leetcode_560\leetcode_560\obj\Debug\leetcode_560.pdb
