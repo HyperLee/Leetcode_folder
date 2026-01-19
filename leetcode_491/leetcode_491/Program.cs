@@ -110,7 +110,7 @@ class Program
     /// <param name="nums">原始輸入陣列</param>
     /// <param name="current">當前正在建構的子序列</param>
     /// <param name="result">儲存所有有效結果的清單</param>
-    public static void Backtrack(int startIndex, int[] nums, List<int> current, List<IList<int>> result)
+    private static void Backtrack(int startIndex, int[] nums, List<int> current, List<IList<int>> result)
     {
         // 當子序列長度 >= 2 時，符合題目要求，加入結果集
         // 注意：這裡必須建立新的 List 複製，因為 current 會在回溯過程中被修改
@@ -127,13 +127,13 @@ class Program
 
         // 在每一層遞迴中，使用 HashSet 來記錄已經選取過的數字
         // 這是去重的關鍵：避免在同一層選取相同的數字，產生重複的子序列
-        var set = new HashSet<int>();
+        var used = new HashSet<int>();
 
         for (int index = startIndex; index < nums.Length; index++)
         {
             // 去重：如果這個數字在當前層已經被選過，跳過
             // 例如：[4, 7, 7] 在選擇第二個位置時，第一個 7 和第二個 7 會產生相同的子序列
-            if (set.Contains(nums[index]))
+            if (used.Contains(nums[index]))
             {
                 continue;
             }
@@ -147,7 +147,7 @@ class Program
             }
 
             // 記錄當前層已選取的數字
-            set.Add(nums[index]);
+            used.Add(nums[index]);
 
             // 選擇當前元素：將其加入子序列
             current.Add(nums[index]);
@@ -175,7 +175,7 @@ class Program
     /// var program = new Program();
     /// int[] nums = [4, 6, 7, 7];
     /// var result = program.FindSubsequencesOptimized(nums);
-    /// // 結果: [[4,6], [4,6,7], [4,6,7,7], [4,7], [4,7,7], [6,7], [6,7,7], [7,7]]
+    ///  結果: [[4,6], [4,6,7], [4,6,7,7], [4,7], [4,7,7], [6,7], [6,7,7], [7,7]]
     /// </code>
     /// </example>
     /// </summary>
