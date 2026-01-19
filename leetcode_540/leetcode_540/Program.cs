@@ -18,6 +18,7 @@ class Program
     {
         var solution = new Program();
 
+        Console.WriteLine("=== 解法一：全陣列的二分查找 ===");
         // 測試案例 1: [1,1,2,3,3,4,4,8,8] => 2
         int[] nums1 = [1, 1, 2, 3, 3, 4, 4, 8, 8];
         Console.WriteLine($"測試 1: [{string.Join(", ", nums1)}]");
@@ -42,6 +43,70 @@ class Program
         int[] nums5 = [1, 2, 2];
         Console.WriteLine($"\n測試 5: [{string.Join(", ", nums5)}]");
         Console.WriteLine($"結果: {solution.SingleNonDuplicate(nums5)}"); // 預期: 1
+
+        Console.WriteLine("\n\n=== 解法二：Dictionary 雜湊表計數法 ===");
+        Console.WriteLine($"測試 1: [{string.Join(", ", nums1)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate2(nums1)}"); // 預期: 2
+
+        Console.WriteLine($"\n測試 2: [{string.Join(", ", nums2)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate2(nums2)}"); // 預期: 10
+
+        Console.WriteLine($"\n測試 3: [{string.Join(", ", nums3)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate2(nums3)}"); // 預期: 1
+
+        Console.WriteLine($"\n測試 4: [{string.Join(", ", nums4)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate2(nums4)}"); // 預期: 2
+
+        Console.WriteLine($"\n測試 5: [{string.Join(", ", nums5)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate2(nums5)}"); // 預期: 1
+
+        Console.WriteLine("\n\n=== 解法三：XOR 異或運算法 ===");
+        Console.WriteLine($"測試 1: [{string.Join(", ", nums1)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate3(nums1)}"); // 預期: 2
+
+        Console.WriteLine($"\n測試 2: [{string.Join(", ", nums2)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate3(nums2)}"); // 預期: 10
+
+        Console.WriteLine($"\n測試 3: [{string.Join(", ", nums3)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate3(nums3)}"); // 預期: 1
+
+        Console.WriteLine($"\n測試 4: [{string.Join(", ", nums4)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate3(nums4)}"); // 預期: 2
+
+        Console.WriteLine($"\n測試 5: [{string.Join(", ", nums5)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate3(nums5)}"); // 預期: 1
+
+        Console.WriteLine("\n\n=== 解法四：步長為 2 的線性遍歷法 ===");
+        Console.WriteLine($"測試 1: [{string.Join(", ", nums1)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate4(nums1)}"); // 預期: 2
+
+        Console.WriteLine($"\n測試 2: [{string.Join(", ", nums2)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate4(nums2)}"); // 預期: 10
+
+        Console.WriteLine($"\n測試 3: [{string.Join(", ", nums3)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate4(nums3)}"); // 預期: 1
+
+        Console.WriteLine($"\n測試 4: [{string.Join(", ", nums4)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate4(nums4)}"); // 預期: 2
+
+        Console.WriteLine($"\n測試 5: [{string.Join(", ", nums5)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate4(nums5)}"); // 預期: 1
+
+        Console.WriteLine("\n\n=== 解法五：偶數下標二分查找法 ===");
+        Console.WriteLine($"測試 1: [{string.Join(", ", nums1)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate5(nums1)}"); // 預期: 2
+
+        Console.WriteLine($"\n測試 2: [{string.Join(", ", nums2)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate5(nums2)}"); // 預期: 10
+
+        Console.WriteLine($"\n測試 3: [{string.Join(", ", nums3)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate5(nums3)}"); // 預期: 1
+
+        Console.WriteLine($"\n測試 4: [{string.Join(", ", nums4)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate5(nums4)}"); // 預期: 2
+
+        Console.WriteLine($"\n測試 5: [{string.Join(", ", nums5)}]");
+        Console.WriteLine($"結果: {solution.SingleNonDuplicate5(nums5)}"); // 預期: 1
     }
 
     /// <summary>
