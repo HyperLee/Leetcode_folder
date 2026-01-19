@@ -1,4 +1,6 @@
-﻿namespace leetcode_560;
+﻿using System.Net.Mail;
+
+namespace leetcode_560;
 
 class Program
 {
@@ -79,6 +81,85 @@ class Program
                 {
                     count++;
                 }
+            }
+        }
+        
+        return count;
+    }
+
+    /// <summary>
+    /// 方法二: 前綴和 + 雜湊表優化
+    /// 
+    /// 解題思路:
+    /// 方法一的瓶頸在於對每個 i，需要枚舉所有 j 來判斷是否符合條件。
+    /// 我們可以使用前綴和配合雜湊表來優化這個過程。
+    /// 
+    /// 核心概念:
+    /// 1. 定義 pre[i] 為 [0..i] 所有數的和
+    /// 2. pre[i] = pre[i-1] + nums[i] (遞推關係)
+    /// 3. [j..i] 子陣列和為 k 可轉化為: pre[i] - pre[j-1] = k
+    /// 4. 移項得: pre[j-1] = pre[i] - k
+    /// 5. 統計有多少個前綴和為 pre[i] - k 的位置即可
+    /// 
+    /// 雜湊表的作用:
+    /// - 鍵: 前綴和的值
+    /// - 值: 該前綴和出現的次數
+    /// - 可在 O(1) 時間內查詢某個前綴和出現的次數
+    /// 
+    /// 為什麼初始化 map[0] = 1:
+    /// 表示前綴和為 0 出現過一次，對應空陣列的情況。
+    /// 這樣當 pre[i] = k 時，pre[i] - k = 0，可以找到這個匹配。
+    /// 
+    /// 時間複雜度: O(n) - 只需遍歷一次陣列
+    /// 空間複雜度: O(n) - 雜湊表最多存儲 n 個不同的前綴和
+    /// </summary>
+    /// <param name="nums">整數陣列</param>
+    /// <param name="k">目標和</param>
+    /// <returns>和為 k 的連續子陣列個數</returns>
+    public int SubarraySum2(int[] nums, int k)
+    {
+        // 計數器：記錄符合條件的子陣列數量
+        int count = 0;
+        
+        // 前綴和：記錄 [0..i] 的累加和
+        int pre = 0;
+
+        // 雜湊表：記錄每個前綴和出現的次數
+        // Key: 前綴和的值
+        // Value: 該前綴和出現的次數
+        Dictionary<int, int> map = new Dictionary<int, int>();
+        
+        // 初始化：前綴和為 0 出現過 1 次（對應空陣列的情況）
+        // 這樣當 pre[i] = k 時，可以找到 pre[i] - k = 0 的匹配
+        map[0] = 1;
+
+        // 從左到右遍歷陣列，邊更新前綴和邊計算答案
+        for(int i = 0; i < nums.Length; i++)
+        {
+            // 更新前綴和：pre[i] = pre[i-1] + nums[i]
+            pre += nums[i];
+            
+            // 查找是否存在前綴和為 (pre - k) 的位置
+            // 如果存在，說明從那些位置到當前位置 i 的子陣列和為 k
+            // pre[i] - pre[j-1] = k => pre[j-1] = pre[i] - k
+            if(map.ContainsKey(pre - k))
+            {
+                // 將所有符合條件的子陣列數量加到計數器
+                // map[pre - k] 表示前綴和為 (pre - k) 出現的次數
+                count += map[pre - k];
+            }
+
+            // 將當前前綴和記錄到雜湊表中
+            // 為後續的計算提供數據
+            if(map.ContainsKey(pre))
+            {
+                // 如果該前綴和已存在，次數加 1
+                map[pre]++;
+            }
+            else
+            {
+                // 如果是新的前綴和，初始化為 1
+                map[pre] = 1;
             }
         }
         
