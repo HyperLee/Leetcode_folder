@@ -57,7 +57,7 @@ class Program
     /// var program = new Program();
     /// int[] nums = [4, 6, 7, 7];
     /// var result = program.FindSubsequences(nums);
-    /// // 結果: [[4,6], [4,6,7], [4,6,7,7], [4,7], [4,7,7], [6,7], [6,7,7], [7,7]]
+    ///  結果: [[4,6], [4,6,7], [4,6,7,7], [4,7], [4,7,7], [6,7], [6,7,7], [7,7]]
     /// </code>
     /// </example>
     /// </summary>
