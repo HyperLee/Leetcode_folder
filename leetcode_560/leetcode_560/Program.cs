@@ -25,19 +25,25 @@ class Program
         int[] nums1 = [1, 1, 1];
         int k1 = 2;
         int result1 = solution.SubarraySum(nums1, k1);
-        Console.WriteLine($"測試案例 1: nums = [1,1,1], k = 2, 結果 = {result1} (預期: 2)");
+        Console.WriteLine($"測試案例 1 (方法一): nums = [1,1,1], k = 2, 結果 = {result1} (預期: 2)");
+        int result1b = solution.SubarraySum2(nums1, k1);
+        Console.WriteLine($"測試案例 1 (方法二): nums = [1,1,1], k = 2, 結果 = {result1b} (預期: 2)");
         
         // 測試案例 2: nums = [1,2,3], k = 3
         int[] nums2 = [1, 2, 3];
         int k2 = 3;
         int result2 = solution.SubarraySum(nums2, k2);
-        Console.WriteLine($"測試案例 2: nums = [1,2,3], k = 3, 結果 = {result2} (預期: 2)");
+        Console.WriteLine($"測試案例 2 (方法一): nums = [1,2,3], k = 3, 結果 = {result2} (預期: 2)");
+        int result2b = solution.SubarraySum2(nums2, k2);
+        Console.WriteLine($"測試案例 2 (方法二): nums = [1,2,3], k = 3, 結果 = {result2b} (預期: 2)");
         
         // 測試案例 3: nums = [1,-1,0], k = 0
         int[] nums3 = [1, -1, 0];
         int k3 = 0;
         int result3 = solution.SubarraySum(nums3, k3);
-        Console.WriteLine($"測試案例 3: nums = [1,-1,0], k = 0, 結果 = {result3} (預期: 3)");
+        Console.WriteLine($"測試案例 3 (方法一): nums = [1,-1,0], k = 0, 結果 = {result3} (預期: 3)");
+        int result3b = solution.SubarraySum2(nums3, k3);
+        Console.WriteLine($"測試案例 3 (方法二): nums = [1,-1,0], k = 0, 結果 = {result3b} (預期: 3)");
     }
 
     /// <summary>
