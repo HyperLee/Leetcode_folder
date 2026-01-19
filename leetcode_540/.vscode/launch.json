@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Launch (leetcode_540)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_540/bin/Debug/net10.0/leetcode_540.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_540",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
