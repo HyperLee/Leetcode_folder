@@ -2,6 +2,22 @@
 
 class Program
 {
+    /// <summary>
+    /// 3314. Construct the Minimum Bitwise Array I
+    /// https://leetcode.com/problems/construct-the-minimum-bitwise-array-i/description/?envType=daily-question&envId=2026-01-20
+    /// 3314. 构造最小位运算数组 I
+    /// https://leetcode.cn/problems/construct-the-minimum-bitwise-array-i/description/?envType=daily-question&envId=2026-01-20
+    /// 
+    /// You are given an array nums consisting of n prime integers.
+    /// You need to construct an array ans of length n, such that, for each index i, 
+    /// the bitwise OR of ans[i] and ans[i] + 1 is equal to nums[i], 
+    /// i.e. ans[i] OR (ans[i] + 1) == nums[i].
+    /// Additionally, you must minimize each value of ans[i] in the resulting array.
+    /// If it is not possible to find such a value for ans[i] that satisfies the condition, then set ans[i] = -1.
+    /// 
+    /// 
+    /// </summary>
+    /// <param name="args"></param>
     static void Main(string[] args)
     {
         var solution = new Program();
