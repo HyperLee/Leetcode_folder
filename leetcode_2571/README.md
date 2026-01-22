@@ -1,4 +1,4 @@
-﻿# Minimum Operations to Reduce Binary Number to Zero
+﻿# 2571. Minimum Operations to Reduce an Integer to 0
 
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat-square&logo=dotnet)](https://dotnet.microsoft.com/)
 [![C#](https://img.shields.io/badge/C%23-14-239120?style=flat-square&logo=csharp)](https://docs.microsoft.com/dotnet/csharp/)
