@@ -88,7 +88,7 @@ class Program
     /// <code>
     /// var solution = new Program();
     /// int result = solution.MinimumPairRemoval([5, 2, 3, 1]);
-    /// // result = 2
+    ///  result = 2
     /// </code>
     /// </example>
     public int MinimumPairRemoval(int[] nums)
