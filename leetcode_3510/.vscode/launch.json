@@ -1,0 +1,17 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET 目前專案 (leetcode_3510)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build-leetcode_3510",
+      "program": "${workspaceFolder}/leetcode_3510/bin/Debug/net10.0/leetcode_3510.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_3510",
+      "stopAtEntry": false,
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen"
+    }
+  ]
+}
