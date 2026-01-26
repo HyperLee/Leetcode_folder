@@ -139,7 +139,7 @@
 
 ### 前置需求
 
-- [.NET 9.0 SDK](https://dotnet.microsoft.com/download) 或更新版本
+- [.NET 10.0 SDK](https://dotnet.microsoft.com/download) 或更新版本
 
 ### 建構與執行
 
