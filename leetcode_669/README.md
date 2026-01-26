@@ -322,11 +322,34 @@ if (node.left.val < low)
 
 **原因：** 替換後的新左子節點（原本的 `node.left.right`）可能仍然不符合條件，需要再次檢查。
 
-**範例：**
+**重要觀念釐清：**
+
+❌ **錯誤理解：** 每次替換後都從 root 重新開始往下找  
+✅ **正確理解：** 替換後停留在**當前父節點**，檢查新的子節點
 
 ```
-假設 low = 5
+迴圈運作方式：
 
+第 1 次迴圈: node 在位置 A
+  → 檢查 node.left (舊的子節點)
+  → 不符合條件，替換為 node.left.right
+  → node 仍在位置 A (不移動)
+
+第 2 次迴圈: node 仍在位置 A
+  → 檢查 node.left (新的子節點)
+  → 如果符合，才 node = node.left (向下移動)
+  → 如果不符合，再次替換，node 仍在 A
+
+只有子節點符合條件時，才會：
+  → node = node.left (向下移動到子節點)
+```
+
+**詳細範例：**
+
+```
+假設 low = 5，觀察 node 的位置變化
+
+初始狀態:
      10
     /
    3
@@ -336,28 +359,46 @@ if (node.left.val < low)
        6
 
 第一次循環:
-  - node = 10, node.left = 3
-  - 3 < 5，替換為 node.left.right = 4
-  - 若此時移動 node，會漏掉檢查節點 4
+  - node = 10 (位置不變)
+  - 檢查 node.left = 3
+  - 3 < 5 ✗ → 替換 node.left = node.left.right (節點 4)
+  - 重點：node 仍是 10，沒有移動！
 
-     10
+     10  ← node 停留在這裡
     /
-   4        ← 新的左子節點，仍需檢查
+   4        ← 新的 node.left
     \
      6
 
 第二次循環:
-  - node = 10, node.left = 4
-  - 4 < 5，替換為 node.left.right = 6
+  - node = 10 (位置不變，仍在檢查同一個父節點)
+  - 檢查 node.left = 4 (注意：這是新的左子節點)
+  - 4 < 5 ✗ → 再次替換 node.left = node.left.right (節點 6)
+  - 重點：node 還是 10，繼續停留！
 
-     10
+     10  ← node 仍停留在這裡
     /
-   6        ← 現在符合條件
+   6        ← 又是新的 node.left
 
 第三次循環:
-  - node = 10, node.left = 6
-  - 6 >= 5 ✓，移動 node = 6
-  - node.left = null，結束
+  - node = 10 (仍在原位)
+  - 檢查 node.left = 6
+  - 6 >= 5 ✓ → 符合條件！
+  - 執行 node = node.left (向下移動)
+
+      10
+     /
+    6  ← 現在 node 移動到這裡了
+
+第四次循環:
+  - node = 6
+  - node.left = null → 迴圈結束
+
+總結：
+  → node 在位置 10 停留了 3 次循環
+  → 每次檢查不同的 node.left (3 → 4 → 6)
+  → 直到 node.left 符合條件，才向下移動
+  → 並非每次都從 root 重新開始
 ```
 
 ### 複雜度分析（迭代法）
