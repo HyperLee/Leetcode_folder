@@ -147,4 +147,159 @@ class Program
 
         return result;
     }
+
+    /// <summary>
+    /// 解法二：計數排序 (Counting Sort) — 適用於數值範圍有限的情況。
+    /// 
+    /// <para><b>解題思路：</b></para>
+    /// <para>
+    /// 1. 找出陣列的最小值與最大值，建立一個布林陣列標記哪些數字存在。
+    /// 2. 遍歷計數陣列，找出相鄰存在的數字，計算其差值。
+    /// 3. 與排序解法類似，維護最小差值並收集結果。
+    /// </para>
+    /// 
+    /// <para><b>時間複雜度：</b>O(n + k)，其中 n 為陣列長度，k 為數值範圍 (max - min)。</para>
+    /// <para><b>空間複雜度：</b>O(k)，計數陣列所需空間。</para>
+    /// <para><b>適用場景：</b>當數值範圍 k 較小時（如 k ≤ 2×10^6），效率優於排序解法。</para>
+    /// </summary>
+    /// <param name="arr">由互不相同整數組成的陣列。</param>
+    /// <returns>所有具有最小絕對差的元素對清單，按升序排列。</returns>
+    public IList<IList<int>> MinimumAbsDifference_CountingSort(int[] arr)
+    {
+        // 步驟 1：找出最小值和最大值
+        int min = arr.Min();
+        int max = arr.Max();
+        int range = max - min + 1;
+
+        // 步驟 2：建立計數陣列（用 bool 即可，因為元素互不相同）
+        bool[] exists = new bool[range];
+        foreach (int num in arr)
+        {
+            exists[num - min] = true;
+        }
+
+        IList<IList<int>> result = new List<IList<int>>();
+        int minDiff = int.MaxValue;
+        int prev = -1;
+
+        // 步驟 3：遍歷計數陣列找出相鄰存在的數字
+        for (int i = 0; i < range; i++)
+        {
+            if (!exists[i])
+            {
+                continue;
+            }
+
+            if (prev != -1)
+            {
+                int delta = i - prev;
+
+                if (delta < minDiff)
+                {
+                    minDiff = delta;
+                    result.Clear();
+                    result.Add(new List<int> { prev + min, i + min });
+                }
+                else if (delta == minDiff)
+                {
+                    result.Add(new List<int> { prev + min, i + min });
+                }
+            }
+
+            prev = i;
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// 解法三：兩次遍歷優化版本 — 程式碼更清晰簡潔。
+    /// 
+    /// <para><b>解題思路：</b></para>
+    /// <para>
+    /// 1. 第一次遍歷：排序後只找最小差值。
+    /// 2. 第二次遍歷：收集所有等於最小差值的元素對。
+    /// </para>
+    /// 
+    /// <para><b>時間複雜度：</b>O(n log n)，排序為主要開銷。</para>
+    /// <para><b>空間複雜度：</b>O(log n)，排序所需的堆疊空間。</para>
+    /// <para><b>優點：</b>程式碼更簡潔，避免 Clear() 操作。</para>
+    /// </summary>
+    /// <param name="arr">由互不相同整數組成的陣列。</param>
+    /// <returns>所有具有最小絕對差的元素對清單，按升序排列。</returns>
+    public IList<IList<int>> MinimumAbsDifference_TwoPass(int[] arr)
+    {
+        Array.Sort(arr);
+
+        // 第一次遍歷：只找最小差值
+        int minDiff = int.MaxValue;
+        for (int i = 0; i < arr.Length - 1; i++)
+        {
+            minDiff = Math.Min(minDiff, arr[i + 1] - arr[i]);
+        }
+
+        // 第二次遍歷：收集所有等於最小差值的元素對
+        IList<IList<int>> result = new List<IList<int>>();
+        for (int i = 0; i < arr.Length - 1; i++)
+        {
+            if (arr[i + 1] - arr[i] == minDiff)
+            {
+                result.Add(new List<int> { arr[i], arr[i + 1] });
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// 解法四：陣列優化版本 — 預先分配記憶體，減少動態分配。
+    /// 
+    /// <para><b>解題思路：</b></para>
+    /// <para>
+    /// 1. 第一次遍歷：找最小差值並計算符合條件的元素對數量。
+    /// 2. 預先分配正確大小的結果清單，避免動態擴容。
+    /// 3. 第二次遍歷：收集結果。
+    /// </para>
+    /// 
+    /// <para><b>時間複雜度：</b>O(n log n)，排序為主要開銷。</para>
+    /// <para><b>空間複雜度：</b>O(log n)，排序所需的堆疊空間。</para>
+    /// <para><b>優點：</b>減少記憶體分配次數，使用陣列取代 List 作為元素對。</para>
+    /// </summary>
+    /// <param name="arr">由互不相同整數組成的陣列。</param>
+    /// <returns>所有具有最小絕對差的元素對清單，按升序排列。</returns>
+    public IList<IList<int>> MinimumAbsDifference_ArrayOptimized(int[] arr)
+    {
+        Array.Sort(arr);
+
+        int minDiff = int.MaxValue;
+        int count = 0;
+
+        // 第一次遍歷：找最小差值並計數
+        for (int i = 0; i < arr.Length - 1; i++)
+        {
+            int delta = arr[i + 1] - arr[i];
+
+            if (delta < minDiff)
+            {
+                minDiff = delta;
+                count = 1;
+            }
+            else if (delta == minDiff)
+            {
+                count++;
+            }
+        }
+
+        // 預先分配正確大小的結果
+        IList<IList<int>> result = new List<IList<int>>(count);
+        for (int i = 0; i < arr.Length - 1; i++)
+        {
+            if (arr[i + 1] - arr[i] == minDiff)
+            {
+                result.Add(new int[] { arr[i], arr[i + 1] });
+            }
+        }
+
+        return result;
+    }
 }
