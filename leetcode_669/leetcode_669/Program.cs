@@ -75,6 +75,40 @@ class Program
         var result3 = program.TrimBST(root3, 2, 5);
         Console.WriteLine("\n範例 3:");
         PrintTree(result3);
+
+        // 迭代法 TrimBST2 範例測試（和上面相同的三個測試）
+        Console.WriteLine("\n=== 迭代法 TrimBST2 範例測試 ===");
+
+        var root1b = new TreeNode(1,
+            new TreeNode(0),
+            new TreeNode(2));
+        var result1b = program.TrimBST2(root1b, 1, 2);
+        Console.WriteLine("\n範例 1 (迭代法):");
+        PrintTree(result1b);
+
+        var root2b = new TreeNode(3,
+            new TreeNode(0,
+                null,
+                new TreeNode(2,
+                    new TreeNode(1),
+                    null)),
+            new TreeNode(4));
+        var result2b = program.TrimBST2(root2b, 1, 3);
+        Console.WriteLine("\n範例 2 (迭代法):");
+        PrintTree(result2b);
+
+        var root3b = new TreeNode(5,
+            new TreeNode(3,
+                new TreeNode(2,
+                    new TreeNode(1),
+                    null),
+                new TreeNode(4)),
+            new TreeNode(6,
+                null,
+                new TreeNode(7)));
+        var result3b = program.TrimBST2(root3b, 2, 5);
+        Console.WriteLine("\n範例 3 (迭代法):");
+        PrintTree(result3b);
     }
 
     /// <summary>
