@@ -1,6 +1,0 @@
-D:\TestFolder\leetcode_700\leetcode_700\bin\Debug\leetcode_700.exe.config
-D:\TestFolder\leetcode_700\leetcode_700\bin\Debug\leetcode_700.exe
-D:\TestFolder\leetcode_700\leetcode_700\bin\Debug\leetcode_700.pdb
-D:\TestFolder\leetcode_700\leetcode_700\obj\Debug\leetcode_700.csprojResolveAssemblyReference.cache
-D:\TestFolder\leetcode_700\leetcode_700\obj\Debug\leetcode_700.exe
-D:\TestFolder\leetcode_700\leetcode_700\obj\Debug\leetcode_700.pdb
