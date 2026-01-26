@@ -167,4 +167,85 @@ class Program
 
         return root;
     }
+
+    /// <summary>
+    /// 迭代法修剪二叉搜尋樹（Trim BST）
+    /// 
+    /// 解題思路：
+    /// 迭代法分為三個階段：
+    /// 1. 找到符合條件的根節點：不斷調整根節點，直到其值在 [low, high] 範圍內
+    /// 2. 修剪左子樹：對於每個節點，如果其左子節點值 < low，則用左子節點的右子樹替換
+    /// 3. 修剪右子樹：對於每個節點，如果其右子節點值 > high，則用右子節點的左子樹替換
+    /// 
+    /// 核心概念：
+    /// - 當左子節點值 < low 時，該左子節點及其左子樹都不符合條件，但其右子樹可能符合
+    /// - 當右子節點值 > high 時，該右子節點及其右子樹都不符合條件，但其左子樹可能符合
+    /// 
+    /// 時間複雜度：O(n)，其中 n 為樹中節點數量
+    /// 空間複雜度：O(1)，只使用常數額外空間，無遞迴呼叫堆疊
+    /// </summary>
+    /// <param name="root">二叉搜尋樹的根節點</param>
+    /// <param name="low">範圍下界（含）</param>
+    /// <param name="high">範圍上界（含）</param>
+    /// <returns>修剪後的二叉搜尋樹根節點</returns>
+    public TreeNode? TrimBST2(TreeNode? root, int low, int high)
+    {
+        // 階段 1：找到符合條件的根節點
+        // 不斷調整根節點，直到其值在 [low, high] 範圍內
+        while (root is not null && (root.val < low || root.val > high))
+        {
+            if (root.val < low)
+            {
+                // 當前根節點值太小，往右子樹尋找
+                root = root.right;
+            }
+            else
+            {
+                // 當前根節點值太大，往左子樹尋找
+                root = root.left;
+            }
+        }
+
+        // 若找不到符合條件的根節點，返回 null
+        if (root is null)
+        {
+            return null;
+        }
+
+        // 階段 2：修剪左子樹
+        // 從根節點開始，向左遍歷並修剪不符合條件的節點
+        for (TreeNode node = root; node.left is not null;)
+        {
+            if (node.left.val < low)
+            {
+                // 左子節點值太小，用其右子樹替換
+                // 因為左子節點的左子樹都小於 low，而右子樹可能有符合條件的節點
+                node.left = node.left.right;
+            }
+            else
+            {
+                // 左子節點符合條件，繼續向左遍歷
+                node = node.left;
+            }
+        }
+
+        // 階段 3：修剪右子樹
+        // 從根節點開始，向右遍歷並修剪不符合條件的節點
+        for (TreeNode node = root; node.right is not null;)
+        {
+            if (node.right.val > high)
+            {
+                // 右子節點值太大，用其左子樹替換
+                // 因為右子節點的右子樹都大於 high，而左子樹可能有符合條件的節點
+                node.right = node.right.left;
+            }
+            else
+            {
+                // 右子節點符合條件，繼續向右遍歷
+                node = node.right;
+            }
+        }
+
+        return root;
+    }
 }
