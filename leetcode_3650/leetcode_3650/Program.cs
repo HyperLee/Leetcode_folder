@@ -59,6 +59,30 @@ class Program
         int result4 = solution.MinCost(3, edges4);
         Console.WriteLine($"測試案例 4：n=3, edges=[[0,1,10],[0,2,1],[2,1,1]]");
         Console.WriteLine($"預期結果：2，實際結果：{result4}");
+        Console.WriteLine();
+
+        // ========== 解法二：標準 Dijkstra 演算法測試 ==========
+        Console.WriteLine("========== 解法二：標準 Dijkstra 演算法 ==========");
+        Console.WriteLine();
+
+        int result1_std = solution.MinCostStandard(3, edges1);
+        Console.WriteLine($"測試案例 1（標準版）：n=3, edges=[[0,1,1],[1,2,2]]");
+        Console.WriteLine($"預期結果：3，實際結果：{result1_std}");
+        Console.WriteLine();
+
+        int result2_std = solution.MinCostStandard(3, edges2);
+        Console.WriteLine($"測試案例 2（標準版）：n=3, edges=[[1,0,5],[1,2,3]]");
+        Console.WriteLine($"預期結果：13，實際結果：{result2_std}");
+        Console.WriteLine();
+
+        int result3_std = solution.MinCostStandard(3, edges3);
+        Console.WriteLine($"測試案例 3（標準版）：n=3, edges=[[0,1,1]]");
+        Console.WriteLine($"預期結果：-1，實際結果：{result3_std}");
+        Console.WriteLine();
+
+        int result4_std = solution.MinCostStandard(3, edges4);
+        Console.WriteLine($"測試案例 4（標準版）：n=3, edges=[[0,1,10],[0,2,1],[2,1,1]]");
+        Console.WriteLine($"預期結果：2，實際結果：{result4_std}");
     }
 
     /// <summary>
@@ -174,5 +198,150 @@ class Program
 
         // 若無法到達終點，返回 -1
         return -1;
+    }
+
+    /// <summary>
+    /// 【解法二】使用標準 Dijkstra 演算法（無優先佇列優化）計算從節點 0 到節點 n-1 的最小成本路徑。
+    /// 
+    /// <para><b>與優化版本的差異：</b></para>
+    /// <list type="table">
+    ///   <listheader>
+    ///     <term>項目</term>
+    ///     <description>標準版 vs 優化版</description>
+    ///   </listheader>
+    ///   <item>
+    ///     <term>尋找最小距離節點</term>
+    ///     <description>標準版：線性搜尋 O(n) | 優化版：最小堆 O(log n)</description>
+    ///   </item>
+    ///   <item>
+    ///     <term>時間複雜度</term>
+    ///     <description>標準版：O(n²) | 優化版：O(m log m)</description>
+    ///   </item>
+    ///   <item>
+    ///     <term>適用場景</term>
+    ///     <description>標準版：稠密圖 | 優化版：稀疏圖</description>
+    ///   </item>
+    ///   <item>
+    ///     <term>實作複雜度</term>
+    ///     <description>標準版：簡單易懂 | 優化版：需要堆結構</description>
+    ///   </item>
+    /// </list>
+    /// 
+    /// <para><b>演算法步驟：</b></para>
+    /// <list type="number">
+    ///   <item>初始化：起點距離設為 0，其餘設為無限大</item>
+    ///   <item>重複 n 次迭代：
+    ///     <list type="bullet">
+    ///       <item>從未訪問節點中找出距離最小的節點 u（線性搜尋）</item>
+    ///       <item>標記 u 為已訪問</item>
+    ///       <item>對 u 的所有鄰居進行鬆弛操作</item>
+    ///     </list>
+    ///   </item>
+    ///   <item>返回終點的距離</item>
+    /// </list>
+    /// 
+    /// <para><b>時間複雜度：</b>O(n²)，每次迭代需要 O(n) 時間找最小距離節點。</para>
+    /// <para><b>空間複雜度：</b>O(n + m)，用於儲存圖和距離陣列。</para>
+    /// </summary>
+    /// <param name="n">圖中節點的數量（節點編號為 0 到 n-1）</param>
+    /// <param name="edges">邊的陣列，每條邊格式為 [起點, 終點, 權重]</param>
+    /// <returns>從節點 0 到節點 n-1 的最小成本；若無法到達則返回 -1</returns>
+    /// <example>
+    /// <code>
+    /// var solution = new Program();
+    /// int[][] edges = [[0, 1, 1], [1, 2, 2]];
+    /// int result = solution.MinCostStandard(3, edges); // 返回 3
+    /// </code>
+    /// </example>
+    public int MinCostStandard(int n, int[][] edges)
+    {
+        // ==================== 第一步：建圖 ====================
+        // 建立鄰接表表示圖，每個節點儲存其相鄰節點和對應的邊權重
+        var graph = new List<(int node, int weight)>[n];
+        for (int i = 0; i < n; i++)
+        {
+            graph[i] = new List<(int, int)>();
+        }
+
+        // 建圖：對於每條邊 [x, y, w]，同時加入正向邊和反向邊
+        foreach (var e in edges)
+        {
+            int x = e[0];  // 起點
+            int y = e[1];  // 終點
+            int w = e[2];  // 權重（成本）
+
+            // 正向邊：從 x 到 y，成本為 w
+            graph[x].Add((y, w));
+
+            // 反向邊：從 y 到 x（相當於在 y 點使用開關反轉邊），成本為 2w
+            graph[y].Add((x, 2 * w));
+        }
+
+        // ==================== 第二步：初始化 ====================
+        // dist[i] 記錄從起點 0 到節點 i 的最短距離
+        int[] dist = new int[n];
+
+        // visited[i] 標記節點 i 是否已經確定最短路徑
+        bool[] visited = new bool[n];
+
+        // 初始化所有距離為無限大
+        Array.Fill(dist, int.MaxValue);
+
+        // 起點到自身的距離為 0
+        dist[0] = 0;
+
+        // ==================== 第三步：標準 Dijkstra 主迴圈 ====================
+        // 執行 n 次迭代，每次確定一個節點的最短路徑
+        for (int iteration = 0; iteration < n; iteration++)
+        {
+            // ------------------------------------------------------
+            // 【關鍵差異點】線性搜尋找最小距離節點
+            // 優化版使用 PriorityQueue.Dequeue() 為 O(log n)
+            // 標準版使用線性搜尋為 O(n)
+            // ------------------------------------------------------
+            int u = -1;
+            int minDist = int.MaxValue;
+
+            // 遍歷所有節點，找出未訪問且距離最小的節點
+            for (int v = 0; v < n; v++)
+            {
+                if (!visited[v] && dist[v] < minDist)
+                {
+                    minDist = dist[v];
+                    u = v;
+                }
+            }
+
+            // 若找不到可達節點，表示剩餘節點都不可達，跳出迴圈
+            if (u == -1)
+            {
+                break;
+            }
+
+            // 標記該節點已確定最短路徑
+            visited[u] = true;
+
+            // ------------------------------------------------------
+            // 【鬆弛操作】嘗試透過當前節點更新其鄰居的最短距離
+            // 這部分與優化版相同
+            // ------------------------------------------------------
+            foreach (var neighbor in graph[u])
+            {
+                int v = neighbor.node;    // 鄰居節點
+                int w = neighbor.weight;  // 邊的權重
+
+                // 防止整數溢位：只有當 dist[u] 不是無限大時才進行鬆弛
+                if (dist[u] != int.MaxValue && dist[u] + w < dist[v])
+                {
+                    dist[v] = dist[u] + w;
+                    // 【關鍵差異點】標準版不需要將更新後的節點加入堆中
+                    // 因為下一次迭代會重新掃描所有未訪問節點
+                }
+            }
+        }
+
+        // ==================== 第四步：返回結果 ====================
+        // 若終點的距離仍為無限大，表示無法到達
+        return dist[n - 1] == int.MaxValue ? -1 : dist[n - 1];
     }
 }
