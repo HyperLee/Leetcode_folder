@@ -56,9 +56,9 @@ class Program
         // 測試案例 4：多條路徑選擇最短
         // 圖形：0 -> 1 (cost: 10), 0 -> 2 (cost: 1), 2 -> 1 (cost: 1)
         int[][] edges4 = [[0, 1, 10], [0, 2, 1], [2, 1, 1]];
-        int result4 = solution.MinCost(2, edges4);
-        Console.WriteLine($"測試案例 4：n=2, edges=[[0,1,10],[0,2,1],[2,1,1]]");
-        Console.WriteLine($"預期結果：10，實際結果：{result4}");
+        int result4 = solution.MinCost(3, edges4);
+        Console.WriteLine($"測試案例 4：n=3, edges=[[0,1,10],[0,2,1],[2,1,1]]");
+        Console.WriteLine($"預期結果：2，實際結果：{result4}");
     }
 
     /// <summary>
@@ -97,10 +97,10 @@ class Program
     public int MinCost(int n, int[][] edges)
     {
         // 建立鄰接表表示圖，每個節點儲存其相鄰節點和對應的邊權重
-        var g = new List<(int node, int weight)>[n];
+        var graph = new List<(int node, int weight)>[n];
         for (int i = 0; i < n; i++)
         {
-            g[i] = new List<(int, int)>();
+            graph[i] = new List<(int, int)>();
         }
 
         // 建圖：對於每條邊 [x, y, w]，同時加入正向邊和反向邊
@@ -111,10 +111,10 @@ class Program
             int w = e[2];  // 權重（成本）
 
             // 正向邊：從 x 到 y，成本為 w
-            g[x].Add((y, w));
+            graph[x].Add((y, w));
 
             // 反向邊：從 y 到 x（相當於在 y 點使用開關反轉邊），成本為 2w
-            g[y].Add((x, 2 * w));
+            graph[y].Add((x, 2 * w));
         }
 
         // dist[i] 記錄從起點 0 到節點 i 的最短距離
@@ -158,7 +158,7 @@ class Program
             visited[x] = true;
 
             // 鬆弛操作：嘗試透過當前節點更新其鄰居的最短距離
-            foreach (var neighbor in g[x])
+            foreach (var neighbor in graph[x])
             {
                 int y = neighbor.node;    // 鄰居節點
                 int w = neighbor.weight;  // 邊的權重
