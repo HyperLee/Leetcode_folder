@@ -89,8 +89,8 @@ class Program
     /// <returns>從 (0,0) 到達 (m-1,n-1) 的最小總花費</returns>
     /// <example>
     /// <code>
-    /// // 範例：grid = [[0,1,2],[3,4,5]], k = 1
-    /// // 預期輸出: 2
+    ///  範例：grid = [[0,1,2],[3,4,5]], k = 1
+    ///  預期輸出: 2
     /// var solution = new Program();
     /// int result = solution.MinCost(new int[][] { new[] {0,1,2}, new[] {3,4,5} }, 1);
     /// </code>
