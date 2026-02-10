@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Launch (leetcode_3719)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_3719/bin/Debug/net10.0/leetcode_3719.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_3719",
+      "console": "integratedTerminal",
+      "stopAtEntry": false,
+      "internalConsoleOptions": "neverOpen",
+      "justMyCode": true
+    }
+  ]
+}
