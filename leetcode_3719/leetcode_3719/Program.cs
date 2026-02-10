@@ -85,7 +85,7 @@ class Program
             for(int j = i; j < nums.Length; j++)
             {
                 // 判斷當前數字是奇數還是偶數，選擇對應的雜湊表
-                var dict = (nums[j] & 1) == 1 ? odd : even;
+                Dictionary<int, int> dict = (nums[j] & 1) == 1 ? odd : even;
                 
                 // 更新該數字的出現次數
                 dict[nums[j]] = dict.GetValueOrDefault(nums[j], 0) + 1;
