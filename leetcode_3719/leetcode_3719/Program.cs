@@ -93,6 +93,7 @@ class Program
                 Dictionary<int, int> dict = (nums[j] & 1) == 1 ? odd : even;
                 
                 // 更新該數字的出現次數
+                // key: 數字本身, value: 出現次數
                 dict[nums[j]] = dict.GetValueOrDefault(nums[j], 0) + 1;
 
                 // 檢查是否為平衡子陣列：不同的偶數數量 == 不同的奇數數量
