@@ -97,6 +97,7 @@ class Program
                 dict[nums[j]] = dict.GetValueOrDefault(nums[j], 0) + 1;
 
                 // 檢查是否為平衡子陣列：不同的偶數數量 == 不同的奇數數量
+                // 使用 Dictionary 的 Count 屬性來取得不同數字的種類數(有幾個key, 不是value的總和)
                 if (even.Count == odd.Count)
                 {
                     // 更新最大長度
