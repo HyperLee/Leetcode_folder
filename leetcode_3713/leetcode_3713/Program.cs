@@ -10,9 +10,15 @@ class Program
     /// 3713. 最长的平衡子串 I
     /// https://leetcode.cn/problems/longest-balanced-substring-i/description/?envType=daily-question&envId=2026-02-12
     /// 
+    /// You are given a string s consisting of lowercase English letters.
+    /// A substring of s is called balanced if all distinct characters in the substring appear the same number of times.
+    /// Return the length of the longest balanced substring of s.
     /// 
+    /// 給定由小寫英文字母組成的字串 s。
+    /// 若子字串中所有不同字元的出現次數都相同，則稱該子字串為平衡。
+    /// 回傳 s 中最長平衡子字串的長度。
     /// </summary>
-    /// <param name="args"></param>
+    /// <param name="args">命令列參數</param>
     static void Main(string[] args)
     {
         Program program = new Program();
