@@ -52,69 +52,6 @@ class Program
         string s7 = "abcabcabc";
         Console.WriteLine($"Input: \"{s7}\" => Output: {program.LongestBalanced(s7)}"); // 預期輸出: 9
     }
-
-    /// <summary>
-    /// 處理「僅包含兩種字元」的情況，求最長平衡子字串長度。
-    /// <para>
-    /// 解題思路：字串被第三種字元分割為若干子串，每段子串獨立處理。
-    /// 利用前綴和差值（prefix[x] - prefix[y]）搭配雜湊表，
-    /// 記錄每個差值最早出現的位置，當同一差值再次出現時，
-    /// 代表這段區間內 x 與 y 的個數相等，即為平衡子字串。
-    /// </para>
-    /// <example>
-    /// <code>
-    ///  s = "aabb", x = 'a', y = 'b'
-    ///  前綴差值依序為: 1, 2, 1, 0 → 差值 0 在起始位為 -1，
-    ///  當 i=3 時差值再次為 0，長度 = 3 - (-1) = 4
-    /// Case2Helper("aabb", 'a', 'b'); // 回傳 4
-    /// </code>
-    /// </example>
-    /// </summary>
-    /// <param name="s">輸入字串，僅包含 'a'、'b'、'c'</param>
-    /// <param name="x">要比較的第一種字元</param>
-    /// <param name="y">要比較的第二種字元</param>
-    /// <returns>僅由 <paramref name="x"/> 和 <paramref name="y"/> 組成的最長平衡子字串長度</returns>
-    private int Case2Helper(string s, char x, char y) 
-    {
-        int n = s.Length;
-        int res = 0;
-        // 雜湊表：記錄前綴差值(countX - countY)最早出現的位置
-        Dictionary<int, int> dict = new Dictionary<int, int>();
-        
-        for (int i = 0; i < n; i++) 
-        {
-            // 跳過不屬於 x 或 y 的字元（即第三種字元，作為分割點）
-            if (s[i] != x && s[i] != y) 
-            {
-                continue;
-            }
-            
-            // 遇到新的連續段，清空雜湊表
-            dict.Clear();
-            // 子串起始前，差值為 0，位置設為 i - 1（代表虛擬起點）
-            dict[0] = i - 1;
-            int diff = 0;
-            // 在連續段內逐字元處理
-            while (i < n && (s[i] == x || s[i] == y)) 
-            {
-                // 遇到 x 則差值 +1，遇到 y 則差值 -1
-                diff += (s[i] == x) ? 1 : -1;
-                if (dict.ContainsKey(diff)) 
-                {
-                    // 同一差值再次出現 → 中間區間 x 與 y 個數相等
-                    res = Math.Max(res, i - dict[diff]);
-                } 
-                else 
-                {
-                    // 首次出現此差值，記錄位置
-                    dict[diff] = i;
-                }
-                i++;
-            }
-        }
-
-        return res;
-    }
     
     /// <summary>
     /// 求字串 <paramref name="s"/> 中最長平衡子字串的長度。
@@ -193,6 +130,69 @@ class Program
 
         return res;
     }
+
+    /// <summary>
+    /// 處理「僅包含兩種字元」的情況，求最長平衡子字串長度。
+    /// <para>
+    /// 解題思路：字串被第三種字元分割為若干子串，每段子串獨立處理。
+    /// 利用前綴和差值（prefix[x] - prefix[y]）搭配雜湊表，
+    /// 記錄每個差值最早出現的位置，當同一差值再次出現時，
+    /// 代表這段區間內 x 與 y 的個數相等，即為平衡子字串。
+    /// </para>
+    /// <example>
+    /// <code>
+    ///  s = "aabb", x = 'a', y = 'b'
+    ///  前綴差值依序為: 1, 2, 1, 0 → 差值 0 在起始位為 -1，
+    ///  當 i=3 時差值再次為 0，長度 = 3 - (-1) = 4
+    /// Case2Helper("aabb", 'a', 'b'); // 回傳 4
+    /// </code>
+    /// </example>
+    /// </summary>
+    /// <param name="s">輸入字串，僅包含 'a'、'b'、'c'</param>
+    /// <param name="x">要比較的第一種字元</param>
+    /// <param name="y">要比較的第二種字元</param>
+    /// <returns>僅由 <paramref name="x"/> 和 <paramref name="y"/> 組成的最長平衡子字串長度</returns>
+    private int Case2Helper(string s, char x, char y) 
+    {
+        int n = s.Length;
+        int res = 0;
+        // 雜湊表：記錄前綴差值(countX - countY)最早出現的位置
+        Dictionary<int, int> dict = new Dictionary<int, int>();
+        
+        for (int i = 0; i < n; i++) 
+        {
+            // 跳過不屬於 x 或 y 的字元（即第三種字元，作為分割點）
+            if (s[i] != x && s[i] != y) 
+            {
+                continue;
+            }
+            
+            // 遇到新的連續段，清空雜湊表
+            dict.Clear();
+            // 子串起始前，差值為 0，位置設為 i - 1（代表虛擬起點）
+            dict[0] = i - 1;
+            int diff = 0;
+            // 在連續段內逐字元處理
+            while (i < n && (s[i] == x || s[i] == y)) 
+            {
+                // 遇到 x 則差值 +1，遇到 y 則差值 -1
+                diff += (s[i] == x) ? 1 : -1;
+                if (dict.ContainsKey(diff)) 
+                {
+                    // 同一差值再次出現 → 中間區間 x 與 y 個數相等
+                    res = Math.Max(res, i - dict[diff]);
+                } 
+                else 
+                {
+                    // 首次出現此差值，記錄位置
+                    dict[diff] = i;
+                }
+                i++;
+            }
+        }
+
+        return res;
+    }    
     
     /// <summary>
     /// 將二元組 (<paramref name="x"/>, <paramref name="y"/>) 轉換為唯一的字串鍵值，供雜湊表使用。
