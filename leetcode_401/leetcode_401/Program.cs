@@ -84,10 +84,10 @@ class Program
         IList<string> ans = new List<string>();
 
         // 枚舉所有小時（0 ~ 11）
-        for (int h = 0; h < 12; ++h)
+        for (int h = 0; h < 12; h++)
         {
             // 枚舉所有分鐘（0 ~ 59）
-            for (int m = 0; m < 60; ++m)
+            for (int m = 0; m < 60; m++)
             {
                 // 計算小時與分鐘二進位中 1 的個數之和，若等於 turnedOn 則為合法時間
                 if (BitCount(h) + BitCount(m) == turnedOn)
