@@ -151,7 +151,7 @@ class Program
         IList<string> ans = new List<string>();
 
         // 枚舉所有 10 位元的組合（0 ~ 1023）
-        for (int i = 0; i < 1024; ++i)
+        for (int i = 0; i < 1024; i++)
         {
             // 用位元運算取出高 4 位元（小時）和低 6 位元（分鐘）
             int h = i >> 6;
