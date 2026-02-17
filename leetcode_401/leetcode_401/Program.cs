@@ -73,7 +73,7 @@ class Program
     /// <code>
     /// var program = new Program();
     /// IList&lt;string&gt; result = program.ReadBinaryWatch(1);
-    /// // result: ["0:01", "0:02", "0:04", "0:08", "0:16", "0:32", "1:00", "2:00", "4:00", "8:00"]
+    /// result: ["0:01", "0:02", "0:04", "0:08", "0:16", "0:32", "1:00", "2:00", "4:00", "8:00"]
     /// </code>
     /// </example>
     /// </summary>
@@ -140,7 +140,7 @@ class Program
     /// <code>
     /// var program = new Program();
     /// IList&lt;string&gt; result = program.ReadBinaryWatch2(1);
-    /// // result: ["0:01", "0:02", "0:04", "0:08", "0:16", "0:32", "1:00", "2:00", "4:00", "8:00"]
+    /// result: ["0:01", "0:02", "0:04", "0:08", "0:16", "0:32", "1:00", "2:00", "4:00", "8:00"]
     /// </code>
     /// </example>
     /// </summary>
@@ -184,7 +184,7 @@ class Program
     /// <code>
     /// var program = new Program();
     /// IList&lt;string&gt; result = program.ReadBinaryWatch3(1);
-    /// // result: ["1:00", "2:00", "4:00", "8:00", "0:01", "0:02", "0:04", "0:08", "0:16", "0:32"]
+    /// result: ["1:00", "2:00", "4:00", "8:00", "0:01", "0:02", "0:04", "0:08", "0:16", "0:32"]
     /// </code>
     /// </example>
     /// </summary>
