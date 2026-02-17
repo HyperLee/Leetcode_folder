@@ -130,7 +130,7 @@ class Program
     /// <para>
     /// 解題思路：將 10 顆 LED 視為一個 10 位元的二進位數，高 4 位元代表小時，低 6 位元代表分鐘。
     /// 枚舉所有 2^10 = 1024 種組合，篩選出位元中 1 的個數恰好等於 <paramref name="turnedOn"/>，
-    /// 且小時 &lt; 12、分鐘 &lt; 60 的合法結果。
+    /// 且小時 < 12、分鐘 < 60 的合法結果。
     /// </para>
     /// <para>
     /// 時間複雜度：O(1024) = O(1)，常數級。
@@ -139,7 +139,7 @@ class Program
     /// <example>
     /// <code>
     /// var program = new Program();
-    /// IList&lt;string&gt; result = program.ReadBinaryWatch2(1);
+    /// IList<string> result = program.ReadBinaryWatch2(1);
     /// result: ["0:01", "0:02", "0:04", "0:08", "0:16", "0:32", "1:00", "2:00", "4:00", "8:00"]
     /// </code>
     /// </example>
@@ -183,7 +183,7 @@ class Program
     /// <example>
     /// <code>
     /// var program = new Program();
-    /// IList&lt;string&gt; result = program.ReadBinaryWatch3(1);
+    /// IList<string> result = program.ReadBinaryWatch3(1);
     /// result: ["1:00", "2:00", "4:00", "8:00", "0:01", "0:02", "0:04", "0:08", "0:16", "0:32"]
     /// </code>
     /// </example>
