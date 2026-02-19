@@ -41,6 +41,18 @@ class Program
         // 相鄰分組對的 min：min(4,3)=3、min(3,2)=2 → 共 5
         string s3 = "000011100";
         Console.WriteLine($"輸入: \"{s3}\" → 輸出: {solution.CountBinarySubstrings(s3)}"); // 預期: 5
+
+        Console.WriteLine();
+        Console.WriteLine("=== 方法二驗證 ===");
+        Console.WriteLine($"輸入: \"{s1}\" → 輸出: {solution.CountBinarySubstrings2(s1)}"); // 預期: 6
+        Console.WriteLine($"輸入: \"{s2}\" → 輸出: {solution.CountBinarySubstrings2(s2)}"); // 預期: 4
+        Console.WriteLine($"輸入: \"{s3}\" → 輸出: {solution.CountBinarySubstrings2(s3)}"); // 預期: 5
+
+        Console.WriteLine();
+        Console.WriteLine("=== 方法三驗證 ===");
+        Console.WriteLine($"輸入: \"{s1}\" → 輸出: {solution.CountBinarySubstrings3(s1)}"); // 預期: 6
+        Console.WriteLine($"輸入: \"{s2}\" → 輸出: {solution.CountBinarySubstrings3(s2)}"); // 預期: 4
+        Console.WriteLine($"輸入: \"{s3}\" → 輸出: {solution.CountBinarySubstrings3(s3)}"); // 預期: 5
     }
 
     /// <summary>
@@ -164,5 +176,64 @@ class Program
         }
 
         return res;
+    }
+
+    /// <summary>
+    /// 方法三：方法二的空間優化版本（以單一變數取代群組陣列）
+    /// <para>
+    /// 出發點：
+    /// 方法二建立了完整的 <c>groups</c> 陣列，但在計算階段，
+    /// 我們只需要「相鄰的兩個群組長度」就能得出貢獻值。
+    /// 因此不必儲存整個陣列，只需用一個變數 <c>last</c>
+    /// 記錄「上一個群組的長度」即可，將空間複雜度從 O(n) 降至 O(1)。
+    /// </para>
+    /// <para>
+    /// 解題概念：
+    /// 每次走完一個連續字元群組（長度為 <c>count</c>）後，
+    /// 當前群組與上一個群組可貢獻 <c>min(count, last)</c> 個有效子字串。
+    /// 接著將 <c>last = count</c>，繼續走下一個群組。
+    /// 走訪結束後所有相鄰群組對均已計算，無需額外補算。
+    /// </para>
+    /// <para>
+    /// 複雜度：
+    /// 時間 O(n)、空間 O(1)。
+    /// 兼具方法一的空間效率與方法二的直觀可讀性。
+    /// </para>
+    /// <example>
+    /// <code>
+    /// CountBinarySubstrings3("00110011") // 回傳 6
+    /// CountBinarySubstrings3("10101")    // 回傳 4
+    /// </code>
+    /// </example>
+    /// </summary>
+    /// <param name="s">僅含 '0' 與 '1' 的二元字串。</param>
+    /// <returns>符合條件的非空子字串總數。</returns>
+    public int CountBinarySubstrings3(string s)
+    {
+        int ptr = 0, n = s.Length;
+        int last = 0;   // 上一個連續字元群組的長度（取代 groups 陣列）
+        int ans = 0;    // 累計有效子字串數量
+
+        while (ptr < n)
+        {
+            char c = s[ptr];
+            int count = 0;  // 當前群組的長度
+
+            // 計算當前群組（相同字元 c）的長度
+            while (ptr < n && s[ptr] == c)
+            {
+                ptr++;
+                count++;
+            }
+
+            // 當前群組與上一群組可貢獻 min(count, last) 個有效子字串
+            // 首次進入時 last = 0，不會錯誤累加
+            ans += Math.Min(count, last);
+
+            // 將當前群組長度儲存為下一輪的「上一群組」
+            last = count;
+        }
+
+        return ans;
     }
 }

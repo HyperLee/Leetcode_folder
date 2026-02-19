@@ -185,6 +185,71 @@ The 4 valid substrings are:
 
 ---
 
+## Solution Concept — Method 3: Space-Optimised Group Scan
+
+### Key Observation — Rolling Single Variable
+
+Method 2 materialises a full `groups` array, but during the accumulation phase only **two adjacent values** are ever needed at once — `groups[i-1]` and `groups[i]`. Therefore the entire array can be replaced by a single scalar variable `last` that carries the **previous group's length** into the next iteration.
+
+This insight shrinks space complexity from $O(n)$ to $O(1)$ while keeping the same two-pointer group-scanning logic, combining the best traits of both earlier methods — the explicit readability of Method 2 and the constant space of Method 1.
+
+### Algorithm
+
+Use a pointer `ptr` to walk the string. For each new group:
+
+1. Record the current character `c`.
+2. Count consecutive occurrences → `count`.
+3. Accumulate `min(count, last)` into the answer.
+4. Set `last = count` and proceed to the next group.
+
+When `ptr` reaches the end all adjacent pairs have been processed; no final flush step is needed.
+
+**Time complexity:** $O(n)$  
+**Space complexity:** $O(1)$
+
+### Comparison of All Three Methods
+
+| | Method 1 | Method 2 | Method 3 |
+|---|---|---|---|
+| Space | $O(1)$ | $O(n)$ | $O(1)$ |
+| Passes | 1 (index loop) | 2 (build + scan) | 1 (pointer loop) |
+| Extra variable | `prev`, `curr` | `groups[]` | `last` |
+| Readability | Compact | Most explicit | Balanced |
+
+---
+
+## Step-by-Step Walkthrough — Method 3
+
+### Example: `s = "00111011"`
+
+```
+Index:  0  1  2  3  4  5  6  7
+Char:   0  0  1  1  1  0  1  1
+```
+
+Initial state: `ptr = 0`, `last = 0`, `ans = 0`
+
+| Iteration | ptr range | char | count | min(count, last) | ans | last |
+|-----------|-----------|------|-------|-------------------|-----|------|
+| 1 | 0 → 2 | `'0'` | 2 | min(2, 0) = 0 | 0 | 2 |
+| 2 | 2 → 5 | `'1'` | 3 | min(3, 2) = 2 | 2 | 3 |
+| 3 | 5 → 6 | `'0'` | 1 | min(1, 3) = 1 | 3 | 1 |
+| 4 | 6 → 8 | `'1'` | 2 | min(2, 1) = 1 | 4 | 2 |
+
+**Result: 4** ✓
+
+Notice that the `last = 0` initialisation ensures the very first group contributes `0`, which is correct — a single isolated group cannot form any valid substring on its own.
+
+The 4 valid substrings are identical to Method 2's result:
+
+| Group pair | Substrings formed |
+|------------|-------------------|
+| `"00"` & `"111"` (min=2) | `"01"`, `"0011"` |
+| `"111"` & `"0"` (min=1) | `"10"` |
+| `"0"` & `"11"` (min=1) | `"01"` |
+
+---
+
 ## Project Structure
 
 ```
