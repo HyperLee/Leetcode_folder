@@ -108,6 +108,83 @@ Total = 3 + 2 = **5** ✓
 
 ---
 
+## Solution Concept — Method 2: Group and Count
+
+### Key Observation — Materialise All Groups
+
+Split the string into **runs** of identical characters and store each run's length in a `groups` array. For example:
+
+```
+"00111011"  →  groups = [2, 3, 1, 2]
+                          ↑   ↑  ↑  ↑
+                         "00"|"111"|"0"|"11"
+```
+
+Because adjacent elements in `groups` always represent **different** characters, any pair of adjacent values `(u, v)` can form exactly $\min(u, v)$ valid substrings:
+
+$$\text{contribution of each adjacent pair} = \min(u,\, v)$$
+
+Summing contributions across all adjacent pairs gives the final answer.
+
+### Algorithm
+
+**Phase 1 — Build the groups array:**
+Use a pointer `ptr` to walk through the string. For each new character, count how many consecutive identical characters follow and append that count to `groups`.
+
+**Phase 2 — Accumulate contributions:**
+Iterate over all adjacent pairs `(groups[i-1], groups[i])` and add `Math.Min(groups[i-1], groups[i])` to the result.
+
+**Time complexity:** $O(n)$  
+**Space complexity:** $O(n)$ — the `groups` array stores at most $n$ elements (contrast with Method 1's $O(1)$ space)
+
+### Comparison with Method 1
+
+| | Method 1 (Two Pointers) | Method 2 (Group Array) |
+|---|---|---|
+| Space | $O(1)$ | $O(n)$ |
+| Passes | 1 | 2 |
+| Readability | Compact | More explicit |
+
+---
+
+## Step-by-Step Walkthrough — Method 2
+
+### Example: `s = "00111011"`
+
+**Phase 1 — Build groups:**
+
+```
+Index:  0  1  2  3  4  5  6  7
+Char:   0  0  1  1  1  0  1  1
+```
+
+| ptr range | char | groupLen | groups after |  
+|-----------|------|----------|---------------|
+| 0 → 2 | `'0'` | 2 | `[2]` |
+| 2 → 5 | `'1'` | 3 | `[2, 3]` |
+| 5 → 6 | `'0'` | 1 | `[2, 3, 1]` |
+| 6 → 8 | `'1'` | 2 | `[2, 3, 1, 2]` |
+
+**Phase 2 — Accumulate contributions:**
+
+| Adjacent pair | u | v | min(u, v) | res |
+|---------------|---|---|-----------|-----|
+| groups[0], groups[1] | 2 | 3 | 2 | 2 |
+| groups[1], groups[2] | 3 | 1 | 1 | 3 |
+| groups[2], groups[3] | 1 | 2 | 1 | 4 |
+
+**Result: 4**
+
+The 4 valid substrings are:
+
+| groups pair | min | Substrings formed |
+|-------------|-----|-------------------|
+| `[2, 3]` → `"00"` & `"111"` | 2 | `"01"`, `"0011"` |
+| `[3, 1]` → `"111"` & `"0"` | 1 | `"10"` |
+| `[1, 2]` → `"0"` & `"11"` | 1 | `"01"` |
+
+---
+
 ## Project Structure
 
 ```

@@ -99,4 +99,70 @@ class Program
         count += Math.Min(prev, curr);
         return count;
     }
+
+
+    /// <summary>
+    /// 方法二：按字元分組（Group and Count）
+    /// <para>
+    /// 解題概念：
+    /// 先將字串 <paramref name="s"/> 依連續相同字元切割成若干群組，
+    /// 將每組長度依序存入 <c>groups</c> 陣列。
+    /// 例如 s = "00111011" 可得 groups = [2, 3, 1, 2]，
+    /// 分別代表 "00"、"111"、"0"、"11" 四個連續段。
+    /// </para>
+    /// <para>
+    /// 關鍵觀察：
+    /// <c>groups</c> 中任意相鄰兩個元素（設為 u、v）必然代表不同字元的群組。
+    /// 這兩個群組恰好可組成 min(u, v) 個滿足條件的子字串
+    /// （長度分別為 2、4、…、2×min(u,v)）。
+    /// 因此，遍歷所有相鄰數對並累加 min 值即為答案。
+    /// </para>
+    /// <para>
+    /// 複雜度：
+    /// 時間 O(n)、空間 O(n)（需額外儲存 groups 陣列，與方法一的 O(1) 空間相比略遜）。
+    /// </para>
+    /// <example>
+    /// <code>
+    /// CountBinarySubstrings2("00110011") // 回傳 6
+    /// CountBinarySubstrings2("10101")    // 回傳 4
+    /// </code>
+    /// </example>
+    /// </summary>
+    /// <param name="s">僅含 '0' 與 '1' 的二元字串。</param>
+    /// <returns>符合條件的非空子字串總數。</returns>
+    public int CountBinarySubstrings2(string s)
+    {
+        // groups 儲存每個連續字元群組的長度
+        // 例如 "00111011" → groups = [2, 3, 1, 2]
+        List<int> groups = new List<int>();
+        int ptr = 0;
+        int n = s.Length;
+
+        // 第一階段：掃描並建立群組長度陣列
+        while (ptr < n)
+        {
+            char c = s[ptr];    // 記錄當前群組的字元
+            int groupLen = 0;   // 當前群組的長度
+
+            // 持續向右推進，直到字元切換或到達字串末端
+            while (ptr < n && s[ptr] == c)
+            {
+                ptr++;
+                groupLen++;
+            }
+
+            groups.Add(groupLen);
+        }
+
+        // 第二階段：遍歷相鄰群組對，累加 min(u, v)
+        int res = 0;
+        for (int i = 1; i < groups.Count; i++)
+        {
+            // 相鄰兩組 groups[i-1] (u 個某字元) 與 groups[i] (v 個另一字元)
+            // 可貢獻 min(u, v) 個有效子字串
+            res += Math.Min(groups[i - 1], groups[i]);
+        }
+
+        return res;
+    }
 }
