@@ -250,6 +250,19 @@ The 4 valid substrings are identical to Method 2's result:
 
 ---
 
+## 參考解法
+
+以下為線上題解參考：
+
+- 官方解法（LeetCode） — 演算法說明：
+  https://leetcode.cn/problems/count-binary-substrings/solutions/367704/ji-shu-er-jin-zhi-zi-chuan-by-leetcode-solution/?envType=daily-question&envId=2026-02-19
+- 靈茶山艾府 — 一次遍歷的簡潔寫法（多語言範例）：
+  https://leetcode.cn/problems/count-binary-substrings/solutions/3898025/yi-ci-bian-li-jian-ji-xie-fa-pythonjavac-0mdk/?envType=daily-question&envId=2026-02-19
+- Storm — 詳解與實作範例：
+  https://leetcode.cn/problems/count-binary-substrings/solutions/1142355/696-ji-shu-er-jin-zhi-zi-chuan-by-storms-ttqv/
+- 酷酷的懶蟲 — 題解與優化討論：
+  https://leetcode.cn/problems/count-binary-substrings/solutions/2251569/696-ji-shu-er-jin-zhi-zi-chuan-by-shen-d-wzef/
+
 ## Project Structure
 
 ```
