@@ -42,6 +42,13 @@ class Program
         // 14 (1110) -> 3 bits -> 質數 ✓
         // 15 (1111) -> 4 bits -> 4 不是質數 ✗
         Console.WriteLine(p.CountPrimeSetBits(10, 15));  // 預期：5
+
+        // 方法二測試：位元遮罩快取
+        // 測試案例 1：left=6, right=10 => 預期輸出 4
+        Console.WriteLine(p.CountPrimeSetBits2(6, 10));   // 預期：4
+
+        // 測試案例 2：left=10, right=15 => 預期輸出 5
+        Console.WriteLine(p.CountPrimeSetBits2(10, 15));  // 預期：5
     }
 
     /// <summary>
@@ -164,5 +171,58 @@ class Program
 
         // 取低 6 位元（32 位元整數最多 32 個 1，6 位元足夠表示）
         return i & 0x3f;
+    }
+
+
+    /// <summary>
+    /// 方法二：列舉 + 位元計算 + 位元遮罩質數快取（Bitmask Lookup）
+    ///
+    /// 解題思路：
+    /// 由於 right ≤ 10^6 &lt; 2^20，任一數的置位數 c 最多為 20，
+    /// 不超過 20 的質數只有 {2, 3, 5, 7, 11, 13, 17, 19} 共 8 個。
+    ///
+    /// 利用一個 32 位元整數 mask = 665772（二進位：10100010100010101100₂）
+    /// 做為質數查表，其中第 i 個位元為 1 表示 i 是質數：
+    ///   bit  2 = 1（2 是質數）
+    ///   bit  3 = 1（3 是質數）
+    ///   bit  5 = 1（5 是質數）
+    ///   bit  7 = 1（7 是質數）
+    ///   bit 11 = 1（11 是質數）
+    ///   bit 13 = 1（13 是質數）
+    ///   bit 17 = 1（17 是質數）
+    ///   bit 19 = 1（19 是質數）
+    ///
+    /// 判斷方式：計算 x 的置位數 c，若 (1 << c) & mask ≠ 0，則 c 為質數。
+    /// 此方法以單次位元運算取代 IsPrime 的迴圈，效能更佳。
+    ///
+    /// <example>
+    /// <code>
+    /// CountPrimeSetBits2(6, 10)  // returns 4
+    /// CountPrimeSetBits2(10, 15) // returns 5
+    /// </code>
+    /// </example>
+    /// </summary>
+    /// <param name="left">範圍左端點（含）。</param>
+    /// <param name="right">範圍右端點（含）。</param>
+    /// <returns>滿足條件的整數個數。</returns>
+    public int CountPrimeSetBits2(int left, int right)
+    {
+        int res = 0;
+
+        // 質數位元遮罩：665772 = 0b10100010100010101100
+        // 第 i 位元為 1 代表 i 是質數（涵蓋 2, 3, 5, 7, 11, 13, 17, 19）
+        const int mask = 665772;
+
+        for(int x = left; x <= right; x++)
+        {
+            // 計算 x 的置位數 c，再以 (1 << c) & mask 判斷 c 是否為質數
+            // 若結果非零，代表 mask 的第 c 個位元為 1，即 c 是質數
+            if (((1 << BitCount(x)) & mask) != 0)
+            {
+                res++;
+            }
+        }
+
+        return res;
     }
 }
