@@ -218,6 +218,7 @@ class Program
         {
             // 計算 x 的置位數 c，再以 (1 << c) & mask 判斷 c 是否為質數
             // 若結果非零，代表 mask 的第 c 個位元為 1，即 c 是質數
+            // BitCount(x) 也可以使用 C# 內建的 int.PopCount(x)（.NET 7+）替代
             if (((1 << BitCount(x)) & mask) != 0)
             {
                 res++;
