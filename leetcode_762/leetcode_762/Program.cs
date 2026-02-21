@@ -81,6 +81,7 @@ class Program
         for(int x = left; x <= right; x++)
         {
             // 若 x 的置位數（二進位中 1 的個數）為質數，即計入結果
+            // BitCount(x) 也可以使用 C# 內建的 int.PopCount(x)（.NET 7+）替代
             if(IsPrime(BitCount(x)))
             {
                 res++;
