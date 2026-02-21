@@ -1,0 +1,18 @@
+{
+    // 使用 IntelliSense 了解相關屬性。
+    // 欲深入了解，請造訪: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/leetcode_762/bin/Debug/net10.0/leetcode_762.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/leetcode_762",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        }
+    ]
+}
