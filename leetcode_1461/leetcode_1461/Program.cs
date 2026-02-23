@@ -121,7 +121,7 @@ class Program
 
         // 使用滑動視窗遍歷字串
         // 從索引 0 開始，到索引 s.Length - k 結束
-        for (int i = 0; i + k <= s.Length; ++i)
+        for (int i = 0; i <= s.Length - k; i++)
         {
             // 取出從索引 i 開始、長度為 k 的子串
             exists.Add(s.Substring(i, k));
