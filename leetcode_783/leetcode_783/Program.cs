@@ -94,7 +94,7 @@ class Program
         // 注意：Array.Sort 排序的是 list.ToArray() 回傳的副本，
         // 並不會更動 list 本身。由於 BST 中序遍歷已產生有序序列，
         // 此行實際上是多餘的，保留僅作示意說明。
-        Array.Sort(list.ToArray());
+        // Array.Sort(list.ToArray());
 
         int n = list.Count;
         int res = int.MaxValue;
