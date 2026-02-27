@@ -160,6 +160,141 @@ private void DFS(TreeNode node, int num)
 
 ---
 
+## 解法二：迭代（後序 DFS + Stack）
+
+### 解題概念
+
+與遞迴解法的數學核心完全相同：
+
+- **向下**（壓入堆疊）時：`val = (val << 1) | node.val`，逐位元累積路徑數值。
+- **向上**（彈出堆疊）時：`val >>= 1`，右移一位還原至父節點層級的數值。
+
+兩個方向的操作恰好是逆運算，因此不需要另外儲存「回溯用的舊值」。
+
+### 出發點
+
+遞迴 DFS 的呼叫堆疊本質上是一個**後序（Post-order）遍歷**：先一路走到最左下，再依序處理右子樹，最後才處理當前節點。利用顯式 `Stack` 和 `prev` 指標可以精確還原這個流程，同時避免遞迴的系統呼叫堆疊開銷。
+
+核心問題：「何時該彈出一個節點？」
+
+> 當其**右子樹為空**，或**右子樹已被訪問完畢**（即 `root.right == prev`），才能彈出。
+
+### 演算法流程
+
+```
+初始化：stack 為空，val = 0，ret = 0，prev = null
+
+重複以下步驟直到 root 為 null 且 stack 為空：
+
+  步驟 1 ── 沿左子樹一路向下
+  while root 非空:
+      val = (val << 1) | root.val   ← 累積當前節點的位元值
+      root 壓入 stack
+      root = root.left
+
+  步驟 2 ── 查看 stack 頂端，決定是否可以彈出
+  root = stack.Peek()
+
+  若 root.right 為空 或 root.right == prev:    ← 右子樹已完成
+      若 root 為葉節點: ret += val              ← 累加路徑值
+      val >>= 1                                 ← 還原至父節點層級
+      彈出 stack
+      prev = root                               ← 標記本節點已訪問
+      root = null                               ← 回到外層 while 繼續
+  否則:
+      root = root.right                         ← 轉向右子樹，重複步驟 1
+```
+
+### 複雜度
+
+| 類型 | 複雜度 | 說明 |
+|------|--------|------|
+| 時間 | O(N) | N 為節點數，每個節點各入/出堆疊一次 |
+| 空間 | O(H) | H 為樹的高度，堆疊最多同時存放 H 個節點 |
+
+---
+
+## 方法二範例演示
+
+以範例 1 的樹為例，逐步追蹤 `val` 與 `stack` 的狀態變化：
+
+```
+      1
+     / \
+    0   1
+   / \ / \
+  0  1 0  1
+```
+
+| 操作 | root | stack（底→頂） | val（二進位） | ret | prev |
+|------|------|--------------|-------------|-----|------|
+| 初始 | 1 | \[\] | 0 | 0 | — |
+| 壓入 1，往左 | 0 | \[1\] | 1 | 0 | — |
+| 壓入 0，往左 | 0 | \[1,0\] | 10 | 0 | — |
+| 壓入 0，往左 | null | \[1,0,0\] | 100 | 0 | — |
+| 頂=0，葉節點 → ret+=4，右移，彈出 | null | \[1,0\] | 10 | 4 | 0(左下) |
+| 頂=0，right 非空且≠prev → 轉右 | 1 | \[1,0\] | 10 | 4 | — |
+| 壓入 1，往左 | null | \[1,0,1\] | 101 | 4 | — |
+| 頂=1，葉節點 → ret+=5，右移，彈出 | null | \[1,0\] | 10 | 9 | 1(左子) |
+| 頂=0，right==prev → 非葉，右移，彈出 | null | \[1\] | 1 | 9 | 0(左) |
+| 頂=1，right 非空且≠prev → 轉右 | 1 | \[1\] | 1 | 9 | — |
+| 壓入 1，往左 | 0 | \[1,1\] | 11 | 9 | — |
+| 壓入 0，往左 | null | \[1,1,0\] | 110 | 9 | — |
+| 頂=0，葉節點 → ret+=6，右移，彈出 | null | \[1,1\] | 11 | 15 | 0(右下左) |
+| 頂=1，right 非空且≠prev → 轉右 | 1 | \[1,1\] | 11 | 15 | — |
+| 壓入 1，往左 | null | \[1,1,1\] | 111 | 15 | — |
+| 頂=1，葉節點 → ret+=7，右移，彈出 | null | \[1,1\] | 11 | 22 | 1(右下右) |
+| 頂=1，right==prev → 非葉，右移，彈出 | null | \[1\] | 1 | 22 | 1(右) |
+| 頂=1，right==prev → 非葉，右移，彈出 | null | \[\] | 0 | 22 | 1(根) |
+| stack 空，結束 | — | \[\] | 0 | **22** | — |
+
+最終 `ret = 22` ✓
+
+---
+
+## 方法二程式碼
+
+```csharp
+public int SumRootToLeaf2(TreeNode root)
+{
+    Stack<TreeNode> stack = new Stack<TreeNode>();
+    int val = 0;
+    int ret = 0;
+    TreeNode? prev = null;
+
+    while (root is not null || stack.Count > 0)
+    {
+        // 步驟 1：沿左子樹向下，同步累積 val
+        while (root is not null)
+        {
+            val = (val << 1) | root.val;
+            stack.Push(root);
+            root = root.left;
+        }
+
+        // 步驟 2：查看頂端，判斷是否可後序離開
+        root = stack.Peek();
+        if (root.right is null || root.right == prev)
+        {
+            if (root.left is null && root.right is null)
+                ret += val;           // 葉節點：累加路徑值
+
+            val >>= 1;                // 還原至父節點層級
+            stack.Pop();
+            prev = root;
+            root = null;
+        }
+        else
+        {
+            root = root.right;        // 轉向右子樹
+        }
+    }
+    return ret;
+}
+```
+
+---
+
 ## 執行方式
 
 ```bash
@@ -170,6 +305,11 @@ dotnet run --project leetcode_1022
 預期輸出：
 
 ```
+範例 1 結果: 22
+範例 2 結果: 0
+範例 3 結果: 11
+
+=== 方法二：迭代解法驗證 ===
 範例 1 結果: 22
 範例 2 結果: 0
 範例 3 結果: 11
