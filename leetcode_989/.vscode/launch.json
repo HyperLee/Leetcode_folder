@@ -1,0 +1,19 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch leetcode_989",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/leetcode_989/bin/Debug/net10.0/leetcode_989.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/leetcode_989",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        }
+    ]
+}
