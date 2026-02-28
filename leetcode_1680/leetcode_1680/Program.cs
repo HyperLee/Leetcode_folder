@@ -69,7 +69,7 @@ class Program
     /// <returns>串接後的二進位字串對應的十進位值，對 10^9+7 取模</returns>
     /// <example>
     /// <code>
-    /// // n = 3 -> 串接 "1"+"10"+"11" = "11011" = 27
+    /// n = 3 -> 串接 "1"+"10"+"11" = "11011" = 27
     /// int result = ConcatenatedBinary(3); // 27
     /// </code>
     /// </example>
@@ -113,10 +113,10 @@ class Program
     /// <returns>串接後的二進位字串對應的十進位值，對 10^9+7 取模</returns>
     /// <example>
     /// <code>
-    /// // n = 3 -> 串接 "1"+"10"+"11" = "11011" = 27
-    /// // i=1: 1=2^0 -> bits=1, res=(0&lt;&lt;1)+1=1
-    /// // i=2: 2=2^1 -> bits=2, res=(1&lt;&lt;2)+2=6
-    /// // i=3: 非2冪  -> bits=2, res=(6&lt;&lt;2)+3=27
+    /// n = 3 -> 串接 "1"+"10"+"11" = "11011" = 27
+    /// i=1: 1=2^0 -> bits=1, res=(0 << 1)+1=1
+    /// i=2: 2=2^1 -> bits=2, res=(1 << 2)+2=6
+    /// i=3: 非2冪  -> bits=2, res=(6 << 2)+3=27
     /// int result = ConcatenatedBinary2(3); // 27
     /// </code>
     /// </example>
