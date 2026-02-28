@@ -34,25 +34,62 @@ class Program
         int[] num3 = [2, 1, 5];
         int   k3   = 806;
 
+        // ── 極端測試資料 ──────────────────────────────────────────────
+        // 測試案例 4: num 長度(3位) < k 位數(4位): [9,9,9] + 9001 → 期望 [1,0,0,0,0]
+        int[] num4 = [9, 9, 9];
+        int   k4   = 9001;
+
+        // 測試案例 5: 單元素陣列 + 大數: [0] + 10000 → 期望 [1,0,0,0,0]
+        int[] num5 = [0];
+        int   k5   = 10000;
+
+        // 測試案例 6: 全 9 進位連鎖: [9,9,9,9] + 9999 → 期望 [1,9,9,9,8]
+        int[] num6 = [9, 9, 9, 9];
+        int   k6   = 9999;
+
+        // 測試案例 7: 單元素 + 比 num 位數多的 k: [5] + 995 → 期望 [1,0,0,0]
+        int[] num7 = [5];
+        int   k7   = 995;
+
+        // 測試案例 8: k = 0，結果應與 num 相同: [1,2,3] + 0 → 期望 [1,2,3]
+        //            ※ 注意：方法二（AddToArrayForm2）在此案例有潛在空結果問題
+        int[] num8 = [1, 2, 3];
+        int   k8   = 0;
+
         Program p = new Program();
 
         // ── 方法一：逐位相加 ─────────────────────────────────────────
         Console.WriteLine("=== 方法一：AddToArrayForm ===");
-        Console.WriteLine($"[1,2,0,0] + 34  = [{string.Join(",", p.AddToArrayForm(num1, k1))}]");   // [1,2,3,4]
-        Console.WriteLine($"[2,7,4]   + 181 = [{string.Join(",", p.AddToArrayForm(num2, k2))}]");   // [4,5,5]
-        Console.WriteLine($"[2,1,5]   + 806 = [{string.Join(",", p.AddToArrayForm(num3, k3))}]");   // [1,0,2,1]
+        Console.WriteLine($"[1,2,0,0] + 34   = [{string.Join(",", p.AddToArrayForm(num1, k1))}]");    // [1,2,3,4]
+        Console.WriteLine($"[2,7,4]   + 181  = [{string.Join(",", p.AddToArrayForm(num2, k2))}]");    // [4,5,5]
+        Console.WriteLine($"[2,1,5]   + 806  = [{string.Join(",", p.AddToArrayForm(num3, k3))}]");    // [1,0,2,1]
+        Console.WriteLine($"[9,9,9]   + 9001 = [{string.Join(",", p.AddToArrayForm(num4, k4))}]");    // [1,0,0,0,0]
+        Console.WriteLine($"[0]       +10000 = [{string.Join(",", p.AddToArrayForm(num5, k5))}]");    // [1,0,0,0,0]
+        Console.WriteLine($"[9,9,9,9] + 9999 = [{string.Join(",", p.AddToArrayForm(num6, k6))}]");    // [1,9,9,9,8]
+        Console.WriteLine($"[5]       + 995  = [{string.Join(",", p.AddToArrayForm(num7, k7))}]");    // [1,0,0,0]
+        Console.WriteLine($"[1,2,3]   + 0    = [{string.Join(",", p.AddToArrayForm(num8, k8))}]");    // [1,2,3]
 
         // ── 方法二：陣列轉整數相加（示意用，有精度限制） ─────────────
         Console.WriteLine("\n=== 方法二：AddToArrayForm2 ===");
-        Console.WriteLine($"[1,2,0,0] + 34  = [{string.Join(",", AddToArrayForm2(num1, k1))}]");
-        Console.WriteLine($"[2,7,4]   + 181 = [{string.Join(",", AddToArrayForm2(num2, k2))}]");
-        Console.WriteLine($"[2,1,5]   + 806 = [{string.Join(",", AddToArrayForm2(num3, k3))}]");
+        Console.WriteLine($"[1,2,0,0] + 34   = [{string.Join(",", AddToArrayForm2(num1, k1))}]");
+        Console.WriteLine($"[2,7,4]   + 181  = [{string.Join(",", AddToArrayForm2(num2, k2))}]");
+        Console.WriteLine($"[2,1,5]   + 806  = [{string.Join(",", AddToArrayForm2(num3, k3))}]");
+        Console.WriteLine($"[9,9,9]   + 9001 = [{string.Join(",", AddToArrayForm2(num4, k4))}]");
+        Console.WriteLine($"[0]       +10000 = [{string.Join(",", AddToArrayForm2(num5, k5))}]");
+        Console.WriteLine($"[9,9,9,9] + 9999 = [{string.Join(",", AddToArrayForm2(num6, k6))}]");
+        Console.WriteLine($"[5]       + 995  = [{string.Join(",", AddToArrayForm2(num7, k7))}]");
+        Console.WriteLine($"[1,2,3]   + 0    = [{string.Join(",", AddToArrayForm2(num8, k8))}]");     // [1,2,3]（⚠ 若 num=[0] 且 k=0，finalScore=0 導致迴圈不執行，回傳空列表）
 
         // ── 方法三：將 k 直接加至最低位進位展開 ─────────────────────
         Console.WriteLine("\n=== 方法三：AddToArrayForm3 ===");
-        Console.WriteLine($"[1,2,0,0] + 34  = [{string.Join(",", AddToArrayForm3(num1, k1))}]");   // [1,2,3,4]
-        Console.WriteLine($"[2,7,4]   + 181 = [{string.Join(",", AddToArrayForm3(num2, k2))}]");   // [4,5,5]
-        Console.WriteLine($"[2,1,5]   + 806 = [{string.Join(",", AddToArrayForm3(num3, k3))}]");   // [1,0,2,1]
+        Console.WriteLine($"[1,2,0,0] + 34   = [{string.Join(",", AddToArrayForm3(num1, k1))}]");    // [1,2,3,4]
+        Console.WriteLine($"[2,7,4]   + 181  = [{string.Join(",", AddToArrayForm3(num2, k2))}]");    // [4,5,5]
+        Console.WriteLine($"[2,1,5]   + 806  = [{string.Join(",", AddToArrayForm3(num3, k3))}]");    // [1,0,2,1]
+        Console.WriteLine($"[9,9,9]   + 9001 = [{string.Join(",", AddToArrayForm3(num4, k4))}]");    // [1,0,0,0,0]
+        Console.WriteLine($"[0]       +10000 = [{string.Join(",", AddToArrayForm3(num5, k5))}]");    // [1,0,0,0,0]
+        Console.WriteLine($"[9,9,9,9] + 9999 = [{string.Join(",", AddToArrayForm3(num6, k6))}]");    // [1,9,9,9,8]
+        Console.WriteLine($"[5]       + 995  = [{string.Join(",", AddToArrayForm3(num7, k7))}]");    // [1,0,0,0]
+        Console.WriteLine($"[1,2,3]   + 0    = [{string.Join(",", AddToArrayForm3(num8, k8))}]");    // [1,2,3]
     }
 
     /// <summary>
