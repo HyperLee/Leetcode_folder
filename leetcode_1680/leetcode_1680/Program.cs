@@ -65,7 +65,7 @@ class Program
     ///
     /// 時間複雜度：O(n)    空間複雜度：O(1)
     /// </summary>
-    /// <param name="n">正整數 n，範圍 1 &lt;= n &lt;= 10^5</param>
+    /// <param name="n">正整數 n，範圍 1 <= n <= 10^5</param>
     /// <returns>串接後的二進位字串對應的十進位值，對 10^9+7 取模</returns>
     /// <example>
     /// <code>
