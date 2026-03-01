@@ -32,7 +32,30 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        var solution = new Program();
+
+        // 測試案例 1：LeetCode 官方範例
+        // 預期輸出：2
+        // "gin"  -> "--....-."  
+        // "zen"  -> "--....-."  (與 gin 相同)
+        // "tit"  -> "-......-"
+        // "maps" -> "--...-..."
+        // 共有 2 種不同的轉換形式
+        string[] words1 = ["gin", "zen", "tit", "maps"];
+        int result1 = solution.UniqueMorseRepresentations(words1);
+        Console.WriteLine($"測試案例 1：{result1}"); // 預期：2
+
+        // 測試案例 2：只有一個單詞
+        // "a" -> ".-"，共 1 種
+        string[] words2 = ["a"];
+        int result2 = solution.UniqueMorseRepresentations(words2);
+        Console.WriteLine($"測試案例 2：{result2}"); // 預期：1
+
+        // 測試案例 3：所有單詞摩爾斯碼不同
+        // "abc" -> ".--.-."，"xyz" -> "-..--.--.."，共 2 種
+        string[] words3 = ["abc", "xyz"];
+        int result3 = solution.UniqueMorseRepresentations(words3);
+        Console.WriteLine($"測試案例 3：{result3}"); // 預期：2
     }
 
     public static string[] MORSE = {".-", "-...", "-.-.", "-..", ".", "..-.", "--.",
@@ -41,37 +64,55 @@ class Program
                                     "...-", ".--", "-..-", "-.--", "--.."};
 
     /// <summary>
-    /// 我们将数组 words 中的每个单词按照莫尔斯密码表转换为摩尔斯码
-    /// ，并加入哈希集合中，最终的答案即为哈希集合中元素的个数。
-    /// 
-    /// 
-    /// HashSet中的元素唯一性
-    /// 如果你向 HashSet 中插入重复的元素，它的内部会忽视这次操作而不像别的集合一样抛出异常
-    /// 
-    /// HashSet 只能包含唯一的元素，它的内部结构也为此做了专门的优化，值得注意的是，HashSet 也可以
-    /// 存放单个的 null 值，可以得出这么一个结论：如何你想拥有一个具有唯一值的集合，那么 HashSet 就是
-    /// 你最好的选择，何况它还具有超高的检索性能。
-    /// 
-    /// 透過hash儲存 不重複資料 最後計算count即可
+    /// 解題思路：使用 HashSet 去除重複摩爾斯密碼字串
+    ///
+    /// 核心概念：
+    ///   將每個單詞的每個字母依照 MORSE 對照表逐一拼接，
+    ///   形成該單詞完整的摩爾斯密碼字串（稱為「轉換形式」）。
+    ///   再利用 HashSet 的唯一性特性——插入重複值時會自動忽略——
+    ///   收集所有不重複的轉換形式，最終回傳集合的元素個數。
+    ///
+    /// 出發點：
+    ///   不同單詞可能產生相同的摩爾斯密碼（例如 "gin" 與 "zen" 都是 "--....-."），
+    ///   因此直接對字串做去重即可，無需排序或複雜比較。
+    ///
+    /// 時間複雜度：O(S)，S 為所有單詞字元總數；空間複雜度：O(S)。
+    ///
+    /// HashSet 特性補充：
+    ///   - 元素唯一：插入重複元素時靜默忽略，不拋出例外。
+    ///   - 支援存放單一 null 值。
+    ///   - 內部以雜湊結構實作，查詢與插入平均 O(1)，效能極佳。
+    ///
+    /// <example>
+    /// <code>
+    /// var sol = new Program();
+    /// // "gin"->"--....-." , "zen"->"--....-." , "tit"->"-....." , "maps"->"--...-..."
+    /// int result = sol.UniqueMorseRepresentations(["gin", "zen", "tit", "maps"]); // 2
+    /// </code>
+    /// </example>
     /// </summary>
-    /// <param name="words"></param>
-    /// <returns></returns> <summary>
-    /// 
-    /// </summary>
-    /// <param name="words"></param>
-    /// <returns></returns>
+    /// <param name="words">由小寫英文字母組成的單詞陣列。</param>
+    /// <returns>所有單詞中不同摩爾斯密碼轉換形式的數量。</returns>
     public int UniqueMorseRepresentations(string[] words)
     {
+        // 使用 HashSet 自動去除重複的摩爾斯密碼轉換形式
         ISet<string> seen = new HashSet<string>();
-        foreach(var word in words)
+
+        foreach (var word in words)
         {
+            // 逐字母查表，拼接出整個單詞的摩爾斯密碼字串
             StringBuilder sb = new StringBuilder();
-            foreach(var c in word)
+            foreach (var c in word)
             {
+                // c - 'a' 利用 ASCII 差值取得 MORSE 陣列的對應索引（'a'=0, 'b'=1, ...）
                 sb.Append(MORSE[c - 'a']);
             }
+
+            // 加入集合；若已存在相同字串，HashSet 會自動忽略，確保唯一性
             seen.Add(sb.ToString());
         }
+
+        // 集合元素個數即為不同轉換形式的數量
         return seen.Count;
     }
 }
