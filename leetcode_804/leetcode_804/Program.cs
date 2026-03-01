@@ -86,7 +86,7 @@ class Program
     /// <example>
     /// <code>
     /// var sol = new Program();
-    /// // "gin"->"--....-." , "zen"->"--....-." , "tit"->"-....." , "maps"->"--...-..."
+    /// "gin"->"--....-." , "zen"->"--....-." , "tit"->"-....." , "maps"->"--...-..."
     /// int result = sol.UniqueMorseRepresentations(["gin", "zen", "tit", "maps"]); // 2
     /// </code>
     /// </example>
