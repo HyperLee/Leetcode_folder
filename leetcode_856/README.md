@@ -1,22 +1,22 @@
-﻿# LeetCode 856 — Score of Parentheses
+﻿# LeetCode 856 — 括號的分數
 
-A C# solution set for [LeetCode 856: Score of Parentheses](https://leetcode.com/problems/score-of-parentheses/description/), demonstrating three distinct algorithmic approaches with detailed explanations.
+本專案為 [LeetCode 856: Score of Parentheses](https://leetcode.com/problems/score-of-parentheses/description/) 的 C# 解題集，示範三種不同的演算法思路，並附有詳細說明。
 
 ---
 
-## Problem Statement
+## 題目說明
 
-Given a **balanced parentheses string** `s`, return its score according to the following rules:
+給定一個**平衡括號字串** `s`，依照以下規則計算並回傳其分數：
 
-| Rule | Score |
-|------|-------|
+| 規則 | 分數 |
+|------|------|
 | `()` | 1 |
 | `AB` | `score(A) + score(B)` |
 | `(A)` | `2 × score(A)` |
 
-**Constraints:** `2 <= s.length <= 50`, `s` consists of `(` and `)` only, `s` is a balanced parentheses string.
+**限制條件：** `2 <= s.length <= 50`，`s` 只包含 `(` 與 `)`，且 `s` 為平衡括號字串。
 
-### Examples
+### 範例
 
 ```
 Input: "()"       → Output: 1
@@ -27,24 +27,24 @@ Input: "(()(()))→ Output: 6
 
 ---
 
-## Core Insight
+## 核心洞察
 
-No matter how deeply nested, every `()` pair at depth `k` contributes exactly $2^k$ to the final score (where depth is the number of enclosing bracket pairs). The three methods below each exploit this insight differently.
+無論巢狀深度為何，每個位於深度 `k` 的 `()` 對最終分數的貢獻恰好為 $2^k$（深度即外層包覆括號的數量）。以下三種方法各自以不同方式運用此洞察。
 
 ---
 
-## Approaches
+## 解題方法
 
-### Method 1 — Bit-shift Depth Counting
+### 方法一 — 位元位移深度計數
 
-**Concept:** Avoid storing intermediate results altogether. As one traverses the string, maintain a depth counter `cnt`. Each time a bare `()` is encountered (i.e., `s[i-1] == '('` when seeing `)`), add `1 << cnt` to the score.
+**概念：** 完全不儲存中間結果。遍歷字串時維護一個深度計數器 `cnt`，每當遇到裸露的 `()` 組合（即看到 `)` 時 `s[i-1] == '('`），就將 `1 << cnt` 加入分數。
 
-**Why it works:** `cnt` at that moment equals the nesting depth of the innermost `()`, so `1 << cnt` equals $2^{cnt}$, the exact contribution of that pair.
+**原理：** 此時 `cnt` 恰好等於最內層 `()` 的巢狀深度，因此 `1 << cnt` 即為 $2^{cnt}$，精確對應該括號對的貢獻。
 
-| Complexity | Value |
-|-----------|-------|
-| Time | O(n) |
-| Space | **O(1)** — only two integer variables |
+| 複雜度 | 數值 |
+|--------|------|
+| 時間 | O(n) |
+| 空間 | **O(1)** — 僅使用兩個整數變數 |
 
 ```csharp
 public int ScoreOfParentheses(string s)
@@ -66,19 +66,19 @@ public int ScoreOfParentheses(string s)
 
 ---
 
-### Method 2 — Stack Simulation
+### 方法二 — 堆疊模擬
 
-**Concept:** Treat the string as an empty string plus `s` itself and assign each layer of brackets its own "score frame" on a stack.
+**概念：** 將字串視為空字串加上 `s` 本身，並在堆疊上為每一層括號分配獨立的「分數框架」。
 
-- `(` → push `0` (open a new frame)
-- `)` → pop `v` (inner score); pop `w` (outer accumulated); push `w + max(2*v, 1)`
-  - If `v == 0` the inner content is empty, so `()` scores 1.
-  - Otherwise, `(A)` scores `2 * score(A)`.
+- `(` → 推入 `0`（開啟新框架）
+- `)` → 彈出 `v`（內層分數）；彈出 `w`（外層累積分數）；推入 `w + max(2*v, 1)`
+  - 若 `v == 0` 表示內容為空，`()` 得 1 分。
+  - 否則，`(A)` 得 `2 * score(A)` 分。
 
-| Complexity | Value |
-|-----------|-------|
-| Time | O(n) |
-| Space | O(n) — stack depth up to n/2 |
+| 複雜度 | 數值 |
+|--------|------|
+| 時間 | O(n) |
+| 空間 | O(n) — 堆疊深度最多為 n/2 |
 
 ```csharp
 public int ScoreOfParentheses2(string s)
@@ -101,19 +101,19 @@ public int ScoreOfParentheses2(string s)
 
 ---
 
-### Method 3 — Divide and Conquer
+### 方法三 — 分治法
 
-**Concept:** Every balanced parentheses string must be in one of two forms:
+**概念：** 每個平衡括號字串必定屬於以下兩種形式之一：
 
-- **`(A)`** — the entire string is wrapped by one outermost pair.
-- **`A + B`** — two or more independent balanced sub-strings concatenated.
+- **`(A)`** — 整個字串由最外層一對括號包裹。
+- **`A + B`** — 兩段以上獨立的平衡子字串相連。
 
-Use a running balance (`+1` for `(`, `−1` for `)`) to locate the first point where `bal == 0`. That split point determines the form.
+使用累積平衡值（`(` 加 1，`)` 減 1）找到第一個 `bal == 0` 的位置，該分割點決定字串屬於哪種形式。
 
-| Complexity | Value |
-|-----------|-------|
-| Time | O(n²) worst case |
-| Space | O(n) — recursion stack |
+| 複雜度 | 數值 |
+|--------|------|
+| 時間 | O(n²) 最壞情況 |
+| 空間 | O(n) — 遞迴呼叫堆疊 |
 
 ```csharp
 public int ScoreOfParentheses3(string s)
@@ -136,162 +136,162 @@ public int ScoreOfParentheses3(string s)
 
 ---
 
-## Walkthrough Examples
+## 逐步範例解析
 
-### Example 1 — `"()()"` → 2
+### 範例一 — `"()()"` → 2
 
-#### Method 1 (Bit-shift)
+#### 方法一（位元位移）
 
-| i | char | cnt | s[i-1] | score |
-|---|------|-----|--------|-------|
-| 0 | `(`  | 1   | —      | 0     |
+| i | 字元 | cnt | s[i-1] | 分數 |
+|---|------|-----|--------|------|
+| 0 | `(`  | 1   | —      | 0    |
 | 1 | `)`  | 0   | `(`  ✓ | **1** (`1<<0`) |
-| 2 | `(`  | 1   | —      | 1     |
+| 2 | `(`  | 1   | —      | 1    |
 | 3 | `)`  | 0   | `(`  ✓ | **2** (`1<<0`) |
 
-Result: **2** ✓
+結果：**2** ✓
 
-#### Method 2 (Stack)
-
-```
-init  → [0]
-'('   → [0, 0]
-')'   → v=0, w=0 → push max(0,1)=1 → [1]
-'('   → [1, 0]
-')'   → v=0, w=1 → push 1+1=2    → [2]
-peek  → 2
-```
-
-Result: **2** ✓
-
-#### Method 3 (Divide & Conquer)
+#### 方法二（堆疊）
 
 ```
-"()()"  len=2, n=4 → A+B form
+初始化 → [0]
+'('    → [0, 0]
+')'    → v=0, w=0 → 推入 max(0,1)=1 → [1]
+'('    → [1, 0]
+')'    → v=0, w=1 → 推入 1+1=2      → [2]
+peek   → 2
+```
+
+結果：**2** ✓
+
+#### 方法三（分治）
+
+```
+"()()"  len=2, n=4 → A+B 形式
   A = "()"  → 1
   B = "()"  → 1
   A+B = 2
 ```
 
-Result: **2** ✓
+結果：**2** ✓
 
 ---
 
-### Example 2 — `"(())"` → 2
+### 範例二 — `"(())"` → 2
 
-#### Method 1 (Bit-shift)
+#### 方法一（位元位移）
 
-| i | char | cnt | s[i-1] | score |
-|---|------|-----|--------|-------|
-| 0 | `(`  | 1   | —      | 0     |
-| 1 | `(`  | 2   | —      | 0     |
+| i | 字元 | cnt | s[i-1] | 分數 |
+|---|------|-----|--------|------|
+| 0 | `(`  | 1   | —      | 0    |
+| 1 | `(`  | 2   | —      | 0    |
 | 2 | `)`  | 1   | `(`  ✓ | **2** (`1<<1`) |
-| 3 | `)`  | 0   | `)`  ✗ | 2     |
+| 3 | `)`  | 0   | `)`  ✗ | 2    |
 
-Result: **2** ✓
+結果：**2** ✓
 
-#### Method 2 (Stack)
-
-```
-init  → [0]
-'('   → [0, 0]
-'('   → [0, 0, 0]
-')'   → v=0, w=0 → push max(0,1)=1  → [0, 1]
-')'   → v=1, w=0 → push 0+max(2,1)=2→ [2]
-peek  → 2
-```
-
-Result: **2** ✓
-
-#### Method 3 (Divide & Conquer)
+#### 方法二（堆疊）
 
 ```
-"(())"  bal reaches 0 at i=3, len=4=n → (A) form
+初始化 → [0]
+'('    → [0, 0]
+'('    → [0, 0, 0]
+')'    → v=0, w=0 → 推入 max(0,1)=1   → [0, 1]
+')'    → v=1, w=0 → 推入 0+max(2,1)=2 → [2]
+peek   → 2
+```
+
+結果：**2** ✓
+
+#### 方法三（分治）
+
+```
+"(())"  bal 在 i=3 時歸零，len=4=n → (A) 形式
   A = "()"  → 1
   2 * 1 = 2
 ```
 
-Result: **2** ✓
+結果：**2** ✓
 
 ---
 
-### Example 3 — `"(()(()))"` → 6
+### 範例三 — `"(()(()))"` → 6
 
-#### Method 1 (Bit-shift)
+#### 方法一（位元位移）
 
-| i | char | cnt | s[i-1] | score |
-|---|------|-----|--------|-------|
-| 0 | `(`  | 1   | —      | 0     |
-| 1 | `(`  | 2   | —      | 0     |
+| i | 字元 | cnt | s[i-1] | 分數 |
+|---|------|-----|--------|------|
+| 0 | `(`  | 1   | —      | 0    |
+| 1 | `(`  | 2   | —      | 0    |
 | 2 | `)`  | 1   | `(`  ✓ | **2** (`1<<1`) |
-| 3 | `(`  | 2   | —      | 2     |
-| 4 | `(`  | 3   | —      | 2     |
-| 5 | `)`  | 2   | `(`  ✓ | **6** (`1<<2=4`, total 2+4) |
-| 6 | `)`  | 1   | `)`  ✗ | 6     |
-| 7 | `)`  | 0   | `)`  ✗ | 6     |
+| 3 | `(`  | 2   | —      | 2    |
+| 4 | `(`  | 3   | —      | 2    |
+| 5 | `)`  | 2   | `(`  ✓ | **6** (`1<<2=4`，累計 2+4) |
+| 6 | `)`  | 1   | `)`  ✗ | 6    |
+| 7 | `)`  | 0   | `)`  ✗ | 6    |
 
-Result: **6** ✓
+結果：**6** ✓
 
-#### Method 2 (Stack)
-
-```
-init      → [0]
-'('       → [0, 0]
-'('       → [0, 0, 0]
-')'       → v=0, w=0 → push 1       → [0, 1]
-'('       → [0, 1, 0]
-'('       → [0, 1, 0, 0]
-')'       → v=0, w=0 → push 1       → [0, 1, 1]
-')'       → v=1, w=1 → push 1+2=3   → [0, 3]
-')'       → v=3, w=0 → push 0+6=6   → [6]
-peek      → 6
-```
-
-Result: **6** ✓
-
-#### Method 3 (Divide & Conquer)
+#### 方法二（堆疊）
 
 ```
-"(()(()))"  len=8=n → (A) form
+初始化  → [0]
+'('     → [0, 0]
+'('     → [0, 0, 0]
+')'     → v=0, w=0 → 推入 1       → [0, 1]
+'('     → [0, 1, 0]
+'('     → [0, 1, 0, 0]
+')'     → v=0, w=0 → 推入 1       → [0, 1, 1]
+')'     → v=1, w=1 → 推入 1+2=3   → [0, 3]
+')'     → v=3, w=0 → 推入 0+6=6   → [6]
+peek    → 6
+```
+
+結果：**6** ✓
+
+#### 方法三（分治）
+
+```
+"(()(()))"  len=8=n → (A) 形式
   A = "()(())"
-    len=2, A+B form
+    len=2，A+B 形式
       A = "()"         → 1
       B = "(())"
-        len=4=n → (A) form
+        len=4=n → (A) 形式
           inner = "()" → 1
           2 * 1 = 2
       A+B = 1+2 = 3
   2 * 3 = 6
 ```
 
-Result: **6** ✓
+結果：**6** ✓
 
 ---
 
-## Comparison
+## 方法比較
 
-| Method | Time | Space | Key Data Structure | Best Suited For |
-|--------|------|-------|--------------------|-----------------|
-| 1 — Bit-shift | O(n) | **O(1)** | Variables only | Competitive / memory-critical |
-| 2 — Stack | O(n) | O(n)  | Stack | Clean and generalizable |
-| 3 — Divide & Conquer | O(n²) | O(n) | Recursion | Conceptual understanding |
+| 方法 | 時間 | 空間 | 核心資料結構 | 最適用情境 |
+|------|------|------|-------------|-----------|
+| 一 — 位元位移 | O(n) | **O(1)** | 僅變數 | 競程 / 記憶體受限場合 |
+| 二 — 堆疊 | O(n) | O(n)  | 堆疊 | 簡潔且通用 |
+| 三 — 分治 | O(n²) | O(n) | 遞迴呼叫堆疊 | 概念理解 |
 
 > [!TIP]
-> Method 1 is the most efficient. Method 2 is the most idiomatic for stack-based bracket problems. Method 3 directly mirrors the recursive definition in the problem statement, making it the easiest to reason about from first principles.
+> 方法一效率最高。方法二是堆疊類括號題最慣用的寫法。方法三直接對應題目敘述中的遞迴定義，從第一原則出發最易推導理解。
 
 ---
 
-## Getting Started
+## 快速開始
 
 ```bash
-# Build
+# 建構
 dotnet build leetcode_856/leetcode_856.csproj
 
-# Run
+# 執行
 dotnet run --project leetcode_856/leetcode_856.csproj
 ```
 
-Expected output:
+預期輸出：
 
 ```
 === LeetCode 856: Score of Parentheses ===
