@@ -68,7 +68,7 @@ class Program
     /// 解题步驟：
     ///   1. 維護一個括號層數計數器 cnt，遇左+1、遇右-1。
     ///   2. 每當遇到 ')' 且前一個字元為 '('(即最内層)，
-    ///      計算 1 &lt;&lt; cnt 並加进 score。
+    ///      計算 1 << 並加進 score。
     ///   3. 返回 score。
     /// 
     /// 時間複雜度：O(n) —— 單次遍訪字串。
@@ -78,8 +78,8 @@ class Program
     /// <code>
     /// ScoreOfParentheses("(()(()))") == 6
     /// cnt 變化： 1 2 1 2 3 2 1 0
-    /// 在 i=2 cnt=1： score += 1&lt;&lt;1 = 2
-    /// 在 i=5 cnt=2： score += 1&lt;&lt;2 = 4  =&gt; 總分 6
+    /// 在 i=2 cnt=1： score += 1 << 1 = 2
+    /// 在 i=5 cnt=2： score += 1 << 2 = 4  => 總分 6
     /// </code>
     /// </example>
     /// </summary>
@@ -123,7 +123,7 @@ class Program
     ///   遇到 '(' 開啟新層次，堆疊壓入 0；
     ///   遇到 ')' 關閉一層次，彈出 v(內層累積)：
     ///     - v == 0 代表內層為空串，产生分數 1
-    ///     - v &gt; 0 則產生分數 2*v
+    ///     - v > 0 則產生分數 2*v
     ///   再彈出 w(外層已累積)，將計算結果嚇回堆疊。
     /// 
     /// 解题步驟：
@@ -138,7 +138,7 @@ class Program
     /// <example>
     /// <code>
     /// ScoreOfParentheses2("()()") == 2
-    /// stack: [0] -&gt; [0,0] -&gt; [1] -&gt; [1,0] -&gt; [2]
+    /// stack: [0] -> [0,0] -> [1] -> [1,0] -> [2]
     /// </code>
     /// </example>
     /// </summary>
@@ -196,9 +196,9 @@ class Program
     /// <code>
     /// ScoreOfParentheses3("(()(()))") == 6
     /// bal 對應整個字串，len==8==n，形式 (A)
-    ///   =&gt; 2 * Solve("()(())")
-    ///      len=2, 形式 A+B =&gt; Solve("()") + Solve("(())")
-    ///      = 1 + 2 = 3  =&gt; 2 * 3 = 6
+    ///   => 2 * Solve("()(())")
+    ///      len=2, 形式 A+B => Solve("()") + Solve("(())")
+    ///      = 1 + 2 = 3  => 2 * 3 = 6
     /// </code>
     /// </example>
     /// </summary>
