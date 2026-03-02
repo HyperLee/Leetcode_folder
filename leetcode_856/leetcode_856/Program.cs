@@ -76,10 +76,10 @@ class Program
     /// 
     /// <example>
     /// <code>
-    /// // ScoreOfParentheses("(()(()))") == 6
-    /// // cnt 變化： 1 2 1 2 3 2 1 0
-    /// // 在 i=2 cnt=1： score += 1&lt;&lt;1 = 2
-    /// // 在 i=5 cnt=2： score += 1&lt;&lt;2 = 4  =&gt; 總分 6
+    /// ScoreOfParentheses("(()(()))") == 6
+    /// cnt 變化： 1 2 1 2 3 2 1 0
+    /// 在 i=2 cnt=1： score += 1&lt;&lt;1 = 2
+    /// 在 i=5 cnt=2： score += 1&lt;&lt;2 = 4  =&gt; 總分 6
     /// </code>
     /// </example>
     /// </summary>
@@ -137,8 +137,8 @@ class Program
     /// 
     /// <example>
     /// <code>
-    /// // ScoreOfParentheses2("()()") == 2
-    /// // stack: [0] -&gt; [0,0] -&gt; [1] -&gt; [1,0] -&gt; [2]
+    /// ScoreOfParentheses2("()()") == 2
+    /// stack: [0] -&gt; [0,0] -&gt; [1] -&gt; [1,0] -&gt; [2]
     /// </code>
     /// </example>
     /// </summary>
@@ -194,11 +194,11 @@ class Program
     /// 
     /// <example>
     /// <code>
-    /// // ScoreOfParentheses3("(()(()))") == 6
-    /// // bal 對應整個字串，len==8==n，形式 (A)
-    /// //   =&gt; 2 * Solve("()(())")
-    /// //      len=2, 形式 A+B =&gt; Solve("()") + Solve("(())")
-    /// //      = 1 + 2 = 3  =&gt; 2 * 3 = 6
+    /// ScoreOfParentheses3("(()(()))") == 6
+    /// bal 對應整個字串，len==8==n，形式 (A)
+    ///   =&gt; 2 * Solve("()(())")
+    ///      len=2, 形式 A+B =&gt; Solve("()") + Solve("(())")
+    ///      = 1 + 2 = 3  =&gt; 2 * 3 = 6
     /// </code>
     /// </example>
     /// </summary>
