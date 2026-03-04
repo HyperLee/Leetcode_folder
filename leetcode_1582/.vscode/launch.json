@@ -1,0 +1,17 @@
+{
+    // 使用.NET Core C# 程式的啟動設定
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch leetcode_1582",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/leetcode_1582/bin/Debug/net10.0/leetcode_1582.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/leetcode_1582",
+            "stopAtEntry": false,
+            "internalConsoleOptions": "openOnSessionStart"
+        }
+    ]
+}
