@@ -85,8 +85,8 @@ class Program
     /// <returns>矩陣中特殊位置的總數</returns>
     /// <example>
     /// <code>
-    /// // mat = [[1,0,0],[0,0,1],[1,0,0]] => 1
-    /// // mat = [[1,0,0],[0,1,0],[0,0,1]] => 3
+    /// mat = [[1,0,0],[0,0,1],[1,0,0]] => 1
+    /// mat = [[1,0,0],[0,1,0],[0,0,1]] => 3
     /// </code>
     /// </example>
     public int NumSpecial(int[][] mat)
