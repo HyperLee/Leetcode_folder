@@ -17,60 +17,104 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new Program();
+
+        // 測試案例：涵蓋全零、單段1、多段1、邊界值等情境
+        (string input, bool expected)[] testCases =
+        [
+            ("1",       true),   // 最短輸入，只有一個 1
+            ("110",     true),   // 單段 1 後接 0
+            ("1110000", true),   // 多個 1 後接多個 0
+            ("1000110", false),  // 兩段 1，中間有 0
+            ("10",      true),   // 單個 1 後接 0
+            ("11",      true),   // 兩個連續 1
+            ("101",     false),  // 中間斷開的兩段 1
+        ];
+
+        Console.WriteLine("=== LeetCode 1784 測試結果 ===");
+        Console.WriteLine($"{"Input",-12} {"Expected",-10} {"Method1",-10} {"Method2",-10} {"Pass?"}");
+        Console.WriteLine(new string('-', 55));
+
+        foreach ((string s, bool expected) in testCases)
+        {
+            bool r1 = solution.CheckOnesSegment(s);
+            bool r2 = solution.CheckOnesSegment2(s);
+            string pass = (r1 == expected && r2 == expected) ? "PASS" : "FAIL";
+            Console.WriteLine($"{s,-12} {expected,-10} {r1,-10} {r2,-10} {pass}");
+        }
     }
 
     /// <summary>
-    /// 迴圈遍歷
-    /// 
-    /// 1. 遇到第一個 '1' 時開始「進入 1 段」狀態。
-    /// 2. 如果之後看到 0，就把狀態改成「已離開 1 段」。
-    /// 3. 一旦狀態是「已離開 1 段」卻又遇到 '1'，就代表有第二段，直接回傳 false。 
-    /// 4. 走完整串沒有觸發上述條件，回傳 true。 
+    /// 方法一：逐字元狀態機（迴圈遍歷）
+    ///
+    /// 解題概念：
+    ///   使用兩個布林旗標追蹤「目前是否在 1 段中」與「是否已離開過一段 1」。
+    ///   當我們偵測到「離開過 1 段之後又遇到新的 1」，即確認存在兩段以上，回傳 false。
+    ///
+    /// 解題步驟：
+    ///   1. 遇到第一個 '1' → 設定 inSegment = true（進入 1 段）。
+    ///   2. 在 1 段中遇到 '0' → 設定 leftSegment = true（已離開第一段 1）。
+    ///   3. 若 leftSegment == true 卻再次遇到 '1' → 第二段出現，直接回傳 false。
+    ///   4. 整串走完未觸發第 3 步 → 回傳 true。
+    ///
+    /// 時間複雜度：O(n)，n 為字串長度，只需一次線性掃描。
+    /// 空間複雜度：O(1)，只使用常數個輔助變數。
     /// </summary>
-    /// <param name="s"></param>
-    /// <returns></returns>
+    /// <param name="s">不含前導零的二進位字串。</param>
+    /// <returns>字串中至多只有一段連續 1 時回傳 true，否則回傳 false。</returns>
     public bool CheckOnesSegment(string s)
     {
-        bool inSegment = false;
-        bool leftSegment = false;
-        foreach (char c in s) 
+        bool inSegment = false;   // 目前是否正在 1 段內
+        bool leftSegment = false; // 是否已曾離開過一段 1
+
+        foreach (char c in s)
         {
-            if (c == '1') 
+            if (c == '1')
             {
-                if (leftSegment) 
+                // 已離開過 1 段卻又見到 1，代表第二段開始
+                if (leftSegment)
                 {
-                    return false;      // 第二段 1
+                    return false;
                 }
-                inSegment = true;
-            } 
-            else 
-            { 
-                // c == '0'
-                if (inSegment) 
+                inSegment = true; // 進入（或持續在）1 段
+            }
+            else
+            {
+                // 遇到 0 時，若當前在 1 段內，標記為已離開
+                if (inSegment)
                 {
-                    leftSegment = true; // 退出第一段
+                    leftSegment = true;
                 }
                 inSegment = false;
             }
         }
+
         return true;
     }
 
     /// <summary>
-    /// 方法2: 寻找 01 串
-    /// 题目给定一个长度为 n 的二进制字符串 s，并满足该字符串不含前导零。
-    /// 现在我们需要判断字符串中是否只包含零个或一个由连续 1 组成的字段。首先我们依次分析这两种情况：
-    /// - 字符串 s 中包含零个由连续 1 组成的字段，那么整个串的表示为 00⋯00。
-    /// - 字符串 s 中只包含一个由连续 1 组成的字段，因为已知字符串 s 不包含前导零，所以整个串的表示为 1⋯100⋯00。
-    /// 那么可以看到两种情况中都不包含 01 串。且不包含的 01 串的一个二进制字符串也有且仅有上面两种情况。所以我们可以通过原字
-    /// 符串中是否有 01 串来判断字符串中是否只包含零个或一个由连续 1 组成的字段。如果有 01 串则说明该情况不满足，否则即满足该
-    /// 情况条件。
+    /// 方法二：尋找子字串 "01"（一行解）
+    ///
+    /// 解題概念：
+    ///   由於輸入字串不含前導零，符合條件的字串形態只有兩種：
+    ///     - 全零串：00⋯0
+    ///     - 一段 1 後接零或多個 0：1⋯10⋯0
+    ///   這兩種情況的共同特徵是：字串中絕對不會出現子字串 "01"。
+    ///   反之，一旦出現 "01"，必定代表某段 1 之後出現了 0，而 0 之後還有 1，
+    ///   意味著存在至少兩段不連續的 1。
+    ///
+    /// 關鍵觀察：
+    ///   「不含前導零」保證字串開頭若有 1，就是第一段的起點。
+    ///   若偵測到 "01"，代表 1 段在某處結束後，後面仍有 1，違反題意。
+    ///
+    /// 時間複雜度：O(n)，字串搜尋為線性。
+    /// 空間複雜度：O(1)，不需要額外空間。
     /// </summary>
-    /// <param name="s"></param>
-    /// <returns></returns>
+    /// <param name="s">不含前導零的二進位字串。</param>
+    /// <returns>字串中至多只有一段連續 1 時回傳 true，否則回傳 false。</returns>
     public bool CheckOnesSegment2(string s)
     {
+        // 若出現 "01" 子字串，代表 1 段結束後再度出現 1（第二段），不符合條件
         return !s.Contains("01");
     }
 }
