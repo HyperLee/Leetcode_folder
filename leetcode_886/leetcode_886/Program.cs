@@ -69,27 +69,30 @@ class Program
     /// <returns>若可分成兩組回傳 true，否則回傳 false</returns>
     public bool PossibleBipartition(int n, int[][] dislikes)
     {
-        // 每个人对应的颜色
+        // color[i] 記錄節點 i 的分組顏色：0 = 未分組，1 = 第一組，2 = 第二組
         int[] color = new int[n + 1];
+
+        // g[i] 為鄰接表，儲存節點 i 的所有「不喜歡」對象（無向邊，雙向記錄）
         IList<int>[] g = new IList<int>[n + 1];
         for(int i = 0; i <= n; i++)
         {
             g[i] = new List<int>();
         }
 
-        //给每一个人做一张仇人表
+        // 建立無向圖：若 a 不喜歡 b，則 a→b 與 b→a 皆加入鄰接表
         foreach(int[] p in dislikes)
         {
             g[p[0]].Add(p[1]);
             g[p[1]].Add(p[0]);
         }
 
-        //顺序地给每个人染色
+        // 依序走訪每個節點；若尚未染色，從該節點啟動 DFS 嘗試染色
+        // 圖可能不連通，因此需對每個未染色節點分別啟動 DFS
         for(int i = 1; i <= n; i++)
         {
             if(color[i] == 0 && !DFS(i, 1, color, g))
             {
-                //这个节点无论如何都会与仇人共色，无法二分
+                // 此節點所在的連通分量存在奇數環，無論如何都無法二分
                 return false;
             }
         }
@@ -130,20 +133,22 @@ class Program
     /// <returns>若染色方案合法（無衝突）回傳 true，否則回傳 false</returns>
     public bool DFS(int curnode, int nowcolor, int[] color, IList<int>[] g)
     {
-        //给节点染色
+        // 將當前節點染上指定顏色，完成分組歸屬
         color[curnode] = nowcolor;
-        //g[curnode]表示这个节点的仇家们
+
+        // g[curnode] 為 curnode 的所有相鄰節點（即不喜歡的對象）
         foreach(int nextnode in g[curnode])
         {
             if(color[nextnode] != 0 && color[nextnode] == color[curnode])
             {
-                //仇家已经被染色，而且和节点颜色相同
+                // 相鄰節點已被染色，且與 curnode 顏色相同 → 產生衝突，無法二分
                 return false;
             }
 
             if(color[nextnode] == 0 && !DFS(nextnode, 3 ^ nowcolor, color, g))
             {
-                //虽然仇家没有染色，但是不可能将全部仇家然成反色(3 ^ nowcolor)
+                // 相鄰節點尚未染色，嘗試染反色（3 ^ nowcolor：1↔2 互換）
+                // 若遞迴 DFS 也回傳衝突，則整條路徑均無法二分
                 return false;
             }
         }
