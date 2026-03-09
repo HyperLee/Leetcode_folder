@@ -92,17 +92,20 @@ class Program
         }
 
         // 基底：只填 0 且不超過 limit 個，每種長度恰好一種方案
+        // “單調 0” 的方案數為 1（即 [0,0,...,0]），但當 i > limit 時不合法，因此只初始化到 Math.Min(zero, limit)
         for(int i = 0; i <= Math.Min(zero, limit); i++)
         {
             dp[i][0][0] = 1;
         }
 
         // 基底：只填 1 且不超過 limit 個，每種長度恰好一種方案
+        // “單調 1” 的方案數為 1（即 [1,1,...,1]），但當 j > limit 時不合法，因此只初始化到 Math.Min(one, limit)
         for(int j = 0; j <= Math.Min(one, limit); j++)
         {
             dp[0][j][1] = 1;
         }
 
+        // 混合填充 0 和 1 的方案數，從小到大計算 dp[i][j][k]
         for (int i = 1; i <= zero; i++) 
         {
             for (int j = 1; j <= one; j++) 
