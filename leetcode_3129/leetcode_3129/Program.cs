@@ -65,9 +65,9 @@ class Program
     /// dp[i][j][1] = 已放置 i 個 0、j 個 1 且最後一個元素為 1 的合法方案數
     /// </para>
     /// <para>
-    /// 轉移方程式（以 dp[i][j][0] 為例，i≥1, j≥1）：<br/>
-    /// · i ≤ limit：dp[i][j][0] = dp[i-1][j][0] + dp[i-1][j][1]<br/>
-    /// · i > limit：dp[i][j][0] = dp[i-1][j][0] + dp[i-1][j][1] - dp[i-limit-1][j][1]<br/>
+    /// 轉移方程式（以 dp[i][j][0] 為例，i≥1, j≥1）：
+    /// · i ≤ limit：dp[i][j][0] = dp[i-1][j][0] + dp[i-1][j][1]
+    /// · i > limit：dp[i][j][0] = dp[i-1][j][0] + dp[i-1][j][1] - dp[i-limit-1][j][1]
     ///   （減去「前一個 1 之後恰好連填 limit 個 0」的非法方案 dp[i-limit-1][j][1]）
     /// </para>
     /// <para>最終答案：(dp[zero][one][0] + dp[zero][one][1]) mod (10^9+7)</para>
