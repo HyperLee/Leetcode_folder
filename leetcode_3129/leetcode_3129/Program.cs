@@ -67,7 +67,7 @@ class Program
     /// <para>
     /// 轉移方程式（以 dp[i][j][0] 為例，i≥1, j≥1）：<br/>
     /// · i ≤ limit：dp[i][j][0] = dp[i-1][j][0] + dp[i-1][j][1]<br/>
-    /// · i &gt; limit：dp[i][j][0] = dp[i-1][j][0] + dp[i-1][j][1] - dp[i-limit-1][j][1]<br/>
+    /// · i > limit：dp[i][j][0] = dp[i-1][j][0] + dp[i-1][j][1] - dp[i-limit-1][j][1]<br/>
     ///   （減去「前一個 1 之後恰好連填 limit 個 0」的非法方案 dp[i-limit-1][j][1]）
     /// </para>
     /// <para>最終答案：(dp[zero][one][0] + dp[zero][one][1]) mod (10^9+7)</para>
