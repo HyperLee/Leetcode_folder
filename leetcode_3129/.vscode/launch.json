@@ -1,0 +1,18 @@
+{
+    // 使用 IntelliSense 來了解可能的屬性。
+    // 應用程式的如需詳細資訊，請造訪: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Debug",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/leetcode_3129/bin/Debug/net10.0/leetcode_3129.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/leetcode_3129",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        }
+    ]
+}
