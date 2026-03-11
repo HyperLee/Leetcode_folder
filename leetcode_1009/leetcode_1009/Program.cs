@@ -23,6 +23,71 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        var solution = new Program();
+
+        // 測試案例 1：n=5 (101₂)，反碼 010₂ = 2
+        Console.WriteLine($"BitwiseComplement(5)  = {solution.BitwiseComplement(5)}");   // 預期：2
+
+        // 測試案例 2：n=7 (111₂)，反碼 000₂ = 0
+        Console.WriteLine($"BitwiseComplement(7)  = {solution.BitwiseComplement(7)}");   // 預期：0
+
+        // 測試案例 3：n=10 (1010₂)，反碼 0101₂ = 5
+        Console.WriteLine($"BitwiseComplement(10) = {solution.BitwiseComplement(10)}");  // 預期：5
+
+        // 邊界案例：n=0，二進位視為 "0"，反碼為 "1" = 1
+        Console.WriteLine($"BitwiseComplement(0)  = {solution.BitwiseComplement(0)}");   // 預期：1
+    }
+
+    /// <summary>
+    /// 計算整數 n 的位元反碼（Bitwise Complement）
+    ///
+    /// 解題出發點：
+    /// 電腦以 32 位儲存整數，若直接對所有位元取反會翻轉前導零，
+    /// 因此只能翻轉 n 二進位「最高位 1 及以下」的有效位元。
+    ///
+    /// 位元運算解法步驟：
+    /// 1. 找出最高位 1 的位置 i，使得 2^i ≤ n < 2^(i+1)（0 ≤ i ≤ 30）
+    /// 2. 建立遮罩 mask = 2^(i+1) - 1，即低 i+1 個位元皆為 1 的數
+    /// 3. 對 n 與 mask 做 XOR 運算：
+    ///    - 有效位（0～i）與 1 做 XOR → 位元翻轉
+    ///    - 高位（i+1 以上）皆為 0，與 0 做 XOR → 保持 0 不變
+    ///
+    /// 邊界情況：
+    /// 當 i=30 時，1 << 31 會造成有號整數溢位，
+    /// 故直接使用常數 0x7FFFFFFF（= 2^31 - 1）。
+    ///
+    /// 範例：n=5 (101₂)，i=2，mask=7 (111₂)，5 XOR 7 = 2 (010₂) ✓
+    ///
+    /// 時間複雜度：O(log n)　空間複雜度：O(1)
+    /// </summary>
+    /// <param name="n">輸入的非負整數（0 ≤ n &lt; 10^9）</param>
+    /// <returns>n 的位元反碼對應的十進制整數</returns>
+    public int BitwiseComplement(int n)
+    {
+        // 記錄最高位 1 所在的位置，初始為 0（對應 n=0 或 n=1 的情況）
+        int highbit = 0;
+
+        // 從第 1 位開始向上找，直到 2^i > n 為止
+        for (int i = 1; i <= 30; i++)
+        {
+            if (n >= 1 << i)
+            {
+                // n 的最高位至少在第 i 位
+                highbit = i;
+            }
+            else
+            {
+                // 2^i 已超過 n，最高位就是第 highbit 位，提前結束
+                break;
+            }
+        }
+
+        // 建立遮罩：低 (highbit+1) 個位元全為 1
+        // 例如 highbit=2 → mask = (1<<3)-1 = 7 = 111₂
+        // 特例 highbit=30 → 直接使用 0x7FFFFFFF 避免 1<<31 溢位
+        int mask = highbit == 30 ? 0x7fffffff : (1 << (highbit + 1)) - 1;
+
+        // XOR 翻轉有效位元，高位原本為 0 與 0 做 XOR 仍為 0，不受影響
+        return n ^ mask;
     }
 }
