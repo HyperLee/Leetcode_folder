@@ -1,96 +1,96 @@
-﻿# LeetCode 1009 — Complement of Base 10 Integer
+﻿# LeetCode 1009 — 十進位整數的補數
 
-A C# solution to [LeetCode 1009](https://leetcode.com/problems/complement-of-base-10-integer/) demonstrating a bitwise manipulation approach to compute the complement of a non-negative integer.
+以 C# 解答 [LeetCode 1009](https://leetcode.com/problems/complement-of-base-10-integer/)，展示以位元運算搭配遮罩（mask）求非負整數補數的方式。
 
-## Problem
+## 題目描述
 
-> Given a non-negative integer `n`, return its **complement** — the integer obtained by flipping every `0` to `1` and every `1` to `0` in its binary representation.
+> 給定一個非負整數 `n`，回傳其**補數** — 即將其二進位表示中每個 `0` 翻轉為 `1`、每個 `1` 翻轉為 `0` 所得到的整數。
 
-**Constraints:** `0 <= n < 10^9`
+**限制條件：** `0 <= n < 10^9`
 
-### Examples
+### 範例
 
-| Input `n` | Binary  | Complement binary | Output |
-|:---------:|:-------:|:-----------------:|:------:|
-| 5         | `101`   | `010`             | 2      |
-| 7         | `111`   | `000`             | 0      |
-| 10        | `1010`  | `0101`            | 5      |
-| 0         | `0`     | `1`               | 1      |
+| 輸入 `n` | 二進位  | 補數二進位 | 輸出 |
+|:--------:|:-------:|:----------:|:----:|
+| 5        | `101`   | `010`      | 2    |
+| 7        | `111`   | `000`      | 0    |
+| 10       | `1010`  | `0101`     | 5    |
+| 0        | `0`     | `1`        | 1    |
 
-## Solution Approach — Bit Manipulation with Mask
+## 解題思路 — 位元運算搭配遮罩
 
-### Why not flip all 32 bits?
+### 為何不直接翻轉全部 32 個位元？
 
-A computer stores integers in 32 bits. For example, `n = 5` is internally represented as:
+電腦以 32 位元儲存整數。例如 `n = 5` 在內部表示為：
 
 ```
 0000 0000 0000 0000 0000 0000 0000 0101
 ```
 
-Flipping all 32 bits would turn the leading zeros into ones, producing the wrong result. We only want to flip the **significant bits** — from the least significant bit up to (and including) the highest set bit.
+若翻轉全部 32 個位元，前面的零會變成一，導致結果錯誤。我們只需翻轉**有效位元** — 從最低有效位元到最高有效位元（含）。
 
-### Algorithm
+### 演算法
 
-1. **Find the position `i` of the highest set bit** by iterating over `[1, 30]`:
+1. **找出最高有效位元的位置 `i`**，在 `[1, 30]` 的範圍內迭代：
 
 $$2^i \leq n < 2^{i+1}$$
 
-2. **Construct a mask** with exactly `i + 1` bits all set to `1`:
+2. **建構遮罩**，使恰好 `i + 1` 個位元全部為 `1`：
 
 $$\text{mask} = 2^{i+1} - 1$$
 
-3. **XOR `n` with the mask** to flip exactly those bits:
+3. **將 `n` 與遮罩做 XOR**，精確翻轉這些位元：
 
-| Bit in `n` | Bit in `mask` | `n XOR mask` |
+| `n` 的位元 | `mask` 的位元 | `n XOR mask` |
 |:----------:|:-------------:|:------------:|
 | 0          | 1             | 1 ✓          |
 | 1          | 1             | 0 ✓          |
-| 0 (high)   | 0             | 0 (unchanged)|
+| 0（高位）  | 0             | 0（不變）    |
 
 > [!NOTE]
-> When `i = 30`, computing `1 << 31` would overflow a signed 32-bit integer.
-> The code handles this edge case by using the constant `0x7FFFFFFF` (= $2^{31} - 1$) directly.
+> 當 `i = 30` 時，計算 `1 << 31` 會造成帶號 32 位元整數溢位。
+> 程式碼以常數 `0x7FFFFFFF`（即 $2^{31} - 1$）直接處理此邊界情況。
 
-### Step-by-step walkthrough: `n = 5`
+### 逐步執行範例：`n = 5`
 
 ```
-n     = 5  →  binary:  0 … 0  1  0  1
-                               ↑
-                        highest bit at position i = 2
+n     = 5  →  二進位：  0 … 0  1  0  1
+                                ↑
+                         最高有效位元位於 i = 2
 
-mask  = 2^(2+1) - 1 = 7  →  binary:  0 … 0  1  1  1
+mask  = 2^(2+1) - 1 = 7  →  二進位：  0 … 0  1  1  1
 
-n XOR mask:
+n XOR mask：
     0 … 0  1  0  1   (5)
   ⊕ 0 … 0  1  1  1   (7)
   ─────────────────
     0 … 0  0  1  0   (2)  ✓
 ```
 
-### Complexity
+### 時間與空間複雜度
 
-| Complexity | Value |
-|:----------:|:-----:|
-| Time       | O(log n) — at most 30 iterations |
-| Space      | O(1) — no extra data structures |
+| 複雜度 | 數值 |
+|:------:|:----:|
+| 時間   | O(log n) — 最多 30 次迭代 |
+| 空間   | O(1) — 不需額外的資料結構 |
 
-## Project Structure
+## 專案結構
 
 ```
 leetcode_1009/
 ├── leetcode_1009.sln
 └── leetcode_1009/
     ├── leetcode_1009.csproj
-    └── Program.cs          # Solution implementation and test cases
+    └── Program.cs          # 解題實作與測試案例
 ```
 
-## Running the Solution
+## 執行方式
 
 ```bash
 dotnet run --project leetcode_1009/leetcode_1009.csproj
 ```
 
-Expected output:
+預期輸出：
 
 ```
 BitwiseComplement(5)  = 2
@@ -99,7 +99,7 @@ BitwiseComplement(10) = 5
 BitwiseComplement(0)  = 1
 ```
 
-## References
+## 參考資料
 
-- [LeetCode 1009 (English)](https://leetcode.com/problems/complement-of-base-10-integer/description/?envType=daily-question&envId=2026-03-11)
-- [LeetCode 1009 (中文)](https://leetcode.cn/problems/complement-of-base-10-integer/description/?envType=daily-question&envId=2026-03-11)
+- [LeetCode 1009（英文版）](https://leetcode.com/problems/complement-of-base-10-integer/description/?envType=daily-question&envId=2026-03-11)
+- [LeetCode 1009（中文版）](https://leetcode.cn/problems/complement-of-base-10-integer/description/?envType=daily-question&envId=2026-03-11)
