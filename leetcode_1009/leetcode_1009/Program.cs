@@ -36,6 +36,21 @@ class Program
 
         // 邊界案例：n=0，二進位視為 "0"，反碼為 "1" = 1
         Console.WriteLine($"BitwiseComplement(0)  = {solution.BitwiseComplement(0)}");   // 預期：1
+
+        Console.WriteLine();
+        Console.WriteLine("--- 解法二：LeadingZeroCount ---");
+
+        // 測試案例 1：n=5 (101₂)，反碼 010₂ = 2
+        Console.WriteLine($"BitwiseComplement2(5)  = {solution.BitwiseComplement2(5)}");   // 預期：2
+
+        // 測試案例 2：n=7 (111₂)，反碼 000₂ = 0
+        Console.WriteLine($"BitwiseComplement2(7)  = {solution.BitwiseComplement2(7)}");   // 預期：0
+
+        // 測試案例 3：n=10 (1010₂)，反碼 0101₂ = 5
+        Console.WriteLine($"BitwiseComplement2(10) = {solution.BitwiseComplement2(10)}");  // 預期：5
+
+        // 邊界案例：n=0，二進位視為 "0"，反碼為 "1" = 1
+        Console.WriteLine($"BitwiseComplement2(0)  = {solution.BitwiseComplement2(0)}");   // 預期：1
     }
 
     /// <summary>
@@ -89,5 +104,43 @@ class Program
 
         // XOR 翻轉有效位元，高位原本為 0 與 0 做 XOR 仍為 0，不受影響
         return n ^ mask;
+    }
+
+    /// <summary>
+    /// 計算整數 n 的位元反碼（解法二：LeadingZeroCount）
+    ///
+    /// 核心想法：
+    /// 直接以 <see cref="System.Numerics.BitOperations.LeadingZeroCount"/> 取得
+    /// n 的二進位長度 w（即最高位 1 所在位置 + 1），再以
+    ///   mask = (1 << w) - 1
+    /// 建立低 w 個位元全為 1 的遮罩，最後計算 mask XOR n 即為補數。
+    ///
+    /// 特殊情況：
+    /// n=0 時 LeadingZeroCount 回傳 32，導致 w=0，mask=0，XOR 結果為 0，
+    /// 與題意不符（應回傳 1），故以 if 提前返回。
+    ///
+    /// 範例：n=25 (11001₂)，w=5，mask=31 (11111₂)，25 XOR 31 = 6 (00110₂) ✓
+    ///
+    /// 時間複雜度：O(1)　空間複雜度：O(1)
+    /// </summary>
+    /// <param name="n">輸入的非負整數（0 ≤ n &lt; 10^9）</param>
+    /// <returns>n 的位元反碼對應的十進制整數</returns>
+    public int BitwiseComplement2(int n)
+    {
+        // 特判 n=0：題意規定 0 的補數為 1
+        if (n == 0)
+        {
+            return 1;
+        }
+
+        // LeadingZeroCount 回傳從最高位起連續 0 的個數，
+        // 以 uint 轉型確保符號位不干擾計算
+        int w = 32 - (int)System.Numerics.BitOperations.LeadingZeroCount((uint)n);
+
+        // 遮罩：低 w 個位元全為 1，例如 w=5 → (1<<5)-1 = 31 = 11111₂
+        int mask = (1 << w) - 1;
+
+        // XOR 翻轉有效位元
+        return mask ^ n;
     }
 }

@@ -74,6 +74,74 @@ n XOR mask：
 | 時間   | O(log n) — 最多 30 次迭代 |
 | 空間   | O(1) — 不需額外的資料結構 |
 
+---
+
+## 解法二 — `LeadingZeroCount` 內建函式
+
+### 核心思路
+
+解法一以迴圈逐步找最高位；解法二改用 .NET 內建的
+`System.Numerics.BitOperations.LeadingZeroCount` 直接計算二進位長度 $w$，
+再以同樣的 XOR 遮罩翻轉，將時間複雜度從 $O(\log n)$ 降至 $O(1)$。
+
+### 演算法步驟
+
+1. **特判 `n = 0`**：題意規定 `0` 的補數為 `1`，直接返回。
+   （若不特判，`LeadingZeroCount(0)` 回傳 32，導致 $w = 0$、mask = 0、結果為 0，與題意不符。）
+
+2. **計算二進位長度 $w$**：
+
+$$w = 32 - \text{LeadingZeroCount}(n)$$
+
+> `LeadingZeroCount(n)` 計算從第 31 位（最高位）往低位數，連續為 0 的位元個數。
+> 以 32 減去它，即得 n 實際使用的位元數。
+
+3. **建構遮罩**，使低 $w$ 個位元全為 `1`：
+
+$$\text{mask} = (1 \ll w) - 1$$
+
+4. **XOR 得到補數**：
+
+$$\text{result} = \text{mask} \oplus n$$
+
+### 時間與空間複雜度
+
+| 複雜度 | 數值 |
+|:------:|:----:|
+| 時間   | O(1) — 單次 CPU 指令完成前導零計算 |
+| 空間   | O(1) — 不需額外的資料結構 |
+
+### 逐步執行範例：`n = 25`
+
+```
+n = 25  →  二進位（32 位元）：
+  0000 0000 0000 0000 0000 0000 0001 1001
+  └──────────── 27 個前導零 ────────────┘└ 5 個有效位元 ┘
+
+LeadingZeroCount(25) = 27
+w = 32 - 27 = 5
+
+mask = (1 << 5) - 1 = 32 - 1 = 31
+  二進位：0 … 0  1  1  1  1  1   (31)
+
+n XOR mask：
+    0 … 0  1  1  0  0  1   (25)
+  ⊕ 0 … 0  1  1  1  1  1   (31)
+  ───────────────────────
+    0 … 0  0  0  1  1  0   (6)  ✓
+```
+
+驗證：`11001₂` 取反後為 `00110₂ = 6` ✓
+
+### 解法比較
+
+| 項目 | 解法一（迴圈） | 解法二（LeadingZeroCount） |
+|:----:|:--------------:|:--------------------------:|
+| 時間複雜度 | O(log n) | O(1) |
+| 特殊處理溢位 | 需要（hardcode `0x7FFFFFFF`） | 不需要 |
+| 特判 n=0 | 不需要（highbit=0 自然產生 mask=1） | 需要 |
+| 依賴函式庫 | 無 | `System.Numerics.BitOperations` |
+
 ## 專案結構
 
 ```
@@ -97,6 +165,12 @@ BitwiseComplement(5)  = 2
 BitwiseComplement(7)  = 0
 BitwiseComplement(10) = 5
 BitwiseComplement(0)  = 1
+
+--- 解法二：LeadingZeroCount ---
+BitwiseComplement2(5)  = 2
+BitwiseComplement2(7)  = 0
+BitwiseComplement2(10) = 5
+BitwiseComplement2(0)  = 1
 ```
 
 ## 參考資料
