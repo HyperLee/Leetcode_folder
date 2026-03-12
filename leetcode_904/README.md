@@ -139,18 +139,32 @@ if (!cnt.ContainsKey(fruits[right]))
 cnt[fruits[right]]++;
 ```
 
-在 C# 中，以下兩種寫法與上述行為完全等效，可依個人風格選用：
+在 C# 中，以下三種寫法與上述行為完全等效，可依個人風格選用：
 
 ```csharp
 // 寫法一：TryGetValue 取出現有值，不存在則預設為 0
 cnt.TryGetValue(fruits[right], out int val);
 cnt[fruits[right]] = val + 1;
 
-// 寫法二：GetValueOrDefault 取值（更簡潔）
+// 寫法二：GetValueOrDefault 取值（更簡潔，一行完成）
 cnt[fruits[right]] = cnt.GetValueOrDefault(fruits[right]) + 1;
+
+// 寫法三：TryAdd 嘗試插入初始值，再遞增（意圖最明確）
+cnt.TryAdd(fruits[right], 0);
+++cnt[fruits[right]];
 ```
 
-三種寫法的行為完全一致，差異僅在可讀性與 C# 慣用風格。`GetValueOrDefault` 是現代 C# 推薦的簡潔做法。
+四種寫法的行為完全一致，差異在可讀性、查找次數與 C# 慣用風格：
+
+| 寫法 | 雜湊表查找次數 | 特點 |
+|------|:---:|------|
+| `ContainsKey` + `++` | 3 次 | 原始防禦性寫法，最易理解 |
+| `TryGetValue` + 賦值 | 2 次 | 明確取出舊值再寫入 |
+| `GetValueOrDefault` + 賦值 | 2 次 | 現代 C# 推薦，最簡潔 |
+| `TryAdd` + `++` | 2 次 | 「初始化」與「遞增」意圖分離，語意清晰 |
+
+> [!NOTE]
+> `TryAdd(key, value)` 若鍵已存在則**不覆蓋**直接回傳 `false`，此處忽略回傳值，行為等同「不存在時才初始化為 0」。`GetValueOrDefault` 則是現代 C# 最推薦的一行簡潔做法。
 
 ## 技術資訊
 
