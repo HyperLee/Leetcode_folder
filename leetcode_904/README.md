@@ -124,6 +124,34 @@ dotnet run --project leetcode_904/leetcode_904.csproj
 測試 6: [7] => 1
 ```
 
+## 補充說明
+
+### 雜湊表計數的簡潔寫法
+
+在解法中，加入新水果至雜湊表時採用了「先判斷是否存在、再遞增」的防禦性寫法：
+
+```csharp
+// 原始寫法：明確初始化再遞增
+if (!cnt.ContainsKey(fruits[right]))
+{
+    cnt[fruits[right]] = 0;
+}
+cnt[fruits[right]]++;
+```
+
+在 C# 中，以下兩種寫法與上述行為完全等效，可依個人風格選用：
+
+```csharp
+// 寫法一：TryGetValue 取出現有值，不存在則預設為 0
+cnt.TryGetValue(fruits[right], out int val);
+cnt[fruits[right]] = val + 1;
+
+// 寫法二：GetValueOrDefault 取值（更簡潔）
+cnt[fruits[right]] = cnt.GetValueOrDefault(fruits[right]) + 1;
+```
+
+三種寫法的行為完全一致，差異僅在可讀性與 C# 慣用風格。`GetValueOrDefault` 是現代 C# 推薦的簡潔做法。
+
 ## 技術資訊
 
 - **語言**：C# 14 / .NET 10
