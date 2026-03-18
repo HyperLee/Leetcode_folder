@@ -28,6 +28,34 @@ class Program
         // 測試範例 2: grid = [[7,6,3],[6,6,1]], k = 18 => 預期輸出: 4
         int[][] grid2 = [[7, 6, 3], [6, 6, 1]];
         Console.WriteLine($"Test 2: {solution.CountSubmatrices(grid2, 18)}"); // 4
+
+        // 測試範例 3: 單一元素矩陣，元素 ≤ k => 預期輸出: 1
+        int[][] grid3 = [[5]];
+        Console.WriteLine($"Test 3: {solution.CountSubmatrices(grid3, 5)}"); // 1
+
+        // 測試範例 4: 單一元素矩陣，元素 > k => 預期輸出: 0
+        int[][] grid4 = [[10]];
+        Console.WriteLine($"Test 4: {solution.CountSubmatrices(grid4, 3)}"); // 0
+
+        // 測試範例 5: 單一列矩陣 => 預期輸出: 3
+        int[][] grid5 = [[1, 2, 3]];
+        Console.WriteLine($"Test 5: {solution.CountSubmatrices(grid5, 6)}"); // 3
+
+        // 測試範例 6: 單一行矩陣 => 預期輸出: 2
+        int[][] grid6 = [[2], [3], [5]];
+        Console.WriteLine($"Test 6: {solution.CountSubmatrices(grid6, 5)}"); // 2
+
+        // 測試範例 7: 全部為 0 的矩陣，所有子矩陣和皆為 0 ≤ k => 預期輸出: 6
+        int[][] grid7 = [[0, 0, 0], [0, 0, 0]];
+        Console.WriteLine($"Test 7: {solution.CountSubmatrices(grid7, 0)}"); // 6
+
+        // 測試範例 8: 左上角元素已超過 k => 預期輸出: 0
+        int[][] grid8 = [[100, 1], [1, 1]];
+        Console.WriteLine($"Test 8: {solution.CountSubmatrices(grid8, 50)}"); // 0
+
+        // 測試範例 9: k 非常大，所有子矩陣都符合 => 預期輸出: 9
+        int[][] grid9 = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+        Console.WriteLine($"Test 9: {solution.CountSubmatrices(grid9, 1000000000)}"); // 9
     }
 
     /// <summary>
