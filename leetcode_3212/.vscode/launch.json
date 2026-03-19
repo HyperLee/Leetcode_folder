@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "leetcode_3212",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_3212/bin/Debug/net10.0/leetcode_3212",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_3212",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    }
+  ]
+}
