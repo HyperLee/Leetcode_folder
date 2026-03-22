@@ -259,4 +259,6 @@ Example 3: True
 ```
 
 ref:
-- [leetcode-48](https://leetcode.cn/problems/rotate-image/solutions/526980/xuan-zhuan-tu-xiang-by-leetcode-solution-vu3m/)
+- [48. 旋转图像](https://leetcode.cn/problems/rotate-image/description/)
+
+- [48. Rotate Image](https://leetcode.com/problems/rotate-image/description/)
