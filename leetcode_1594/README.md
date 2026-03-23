@@ -61,6 +61,13 @@ $$
 \text{minProduct}[i][j] = \min(\text{minProduct}[i-1][j],\ \text{minProduct}[i][j-1]) \times \text{grid}[i][j]
 $$
 
+> **範例（正數）：** 假設位置 `(i,j)` 的 `grid[i][j] = 3`，上方路徑 `maxProduct = 4`、左方路徑 `maxProduct = 2`，上方路徑 `minProduct = -6`、左方路徑 `minProduct = -1`：
+>
+> - $\text{maxProduct}[i][j] = \max(4,\ 2) \times 3 = 4 \times 3 = \mathbf{12}$
+> - $\text{minProduct}[i][j] = \min(-6,\ -1) \times 3 = -6 \times 3 = \mathbf{-18}$
+>
+> 乘以正數時，大的還是大、小的還是小，大小關係**不翻轉**。
+
 **當 `grid[i][j] < 0`（負數）時**，乘以負數會翻轉大小關係：
 
 $$
@@ -70,6 +77,14 @@ $$
 $$
 \text{minProduct}[i][j] = \max(\text{maxProduct}[i-1][j],\ \text{maxProduct}[i][j-1]) \times \text{grid}[i][j]
 $$
+
+> **範例（負數）：** 同樣條件，但 `grid[i][j] = -2`：
+>
+> - 若直覺套用「用 max 乘」：$\max(4,\ 2) \times (-2) = 4 \times (-2) = -8$（**錯誤！不是最大值**）
+> - 正確做法，取 **min 乘以負數**：$\min(-6,\ -1) \times (-2) = -6 \times (-2) = \mathbf{12}$（最大）
+> - 取 **max 乘以負數**：$\max(4,\ 2) \times (-2) = 4 \times (-2) = \mathbf{-8}$（最小）
+>
+> 乘以負數時，原本最小的負數反而翻轉成最大正數，因此必須**交換 max/min 的來源**。
 
 ### 邊界條件
 
