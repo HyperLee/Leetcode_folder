@@ -101,13 +101,13 @@ class Program
         // 初始化起點
         maxProduct[0, 0] = minProduct[0, 0] = grid[0][0];
 
-        // 初始化第一列（只能從左方到達）
+        // 初始化第一行（只能從左方到達）
         for(int col = 1; col < n; col++)
         {
             maxProduct[0, col] = minProduct[0, col] = maxProduct[0, col - 1] * grid[0][col];
         }
 
-        // 初始化第一行（只能從上方到達）
+        // 初始化第一列（只能從上方到達）
         for(int row = 1; row < m; row++)
         {
             maxProduct[row, 0] = minProduct[row, 0] = maxProduct[row - 1, 0] * grid[row][0];
