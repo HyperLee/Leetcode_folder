@@ -42,8 +42,8 @@ LeetCode 每日一題（2026-03-23）的 C# 解法，使用動態規劃求解矩
 
 | 陣列 | 意義 |
 |---|---|
-| `maxgt[i][j]` | 從 `(0,0)` 到 `(i,j)` 所有路徑中，乘積的**最大值** |
-| `minlt[i][j]` | 從 `(0,0)` 到 `(i,j)` 所有路徑中，乘積的**最小值** |
+| `maxProduct[i][j]` | 從 `(0,0)` 到 `(i,j)` 所有路徑中，乘積的**最大值** |
+| `minProduct[i][j]` | 從 `(0,0)` 到 `(i,j)` 所有路徑中，乘積的**最小值** |
 
 ## 解法詳細說明
 
@@ -54,28 +54,28 @@ LeetCode 每日一題（2026-03-23）的 C# 解法，使用動態規劃求解矩
 **當 `grid[i][j] >= 0`（正數或零）時：**
 
 $$
-\text{maxgt}[i][j] = \max(\text{maxgt}[i-1][j],\ \text{maxgt}[i][j-1]) \times \text{grid}[i][j]
+\text{maxProduct}[i][j] = \max(\text{maxProduct}[i-1][j],\ \text{maxProduct}[i][j-1]) \times \text{grid}[i][j]
 $$
 
 $$
-\text{minlt}[i][j] = \min(\text{minlt}[i-1][j],\ \text{minlt}[i][j-1]) \times \text{grid}[i][j]
+\text{minProduct}[i][j] = \min(\text{minProduct}[i-1][j],\ \text{minProduct}[i][j-1]) \times \text{grid}[i][j]
 $$
 
 **當 `grid[i][j] < 0`（負數）時**，乘以負數會翻轉大小關係：
 
 $$
-\text{maxgt}[i][j] = \min(\text{minlt}[i-1][j],\ \text{minlt}[i][j-1]) \times \text{grid}[i][j]
+\text{maxProduct}[i][j] = \min(\text{minProduct}[i-1][j],\ \text{minProduct}[i][j-1]) \times \text{grid}[i][j]
 $$
 
 $$
-\text{minlt}[i][j] = \max(\text{maxgt}[i-1][j],\ \text{maxgt}[i][j-1]) \times \text{grid}[i][j]
+\text{minProduct}[i][j] = \max(\text{maxProduct}[i-1][j],\ \text{maxProduct}[i][j-1]) \times \text{grid}[i][j]
 $$
 
 ### 邊界條件
 
 | 情況 | 處理方式 |
 |---|---|
-| `i = 0, j = 0` | `maxgt[0][0] = minlt[0][0] = grid[0][0]` |
+| `i = 0, j = 0` | `maxProduct[0][0] = minProduct[0][0] = grid[0][0]` |
 | `i = 0`（第一列） | 只能從左方 `(0, j-1)` 轉移 |
 | `j = 0`（第一行） | 只能從上方 `(i-1, 0)` 轉移 |
 
@@ -84,8 +84,8 @@ $$
 $$
 \text{answer} =
 \begin{cases}
--1 & \text{if } \text{maxgt}[m-1][n-1] < 0 \\
-\text{maxgt}[m-1][n-1] \mod (10^9 + 7) & \text{otherwise}
+-1 & \text{if } \text{maxProduct}[m-1][n-1] < 0 \\
+\text{maxProduct}[m-1][n-1] \mod (10^9 + 7) & \text{otherwise}
 \end{cases}
 $$
 
@@ -101,21 +101,21 @@ $$
 ### Step 1：初始化起點
 
 ```
-maxgt[0][0] = 1,  minlt[0][0] = 1
+maxProduct[0][0] = 1,  minProduct[0][0] = 1
 ```
 
 ### Step 2：初始化第一列（只能向右）
 
 ```
-maxgt[0][1] = 1 × (-2) = -2,  minlt[0][1] = -2
-maxgt[0][2] = -2 × 1 = -2,    minlt[0][2] = -2
+maxProduct[0][1] = 1 × (-2) = -2,  minProduct[0][1] = -2
+maxProduct[0][2] = -2 × 1 = -2,    minProduct[0][2] = -2
 ```
 
 ### Step 3：初始化第一行（只能向下）
 
 ```
-maxgt[1][0] = 1 × 1 = 1,   minlt[1][0] = 1
-maxgt[2][0] = 1 × 3 = 3,   minlt[2][0] = 3
+maxProduct[1][0] = 1 × 1 = 1,   minProduct[1][0] = 1
+maxProduct[2][0] = 1 × 3 = 3,   minProduct[2][0] = 3
 ```
 
 ### Step 4：填充 DP 表格
@@ -123,40 +123,40 @@ maxgt[2][0] = 1 × 3 = 3,   minlt[2][0] = 3
 **位置 (1,1)，`grid[1][1] = -2`（負數，翻轉）：**
 
 ```
-maxgt[1][1] = min(minlt[0][1], minlt[1][0]) × (-2) = min(-2, 1) × (-2) = (-2) × (-2) = 4
-minlt[1][1] = max(maxgt[0][1], maxgt[1][0]) × (-2) = max(-2, 1) × (-2) = 1 × (-2) = -2
+maxProduct[1][1] = min(minProduct[0][1], minProduct[1][0]) × (-2) = min(-2, 1) × (-2) = (-2) × (-2) = 4
+minProduct[1][1] = max(maxProduct[0][1], maxProduct[1][0]) × (-2) = max(-2, 1) × (-2) = 1 × (-2) = -2
 ```
 
 **位置 (1,2)，`grid[1][2] = 1`（正數）：**
 
 ```
-maxgt[1][2] = max(maxgt[0][2], maxgt[1][1]) × 1 = max(-2, 4) × 1 = 4
-minlt[1][2] = min(minlt[0][2], minlt[1][1]) × 1 = min(-2, -2) × 1 = -2
+maxProduct[1][2] = max(maxProduct[0][2], maxProduct[1][1]) × 1 = max(-2, 4) × 1 = 4
+minProduct[1][2] = min(minProduct[0][2], minProduct[1][1]) × 1 = min(-2, -2) × 1 = -2
 ```
 
 **位置 (2,1)，`grid[2][1] = -4`（負數，翻轉）：**
 
 ```
-maxgt[2][1] = min(minlt[1][1], minlt[2][0]) × (-4) = min(-2, 3) × (-4) = (-2) × (-4) = 8
-minlt[2][1] = max(maxgt[1][1], maxgt[2][0]) × (-4) = max(4, 3) × (-4) = 4 × (-4) = -16
+maxProduct[2][1] = min(minProduct[1][1], minProduct[2][0]) × (-4) = min(-2, 3) × (-4) = (-2) × (-4) = 8
+minProduct[2][1] = max(maxProduct[1][1], maxProduct[2][0]) × (-4) = max(4, 3) × (-4) = 4 × (-4) = -16
 ```
 
 **位置 (2,2)，`grid[2][2] = 1`（正數）：**
 
 ```
-maxgt[2][2] = max(maxgt[1][2], maxgt[2][1]) × 1 = max(4, 8) × 1 = 8
-minlt[2][2] = min(minlt[1][2], minlt[2][1]) × 1 = min(-2, -16) × 1 = -16
+maxProduct[2][2] = max(maxProduct[1][2], maxProduct[2][1]) × 1 = max(4, 8) × 1 = 8
+minProduct[2][2] = min(minProduct[1][2], minProduct[2][1]) × 1 = min(-2, -16) × 1 = -16
 ```
 
 ### Step 5：取得結果
 
 ```
-maxgt[2][2] = 8 >= 0，回傳 8 % (10^9 + 7) = 8
+maxProduct[2][2] = 8 >= 0，回傳 8 % (10^9 + 7) = 8
 ```
 
 ### 最終 DP 表格
 
-**maxgt：**
+**maxProduct：**
 
 | | j=0 | j=1 | j=2 |
 |---|---|---|---|
@@ -164,7 +164,7 @@ maxgt[2][2] = 8 >= 0，回傳 8 % (10^9 + 7) = 8
 | **i=1** | 1 | 4 | 4 |
 | **i=2** | 3 | 8 | **8** |
 
-**minlt：**
+**minProduct：**
 
 | | j=0 | j=1 | j=2 |
 |---|---|---|---|
@@ -173,7 +173,7 @@ maxgt[2][2] = 8 >= 0，回傳 8 % (10^9 + 7) = 8
 | **i=2** | 3 | -16 | **-16** |
 
 > [!TIP]
-> 關鍵觀察：位置 `(2,1)` 的 `maxgt = 8` 正是利用了 `(1,1)` 的最小值 `-2` 乘以負數 `-4` 翻轉而來，這就是為什麼需要同時追蹤最大值與最小值。
+> 關鍵觀察：位置 `(2,1)` 的 `maxProduct = 8` 正是利用了 `(1,1)` 的最小值 `-2` 乘以負數 `-4` 翻轉而來，這就是為什麼需要同時追蹤最大值與最小值。
 
 ## 執行
 

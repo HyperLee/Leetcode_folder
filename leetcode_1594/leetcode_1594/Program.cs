@@ -67,15 +67,15 @@ class Program
     /// 解題思路：
     /// 由於矩陣中的元素有正有負，僅追蹤最大乘積不足以得到正確答案。
     /// 例如，當前最大乘積為正數，乘上負數後反而不如一個負數乘上同樣的負數。
-    /// 因此需要同時追蹤乘積的最大值 (maxgt) 與最小值 (minlt)。
+    /// 因此需要同時追蹤乘積的最大值 (maxProduct) 與最小值 (minProduct)。
     /// 
     /// 狀態轉移：
     /// - 若 grid[i][j] >= 0：
-    ///   maxgt[i,j] = max(maxgt[i-1,j], maxgt[i,j-1]) * grid[i][j]
-    ///   minlt[i,j] = min(minlt[i-1,j], minlt[i,j-1]) * grid[i][j]
-    /// - 若 grid[i][j] &lt; 0（負數會翻轉大小關係）：
-    ///   maxgt[i,j] = min(minlt[i-1,j], minlt[i,j-1]) * grid[i][j]
-    ///   minlt[i,j] = max(maxgt[i-1,j], maxgt[i,j-1]) * grid[i][j]
+    ///   maxProduct[i,j] = max(maxProduct[i-1,j], maxProduct[i,j-1]) * grid[i][j]
+    ///   minProduct[i,j] = min(minProduct[i-1,j], minProduct[i,j-1]) * grid[i][j]
+    /// - 若 grid[i][j] < 0（負數會翻轉大小關係）：
+    ///   maxProduct[i,j] = min(minProduct[i-1,j], minProduct[i,j-1]) * grid[i][j]
+    ///   minProduct[i,j] = max(maxProduct[i-1,j], maxProduct[i,j-1]) * grid[i][j]
     /// 
     /// 時間複雜度：O(m * n)，空間複雜度：O(m * n)
     /// </summary>
@@ -84,7 +84,7 @@ class Program
     /// <example>
     /// <code>
     /// var result = MaxProductPath(new int[][] { [-1, -2, -3], [-2, -3, -3], [-3, -3, -2] });
-    /// // result = 8
+    /// result = 8
     /// </code>
     /// </example>
     public int MaxProductPath(int[][] grid)
@@ -93,24 +93,24 @@ class Program
         int m = grid.Length;
         int n = grid[0].Length;
 
-        // maxgt[i,j]: 從 (0,0) 到 (i,j) 路徑乘積的最大值
-        // minlt[i,j]: 從 (0,0) 到 (i,j) 路徑乘積的最小值
-        long[,] maxgt = new long[m, n];
-        long[,] minlt = new long[m, n];
+        // maxProduct[i,j]: 從 (0,0) 到 (i,j) 路徑乘積的最大值
+        // minProduct[i,j]: 從 (0,0) 到 (i,j) 路徑乘積的最小值
+        long[,] maxProduct = new long[m, n];
+        long[,] minProduct = new long[m, n];
 
         // 初始化起點
-        maxgt[0, 0] = minlt[0, 0] = grid[0][0];
+        maxProduct[0, 0] = minProduct[0, 0] = grid[0][0];
 
         // 初始化第一列（只能從左方到達）
-        for(int i = 1; i < n; i++)
+        for(int col = 1; col < n; col++)
         {
-            maxgt[0, i] = minlt[0, i] = maxgt[0, i - 1] * grid[0][i];
+            maxProduct[0, col] = minProduct[0, col] = maxProduct[0, col - 1] * grid[0][col];
         }
 
         // 初始化第一行（只能從上方到達）
-        for(int i = 1; i < m; i++)
+        for(int row = 1; row < m; row++)
         {
-            maxgt[i, 0] = minlt[i, 0] = maxgt[i - 1, 0] * grid[i][0];
+            maxProduct[row, 0] = minProduct[row, 0] = maxProduct[row - 1, 0] * grid[row][0];
         }
 
         // 填充 DP 表格
@@ -121,19 +121,19 @@ class Program
                 if(grid[i][j] >= 0)
                 {
                     // 正數或零：最大值來自前一步的最大值，最小值來自前一步的最小值
-                    maxgt[i, j] = Math.Max(maxgt[i - 1, j], maxgt[i, j - 1]) * grid[i][j];
-                    minlt[i, j] = Math.Min(minlt[i - 1, j], minlt[i, j - 1]) * grid[i][j];
+                    maxProduct[i, j] = Math.Max(maxProduct[i - 1, j], maxProduct[i, j - 1]) * grid[i][j];
+                    minProduct[i, j] = Math.Min(minProduct[i - 1, j], minProduct[i, j - 1]) * grid[i][j];
                 }
                 else
                 {
                     // 負數：乘以負數會翻轉大小，最大值來自前一步的最小值，反之亦然
-                    maxgt[i, j] = Math.Min(minlt[i - 1, j], minlt[i, j - 1]) * grid[i][j];
-                    minlt[i, j] = Math.Max(maxgt[i - 1, j], maxgt[i, j - 1]) * grid[i][j];
+                    maxProduct[i, j] = Math.Min(minProduct[i - 1, j], minProduct[i, j - 1]) * grid[i][j];
+                    minProduct[i, j] = Math.Max(maxProduct[i - 1, j], maxProduct[i, j - 1]) * grid[i][j];
                 }
             }
         }
 
         // 若最大乘積為負數回傳 -1，否則回傳取模結果
-        return maxgt[m - 1, n - 1] < 0 ? -1 : (int)(maxgt[m - 1, n - 1] % mod);
+        return maxProduct[m - 1, n - 1] < 0 ? -1 : (int)(maxProduct[m - 1, n - 1] % mod);
     }
 }
