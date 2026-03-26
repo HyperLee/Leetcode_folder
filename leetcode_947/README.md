@@ -544,3 +544,11 @@ public class UnionFind
     public bool Connected(int x, int y) => Find(x) == Find(y);
 }
 ```
+
+---
+
+### reference
+
+- [leetcode](https://leetcode.cn/problems/most-stones-removed-with-same-row-or-column/solutions/560400/947-yi-chu-zui-duo-de-tong-xing-huo-tong-ezha/)
+- [力扣官方题解](https://leetcode.cn/problems/most-stones-removed-with-same-row-or-column/solutions/560363/yi-chu-zui-duo-de-tong-xing-huo-tong-lie-m50r/)
+- [灵茶山艾府](https://leetcode.cn/problems/most-stones-removed-with-same-row-or-column/solutions/3931977/zhong-jie-bing-cha-ji-pythonjavacgo-by-e-ulrj/)
