@@ -43,7 +43,7 @@ $$
 \text{最多可移除石頭數} = \text{石頭總數} - \text{連通分量個數}
 $$
 
-## 解法：並查集 (Union-Find)
+## 解法一：並查集 — 懶初始化 (Dictionary)
 
 ### 為什麼用並查集？
 
@@ -114,6 +114,116 @@ public int RemoveStones(int[][] stones)
 |---|--------|
 | **時間** | $O(n \cdot \alpha(n))$，其中 $\alpha$ 為反阿克曼函式，近似 $O(n)$ |
 | **空間** | $O(n)$，並查集所使用的 Dictionary 儲存空間 |
+
+## 解法二：並查集 — 預先初始化 + 按秩合併 (Array)
+
+### 與解法一的差異
+
+| | 解法一 | 解法二 |
+|---|--------|--------|
+| **並查集節點** | 行座標與列座標 | 石頭索引 (0 ~ n-1) |
+| **儲存結構** | `Dictionary<int, int>`（懶初始化） | `int[]`（預先初始化） |
+| **合併策略** | 僅路徑壓縮 | 路徑壓縮 + 按秩合併 |
+| **合併語義** | 將行與列合併 | 將同行 / 同列的石頭合併 |
+
+### 設計思路
+
+解法一將「行」與「列」作為並查集的節點，巧妙但較抽象。解法二採取更直觀的作法：
+
+1. **以石頭索引為節點**：建立大小為 `n` 的並查集，每顆石頭對應一個節點。
+2. **分組合併**：使用 `Dictionary<int, List<int>>` 將石頭按行座標和列座標分組，同一組內的石頭全部合併。
+3. **雙重優化**：同時使用路徑壓縮與按秩合併，均攤時間複雜度為 $O(\alpha(n))$。
+
+### 分組合併的過程
+
+將石頭按行和列分組後，只需將**每組的第一顆石頭與其餘石頭逐一合併**，即可確保同行或同列的所有石頭位於同一連通分量中。
+
+以 `stones = [[0,0],[0,1],[1,0],[1,2],[2,1],[2,2]]` 為例：
+
+**按行分組：**
+
+| 行 | 石頭索引 |
+|-----|------------|
+| 0 | 0, 1 |
+| 1 | 2, 3 |
+| 2 | 4, 5 |
+
+**按列分組：**
+
+| 列 | 石頭索引 |
+|-----|------------|
+| 0 | 0, 2 |
+| 1 | 1, 4 |
+| 2 | 3, 5 |
+
+**合併過程：**
+
+| 步驟 | 操作 | 來源 | 說明 |
+|:----:|:----:|:----:|------|
+| 1 | `Union(0, 1)` | 行 0 | 石頭 0 與石頭 1 同行，合併 → 連通分量數：5 |
+| 2 | `Union(2, 3)` | 行 1 | 石頭 2 與石頭 3 同行，合併 → 連通分量數：4 |
+| 3 | `Union(4, 5)` | 行 2 | 石頭 4 與石頭 5 同行，合併 → 連通分量數：3 |
+| 4 | `Union(0, 2)` | 列 0 | 石頭 0 與石頭 2 同列，合併 → 連通分量數：2 |
+| 5 | `Union(1, 4)` | 列 1 | 石頭 1 與石頭 4 同列，合併 → 連通分量數：1 |
+| 6 | `Union(3, 5)` | 列 2 | 石頭 3 與石頭 5 已在同一分量 → 連通分量數：1 |
+
+**結果**：`6 - 1 = 5` ✅
+
+### 程式碼
+
+```csharp
+public int RemoveStones2(int[][] stones)
+{
+    int n = stones.Length;
+    UnionFind unionFind = new UnionFind(n);
+
+    // 使用 Dictionary 將同行或同列的石頭索引分組
+    Dictionary<int, List<int>> rowGroups = new();
+    Dictionary<int, List<int>> colGroups = new();
+
+    for (int i = 0; i < n; i++)
+    {
+        int row = stones[i][0];
+        int col = stones[i][1];
+
+        if (!rowGroups.ContainsKey(row))
+            rowGroups[row] = new List<int>();
+        rowGroups[row].Add(i);
+
+        if (!colGroups.ContainsKey(col))
+            colGroups[col] = new List<int>();
+        colGroups[col].Add(i);
+    }
+
+    // 將同行的石頭合併至同一連通分量
+    foreach (List<int> group in rowGroups.Values)
+    {
+        for (int i = 1; i < group.Count; i++)
+        {
+            unionFind.Union(group[0], group[i]);
+        }
+    }
+
+    // 將同列的石頭合併至同一連通分量
+    foreach (List<int> group in colGroups.Values)
+    {
+        for (int i = 1; i < group.Count; i++)
+        {
+            unionFind.Union(group[0], group[i]);
+        }
+    }
+
+    // 石頭總數 − 連通分量個數 = 最多可移除石頭數
+    return n - unionFind.Count;
+}
+```
+
+### 複雜度分析
+
+| | 複雜度 |
+|---|--------|
+| **時間** | $O(n \cdot \alpha(n))$，其中 $\alpha$ 為反阿克曼函式，近似 $O(n)$ |
+| **空間** | $O(n)$，並查集陣列與分組 Dictionary 儲存空間 |
 
 ---
 
