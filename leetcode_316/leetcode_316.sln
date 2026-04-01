@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "leetcode_316", "leetcode_316\leetcode_316.csproj", "{26D9D835-3753-40B3-98E3-650C44D30C6F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "leetcode_316.Tests", "leetcode_316.Tests\leetcode_316.Tests.csproj", "{FB74C3ED-7EA8-4465-8E75-FA11C1FD3645}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{26D9D835-3753-40B3-98E3-650C44D30C6F}.Release|x64.Build.0 = Release|Any CPU
 		{26D9D835-3753-40B3-98E3-650C44D30C6F}.Release|x86.ActiveCfg = Release|Any CPU
 		{26D9D835-3753-40B3-98E3-650C44D30C6F}.Release|x86.Build.0 = Release|Any CPU
+		{FB74C3ED-7EA8-4465-8E75-FA11C1FD3645}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB74C3ED-7EA8-4465-8E75-FA11C1FD3645}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB74C3ED-7EA8-4465-8E75-FA11C1FD3645}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FB74C3ED-7EA8-4465-8E75-FA11C1FD3645}.Debug|x64.Build.0 = Debug|Any CPU
+		{FB74C3ED-7EA8-4465-8E75-FA11C1FD3645}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FB74C3ED-7EA8-4465-8E75-FA11C1FD3645}.Debug|x86.Build.0 = Debug|Any CPU
+		{FB74C3ED-7EA8-4465-8E75-FA11C1FD3645}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB74C3ED-7EA8-4465-8E75-FA11C1FD3645}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB74C3ED-7EA8-4465-8E75-FA11C1FD3645}.Release|x64.ActiveCfg = Release|Any CPU
+		{FB74C3ED-7EA8-4465-8E75-FA11C1FD3645}.Release|x64.Build.0 = Release|Any CPU
+		{FB74C3ED-7EA8-4465-8E75-FA11C1FD3645}.Release|x86.ActiveCfg = Release|Any CPU
+		{FB74C3ED-7EA8-4465-8E75-FA11C1FD3645}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

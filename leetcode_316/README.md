@@ -13,6 +13,7 @@
 - `RemoveDuplicateLetters`：以 `StringBuilder` 模擬堆疊。
 - `RemoveDuplicateLetters2`：以 `Stack<char>` 顯式維護堆疊。
 - `Main`：內建多組測資，可直接執行比對兩個版本的輸出。
+- `leetcode_316.Tests`：以 xUnit 驗證主要輸入案例與例外行為。
 
 ## 題目說明
 
@@ -158,6 +159,18 @@ dotnet run --project leetcode_316/leetcode_316.csproj
 
 執行後，`Main` 會輸出多組內建測資，並同時比對兩個方法的結果與預期答案。
 
+### 執行 xUnit 測試
+
+```bash
+dotnet test leetcode_316.sln
+```
+
+如果只想執行測試專案，也可以使用：
+
+```bash
+dotnet test leetcode_316.Tests/leetcode_316.Tests.csproj
+```
+
 ### 目前內建測資
 
 | 輸入 | 預期輸出 |
@@ -172,11 +185,17 @@ dotnet run --project leetcode_316/leetcode_316.csproj
 
 ```text
 leetcode_316/
+├─ AGENTS.md
 ├─ README.md
 ├─ leetcode_316.sln
-└─ leetcode_316/
-   ├─ leetcode_316.csproj
-   └─ Program.cs
+├─ leetcode_316/
+│  ├─ leetcode_316.csproj
+│  ├─ Program.cs
+│  └─ Properties/
+│     └─ AssemblyInfo.cs
+└─ leetcode_316.Tests/
+   ├─ leetcode_316.Tests.csproj
+   └─ RemoveDuplicateLettersTests.cs
 ```
 
 如果你想直接看實作，重點就在 [leetcode_316/Program.cs](leetcode_316/Program.cs)。
