@@ -97,10 +97,10 @@ class Program
 
             // 若尾端字元較大且之後還會出現，先移除它以換取更小的字典序。
             while (resultStack.Length > 0
-                && resultStack[^1] > current
-                && remainingCount[resultStack[^1] - 'a'] > 0)
+                && resultStack[resultStack.Length - 1] > current
+                && remainingCount[resultStack[resultStack.Length - 1] - 'a'] > 0)
             {
-                char lastChar = resultStack[^1];
+                char lastChar = resultStack[resultStack.Length - 1];
                 inResult.Remove(lastChar);
                 resultStack.Remove(resultStack.Length - 1, 1);
             }
