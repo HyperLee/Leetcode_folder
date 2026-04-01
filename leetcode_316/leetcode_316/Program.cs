@@ -4,6 +4,16 @@ namespace leetcode_316;
 
 class Program
 {
+    /// <summary>
+    /// 316. Remove Duplicate Letters
+    /// https://leetcode.com/problems/remove-duplicate-letters/description/
+    /// 316. 去除重复字母
+    /// https://leetcode.cn/problems/remove-duplicate-letters/description/
+    /// 
+    /// Given a string s, remove duplicate letters so that every letter appears once and only once. 
+    /// You must make sure your result is the smallest in lexicographical order among all possible results.
+    /// </summary>
+    /// <param name="args"></param>
     static void Main(string[] args)
     {
         Program solver = new Program();
