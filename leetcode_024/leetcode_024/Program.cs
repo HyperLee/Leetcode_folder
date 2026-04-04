@@ -50,6 +50,33 @@ class Program
         ListNode? head4 = BuildList([1, 2, 3]);
         Console.WriteLine("Test 4 Input:  " + PrintList(head4));
         Console.WriteLine("Test 4 Output: " + PrintList(solution.SwapPairs(head4)));
+
+        Console.WriteLine();
+        Console.WriteLine("=== 解法二（SwapPairs2）===");
+        Console.WriteLine();
+
+        // 測試案例 5：偶數節點 [1,2,3,4] → [2,1,4,3]
+        ListNode? head5 = BuildList([1, 2, 3, 4]);
+        Console.WriteLine("Test 5 Input:  " + PrintList(head5));
+        Console.WriteLine("Test 5 Output: " + PrintList(solution.SwapPairs2(head5)));
+        Console.WriteLine();
+
+        // 測試案例 6：空鏈表 [] → []
+        ListNode? head6 = BuildList([]);
+        Console.WriteLine("Test 6 Input:  " + PrintList(head6));
+        Console.WriteLine("Test 6 Output: " + PrintList(solution.SwapPairs2(head6)));
+        Console.WriteLine();
+
+        // 測試案例 7：只有一個節點 [1] → [1]
+        ListNode? head7 = BuildList([1]);
+        Console.WriteLine("Test 7 Input:  " + PrintList(head7));
+        Console.WriteLine("Test 7 Output: " + PrintList(solution.SwapPairs2(head7)));
+        Console.WriteLine();
+
+        // 測試案例 8：奇數節點 [1,2,3] → [2,1,3]，最後一個節點無法配對故維持原位
+        ListNode? head8 = BuildList([1, 2, 3]);
+        Console.WriteLine("Test 8 Input:  " + PrintList(head8));
+        Console.WriteLine("Test 8 Output: " + PrintList(solution.SwapPairs2(head8)));
     }
 
     /// <summary>
@@ -157,5 +184,61 @@ class Program
 
         // 步驟 4：回傳新的頭節點（原第二個節點）
         return newHead;
+    }
+
+    /// <summary>
+    /// 遞迴法（解法二）：兩兩交換鏈表中相鄰的節點。
+    ///
+    /// 與解法一思路相同，同樣利用遞迴子結構完成成對交換。
+    /// 差異在於：本解法明確命名 node1、node2、node3 三個指標，
+    /// 先保存後續子鏈表起點 node3，再依序完成遞迴與串接，邏輯更直觀。
+    ///
+    /// ─── 解題思路 ───────────────────────────────────────────────────
+    /// 終止條件（Base Case）：
+    ///   - head 為 null           → 鏈表為空，無節點可交換，直接回傳。
+    ///   - head.next 為 null      → 只剩一個節點（奇數尾端），無法配對，直接回傳。
+    ///
+    /// 單層遞迴步驟（以 [1 → 2 → 3 → 4] 為例）：
+    ///   1. node1 = head（節點 1），node2 = head.next（節點 2），
+    ///      node3 = node2.next（節點 3，後續子鏈表起點）。
+    ///   2. 遞迴處理以 node3 為頭的子鏈表，取得後半段已交換完的結果。
+    ///   3. 把 node1.next 指向遞迴回傳的鏈表頭，完成後半段的串接。
+    ///   4. 把 node2.next 指向 node1，完成本對節點的位置互換。
+    ///   5. 回傳 node2，作為本層交換後的新頭節點。
+    ///
+    /// 節點指標關係：
+    ///   交換前：node1(1) → node2(2) → node3(3) → ...
+    ///   交換後：node2(2) → node1(1) → SwapPairs2(node3)
+    ///
+    /// 時間複雜度：O(n)，每個節點恰好被走訪一次。
+    /// 空間複雜度：O(n)，遞迴呼叫堆疊深度為 n/2。
+    /// ────────────────────────────────────────────────────────────────
+    /// </summary>
+    /// <param name="head">鏈表的頭節點</param>
+    /// <returns>兩兩交換後的鏈表頭節點</returns>
+    public ListNode? SwapPairs2(ListNode? head)
+    {
+        // 終止條件：空鏈表或只剩一個節點時，無法進行交換，直接回傳
+        if (head is null || head.next is null)
+        {
+            return head;
+        }
+
+        // 步驟 1：明確記錄三個關鍵節點
+        //   node1 = 目前這對的第一個節點（原頭）
+        //   node2 = 目前這對的第二個節點（將成為新頭）
+        //   node3 = 下一對的起始節點（後續子鏈表的頭）
+        ListNode node1 = head;
+        ListNode node2 = head.next;
+        ListNode? node3 = node2.next;
+
+        // 步驟 2：遞迴處理以 node3 為頭的子鏈表，將結果接到 node1 的 next
+        node1.next = SwapPairs2(node3);
+
+        // 步驟 3：將 node2 的 next 指向 node1，完成這對節點的位置互換
+        node2.next = node1;
+
+        // 步驟 4：回傳 node2 作為本層交換後的新頭節點
+        return node2;
     }
 }
