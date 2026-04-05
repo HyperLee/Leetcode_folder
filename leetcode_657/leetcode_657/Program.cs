@@ -72,35 +72,33 @@ class Program
     /// </returns>
     public bool JudgeCircle(string moves)
     {
+        // 防禦性檢查：moves 不可為 null
+        ArgumentNullException.ThrowIfNull(moves);
+
+        // 奇數長度的指令串必定無法回到原點（兩軸無法同時抵銷）
+        if (moves.Length % 2 != 0)
+            return false;
+
         // 使用 x、y 模擬機器人的二維座標，起始位置為原點 (0, 0)
         int x = 0;
         int y = 0;
-        int length = moves.Length;
 
-        for (int i = 0; i < length; i++)
+        foreach (char move in moves)
         {
-            char move = moves[i];
-
-            // 依據指令更新座標：
-            //   U（Up）   → y 減 1（向上）
-            //   D（Down） → y 加 1（向下）
+            // 依據指令更新座標（標準笛卡兒座標系）：
+            //   U（Up）   → y 加 1（向上）
+            //   D（Down） → y 減 1（向下）
             //   L（Left） → x 減 1（向左）
             //   R（Right）→ x 加 1（向右）
-            switch (move)
+            //   其餘字元  → 忽略（明確表達「不處理」語意）
+            (x, y) = move switch
             {
-                case 'U':
-                    y--;
-                    break;
-                case 'D':
-                    y++;
-                    break;
-                case 'L':
-                    x--;
-                    break;
-                case 'R':
-                    x++;
-                    break;
-            }
+                'U' => (x,     y + 1),
+                'D' => (x,     y - 1),
+                'L' => (x - 1, y    ),
+                'R' => (x + 1, y    ),
+                _   => (x,     y    )
+            };
         }
 
         // 所有指令執行完畢後，若 x 與 y 皆為 0，代表機器人回到原點
