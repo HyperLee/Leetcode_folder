@@ -134,7 +134,7 @@ $$\text{distance}(0, 2, 4) = |0-2| + |2-4| + |4-0| = 2 + 2 + 4 = 8 = 2 \times (4
 1. 為每個數值維護一個長度為 3 的索引快取（`cache[v, 0..2]`）及已記錄的次數（`count[v]`）。
 2. 遇到數值 `v`：
    - 若 `count[v] < 3`：直接將當前索引 `i` 存入 `cache[v, count[v]]`，並將 `count[v]++`。
-   - 若 `count[v] == 3`（快取已滿）：左移視窗——`cache[v,0] ← cache[v,1]`、`cache[v,1] ← cache[v,2]`、`cache[v,2] ← i`，丟棄最舊的位置，保留最新三個。
+   - 若 `count[v] == 3`（快取已滿）：**視窗右移**——丟棄 slot 0 最舊索引，slot 內資料依序往前遞補（`cache[v,0] ← cache[v,1]`、`cache[v,1] ← cache[v,2]`），再將當前索引 `i` 寫入 slot 2，令視窗始終保留最近三個位置。
 3. 每當 `count[v] == 3`，立即以 $2 \times (\text{cache}[v,2] - \text{cache}[v,0])$ 更新全域最小值。
 4. 掃描完成後，若從未更新過最小值，回傳 `-1`；否則回傳最小值。
 
@@ -174,7 +174,8 @@ public int MinimumDistance2(int[] nums)
         }
         else
         {
-            // 左移視窗：丟棄最舊位置，加入當前索引
+            // 視窗右移：slot 資料依序往前遞補，slot 2 存入最新索引
+            // 丟棄最舊（最左）位置，因為越靠近的三點，距離 2*(rightmost-leftmost) 必定越小
             cache[v, 0] = cache[v, 1];
             cache[v, 1] = cache[v, 2];
             cache[v, 2] = i;
