@@ -50,6 +50,14 @@ class Program
         // 測試案例 5: 值 4 出現在索引 0,2,4 → 距離 = 2*(4-0) = 8
         int[] nums5 = [4, 3, 4, 1, 4];
         Console.WriteLine($"測試 5 (預期 8)  : {program.MinimumDistance(nums5)}");
+
+        Console.WriteLine();
+        Console.WriteLine("=== 解法二驗證 ===");
+        Console.WriteLine($"測試 1 (預期 4)  : {program.MinimumDistance2(nums1)}");
+        Console.WriteLine($"測試 2 (預期 8)  : {program.MinimumDistance2(nums2)}");
+        Console.WriteLine($"測試 3 (預期 -1) : {program.MinimumDistance2(nums3)}");
+        Console.WriteLine($"測試 4 (預期 4)  : {program.MinimumDistance2(nums4)}");
+        Console.WriteLine($"測試 5 (預期 8)  : {program.MinimumDistance2(nums5)}");
     }
 
     /// <summary>
@@ -99,6 +107,68 @@ class Program
                         break;
                     }
                 }
+            }
+        }
+
+        return res == int.MaxValue ? -1 : res;
+    }
+
+    /// <summary>
+    /// 方法二：維護最近三次出現位置（O(n) 時間、O(n) 空間）
+    ///
+    /// 解題思路：
+    /// 關鍵性質：若同一個數在索引 a &lt; b &lt; c 各出現一次，
+    /// 則距離 = |a-b| + |b-c| + |c-a| = 2 * (c - a)，結果只與最左和最右位置有關。
+    ///
+    /// 因此只需在遍歷過程中，為每個數維護「最近 3 次出現的索引」：
+    /// - 出現次數未滿 3 次：直接記錄索引。
+    /// - 已有 3 次：將 cache[v][0]←cache[v][1]、cache[v][1]←cache[v][2]、cache[v][2]←當前索引，
+    ///   確保視窗始終保留最靠近的三個位置（越靠近的三點，距離公式中的 c-a 越小）。
+    /// - 一旦某數已累積 3 個位置，立即用 2*(cache[v][2]-cache[v][0]) 更新全局最小值。
+    ///
+    /// 題目保證 1 &lt;= nums[i] &lt;= n，故直接以 n+1 大小的陣列代替 Dictionary，避免雜湊開銷。
+    ///
+    /// 時間複雜度：O(n)，空間複雜度：O(n)。
+    /// </summary>
+    /// <param name="nums">整數陣列，元素值限於 [1, n]。</param>
+    /// <returns>最小距離；若不存在三個相等元素的 good tuple 則回傳 -1。</returns>
+    public int MinimumDistance2(int[] nums)
+    {
+        int n = nums.Length;
+
+        // cache[v, slot]：數值 v 最近三次出現的索引（slot = 0/1/2）
+        // 題目保證 1 <= nums[i] <= n，故開 n+1 避免越界
+        int[,] cache = new int[n + 1, 3];
+
+        // count[v]：數值 v 目前已記錄的索引數量，最大追蹤至 3
+        int[] count = new int[n + 1];
+
+        int res = int.MaxValue;
+
+        for (int i = 0; i < n; i++)
+        {
+            int v = nums[i];
+
+            if (count[v] < 3)
+            {
+                // 尚未滿三個位置，直接填入
+                cache[v, count[v]] = i;
+                count[v]++;
+            }
+            else
+            {
+                // 已滿三個位置：左移視窗，保留最近三個索引
+                // 丟棄最左側（最舊）的位置，因為更靠近的三點距離必定更小
+                cache[v, 0] = cache[v, 1];
+                cache[v, 1] = cache[v, 2];
+                cache[v, 2] = i;
+            }
+
+            // 當恰好累積到三個位置（或更新後仍有三個）的情況下更新答案
+            // 距離 = 2 * (最右索引 - 最左索引)
+            if (count[v] == 3)
+            {
+                res = Math.Min(res, 2 * (cache[v, 2] - cache[v, 0]));
             }
         }
 
