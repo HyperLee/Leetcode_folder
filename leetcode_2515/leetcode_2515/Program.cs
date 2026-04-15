@@ -26,18 +26,23 @@ class Program
         {
             (["hello", "i", "am", "leetcode", "hello"], "hello", 1, 1),
             (["a", "b", "leetcode"], "leetcode", 0, 1),
+            (["start", "middle", "target", "tail"], "start", 0, 0),
+            (["a", "target", "c", "d", "e"], "target", 4, 2),
             (["x", "y", "z"], "hello", 1, -1)
         };
 
         Console.WriteLine("LeetCode 2515 - Shortest Distance to Target String in a Circular Array");
+        Console.WriteLine("Compare formula scan and expanding-from-start solutions:");
 
         for (int index = 0; index < testCases.Length; index++)
         {
             var testCase = testCases[index];
-            int actual = solver.ClosestTarget(testCase.Words, testCase.Target, testCase.StartIndex);
+            int actualByFormula = solver.ClosestTarget(testCase.Words, testCase.Target, testCase.StartIndex);
+            int actualByExpanding = solver.ClosestTargetByExpandingFromStartIndex(testCase.Words, testCase.Target, testCase.StartIndex);
+            bool passed = actualByFormula == testCase.Expected && actualByExpanding == testCase.Expected;
 
             Console.WriteLine(
-                $"Case {index + 1}: words = [{string.Join(", ", testCase.Words)}], target = {testCase.Target}, startIndex = {testCase.StartIndex}, expected = {testCase.Expected}, actual = {actual}");
+                $"Case {index + 1}: words = [{string.Join(", ", testCase.Words)}], target = {testCase.Target}, startIndex = {testCase.StartIndex}, expected = {testCase.Expected}, formula = {actualByFormula}, expand = {actualByExpanding}, pass = {passed}");
         }
     }
 
@@ -79,5 +84,45 @@ class Program
         }
 
         return minDistance == int.MaxValue ? -1 : minDistance;
+    }
+
+    /// <summary>
+    /// 2515. Shortest Distance to Target String in a Circular Array。
+    /// 這個解法直接從 startIndex 出發，依照距離 0、1、2... 逐層向左右兩側擴散。
+    /// 對於每一個候選距離，都檢查 startIndex 往左與往右走相同步數後的位置是否命中 target。
+    /// 因為我們是依照可能答案由小到大枚舉，所以第一次找到 target 的距離一定就是最短距離。
+    /// 配合環狀陣列的特性，任何超出範圍的索引都可以用模運算轉回 [0, n - 1] 的合法範圍。
+    /// </summary>
+    /// <param name="words">環狀字串陣列。</param>
+    /// <param name="target">要搜尋的目標字串。</param>
+    /// <param name="startIndex">起始索引。</param>
+    /// <returns>從 startIndex 往左右兩側擴散時，遇到 target 的最短距離；若不存在則回傳 -1。</returns>
+    /// <example>
+    /// <code>
+    /// int distance = new Program().ClosestTargetByExpandingFromStartIndex(["a", "b", "leetcode"], "leetcode", 0);
+    /// Console.WriteLine(distance); // 1
+    /// </code>
+    /// </example>
+    public int ClosestTargetByExpandingFromStartIndex(string[] words, string target, int startIndex)
+    {
+        int n = words.Length;
+        int maxDistance = n / 2;
+
+        for (int distance = 0; distance <= maxDistance; distance++)
+        {
+            // 左移可能先算出負值，因此先加上 n，再用 % n 折回合法索引。
+            int leftIndex = (startIndex - distance + n) % n;
+
+            // 右移只會超過上界，不會變成負值，直接 % n 即可折回合法索引。
+            int rightIndex = (startIndex + distance) % n;
+
+            // 由於距離是從小到大枚舉，第一次命中就是最短距離。
+            if (words[leftIndex] == target || words[rightIndex] == target)
+            {
+                return distance;
+            }
+        }
+
+        return -1;
     }
 }
