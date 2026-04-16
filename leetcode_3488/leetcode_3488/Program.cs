@@ -61,7 +61,7 @@ class Program
     /// <example>
     /// <code>
     /// var result = SolveQueries([1,3,1,4,1,3,2], [0,3,5]);
-    /// // result = [2, -1, 3]
+    /// result = [2, -1, 3]
     /// </code>
     /// </example>
     public IList<int> SolveQueries(int[] nums, int[] queries)
