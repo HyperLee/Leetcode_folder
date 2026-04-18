@@ -87,6 +87,12 @@ class Program
         foreach (var positions in valueToPositions.Values.ToList())
         {
             int firstPos = positions[0];
+            // [^1] 是 C# 8 的「從尾端起算索引」語法（Index from end operator）
+            // [^1] 等同於 positions[positions.Count - 1]，即取最後一個元素
+            // 其他等效寫法：
+            //   positions[positions.Count - 1]  ← 傳統寫法
+            //   positions.Last()                ← LINQ 寫法（需 using System.Linq）
+            //   positions[^1]                   ← C# 8+ 建議寫法，最簡潔
             int lastPos = positions[^1];
             positions.Insert(0, lastPos - n);
             positions.Add(firstPos + n);
