@@ -53,54 +53,54 @@ class Program
     /// <summary>
     /// 方法一：一次遍歷（哈希表）
     /// <para>
-    /// 解題概念：從左到右遍歷陣列，維護哈希表 <c>prev</c>，其中 <c>prev[v]</c>
+    /// 解題概念：從左到右遍歷陣列，維護哈希表 <c>reversedToLastIndex</c>，其中 <c>reversedToLastIndex[v]</c>
     /// 儲存最近的索引 j，滿足 <c>reverse(nums[j]) == v</c>。
     /// </para>
     /// <para>
     /// 演算法步驟：
     /// <list type="number">
-    ///   <item>對於當前位置 i，令 x = nums[i]。</item>
-    ///   <item>若 x 存在於 prev，表示存在 j 使得 reverse(nums[j]) == x，
-    ///         (j, i) 為鏡像對，以 i - prev[x] 更新最小距離。</item>
-    ///   <item>計算 reverse(x) 並令 prev[reverse(x)] = i，
-    ///         讓目前索引與後續值為 reverse(x) 的元素形成鏡像對。</item>
+    ///   <item>對於當前位置 i，令 current = nums[i]。</item>
+    ///   <item>若 current 存在於 reversedToLastIndex，表示存在 j 使得 reverse(nums[j]) == current，
+    ///         (j, i) 為鏡像對，以 i - reversedToLastIndex[current] 更新 minDistance。</item>
+    ///   <item>計算 reverse(current) 並令 reversedToLastIndex[reverse(current)] = i，
+    ///         讓目前索引與後續值為 reverse(current) 的元素形成鏡像對。</item>
     ///   <item>同一個鍵只保留最近索引：右端點固定時，左端點越靠右距離越小。</item>
     /// </list>
     /// </para>
-    /// <para>時間複雜度：O(n × D)，D 為數字最大位數（int 最多 10 位）。</para>
-    /// <para>空間複雜度：O(n)，哈希表最多儲存 n 組鍵值對。</para>
+    /// <para>時間複雜度：O(length × D)，D 為數字最大位數（int 最多 10 位）。</para>
+    /// <para>空間複雜度：O(length)，哈希表最多儲存 length 組鍵值對。</para>
     /// </summary>
     /// <param name="nums">輸入整數陣列。</param>
     /// <returns>所有鏡像對中索引絕對距離的最小值；若無鏡像對則回傳 -1。</returns>
     public int MinMirrorPairDistance(int[] nums)
     {
-        // prev[v] = 最近一個滿足 reverse(nums[j]) == v 的索引 j
-        Dictionary<int, int> prev = new Dictionary<int, int>();
-        int n = nums.Length;
-        int res = int.MaxValue;
+        // reversedToLastIndex[v] = 最近一個滿足 reverse(nums[j]) == v 的索引 j
+        Dictionary<int, int> reversedToLastIndex = new Dictionary<int, int>();
+        int length = nums.Length;
+        int minDistance = int.MaxValue;
 
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < length; i++)
         {
-            int x = nums[i];
+            int current = nums[i];
 
-            // 若 x 已在 prev 中，代表存在 j 使 reverse(nums[j]) == x → 形成鏡像對
-            if (prev.ContainsKey(x))
+            // 若 current 已在 reversedToLastIndex 中，代表存在 j 使 reverse(nums[j]) == current → 形成鏡像對
+            if (reversedToLastIndex.ContainsKey(current))
             {
-                res = Math.Min(res, i - prev[x]);
+                minDistance = Math.Min(minDistance, i - reversedToLastIndex[current]);
             }
 
-            // 記錄 reverse(x) 對應的最近索引，供後續元素配對使用
-            prev[ReverseNum(x)] = i;
+            // 記錄 reverse(current) 對應的最近索引，供後續元素配對使用
+            reversedToLastIndex[ReverseNum(current)] = i;
         }
 
-        return res == int.MaxValue ? -1 : res;
+        return minDistance == int.MaxValue ? -1 : minDistance;
     }
 
     /// <summary>
-    /// 將非負整數 x 的十進位數字反轉，自動省略前導零。
+    /// 將非負整數 num 的十進位數字反轉，自動省略前導零。
     /// <para>
-    /// 演算法：每次取 x 末位數字（x % 10）附加到 rev 末位，
-    /// 再將 x 右移一位（x /= 10），重複直到 x 歸零。
+    /// 演算法：每次取 num 末位數字（num % 10）附加到 reversed 末位，
+    /// 再將 num 右移一位（num /= 10），重複直到 num 歸零。
     /// </para>
     /// <example>
     /// <code>
@@ -109,20 +109,20 @@ class Program
     /// ReverseNum(1)   → 1
     /// </code>
     /// </example>
-    /// <para>時間複雜度：O(D)，D 為 x 的位數。</para>
+    /// <para>時間複雜度：O(D)，D 為 num 的位數。</para>
     /// <para>空間複雜度：O(1)。</para>
     /// </summary>
-    /// <param name="x">欲反轉的非負整數。</param>
+    /// <param name="num">欲反轉的非負整數。</param>
     /// <returns>反轉後的整數（省略前導零）。</returns>
-    private int ReverseNum(int x)
+    private int ReverseNum(int num)
     {
-        int rev = 0;
-        while (x > 0)
+        int reversed = 0;
+        while (num > 0)
         {
-            rev = rev * 10 + x % 10; // 將末位數字附加到 rev 末位
-            x /= 10;                  // 移除 x 的末位數字
+            reversed = reversed * 10 + num % 10; // 將末位數字附加到 reversed 末位
+            num /= 10;                            // 移除 num 的末位數字
         }
 
-        return rev;
+        return reversed;
     }
 }
