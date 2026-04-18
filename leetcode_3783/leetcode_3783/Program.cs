@@ -25,17 +25,51 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        // 建立 Solution 實例進行測試
+        Program sol = new();
+
+        // 測試資料
+        // n = 1   → reverse(1) = 1   → |1   - 1|   = 0
+        // n = 120 → reverse(120) = 21 → |120 - 21|  = 99
+        // n = 123 → reverse(123) = 321 → |123 - 321| = 198
+        int[] testCases = [1, 120, 123];
+        int[] expected  = [0, 99, 198];
+
+        for (int i = 0; i < testCases.Length; i++)
+        {
+            int result = sol.MirrorDistance(testCases[i]);
+            string status = result == expected[i] ? "PASS" : "FAIL";
+            Console.WriteLine($"[{status}] MirrorDistance({testCases[i]}) = {result}  (expected: {expected[i]})");
+        }
     }
 
     /// <summary>
-    /// 
+    /// 計算整數 n 的鏡像距離（Mirror Distance）。
+    /// <para>
+    /// 【解題概念】
+    /// 鏡像距離定義為 abs(n - reverse(n))，其中 reverse(n) 為將 n
+    /// 的十進位數字逐位反轉後所得的整數（前導零自動省略）。
+    /// </para>
+    /// <para>
+    /// 【解法：數學 + 逐位反轉】<br/>
+    /// 步驟一：呼叫 <see cref="ReverseNum"/> 將 n 反轉，得到鏡像數 rev。<br/>
+    /// 步驟二：回傳 |n - rev|。<br/>
+    /// 整個過程只需一次線性掃描位數，時間複雜度 O(D)，空間複雜度 O(1)。
+    /// </para>
+    /// <example>
+    /// <code>
+    /// MirrorDistance(1)   → |1   - 1|   = 0
+    /// MirrorDistance(120) → |120 - 21|  = 99
+    /// MirrorDistance(123) → |123 - 321| = 198
+    /// </code>
+    /// </example>
     /// </summary>
-    /// <param name="n"></param>
-    /// <returns></returns>
+    /// <param name="n">輸入整數（題目保證為非負整數）。</param>
+    /// <returns>n 與其鏡像數之差的絕對值。</returns>
     public int MirrorDistance(int n)
     {
-        return Math.Abs(n - ReverseNum(n));
+        int rev = ReverseNum(n); // 取得鏡像數
+        return Math.Abs(n - rev); // 回傳兩者差的絕對值
     }
 
     /// <summary>
