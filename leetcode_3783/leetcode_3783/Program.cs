@@ -27,4 +27,44 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="n"></param>
+    /// <returns></returns>
+    public int MirrorDistance(int n)
+    {
+        return Math.Abs(n - ReverseNum(n));
+    }
+
+    /// <summary>
+    /// 將非負整數 num 的十進位數字反轉，自動省略前導零。
+    /// <para>
+    /// 演算法：每次取 num 末位數字（num % 10）附加到 reversed 末位，
+    /// 再將 num 右移一位（num /= 10），重複直到 num 歸零。
+    /// </para>
+    /// <example>
+    /// <code>
+    /// ReverseNum(120) → 21
+    /// ReverseNum(123) → 321
+    /// ReverseNum(1)   → 1
+    /// </code>
+    /// </example>
+    /// <para>時間複雜度：O(D)，D 為 num 的位數。</para>
+    /// <para>空間複雜度：O(1)。</para>
+    /// </summary>
+    /// <param name="num">欲反轉的非負整數。</param>
+    /// <returns>反轉後的整數（省略前導零）。</returns>
+    private int ReverseNum(int num)
+    {
+        int reversed = 0;
+        while (num > 0)
+        {
+            reversed = reversed * 10 + num % 10; // 將末位數字附加到 reversed 末位
+            num /= 10;                            // 移除 num 的末位數字
+        }
+
+        return reversed;
+    }
 }
