@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug leetcode_3761",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build leetcode_3761",
+      "program": "${workspaceFolder}/leetcode_3761/bin/Debug/net10.0/leetcode_3761.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_3761",
+      "stopAtEntry": false,
+      "console": "internalConsole"
+    }
+  ]
+}
