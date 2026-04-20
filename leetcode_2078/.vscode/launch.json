@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug leetcode_2078",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/leetcode_2078/bin/Debug/net10.0/leetcode_2078.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/leetcode_2078",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        }
+    ]
+}
