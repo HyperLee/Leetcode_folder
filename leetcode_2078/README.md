@@ -154,6 +154,144 @@ public int MaxDistance(int[] colors)
 
 ---
 
+## 解法：方法二 — 貪心（Greedy）
+
+### 解題概念與出發點
+
+**關鍵觀察**：最大距離的配對，必然包含最左邊（index `0`）或最右邊（index `n-1`）的房子。
+
+**證明思路**：設最優配對為 `(i, j)`（`i < j`），且兩者均不是端點。設端點共同顏色為 `c`：
+- 若 `colors[j] ≠ c`：則 `colors[0] = c ≠ colors[j]`，配對 `(0, j)` 合法且距離 `j ≥ j - i`。
+- 若 `colors[i] ≠ c`：則 `colors[n-1] = c ≠ colors[i]`，配對 `(i, n-1)` 合法且距離 `n-1-i ≥ j - i`。
+
+無論哪種情況，都能找到含端點且距離不更小的合法配對，因此最優解必然包含 `0` 或 `n-1`。
+
+**分兩種情況討論**：
+
+**情況一**：若 `colors[0] ≠ colors[n-1]`，兩端顏色不同，最大距離直接為 `n-1`，無需進一步搜尋。
+
+**情況二**：若 `colors[0] = colors[n-1] = c`（設此公共顏色為 `boundaryColor`），則：
+- 對 **房子 0**（最左）：從右往左掃描，找到最遠（最右）的顏色不等於 `c` 的房子，索引為 `rightIdx`，距離 = `rightIdx`。
+- 對 **房子 n-1**（最右）：從左往右掃描，找到最遠（最左）的顏色不等於 `c` 的房子，索引為 `leftIdx`，距離 = `n-1-leftIdx`。
+
+答案為：
+
+$$\max(\text{rightIdx},\; n-1-\text{leftIdx})$$
+
+---
+
+### 演算法步驟
+
+1. 若 `colors[0] ≠ colors[n-1]`，直接回傳 `n-1`（情況一）。
+2. 設 `boundaryColor = colors[0] = colors[n-1]`（情況二）。
+3. 從索引 `n-2` 往左掃描，找到最大的 `rightIdx` 使得 `colors[rightIdx] ≠ boundaryColor`。
+4. 從索引 `1` 往右掃描，找到最小的 `leftIdx` 使得 `colors[leftIdx] ≠ boundaryColor`。
+5. 回傳 `max(rightIdx, n-1-leftIdx)`。
+
+### 複雜度分析
+
+| 複雜度 | 數值 | 說明 |
+|--------|------|------|
+| 時間複雜度 | $O(n)$ | 兩次線性掃描，各最多掃完整個陣列一次 |
+| 空間複雜度 | $O(1)$ | 只使用常數額外空間 |
+
+### 程式碼
+
+```csharp
+public int MaxDistance2(int[] colors)
+{
+    int n = colors.Length;
+
+    // 記錄首尾共同顏色（情況一：首尾不同則直接回傳 n-1）
+    int boundaryColor = colors[0];
+    if (boundaryColor != colors[n - 1])
+    {
+        return n - 1;
+    }
+
+    // 情況二：首尾顏色均為 boundaryColor
+    // 對於房子 0：從右往左掃描，找到最遠（最右）的顏色不同房子，索引為 rightIdx
+    int rightIdx = n - 2;
+    while (colors[rightIdx] == boundaryColor)
+    {
+        rightIdx--;
+    }
+
+    // 對於房子 n-1：從左往右掃描，找到最遠（最左）的顏色不同房子，索引為 leftIdx
+    int leftIdx = 1;
+    while (colors[leftIdx] == boundaryColor)
+    {
+        leftIdx++;
+    }
+
+    // 房子 0 到 rightIdx 的距離為 rightIdx；房子 n-1 到 leftIdx 的距離為 n-1-leftIdx
+    return Math.Max(n - 1 - leftIdx, rightIdx);
+}
+```
+
+---
+
+## 範例演示（方法二）
+
+### 範例 1
+
+**輸入**：`colors = [1, 1, 1, 6, 1, 1, 1]`
+
+`colors[0] = 1 = colors[6]`，進入情況二，`boundaryColor = 1`。
+
+從右往左掃描 `rightIdx`：
+
+| rightIdx | colors[rightIdx] | == boundaryColor? |
+|:--------:|:----------------:|:-----------------:|
+| 5        | 1                | ✓ 繼續            |
+| 4        | 1                | ✓ 繼續            |
+| 3        | 6                | ✗ 停止            |
+
+`rightIdx = 3`，房子 `0` 到 `3` 的距離 = **3**
+
+從左往右掃描 `leftIdx`：
+
+| leftIdx | colors[leftIdx] | == boundaryColor? |
+|:-------:|:---------------:|:-----------------:|
+| 1       | 1               | ✓ 繼續            |
+| 2       | 1               | ✓ 繼續            |
+| 3       | 6               | ✗ 停止            |
+
+`leftIdx = 3`，房子 `6` 到 `3` 的距離 = `6 - 3` = **3**
+
+$$\max(3,\; 6 - 3) = \max(3,\; 3) = 3$$
+
+**輸出**：`3`
+
+```
+索引:  0   1   2   3   4   5   6
+顏色: [1]  [1] [1] [6] [1] [1] [1]
+       ↑___________↑              掃描 rightIdx 停在 3，距離 = 3
+               ↑___________↑     掃描 leftIdx 停在 3，距離 = 3
+```
+
+---
+
+### 範例 2
+
+**輸入**：`colors = [1, 8, 3, 8, 3]`
+
+`colors[0] = 1 ≠ colors[4] = 3`，進入情況一，直接回傳 `n-1 = 4`。
+
+**輸出**：`4`
+
+---
+
+### 範例 3（邊界情況）
+
+**輸入**：`colors = [0, 1]`
+
+`colors[0] = 0 ≠ colors[1] = 1`，進入情況一，直接回傳 `n-1 = 1`。
+
+**輸出**：`1`
+
+---
+
 ## 執行測試
 
 ```bash

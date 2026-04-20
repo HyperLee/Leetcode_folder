@@ -40,6 +40,11 @@ class Program
         // 僅有兩棟房子，顏色不同，距離為 1
         int[] colors3 = [0, 1];
         Console.WriteLine($"Test 3: {program.MaxDistance(colors3)}"); // Expected: 1
+
+        // ── 方法二測試 ──────────────────────────────────────────────────
+        Console.WriteLine($"Test MaxDistance2 - 1: {program.MaxDistance2(colors1)}"); // Expected: 3
+        Console.WriteLine($"Test MaxDistance2 - 2: {program.MaxDistance2(colors2)}"); // Expected: 4
+        Console.WriteLine($"Test MaxDistance2 - 3: {program.MaxDistance2(colors3)}"); // Expected: 1
     }
 
     /// <summary>
@@ -84,5 +89,59 @@ class Program
         }
 
         return maxDistance;
+    }
+
+    /// <summary>
+    /// 方法二：貪心（Greedy）
+    /// <br/>
+    /// 解題概念與出發點：
+    /// <br/>
+    /// 關鍵觀察：最大距離的配對，必然包含最左（index 0）或最右（index n-1）的房子。
+    /// 對任意不含端點的配對 (i, j)，總能替換為含端點且距離不減少的合法配對，因此端點必然參與最優解。
+    /// <br/>
+    /// 分兩種情況討論：
+    /// <br/>
+    /// 情況一：若 colors[0] != colors[n-1]，兩端顏色不同，最大距離直接為 n-1。
+    /// <br/>
+    /// 情況二：若 colors[0] == colors[n-1]，設此公共顏色為 boundaryColor。
+    /// <list type="bullet">
+    ///   <item>對於房子 0（最左）：從右往左掃描，找到最遠（最右）顏色不等於 boundaryColor 的房子，索引為 rightIdx，距離 = rightIdx。</item>
+    ///   <item>對於房子 n-1（最右）：從左往右掃描，找到最遠（最左）顏色不等於 boundaryColor 的房子，索引為 leftIdx，距離 = n-1-leftIdx。</item>
+    /// </list>
+    /// 答案為 max(rightIdx, n-1-leftIdx)。
+    /// <br/>
+    /// 時間複雜度：O(n)，兩次線性掃描。<br/>
+    /// 空間複雜度：O(1)，只使用常數額外空間。
+    /// </summary>
+    /// <param name="colors">長度為 n 的 0 索引整數陣列，colors[i] 表示第 i 棟房屋的顏色。</param>
+    /// <returns>兩棟顏色不同的房屋之間的最大距離。</returns>
+    public int MaxDistance2(int[] colors)
+    {
+        int n = colors.Length;
+
+        // 記錄首尾共同顏色（情況一：首尾不同則直接回傳 n-1）
+        int boundaryColor = colors[0];
+        if (boundaryColor != colors[n - 1])
+        {
+            return n - 1;
+        }
+
+        // 情況二：首尾顏色均為 boundaryColor
+        // 對於房子 0：從右往左掃描，找到最遠（最右）的顏色不同房子，索引為 rightIdx
+        int rightIdx = n - 2;
+        while (colors[rightIdx] == boundaryColor)
+        {
+            rightIdx--;
+        }
+
+        // 對於房子 n-1：從左往右掃描，找到最遠（最左）的顏色不同房子，索引為 leftIdx
+        int leftIdx = 1;
+        while (colors[leftIdx] == boundaryColor)
+        {
+            leftIdx++;
+        }
+
+        // 房子 0 到 rightIdx 的距離為 rightIdx；房子 n-1 到 leftIdx 的距離為 n-1-leftIdx
+        return Math.Max(n - 1 - leftIdx, rightIdx);
     }
 }
