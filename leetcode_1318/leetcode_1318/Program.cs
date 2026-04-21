@@ -23,4 +23,39 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="a"></param>
+    /// <param name="b"></param>
+    /// <param name="c"></param>
+    /// <returns></returns>
+    public int MinFlips(int a, int b, int c)
+    {
+        int flips = 0;
+        while(a > 0 || b > 0 || c > 0)
+        {
+            int abit = a & 1;
+            int bbit = b & 1;
+            int cbit = c & 1;
+
+            if((abit | bbit) != cbit)
+            {
+                if(cbit == 1)
+                {
+                    flips++;
+                }
+                else
+                {
+                    flips += abit + bbit;
+                }
+            }
+
+             a >>= 1;
+             b >>= 1;
+             c >>= 1;
+        }
+        return flips;
+    }
 }
