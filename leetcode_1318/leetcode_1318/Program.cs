@@ -15,7 +15,7 @@
 class Program
 {
     /// <summary>
-    /// 執行題目範例與自訂測資，快速驗證 MinFlips 的結果。
+    /// 執行題目範例與自訂測資，快速驗證兩種解法的結果。
     /// </summary>
     /// <param name="args">命令列參數。</param>
     static void Main(string[] args)
@@ -34,10 +34,15 @@ class Program
 
         foreach (var (a, b, c, expected) in testCases)
         {
-            var actual = solver.MinFlips(a, b, c);
-            var result = actual == expected ? "PASS" : "FAIL";
+            var actualMethod1 = solver.MinFlips(a, b, c);
+            var actualMethod2 = solver.MinFlips2(a, b, c);
+            var resultMethod1 = actualMethod1 == expected ? "PASS" : "FAIL";
+            var resultMethod2 = actualMethod2 == expected ? "PASS" : "FAIL";
 
-            Console.WriteLine($"{result,-4} a = {a}, b = {b}, c = {c} -> flips = {actual}, expected = {expected}");
+            Console.WriteLine($"Input    a = {a}, b = {b}, c = {c}, expected = {expected}");
+            Console.WriteLine($"Method 1 {resultMethod1,-4} flips = {actualMethod1}");
+            Console.WriteLine($"Method 2 {resultMethod2,-4} flips = {actualMethod2}");
+            Console.WriteLine();
         }
     }
 
@@ -91,6 +96,51 @@ class Program
             a >>= 1;
             b >>= 1;
             c >>= 1;
+        }
+
+        return flips;
+    }
+
+    /// <summary>
+    /// 計算讓 a OR b 等於 c 所需的最少翻轉次數。
+    /// 解法固定枚舉每一個可能的二進位位元，並以位移搭配遮罩直接讀取該位的值。
+    /// 若目標位 cBit 為 0，則 aBit 與 bBit 都必須為 0；若目標位 cBit 為 1，則 aBit 與 bBit 至少要有一個為 1。
+    /// </summary>
+    /// <param name="a">第一個正整數。</param>
+    /// <param name="b">第二個正整數。</param>
+    /// <param name="c">目標正整數。</param>
+    /// <returns>使 a OR b 等於 c 的最少翻轉次數。</returns>
+    /// <remarks>
+    /// 題目條件保證 a、b、c 都小於 10^9，因此只需要檢查第 0 位到第 30 位。
+    /// 這個版本使用固定次數的 for 迴圈完成枚舉，時間複雜度為 O(31)，可視為 O(1)，空間複雜度為 O(1)。
+    /// </remarks>
+    /// <example>
+    /// <code>
+    /// var solver = new Program();
+    /// var flips = solver.MinFlips2(2, 6, 5); // 3
+    /// </code>
+    /// </example>
+    public int MinFlips2(int a, int b, int c)
+    {
+        var flips = 0;
+
+        // 題目範圍下，檢查第 0 位到第 30 位就足以覆蓋所有有效位元。
+        for (var bitIndex = 0; bitIndex < 31; bitIndex++)
+        {
+            var aBit = (a >> bitIndex) & 1;
+            var bBit = (b >> bitIndex) & 1;
+            var cBit = (c >> bitIndex) & 1;
+
+            if (cBit == 0)
+            {
+                // 目標位是 0 時，當前位上有幾個 1，就必須翻幾次。
+                flips += aBit + bBit;
+            }
+            else
+            {
+                // 目標位是 1 時，只有兩個輸入位都為 0 才需要補一次翻轉。
+                flips += (aBit + bBit == 0) ? 1 : 0;
+            }
         }
 
         return flips;
