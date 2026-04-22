@@ -28,14 +28,18 @@ class Program
         string[] queries1 = ["word", "note", "ants", "wood"];
         string[] dictionary1 = ["wood", "joke", "moat"];
         IList<string> result1 = program.TwoEditWords(queries1, dictionary1);
-        Console.WriteLine($"Test 1: [{string.Join(", ", result1)}]");
+        Console.WriteLine($"Test 1 (暴力解): [{string.Join(", ", result1)}]");
+        IList<string> result1Trie = program.TwoEditWordsTrie(queries1, dictionary1);
+        Console.WriteLine($"Test 1 (Trie):   [{string.Join(", ", result1Trie)}]");
         // Expected: [word, note, wood]
 
         // 測試資料 2：預期輸出 []
         string[] queries2 = ["yes"];
         string[] dictionary2 = ["not"];
         IList<string> result2 = program.TwoEditWords(queries2, dictionary2);
-        Console.WriteLine($"Test 2: [{string.Join(", ", result2)}]");
+        Console.WriteLine($"Test 2 (暴力解): [{string.Join(", ", result2)}]");
+        IList<string> result2Trie = program.TwoEditWordsTrie(queries2, dictionary2);
+        Console.WriteLine($"Test 2 (Trie):   [{string.Join(", ", result2Trie)}]");
         // Expected: []
     }
 
@@ -82,5 +86,116 @@ class Program
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// 解法二：Trie + DFS 剪枝
+    ///
+    /// 解題思路：
+    /// 1. 將 dictionary 中所有單詞插入 Trie。
+    /// 2. 對每個 query，以 DFS 方式遍歷 Trie，同時記錄已使用的編輯次數（字元不匹配數）。
+    /// 3. 若已用編輯次數超過 2，立即剪枝，不再深入該分支。
+    /// 4. 若 DFS 成功抵達某個 dictionary 單詞的末端節點（isEnd = true）且編輯次數 ≤ 2，
+    ///    則此 query 符合條件。
+    ///
+    /// 與暴力解相比，Trie 可共用前綴，一旦某個前綴的差異已超過 2，
+    /// 就能一次剪掉所有共用此前綴的 dictionary 單詞，大幅減少比較次數。
+    ///
+    /// 時間複雜度：O(m×L) 建 Trie + O(n×L×26²) 查詢（剪枝後實際遠低於此上界）
+    /// 空間複雜度：O(m×L×26)（Trie 節點數）
+    /// </summary>
+    /// <param name="queries">查詢字串陣列</param>
+    /// <param name="dictionary">字典字串陣列</param>
+    /// <returns>所有符合條件（編輯次數 ≤ 2）的查詢字串列表</returns>
+    public IList<string> TwoEditWordsTrie(string[] queries, string[] dictionary)
+    {
+        // 建立 Trie 並插入所有 dictionary 單詞
+        var trie = new TrieNode();
+        foreach (string word in dictionary)
+        {
+            trie.Insert(word);
+        }
+
+        IList<string> result = new List<string>();
+        foreach (string query in queries)
+        {
+            // DFS 搜尋：若能在 ≤ 2 次編輯內匹配到任一 dictionary 單詞，則加入結果
+            if (trie.Search(query, 0, 0))
+            {
+                result.Add(query);
+            }
+        }
+
+        return result;
+    }
+}
+
+/// <summary>
+/// Trie 節點，用於支援最多 2 次編輯的 DFS 搜尋。
+/// 每個節點儲存 26 個子節點（對應 a-z），以及是否為單詞結尾的旗標。
+/// </summary>
+internal class TrieNode
+{
+    private readonly TrieNode?[] children = new TrieNode?[26];
+    private bool isEnd;
+
+    /// <summary>
+    /// 將單詞插入 Trie。
+    /// </summary>
+    /// <param name="word">要插入的單詞</param>
+    public void Insert(string word)
+    {
+        var node = this;
+        foreach (char c in word)
+        {
+            int idx = c - 'a';
+            node.children[idx] ??= new TrieNode();
+            node = node.children[idx]!;
+        }
+
+        node.isEnd = true;
+    }
+
+    /// <summary>
+    /// 以 DFS 方式在 Trie 中搜尋 query，允許最多 2 次字元不匹配（編輯）。
+    /// 超過 2 次不匹配時立即剪枝，不繼續深入該分支。
+    /// </summary>
+    /// <param name="query">查詢字串</param>
+    /// <param name="pos">目前比對到的字元位置</param>
+    /// <param name="edits">目前已累積的編輯（不匹配）次數</param>
+    /// <returns>若能在 ≤ 2 次編輯內匹配到某個 dictionary 單詞，回傳 true；否則回傳 false</returns>
+    public bool Search(string query, int pos, int edits)
+    {
+        // 剪枝：編輯次數已超過上限，放棄此分支
+        if (edits > 2)
+        {
+            return false;
+        }
+
+        // 抵達 query 末端：若此節點為 dictionary 單詞結尾，代表找到匹配
+        if (pos == query.Length)
+        {
+            return isEnd;
+        }
+
+        int queryIdx = query[pos] - 'a';
+
+        // 嘗試 Trie 中所有存在的子節點分支
+        for (int i = 0; i < 26; i++)
+        {
+            if (children[i] is null)
+            {
+                continue;
+            }
+
+            // 字元匹配則不增加編輯次數；不匹配則視為一次編輯
+            int nextEdits = edits + (i == queryIdx ? 0 : 1);
+            if (children[i]!.Search(query, pos + 1, nextEdits))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
