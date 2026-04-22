@@ -1,0 +1,21 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Core Launch (console)",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/leetcode_2452/bin/Debug/net10.0/leetcode_2452.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/leetcode_2452",
+            "stopAtEntry": false,
+            "console": "integratedTerminal"
+        },
+        {
+            "name": ".NET Core Attach",
+            "type": "coreclr",
+            "request": "attach"
+        }
+    ]
+}
