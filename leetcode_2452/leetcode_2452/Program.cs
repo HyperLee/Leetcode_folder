@@ -31,6 +31,8 @@ class Program
         Console.WriteLine($"Test 1 (暴力解): [{string.Join(", ", result1)}]");
         IList<string> result1Trie = program.TwoEditWordsTrie(queries1, dictionary1);
         Console.WriteLine($"Test 1 (Trie):   [{string.Join(", ", result1Trie)}]");
+        IList<string> result1Hash = program.TwoEditWordsHash(queries1, dictionary1);
+        Console.WriteLine($"Test 1 (雜湊):   [{string.Join(", ", result1Hash)}]");
         // Expected: [word, note, wood]
 
         // 測試資料 2：預期輸出 []
@@ -40,6 +42,8 @@ class Program
         Console.WriteLine($"Test 2 (暴力解): [{string.Join(", ", result2)}]");
         IList<string> result2Trie = program.TwoEditWordsTrie(queries2, dictionary2);
         Console.WriteLine($"Test 2 (Trie):   [{string.Join(", ", result2Trie)}]");
+        IList<string> result2Hash = program.TwoEditWordsHash(queries2, dictionary2);
+        Console.WriteLine($"Test 2 (雜湊):   [{string.Join(", ", result2Hash)}]");
         // Expected: []
     }
 
@@ -127,6 +131,85 @@ class Program
         }
 
         return result;
+    }
+
+    /// <summary>
+    /// 解法三：萬用字元雜湊（Wildcard Hashing）
+    ///
+    /// 解題思路：
+    /// 1. 對 dictionary 中每個單詞，產生所有 0、1、2 個位置被替換為萬用字元 '*' 的模式。
+    ///    每個長度為 L 的單詞共產生 1 + L + C(L,2) 個模式。
+    /// 2. 將所有模式存入 HashSet<string>，使查表操作達到 O(1)。
+    /// 3. 對每個 query，同樣產生所有萬用字元模式，若任一模式存在於 HashSet，
+    ///    表示此 query 與某個 dictionary 單詞的漢明距離 ≤ 2，加入結果。
+    ///
+    /// 核心原理：若 query 與 dictWord 在位置 i、j 上不同，
+    /// 則兩者在這兩個位置都換成 '*' 後的模式字串完全相同，因此可被 HashSet 匹配。
+    ///
+    /// 時間複雜度：O((m+n)×L²)，m = dictionary 長度，n = queries 長度，L = 字串長度
+    /// 空間複雜度：O(m×L²)（HashSet 中儲存的模式數量）
+    /// </summary>
+    /// <param name="queries">查詢字串陣列</param>
+    /// <param name="dictionary">字典字串陣列</param>
+    /// <returns>所有符合條件（漢明距離 ≤ 2）的查詢字串列表</returns>
+    public IList<string> TwoEditWordsHash(string[] queries, string[] dictionary)
+    {
+        // 預處理：將 dictionary 中所有單詞的萬用字元模式加入 HashSet
+        var patternSet = new HashSet<string>();
+        foreach (string word in dictionary)
+        {
+            foreach (string pattern in GeneratePatterns(word))
+            {
+                patternSet.Add(pattern);
+            }
+        }
+
+        IList<string> result = new List<string>();
+        foreach (string query in queries)
+        {
+            // 若 query 的任一模式存在於 HashSet，表示漢明距離 ≤ 2，符合條件
+            if (GeneratePatterns(query).Any(p => patternSet.Contains(p)))
+            {
+                result.Add(query);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// 為單詞產生所有「0、1、2 個位置替換為萬用字元 '*'」的模式。
+    /// 共產生 1 + L + C(L,2) = 1 + L + L×(L-1)/2 個模式。
+    /// </summary>
+    /// <param name="word">輸入單詞</param>
+    /// <returns>所有萬用字元模式的序列</returns>
+    private static IEnumerable<string> GeneratePatterns(string word)
+    {
+        char[] chars = word.ToCharArray();
+        int len = word.Length;
+
+        // 0 個萬用字元：原始單詞（涵蓋漢明距離 = 0 的情況）
+        yield return word;
+
+        for (int i = 0; i < len; i++)
+        {
+            char origI = chars[i];
+            chars[i] = '*';
+
+            // 1 個萬用字元：位置 i
+            yield return new string(chars);
+
+            // 2 個萬用字元：位置 i 和 j（j > i）
+            for (int j = i + 1; j < len; j++)
+            {
+                char origJ = chars[j];
+                chars[j] = '*';
+                yield return new string(chars);
+                chars[j] = origJ;
+            }
+
+            chars[i] = origI;
+        }
     }
 }
 
