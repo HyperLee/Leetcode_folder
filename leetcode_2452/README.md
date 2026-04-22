@@ -1,112 +1,112 @@
-# LeetCode 2452 — Words Within Two Edits of Dictionary
+# LeetCode 2452 — 兩次編輯內的字典單詞
 
-> **Daily Question** · 2026-04-22 · Difficulty: Medium
+> **每日題目** · 2026-04-22 · 難度：中等
 
-## Problem Description
+## 題目描述
 
-Given two string arrays `queries` and `dictionary`, where all words in each array have the **same length** and consist of lowercase English letters.
+給定兩個字串陣列 `queries` 和 `dictionary`，其中每個陣列中的所有單詞長度**相同**，且只由小寫英文字母組成。
 
-In **one edit**, you can take a word from `queries` and change **any single letter** to any other letter.
+**一次編輯**是指從 `queries` 中取出一個單詞，將其中**任意一個字母**替換成另一個字母。
 
-Find all words from `queries` that can equal some word from `dictionary` after **at most two edits**.
+找出 `queries` 中所有能在**至多兩次編輯**後等於 `dictionary` 中某個單詞的單詞。
 
-Return the matching words **in the same order** they appear in `queries`.
+回傳符合條件的單詞，**順序與其在 `queries` 中出現的順序相同**。
 
-**LeetCode links:**
+**LeetCode 連結：**
 - English: https://leetcode.com/problems/words-within-two-edits-of-dictionary/description/
 - 中文: https://leetcode.cn/problems/words-within-two-edits-of-dictionary/description/
 
-### Constraints
+### 限制條件
 
 - `1 <= queries.length, dictionary.length <= 100`
 - `n == queries[i].length == dictionary[j].length`
 - `1 <= n <= 100`
-- All words consist of lowercase English letters only.
+- 所有單詞僅由小寫英文字母組成。
 
 ---
 
-## Solution Concept
+## 解題思路
 
-### Key Insight — Hamming Distance
+### 核心觀察 — 漢明距離（Hamming Distance）
 
-Because all words share the **same length**, the problem reduces to computing the **Hamming distance** between every pair `(query, dictWord)`.
+由於所有單詞長度**相同**，問題可以轉化為計算每對 `(query, dictWord)` 之間的**漢明距離**。
 
-> The **Hamming distance** between two equal-length strings is the number of positions at which the corresponding characters differ.
+> **漢明距離**是指兩個等長字串中，對應位置字元不同的位置數量。
 
-If `hammingDistance(query, dictWord) ≤ 2`, the `query` can be transformed into `dictWord` with at most two edits, so it qualifies.
+若 `hammingDistance(query, dictWord) ≤ 2`，則該 `query` 最多經過兩次編輯即可變成 `dictWord`，符合條件。
 
-### Approach — Brute Force
+### 解法 — 暴力枚舉
 
-Given the small constraints (at most 100 words, each at most 100 characters), an `O(n × m × L)` brute force is efficient enough:
+由於限制條件較小（最多 100 個單詞，每個單詞最多 100 個字元），`O(n × m × L)` 的暴力枚舉已足夠：
 
-1. For each `query` in `queries`:
-2. For each `dictWord` in `dictionary`:
-   - Count positions where `query[i] ≠ dictWord[i]` → `diffCount`
-3. If `diffCount ≤ 2`, add `query` to the result and break the inner loop (no need to check further).
-4. Return the collected result list.
+1. 對 `queries` 中的每個 `query`：
+2. 對 `dictionary` 中的每個 `dictWord`：
+   - 計算 `query[i] ≠ dictWord[i]` 的位置數量 → `diffCount`
+3. 若 `diffCount ≤ 2`，將 `query` 加入結果並跳出內層迴圈（不需再繼續比對）。
+4. 回傳收集到的結果列表。
 
-Because we iterate `queries` in order and never reorder the result list, the output order is naturally preserved.
+由於我們按順序迭代 `queries` 且從不重新排序結果列表，輸出順序自然保留。
 
-**Time Complexity:** `O(n × m × L)` — n = |queries|, m = |dictionary|, L = word length  
-**Space Complexity:** `O(1)` extra (excluding the output list)
+**時間複雜度：** `O(n × m × L)` — n = |queries|，m = |dictionary|，L = 單詞長度  
+**空間複雜度：** `O(1)` 額外空間（不含輸出列表）
 
 ---
 
-## Walkthrough Example
+## 逐步範例
 
-### Input
+### 輸入
 
 ```text
 queries    = ["word", "note", "ants", "wood"]
 dictionary = ["wood", "joke", "moat"]
 ```
 
-### Step-by-step Process
+### 逐步流程
 
-We check each `query` against every `dictWord` and count differing characters:
+逐一比對每個 `query` 與每個 `dictWord`，計算不同字元的數量：
 
-| query | dictWord | Diffs (position) | diffCount | Qualifies? |
-|-------|----------|-----------------|-----------|------------|
-| `word` | `wood` | pos 2: `r`≠`o` | 1 | ✅ ≤ 2 → add, break |
-| `note` | `wood` | pos 0: `n`≠`w`, pos 1: `o`≠`o`✓, pos 2: `t`≠`o`, pos 3: `e`≠`d` → 3 | 3 | ❌ |
-| `note` | `joke` | pos 0: `n`≠`j`, pos 2: `t`≠`k` | 2 | ✅ ≤ 2 → add, break |
-| `ants` | `wood` | pos 0: `a`≠`w`, pos 1: `n`≠`o`, pos 2: `t`≠`o`, pos 3: `s`≠`d` → 4 | 4 | ❌ |
-| `ants` | `joke` | pos 0: `a`≠`j`, pos 1: `n`≠`o`, pos 2: `t`≠`k`, pos 3: `s`≠`e` → 4 | 4 | ❌ |
-| `ants` | `moat` | pos 0: `a`≠`m`, pos 1: `n`≠`o`, pos 3: `s`≠`t` | 3 | ❌ → not added |
-| `wood` | `wood` | (all same) | 0 | ✅ ≤ 2 → add, break |
+| query | dictWord | 差異位置 | diffCount | 是否符合？ |
+|-------|----------|---------|-----------|-----------|
+| `word` | `wood` | 位置 2：`r`≠`o` | 1 | ✅ ≤ 2 → 加入，跳出 |
+| `note` | `wood` | 位置 0：`n`≠`w`，位置 1：`o`≠`o`✓，位置 2：`t`≠`o`，位置 3：`e`≠`d` → 3 | 3 | ❌ |
+| `note` | `joke` | 位置 0：`n`≠`j`，位置 2：`t`≠`k` | 2 | ✅ ≤ 2 → 加入，跳出 |
+| `ants` | `wood` | 位置 0：`a`≠`w`，位置 1：`n`≠`o`，位置 2：`t`≠`o`，位置 3：`s`≠`d` → 4 | 4 | ❌ |
+| `ants` | `joke` | 位置 0：`a`≠`j`，位置 1：`n`≠`o`，位置 2：`t`≠`k`，位置 3：`s`≠`e` → 4 | 4 | ❌ |
+| `ants` | `moat` | 位置 0：`a`≠`m`，位置 1：`n`≠`o`，位置 3：`s`≠`t` | 3 | ❌ → 不加入 |
+| `wood` | `wood` | （全部相同） | 0 | ✅ ≤ 2 → 加入，跳出 |
 
-### Output
+### 輸出
 
 ```text
 ["word", "note", "wood"]
 ```
 
-### Test Case 2
+### 測試案例 2
 
 ```text
 queries    = ["yes"]
 dictionary = ["not"]
 ```
 
-| query | dictWord | Diffs | diffCount | Qualifies? |
-|-------|----------|-------|-----------|------------|
-| `yes` | `not` | pos 0: `y`≠`n`, pos 1: `e`≠`o`, pos 2: `s`≠`t` | 3 | ❌ |
+| query | dictWord | 差異 | diffCount | 是否符合？ |
+|-------|----------|------|-----------|-----------|
+| `yes` | `not` | 位置 0：`y`≠`n`，位置 1：`e`≠`o`，位置 2：`s`≠`t` | 3 | ❌ |
 
-**Output:** `[]`
+**輸出：** `[]`
 
 ---
 
-## Running the Project
+## 執行專案
 
 ```bash
-# Build
+# 建構
 dotnet build leetcode_2452/leetcode_2452.csproj
 
-# Run
+# 執行
 dotnet run --project leetcode_2452/leetcode_2452.csproj
 ```
 
-Expected output:
+預期輸出：
 
 ```
 Test 1: [word, note, wood]
