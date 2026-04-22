@@ -46,27 +46,39 @@ class Program
         Console.WriteLine($"Test 2 (雜湊):   [{string.Join(", ", result2Hash)}]");
         // Expected: []
 
-        // --- TwoEditWordsHash 邊界測試 ---
+        // --- 邊界測試（三種方法同步驗證）---
 
         // 測試資料 3：恰好 0 次編輯（完全相同），預期輸出 ["abc"]
         string[] queries3 = ["abc"];
         string[] dictionary3 = ["abc"];
+        IList<string> result3 = program.TwoEditWords(queries3, dictionary3);
+        IList<string> result3Trie = program.TwoEditWordsTrie(queries3, dictionary3);
         IList<string> result3Hash = program.TwoEditWordsHash(queries3, dictionary3);
-        Console.WriteLine($"Test 3 (雜湊, 0 edits): [{string.Join(", ", result3Hash)}]");
+        Console.WriteLine($"Test 3 (暴力解, 0 edits): [{string.Join(", ", result3)}]");
+        Console.WriteLine($"Test 3 (Trie,   0 edits): [{string.Join(", ", result3Trie)}]");
+        Console.WriteLine($"Test 3 (雜湊,   0 edits): [{string.Join(", ", result3Hash)}]");
         // Expected: [abc]
 
         // 測試資料 4：恰好 2 次編輯（邊界值），預期輸出 ["axx"]
         string[] queries4 = ["axx"];
         string[] dictionary4 = ["abc"];
+        IList<string> result4 = program.TwoEditWords(queries4, dictionary4);
+        IList<string> result4Trie = program.TwoEditWordsTrie(queries4, dictionary4);
         IList<string> result4Hash = program.TwoEditWordsHash(queries4, dictionary4);
-        Console.WriteLine($"Test 4 (雜湊, 2 edits): [{string.Join(", ", result4Hash)}]");
+        Console.WriteLine($"Test 4 (暴力解, 2 edits): [{string.Join(", ", result4)}]");
+        Console.WriteLine($"Test 4 (Trie,   2 edits): [{string.Join(", ", result4Trie)}]");
+        Console.WriteLine($"Test 4 (雜湊,   2 edits): [{string.Join(", ", result4Hash)}]");
         // Expected: [axx]
 
         // 測試資料 5：恰好 3 次編輯（超出上限），預期輸出 []
         string[] queries5 = ["xyz"];
         string[] dictionary5 = ["abc"];
+        IList<string> result5 = program.TwoEditWords(queries5, dictionary5);
+        IList<string> result5Trie = program.TwoEditWordsTrie(queries5, dictionary5);
         IList<string> result5Hash = program.TwoEditWordsHash(queries5, dictionary5);
-        Console.WriteLine($"Test 5 (雜湊, 3 edits): [{string.Join(", ", result5Hash)}]");
+        Console.WriteLine($"Test 5 (暴力解, 3 edits): [{string.Join(", ", result5)}]");
+        Console.WriteLine($"Test 5 (Trie,   3 edits): [{string.Join(", ", result5Trie)}]");
+        Console.WriteLine($"Test 5 (雜湊,   3 edits): [{string.Join(", ", result5Hash)}]");
         // Expected: []
     }
 
