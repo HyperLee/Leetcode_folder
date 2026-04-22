@@ -22,37 +22,65 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        var program = new Program();
+
+        // 測試資料 1：預期輸出 ["word", "note", "wood"]
+        string[] queries1 = ["word", "note", "ants", "wood"];
+        string[] dictionary1 = ["wood", "joke", "moat"];
+        IList<string> result1 = program.TwoEditWords(queries1, dictionary1);
+        Console.WriteLine($"Test 1: [{string.Join(", ", result1)}]");
+        // Expected: [word, note, wood]
+
+        // 測試資料 2：預期輸出 []
+        string[] queries2 = ["yes"];
+        string[] dictionary2 = ["not"];
+        IList<string> result2 = program.TwoEditWords(queries2, dictionary2);
+        Console.WriteLine($"Test 2: [{string.Join(", ", result2)}]");
+        // Expected: []
     }
 
     /// <summary>
-    /// 
+    /// 找出 queries 中，與 dictionary 裡任一單詞的漢明距離（字元差異數）小於等於 2 的所有單詞。
+    ///
+    /// 解題思路（暴力解）：
+    /// 對 queries 中的每個字串，逐一與 dictionary 中的每個字串比較，
+    /// 計算兩者在相同位置上不同字元的數量（即漢明距離）。
+    /// 若漢明距離 ≤ 2，表示最多只需兩次編輯即可讓 query 等於該 dictionary 單詞，
+    /// 則將此 query 加入結果並跳出內層迴圈。
+    ///
+    /// 時間複雜度：O(n × m × L)，n = queries 長度，m = dictionary 長度，L = 字串長度
+    /// 空間複雜度：O(1)（不含輸出結果）
     /// </summary>
-    /// <param name="queries"></param>
-    /// <param name="dictionary"></param>
-    /// <returns></returns>
+    /// <param name="queries">查詢字串陣列</param>
+    /// <param name="dictionary">字典字串陣列</param>
+    /// <returns>所有符合條件（漢明距離 ≤ 2）的查詢字串列表</returns>
     public IList<string> TwoEditWords(string[] queries, string[] dictionary)
     {
-        IList<string> res = new List<string>();
-        foreach(string query in queries)
+        IList<string> result = new List<string>();
+
+        foreach (string query in queries)
         {
-            foreach(string dict in dictionary)
+            foreach (string dictWord in dictionary)
             {
-                int dis = 0;
-                for(int i = 0; i < query.Length; i++)
+                // 計算 query 與 dictWord 在相同索引位置上不同字元的個數（漢明距離）
+                int diffCount = 0;
+                for (int i = 0; i < query.Length; i++)
                 {
-                    if(query[i] != dict[i])
+                    if (query[i] != dictWord[i])
                     {
-                        dis++;
+                        diffCount++;
                     }
                 }
-                if(dis <= 2)
+
+                // 漢明距離 ≤ 2 表示最多兩次編輯即可匹配，符合條件則加入結果並提前結束內層迴圈
+                if (diffCount <= 2)
                 {
-                    res.Add(query);
+                    result.Add(query);
                     break;
                 }
             }
         }
-        return res;
+
+        return result;
     }
 }
