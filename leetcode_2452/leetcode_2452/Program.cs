@@ -24,4 +24,35 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="queries"></param>
+    /// <param name="dictionary"></param>
+    /// <returns></returns>
+    public IList<string> TwoEditWords(string[] queries, string[] dictionary)
+    {
+        IList<string> res = new List<string>();
+        foreach(string query in queries)
+        {
+            foreach(string dict in dictionary)
+            {
+                int dis = 0;
+                for(int i = 0; i < query.Length; i++)
+                {
+                    if(query[i] != dict[i])
+                    {
+                        dis++;
+                    }
+                }
+                if(dis <= 2)
+                {
+                    res.Add(query);
+                    break;
+                }
+            }
+        }
+        return res;
+    }
 }
