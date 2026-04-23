@@ -199,3 +199,8 @@ leetcode_2615/
    ├─ leetcode_2615.csproj
    └─ Program.cs   // Main 測試資料 + Distance 解題實作
 ```
+
+
+### 附錄
+- [LeetCode 2615 — Sum of Distances（等值距離和）灵茶山艾府](https://leetcode.cn/problems/sum-of-distances/solutions/2216380/zhao-ban-2602-ti-by-endlesscheng-6pbi/?envType=daily-question&envId=2026-04-23)
+- [2602. Minimum Operations to Make All Array Elements Equal（使所有元素相等的最小操作数）](https://leetcode.cn/problems/minimum-operations-to-make-all-array-elements-equal/solutions/2191417/yi-tu-miao-dong-pai-xu-qian-zhui-he-er-f-nf55/)
