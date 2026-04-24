@@ -25,6 +25,67 @@ class Program
     /// <param name="args">程式進入點參數</param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new Program();
+
+        // 測試資料 1: moves = "L_RL__R" → L=2, R=2, _=3 → |2-2|+3 = 3
+        Console.WriteLine(solution.FurthestDistanceFromOrigin("L_RL__R")); // 預期輸出: 3
+
+        // 測試資料 2: moves = "_R__LL_" → L=2, R=1, _=4 → |2-1|+4 = 5
+        Console.WriteLine(solution.FurthestDistanceFromOrigin("_R__LL_")); // 預期輸出: 5
+
+        // 測試資料 3: moves = "_______" → L=0, R=0, _=7 → |0-0|+7 = 7
+        Console.WriteLine(solution.FurthestDistanceFromOrigin("_______")); // 預期輸出: 7
+    }
+
+    /// <summary>
+    /// 計算從原點出發，在完成所有移動後能距離原點的最遠距離。
+    ///
+    /// 解題思路（一次遍歷）：
+    /// 令 L 為 moves 中 'L' 的數量，R 為 moves 中 'R' 的數量，B 為 moves 中 '_' 的數量。
+    ///
+    /// 在不考慮 '_' 的情況下，當前位置與原點的距離為 |L - R|。
+    /// 為了使得最終位置距離原點最遠，應將所有 '_' 全部移動到與當前偏移方向相同的方向，
+    /// 因此最遠距離為 |L - R| + B。
+    ///
+    /// 時間複雜度：O(n)，其中 n 為 moves 的長度（單次遍歷）
+    /// 空間複雜度：O(1)，只使用常數額外空間
+    /// </summary>
+    /// <param name="moves">
+    /// 由 'L'（向左移動）、'R'（向右移動）、'_'（可自由選擇方向）組成的移動字串
+    /// </param>
+    /// <returns>從原點可到達的最遠距離</returns>
+    /// <example>
+    /// <code>
+    /// FurthestDistanceFromOrigin("L_RL__R") // 回傳 3
+    /// FurthestDistanceFromOrigin("_R__LL_") // 回傳 5
+    /// FurthestDistanceFromOrigin("_______") // 回傳 7
+    /// </code>
+    /// </example>
+    public int FurthestDistanceFromOrigin(string moves)
+    {
+        int leftCount = 0;        // 'L' 的總數量
+        int rightCount = 0;       // 'R' 的總數量
+        int underscoreCount = 0;  // '_' 的總數量（可自由選擇方向）
+
+        // 一次遍歷，統計各字元出現次數
+        foreach (char move in moves)
+        {
+            if (move == 'L')
+            {
+                leftCount++;
+            }
+            else if (move == 'R')
+            {
+                rightCount++;
+            }
+            else if (move == '_')
+            {
+                underscoreCount++;
+            }
+        }
+
+        // 固定移動的淨偏移量為 |L - R|，再將所有 '_' 配合偏移方向加上去，即為最遠距離
+        int maxDistance = Math.Abs(leftCount - rightCount) + underscoreCount;
+        return maxDistance;
     }
 }
