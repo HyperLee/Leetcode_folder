@@ -202,3 +202,54 @@ cnt[40] = 2
 ```powershell
 dotnet run --project .\leetcode_1010\leetcode_1010.csproj
 ```
+
+---
+
+## 九、補充說明：「若寫 60 - 0 會越界」是什麼意思？
+
+### 背景
+
+`remainderCounts` 是長度為 **60** 的整數陣列，合法索引範圍為 **0 ~ 59**。
+
+### 問題根源
+
+在解法二的迴圈中，需要查詢「互補餘數」的計數。  
+若不加任何特判，直接寫：
+
+```csharp
+pairCount += remainderCounts[60 - remainder];
+```
+
+當 `remainder == 0` 時代入，得到：
+
+```
+remainderCounts[60 - 0]
+= remainderCounts[60]   ← 索引 60 已超出陣列邊界！
+```
+
+陣列最大合法索引為 **59**，存取索引 60 會在執行期間拋出 `IndexOutOfRangeException`，程式直接崩潰。
+
+### 兩種修正方式
+
+| 解法 | 修正寫法 | 原理 |
+| --- | --- | --- |
+| 解法一 | `complement = (60 - remainder) % 60` | 當 `remainder = 0`，`(60 - 0) % 60 = 60 % 60 = 0`，自動回到索引 0 |
+| 解法二 | `if (remainder != 0) ... else remainderCounts[0]` | 以 `if/else` 明確分開兩種情況，避免直接計算 `60 - 0` |
+
+### 視覺化對照
+
+```
+陣列長度 = 60
+合法索引 = [0, 1, 2, ..., 58, 59]
+                                    ↑
+                              最大合法索引
+
+若 remainder = 0：
+  60 - remainder = 60 - 0 = 60  ← 超出邊界 ❌
+  (60 - 0) % 60 = 0             ← 安全 ✅
+```
+
+### 小結
+
+- **餘數 0** 的互補餘數仍是 **0**（因為 0 + 0 = 0，0 % 60 = 0）。
+- 直接用 `60 - 0 = 60` 當索引會越界；必須額外取模或分支處理才能安全存取 `remainderCounts[0]`。
