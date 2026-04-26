@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug leetcode_953",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/leetcode_953/bin/Debug/net10.0/leetcode_953.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/leetcode_953",
+            "console": "internalConsole",
+            "stopAtEntry": false
+        }
+    ]
+}
