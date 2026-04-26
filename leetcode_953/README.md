@@ -182,6 +182,51 @@ public bool IsAlienSorted(string[] words, string order)
 }
 ```
 
+### 補充說明：內層迴圈條件 `j < words[i - 1].Length && j < words[i].Length`
+
+```csharp
+for (int j = 0; j < words[i - 1].Length && j < words[i].Length; j++)
+```
+
+**為什麼需要兩個條件以 `&&` 連接？**
+
+這個迴圈的目的是「在兩個字串**都還有字元**的前提下，逐位置比較」。
+`&&` 確保 `j` 同時是兩個字串的合法索引，**任一個字串已經走完就停止**，避免 `IndexOutOfRangeException`。
+
+**情境 A：長度不同（如 `"app"` vs `"apple"`）**
+
+```text
+words[i-1] = "app"    長度 3
+words[i]   = "apple"  長度 5
+
+j=0: 'a' vs 'a'  → 相等，繼續
+j=1: 'p' vs 'p'  → 相等，繼續
+j=2: 'p' vs 'p'  → 相等，繼續
+j=3: 3 < 3 為 false → 迴圈停止（words[i-1] 已走完）
+```
+
+若只寫 `j < words[i].Length`，當 `j = 3` 時試圖讀取 `words[i-1][3]` → **IndexOutOfRangeException 崩潰**。
+
+**情境 B：第一個字元就不同（如 `"hello"` vs `"leetcode"`）**
+
+```text
+j=0: 'h' vs 'l' → 不相等，立即判斷大小，break 或 return false
+```
+
+迴圈在走到長度邊界之前就已結束，兩個條件此時都沒有差異。
+
+**等效改寫（更直觀）**
+
+```csharp
+int minLen = Math.Min(words[i - 1].Length, words[i].Length);
+for (int j = 0; j < minLen; j++)
+```
+
+兩種寫法邏輯完全相同，`&&` 版本只是把「取最短長度」內嵌進迴圈條件裡。
+
+> [!TIP]
+> 一句話總結：`j < words[i-1].Length && j < words[i].Length` 的意思是「`j` 必須同時是兩個字串的合法索引」，等同於只走到**較短那個字串的末尾**為止。
+
 ---
 
 ## 流程演示
