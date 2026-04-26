@@ -150,10 +150,10 @@ $$
 
 ### 答案彙整
 
-最終答案為：
+最終答案為（其中 $0 \le i < n$，$0 \le d_{\text{idx}} \le 2 \cdot \text{maxDiff}$）：
 
 $$
-\text{answer} = \max_{\substack{0 \le i < n \\ 0 \le d_{\text{idx}} \le 2 \cdot \text{maxDiff}}} dp[i][d_{\text{idx}}]
+\text{answer} = \max_{i,\; d_{\text{idx}}} \; dp[i][d_{\text{idx}}]
 $$
 
 實作上可在轉移過程中即時維護一個 `maxLength` 變數，避免最後再遍歷一次。
