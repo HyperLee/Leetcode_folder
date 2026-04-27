@@ -2,11 +2,21 @@
 
 class Program
 {
+    /// <summary>
+    /// 二元樹節點，包含節點值與左右子節點參考。
+    /// </summary>
     public class TreeNode
     {
         public int val;
         public TreeNode? left;
         public TreeNode? right;
+
+        /// <summary>
+        /// 建立二元樹節點。
+        /// </summary>
+        /// <param name="val">節點值</param>
+        /// <param name="left">左子節點</param>
+        /// <param name="right">右子節點</param>
         public TreeNode(int val = 0, TreeNode? left = null, TreeNode? right = null)
         {
             this.val = val;
@@ -42,7 +52,8 @@ class Program
             new TreeNode(15,
                 null,
                 new TreeNode(18)));
-        Console.WriteLine($"範例 1 結果：{p.RangeSumBST(root1, 7, 15)}"); // 預期：32
+        Console.WriteLine($"範例 1 DFS 結果：{p.RangeSumBST(root1, 7, 15)}"); // 預期：32
+        Console.WriteLine($"範例 1 BFS 結果：{p.RangeSumBSTBfs(root1, 7, 15)}"); // 預期：32
 
         // 測試範例 2
         // 樹結構：[10, 5, 15, 3, 7, 13, 18, 1, null, 6]，low = 6，high = 10
@@ -58,7 +69,8 @@ class Program
             new TreeNode(15,
                 new TreeNode(13),
                 new TreeNode(18)));
-        Console.WriteLine($"範例 2 結果：{p.RangeSumBST(root2, 6, 10)}"); // 預期：23
+        Console.WriteLine($"範例 2 DFS 結果：{p.RangeSumBST(root2, 6, 10)}"); // 預期：23
+        Console.WriteLine($"範例 2 BFS 結果：{p.RangeSumBSTBfs(root2, 6, 10)}"); // 預期：23
     }
 
     /// <summary>
@@ -74,7 +86,7 @@ class Program
     /// </para>
     /// <example>
     /// <code>
-    /// // 樹：[10,5,15,3,7,null,18]，low=7，high=15 → 32
+    /// 樹：[10,5,15,3,7,null,18]，low=7，high=15 → 32
     /// int result = RangeSumBST(root, 7, 15);
     /// </code>
     /// </example>
@@ -85,24 +97,83 @@ class Program
     /// <returns>所有節點值位於 [low, high] 的總和</returns>
     public int RangeSumBST(TreeNode? root, int low, int high)
     {
-        if(root == null)
+        if (root is null)
         {
             return 0;
         }
 
         // 二元樹右子樹節點值大於左子樹, 所以走左邊就不會有大於 high 的值了
-        if(root.val > high)
+        if (root.val > high)
         {
             return RangeSumBST(root.left, low, high);
         }
 
         // 二元樹右子樹節點值大於左子樹, 所以走右邊就不會有小於 low 的值了
-        if(root.val < low)
+        if (root.val < low)
         {
             return RangeSumBST(root.right, low, high);
         }
 
         // root.val 在 [low, high] 之間, 就把 root.val 加上左右子樹的結果
         return root.val + RangeSumBST(root.left, low, high) + RangeSumBST(root.right, low, high);
+    }
+
+    /// <summary>
+    /// 方法二：廣度優先搜尋（BFS）
+    /// <para>
+    /// 使用佇列逐層走訪 BST，並依照目前節點值剪枝：
+    /// <list type="bullet">
+    ///   <item>若 root 為 null，回傳 0。</item>
+    ///   <item>若目前節點值在 [low, high] 之間，累加到總和。</item>
+    ///   <item>若目前節點值大於 low，左子樹仍可能有符合範圍的值，將左子節點加入佇列。</item>
+    ///   <item>若目前節點值小於 high，右子樹仍可能有符合範圍的值，將右子節點加入佇列。</item>
+    /// </list>
+    /// </para>
+    /// <example>
+    /// <code>
+    /// 樹：[10,5,15,3,7,null,18]，low=7，high=15 → 32
+    /// int result = RangeSumBSTBfs(root, 7, 15);
+    /// </code>
+    /// </example>
+    /// </summary>
+    /// <param name="root">二元搜尋樹的根節點</param>
+    /// <param name="low">範圍下界（含）</param>
+    /// <param name="high">範圍上界（含）</param>
+    /// <returns>所有節點值位於 [low, high] 的總和</returns>
+    public int RangeSumBSTBfs(TreeNode? root, int low, int high)
+    {
+        if (root is null)
+        {
+            return 0;
+        }
+
+        int sum = 0;
+        Queue<TreeNode> queue = new Queue<TreeNode>();
+        queue.Enqueue(root);
+
+        while (queue.Count > 0)
+        {
+            TreeNode current = queue.Dequeue();
+
+            // 節點值落在包含區間 [low, high] 內，才需要累加。
+            if (current.val >= low && current.val <= high)
+            {
+                sum += current.val;
+            }
+
+            // current.val 大於 low 時，左子樹可能仍有節點落在範圍內。
+            if (current.val > low && current.left is not null)
+            {
+                queue.Enqueue(current.left);
+            }
+
+            // current.val 小於 high 時，右子樹可能仍有節點落在範圍內。
+            if (current.val < high && current.right is not null)
+            {
+                queue.Enqueue(current.right);
+            }
+        }
+
+        return sum;
     }
 }
