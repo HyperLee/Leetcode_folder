@@ -26,4 +26,45 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="grid"></param>
+    /// <param name="x"></param>
+    /// <returns></returns>
+    public int MinOperations(int[][] grid, int x)
+    {
+        int k = grid.Length * grid[0].Length;
+        int[] arr = new int[k];
+        int idx = 0;
+        int target = grid[0][0] % x;
+
+        // 1. 判斷是否無解
+        foreach(int[] row in grid)
+        {
+            foreach(int num in row)
+            {
+                // 每個元素對 x 取模後的結果必須相同，否則無法透過加減 x 來達成單值網格
+                if(num % x != target)
+                {
+                    return -1;
+                }
+                arr[idx++] = num;
+            }
+        }
+
+        // 2. 計算 grid 中所有元素的中位數
+        Array.Sort(arr);
+        int median = arr[k / 2];
+
+        // 3. 計算將所有元素變成中位數所需的操作次數
+        int operations = 0;
+        foreach(int num in arr)
+        {
+            operations += Math.Abs(num - median);
+        }
+
+        return operations / x;
+    }
 }
