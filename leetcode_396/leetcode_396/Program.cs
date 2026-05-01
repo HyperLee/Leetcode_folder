@@ -30,31 +30,63 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new();
+        (int[] Nums, int Expected)[] testCases =
+        [
+            (new[] { 4, 3, 2, 6 }, 26),
+            (new[] { 100 }, 0),
+            (new[] { 1, 2, 3, 4 }, 20),
+            (new[] { -1, -2, -3 }, -5)
+        ];
+
+        Console.WriteLine("396. Rotate Function");
+        Console.WriteLine();
+
+        for (int i = 0; i < testCases.Length; i++)
+        {
+            int actual = solution.MaxRotateFunction(testCases[i].Nums);
+            string numsText = string.Join(", ", testCases[i].Nums);
+
+            Console.WriteLine($"Test Case {i + 1}");
+            Console.WriteLine($"nums     = [{numsText}]");
+            Console.WriteLine($"expected = {testCases[i].Expected}");
+            Console.WriteLine($"actual   = {actual}");
+            Console.WriteLine($"result   = {(actual == testCases[i].Expected ? "PASS" : "FAIL")}");
+            Console.WriteLine();
+        }
     }
 
     /// <summary>
-    /// 迭代
+    /// 使用旋轉函數的遞推公式，以 O(n) 時間找出所有 F(k) 中的最大值。
+    /// 先計算原始狀態的 F(0) 與陣列總和 numSum，
+    /// 再利用 F(k) = F(k - 1) + numSum - n * nums[n - k]
+    /// 逐步推出下一個旋轉結果，避免每次旋轉後都重新計算整個加權總和。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <returns></returns>
+    /// <param name="nums">輸入整數陣列。</param>
+    /// <returns>所有旋轉函數值中的最大值。</returns>
     public int MaxRotateFunction(int[] nums)
     {
-        int f = 0;
         int n = nums.Length;
         int numSum = nums.Sum();
+        int f = 0;
 
-        for(int i = 0; i < n; i++)
+        // 先計算 F(0) = 0 * nums[0] + 1 * nums[1] + ... + (n - 1) * nums[n - 1]
+        for (int i = 0; i < n; i++)
         {
             f += i * nums[i];
         }
 
         int res = f;
-        for(int i = n - 1; i > 0; i--)
+
+        // 由後往前套用遞推公式：
+        // F(k) = F(k - 1) + numSum - n * nums[n - k]
+        // 這樣就能在 O(1) 時間得到下一個旋轉函數值。
+        for (int i = n - 1; i > 0; i--)
         {
             f += numSum - n * nums[i];
             res = Math.Max(res, f);
         }
+
         return res;
     }
 }
