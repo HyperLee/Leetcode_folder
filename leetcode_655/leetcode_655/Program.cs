@@ -69,8 +69,20 @@ class Program
             new TreeNode(2, null, new TreeNode(4)),
             new TreeNode(3));
 
-        program.RunTestCase("Sample 1", sample1);
-        program.RunTestCase("Sample 2", sample2);
+        // 測試資料 3：
+        //       1
+        //      / \
+        //     2   3
+        //    /   / \
+        //   4   5   6
+        var sample3 = new TreeNode(
+            1,
+            new TreeNode(2, new TreeNode(4)),
+            new TreeNode(3, new TreeNode(5), new TreeNode(6)));
+
+        program.RunComparisonTestCase("Sample 1", sample1);
+        program.RunComparisonTestCase("Sample 2", sample2);
+        program.RunComparisonTestCase("Sample 3", sample3);
     }
 
     /// <summary>
@@ -114,6 +126,73 @@ class Program
     }
 
     /// <summary>
+    /// 使用 BFS 解出題目要求的字串矩陣。
+    /// 做法分成兩個階段：
+    /// 1. 先以 BFS 計算整棵樹的高度。
+    /// 2. 再以 BFS 逐層放置節點，並記錄每個節點應該落在哪一列與哪一欄。
+    /// </summary>
+    /// <param name="root">二元樹根節點。</param>
+    /// <returns>符合題意的二維字串矩陣。</returns>
+    public IList<IList<string>> PrintTreeBfs(TreeNode? root)
+    {
+        if (root is null)
+        {
+            return new List<IList<string>>();
+        }
+
+        // 先以 BFS 算出高度，後續才能依公式建立答案矩陣。
+        int height = GetHeightBfs(root);
+        int rows = height + 1;
+        int cols = (1 << (height + 1)) - 1;
+
+        var result = new List<IList<string>>(rows);
+
+        // 先建立一個全部填入空字串的 m x n 矩陣。
+        for (int row = 0; row < rows; row++)
+        {
+            var currentRow = new List<string>(cols);
+            for (int col = 0; col < cols; col++)
+            {
+                currentRow.Add(string.Empty);
+            }
+
+            result.Add(currentRow);
+        }
+
+        // 佇列中同時保存節點本身，以及它在答案矩陣中的座標。
+        var queue = new Queue<(TreeNode node, int row, int col)>();
+        queue.Enqueue((root, 0, (cols - 1) / 2));
+
+        while (queue.Count > 0)
+        {
+            (TreeNode node, int row, int col) = queue.Dequeue();
+
+            // 取出節點後，直接把值放入對應位置。
+            result[row][col] = node.val.ToString();
+
+            // 左右子節點都在下一列，欄位位移量依題目公式為 2^(height - row - 1)。
+            if (node.left is not null || node.right is not null)
+            {
+                int offset = 1 << (height - row - 1);
+
+                // 左子節點放到目前欄位往左 offset 的位置。
+                if (node.left is not null)
+                {
+                    queue.Enqueue((node.left, row + 1, col - offset));
+                }
+
+                // 右子節點放到目前欄位往右 offset 的位置。
+                if (node.right is not null)
+                {
+                    queue.Enqueue((node.right, row + 1, col + offset));
+                }
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
     /// 計算二元樹高度，並以「邊數」作為高度定義。
     /// 也就是說：
     /// 1. 空節點高度視為 -1。
@@ -133,6 +212,49 @@ class Program
         int leftHeight = GetHeight(node.left);
         int rightHeight = GetHeight(node.right);
         return Math.Max(leftHeight, rightHeight) + 1;
+    }
+
+    /// <summary>
+    /// 使用 BFS 逐層計算二元樹高度。
+    /// 每完成一層就把高度加一，因此空樹高度為 -1，葉節點高度為 0。
+    /// </summary>
+    /// <param name="root">二元樹根節點。</param>
+    /// <returns>目前二元樹的高度。</returns>
+    public int GetHeightBfs(TreeNode? root)
+    {
+        if (root is null)
+        {
+            return -1;
+        }
+
+        int height = -1;
+        var queue = new Queue<TreeNode>();
+        queue.Enqueue(root);
+
+        while (queue.Count > 0)
+        {
+            int levelCount = queue.Count;
+            height++;
+
+            // 每次迴圈完整處理同一層的所有節點。
+            for (int index = 0; index < levelCount; index++)
+            {
+                TreeNode node = queue.Dequeue();
+
+                // 把下一層存在的節點加入佇列，供下一輪處理。
+                if (node.left is not null)
+                {
+                    queue.Enqueue(node.left);
+                }
+
+                if (node.right is not null)
+                {
+                    queue.Enqueue(node.right);
+                }
+            }
+        }
+
+        return height;
     }
 
     /// <summary>
@@ -161,6 +283,59 @@ class Program
 
         // 右子樹使用右半部空間 [mid + 1, right]。
         FillMatrix(matrix, node.right, row + 1, mid + 1, right);
+    }
+
+    /// <summary>
+    /// 同時執行 DFS 解法一與 BFS 解法二，並輸出兩者結果供比對。
+    /// </summary>
+    /// <param name="title">測試案例名稱。</param>
+    /// <param name="root">測試用二元樹根節點。</param>
+    public void RunComparisonTestCase(string title, TreeNode? root)
+    {
+        Console.WriteLine(title);
+
+        Console.WriteLine("DFS:");
+        IList<IList<string>> dfsResult = PrintTree(root);
+        PrintMatrix(dfsResult);
+
+        Console.WriteLine("BFS:");
+        IList<IList<string>> bfsResult = PrintTreeBfs(root);
+        PrintMatrix(bfsResult);
+
+        Console.WriteLine($"Same Result: {AreMatricesEqual(dfsResult, bfsResult)}");
+        Console.WriteLine();
+    }
+
+    /// <summary>
+    /// 比對兩個二維字串矩陣是否完全相同，方便驗證兩種解法輸出一致。
+    /// </summary>
+    /// <param name="first">第一個矩陣。</param>
+    /// <param name="second">第二個矩陣。</param>
+    /// <returns>若矩陣內容一致則回傳 true，否則回傳 false。</returns>
+    public bool AreMatricesEqual(IList<IList<string>> first, IList<IList<string>> second)
+    {
+        if (first.Count != second.Count)
+        {
+            return false;
+        }
+
+        for (int row = 0; row < first.Count; row++)
+        {
+            if (first[row].Count != second[row].Count)
+            {
+                return false;
+            }
+
+            for (int col = 0; col < first[row].Count; col++)
+            {
+                if (!string.Equals(first[row][col], second[row][col], StringComparison.Ordinal))
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     /// <summary>
