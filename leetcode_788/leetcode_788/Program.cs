@@ -40,42 +40,72 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new Program();
+        int[] testCases = { 1, 2, 10, 20, 30, 100 };
+
+        Console.WriteLine("LeetCode 788. Rotated Digits");
+        Console.WriteLine();
+
+        foreach (int n in testCases)
+        {
+            int result = solution.RotatedDigits(n);
+            Console.WriteLine($"n = {n}, good numbers count = {result}");
+        }
     }
 
-    static int[] check = {0, 0, 1, -1, -1, 1, 1, -1, 0, 1};
+    // 陣列索引代表數字 0 ~ 9，值的意義如下：
+    // 0  => 旋轉後仍是自己，例如 0、1、8
+    // 1  => 旋轉後會變成其他合法數字，例如 2、5、6、9
+    // -1 => 旋轉後不是合法數字，例如 3、4、7
+    static readonly int[] check = { 0, 0, 1, -1, -1, 1, 1, -1, 0, 1 };
 
     /// <summary>
-    /// 方法一：枚舉每個數字，檢查是否為 good 數字
+    /// 方法一：枚舉 1 到 n 的每一個整數，逐位判斷它是否為 good number。
+    ///
+    /// 解題觀念：
+    /// 1. 若數字中出現 3、4、7，旋轉後會失效，因此該數字直接淘汰。
+    /// 2. 若數字至少出現一次 2、5、6、9，代表旋轉後一定會與原數不同。
+    /// 3. 若數字只由 0、1、8 組成，雖然旋轉後仍合法，但結果與原數相同，不算 good number。
+    ///
+    /// 因此只要同時滿足「整個數字合法」以及「旋轉後至少有一位不同」，
+    /// 就可以將它計入答案。
     /// </summary>
-    /// <param name="n"></param>
-    /// <returns></returns>
+    /// <param name="n">要統計的上限，範圍為 [1, n]。</param>
+    /// <returns>區間 [1, n] 中 good numbers 的數量。</returns>
     public int RotatedDigits(int n)
     {
         int count = 0;
-        for(int i = 1; i <= n; i++)
+
+        for (int i = 1; i <= n; i++)
         {
             string num = i.ToString();
             bool valid = true;
             bool different = false;
 
-            foreach(char ch in num)
+            foreach (char ch in num)
             {
-                if(check[ch - '0'] == -1)
+                int rotationResult = check[ch - '0'];
+
+                // 只要某一位旋轉後不合法，整個數字就不是 good number。
+                if (rotationResult == -1)
                 {
                     valid = false;
-
+                    break;
                 }
-                else if(check[ch - '0'] == 1)
+
+                // 只要有任一位旋轉後改變，最終結果就會與原數不同。
+                if (rotationResult == 1)
                 {
                     different = true;
                 }
             }
-            if(valid && different)
+
+            if (valid && different)
             {
                 count++;
             }
         }
+
         return count;
     }
 }
