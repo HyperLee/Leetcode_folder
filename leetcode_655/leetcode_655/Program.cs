@@ -5,15 +5,16 @@ class Program
     public class TreeNode
     {
         public int val;
-        public TreeNode left;
-        public TreeNode right;
-        public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+        public TreeNode? left;
+        public TreeNode? right;
+
+        public TreeNode(int val = 0, TreeNode? left = null, TreeNode? right = null)
         {
             this.val = val;
             this.left = left;
             this.right = right;
         }
-    }    
+    }
 
     /// <summary>
     /// 655. Print Binary Tree
@@ -46,86 +47,143 @@ class Program
     /// 6. 其餘空白位置都填入空字串 ""。
     /// 回傳建構完成的矩陣 res。
     /// </summary>
-    /// <param name="args"></param>
+    /// <param name="args">命令列參數。</param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        var program = new Program();
+
+        // 測試資料 1：
+        //   1
+        //  /
+        // 2
+        var sample1 = new TreeNode(1, new TreeNode(2));
+
+        // 測試資料 2：
+        //     1
+        //    / \
+        //   2   3
+        //    \
+        //     4
+        var sample2 = new TreeNode(
+            1,
+            new TreeNode(2, null, new TreeNode(4)),
+            new TreeNode(3));
+
+        program.RunTestCase("Sample 1", sample1);
+        program.RunTestCase("Sample 2", sample2);
     }
 
     /// <summary>
-    /// DFS 深度優先搜尋
+    /// 使用 DFS 解出題目要求的字串矩陣。
+    /// 解題核心分成三步：
+    /// 1. 先遞迴求出樹高，注意本題高度從 0 開始，因此葉節點高度是 0。
+    /// 2. 依照公式建立 rows = height + 1、cols = 2^(height + 1) - 1 的答案矩陣。
+    /// 3. 再以 DFS 將每個節點放到目前區間的正中央，並把左右剩餘空間遞迴分配給左右子樹。
     /// </summary>
-    /// <param name="root"></param>
-    /// <returns></returns>
-    public IList<IList<string>> PrintTree(TreeNode root)
+    /// <param name="root">二元樹根節點。</param>
+    /// <returns>符合題意的二維字串矩陣。</returns>
+    public IList<IList<string>> PrintTree(TreeNode? root)
     {
-        int height = CalDepth(root);
-        // 行數高從 0 開始, 所以要 +1
-        int m = height + 1;
-        // 列數 n = 2^(height + 1) - 1
-        int n = (1 << (height + 1)) - 1;
-
-        IList<IList<string>> res = new List<IList<string>>();
-        // 先創建一顆空樹, value 是空字串
-        for (int i = 0; i < m; i++)
+        if (root is null)
         {
-            IList<string> row = new List<string>();
-            for (int j = 0; j < n; j++)
+            return new List<IList<string>>();
+        }
+
+        // 本題高度從 0 開始，葉節點高度為 0。
+        int height = GetHeight(root);
+        int rows = height + 1;
+        int cols = (1 << (height + 1)) - 1;
+
+        var result = new List<IList<string>>(rows);
+
+        // 先建立一個 filled with "" 的 m x n 矩陣。
+        for (int row = 0; row < rows; row++)
+        {
+            var currentRow = new List<string>(cols);
+            for (int col = 0; col < cols; col++)
             {
-                row.Add("");
+                currentRow.Add(string.Empty);
             }
-            res.Add(row);
+
+            result.Add(currentRow);
         }
-        DFS(res, root, 0, (n - 1) / 2, height);
-        return res;
+
+        // 從整個欄位區間開始，把根節點放在第一列正中央。
+        FillMatrix(result, root, row: 0, left: 0, right: cols - 1);
+        return result;
     }
 
     /// <summary>
-    /// Depth
-    /// 一開始先透過DFS, 取出高度
+    /// 計算二元樹高度，並以「邊數」作為高度定義。
+    /// 也就是說：
+    /// 1. 空節點高度視為 -1。
+    /// 2. 葉節點高度為 0。
+    /// 這樣可直接對應題目的 rows = height + 1 與 cols = 2^(height + 1) - 1。
     /// </summary>
-    /// <param name="root"></param>
-    /// <returns></returns>
-    public int CalDepth(TreeNode root)
+    /// <param name="node">目前遞迴到的節點。</param>
+    /// <returns>目前子樹的高度。</returns>
+    public int GetHeight(TreeNode? node)
     {
-        int h = 0;
-        if(root.left is not null)
+        if (node is null)
         {
-            h = Math.Max(h, CalDepth(root.left));
+            return -1;
         }
-        if(root.right is not null)
-        {
-            h = Math.Max(h, CalDepth(root.right));
-        }
-        return h + 1;
+
+        // 左右子樹各自求高，取較大值再加上目前這一層。
+        int leftHeight = GetHeight(node.left);
+        int rightHeight = GetHeight(node.right);
+        return Math.Max(leftHeight, rightHeight) + 1;
     }
 
     /// <summary>
-    /// DFS
-    /// 中左右
-    /// 透過 深度優先 來把資料塞進去
-    /// 依據題目規則來塞入
+    /// 以 DFS 將節點值填入答案矩陣。
+    /// 每次遞迴都把目前節點放在 [left, right] 區間的中點，
+    /// 之後把左半部區間交給左子樹、右半部區間交給右子樹。
     /// </summary>
-    /// <param name="res"></param>
-    /// <param name="root"></param>
-    /// <param name="r"></param>
-    /// <param name="c"></param>
-    /// <param name="height"></param>
-    public void DFS(IList<IList<string>> res, TreeNode root, int r, int c, int height)
+    /// <param name="matrix">答案矩陣。</param>
+    /// <param name="node">目前要放入矩陣的節點。</param>
+    /// <param name="row">目前所在列。</param>
+    /// <param name="left">目前可用區間的左邊界。</param>
+    /// <param name="right">目前可用區間的右邊界。</param>
+    public void FillMatrix(IList<IList<string>> matrix, TreeNode? node, int row, int left, int right)
     {
-        // root 在高度為0(最上層)的正中央
-        res[r][c] = root.val.ToString();
-
-        if(root.left is not null)
+        if (node is null || left > right)
         {
-            // 左子樹公式   
-            DFS(res, root.left, r + 1, c - (1 << (height - r - 1)), height);
+            return;
         }
 
-        if(root.right is not null)
+        // 目前區間的中點，就是這個節點應該放置的位置。
+        int mid = left + (right - left) / 2;
+        matrix[row][mid] = node.val.ToString();
+
+        // 左子樹使用左半部空間 [left, mid - 1]。
+        FillMatrix(matrix, node.left, row + 1, left, mid - 1);
+
+        // 右子樹使用右半部空間 [mid + 1, right]。
+        FillMatrix(matrix, node.right, row + 1, mid + 1, right);
+    }
+
+    /// <summary>
+    /// 執行單筆測試資料，並把題目要求的矩陣格式印出來，方便在 main 中快速驗證。
+    /// </summary>
+    /// <param name="title">測試案例名稱。</param>
+    /// <param name="root">測試用二元樹根節點。</param>
+    public void RunTestCase(string title, TreeNode? root)
+    {
+        Console.WriteLine(title);
+        PrintMatrix(PrintTree(root));
+        Console.WriteLine();
+    }
+
+    /// <summary>
+    /// 將二維字串矩陣輸出成容易閱讀的形式。
+    /// </summary>
+    /// <param name="matrix">要輸出的矩陣。</param>
+    public void PrintMatrix(IList<IList<string>> matrix)
+    {
+        foreach (IList<string> row in matrix)
         {
-            // 右子樹公式
-            DFS(res, root.right, r + 1, c + (1 << (height - r - 1)), height);
+            Console.WriteLine($"[{string.Join(", ", row.Select(value => $"\"{value}\""))}]");
         }
     }
 }
