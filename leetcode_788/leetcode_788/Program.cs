@@ -42,4 +42,40 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    static int[] check = {0, 0, 1, -1, -1, 1, 1, -1, 0, 1};
+
+    /// <summary>
+    /// 方法一：枚舉每個數字，檢查是否為 good 數字
+    /// </summary>
+    /// <param name="n"></param>
+    /// <returns></returns>
+    public int RotatedDigits(int n)
+    {
+        int count = 0;
+        for(int i = 1; i <= n; i++)
+        {
+            string num = i.ToString();
+            bool valid = true;
+            bool different = false;
+
+            foreach(char ch in num)
+            {
+                if(check[ch - '0'] == -1)
+                {
+                    valid = false;
+
+                }
+                else if(check[ch - '0'] == 1)
+                {
+                    different = true;
+                }
+            }
+            if(valid && different)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
 }
