@@ -46,6 +46,7 @@ class Program
         Console.WriteLine("LeetCode 788. Rotated Digits");
         Console.WriteLine();
 
+        // 將陣列中的每個測試案例傳入方法，並印出結果。
         foreach (int n in testCases)
         {
             int result = solution.RotatedDigits(n);
@@ -76,6 +77,7 @@ class Program
     {
         int count = 0;
 
+        // 從 1 到 n 枚舉每一個整數，檢查它是否為 good number。 
         for (int i = 1; i <= n; i++)
         {
             string num = i.ToString();
