@@ -2,6 +2,19 @@
 
 class Program
 {
+    public class TreeNode
+    {
+        public int val;
+        public TreeNode left;
+        public TreeNode right;
+        public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+        {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }    
+
     /// <summary>
     /// 655. Print Binary Tree
     /// https://leetcode.com/problems/print-binary-tree/description/
@@ -37,5 +50,82 @@ class Program
     static void Main(string[] args)
     {
         Console.WriteLine("Hello, World!");
+    }
+
+    /// <summary>
+    /// DFS 深度優先搜尋
+    /// </summary>
+    /// <param name="root"></param>
+    /// <returns></returns>
+    public IList<IList<string>> PrintTree(TreeNode root)
+    {
+        int height = CalDepth(root);
+        // 行數高從 0 開始, 所以要 +1
+        int m = height + 1;
+        // 列數 n = 2^(height + 1) - 1
+        int n = (1 << (height + 1)) - 1;
+
+        IList<IList<string>> res = new List<IList<string>>();
+        // 先創建一顆空樹, value 是空字串
+        for (int i = 0; i < m; i++)
+        {
+            IList<string> row = new List<string>();
+            for (int j = 0; j < n; j++)
+            {
+                row.Add("");
+            }
+            res.Add(row);
+        }
+        DFS(res, root, 0, (n - 1) / 2, height);
+        return res;
+    }
+
+    /// <summary>
+    /// Depth
+    /// 一開始先透過DFS, 取出高度
+    /// </summary>
+    /// <param name="root"></param>
+    /// <returns></returns>
+    public int CalDepth(TreeNode root)
+    {
+        int h = 0;
+        if(root.left is not null)
+        {
+            h = Math.Max(h, CalDepth(root.left));
+        }
+        if(root.right is not null)
+        {
+            h = Math.Max(h, CalDepth(root.right));
+        }
+        return h + 1;
+    }
+
+    /// <summary>
+    /// DFS
+    /// 中左右
+    /// 透過 深度優先 來把資料塞進去
+    /// 依據題目規則來塞入
+    /// </summary>
+    /// <param name="res"></param>
+    /// <param name="root"></param>
+    /// <param name="r"></param>
+    /// <param name="c"></param>
+    /// <param name="height"></param>
+    public void DFS(IList<IList<string>> res, TreeNode root, int r, int c, int height)
+    {
+        // root 在高度為0(最上層)的正中央
+        res[r][c] = root.val.ToString();
+
+        if(root.left is not null)
+        {
+            // 左子樹公式   
+            DFS(res, root.left, r + 1, c - (1 << (height - r - 1)), height);
+        }
+
+        if(root.right is not null)
+        {
+            // 右子樹公式
+            DFS(res, root.right, r + 1, c + (1 << (height - r - 1)), height);
+        }
     }
 }
