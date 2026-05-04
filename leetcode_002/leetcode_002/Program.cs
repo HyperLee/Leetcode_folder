@@ -141,7 +141,7 @@ class Program
     /// <param name="l2">第二個反向儲存數字的 linked list。</param>
     /// <returns>兩數相加後的反向 linked list。</returns>
     /// <example>
-    /// 輸入 [2 -&gt; 4 -&gt; 3] 與 [5 -&gt; 6 -&gt; 4]，輸出 [7 -&gt; 0 -&gt; 8]。
+    /// 輸入 [2 -> 4 -> 3] 與 [5 -> 6 -> 4]，輸出 [7 -> 0 -> 8]。
     /// </example>
     /// <remarks>
     /// 解題重點在於逐位模擬直式加法、用 dummy head 簡化答案 linked list 的建立，
