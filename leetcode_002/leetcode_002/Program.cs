@@ -179,7 +179,9 @@ class Program
 
             // 本輪只留下個位數，十位數由下一輪繼續處理。
             ListNode nextNode = new ListNode(sum % 10);
+            // ① 把新節點接在鏈的尾端; 把新節點「串上去」
             tail.next = nextNode;
+            // ② tail 指標移動到新尾端; 更新 tail 為最新尾端
             tail = nextNode;
         }
 
@@ -189,6 +191,7 @@ class Program
             tail.next = new ListNode(1);
         }
 
+        // 跳過 dummy head [0]，從真正的第一個節點回傳
         return dummyHead.next!;
     }
 
