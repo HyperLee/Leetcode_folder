@@ -205,7 +205,7 @@ class Program
     /// <param name="l2">第二個反向儲存數字的 linked list。</param>
     /// <returns>兩數相加後的反向 linked list。</returns>
     /// <example>
-    /// 輸入 [2 -&gt; 4 -&gt; 3] 與 [5 -&gt; 6 -&gt; 4]，輸出 [7 -&gt; 0 -&gt; 8]。
+    /// 輸入 [2 -> 4 -> 3] 與 [5 -> 6 -> 4]，輸出 [7 -> 0 -> 8]。
     /// </example>
     /// <remarks>
     /// 此解法把本輪總和與下一輪進位分開管理，因此更容易逐步追蹤。時間複雜度為 O(n)，
