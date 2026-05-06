@@ -40,14 +40,84 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        var solution = new Program();
+
+        // 測試案例 1：單列，無障礙物
+        // 輸入:  [['#','.','#']]
+        // 預期:  [['.'],['#'],['#']]
+        char[][] box1 = [['#', '.', '#']];
+        Console.WriteLine("=== Test Case 1 ===");
+        Console.WriteLine("Input:");
+        PrintGrid(box1);
+        Console.WriteLine("Output:");
+        PrintGrid(solution.RotateTheBox(box1));
+
+        // 測試案例 2：兩列，含障礙物 '*'
+        // 輸入:  [['#','.','*','.'],['#','#','*','.']]
+        // 預期:  [['#','.'],['#','#'],['*','*'],['.','.']]
+        char[][] box2 =
+        [
+            ['#', '.', '*', '.'],
+            ['#', '#', '*', '.']
+        ];
+        Console.WriteLine("=== Test Case 2 ===");
+        Console.WriteLine("Input:");
+        PrintGrid(box2);
+        Console.WriteLine("Output:");
+        PrintGrid(solution.RotateTheBox(box2));
+
+        // 測試案例 3：三列，多個障礙物
+        // 輸入:  [['#','#','*','.','*','.'],['#','#','*','#','*','.'],['#','#','*','#','*','#']]
+        // 預期:  [['#','#','#'],['#','#','#'],['*','*','*'],['#','#','.'],['*','*','*'],['#','.','.']]
+        char[][] box3 =
+        [
+            ['#', '#', '*', '.', '*', '.'],
+            ['#', '#', '*', '#', '*', '.'],
+            ['#', '#', '*', '#', '*', '#']
+        ];
+        Console.WriteLine("=== Test Case 3 ===");
+        Console.WriteLine("Input:");
+        PrintGrid(box3);
+        Console.WriteLine("Output:");
+        PrintGrid(solution.RotateTheBox(box3));
     }
 
     /// <summary>
-    /// 
+    /// 輔助函式：以可讀格式列印二維字元矩陣。
     /// </summary>
-    /// <param name="boxGrid"></param>
-    /// <returns></returns>
+    /// <param name="grid">要列印的二維字元矩陣</param>
+    static void PrintGrid(char[][] grid)
+    {
+        foreach (char[] row in grid)
+        {
+            Console.WriteLine("[" + string.Join(", ", row.Select(c => $"'{c}'")) + "]");
+        }
+
+        Console.WriteLine();
+    }
+
+    /// <summary>
+    /// 解法：正序遍歷（模擬重力 + 旋轉）
+    ///
+    /// 核心思路：
+    ///   boxGrid 的每一列互相獨立，可分別計算。
+    ///   在原始盒子中，重力使石頭向右滑動；旋轉後，此方向恰好對應新的向下方向。
+    ///
+    /// 演算法步驟：
+    ///   1. 以障礙物 '*' 為分隔，將每列劃分成多個獨立區段。
+    ///   2. 遍歷每個區段，以 cnt 統計其中石頭('#')的數量。
+    ///      遍歷時先將石頭視為空格寫入目標位置；
+    ///      當區段結束（遇到障礙物或到達列末），
+    ///      再從尾端往前填入 cnt 個石頭，模擬石頭向右集中掉落。
+    ///   3. 同時套用旋轉座標轉換：
+    ///      原座標 (i, j) ── 順時針旋轉 90° ──▶ (j, m - 1 - i)
+    ///      其中 m 為原始矩陣的列數。
+    ///
+    /// 時間複雜度：O(m × n)
+    /// 空間複雜度：O(m × n)（輸出矩陣，不計輸入）
+    /// </summary>
+    /// <param name="boxGrid">m × n 的字元矩陣，代表盒子側視圖</param>
+    /// <returns>旋轉並套用重力後的 n × m 字元矩陣</returns>
     public char[][] RotateTheBox(char[][] boxGrid)
     {
         // m = 原始 box 的列數
