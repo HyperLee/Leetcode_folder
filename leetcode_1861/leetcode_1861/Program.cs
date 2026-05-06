@@ -42,4 +42,82 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="boxGrid"></param>
+    /// <returns></returns>
+    public char[][] RotateTheBox(char[][] boxGrid)
+    {
+        // m = 原始 box 的列數
+        int m = boxGrid.Length;
+
+        // n = 原始 box 的行數
+        int n = boxGrid[0].Length;
+
+        // 旋轉後矩陣大小會變成 n x m
+        char[][] ans = new char[n][];
+
+        // 初始化答案矩陣
+        for (int i = 0; i < n; i++)
+        {
+            ans[i] = new char[m];
+        }
+
+        // 遍歷原始 box 每一列
+        for (int i = 0; i < m; i++)
+        {
+            char[] row = boxGrid[i];
+
+            // cnt 用來記錄目前區間內石頭(#)數量
+            int cnt = 0;
+
+            // 遍歷當前列的每個位置
+            for (int j = 0; j < n; j++)
+            {
+                char ch = row[j];
+
+                // 如果遇到石頭，先計數
+                if (ch == '#')
+                {
+                    cnt++;
+
+                    // 先把石頭清空，後面再統一掉落
+                    ch = '.';
+                }
+
+                /*
+                 * 先做旋轉
+                 * 原座標 (i, j)
+                 * 旋轉 90 度順時針後 -> (j, m - 1 - i)
+                 */
+                ans[j][m - 1 - i] = ch;
+
+                /*
+                 * 如果：
+                 * 1. 已經到這一列最後一格
+                 * 2. 下一格是障礙物(*)
+                 *
+                 * 表示一個區段結束，需要讓石頭往右(旋轉後往下)掉落
+                 */
+                if (j == n - 1 || row[j + 1] == '*')
+                {
+                    /*
+                     * 從 j 開始往前填入 cnt 個石頭
+                     * 代表石頭因重力集中到最右側
+                     */
+                    for (int k = j; k > j - cnt; k--)
+                    {
+                        ans[k][m - 1 - i] = '#';
+                    }
+
+                    // 重置石頭計數
+                    cnt = 0;
+                }
+            }
+        }
+
+        return ans;
+    }
 }
