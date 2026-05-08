@@ -1,4 +1,4 @@
-﻿namespace leetcode_071;
+namespace leetcode_071;
 
 class Program
 {
@@ -48,6 +48,64 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new Program();
+        var testCases = new (string Path, string Expected)[]
+        {
+            ("/home/", "/home"),
+            ("/home//foo/", "/home/foo"),
+            ("/home/user/Documents/../Pictures", "/home/user/Pictures"),
+            ("/../", "/"),
+            ("/.../a/../b/c/../d/./", "/.../b/d")
+        };
+
+        foreach (var (path, expected) in testCases)
+        {
+            string actual = solution.SimplifyPath(path);
+
+            Console.WriteLine($"Input: {path}");
+            Console.WriteLine($"Output: {actual}");
+            Console.WriteLine($"Expected: {expected}");
+            Console.WriteLine($"Result: {(actual == expected ? "PASS" : "FAIL")}");
+            Console.WriteLine();
+        }
+    }
+
+
+    /// <summary>
+    /// 將 Unix-style 絕對路徑簡化為標準路徑。
+    /// 解題概念：使用堆疊保存仍有效的目錄名稱；遇到 "." 忽略，遇到 ".." 則回到上一層，
+    /// 其他片段視為合法目錄名稱加入堆疊。
+    /// 輸入條件：<paramref name="path"/> 為以 "/" 開頭的絕對路徑，可包含連續斜線、"."、".." 與一般目錄名稱。
+    /// 輸出結果：回傳以單一 "/" 開頭、目錄間只用一個 "/" 分隔、不以多餘斜線結尾的標準路徑。
+    /// </summary>
+    /// <param name="path">待簡化的 Unix-style 絕對路徑。</param>
+    /// <returns>簡化後的標準絕對路徑。</returns>
+    public string SimplifyPath(string path)
+    {
+        Stack<string> directories = new Stack<string>();
+
+        foreach (string segment in path.Split('/', StringSplitOptions.RemoveEmptyEntries))
+        {
+            if (segment == ".")
+            {
+                continue;
+            }
+
+            if (segment == "..")
+            {
+                // 只有在堆疊中已有有效目錄時才回上一層；根目錄不能再往上。
+                if (directories.Count > 0)
+                {
+                    directories.Pop();
+                }
+
+                continue;
+            }
+
+            directories.Push(segment);
+        }
+
+        // Stack 會由最後加入的目錄開始列舉，反轉後即可組回根到目標的路徑。
+        return directories.Count == 0 ? "/" : "/" + string.Join("/", directories.Reverse());
     }
 }
