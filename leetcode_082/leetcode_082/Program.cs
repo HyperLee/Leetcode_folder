@@ -2,17 +2,27 @@
 
 class Program
 {
+    /// <summary>
+    /// 表示單向鏈結串列節點，符合 LeetCode 題目提供的 ListNode 結構。
+    /// 節點保存整數值與下一個節點參考；下一個節點可以是 null，代表串列結尾。
+    /// </summary>
     public class ListNode
     {
         public int val;
-        public ListNode next;
-        public ListNode(int val = 0, ListNode next = null)
+        public ListNode? next;
+
+        /// <summary>
+        /// 建立鏈結串列節點。
+        /// 輸入節點值與可選的下一個節點，輸出可串接成單向鏈結串列的節點物件。
+        /// </summary>
+        /// <param name="val">目前節點保存的整數值。</param>
+        /// <param name="next">下一個節點；若為 null 則代表目前節點是尾端。</param>
+        public ListNode(int val = 0, ListNode? next = null)
         {
             this.val = val;
             this.next = next;
         }
-    }    
-
+    }
 
     /// <summary>
     /// 82. Remove Duplicates from Sorted List II
@@ -31,66 +41,69 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new Program();
+        int[][] samples =
+        [
+            [1, 2, 3, 3, 4, 4, 5],
+            [1, 1, 1, 2, 3],
+            [1, 1]
+        ];
+
+        Console.WriteLine("LeetCode 82 - Remove Duplicates from Sorted List II");
+        Console.WriteLine("Solution 1: In-place overwrite");
+        RunDemoCases(samples, solution.DeleteDuplicates);
+        Console.WriteLine();
+        Console.WriteLine("Solution 2: Dummy node predecessor");
+        RunDemoCases(samples, solution.DeleteDuplicates2);
     }
 
     /// <summary>
-    /// 題目敘述, ListNode 已經經過排序了.
-    /// 所以相同的 node val 必定會相鄰
-    /// 所以判斷相鄰是不是 相同 val 即可
+    /// 移除已排序鏈結串列中所有重複值節點。
+    /// 解題概念是利用排序特性讓相同值必定相鄰，透過 current 掃描相同值群組，
+    /// 並用 prev 記錄上一個確認保留的節點。輸入可以是 null 或已排序串列；
+    /// 輸出為只保留出現一次數值的串列頭節點，若沒有節點可保留則回傳 null。
     /// </summary>
-    /// <param name="head"></param>
-    /// <returns></returns>
-    public ListNode DeleteDuplicates(ListNode head)
+    /// <param name="head">已依非遞減順序排序的鏈結串列頭節點；可為 null。</param>
+    /// <returns>刪除所有重複值後的鏈結串列頭節點；若結果為空則回傳 null。</returns>
+    public ListNode? DeleteDuplicates(ListNode? head)
     {
-        // 記錄上一個節點
-        ListNode prev = null;
-        // 記錄目前節點
-        ListNode current = head;
-        // 是否有相同的節點
+        ListNode? prev = null;
+        ListNode? current = head;
         bool hasDuplicate = false;
 
         while (current != null && current.next != null)
         {
-            if(current.val == current.next.val)
+            if (current.val == current.next.val)
             {
-                // 當前節點與下一個節點相同時, 當前節點next指向下下個節點
-                // 再次循環直到不相同為止
+                // 已排序串列的重複值會連續出現，先把相同值節點逐一略過。
                 current.next = current.next.next;
-                // 記錄節點需要被刪除
                 hasDuplicate = true;
             }
             else
             {
-                // 節點值不同時
-
-                // 當前節點已經出現過相同節點, 直接替換刪除
-                if(hasDuplicate)
+                if (hasDuplicate)
                 {
+                    // current 本身也屬於重複群組，改用下一個不同值覆蓋並繼續檢查。
                     current.val = current.next.val;
                     current.next = current.next.next;
-                    // 記錄節點刪除完成
                     hasDuplicate = false;
                 }
                 else
                 {
-                    // 更新上一個節點 val
                     prev = current;
-                    // 繼續往下走
                     current = current.next;
                 }
             }
         }
 
-        // 由於要等到遇到不同節點時候才替換, 有可能最後節點依舊相同. 下個節點為空就無法刪除
-        if(hasDuplicate) // 節點為刪除
+        if (hasDuplicate)
         {
-            if(prev == null)
+            if (prev == null)
             {
                 return null;
             }
 
-            // 上一個節點的 next 放空
+            // 重複群組一路延伸到尾端時，只能由上一個保留節點切斷尾端。
             prev.next = null;
         }
 
@@ -98,60 +111,124 @@ class Program
     }
 
     /// <summary>
-    /// 題目敘述, ListNode 已經經過排序了.
-    /// 所以相同的 node val 必定會相鄰
-    /// 所以判斷相鄰是不是 相同 val 即可
-    /// 
-    /// 如果当前 cur.next 与 cur.next.next 对应的元素相同，那么我们就需要将 cur.next 以及所有后面拥有相同元素值的链表节点全部删除。
-    /// 我们记下这个元素值 x，随后不断将 cur.next 从链表中移除，直到 cur.next 为空节点或者其元素值不等于 x 为止。
-    /// 此时，我们将链表中所有元素值为 x 的节点全部删除。
-    /// 
-    /// 如果当前 cur.next 与 cur.next.next 对应的元素不相同，那么说明链表中只有一个元素值为 cur.next 的节点，那么我们就可以将
-    /// cur 指向 cur.next。
-    /// 
-    /// 当遍历完整个链表之后，我们返回链表的的哑节点的下一个节点 dummy.next 即可。
-    /// 
-    /// 需要注意 cur.next 以及 cur.next.next 可能为空节点，如果不加以判断，可能会产生运行错误。
+    /// 以 dummy node 與前驅指標移除已排序鏈結串列中所有重複值節點。
+    /// 解題概念是讓 cur 永遠停在待判斷區段前一個節點，若 cur.next 與
+    /// cur.next.next 值相同，就刪除整段相同值；否則 cur 前進。輸入可以是
+    /// null 或已排序串列；輸出為只保留出現一次數值的串列頭節點，若沒有節點可保留則回傳 null。
     /// </summary>
-    /// <param name="head"></param>
-    /// <returns></returns>
-    public ListNode DeleteDuplicates2(ListNode head)
+    /// <param name="head">已依非遞減順序排序的鏈結串列頭節點；可為 null。</param>
+    /// <returns>刪除所有重複值後的鏈結串列頭節點；若結果為空則回傳 null。</returns>
+    public ListNode? DeleteDuplicates2(ListNode? head)
     {
-        if(head == null)
+        if (head == null)
         {
-            return head;
+            return null;
         }
 
-        // 開頭插入 0, 後續接上 head
         ListNode dummy = new ListNode(0, head);
         ListNode cur = dummy;
 
-        // 下一個與下下一個不為空為停止條件
-        while(cur.next != null && cur.next.next != null)
+        while (cur.next != null && cur.next.next != null)
         {
-            // 現在位置 node val
-            int now = cur.val;
-
-            // 下一個與下下一個是否相同
-            if(cur.next.val == cur.next.next.val)
+            if (cur.next.val == cur.next.next.val)
             {
-                int x = cur.next.val;
-                // 持續往下找, 直到不同 node val 為止
-                while(cur.next != null && cur.next.val == x)
+                int duplicateValue = cur.next.val;
+
+                // cur 停在重複群組前方，直接跳過整段 duplicateValue 節點。
+                while (cur.next != null && cur.next.val == duplicateValue)
                 {
-                    // 有相同,就要找到新的不同 val 來替換
-                    // 也可以說是刪除相同 val
                     cur.next = cur.next.next;
                 }
             }
             else
             {
-                // 往下走
                 cur = cur.next;
             }
         }
 
-        // 開頭有插入 dummy node, 最後回傳 dummy.next
         return dummy.next;
+    }
+
+    /// <summary>
+    /// 執行多組範例測資並輸出輸入與結果。
+    /// 輸入為多組整數陣列與指定解法；每組測資會轉成鏈結串列後呼叫解法，
+    /// 輸出為可直接比對 README 範例流程的主控台文字。
+    /// </summary>
+    /// <param name="samples">每一組已排序的整數測資。</param>
+    /// <param name="solver">要展示的鏈結串列去重解法。</param>
+    private static void RunDemoCases(int[][] samples, Func<ListNode?, ListNode?> solver)
+    {
+        for (int i = 0; i < samples.Length; i++)
+        {
+            ListNode? input = BuildList(samples[i]);
+            ListNode? result = solver(CloneList(input));
+
+            Console.WriteLine($"Case {i + 1}: input={FormatList(input)} output={FormatList(result)}");
+        }
+    }
+
+    /// <summary>
+    /// 將整數陣列建立為單向鏈結串列。
+    /// 輸入為已排序或空陣列；輸出為對應的串列頭節點，若陣列沒有元素則回傳 null。
+    /// </summary>
+    /// <param name="values">要依序放入鏈結串列的整數值。</param>
+    /// <returns>新建立的鏈結串列頭節點；若輸入沒有元素則回傳 null。</returns>
+    private static ListNode? BuildList(params int[] values)
+    {
+        ListNode dummy = new ListNode();
+        ListNode tail = dummy;
+
+        foreach (int value in values)
+        {
+            ListNode node = new ListNode(value);
+            tail.next = node;
+            tail = node;
+        }
+
+        return dummy.next;
+    }
+
+    /// <summary>
+    /// 複製鏈結串列，避免範例輸出因解法原地修改節點而影響原始輸入展示。
+    /// 輸入可以是 null 或任意單向鏈結串列；輸出為值相同但節點參考獨立的新串列。
+    /// </summary>
+    /// <param name="head">要複製的鏈結串列頭節點；可為 null。</param>
+    /// <returns>複製後的鏈結串列頭節點；若輸入為 null 則回傳 null。</returns>
+    private static ListNode? CloneList(ListNode? head)
+    {
+        ListNode dummy = new ListNode();
+        ListNode tail = dummy;
+        ListNode? current = head;
+
+        while (current != null)
+        {
+            ListNode node = new ListNode(current.val);
+            tail.next = node;
+            tail = node;
+            current = current.next;
+        }
+
+        return dummy.next;
+    }
+
+    /// <summary>
+    /// 將鏈結串列格式化為主控台與 README 使用的陣列字串。
+    /// 輸入可以是 null 或任意單向鏈結串列；輸出格式為 "[1,2,3]"，
+    /// 若串列為空則輸出 "[]"。
+    /// </summary>
+    /// <param name="head">要格式化的鏈結串列頭節點；可為 null。</param>
+    /// <returns>代表鏈結串列內容的陣列格式字串。</returns>
+    private static string FormatList(ListNode? head)
+    {
+        List<int> values = [];
+        ListNode? current = head;
+
+        while (current != null)
+        {
+            values.Add(current.val);
+            current = current.next;
+        }
+
+        return $"[{string.Join(",", values)}]";
     }
 }
