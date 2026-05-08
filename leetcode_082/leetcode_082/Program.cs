@@ -96,4 +96,62 @@ class Program
 
         return head;
     }
+
+    /// <summary>
+    /// 題目敘述, ListNode 已經經過排序了.
+    /// 所以相同的 node val 必定會相鄰
+    /// 所以判斷相鄰是不是 相同 val 即可
+    /// 
+    /// 如果当前 cur.next 与 cur.next.next 对应的元素相同，那么我们就需要将 cur.next 以及所有后面拥有相同元素值的链表节点全部删除。
+    /// 我们记下这个元素值 x，随后不断将 cur.next 从链表中移除，直到 cur.next 为空节点或者其元素值不等于 x 为止。
+    /// 此时，我们将链表中所有元素值为 x 的节点全部删除。
+    /// 
+    /// 如果当前 cur.next 与 cur.next.next 对应的元素不相同，那么说明链表中只有一个元素值为 cur.next 的节点，那么我们就可以将
+    /// cur 指向 cur.next。
+    /// 
+    /// 当遍历完整个链表之后，我们返回链表的的哑节点的下一个节点 dummy.next 即可。
+    /// 
+    /// 需要注意 cur.next 以及 cur.next.next 可能为空节点，如果不加以判断，可能会产生运行错误。
+    /// </summary>
+    /// <param name="head"></param>
+    /// <returns></returns>
+    public ListNode DeleteDuplicates2(ListNode head)
+    {
+        if(head == null)
+        {
+            return head;
+        }
+
+        // 開頭插入 0, 後續接上 head
+        ListNode dummy = new ListNode(0, head);
+        ListNode cur = dummy;
+
+        // 下一個與下下一個不為空為停止條件
+        while(cur.next != null && cur.next.next != null)
+        {
+            // 現在位置 node val
+            int now = cur.val;
+
+            // 下一個與下下一個是否相同
+            if(cur.next.val == cur.next.next.val)
+            {
+                int x = cur.next.val;
+                // 持續往下找, 直到不同 node val 為止
+                while(cur.next != null && cur.next.val == x)
+                {
+                    // 有相同,就要找到新的不同 val 來替換
+                    // 也可以說是刪除相同 val
+                    cur.next = cur.next.next;
+                }
+            }
+            else
+            {
+                // 往下走
+                cur = cur.next;
+            }
+        }
+
+        // 開頭有插入 dummy node, 最後回傳 dummy.next
+        return dummy.next;
+    }
 }
