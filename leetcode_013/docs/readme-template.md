@@ -1,8 +1,3 @@
-# README Generation Prompt Template
-
-Use this template when you want Codex or another AI assistant to create or refresh a polished project `README.md`.
-
-```markdown
 ---
 description: "Create or improve the README.md file for this project"
 ---
@@ -46,4 +41,4 @@ Before finishing:
 - Confirm all documented commands and paths are correct.
 - Confirm examples match the current implementation output.
 - Confirm the README does not include unsupported claims or missing assets.
-```
+
