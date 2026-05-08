@@ -59,55 +59,134 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new();
+
+        // 建立題目常見案例，涵蓋一般加法與六種減法規則中的代表情境。
+        (string Roman, int Expected)[] testCases =
+        [
+            ("III", 3),
+            ("IV", 4),
+            ("IX", 9),
+            ("LVIII", 58),
+            ("MCMXCIV", 1994)
+        ];
+
+        Console.WriteLine("LeetCode 13 - Roman to Integer");
+        Console.WriteLine();
+
+        // 逐筆執行兩種解法，方便直接從主控台確認輸出是否符合預期。
+        foreach ((string roman, int expected) in testCases)
+        {
+            int result1 = solution.RomanToInt(roman);
+            int result2 = solution.RomanToInt2(roman);
+
+            Console.WriteLine($"Input: {roman}");
+            Console.WriteLine($"Expected: {expected}");
+            Console.WriteLine($"RomanToInt : {result1}");
+            Console.WriteLine($"RomanToInt2: {result2}");
+            Console.WriteLine($"Pass: {result1 == expected && result2 == expected}");
+            Console.WriteLine(new string('-', 32));
+        }
     }
 
     /// <summary>
-    /// 解法一: 使用字典儲存羅馬數字與對應的整數，遍歷羅馬數字字串，根據前後字元的大小關係決定是加還是減。
+    /// 解法一：在方法內建立羅馬符號對應表，從左到右掃描字串並累加答案。
     /// 
-    /// 首先，分別將單個羅馬數和其所對應的整數存入字典中。
-    /// 其次，對於輸入的羅馬數，將其看作字串。設定目前數為0，開始遍歷，根據規律，
-    /// 從第一個字元到倒數第二個字元，每個字元在字典中的值與後一個字元比較
-    /// ，若前者小於後者，說明是類似於IV一樣的，需要用目前的數減去這個值。
-    /// 否則，用目前的數加上這個值。
-    /// 若迴圈到最後一個字元，則其在字典中的值直接相加，直到迴圈結束。
-    /// 最後，返回結果。
-    /// 時間複雜度：O(n)
+    /// 解題說明：
+    /// 羅馬數字通常由大到小排列，因此大多數符號可以直接相加。
+    /// 但若目前符號的值小於右邊下一個符號，代表遇到 IV、IX、XL、XC、CD、CM
+    /// 這類減法組合，此時目前符號要改成扣除。
     /// 
-    /// 要小心羅馬數字有前後問題
-    /// 如下:
-    /// IV: 4  => -=
-    ///  V: 5
-    /// VI: 6  => +=
-    /// 並非像是阿拉伯數字一致性讀取即可, 會出錯
-    /// 
-    /// 羅馬數字前後判讀方式:
-    /// 前面 < 後面 => 減法
-    /// 前面 > 後面 => 加法
+    /// 判斷規則：
+    /// 目前值 < 下一個值：減去目前值。
+    /// 目前值 >= 下一個值，或目前符號已是最後一位：加上目前值。
+    ///
+    /// 時間複雜度：O(n)，其中 n 是字串長度。
+    /// 空間複雜度：O(1)，羅馬符號種類固定為 7 種。
     /// </summary>
-    /// <param name="s"></param>
-    /// <returns></returns>
+    /// <param name="s">有效的羅馬數字字串。</param>
+    /// <returns>羅馬數字轉換後的整數值。</returns>
     public int RomanToInt(string s)
     {
         int res = 0;
-        // 儲存 羅馬字 總共七種符號 與其對應的數值
+
+        // 儲存七種羅馬符號與對應的整數值。
         Dictionary<char, int> dic = new Dictionary<char, int>{{'I', 1}, {'V', 5}, {'X', 10}, {'L', 50}, {'C', 100}, {'D', 500}, {'M', 1000}};
 
         for(int i = 0; i < s.Length; i++)
         {
+            // 先取得目前符號的數值，避免後續判斷重複查表。
             int value = dic[s[i]];
 
-            // 每個字元在字典中的值與後一個字元比較
+            // 最後一個符號一定直接相加；若下一個值不比目前值大，也屬於一般加法。
             if(i == s.Length - 1 || dic[s[i + 1]] <= dic[s[i]])
             {
                 res += value;
             }
             else
             {
-                // 後面比前面大，說明是類似於IV一樣的，需要用目前的數減去這個值
+                // 下一個值比目前值大，表示遇到減法組合，例如 IV = 5 - 1。
                 res -= value;
             }
         }
+
+        return res;
+    }
+
+    /// <summary>
+    /// 解法二使用的共用羅馬符號對應表。
+    /// 
+    /// 解題說明：
+    /// 羅馬符號的映射固定不變，將字典放在欄位中可以讓多次呼叫重複使用，
+    /// 不需要每次執行方法時都重新建立同一份資料。
+    /// </summary>
+    /// <value>七種羅馬符號與整數值的固定映射。</value>
+    Dictionary<char, int> symbolValues = new Dictionary<char, int> {
+        {'I', 1},
+        {'V', 5},
+        {'X', 10},
+        {'L', 50},
+        {'C', 100},
+        {'D', 500},
+        {'M', 1000},
+    };
+
+    /// <summary>
+    /// 解法二：使用共用字典欄位查表，從左到右掃描羅馬數字並計算總和。
+    /// 
+    /// 解題說明：
+    /// 每次讀取目前符號後，先比較它與下一個符號的大小。
+    /// 若目前值小於下一個值，表示目前符號是減法組合的左側符號，因此扣除；
+    /// 否則將目前值加進答案。
+    ///
+    /// 此解法和解法一的核心邏輯相同，差異在於對應表放在欄位中共用。
+    /// 時間複雜度：O(n)，其中 n 是字串長度。
+    /// 空間複雜度：O(1)，只使用固定大小的符號對應表。
+    /// </summary>
+    /// <param name="s">有效的羅馬數字字串。</param>
+    /// <returns>羅馬數字轉換後的整數值。</returns>
+    public int RomanToInt2(string s)
+    {
+        int res = 0;
+        int n = s.Length;
+
+        for(int i = 0; i < n; i++)
+        {
+            // 使用共用字典取得目前符號的數值。
+            int value = symbolValues[s[i]];
+
+            // 目前值小於下一個值時，代表要套用羅馬數字的減法規則。
+            if(i < n - 1 && value < symbolValues[s[i + 1]])
+            {
+                res -= value;
+            }
+            else
+            {
+                // 一般情況直接把目前符號的值加入總和。
+                res += value;
+            }
+        }
+
         return res;
     }
 }
