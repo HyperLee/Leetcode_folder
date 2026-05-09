@@ -2,6 +2,18 @@
 
 class Program
 {
+
+    public class ListNode
+    {
+        public int val;
+        public ListNode next;
+        public ListNode(int x)
+        {
+            val = x;
+            next = null;
+        }
+    }
+
     /// <summary>
     /// 142. Linked List Cycle II
     /// https://leetcode.com/problems/linked-list-cycle-ii/description/
@@ -34,5 +46,57 @@ class Program
     static void Main(string[] args)
     {
         Console.WriteLine("Hello, World!");
+    }
+
+    /// <summary>
+    /// 快慢針解法:
+    /// slow * 2 = fast;
+    /// slow = a + b;
+    /// fast = a + b + c + b = a + 2*b + c;
+    /// (a + b)*2 = a + 2*b + c;
+    /// a = c;
+    /// 
+    /// 快针走的是慢针的两倍。
+    /// 慢针走过的路，快针走过一遍。
+    /// 快针走过的剩余路程，也就是和慢针走过的全部路程相等。(a+b = c+b)
+    /// 刨去快针追赶慢针的半圈(b)，剩余路程即为所求入环距离(a=c)
+    /// </summary>
+    /// <param name="head"></param>
+    /// <returns></returns>
+    public ListNode DetectCycle(ListNode head)
+    {
+        if(head == null)
+        {
+            return head;
+        }
+
+        var oneStep = head;
+        var twoStep = head;
+
+        while(oneStep.next != null && twoStep.next != null)
+        {
+            // 慢針
+            oneStep = oneStep.next;
+            // 快針
+            twoStep = twoStep.next.next;
+
+            if(oneStep == twoStep)
+            {
+                var oneStep2 = head;
+                while(oneStep.next != null && oneStep2.next != null)
+                {
+                    // oneStep2 從頭走為a路徑, 
+                    // 原先的oneStep繼續走為c路徑
+                    // 兩者交會 就是答案
+                    if(oneStep == oneStep2)
+                    {
+                        return oneStep;
+                    }
+                    oneStep = oneStep.next;
+                    oneStep2 = oneStep2.next;
+                }
+            }
+        }
+        return null;
     }
 }
