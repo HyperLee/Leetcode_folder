@@ -65,36 +65,82 @@ class Program
     /// <returns></returns>
     public ListNode DetectCycle(ListNode head)
     {
-        if(head == null)
-        {
-            return head;
-        }
+        ListNode oneStep = head;
+        ListNode twoStep = head;
 
-        var oneStep = head;
-        var twoStep = head;
-
-        while(oneStep.next != null && twoStep.next != null)
+        while (twoStep != null && twoStep.next != null)
         {
             // 慢針
             oneStep = oneStep.next;
             // 快針
             twoStep = twoStep.next.next;
 
-            if(oneStep == twoStep)
+            if (oneStep == twoStep)
             {
-                var oneStep2 = head;
-                while(oneStep.next != null && oneStep2.next != null)
+                ListNode oneStep2 = head;
+                while (oneStep2 != oneStep)
                 {
                     // oneStep2 從頭走為a路徑, 
                     // 原先的oneStep繼續走為c路徑
                     // 兩者交會 就是答案
-                    if(oneStep == oneStep2)
-                    {
-                        return oneStep;
-                    }
                     oneStep = oneStep.next;
                     oneStep2 = oneStep2.next;
                 }
+
+                return oneStep2;
+            }
+        }
+        return null;
+    }
+
+    /// <summary>
+    /// 我们使用两个指针，fast 与 slow。它们起始都位于链表的头部。随后，slow 指针每次向后移动一个位置，而 fast 指针向后移动两
+    /// 个位置。如果链表中存在环，则 fast 指针最终将再次与 slow 指针在环中相遇。
+    /// 
+    /// 如下图所示，设链表中环外部分的长度为 a。slow 指针进入环后，又走了 b 的距离与 fast 相遇。此时，fast 指针已经走完了环的
+    /// n 圈，因此它走过的总距离为 a+n(b+c)+b=a+(n+1)b+nc。
+    /// 
+    /// 根据题意，任意时刻，fast 指针走过的距离都为 slow 指针的 2 倍。因此，我们有
+    /// a+(n+1)b+nc=2(a+b)⟹a=c+(n−1)(b+c)
+    /// 有了 a=c+(n−1)(b+c) 的等量关系，我们会发现：从相遇点到入环点的距离加上 n−1 圈的环长，恰好等于从链表头部到入环
+    /// 点的距离。.
+    /// 
+    /// 因此，当发现 slow 与 fast 相遇时，我们再额外使用一个指针 ptr。起始，它指向链表头部；随后，它和 slow 每次向后移动一个位
+    /// 置。最终，它们会在入环点相遇。
+    /// </summary>
+    /// <param name="head"></param>
+    /// <returns></returns>
+    public ListNode DetectCycle2(ListNode head)
+    {
+        if(head == null)
+        {
+            return null;
+        }
+
+        ListNode slow = head;
+        ListNode fast = head;
+
+        while(fast != null)
+        {
+            slow = slow.next;
+            if(fast.next != null)
+            {
+                fast = fast.next.next;
+            }
+            else
+            {
+                return null;
+            }
+
+            if(fast == slow)
+            {
+                ListNode ptr = head;
+                while(ptr != slow)
+                {
+                    ptr = ptr.next;
+                    slow = slow.next;
+                }
+                return ptr;
             }
         }
         return null;
