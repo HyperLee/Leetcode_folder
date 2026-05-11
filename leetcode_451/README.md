@@ -22,7 +22,10 @@
 
 題目核心不是依字母大小排序，而是依「每個字元出現幾次」排序。因此解題出發點是先把原字串轉換成頻率表，再根據頻率表的數值排序，最後按照排序結果重建字串。
 
-目前專案提供一種解法：`Dictionary<char, int>` 統計頻率、LINQ 排序、`StringBuilder` 組合輸出。
+目前專案提供兩種解法：
+
+- 解法一：`Dictionary<char, int>` 統計頻率、LINQ 排序、`StringBuilder` 組合輸出。
+- 解法二：`Dictionary<char, int>` 統計頻率、桶排序、`StringBuilder` 組合輸出。
 
 ## 解法一：Dictionary + Sort + StringBuilder
 
@@ -55,6 +58,41 @@
 2. `b` 的頻率最高，需排在前面；`A` 與 `a` 視為不同字元
 3. 重建輸出：目前程式輸出 `bbAa`
 
+## 解法二：桶排序
+
+### 設計說明
+
+1. 遍歷輸入字串，使用 `Dictionary<char, int>` 統計每個字元出現次數，同時記錄最高頻率 `maxFreq`。
+2. 建立長度為 `maxFreq + 1` 的桶陣列，讓索引值代表字元出現頻率。
+3. 將每個字元依照它的出現頻率放入對應桶中，例如出現 `3` 次的字元會放入 `buckets[3]`。
+4. 從 `maxFreq` 往 `1` 反向遍歷桶，將桶內字元依照該頻率重複加入 `StringBuilder`。
+5. 回傳重建後的字串。
+
+時間複雜度為 `O(n + k + maxFreq)`，其中 `n` 是字串長度，`k` 是不同字元數量，且 `maxFreq <= n`。空間複雜度為 `O(n + k + maxFreq)`，包含桶、頻率表與輸出字串。
+
+### 範例演示流程
+
+#### 範例一：`tree`
+
+1. 頻率統計：`t: 1`、`r: 1`、`e: 2`，最高頻率 `maxFreq = 2`
+2. 建立桶：`buckets[1]` 放入 `t`、`r`，`buckets[2]` 放入 `e`
+3. 從高頻桶開始重建：先加入 `ee`，再加入 `t`、`r`
+4. 重建輸出：目前程式輸出 `eetr`；`eert` 也符合題意
+
+#### 範例二：`cccaaa`
+
+1. 頻率統計：`c: 3`、`a: 3`，最高頻率 `maxFreq = 3`
+2. `c` 與 `a` 都放入 `buckets[3]`
+3. 從 `buckets[3]` 取出字元並各重複 `3` 次
+4. 重建輸出：目前程式輸出 `cccaaa`；`aaaccc` 也符合題意
+
+#### 範例三：`Aabb`
+
+1. 頻率統計：`A: 1`、`a: 1`、`b: 2`，最高頻率 `maxFreq = 2`
+2. `buckets[1]` 放入 `A`、`a`，`buckets[2]` 放入 `b`
+3. 從高頻桶開始重建：先加入 `bb`，再加入 `A`、`a`
+4. 重建輸出：目前程式輸出 `bbAa`
+
 ## 執行方式
 
 需求：
@@ -77,17 +115,20 @@ dotnet run --project .\leetcode_451\leetcode_451.csproj
 
 ```text
 Input: tree
-Output: eetr
+Method 1 Output: eetr
+Method 2 Output: eetr
 
 Input: cccaaa
-Output: cccaaa
+Method 1 Output: cccaaa
+Method 2 Output: cccaaa
 
 Input: Aabb
-Output: bbAa
+Method 1 Output: bbAa
+Method 2 Output: bbAa
 ```
 
 > [!NOTE]
-> 此專案目前沒有獨立測試專案，驗證方式是執行建置與 console 範例資料。
+> 此專案目前沒有獨立測試專案，驗證方式是執行建置與 console 範例資料；`Main` 會同時輸出兩種解法的結果。
 
 ## 專案結構
 

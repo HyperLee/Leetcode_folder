@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Runtime.CompilerServices;
+using System.Text;
 
 namespace leetcode_451;
 
@@ -33,9 +34,11 @@ class Program
 
         foreach (var input in testCases)
         {
-            string output = solution.FrequencySort(input);
+            string output1 = solution.FrequencySort(input);
+            string output2 = solution.FrequencySort2(input);
             Console.WriteLine($"Input: {input}");
-            Console.WriteLine($"Output: {output}");
+            Console.WriteLine($"Method 1 Output: {output1}");
+            Console.WriteLine($"Method 2 Output: {output2}");
             Console.WriteLine();
         }
     }
@@ -74,6 +77,66 @@ class Program
             for (int i = 0; i < item.Value; i++)
             {
                 result.Append(item.Key);
+            }
+        }
+
+        return result.ToString();
+    }
+
+    /// <summary>
+    /// 解法二：桶排序
+    /// 先統計每個字元的出現次數與最高頻率，再建立頻率桶，將相同頻率的字元放在同一個桶中。
+    /// 最後由最高頻率往低頻率遍歷桶，依照頻率重複加入字元，即可組合出依頻率遞減排序的字串。
+    /// </summary>
+    /// <param name="s">需要依字元頻率重新排序的輸入字串。</param>
+    /// <returns>使用桶排序依字元出現頻率由高到低排列後的字串。</returns>
+    public string FrequencySort2(string s)
+    {
+        Dictionary<char, int> frequencies = new Dictionary<char, int>();
+        int maxFreq = 0;
+
+        // 統計每個字元出現次數，並同步記錄最高頻率，方便後續建立桶的大小。
+        foreach (char ch in s)
+        {
+            if (frequencies.ContainsKey(ch))
+            {
+                frequencies[ch]++;
+            }
+            else
+            {
+                frequencies[ch] = 1;
+            }
+
+            maxFreq = Math.Max(maxFreq, frequencies[ch]);
+        }
+
+        // buckets[i] 存放出現 i 次的所有字元，因此索引範圍需要到 maxFreq。
+        StringBuilder[] buckets = new StringBuilder[maxFreq + 1];
+        for (int i = 0; i <= maxFreq; i++)
+        {
+            buckets[i] = new StringBuilder();
+        }
+
+        // 將每個字元依照出現頻率放入對應的桶。
+        foreach (KeyValuePair<char, int> item in frequencies)
+        {
+            char ch = item.Key;
+            int frequency = item.Value;
+            buckets[frequency].Append(ch);
+        }
+
+        StringBuilder result = new StringBuilder(s.Length);
+
+        // 從高頻率桶往低頻率桶取出字元，並依照頻率重複加入結果。
+        for (int i = maxFreq; i > 0; i--)
+        {
+            StringBuilder bucket = buckets[i];
+            for (int j = 0; j < bucket.Length; j++)
+            {
+                for (int k = 0; k < i; k++)
+                {
+                    result.Append(bucket[j]);
+                }
             }
         }
 
