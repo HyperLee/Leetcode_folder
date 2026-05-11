@@ -35,11 +35,15 @@ class Program
     /// <param name="input">要展示的測試字元陣列。</param>
     private static void RunSample(Program solution, char[] input)
     {
-        char[] sample = (char[])input.Clone();
+        char[] twoPointerSample = (char[])input.Clone();
+        char[] singlePointerSample = (char[])input.Clone();
 
-        Console.WriteLine($"Input:  {FormatChars(sample)}");
-        solution.ReverseString(sample);
-        Console.WriteLine($"Output: {FormatChars(sample)}");
+        solution.ReverseString(twoPointerSample);
+        solution.ReverseStringSinglePointer(singlePointerSample);
+
+        Console.WriteLine($"Input:      {FormatChars(input)}");
+        Console.WriteLine($"Solution 1: {FormatChars(twoPointerSample)}");
+        Console.WriteLine($"Solution 2: {FormatChars(singlePointerSample)}");
         Console.WriteLine();
     }
 
@@ -70,6 +74,23 @@ class Program
             char ch = s[left];
             s[left] = s[right];
             s[right] = ch;
+        }
+    }
+
+    /// <summary>
+    /// 使用單指針原地反轉字元陣列。
+    /// 解題概念是用 i 表示左側索引，再透過 n - 1 - i 推導出右側對稱索引。
+    /// 只需要處理前半段字元，因為每次交換都會同時完成一組左右對稱位置。
+    /// </summary>
+    /// <param name="s">要原地反轉的字元陣列。</param>
+    public void ReverseStringSinglePointer(char[] s)
+    {
+        int n = s.Length;
+        for (int i = 0; i < n / 2; i++)
+        {
+            char ch = s[i];
+            s[i] = s[n - 1 - i];
+            s[n - 1 - i] = ch;
         }
     }
 }
