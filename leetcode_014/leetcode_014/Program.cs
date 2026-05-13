@@ -64,17 +64,22 @@ class Program
         string result = string.Empty;
 
         // 共同前綴不可能比最短字串更長，因此先找出比較上限。
+        // 從上至下
         for(int i = 0; i < strs.Length; i++)
         {
+            // 從左至右
             if(strs[i].Length < shortestLength)
             {
+                // 找出最短的字串及其長度
                 shortestLength = strs[i].Length;
                 shortestString = strs[i];
             }
         }
 
+        // 從左至右
         for(int i = 0; i < shortestLength; i++)
         {
+            // 從上至下
             for(int j = 0; j < strs.Length; j++)
             {
                 if(shortestString[i] != strs[j][i])
