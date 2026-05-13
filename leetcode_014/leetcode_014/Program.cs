@@ -15,108 +15,108 @@ class Program
     /// 繁體中文：
     /// 撰寫一個函式，用來找出字串陣列中最長的共同前綴字串。
     /// 如果沒有共同前綴，請回傳空字串 ""。
+    ///
+    /// Main 用途：執行內建測試資料，示範兩種最長共同前綴解法。
+    /// 輸入條件：本範例不使用命令列參數，測試資料直接定義於程式中。
+    /// 輸出結果：在主控台列出每筆測資的預期值與兩種解法的回傳結果。
     /// </summary>
-    /// <param name="args">Command-line arguments.</param>
+    /// <param name="args">命令列參數；本範例未使用。</param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        string[][] testCases =
+        [
+            ["flower", "flow", "flight"],
+            ["dog", "racecar", "car"],
+            ["interspecies", "interstellar", "interstate"],
+            [""],
+            ["prefix", "prefix", "prefix"]
+        ];
+
+        string[] expectedResults = ["fl", "", "inters", "", "prefix"];
+
+        for(int i = 0; i < testCases.Length; i++)
+        {
+            string shortestStringResult = LongestCommonPrefixByShortestString(testCases[i]);
+            string verticalScanningResult = LongestCommonPrefixByVerticalScanning(testCases[i]);
+            string formattedInput = string.Join(", ", testCases[i].Select(s => "\"" + s + "\""));
+
+            Console.WriteLine($"Case {i + 1}: [{formattedInput}]");
+            Console.WriteLine($"Expected: \"{expectedResults[i]}\"");
+            Console.WriteLine($"Shortest string: \"{shortestStringResult}\"");
+            Console.WriteLine($"Vertical scanning: \"{verticalScanningResult}\"");
+            Console.WriteLine();
+        }
     }
 
     /// <summary>
-    /// 解法一
-    /// 
-    /// 先找出輸入 strs 陣列中, 最短的字串
-    /// 利用 最短字串長度 與 最短字串
-    /// 去跟 "其他組字串" 來做文字比對
-    /// 找出 相同的 文字出來
-    /// 找到相同就加入 共同前綴 
+    /// 解法一：以最短字串為比較上限尋找最長共同前綴。
+    /// 解題概念：先找出 <paramref name="strs"/> 中長度最短的字串，避免比較時超出任一字串範圍；
+    /// 再逐一檢查最短字串的每個字元是否出現在所有字串的相同位置。
+    /// 輸入條件：<paramref name="strs"/> 至少包含一個字串，且每個元素皆為非 null 字串。
+    /// 輸出結果：回傳所有字串共同擁有的最長起始片段；若沒有共同前綴則回傳空字串。
     /// </summary>
-    /// <param name="strs"></param>
-    /// <returns></returns> <summary>
-    /// 
-    /// </summary>
-    /// <param name="strs"></param>
-    /// <returns></returns>
-    public string LongestCommonPrefix(string[] strs)
+    /// <param name="strs">要比對共同前綴的字串陣列。</param>
+    /// <returns>所有字串的最長共同前綴，若不存在則為空字串。</returns>
+    public static string LongestCommonPrefixByShortestString(string[] strs)
     {
-        // 求出最短字串長度
-        int shortlength = int.MaxValue;
-        // 最短字串
-        string shortstring = "";
-        string res = "";
+        int shortestLength = int.MaxValue;
+        string shortestString = string.Empty;
+        string result = string.Empty;
 
-        // 找出最短字串以及長度
+        // 共同前綴不可能比最短字串更長，因此先找出比較上限。
         for(int i = 0; i < strs.Length; i++)
         {
-            if(strs[i].Length < shortlength)
+            if(strs[i].Length < shortestLength)
             {
-                // 最短字串長度
-                shortlength = strs[i].Length;
-                // 最短字串
-                shortstring = strs[i];
+                shortestLength = strs[i].Length;
+                shortestString = strs[i];
             }
         }
 
-        // 遍歷  "最短的字串" 和陣列中 "其他字串" 相比較, 比較次數上限為 "最短字串的長度"
-        for(int i = 0; i < shortlength; i++)
+        for(int i = 0; i < shortestLength; i++)
         {
-            // j: strs 陣列中, 第 j 個字串
             for(int j = 0; j < strs.Length; j++)
             {
-                if(shortstring[i] != strs[j][i])
+                if(shortestString[i] != strs[j][i])
                 {
-                    // 不存在回傳空字串
-                    return res;
+                    // 任一字串在此位置不同，代表目前累積結果就是最長共同前綴。
+                    return result;
                 }
             }
 
-            // 找到共同前綴字, 加入
-            res += shortstring[i];
+            result += shortestString[i];
         }
-        return res;
+
+        return result;
     }
 
     /// <summary>
-    /// Data Structures and Algorithms 常見的「縱向掃描（Vertical Scanning）」解法。
-    /// ex:
-    /// ​flower
-    /// flow
-    /// flight
-    /// 从左到右，竖着看，第一列全是 f，第二列全是 l，第三列就不全一样了，所以「最长公共前缀」是 fl。
-    /// 
-    /// 具体算法如下：
-    /// 1. 从左到右遍历 strs 的每一列。
-    /// ​2. 设当前遍历到第 j 列，从上到下遍历这一列的字母。
-    /// 3. 设当前遍历到第 i 行，即 strs[i][j]。如果 j 等于 strs[i] 的长度，或者 strs[i][j]=strs[0][j]，说明这一列的字母缺失或者不全一
-    /// 样，那么最长公共前缀的长度等于 j，返回 strs[0] 的长为 j 的前缀。
-    /// 4. 如果没有中途返回，说明所有字符串都有一个等于 strs[0] 的前缀，那么最长公共前缀就是 strs[0]。
+    /// 解法二：使用縱向掃描（Vertical Scanning）尋找最長共同前綴。
+    /// 解題概念：以第一個字串為基準，由左到右逐欄比較所有字串在同一索引位置的字元；
+    /// 若某個字串長度不足或字元不同，即可立即回傳基準字串在目前索引之前的子字串。
+    /// 輸入條件：<paramref name="strs"/> 至少包含一個字串，且每個元素皆為非 null 字串。
+    /// 輸出結果：回傳所有字串共同擁有的最長起始片段；若第一欄即不一致則回傳空字串。
     /// </summary>
-    /// <param name="strs"></param>
-    /// <returns></returns> <summary>
-    /// 
-    /// </summary>
-    /// <param name="strs"></param>
-    /// <returns></returns>
-    public string LongestCommonPrefix(string[] strs)
+    /// <param name="strs">要比對共同前綴的字串陣列。</param>
+    /// <returns>所有字串的最長共同前綴，若不存在則為空字串。</returns>
+    public static string LongestCommonPrefixByVerticalScanning(string[] strs)
     {
-        string s0 = strs[0];
-        // 從左至右
-        for(int j = 0; j < s0.Length; j++)
-        {
-            char c = s0[j];
+        string firstString = strs[0];
 
-            // 從上到下檢查每個字串
-            foreach(string s in strs)
+        for(int column = 0; column < firstString.Length; column++)
+        {
+            char expectedChar = firstString[column];
+
+            // 逐欄確認所有字串是否仍維持相同前綴。
+            for(int row = 1; row < strs.Length; row++)
             {
-                // 如果字串長度不夠, 或目前字元不同
-                if(j == s.Length || s[j] != c)
+                if(column == strs[row].Length || strs[row][column] != expectedChar)
                 {
-                    // 回傳 0 ~ j - 1 的共同前綴
-                    return s0.Substring(0, j);
+                    return firstString.Substring(0, column);
                 }
             }
         }
-        // 全部都相同
-        return s0;
+
+        return firstString;
     }
 }
