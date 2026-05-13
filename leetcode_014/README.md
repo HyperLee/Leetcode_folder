@@ -131,3 +131,9 @@ leetcode_014/
 │   └── leetcode_014.csproj
 └── README.md
 ```
+
+## 附錄
+
+- [官方解法](https://leetcode.cn/problems/longest-common-prefix/solutions/288575/zui-chang-gong-gong-qian-zhui-by-leetcode-solution/)
+- [灵茶山艾府](https://leetcode.cn/problems/longest-common-prefix/solutions/2801713/jian-dan-ti-jian-dan-zuo-pythonjavaccgoj-478q/)
+- [LockZiPeel](https://leetcode.cn/problems/longest-common-prefix/solutions/1601517/by-lockzipeel-q64w/)
