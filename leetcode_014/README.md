@@ -41,6 +41,21 @@ Output: ""
 
 範例流程：
 
+圖形化示意：
+
+```text
+先找出最短字串 "flow"，共同前綴最多只需要比到 index 3。
+
+          index 0   index 1   index 2   index 3
+flower       f         l         o         w
+flow         f         l         o         w    <- 最短字串，作為比較上限
+flight       f         l         i         g
+             |         |         X
+累積結果    "f"      "fl"      停止
+
+index 2 出現 o / o / i 不一致，因此回傳目前累積的 "fl"。
+```
+
 ```text
 strs = ["flower", "flow", "flight"]
 最短字串 = "flow"
@@ -61,6 +76,22 @@ strs = ["flower", "flow", "flight"]
 3. 若某個字串長度不足，或該欄字元與基準字串不同，就回傳基準字串在目前索引前的子字串。
 
 範例流程：
+
+圖形化示意：
+
+```text
+以第一個字串 "interspecies" 當基準，從左到右逐欄往下比。
+
+              0 1 2 3 4 5 6
+基準字串       i n t e r s p ...
+interstellar  i n t e r s t ...
+interstate    i n t e r s t ...
+              | | | | | | X
+共同前綴       i n t e r s
+
+index 0 ~ 5 都相同，形成 "inters"。
+index 6 出現 p / t / t 不一致，因此回傳 "inters"。
+```
 
 ```text
 strs = ["interspecies", "interstellar", "interstate"]

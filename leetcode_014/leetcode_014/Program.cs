@@ -103,15 +103,18 @@ class Program
     {
         string firstString = strs[0];
 
+        // 從左至右
         for(int column = 0; column < firstString.Length; column++)
         {
             char expectedChar = firstString[column];
 
-            // 逐欄確認所有字串是否仍維持相同前綴。
+            // 逐欄確認所有字串是否仍維持相同前綴。 從上至下
             for(int row = 1; row < strs.Length; row++)
             {
+                // 有缺失或是字母不同
                 if(column == strs[row].Length || strs[row][column] != expectedChar)
                 {
+                    // 0 ~ column 是公共前綴
                     return firstString.Substring(0, column);
                 }
             }
