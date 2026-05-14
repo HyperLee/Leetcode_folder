@@ -51,12 +51,15 @@ class Program
         for (int i = 0; i < demoCases.Length; i++)
         {
             (int[] values, int n) demoCase = demoCases[i];
-            ListNode? input = CreateList(demoCase.values);
-            ListNode? output = solver.RemoveNthFromEnd(input, demoCase.n);
+            ListNode? input1 = CreateList(demoCase.values);
+            ListNode? input2 = CreateList(demoCase.values);
+            ListNode? output1 = solver.RemoveNthFromEnd(input1, demoCase.n);
+            ListNode? output2 = solver.RemoveNthFromEnd2(input2, demoCase.n);
 
             Console.WriteLine($"Case {i + 1}");
             Console.WriteLine($"Input : head = {FormatList(CreateList(demoCase.values))}, n = {demoCase.n}");
-            Console.WriteLine($"Output: {FormatList(output)}");
+            Console.WriteLine($"Solution 1 (雙指針)   : {FormatList(output1)}");
+            Console.WriteLine($"Solution 2 (計算長度) : {FormatList(output2)}");
             Console.WriteLine();
         }
     }
@@ -135,5 +138,53 @@ class Program
         }
 
         return $"[{string.Join(", ", values)}]";
+    }
+
+    /// <summary>
+    /// 先計算 linked list 長度，再換算出正向索引位置來移除倒數第 n 個節點。
+    /// 解題概念是先走訪一次取得總長度，接著把「倒數第 n 個」轉成「正數第 length - n + 1 個」，
+    /// 便能在第二次走訪時找到待刪節點的前一個位置並完成刪除。
+    /// 輸入條件為 head 符合題目定義的 linked list，且 n 介於 1 到 linked list 長度之間。
+    /// 輸出結果為移除指定節點後的新 linked list head；若刪除原本 head，則回傳新的第一個節點。
+    /// </summary>
+    /// <param name="head">linked list 的起始節點。</param>
+    /// <param name="n">要刪除的倒數第 n 個位置。</param>
+    /// <returns>移除指定節點後的新 linked list head。</returns>
+    public ListNode? RemoveNthFromEnd2(ListNode? head, int n)
+    {
+        // dummy node 讓刪除 head 時也能沿用相同的定位與刪除流程。
+        ListNode dummy = new ListNode(0, head);
+        // 先取得 linked list 總長度，才能把倒數位置換算成正向位置。
+        int length = getLength(head);
+        ListNode current = dummy;
+
+        // 只要走到待刪節點的前一格即可，方便直接改接 next。
+        for (int i = 0; i < length - n; i++)
+        {
+            current = current.next!;
+        }
+
+        // 略過目標節點，讓前一個節點直接指向目標節點的下一個節點。
+        current.next = current.next!.next;
+        return dummy.next;
+    }
+
+    /// <summary>
+    /// 計算 linked list 的節點總數，供解法二換算待刪節點位置使用。
+    /// 輸入條件為任意 linked list head，可為 null。
+    /// 輸出結果為 linked list 的節點數量；空 linked list 會回傳 0。
+    /// </summary>
+    /// <param name="head">要計算長度的 linked list 起始節點。</param>
+    /// <returns>linked list 的節點總數。</returns>
+    public int getLength(ListNode? head)
+    {
+        int length = 0;
+
+        while (head != null)
+        {
+            length++;
+            head = head.next;
+        }
+        return length;
     }
 }
