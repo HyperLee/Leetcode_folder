@@ -243,5 +243,6 @@ Program.cs
  Microsoft.CodeAnalysis.NetAnalyzers.dll
 
 [analyzerConfigFiles]
+../.editorconfig
 <DOTNET>/sdk/10.0.300/Sdks/Microsoft.NET.Sdk/analyzers/build/config/analysislevel_10_default.globalconfig
 obj/Debug/net10.0/leetcode_027.GeneratedMSBuildEditorConfig.editorconfig
