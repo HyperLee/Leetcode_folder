@@ -32,4 +32,45 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 输入：nums = [3,2,2,3], val = 3
+    /// 输出：2, nums = [2,2]
+    /// 解释：函数应该返回新的长度 2, 并且 nums 中的前两个元素均为 2。
+    /// 你不需要考虑数组中超出新长度后面的元素。
+    /// 例如，函数返回的新长度为 2 
+    /// ，而 nums = [2,2,3,3] 或 nums = [2,2,0,0]，也会被视作正确答案。
+    ///
+    /// 右指針指向下一個要比對的位置
+    /// 左指針指向下一個要替換的位置
+    /// 
+    /// 原地替換
+    /// 把 != val 的 element 往前移動
+    /// = val 往後
+    /// 最終 回傳 前 k 個 數量
+    /// 也是新的 nums[k] 的 index 位置
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <param name="val"></param>
+    /// <returns></returns>
+    public int RemoveElement(int[] nums, int val)
+    {
+        int n = nums.Length;
+        if(n == 0)
+        {
+            return 0;
+        }
+
+        int left = 0;
+        for(int right = 0; right < n; right++)
+        {
+            // 不等於 val 的 element 往前放
+            if(nums[right] != val)
+            {
+                nums[left] = nums[right];
+                left++;
+            }
+        }
+        return left;
+    }
 }
