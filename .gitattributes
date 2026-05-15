@@ -1,53 +1,29 @@
-# =========================================
 # Auto detect text files
-# =========================================
-
 * text=auto
 
-
-# =========================================
-# C# / .NET
-# =========================================
-
+# C#
 *.cs         text diff=csharp
 *.csproj     text
 *.sln        text eol=crlf
 
-
-# =========================================
-# Config / Structured files
-# =========================================
-
+# Config
 *.json       text
 *.xml        text
 *.yml        text eol=lf
 *.yaml       text eol=lf
 
-
-# =========================================
 # Scripts
-# =========================================
-
 *.sh         text eol=lf
 *.ps1        text eol=crlf
 *.cmd        text eol=crlf
 *.bat        text eol=crlf
 
-
-# =========================================
-# Markdown / Documentation
-# =========================================
-
+# Markdown
 *.md         text
 
-
-# =========================================
-# Binary files
-# =========================================
-
+# Binary
 *.png        binary
 *.jpg        binary
-*.jpeg       binary
 *.gif        binary
 *.ico        binary
 *.zip        binary
