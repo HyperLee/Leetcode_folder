@@ -1,6 +1,6 @@
 ﻿namespace leetcode_033;
 
-class Program
+internal class Program
 {
     /// <summary>
     /// 33. Search in Rotated Sorted Array
@@ -35,8 +35,7 @@ class Program
     ///
     /// 你必須撰寫一個時間複雜度為 O(log n) 的演算法。
     /// </summary>
-    /// <param name="args"></param>
-    static void Main(string[] args)
+    private static void Main()
     {
         Program solution = new();
         (int[] Nums, int Target, int Expected)[] examples =
@@ -46,7 +45,7 @@ class Program
             ([1], 0, -1),
         ];
 
-        for(int index = 0; index < examples.Length; index++)
+        for (int index = 0; index < examples.Length; index++)
         {
             (int[] nums, int target, int expected) = examples[index];
             int linearResult = solution.Search(nums, target);
@@ -70,9 +69,9 @@ class Program
     /// <returns>若找到 <paramref name="target" /> 則回傳其索引，否則回傳 -1。</returns>
     public int Search(int[] nums, int target)
     {
-        for(int i = 0; i < nums.Length; i++)
+        for (int i = 0; i < nums.Length; i++)
         {
-            if(nums[i] == target)
+            if (nums[i] == target)
             {
                 return i;
             }
@@ -92,17 +91,17 @@ class Program
     public int Search2(int[] nums, int target)
     {
         int n = nums.Length;
-        int i = findMin(nums);
+        int i = FindMin(nums);
 
         // 陣列最後一個值屬於右側遞增段；比它大的 target 只可能在左側遞增段。
-        if(target > nums[n - 1])
+        if (target > nums[n - 1])
         {
             // 在開區間 (-1, i) 內搜尋實際索引 [0, i - 1]。
-            return lowerBound(nums, -1, i, target);
+            return LowerBound(nums, -1, i, target);
         }
 
         // 其餘 target 只可能在右側遞增段，實際索引範圍是 [i, n - 1]。
-        return lowerBound(nums, i - 1, n, target);
+        return LowerBound(nums, i - 1, n, target);
     }
 
     /// <summary>
@@ -113,19 +112,19 @@ class Program
     /// </summary>
     /// <param name="nums">可能已旋轉的遞增排序整數陣列，元素值不重複。</param>
     /// <returns><paramref name="nums" /> 中最小值所在的索引。</returns>
-    public int findMin(int[] nums)
+    public int FindMin(int[] nums)
     {
         int n = nums.Length;
         int left = -1;
         // 使用開區間 (-1, n - 1)；right 一開始指向最後一個元素，代表已知的右側遞增段位置。
         int right = n - 1;
 
-        while(left + 1 < right)
+        while (left + 1 < right)
         {
             int mid = left + (right - left) / 2;
 
             // nums[mid] 小於最後一個值，表示 mid 已落在包含最小值的右側遞增段。
-            if(nums[mid] < nums[n - 1])
+            if (nums[mid] < nums[n - 1])
             {
                 right = mid;
             }
@@ -149,13 +148,13 @@ class Program
     /// <param name="right">開區間右邊界，不包含在搜尋範圍內，可作為尾端哨兵。</param>
     /// <param name="target">要查找的目標整數。</param>
     /// <returns>若找到 <paramref name="target" /> 則回傳其索引，否則回傳 -1。</returns>
-    public int lowerBound(int[] nums, int left, int right, int target)
+    public int LowerBound(int[] nums, int left, int right, int target)
     {
         // 維持開區間不變量：left 側排除小於 target 的值，right 側保留第一個可能 >= target 的位置。
-        while(left + 1 < right)
+        while (left + 1 < right)
         {
             int mid = left + (right - left) / 2;
-            if(nums[mid] < target)
+            if (nums[mid] < target)
             {
                 // 範圍縮小到 (mid, right)
                 left = mid;
@@ -183,31 +182,31 @@ class Program
     public int Search3(int[] nums, int target)
     {
         int n = nums.Length;
-        if(n == 0)
+        if (n == 0)
         {
             return -1;
         }
 
-        if(n == 1)
+        if (n == 1)
         {
             return nums[0] == target ? 0 : -1;
         }
 
         int l = 0;
         int r = n - 1;
-        while(l <= r)
+        while (l <= r)
         {
             int mid = l + (r - l) / 2;
-            if(nums[mid] == target)
+            if (nums[mid] == target)
             {
                 return mid;
             }
 
             // nums[0] <= nums[mid] 表示 mid 位於左側遞增段，左半邊可用有序區間判斷。
-            if(nums[0] <= nums[mid])
+            if (nums[0] <= nums[mid])
             {
                 // target 若落在 [nums[0], nums[mid])，代表答案只可能在 mid 左側。
-                if(nums[0] <= target && target < nums[mid])
+                if (nums[0] <= target && target < nums[mid])
                 {
                     r = mid - 1;
                 }
@@ -219,7 +218,7 @@ class Program
             else
             {
                 // mid 位於右側遞增段；target 若落在 (nums[mid], nums[n - 1]]，就往右側找。
-                if(nums[mid] < target && target <= nums[n - 1])
+                if (nums[mid] < target && target <= nums[n - 1])
                 {
                     l = mid + 1;
                 }
