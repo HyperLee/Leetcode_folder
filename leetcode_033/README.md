@@ -3,7 +3,7 @@
 ![.NET](https://img.shields.io/badge/.NET-10.0-512BD4)
 ![Language](https://img.shields.io/badge/Language-C%23-239120)
 
-這個專案使用 C# console app 實作 LeetCode 33「Search in Rotated Sorted Array」。題目要求在可能被旋轉過的遞增排序陣列中查找目標值，並在二分搜尋解法中維持 `O(log n)` 時間複雜度。
+這個專案使用 C# console app 實作 LeetCode 33「Search in Rotated Sorted Array」。題目要求在可能被旋轉過的遞增排序陣列中查找目標值，並示範線性搜尋與兩種維持 `O(log n)` 時間複雜度的二分搜尋寫法。
 
 ## 題目說明
 
@@ -34,7 +34,10 @@
  左側遞增段   右側遞增段
 ```
 
-如果使用線性搜尋，可以直接逐一比對，實作簡單但時間複雜度為 `O(n)`。若要滿足題目的 `O(log n)` 要求，則需要先用二分搜尋找出最小值位置，也就是右側遞增段的起點，再判斷 `target` 應該落在哪一段遞增區間，最後只在該區間內做二分搜尋。
+如果使用線性搜尋，可以直接逐一比對，實作簡單但時間複雜度為 `O(n)`。若要滿足題目的 `O(log n)` 要求，可以使用兩種二分搜尋設計：
+
+- 先用二分搜尋找出最小值位置，也就是右側遞增段的起點，再判斷 `target` 應該落在哪一段遞增區間。
+- 每一輪都以 `mid` 作為分割點，判斷目前切出的左右兩部分哪一側仍然有序，再用有序區間判斷 `target` 是否位於其中。
 
 ## 解法設計
 
@@ -92,6 +95,35 @@ lowerBound 在索引範圍 [0, 3] 中搜尋 3
 回傳 -1
 ```
 
+### 解法三：判斷有序半邊的二分搜尋 `Search3`
+
+`Search3` 不先找旋轉點，而是在每一輪二分搜尋中直接判斷哪一側仍然有序：
+
+1. 先檢查 `nums[mid]` 是否等於 `target`，若相等就直接回傳 `mid`。
+2. 若 `nums[0] <= nums[mid]`，代表 `mid` 位於左側遞增段；此時可用 `[nums[0], nums[mid])` 判斷 `target` 是否在左半邊。
+3. 若 `target` 落在左側有序區間，將右界縮到 `mid - 1`；否則改往右半邊搜尋。
+4. 若 `nums[0] > nums[mid]`，代表 `mid` 位於右側遞增段；此時可用 `(nums[mid], nums[n - 1]]` 判斷 `target` 是否在右半邊。
+5. 若 `target` 落在右側有序區間，將左界縮到 `mid + 1`；否則改往左半邊搜尋。
+
+範例流程：
+
+```text
+nums = [4, 5, 6, 7, 0, 1, 2], target = 0
+
+l = 0, r = 6, mid = 3, nums[mid] = 7
+nums[0] <= nums[mid]，左側 [4, 5, 6, 7] 有序
+target = 0 不在 [4, 7)，往右半邊搜尋
+
+l = 4, r = 6, mid = 5, nums[mid] = 1
+nums[0] > nums[mid]，右側 [1, 2] 有序
+target = 0 不在 (1, 2]，往左半邊搜尋
+
+l = 4, r = 4, mid = 4, nums[mid] = 0
+找到 target，回傳 4
+```
+
+這個方法每一輪都能排除一半搜尋範圍，時間複雜度為 `O(log n)`，只使用固定數量變數，空間複雜度為 `O(1)`。
+
 ## 執行方式
 
 需要 .NET SDK 10.0 或更新版本。
@@ -108,12 +140,15 @@ CSSM_ModuleLoad(): One or more parameters passed to a function were not valid.
 Example 1: nums = [4, 5, 6, 7, 0, 1, 2], target = 0
   Search  => 4 (expected: 4)
   Search2 => 4 (expected: 4)
+  Search3 => 4 (expected: 4)
 Example 2: nums = [4, 5, 6, 7, 0, 1, 2], target = 3
   Search  => -1 (expected: -1)
   Search2 => -1 (expected: -1)
+  Search3 => -1 (expected: -1)
 Example 3: nums = [1], target = 0
   Search  => -1 (expected: -1)
   Search2 => -1 (expected: -1)
+  Search3 => -1 (expected: -1)
 ```
 
 > [!NOTE]

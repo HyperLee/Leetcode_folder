@@ -51,10 +51,12 @@ class Program
             (int[] nums, int target, int expected) = examples[index];
             int linearResult = solution.Search(nums, target);
             int binaryResult = solution.Search2(nums, target);
+            int orderedHalfResult = solution.Search3(nums, target);
 
             Console.WriteLine($"Example {index + 1}: nums = [{string.Join(", ", nums)}], target = {target}");
             Console.WriteLine($"  Search  => {linearResult} (expected: {expected})");
             Console.WriteLine($"  Search2 => {binaryResult} (expected: {expected})");
+            Console.WriteLine($"  Search3 => {orderedHalfResult} (expected: {expected})");
         }
     }
 
@@ -165,5 +167,68 @@ class Program
             }
         }
         return nums[right] == target ? right : -1;
+    }
+
+    /// <summary>
+    /// 使用每次判斷有序半邊的二分搜尋，在旋轉排序陣列中查找目標值。
+    /// 解題概念是將 <c>mid</c> 作為分割點：旋轉排序陣列被切成兩半時，至少會有一半仍然保持遞增。
+    /// 若 <c>mid</c> 落在左側遞增段，就用 <c>[nums[0], nums[mid])</c> 判斷
+    /// <paramref name="target" /> 是否應往左找；否則 <c>mid</c> 落在右側遞增段，
+    /// 再用 <c>(nums[mid], nums[n - 1]]</c> 判斷是否應往右找。
+    /// 每輪都能排除一半搜尋範圍，因此時間複雜度為 O(log n)，額外空間複雜度為 O(1)。
+    /// </summary>
+    /// <param name="nums">可能已旋轉的遞增排序整數陣列，元素值不重複。</param>
+    /// <param name="target">要查找的目標整數。</param>
+    /// <returns>若找到 <paramref name="target" /> 則回傳其索引，否則回傳 -1。</returns>
+    public int Search3(int[] nums, int target)
+    {
+        int n = nums.Length;
+        if(n == 0)
+        {
+            return -1;
+        }
+
+        if(n == 1)
+        {
+            return nums[0] == target ? 0 : -1;
+        }
+
+        int l = 0;
+        int r = n - 1;
+        while(l <= r)
+        {
+            int mid = l + (r - l) / 2;
+            if(nums[mid] == target)
+            {
+                return mid;
+            }
+
+            // nums[0] <= nums[mid] 表示 mid 位於左側遞增段，左半邊可用有序區間判斷。
+            if(nums[0] <= nums[mid])
+            {
+                // target 若落在 [nums[0], nums[mid])，代表答案只可能在 mid 左側。
+                if(nums[0] <= target && target < nums[mid])
+                {
+                    r = mid - 1;
+                }
+                else
+                {
+                    l = mid + 1;
+                }
+            }
+            else
+            {
+                // mid 位於右側遞增段；target 若落在 (nums[mid], nums[n - 1]]，就往右側找。
+                if(nums[mid] < target && target <= nums[n - 1])
+                {
+                    l = mid + 1;
+                }
+                else
+                {
+                    r = mid - 1;
+                }
+            }
+        }
+        return -1;
     }
 }
