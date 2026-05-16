@@ -40,4 +40,110 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 方法一:
+    /// 單純用迴圈跑過一輪 比對
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    public int Search(int[] nums, int target)
+    {
+        for(int i = 0; i < nums.Length; i++)
+        {
+            if(nums[i] == target)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /// <summary>
+    /// 方法二: 二分法
+    /// 輸入的 nums[] 有旋轉過, 所以原先的 遞增順序
+    /// 會被切割成左右兩塊.
+    /// 
+    /// 使用兩次二分
+    /// 抓出 target 坐落在 nums[] 的左邊或是右邊
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    public int Search2(int[] nums, int target)
+    {
+        int n = nums.Length;
+        int i = findMin(nums);
+
+        // target 在第一段
+        if(target > nums[n - 1])
+        {
+            // 開區間(-1, i)
+            return lowerBound(nums, -1, i, target);
+        }
+
+        // target 在第二段
+        // 開區間 (i - 1, n)
+        return lowerBound(nums, i - 1, n, target);
+    }
+
+    /// <summary>
+    ///  寻找旋转排序数组中的最小值
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <returns></returns>
+    public int findMin(int[] nums)
+    {
+        int n = nums.Length;
+        int left = -1;
+        // 開區間(-1, n - 1)
+        int right = n - 1;
+
+        // 開區間 不為空
+        while(left + 1 < right)
+        {
+            int mid = left + (right - left) / 2;
+            if(nums[mid] < nums[n - 1])
+            {
+                right = mid;
+            }
+            else
+            {
+                left = mid;
+            }
+        }
+        return right;
+    }
+
+    /// <summary>
+    /// 有序数组中找 target 的下标
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    /// <param name="target"></param>
+    /// <returns></returns>
+    public int lowerBound(int[] nums, int left, int right, int target)
+    {
+        // 開區間不為空
+        // 循環不變量
+        // nums[left] < target
+        // nums[right] >= target
+        while(left + 1 < right)
+        {
+            int mid = left + (right - left) / 2;
+            if(nums[mid] < target)
+            {
+                // 範圍縮小到 (mid, right)
+                left = mid;
+            }
+            else
+            {
+                // 範圍縮小到 (left, mid)
+                right = mid;
+            }
+        }
+        return nums[right] == target ? right : -1;
+    }
 }
