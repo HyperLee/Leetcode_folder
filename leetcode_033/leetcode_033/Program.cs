@@ -38,16 +38,34 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new();
+        (int[] Nums, int Target, int Expected)[] examples =
+        [
+            ([4, 5, 6, 7, 0, 1, 2], 0, 4),
+            ([4, 5, 6, 7, 0, 1, 2], 3, -1),
+            ([1], 0, -1),
+        ];
+
+        for(int index = 0; index < examples.Length; index++)
+        {
+            (int[] nums, int target, int expected) = examples[index];
+            int linearResult = solution.Search(nums, target);
+            int binaryResult = solution.Search2(nums, target);
+
+            Console.WriteLine($"Example {index + 1}: nums = [{string.Join(", ", nums)}], target = {target}");
+            Console.WriteLine($"  Search  => {linearResult} (expected: {expected})");
+            Console.WriteLine($"  Search2 => {binaryResult} (expected: {expected})");
+        }
     }
 
     /// <summary>
-    /// 方法一:
-    /// 單純用迴圈跑過一輪 比對
+    /// 使用線性搜尋逐一比對旋轉排序陣列中的元素。
+    /// 解題概念是從索引 0 掃描到陣列尾端，遇到第一個等於 <paramref name="target" /> 的元素就回傳其索引。
+    /// 輸入條件為 <paramref name="nums" /> 至少包含一個整數，且元素值不重複；輸出為目標值索引，不存在時回傳 -1。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
+    /// <param name="nums">可能已旋轉的遞增排序整數陣列，元素值不重複。</param>
+    /// <param name="target">要查找的目標整數。</param>
+    /// <returns>若找到 <paramref name="target" /> 則回傳其索引，否則回傳 -1。</returns>
     public int Search(int[] nums, int target)
     {
         for(int i = 0; i < nums.Length; i++)
@@ -61,49 +79,50 @@ class Program
     }
 
     /// <summary>
-    /// 方法二: 二分法
-    /// 輸入的 nums[] 有旋轉過, 所以原先的 遞增順序
-    /// 會被切割成左右兩塊.
-    /// 
-    /// 使用兩次二分
-    /// 抓出 target 坐落在 nums[] 的左邊或是右邊
+    /// 使用二分搜尋在旋轉排序陣列中查找目標值。
+    /// 解題概念是先找出最小值索引，也就是旋轉後第二段遞增區間的起點，再依 <paramref name="target" />
+    /// 與陣列最後一個元素的大小關係判斷目標落在哪一段，最後只在該遞增區間內做 lower bound 搜尋。
+    /// 輸入條件為 <paramref name="nums" /> 至少包含一個整數，且元素值不重複；輸出為目標值索引，不存在時回傳 -1。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
+    /// <param name="nums">可能已旋轉的遞增排序整數陣列，元素值不重複。</param>
+    /// <param name="target">要查找的目標整數。</param>
+    /// <returns>若找到 <paramref name="target" /> 則回傳其索引，否則回傳 -1。</returns>
     public int Search2(int[] nums, int target)
     {
         int n = nums.Length;
         int i = findMin(nums);
 
-        // target 在第一段
+        // 陣列最後一個值屬於右側遞增段；比它大的 target 只可能在左側遞增段。
         if(target > nums[n - 1])
         {
-            // 開區間(-1, i)
+            // 在開區間 (-1, i) 內搜尋實際索引 [0, i - 1]。
             return lowerBound(nums, -1, i, target);
         }
 
-        // target 在第二段
-        // 開區間 (i - 1, n)
+        // 其餘 target 只可能在右側遞增段，實際索引範圍是 [i, n - 1]。
         return lowerBound(nums, i - 1, n, target);
     }
 
     /// <summary>
-    ///  寻找旋转排序数组中的最小值
+    /// 使用二分搜尋找出旋轉排序陣列中的最小值索引。
+    /// 解題概念是利用 <paramref name="nums" /> 最後一個元素作為右側遞增段的判斷基準：
+    /// 小於最後一個元素的值位於右側遞增段，否則位於左側遞增段。搜尋結束時右邊界即為最小值索引。
+    /// 輸入條件為 <paramref name="nums" /> 至少包含一個整數，且元素值不重複；輸出為最小值所在索引。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <returns></returns>
+    /// <param name="nums">可能已旋轉的遞增排序整數陣列，元素值不重複。</param>
+    /// <returns><paramref name="nums" /> 中最小值所在的索引。</returns>
     public int findMin(int[] nums)
     {
         int n = nums.Length;
         int left = -1;
-        // 開區間(-1, n - 1)
+        // 使用開區間 (-1, n - 1)；right 一開始指向最後一個元素，代表已知的右側遞增段位置。
         int right = n - 1;
 
-        // 開區間 不為空
         while(left + 1 < right)
         {
             int mid = left + (right - left) / 2;
+
+            // nums[mid] 小於最後一個值，表示 mid 已落在包含最小值的右側遞增段。
             if(nums[mid] < nums[n - 1])
             {
                 right = mid;
@@ -117,19 +136,20 @@ class Program
     }
 
     /// <summary>
-    /// 有序数组中找 target 的下标
+    /// 在指定的遞增區間內尋找第一個大於或等於目標值的位置，並確認該位置是否等於目標值。
+    /// 解題概念是維護開區間 (<paramref name="left" />, <paramref name="right" />)，
+    /// 其中左界代表小於 <paramref name="target" /> 的位置，右界代表可能大於或等於
+    /// <paramref name="target" /> 的位置。搜尋結束後若右界元素等於目標值就回傳索引，否則回傳 -1。
+    /// 輸入條件為指定搜尋區間中的元素已依遞增排序；輸出為目標值索引，不存在時回傳 -1。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="left"></param>
-    /// <param name="right"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
+    /// <param name="nums">整數陣列，其中指定搜尋區間必須為遞增排序。</param>
+    /// <param name="left">開區間左邊界，不包含在搜尋範圍內。</param>
+    /// <param name="right">開區間右邊界，不包含在搜尋範圍內，可作為尾端哨兵。</param>
+    /// <param name="target">要查找的目標整數。</param>
+    /// <returns>若找到 <paramref name="target" /> 則回傳其索引，否則回傳 -1。</returns>
     public int lowerBound(int[] nums, int left, int right, int target)
     {
-        // 開區間不為空
-        // 循環不變量
-        // nums[left] < target
-        // nums[right] >= target
+        // 維持開區間不變量：left 側排除小於 target 的值，right 側保留第一個可能 >= target 的位置。
         while(left + 1 < right)
         {
             int mid = left + (right - left) / 2;
