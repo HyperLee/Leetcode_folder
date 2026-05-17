@@ -39,6 +39,52 @@
 - 排序後字串：`"eat"`、`"tea"`、`"ate"` 排序後都會變成 `"aet"`。
 - 字母計數：`"eat"`、`"tea"`、`"ate"` 的字母出現次數都會變成 `"a1e1t1"`。
 
+## `Dictionary.TryGetValue` 用法說明
+
+兩種解法都會使用 `Dictionary<string, IList<string>> groupsByKey` 來保存分組結果：
+
+- `key`：代表一組字母異位詞的標準化結果，例如 `"aet"` 或 `"a1e1t1"`。
+- `value`：這個 key 對應到的原始字串清單，例如 `["eat", "tea"]`。
+
+`TryGetValue` 的用途是「嘗試用 key 從 Dictionary 取出既有 value」：
+
+```csharp
+bool found = groupsByKey.TryGetValue(key, out IList<string>? group);
+```
+
+- 如果 Dictionary 已經有這個 `key`，`TryGetValue` 會回傳 `true`，並把既有群組放進 `group`。
+- 如果 Dictionary 還沒有這個 `key`，`TryGetValue` 會回傳 `false`，此時需要自己建立新的群組。
+
+本題使用的寫法如下：
+
+```csharp
+if (!groupsByKey.TryGetValue(key, out IList<string>? group))
+{
+    group = new List<string>();
+    groupsByKey[key] = group;
+}
+
+group.Add(strs[i]);
+```
+
+這段可以拆成三個步驟理解：
+
+1. `TryGetValue(key, out group)` 先檢查這個 key 是否已經有群組。
+2. 前面的 `!` 表示「如果找不到」，就進入 `if` 建立新的 `List<string>`，再用 `groupsByKey[key] = group` 放回 Dictionary。
+3. 離開 `if` 後，`group` 一定會指向某個清單；可能是剛建立的新清單，也可能是 Dictionary 裡原本就存在的清單，所以可以直接呼叫 `group.Add(strs[i])`。
+
+以排序 Key 解法為例：
+
+| 原始字串 | key | `TryGetValue` 結果 | 後續動作 |
+| --- | --- | --- | --- |
+| `"eat"` | `"aet"` | 找不到，回傳 `false` | 建立新清單，再加入 `"eat"` |
+| `"tea"` | `"aet"` | 找到，回傳 `true` | 取出既有清單，再加入 `"tea"` |
+| `"ate"` | `"aet"` | 找到，回傳 `true` | 取出既有清單，再加入 `"ate"` |
+
+重要觀念是：`group` 指向的是 Dictionary 裡保存的同一個 `List<string>` 物件。因此當執行 `group.Add(...)` 時，Dictionary 中對應 key 的清單內容也會一起更新。
+
+這種寫法比先 `ContainsKey` 再用 `groupsByKey[key]` 取值更直接，因為 `TryGetValue` 可以一次完成「確認 key 是否存在」與「取出既有 value」兩件事，也能避免在 key 不存在時直接用索引取值造成錯誤。
+
 ## 解法一：排序 Key
 
 ### 設計說明
