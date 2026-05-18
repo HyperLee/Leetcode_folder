@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace leetcode_050;
 
@@ -206,6 +206,7 @@ public class Solution
 
         while (exponent > 0)
         {
+            // 當前指數如果是奇數，代表這一層的因子要乘進答案
             if ((exponent & 1) == 1)
             {
                 // 當前位元為 1，代表這一層的因子需要乘進答案。
