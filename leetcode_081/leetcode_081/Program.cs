@@ -1,4 +1,4 @@
-﻿namespace leetcode_081;
+namespace leetcode_081;
 
 class Program
 {
@@ -31,77 +31,112 @@ class Program
     /// 回傳 true；否則回傳 false。
     /// 你必須盡可能減少整體操作步驟。
     /// </summary>
-    /// <param name="args"></param>
+    /// <param name="args">命令列參數。</param>
+    /// <summary>
+    /// 主程式進入點，執行多組測資並比較四種解法結果是否一致。
+    /// 解題概念是用固定案例同時驗證正確性與不同方法輸出一致性。
+    /// 輸入為命令列參數（本範例未使用），輸出為每組案例的判斷結果報告。
+    /// </summary>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        var solver = new Program();
+        var testCases = new (int[] nums, int target, bool expected, string note)[]
+        {
+            (new[] { 2, 5, 6, 0, 0, 1, 2 }, 0, true, "LeetCode 範例：目標存在"),
+            (new[] { 2, 5, 6, 0, 0, 1, 2 }, 3, false, "LeetCode 範例：目標不存在"),
+            (new[] { 1, 0, 1, 1, 1 }, 0, true, "重複值干擾有序區判斷"),
+            (new[] { 1, 1, 1, 1, 1 }, 2, false, "全重複但目標不存在"),
+            (new[] { 1 }, 1, true, "單一元素命中"),
+            (new[] { 1 }, 0, false, "單一元素未命中"),
+        };
+
+        Console.WriteLine("LeetCode 81 - Search in Rotated Sorted Array II");
+        Console.WriteLine(new string('-', 70));
+
+        for (int i = 0; i < testCases.Length; i++)
+        {
+            var testCase = testCases[i];
+
+            bool r1 = solver.Search(testCase.nums, testCase.target);
+            bool r2 = solver.Search2(testCase.nums, testCase.target);
+            bool r3 = solver.Search3(testCase.nums, testCase.target);
+            bool r4 = solver.Search4(testCase.nums, testCase.target);
+            bool allEqual = r1 == r2 && r2 == r3 && r3 == r4;
+
+            Console.WriteLine($"Case {i + 1}: {testCase.note}");
+            Console.WriteLine($"  nums    = [{string.Join(", ", testCase.nums)}]");
+            Console.WriteLine($"  target  = {testCase.target}");
+            Console.WriteLine($"  expected= {testCase.expected}");
+            Console.WriteLine($"  Search  = {r1}, Search2 = {r2}, Search3 = {r3}, Search4 = {r4}");
+            Console.WriteLine($"  pass    = {r4 == testCase.expected}, consistent = {allEqual}");
+            Console.WriteLine();
+        }
     }
 
     /// <summary>
-    /// 解法一:
-    /// 直覺方法, 每個數值取出比對然後回傳結果
+    /// 以線性掃描方式搜尋目標值。
+    /// 解題概念是逐一比對每個元素，遇到目標就提早回傳 true。
+    /// 輸入可為任意整數陣列（含重複值與旋轉），輸出為目標是否存在。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="target"></param>
-    /// <returns></returns> <summary>
-    /// 
-    /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
+    /// <param name="nums">旋轉後整數陣列。</param>
+    /// <param name="target">欲搜尋的目標值。</param>
+    /// <returns>若 target 出現在 nums 中回傳 true，否則回傳 false。</returns>
     public bool Search(int[] nums, int target)
     {
         int n = nums.Length;
-        for(int i = 0; i < n; i++)
+        for (int i = 0; i < n; i++)
         {
-            if(nums[i] == target)
+            if (nums[i] == target)
             {
                 return true;
             }
         }
+
         return false;
     }
 
     /// <summary>
-    /// 解法二: 二分法
-    /// 思路:
-    /// 对于数组中有重复元素的情况，二分查找时可能会有 a[l]=a[mid]=a[r]，此时无法判断区间 [l,mid] 和区间 [mid+1,r] 哪个是有序的。
-    /// 例如 nums=[3,1,2,3,3,3,3]，target=2，首次二分时无法判断区间 [0,3] 和区间 [4,6] 哪个是有序的。
-    /// 对于这种情况，我们只能将当前二分区间的左边界加一，右边界减一，然后在新区间上继续二分查找。
+    /// 二分搜尋解法（處理重複值版本）。
+    /// 核心概念是先判斷哪一半有序，再決定保留區間；
+    /// 當 left/mid/right 三者值相同時無法判定有序區，只能同時收縮左右邊界。
+    /// 輸入需為原先非遞減排序、旋轉後的陣列；輸出為目標是否存在。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
+    /// <param name="nums">旋轉後整數陣列。</param>
+    /// <param name="target">欲搜尋的目標值。</param>
+    /// <returns>若 target 出現在 nums 中回傳 true，否則回傳 false。</returns>
     public bool Search2(int[] nums, int target)
     {
         int n = nums.Length;
-        if(n == 0)
+        if (n == 0)
         {
             return false;
         }
-        if(n == 1)
+
+        if (n == 1)
         {
             return nums[0] == target;
         }
 
         int left = 0;
         int right = n - 1;
-        while(left <= right)
+        while (left <= right)
         {
             int mid = left + (right - left) / 2;
-            if(nums[mid] == target)
+            if (nums[mid] == target)
             {
                 return true;
             }
 
-            if(nums[left] == nums[mid] && nums[mid] == nums[right])
+            // 無法判斷哪半邊有序，只能縮小搜尋邊界以去除重複值干擾。
+            if (nums[left] == nums[mid] && nums[mid] == nums[right])
             {
                 left++;
                 right--;
             }
-            else if(nums[left] <= nums[mid])
+            else if (nums[left] <= nums[mid])
             {
-                if(nums[left] <= target && target < nums[mid])
+                // 左半邊有序，判斷 target 是否落在左半邊範圍。
+                if (nums[left] <= target && target < nums[mid])
                 {
                     right = mid - 1;
                 }
@@ -112,7 +147,8 @@ class Program
             }
             else
             {
-                if(nums[mid] < target && target <= nums[n - 1])
+                // 右半邊有序，判斷 target 是否落在右半邊範圍。
+                if (nums[mid] < target && target <= nums[right])
                 {
                     left = mid + 1;
                 }
@@ -122,43 +158,38 @@ class Program
                 }
             }
         }
+
         return false;
     }
 
     /// <summary>
-    /// 解法三: 二分法
-    /// 本题与 33 题的区别是有相同元素，这会导致在二分查找时，可能会遇到恰好二分元素 nums[mid] 与数组末尾元素 nums[n−1] 相
-    /// 同的情况，此时无法确定答案在左半区间中还是右半区间中。
-    /// 
-    /// 既然无法确定最小值所在区间，那么干脆去掉 nums 的最后一个数，继续二分。换句话说，此时问题变成了一个规模为 n−1 的
-    /// 子问题。
-    /// 
-    /// 你可能会有疑问：这会不会碰巧去掉了 target？
-    /// 这是不会的：
-    /// - 如果去掉的数是 target，那么 nums[mid] 也等于 target，这说明 target 仍然在数组中。
-    /// - 如果去掉的数不是 target，那么我们排除了一个不等于 target 的数。
-    /// 为了方便写代码，我们可以把 right 当作「数组最后一个数的下标」:
-    /// - 如果 nums[mid]=nums[right]，那么和上面一样，去掉 nums[right]，也就是把 right 减一。
-    /// - 如果 check(nums[mid])=true，那么下标大于 mid 的数都在 target 的右边，都可以去掉，也就是把 right 更新为 mid
-    /// - 如果 check(nums[mid])=false，和 33 题一样，把 left 更新为 mid。
+    /// 開區間二分解法，透過與右端點比較決定淘汰方向。
+    /// 概念是把 right 視為參考端點，當 nums[mid] 等於 nums[right] 時先丟棄 right 以去重，
+    /// 否則用 check 判斷 mid 是否位於可能包含 target 的區間邊界內。
+    /// 輸入需為旋轉非遞減陣列；輸出為目標是否存在。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
+    /// <param name="nums">旋轉後整數陣列。</param>
+    /// <param name="target">欲搜尋的目標值。</param>
+    /// <returns>若 target 出現在 nums 中回傳 true，否則回傳 false。</returns>
     public bool Search3(int[] nums, int target)
     {
-        int left = -1;
-        int right = nums.Length - 1; // 開區間(-1, n - 1)
+        if (nums.Length == 0)
+        {
+            return false;
+        }
 
-        // 開區間不為空
-        while(left + 1 < right)
+        int left = -1;
+        int right = nums.Length - 1; // 開區間 (-1, n - 1)
+
+        while (left + 1 < right)
         {
             int mid = left + (right - left) / 2;
-            if(nums[mid] == nums[right])
+            if (nums[mid] == nums[right])
             {
+                // 去除重複尾值，避免無法判斷旋轉分界。
                 right--;
             }
-            else if(check(nums, target, right, mid))
+            else if (check(nums, target, right, mid))
             {
                 right = mid;
             }
@@ -167,28 +198,24 @@ class Program
                 left = mid;
             }
         }
+
         return nums[right] == target;
     }
 
     /// <summary>
-    /// 
+    /// 判斷 nums[i] 是否應保留在當前二分收斂的右界區間。
+    /// 透過 nums[right] 區分旋轉前後兩段，再結合 target 相對位置決定淘汰方向。
+    /// 輸入要求 right 與 i 為合法索引；輸出 true 代表可將右邊界收斂至 i。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="target"></param>
-    /// <param name="right"></param>
-    /// <param name="i"></param>
-    /// <returns></returns> <summary>
-    /// 
-    /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="target"></param>
-    /// <param name="right"></param>
-    /// <param name="i"></param>
-    /// <returns></returns>
+    /// <param name="nums">旋轉後整數陣列。</param>
+    /// <param name="target">欲搜尋的目標值。</param>
+    /// <param name="right">目前右邊界索引。</param>
+    /// <param name="i">待判斷索引。</param>
+    /// <returns>若索引 i 應位於保留區間中回傳 true，否則回傳 false。</returns>
     private bool check(int[] nums, int target, int right, int i)
     {
         int x = nums[i];
-        if(x > nums[right])
+        if (x > nums[right])
         {
             return target > nums[right] && x >= target;
         }
@@ -197,30 +224,34 @@ class Program
     }
 
     /// <summary>
-    /// 
+    /// 先找旋轉點，再對兩段有序區做標準二分搜尋。
+    /// 核心是先縮掉尾端重複值以恢復二段性，接著在左右兩段分別查找 target。
+    /// 輸入需為旋轉非遞減陣列；輸出為目標是否存在。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
+    /// <param name="nums">旋轉後整數陣列。</param>
+    /// <param name="target">欲搜尋的目標值。</param>
+    /// <returns>若 target 出現在 nums 中回傳 true，否則回傳 false。</returns>
     public bool Search4(int[] nums, int target)
     {
         int n = nums.Length;
+        if (n == 0)
+        {
+            return false;
+        }
 
-        if (n == 0) return false;
+        int l = 0;
+        int r = n - 1;
 
-        int l = 0, r = n - 1;
-
-        // 恢復二段性
+        // 先削掉尾端與首元素相同的重複值，讓旋轉分界更容易判定。
         while (l < r && nums[0] == nums[r])
         {
             r--;
         }
 
-        // 第一次二分，找旋轉點
+        // 第一次二分：找第一段有序區尾端。
         while (l < r)
         {
             int mid = (l + r + 1) >> 1;
-
             if (nums[mid] >= nums[0])
             {
                 l = mid;
@@ -232,44 +263,43 @@ class Program
         }
 
         int idx = n;
-
         if (nums[r] >= nums[0] && r + 1 < n)
         {
+            // idx 為第二段起點（旋轉後最小值位置）。
             idx = r + 1;
         }
 
-        // 第二次二分，找目標值
         int ans = Find(nums, 0, idx - 1, target);
-
         if (ans != -1)
         {
             return true;
         }
 
         ans = Find(nums, idx, n - 1, target);
-
         return ans != -1;
     }
 
     /// <summary>
-    /// 
+    /// 在閉區間 [l, r] 內執行 lower-bound 風格二分搜尋。
+    /// 概念是收斂到第一個大於等於 target 的位置，再判斷是否等於 target。
+    /// 輸入需滿足 [l, r] 為非遞減有序區間（可為空）；輸出為索引或 -1。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="l"></param>
-    /// <param name="r"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
+    /// <param name="nums">待查詢陣列。</param>
+    /// <param name="l">搜尋左邊界（含）。</param>
+    /// <param name="r">搜尋右邊界（含）。</param>
+    /// <param name="target">欲搜尋目標值。</param>
+    /// <returns>找到 target 回傳其索引，否則回傳 -1。</returns>
     private int Find(int[] nums, int l, int r, int target)
     {
-        if(l > r)
+        if (l > r)
         {
             return -1;
         }
 
-        while(l < r)
+        while (l < r)
         {
             int mid = (l + r) >> 1;
-            if(nums[mid] >= target)
+            if (nums[mid] >= target)
             {
                 r = mid;
             }
@@ -278,6 +308,7 @@ class Program
                 l = mid + 1;
             }
         }
+
         return nums[r] == target ? r : -1;
     }
 }
