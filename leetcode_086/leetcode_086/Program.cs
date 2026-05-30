@@ -3,10 +3,10 @@
 class Program
 {
     /// <summary>
-    /// Defines a singly linked-list node used by the LeetCode 86 examples and solution.
-    /// Each node stores an integer value and an optional reference to the next node.
-    /// The output of algorithms using this type is represented by returning the head node
-    /// of the resulting list, or <c>null</c> when the list is empty.
+    /// 定義 LeetCode 86 範例與解法使用的單向鏈結串列節點。
+    /// 每個節點會儲存一個整數值，以及可選的下一個節點參考。
+    /// 使用此型別的演算法會以結果串列的頭節點作為輸出，
+    /// 若串列為空則回傳 <c>null</c>。
     /// </summary>
     public class ListNode
     {
@@ -14,10 +14,9 @@ class Program
         public ListNode? next;
 
         /// <summary>
-        /// Creates one linked-list node.
-        /// The input value becomes the node payload, and the optional next node links the
-        /// current node to the rest of the list. The constructed node is returned by the
-        /// constructor call and can be used as a list head or an internal node.
+        /// 建立一個鏈結串列節點。
+        /// 輸入值會成為節點承載的資料，選填的下一個節點會將目前節點
+        /// 連接到串列剩餘部分。建構子建立出的節點可作為串列頭節點或內部節點使用。
         /// </summary>
         /// <param name="val">The integer stored in this node.</param>
         /// <param name="next">The next node in the linked list, or <c>null</c> for the tail.</param>
@@ -72,12 +71,11 @@ class Program
     }
 
     /// <summary>
-    /// Partitions a linked list so every node with a value less than <paramref name="x"/>
-    /// appears before nodes with values greater than or equal to <paramref name="x"/>.
-    /// The method uses two dummy-headed lists to collect the small and large partitions
-    /// while preserving the original relative order inside each partition. The input can
-    /// be <c>null</c>, and the output is the head of the rearranged list or <c>null</c>
-    /// when the input list is empty.
+    /// 分隔鏈結串列，使所有值小於 <paramref name="x"/> 的節點
+    /// 都出現在值大於或等於 <paramref name="x"/> 的節點之前。
+    /// 此方法使用兩個帶有虛擬頭節點的串列收集較小與較大的分區，
+    /// 同時保留每個分區內原本的相對順序。輸入可以是 <c>null</c>，
+    /// 輸出則是重新排列後串列的頭節點；若輸入串列為空則為 <c>null</c>。
     /// </summary>
     /// <param name="head">The head of the linked list to partition, or <c>null</c>.</param>
     /// <param name="x">The pivot value used to split nodes into two stable partitions.</param>
@@ -120,10 +118,10 @@ class Program
     }
 
     /// <summary>
-    /// Runs one executable example for the console entry point.
-    /// The input array is converted into a linked list, passed to <see cref="Partition"/>,
-    /// and compared with the expected sequence. The output is a PASS/FAIL line plus the
-    /// input, expected result, and actual result for easy manual verification.
+    /// 執行一個可由主控台進入點呼叫的範例。
+    /// 輸入陣列會被轉換成鏈結串列，傳入 <see cref="Partition"/>，
+    /// 並與預期序列比較。輸出包含 PASS/FAIL 行，以及輸入、預期結果、
+    /// 實際結果，方便人工驗證。
     /// </summary>
     /// <param name="solution">The solution instance used to run the partition algorithm.</param>
     /// <param name="name">The display name of the example.</param>
@@ -145,9 +143,9 @@ class Program
     }
 
     /// <summary>
-    /// Builds a singly linked list from an array in the same order.
-    /// The input array can be empty, in which case the output is <c>null</c>. Otherwise,
-    /// the output is the head node whose traversal yields the same values as the array.
+    /// 依照陣列原本順序建立單向鏈結串列。
+    /// 輸入陣列可以為空，此時輸出為 <c>null</c>。否則，
+    /// 輸出會是頭節點，走訪該串列可得到與陣列相同的值。
     /// </summary>
     /// <param name="values">The values to place into the linked list.</param>
     /// <returns>The head of the linked list, or <c>null</c> for an empty input array.</returns>
@@ -166,9 +164,9 @@ class Program
     }
 
     /// <summary>
-    /// Converts a linked list into an array of values for comparison and display.
-    /// The input can be <c>null</c>, representing an empty list. The output array contains
-    /// each node value in traversal order.
+    /// 將鏈結串列轉換成值陣列，以便比較與顯示。
+    /// 輸入可以是 <c>null</c>，表示空串列。輸出陣列會依走訪順序
+    /// 包含每個節點的值。
     /// </summary>
     /// <param name="head">The head node to traverse, or <c>null</c>.</param>
     /// <returns>An array containing the linked-list values in order.</returns>
@@ -186,9 +184,9 @@ class Program
     }
 
     /// <summary>
-    /// Formats an integer sequence in LeetCode-style bracket notation.
-    /// The input array can be empty. The output is a readable string such as
-    /// <c>[1, 2, 2]</c> or <c>[]</c> for use in console examples and README documentation.
+    /// 將整數序列格式化成 LeetCode 風格的方括號表示法。
+    /// 輸入陣列可以為空。輸出會是可讀字串，例如 <c>[1, 2, 2]</c>
+    /// 或 <c>[]</c>，用於主控台範例與 README 文件。
     /// </summary>
     /// <param name="values">The values to format.</param>
     /// <returns>A bracketed string representation of the input values.</returns>
