@@ -158,6 +158,14 @@ queue = [(root.left, root.right)]
 3. 兩邊值不同：回傳 `false`。
 4. 兩邊值相同：把下一層鏡像 pair 加入佇列。
 
+### 與解法一在 `null` pair 處理上的差異
+
+這裡和解法一的遞迴寫法不同。解法一在 `IsSymmetricTree(left, right)` 中遇到 `left == null && right == null` 時可以 `return true`，因為那次遞迴呼叫只負責判斷「目前這一組鏡像位置」是否成立；回到上一層後，外側與內側的結果仍會透過 `&&` 一起決定整棵子樹是否對稱。
+
+解法二使用 Queue 時，`left == null && right == null` 也只代表「目前取出的這一組 pair」通過，queue 裡可能還有其他尚未檢查的 pair。因此這裡要用 `continue` 跳過目前這組，讓 `while` 繼續處理下一組。
+
+如果在這裡改成 `return true`，程式會在第一次遇到 `(null, null)` 時直接判定整棵樹對稱，導致 queue 後面尚未檢查的節點 pair 被漏掉。
+
 加入佇列的順序是：
 
 ```text
