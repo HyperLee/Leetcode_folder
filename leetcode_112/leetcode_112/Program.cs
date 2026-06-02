@@ -28,9 +28,9 @@ class Program
         public TreeNode? right;
 
         /// <summary>
-        /// Initializes a binary tree node for Path Sum examples and recursion.
-        /// Input conditions: <paramref name="left"/> and <paramref name="right"/> may be null.
-        /// Output result: creates a node containing <paramref name="val"/> and the supplied children.
+        /// 初始化 Path Sum 範例與遞迴運算使用的二元樹節點。
+        /// 輸入條件：<paramref name="left"/> 與 <paramref name="right"/> 可以為 null。
+        /// 輸出結果：建立一個包含 <paramref name="val"/> 與指定子節點的節點。
         /// </summary>
         /// <param name="val">The node value.</param>
         /// <param name="left">The optional left child.</param>
@@ -88,10 +88,10 @@ class Program
     }
 
     /// <summary>
-    /// Prints one executable Path Sum example with its expected and actual result.
-    /// Solution concept: call <see cref="HasPathSum"/> on a prepared tree and compare the boolean result.
-    /// Input conditions: <paramref name="root"/> may be null, and <paramref name="expected"/> is the known answer.
-    /// Output result: writes a deterministic line that can be used as a manual verification example.
+    /// 輸出一筆可執行的 Path Sum 範例，包含預期結果與實際結果。
+    /// 解題概念：對準備好的樹呼叫 <see cref="HasPathSum"/>，並比較布林結果。
+    /// 輸入條件：<paramref name="root"/> 可以為 null，且 <paramref name="expected"/> 為已知答案。
+    /// 輸出結果：寫出一行固定格式的結果，可作為人工驗證範例。
     /// </summary>
     /// <param name="solution">The solution instance that contains the recursive method.</param>
     /// <param name="name">The example label printed to the console.</param>
@@ -111,22 +111,12 @@ class Program
     }
 
     /// <summary>
-    /// Determines whether a binary tree contains a root-to-leaf path whose node values sum to targetSum.
-    /// Solution concept: use depth-first recursion and subtract each visited node value from the remaining sum.
-    /// Input conditions: <paramref name="root"/> may be null; <paramref name="targetSum"/> is the required path sum.
-    /// Output result: returns true only when a path reaches a leaf and exactly consumes the target sum.
-    ///
-    /// 遞迴
-    ///
-    /// 观察要求我们完成的函数，我们可以归纳出它的功能：询问是否存在从当前节点 root 到叶子节点的路径，满足其路径和为 sum。
-    /// 假定从根节点到当前节点的值之和为 val，我们可以将这个大问题转化为一个小问题：是否存在从当前节点的子节点到叶子的路
-    /// 径，满足其路径和为 sum - val。
-    /// 不难发现这满足递归的性质，若当前节点就是叶子节点，那么我们直接判断 sum 是否等于 val 即可（因为路径和已经确定，就是
-    /// 当前节点的值，我们只需要判断该路径和是否满足条件）。若当前节点不是叶子节点，我们只需要递归地询问它的子节点是否能满足
-    /// 条件即可。
-    /// 当题目中提到了 叶子节点 时，正确的做法一定要同时判断节点的 左右子树同时为空 才是叶子节点。
-    /// 叶子节点 是指没有子节点的节点。
-    ///
+    /// 遞迴解法
+    /// 判斷二元樹中是否存在一條從根節點到葉節點的路徑，使節點值總和等於 targetSum。
+    /// 解題概念：使用深度優先遞迴，並在走訪每個節點時從剩餘總和中扣除該節點值。
+    /// 輸入條件：<paramref name="root"/> 可以為 null；<paramref name="targetSum"/> 是要求的路徑總和。
+    /// 輸出結果：只有當某條路徑走到葉節點且剛好用完目標總和時，才回傳 true。
+    /// 
     /// 簡單說就是 路徑總和 要與 targetSum 相同
     /// 所以
     /// 從 root 往下走 每走到一個 node 就扣減該 node value
