@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug leetcode_114",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/leetcode_114/leetcode_114.csproj",
+      "preLaunchTask": "build leetcode_114"
+    }
+  ]
+}
