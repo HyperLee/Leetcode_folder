@@ -106,6 +106,43 @@
 6. 令 `previous.right = current`
 7. 最後把尾節點的 `left` 與 `right` 都設為 `null`
 
+### 補充說明：為什麼 `index` 從 `1` 開始？
+
+在第二階段的重接邏輯中，程式本質上是在做「把前一個節點接到目前節點」這件事。對應程式概念如下：
+
+```csharp
+for (int index = 1; index < nodes.Count; index++)
+{
+    TreeNode previous = nodes[index - 1];
+    TreeNode current = nodes[index];
+
+    previous.left = null;
+    previous.right = current;
+}
+```
+
+這裡的 `nodes` 不是單純存放數值，而是依照前序走訪順序排好的節點參考。
+假設前序結果是：
+
+```text
+[1, 2, 3, 4, 5, 6]
+```
+
+那麼迴圈每一輪做的事情就是：
+
+- `index = 1` 時，把 `nodes[0]` 接到 `nodes[1]`，也就是把 `1` 接到 `2`
+- `index = 2` 時，把 `nodes[1]` 接到 `nodes[2]`，也就是把 `2` 接到 `3`
+- 依此類推，一路接到尾節點
+
+因此 `index` 必須從 `1` 開始，因為第 1 個節點本身沒有「前一個節點」可以接。
+如果從 `0` 開始，`previous = nodes[index - 1]` 就會變成 `nodes[-1]`，這是非法索引。
+
+`previous.left = null` 的意思，是把原本左子樹的連結清掉，確保展平後只保留 `right` 這條鏈。
+`previous.right = current` 的意思，則是把下一個前序節點接到右邊，讓 `right` 扮演 linked list 中「next」的角色。
+
+所以這段迴圈不是在搬動節點值，而是在原地重接節點之間的指標。
+至於最後一個節點，因為它只會當 `current`、不會再當 `previous`，所以還需要在迴圈結束後額外把它的 `left` 與 `right` 清成 `null`。
+
 ### 範例演示流程
 
 輸入：`[1, 2, 5, 3, 4, null, 6]`
