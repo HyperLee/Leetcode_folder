@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Launch leetcode_129",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_129/bin/Debug/net10.0/leetcode_129.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_129",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    }
+  ]
+}
