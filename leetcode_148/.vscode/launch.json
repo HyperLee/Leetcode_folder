@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Launch leetcode_148",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build leetcode_148",
+      "program": "${workspaceFolder}/leetcode_148/bin/Debug/net10.0/leetcode_148.exe",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_148",
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    }
+  ]
+}
