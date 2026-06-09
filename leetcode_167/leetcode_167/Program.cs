@@ -1,4 +1,4 @@
-﻿namespace leetcode_167;
+namespace leetcode_167;
 
 class Program
 {
@@ -23,60 +23,117 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solver = new Program();
+        (int[] Numbers, int Target)[] sampleCases =
+        [
+            (new int[] { 2, 7, 11, 15 }, 9),
+            (new int[] { 2, 3, 4 }, 6),
+            (new int[] { -1, 0 }, -1),
+            (new int[] { 1, 1, 3, 4 }, 2)
+        ];
+
+        Console.WriteLine("LeetCode 167 - Two Sum II");
+        Console.WriteLine();
+
+        for (int i = 0; i < sampleCases.Length; i++)
+        {
+            RunSampleCase(solver, i + 1, sampleCases[i].Numbers, sampleCases[i].Target);
+        }
     }
 
     /// <summary>
-    /// 方法一: Dictionary
-    /// 可能效率沒那麼好
+    /// 依序執行三種解法並輸出同一筆測資的結果，方便直接觀察不同策略是否得到一致的 1-based 索引答案。
+    /// 輸入的 numbers 必須已依非遞減順序排序，target 需符合題目保證的唯一解條件。
+    /// 輸出會列出原始陣列、目標值，以及 Dictionary、Binary Search、Two Pointers 三種方法的回傳結果。
     /// </summary>
-    /// <param name="numbers"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
+    /// <param name="solver">提供解法方法的執行個體。</param>
+    /// <param name="caseNumber">顯示用途的案例編號。</param>
+    /// <param name="numbers">已排序的整數陣列。</param>
+    /// <param name="target">欲湊出的目標總和。</param>
+    private static void RunSampleCase(Program solver, int caseNumber, int[] numbers, int target)
+    {
+        int[] dictionaryResult = solver.TwoSum(numbers, target);
+        int[] binarySearchResult = solver.TwoSum2(numbers, target);
+        int[] twoPointersResult = solver.TwoSum3(numbers, target);
+
+        Console.WriteLine($"Case {caseNumber}");
+        Console.WriteLine($"numbers = {FormatArray(numbers)}, target = {target}");
+        Console.WriteLine($"Dictionary    -> {FormatArray(dictionaryResult)}");
+        Console.WriteLine($"Binary Search -> {FormatArray(binarySearchResult)}");
+        Console.WriteLine($"Two Pointers  -> {FormatArray(twoPointersResult)}");
+        Console.WriteLine();
+    }
+
+    /// <summary>
+    /// 將整數陣列轉成 README 與主控台都容易對照的字串格式。
+    /// 輸入可為任意長度的整數陣列，輸出固定為 [a, b, c] 形式。
+    /// </summary>
+    /// <param name="values">要格式化的整數陣列。</param>
+    /// <returns>以中括號包住、逗號分隔的陣列字串。</returns>
+    private static string FormatArray(int[] values)
+    {
+        return $"[{string.Join(", ", values)}]";
+    }
+
+    /// <summary>
+    /// 使用 Dictionary 記錄先前看過的數值與其 1-based 索引，對每個元素即時尋找是否已存在對應補數。
+    /// 輸入條件是 numbers 必須已排序，且依題意可假設恰好只有一組解、不可重複使用同一元素。
+    /// 若找到解，回傳對應的 1-based 索引；若輸入不符合題目保證而未找到解，則防禦性回傳 [-1, -1]。
+    /// </summary>
+    /// <param name="numbers">已依非遞減順序排序的整數陣列。</param>
+    /// <param name="target">兩數相加後必須等於的目標值。</param>
+    /// <returns>長度為 2 的 1-based 索引陣列。</returns>
     public int[] TwoSum(int[] numbers, int target)
     {
-        // key: 輸入數值, Value: index
-        Dictionary<int, int> dic = new Dictionary<int, int>();
-        for(int i = 0; i < numbers.Length; i++)
+        Dictionary<int, int> visitedNumbers = new Dictionary<int, int>();
+
+        for (int i = 0; i < numbers.Length; i++)
         {
-            int left = target - numbers[i];
-            if(dic.ContainsKey(left))
+            int complement = target - numbers[i];
+
+            // 只要補數已經出現過，就能立刻組成答案。
+            if (visitedNumbers.TryGetValue(complement, out int previousIndex))
             {
-                return new int[]{dic[left], i + 1};
+                return new int[] { previousIndex, i + 1 };
             }
 
-            if(!dic.ContainsKey(numbers[i]))
+            // 只保留第一次出現的索引，避免重複值覆蓋掉較靠左的合法答案位置。
+            if (!visitedNumbers.ContainsKey(numbers[i]))
             {
-                dic.Add(numbers[i], i + 1);
+                visitedNumbers.Add(numbers[i], i + 1);
             }
         }
-        return null;
+
+        return new int[] { -1, -1 };
     }
 
     /// <summary>
-    /// 解法二: 二分法
-    /// 在数组中找到两个数，使得它们的和等于目标值，可以首先固定第一个数，
-    /// 然后寻找第二个数，第二个数等于目标值减去第一个数的差。
-    /// 利用数组的有序性质，可以通过二分查找的方法寻找第二个数。为了避免重复寻找，在寻找第二个数时，只在第一个数的右侧寻
-    /// 找
+    /// 先固定左側元素，再利用已排序特性於右側區間做二分搜尋，尋找 target - numbers[i] 是否存在。
+    /// 輸入條件是 numbers 必須已排序，且答案必定位於當前索引右側，因此每次搜尋區間都從 i + 1 開始。
+    /// 若找到解，回傳對應的 1-based 索引；若輸入不符合題目保證而未找到解，則防禦性回傳 [-1, -1]。
     /// </summary>
-    /// <param name="numbers"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
+    /// <param name="numbers">已依非遞減順序排序的整數陣列。</param>
+    /// <param name="target">兩數相加後必須等於的目標值。</param>
+    /// <returns>長度為 2 的 1-based 索引陣列。</returns>
     public int[] TwoSum2(int[] numbers, int target)
     {
-        for(int i = 0; i < numbers.Length; i++)
+        for (int i = 0; i < numbers.Length; i++)
         {
             int low = i + 1;
             int high = numbers.Length - 1;
-            while(low <= high)
+            int complement = target - numbers[i];
+
+            while (low <= high)
             {
                 int mid = low + (high - low) / 2;
-                if(numbers[mid] == target - numbers[i])
+
+                // 排序陣列可讓我們根據中間值與補數的大小關係快速縮小搜尋區間。
+                if (numbers[mid] == complement)
                 {
-                    return new int[]{i + 1, mid + 1};
+                    return new int[] { i + 1, mid + 1 };
                 }
-                else if(numbers[mid] > target - numbers[i])
+
+                if (numbers[mid] > complement)
                 {
                     high = mid - 1;
                 }
@@ -86,44 +143,34 @@ class Program
                 }
             }
         }
-        return new int[]{ -1, -1};
+
+        return new int[] { -1, -1 };
     }
 
     /// <summary>
-    /// 方法三: 雙指針
-    /// 初始时两个指针分别指向第一个元素位置和最后一个元素的位置。每次计算两个指针指向的两个元素之和，并和目标值比较。如果两
-    /// 个元素之和等于目标值，则发现了唯一解。如果两个元素之和小于目标值，则将左侧指针右移一位。如果两个元素之和大于目标值，
-    /// 则将右侧指针左移一位。移动指针之后，重复上述操作，直到找到答案。
-    /// 
-    /// 使用双指针的实质是缩小查找范围。那么会不会把可能的解过滤掉？答案是不会。假设 numbers[i]+numbers[j]=target 是唯一
-    /// 解，其中 0≤i<j≤numbers.length−1。初始时两个指针分别指向下标 0 和下标 numbers.length−1，左指针指向的下标小于或
-    /// 等于 i，右指针指向的下标大于或等于 j。除非初始时左指针和右指针已经位于下标 i 和 j，否则一定是左指针先到达下标 i 的位
-    /// 置或者右指针先到达下标 j 的位置。
-    /// 
-    /// 如果左指针先到达下标 i 的位置，此时右指针还在下标 j 的右侧，sum>target，因此一定是右指针左移，左指针不可能移到 i 的
-    /// 右侧。
-    /// 
-    /// 如果右指针先到达下标 j 的位置，此时左指针还在下标 i 的左侧，sum<target，因此一定是左指针右移，右指针不可能移到 j 的
-    /// 左侧。
-    /// 
-    /// 由此可见，在整个移动过程中，左指针不可能移到 i 的右侧，右指针不可能移到 j 的左侧，因此不会把可能的解过滤掉。由于题目
-    /// 确保有唯一的答案，因此使用双指针一定可以找到答案。
+    /// 使用雙指標從陣列兩端往中間收斂，藉由目前總和與 target 的大小比較來決定移動哪一側指標。
+    /// 輸入條件是 numbers 必須已排序，這樣左指標右移會讓總和變大，右指標左移會讓總和變小，才能保證不漏解。
+    /// 若找到解，回傳對應的 1-based 索引；若輸入不符合題目保證而未找到解，則防禦性回傳 [-1, -1]。
     /// </summary>
-    /// <param name="numbers"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
+    /// <param name="numbers">已依非遞減順序排序的整數陣列。</param>
+    /// <param name="target">兩數相加後必須等於的目標值。</param>
+    /// <returns>長度為 2 的 1-based 索引陣列。</returns>
     public int[] TwoSum3(int[] numbers, int target)
     {
         int low = 0;
         int high = numbers.Length - 1;
-        while(low < high)
+
+        while (low < high)
         {
             int sum = numbers[low] + numbers[high];
-            if(sum == target)
+
+            if (sum == target)
             {
-                return new int[]{low + 1, high + 1};
+                return new int[] { low + 1, high + 1 };
             }
-            else if(sum < target)
+
+            // 總和偏小就增加左值，總和偏大就減少右值，藉此持續縮小搜尋範圍。
+            if (sum < target)
             {
                 low++;
             }
@@ -132,6 +179,7 @@ class Program
                 high--;
             }
         }
-        return new int[]{ -1, -1};
+
+        return new int[] { -1, -1 };
     }
 }
