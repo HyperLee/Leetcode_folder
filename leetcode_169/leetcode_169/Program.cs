@@ -1,5 +1,3 @@
-﻿using System.Security.Cryptography.X509Certificates;
-
 namespace leetcode_169;
 
 class Program
@@ -23,119 +21,135 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        (int[] Numbers, int Expected)[] sampleCases =
+        [
+            (new int[] { 3, 2, 3 }, 3),
+            (new int[] { 2, 2, 1, 1, 1, 2, 2 }, 2),
+            (new int[] { 1 }, 1),
+            (new int[] { 6, 5, 5 }, 5)
+        ];
+
+        Console.WriteLine("LeetCode 169 - Majority Element");
+        Console.WriteLine();
+
+        for (int i = 0; i < sampleCases.Length; i++)
+        {
+            RunSampleCase(i + 1, sampleCases[i].Numbers, sampleCases[i].Expected);
+        }
     }
 
     /// <summary>
-    /// 解法一: 字典統計
-    /// Dictionary 統計每個出現的數字以及頻率
-    /// key: 數字
-    /// Value: 頻率
-    /// 
-    /// 統計完畢之後, 找出頻率超過 n 的第一個出現的回傳
+    /// 執行單一測試案例，列出原始輸入、預期答案，以及三種解法的實際結果，方便直接比對不同策略是否都得到相同的多數元素。
+    /// 解題概念是以同一份測資同步驗證 Dictionary、Sorting、Boyer-Moore 三種方法；輸入需符合題目前提，也就是陣列非空且一定存在多數元素。
+    /// 輸出結果會寫到主控台，內容包含案例編號、陣列內容、預期值與每種解法的回傳值。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <returns></returns>
-    public int MajorityElement(int[] nums)
+    /// <param name="caseNumber">顯示用途的案例編號。</param>
+    /// <param name="numbers">題目輸入的整數陣列，保證非空且存在多數元素。</param>
+    /// <param name="expected">此案例的預期多數元素。</param>
+    private static void RunSampleCase(int caseNumber, int[] numbers, int expected)
     {
-        // key: nums[i], Value: 出現次數(頻率)
-        Dictionary<int, int> dic = new Dictionary<int, int>();
-        foreach(int num in nums)
+        int dictionaryResult = MajorityElementByDictionary(numbers);
+        int sortingResult = MajorityElementBySorting((int[])numbers.Clone());
+        int boyerMooreResult = MajorityElementByBoyerMoore(numbers);
+
+        Console.WriteLine($"Case {caseNumber}");
+        Console.WriteLine($"nums         = {FormatArray(numbers)}");
+        Console.WriteLine($"Expected     -> {expected}");
+        Console.WriteLine($"Dictionary   -> {dictionaryResult}");
+        Console.WriteLine($"Sorting      -> {sortingResult}");
+        Console.WriteLine($"Boyer-Moore  -> {boyerMooreResult}");
+        Console.WriteLine();
+    }
+
+    /// <summary>
+    /// 將整數陣列格式化成易於閱讀的字串，讓主程式輸出與 README 範例能維持一致。
+    /// 這個 helper 不處理解題邏輯，只假設輸入是任意長度的整數陣列，並回傳以中括號包住、逗號分隔的結果。
+    /// 輸出格式固定為 [a, b, c] 形式，適合直接顯示在主控台或文件中。
+    /// </summary>
+    /// <param name="values">要格式化的整數陣列。</param>
+    /// <returns>以中括號包住、逗號分隔的陣列字串。</returns>
+    private static string FormatArray(int[] values)
+    {
+        return $"[{string.Join(", ", values)}]";
+    }
+
+    /// <summary>
+    /// 使用 Dictionary 統計每個數字出現的次數，當某個數字的頻率首次超過 floor(n / 2) 時立即回傳它。
+    /// 解題概念是以雜湊表保存每個值的累計次數；輸入必須是非空陣列，且依題意保證一定存在多數元素，因此不需要額外處理無解情況。
+    /// 輸出結果為陣列中的多數元素，時間複雜度為 O(n)，空間複雜度為 O(n)。
+    /// </summary>
+    /// <param name="nums">題目輸入的整數陣列，保證非空且存在多數元素。</param>
+    /// <returns>在陣列中出現次數超過一半的數字。</returns>
+    public static int MajorityElementByDictionary(int[] nums)
+    {
+        Dictionary<int, int> counts = new Dictionary<int, int>();
+        int threshold = nums.Length / 2;
+
+        foreach (int num in nums)
         {
-            if(dic.ContainsKey(num))
+            if (counts.ContainsKey(num))
             {
-                dic[num]++;
+                counts[num]++;
             }
             else
             {
-                dic.Add(num, 1);
+                counts.Add(num, 1);
             }
-        }
 
-        int res = 0;
-        // 題目要求, 要超過 n / 2 數量
-        int n = nums.Length / 2;
-
-        foreach(KeyValuePair<int, int> kvp in dic)
-        {
-            // value 超過 n
-            if(kvp.Value > n)
+            // 一旦某個值的出現次數超過門檻，就已經可以確定它是多數元素。
+            if (counts[num] > threshold)
             {
-                // 回傳答案是 key
-                res = kvp.Key;
-                break;
+                return num;
             }
         }
-        return res;
+
+        return nums[0];
     }
 
     /// <summary>
-    /// 解法二: 排序
-    /// 排序後的特性
-    /// 在陣列 nums 中，若某個數是 Majority Element，則它的出現次數超過了陣列長度的一半（n / 2）。
-    /// 當陣列排序後，Majority Element 必定會佔據整個陣列的中間部分。
-    ///  例如，假設 n = 9，n / 2 = 4，那麼排序後的陣列中間索引是 nums[4]。
-    ///  Majority Element 的出現次數超過一半，因此中間索引必定是 Majority Element。
-    ///  
-    /// 數學性質
-    /// 排序後，陣列中超過一半的元素（Majority Element）必定會覆蓋陣列的中間位置，因為：
-    /// 1. 若某元素的出現次數超過 n / 2，那麼它至少佔據陣列的一半以上。
-    /// 2. 當陣列排序後，該元素必然會成為中間部分的元素。
+    /// 先將陣列排序，再直接回傳中間位置的元素，利用多數元素必定覆蓋排序後中位區段的性質求解。
+    /// 解題概念是：若某個值出現次數超過一半，排序後它一定會佔住索引 nums.Length / 2；輸入必須是非空陣列，且允許此方法原地排序。
+    /// 輸出結果為排序後中間位置的數字，也就是題目保證存在的多數元素，時間複雜度為 O(n log n)，空間複雜度取決於排序實作。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <returns></returns>
-    public int MajorityElement2(int[] nums)
+    /// <param name="nums">題目輸入的整數陣列，保證非空且存在多數元素。</param>
+    /// <returns>排序後位於中間位置的多數元素。</returns>
+    public static int MajorityElementBySorting(int[] nums)
     {
-        // sort
+        // 多數元素出現超過一半，排序後一定會覆蓋陣列的中間索引。
         Array.Sort(nums);
-        // 返回中間位置的元素
         return nums[nums.Length / 2];
     }
 
     /// <summary>
-    /// 解法三: 摩爾投票
-    /// 會用另一種情境來解說
-    /// 
-    /// 想象一众武林高手比武，谁会笑到最后？
-    /// 我用「擂台赛」打比方：
-    /// 1. 擂主登场：nums[0] 成为初始擂主，生命值为 1。
-    /// 2. 挑战者出现：遍历后续元素，作为挑战者。
-    /// 3. 比武：如果挑战者与擂主属于同一门派（值相同），那么擂主生命值加 1，否则擂主生命值减 1。
-    /// 4. 擂主更迭：如果比武后，擂主生命值降为 0（同归于尽），那么下一个挑战者成为新的擂主，生命值为 1。
-    /// 5. 最后在擂台上的那人，便是武林盟主（绝对众数）。
-    /// 
-    /// 为什么这样做是对的？
-    /// 设出现次数最多的元素的出现次数为 a，其余元素的出现次数之和为 b=n−a。题目保证 a>b。
-    /// 证明：上述过程中，每次擂主的生命值降为 0 时，相当于开了一个新的擂台赛，在 nums[i−1] 和 nums[i] 之间切一刀。这会把
-    /// nums 分成若干段。依次考察这些段：
-    /// - 对于除了最后一段的每一段（注意这些段的擂主不一定是绝对众数，比如绝对众数是 9，这一段是 [1,1,2,9]），设绝对众数在其
-    /// 中出现了 x 次，其余元素的出现次数之和为 y，则必然有 x≤y。这可以用反证法证明，如果 x>y，那么绝对众数血多，不
-    /// 可能被其余元素同归于尽，绝对众数的生命值在这段结束时必然大于 0，矛盾。由此可得 a−x>b−y，意思是，把 a 减去 x
-    /// ，b 减去 y，所得到的 a′和 b′仍然满足 a′>b′。依此类推，每一段结束时，在剩余元素（未遍历到的元素）中，设出现次数最多的元素的出现次数为 a′，其余元素的出现次数之和为 
-    /// b′，那么 a′>b′始终成立。
-    /// 对于最后一段，由于a′>b′ ，绝对众数血多，不可能被其余元素同归于尽，绝对众数的生命值最终必然大于 0，所以最后在擂
-    /// 台上的是绝对众数。
+    /// 使用 Boyer-Moore Voting Algorithm 透過候選人與票數互相抵消的方式，在一次走訪中找出多數元素。
+    /// 解題概念是把不同元素彼此配對抵消，最後留下的候選人必定是多數元素；輸入必須是非空陣列，且題目保證多數元素確實存在。
+    /// 輸出結果為最終留下的候選值，時間複雜度為 O(n)，空間複雜度為 O(1)。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <returns></returns>
-    public int MajorityElement3(int[] nums)
+    /// <param name="nums">題目輸入的整數陣列，保證非空且存在多數元素。</param>
+    /// <returns>經過投票抵消後留下的多數元素。</returns>
+    public static int MajorityElementByBoyerMoore(int[] nums)
     {
-        int res = 0;
-        int hp = 0;
-        foreach(int num in nums)
+        int candidate = 0;
+        int count = 0;
+
+        foreach (int num in nums)
         {
-            if(hp == 0)
+            if (count == 0)
             {
-                // x 是初始擂台主, 生命值為 1
-                res = num;
-                hp = 1;
+                candidate = num;
+            }
+
+            // 相同值幫候選人加票，不同值互相抵消，最後留下的就是多數元素。
+            if (num == candidate)
+            {
+                count++;
             }
             else
             {
-                // 比武, 同門加血量, 否則扣血量
-                hp += num == res ? 1 : -1;
+                count--;
             }
         }
-        return res;
+
+        return candidate;
     }
 }
