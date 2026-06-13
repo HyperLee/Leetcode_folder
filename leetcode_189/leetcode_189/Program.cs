@@ -6,7 +6,7 @@ class Program
 
     /// <summary>
     /// 189. Rotate Array
-    /// https://leetcode.com/problems/rotate-array/description/?envType=study-plan-v2&envId=top-interview-150
+    /// https://leetcode.com/problems/rotate-array/description/
     /// 189. 轮转数组
     /// https://leetcode.cn/problems/rotate-array/description/
     ///
