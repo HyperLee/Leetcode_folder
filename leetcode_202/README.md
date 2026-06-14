@@ -105,6 +105,89 @@
 - 時間複雜度：`O(k)`，`k` 為進入 `1` 或循環前的轉換次數。
 - 空間複雜度：`O(1)`，只使用固定數量變數。
 
+### 為什麼這裡用 `do...while`
+
+本專案 `Program.cs` 中的 `IsHappy2(int n)` 採用的是下面這種寫法：
+
+```csharp
+int slowRunner = n;
+int fastRunner = n;
+
+do
+{
+    slowRunner = SumOfSquaredDigits(slowRunner);
+    fastRunner = SumOfSquaredDigits(SumOfSquaredDigits(fastRunner));
+}
+while (fastRunner != 1 && slowRunner != fastRunner);
+```
+
+這裡使用 `do...while` 的關鍵原因，是 `slowRunner` 與 `fastRunner` 一開始都從同一個起點 `n` 出發。
+
+- 若改成一般 `while (fastRunner != 1 && slowRunner != fastRunner)`，那麼第一次檢查條件時，`slowRunner == fastRunner` 會立刻成立。
+- 結果就是迴圈尚未真正開始移動，便直接跳出，無法完成 Floyd 快慢指標需要的「先前進，再比較」。
+- `do...while` 則剛好相反：它會先執行一次迴圈內容，再檢查是否繼續，因此非常適合這種「兩個指標同起點」的情境。
+
+也就是說，這段程式其實是在表達：
+
+1. 先讓 `slowRunner` 走一步。
+2. 先讓 `fastRunner` 走兩步。
+3. 然後再判斷：
+   - `fastRunner == 1`：代表序列已收斂到 `1`，所以 `n` 是快樂數。
+   - `slowRunner == fastRunner`：代表兩者在非 `1` 的循環內相遇，所以 `n` 不是快樂數。
+
+如果用極短的示意來看，假設 `n = 19`：
+
+- 初始狀態：`slowRunner = 19`、`fastRunner = 19`
+- 第 1 輪後：`slowRunner = 82`、`fastRunner = 68`
+
+此時兩個指標都已經真的往前走過，接下來再比較是否到 `1` 或是否相遇，才有意義。這也是這裡 `do...while` 最值得記住的地方：**先跑一次，再判斷是否停止。**
+
+### 另一種常見寫法：先讓快指標走一步，再用 `while`
+
+教學文章中也很常看到另一種等價寫法：
+
+```csharp
+int slowRunner = n;
+int fastRunner = SumOfSquaredDigits(n); // 許多範例會把這個函式命名為 getNext
+
+while (fastRunner != 1 && slowRunner != fastRunner)
+{
+    slowRunner = SumOfSquaredDigits(slowRunner);
+    fastRunner = SumOfSquaredDigits(SumOfSquaredDigits(fastRunner));
+}
+```
+
+上面範例中的 `getNext`，在本專案對應的就是 `SumOfSquaredDigits(int value)`。
+
+這種寫法和目前 repo 的版本，本質上仍然是同一個 Floyd 快慢指標演算法；差別只在於「如何避免一開始兩個指標就相等」：
+
+- 目前 repo 的版本：`slowRunner` 與 `fastRunner` 都先設成 `n`，所以要靠 `do...while` 先執行一次。
+- 常見 `while` 版本：先讓 `fastRunner` 偷跑一步，因此第一次進入條件判斷時，不會因為 `slowRunner == fastRunner` 而立刻停住。
+
+換句話說，兩者只是初始化策略不同，核心邏輯沒有變：
+
+- `slowRunner` 每次走一步。
+- `fastRunner` 每次走兩步。
+- 走到 `1` 就代表快樂數。
+- 在非 `1` 的地方相遇就代表循環。
+
+### `do...while` 版與 `while` 版比較
+
+| 比較面向 | 目前 repo 的 `do...while` 版 | 常見的 `while` 版 |
+| --- | --- | --- |
+| 初始化方式 | `slowRunner = n`、`fastRunner = n` | `slowRunner = n`、`fastRunner = SumOfSquaredDigits(n)` |
+| 迴圈型式 | `do...while`，先執行再判斷 | `while`，先判斷再執行 |
+| 為什麼可行 | 同起點，因此必須先跑一次 | 快指標先偷跑一步，避開起點重合 |
+| 初學者可讀性 | 較對稱，較貼近 Floyd 經典寫法 | 對不熟 `do...while` 的讀者通常更直觀 |
+| 時間複雜度 | `O(k)` | `O(k)` |
+| 空間複雜度 | `O(1)` | `O(1)` |
+| 效能差異 | 幾乎可忽略 | 幾乎可忽略 |
+
+實務上，這兩種寫法的效能差異非常小，通常不會是解題時需要在意的重點。真正值得比較的是「哪一種比較容易讓自己日後回看時立刻懂」：
+
+- 若你喜歡初始化對稱、並且接受 `do...while` 的語意，現在 repo 裡這版很整齊。
+- 若你平常較少用 `do...while`，那麼先讓 `fastRunner` 前進一步、再使用一般 `while` 的版本，往往會更好讀。
+
 ## 各位數平方和的核心轉換
 
 兩種解法都依賴同一個輔助函式 `SumOfSquaredDigits(int value)`。
