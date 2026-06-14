@@ -39,6 +39,11 @@ class Program
     ///  => 簡單說偷竊第 i 間就是前 i - 2 間的總和 dp[i - 2] 加上第 i 間的數值 nums[i]
     /// 2. 如果不偷窃第 i 间房屋，则最高金额为下标范围 [0,i − 1] 中能够偷窃到的最高金额，此时的最高金额是 dp[i − 1]。
     ///  => 不偷竊第 i 間也就是取前 i - 1 間的總和 dp[i - 1]
+    /// 
+    /// 總結: 
+    /// 公式為: dp[i]=max(dp[i−2]+nums[i],dp[i−1])
+    /// dp[0]=nums[0] 只有一间房屋，则偷窃该房屋
+    /// dp[1]=max(nums[0],nums[1]) 只有兩間房間, 選擇其中金額較高的防務進行偷竊
     /// </summary>
     /// <param name="nums"></param>
     /// <returns></returns>
@@ -92,12 +97,14 @@ class Program
 
         int prev = nums[0];
         int curr = Math.Max(nums[0], nums[1]);
+        int res = 0;
+        // i 從 2 開始
         for(int i = 2; i < n; i++)
         {
-            int next = Math.Max(prev + nums[i], curr);
+            res = Math.Max(prev + nums[i], curr);
             prev = curr;
-            curr = next;
+            curr = res;
         }
-        return curr;
+        return res;
     }
 }
