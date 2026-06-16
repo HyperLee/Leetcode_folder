@@ -162,6 +162,13 @@ class Program
             char x = s[i];
             char y = t[i];
 
+            // 可以優化 TryGetValue 寫法; 避免重複查詢 Dictionary
+            // if ((sTot.ContainsKey(x) && sTot[x] != y) ||
+            //     (tTos.ContainsKey(y) && tTos[y] != x))
+            // {
+            //     return false;
+            // }
+
             // 正反兩張表都要一致，才能保證映射是雙射而不是多對一。
             if (sTot.TryGetValue(x, out char mappedY) && mappedY != y)
             {
