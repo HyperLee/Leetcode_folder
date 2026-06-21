@@ -15,7 +15,7 @@ class Program
     /// 你能否在不排序的情況下解決此問題？
     /// </summary>
     /// <remarks>
-    /// 主控台入口會執行固定案例，印出兩種解法的預期值、實際值與驗證結果。
+    /// 主控台入口會執行固定案例，印出三種解法的預期值、實際值與驗證結果。
     /// </remarks>
     /// <param name="args">未使用；主控台入口固定執行內建的範例驗證。</param>
     static void Main(string[] args)
@@ -35,7 +35,7 @@ class Program
     }
 
     /// <summary>
-    /// 以同一份輸入的複本執行兩種解法，輸出預期值、實際值與 PASS 或 FAIL 的對照結果。
+    /// 以同一份輸入的複本執行三種解法，輸出預期值、實際值與 PASS 或 FAIL 的對照結果。
     /// </summary>
     /// <param name="caseName">顯示於主控台的案例名稱。</param>
     /// <param name="nums">符合題目限制的非空整數陣列；原始陣列會保留供輸出使用。</param>
@@ -45,14 +45,17 @@ class Program
     {
         int sortingResult = FindKthLargest((int[])nums.Clone(), k);
         int quickselectResult = FindKthLargest2((int[])nums.Clone(), k);
+        int randomQuickselectResult = FindKthLargest3((int[])nums.Clone(), k);
         string sortingStatus = sortingResult == expected ? "PASS" : "FAIL";
         string quickselectStatus = quickselectResult == expected ? "PASS" : "FAIL";
+        string randomQuickselectStatus = randomQuickselectResult == expected ? "PASS" : "FAIL";
 
         Console.WriteLine($"案例：{caseName}");
         Console.WriteLine($"輸入：nums = [{string.Join(", ", nums)}], k = {k}");
         Console.WriteLine($"預期：{expected}");
         Console.WriteLine($"解法一（排序）：{sortingResult}（{sortingStatus}）");
         Console.WriteLine($"解法二（Quickselect）：{quickselectResult}（{quickselectStatus}）");
+        Console.WriteLine($"解法三（隨機 Pivot Quickselect）：{randomQuickselectResult}（{randomQuickselectStatus}）");
         Console.WriteLine();
     }
 
@@ -162,5 +165,78 @@ class Program
         }
 
         return Quickselect(nums, j + 1, right, targetIndex);
+    }
+
+    /// <summary>
+    /// 解法三：使用隨機 pivot 的快速選擇方法。
+    /// </summary>
+    /// <remarks>
+    /// 每輪從目前區間隨機選出 pivot，交換至左端後以與解法二相同的 Hoare 分割縮小候選範圍。
+    /// 輸入必須為非空陣列且 <paramref name="k"/> 介於 1 與陣列長度之間；方法會原地重排陣列。
+    /// </remarks>
+    /// <param name="nums">符合題目限制、且允許被分割與交換元素的整數陣列。</param>
+    /// <param name="k">欲取得的排名，1 代表最大元素。</param>
+    /// <returns>第 k 大的元素；不會忽略重複值。</returns>
+    public int FindKthLargest3(int[] nums, int k)
+    {
+        int targetIndex = nums.Length - k;
+
+        // 第 k 大元素等於升冪排序後索引 targetIndex 的元素。
+        return QuickselectWithRandomPivot(nums, 0, nums.Length - 1, targetIndex);
+    }
+
+    /// <summary>
+    /// 在 <paramref name="nums"/> 的閉區間 <paramref name="left"/> 到 <paramref name="right"/> 中，
+    /// 先隨機選取 pivot 並交換至左端，再以 Hoare 分割持續縮小範圍，直到找出目標元素。
+    /// </summary>
+    /// <param name="nums">正在原地分割的整數陣列。</param>
+    /// <param name="left">目前候選區間的左界（含）。</param>
+    /// <param name="right">目前候選區間的右界（含）。</param>
+    /// <param name="targetIndex">升冪排序後欲取得元素的零起始索引，且必須落在目前候選區間內。</param>
+    /// <returns>升冪排序後位於 <paramref name="targetIndex"/> 的元素。</returns>
+    private int QuickselectWithRandomPivot(int[] nums, int left, int right, int targetIndex)
+    {
+        // 候選區間只剩一個元素時，它就是目標位置的答案。
+        if (left == right)
+        {
+            return nums[targetIndex];
+        }
+
+        int pivotIndex = Random.Shared.Next(left, right + 1);
+        (nums[left], nums[pivotIndex]) = (nums[pivotIndex], nums[left]);
+
+        int pivot = nums[left];
+        int i = left - 1;
+        int j = right + 1;
+
+        while (i < j)
+        {
+            i++;
+            while (nums[i] < pivot)
+            {
+                i++;
+            }
+
+            j--;
+            while (nums[j] > pivot)
+            {
+                j--;
+            }
+
+            if (i < j)
+            {
+                int temp = nums[i];
+                nums[i] = nums[j];
+                nums[j] = temp;
+            }
+        }
+
+        // j 是 Hoare 分割的邊界，不是 pivot 的最終索引；目標只會位於其中一側。
+        if (targetIndex <= j)
+        {
+            return QuickselectWithRandomPivot(nums, left, j, targetIndex);
+        }
+
+        return QuickselectWithRandomPivot(nums, j + 1, right, targetIndex);
     }
 }
