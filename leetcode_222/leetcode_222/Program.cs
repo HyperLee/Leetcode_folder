@@ -17,12 +17,12 @@ class Program
         /// <summary>
         /// 取得或設定左子節點；若不存在則為 <see langword="null"/>。
         /// </summary>
-        public TreeNode? Left { get; set; }
+        public TreeNode? left { get; set; }
 
         /// <summary>
         /// 取得或設定右子節點；若不存在則為 <see langword="null"/>。
         /// </summary>
-        public TreeNode? Right { get; set; }
+        public TreeNode? right { get; set; }
 
         /// <summary>
         /// 初始化一個樹節點，允許在建樹時直接指定左右子節點。
@@ -35,8 +35,8 @@ class Program
         public TreeNode(int value = 0, TreeNode? left = null, TreeNode? right = null)
         {
             Value = value;
-            Left = left;
-            Right = right;
+            left = left;
+            right = right;
         }
     }
 
@@ -48,7 +48,9 @@ class Program
     ///
     /// Given the root of a complete binary tree, return the number of the nodes in the tree.
     ///
-    /// According to [Wikipedia](http://en.wikipedia.org/wiki/Binary_tree#Types_of_binary_trees), every level, except possibly the last, is completely filled in a complete binary tree, and all nodes in the last level are as far left as possible.
+    /// According to [Wikipedia](http://en.wikipedia.org/wiki/Binary_tree#Types_of_binary_trees), 
+    /// every level, except possibly the last, is completely filled in a complete binary tree, 
+    /// and all nodes in the last level are as far left as possible.
     /// It can have between 1 and 2^h nodes inclusive at the last level h.
     ///
     /// Design an algorithm that runs in less than O(n) time complexity.
@@ -145,21 +147,41 @@ class Program
             return 0;
         }
 
-        int leftDepth = GetLeftDepth(root.Left);
-        int rightDepth = GetLeftDepth(root.Right);
+        int leftDepth = GetLeftDepth(root.left);
+        int rightDepth = GetLeftDepth(root.right);
 
         // 左右最左深度相同時，左子樹一定是滿二元樹，可以直接用公式算出節點數，
         // 只需要遞迴處理右側尚未填滿的那一邊。
         if (leftDepth == rightDepth)
         {
             int leftPerfectNodeCount = (1 << leftDepth) - 1;
-            return 1 + leftPerfectNodeCount + CountNodes(root.Right);
+            return 1 + leftPerfectNodeCount + CountNodes(root.right);
         }
 
         // 若左深度較大，表示右子樹是較矮的滿二元樹，遞迴處理左側不完整的區域即可。
         int rightPerfectNodeCount = (1 << rightDepth) - 1;
-        return 1 + rightPerfectNodeCount + CountNodes(root.Left);
+        return 1 + rightPerfectNodeCount + CountNodes(root.left);
     }
+
+    /// <summary>
+    /// 取得某棵子樹沿著最左分支向下的深度，用來判斷該子樹是否為滿二元樹。
+    /// 輸入條件是 node 可為 <see langword="null"/>；若為空，深度定義為 0。
+    /// 輸出結果是從目前節點開始向左走到底時經過的層數。
+    /// </summary>
+    /// <param name="node">要量測深度的子樹根節點，可為 <see langword="null"/>。</param>
+    /// <returns>沿著最左分支向下的層數。</returns>
+    private static int GetLeftDepth(TreeNode? node)
+    {
+        int depth = 0;
+
+        while (node != null)
+        {
+            depth++;
+            node = node.left;
+        }
+
+        return depth;
+    }    
 
     /// <summary>
     /// 使用最直觀的 DFS 遞迴逐節點計數，作為完整二元樹最佳解法的線性時間對照組。
@@ -175,7 +197,7 @@ class Program
             return 0;
         }
 
-        return 1 + CountNodesRecursive(root.Left) + CountNodesRecursive(root.Right);
+        return 1 + CountNodesRecursive(root.left) + CountNodesRecursive(root.right);
     }
 
     /// <summary>
@@ -201,38 +223,18 @@ class Program
             TreeNode node = queue.Dequeue();
             count++;
 
-            if (node.Left != null)
+            if (node.left != null)
             {
-                queue.Enqueue(node.Left);
+                queue.Enqueue(node.left);
             }
 
-            if (node.Right != null)
+            if (node.right != null)
             {
-                queue.Enqueue(node.Right);
+                queue.Enqueue(node.right);
             }
         }
 
         return count;
-    }
-
-    /// <summary>
-    /// 取得某棵子樹沿著最左分支向下的深度，用來判斷該子樹是否為滿二元樹。
-    /// 輸入條件是 node 可為 <see langword="null"/>；若為空，深度定義為 0。
-    /// 輸出結果是從目前節點開始向左走到底時經過的層數。
-    /// </summary>
-    /// <param name="node">要量測深度的子樹根節點，可為 <see langword="null"/>。</param>
-    /// <returns>沿著最左分支向下的層數。</returns>
-    private static int GetLeftDepth(TreeNode? node)
-    {
-        int depth = 0;
-
-        while (node != null)
-        {
-            depth++;
-            node = node.Left;
-        }
-
-        return depth;
     }
 
     /// <summary>
@@ -263,12 +265,12 @@ class Program
 
             if (leftChildIndex < values.Length)
             {
-                nodes[i].Left = nodes[leftChildIndex];
+                nodes[i].left = nodes[leftChildIndex];
             }
 
             if (rightChildIndex < values.Length)
             {
-                nodes[i].Right = nodes[rightChildIndex];
+                nodes[i].right = nodes[rightChildIndex];
             }
         }
 
