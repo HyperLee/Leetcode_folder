@@ -359,3 +359,7 @@ dotnet test leetcode_225/leetcode_225.csproj --nologo
 dotnet run --project leetcode_225/leetcode_225.csproj --no-build
 git diff --check
 ```
+
+## 官方解法
+
+- [力扣官方题解] (https://leetcode.cn/problems/implement-stack-using-queues/solutions/432204/yong-dui-lie-shi-xian-zhan-by-leetcode-solution/)
