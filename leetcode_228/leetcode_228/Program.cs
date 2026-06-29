@@ -41,58 +41,177 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        RunSamples();
     }
 
     /// <summary>
-    /// 解法: 雙指標
-    /// 題目大概意思:
-    /// 題目輸入的陣列已經過排序, 遞增 <可能是連續也有不連續的數字段落>
-    /// 要找出連續區間(數字要連續, 不能斷), 將之輸出
-    /// 
-    /// 使用雙指針解題目
-    /// i 指向區間起始位置, j 向後遍歷直到不滿足區連續遞增的則當作區間結束
-    /// 下一個區間計算 i 指向 j + 1 為區間起始位置(i ~ j 位置已經跑過, 所以從後一個開始), j 則維持上述方式找出 斷掉的位置結束
-    /// 如此循環
-    /// 
-    /// 區間 [a, b] -> a 到 b 為連續遞增數字區間, 不能有斷開的跳過的
-    /// 
-    /// (j + 1 == nums.Length): 右邊界結束區間, 陣列從 0 開始所以 j + 1 是 nums 的右邊界  
-    /// (nums[j] + 1 != nums[j + 1]): 區間內數字是連續遞增的所以 nums[j] + 1 要等同 nums[j + 1]  
+    /// 使用固定範例執行 Summary Ranges 解法，涵蓋題目範例、空陣列、單一元素、負數區間與整數邊界。
+    /// 每筆輸入都會列出預期與實際輸出，方便從主程式直接驗證目前解法。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <returns></returns>
+    private static void RunSamples()
+    {
+        SampleCase[] samples = new SampleCase[]
+        {
+            new SampleCase(
+                "LeetCode 範例 1：多段連續區間",
+                new int[] { 0, 1, 2, 4, 5, 7 },
+                new string[] { "0->2", "4->5", "7" }),
+            new SampleCase(
+                "LeetCode 範例 2：單點與短區間交錯",
+                new int[] { 0, 2, 3, 4, 6, 8, 9 },
+                new string[] { "0", "2->4", "6", "8->9" }),
+            new SampleCase(
+                "空陣列：沒有任何範圍",
+                Array.Empty<int>(),
+                Array.Empty<string>()),
+            new SampleCase(
+                "單一元素：輸出單點",
+                new int[] { 5 },
+                new string[] { "5" }),
+            new SampleCase(
+                "負數區間：跨越 0 的連續段",
+                new int[] { -3, -2, -1, 1, 2, 4 },
+                new string[] { "-3->-1", "1->2", "4" }),
+            new SampleCase(
+                "int.MinValue 邊界：仍可正確串接連續值",
+                new int[] { int.MinValue, int.MinValue + 1, -1, 0, 2 },
+                new string[] { "-2147483648->-2147483647", "-1->0", "2" }),
+        };
+
+        Program solution = new Program();
+        int passedCount = 0;
+
+        Console.WriteLine("Summary Ranges sample verification");
+        Console.WriteLine();
+
+        for (int index = 0; index < samples.Length; index++)
+        {
+            SampleCase sample = samples[index];
+            IList<string> actual = solution.SummaryRanges(sample.Input);
+            bool passed = actual.SequenceEqual(sample.Expected);
+
+            if (passed)
+            {
+                passedCount++;
+            }
+
+            Console.WriteLine($"Case {index + 1}: {sample.Name}");
+            Console.WriteLine($"Input: {FormatIntArray(sample.Input)}");
+            Console.WriteLine($"Expected: {FormatStringList(sample.Expected)}");
+            Console.WriteLine($"Actual: {FormatStringList(actual)}");
+            Console.WriteLine($"Result: {(passed ? "PASS" : "FAIL")}");
+            Console.WriteLine();
+        }
+
+        Console.WriteLine($"Passed {passedCount}/{samples.Length} cases.");
+    }
+
+    /// <summary>
+    /// 將已排序且不重複的整數陣列整理成最小範圍列表。
+    /// 解題概念是以雙指標固定區間左端，再往右延伸到連續數字中斷為止；
+    /// 輸入需符合題目條件，輸出會以 "a" 或 "a-&gt;b" 表示每個範圍。
+    /// </summary>
+    /// <param name="nums">已排序且所有元素唯一的整數陣列。</param>
+    /// <returns>能精確涵蓋所有輸入數字的最小排序範圍列表。</returns>
     public IList<string> SummaryRanges(int[] nums)
     {
-        List<string> res = new List<string>();
-        // i 初始設定 第一個區間的起始位置
-        int i = 0;
+        List<string> result = new List<string>();
+        int start = 0;
 
-        for(int j = 0; j <  nums.Length; j++)
+        while (start < nums.Length)
         {
-            // i 固定之後, j 在後面遍歷. 直到遇到不連續的遞增 nums[j] + 1 != nums[j + 1]
-            // 或是 j 走道輸入資料的最右邊邊界 則當前的區間範圍就是[i, j] 寫入 StringBuilder
-            if ((j + 1 == nums.Length) || (nums[j] + 1 != nums[j + 1]))
+            int end = start;
+
+            // 右指標持續延伸目前區間，直到下一個數字不再剛好大 1。
+            while (end + 1 < nums.Length && (long)nums[end] + 1L == nums[end + 1])
             {
-                // 將當前區間 [i, j] 寫入結果
-                StringBuilder sb = new StringBuilder();
-                // 區間起始(左邊界) i
-                sb.Append(nums[i]);
+                end++;
+            }
 
-                // 區間起始與結束不同位置需要加上 箭號指示
-                // 區間位置相同就不需要. 題目要求
-                if(i != j)
-                {
-                    // 區間結束(右邊界) j
-                    sb.Append("->").Append(nums[j]);
-                }
-
-                // 寫入結果
-                res.Add(sb.ToString());
-                // 將 i 指向下一個區間的起始點 j + 1 當作新的區間左邊界起始位置 (因 i ~ j 已經跑過)
-                i = j + 1;
-            }            
+            // 完成一段最長連續區間後立即輸出，再從下一個位置開始。
+            result.Add(BuildRange(nums[start], nums[end]));
+            start = end + 1;
         }
-        return res;
+
+        return result;
     }
+
+    /// <summary>
+    /// 依題目格式建立單一範圍字串；起終點相同時輸出單一數字，否則輸出 "start-&gt;end"。
+    /// </summary>
+    /// <param name="start">範圍起點。</param>
+    /// <param name="end">範圍終點。</param>
+    /// <returns>符合題目要求的範圍表示字串。</returns>
+    private static string BuildRange(int start, int end)
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.Append(start);
+
+        if (start != end)
+        {
+            builder.Append("->").Append(end);
+        }
+
+        return builder.ToString();
+    }
+
+    /// <summary>
+    /// 將整數陣列格式化為 README 與主程式範例使用的顯示字串。
+    /// </summary>
+    /// <param name="values">要顯示的整數集合。</param>
+    /// <returns>例如 [0, 1, 2] 的字串。</returns>
+    private static string FormatIntArray(IEnumerable<int> values)
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.Append('[');
+
+        bool isFirst = true;
+        foreach (int value in values)
+        {
+            if (!isFirst)
+            {
+                builder.Append(", ");
+            }
+
+            builder.Append(value);
+            isFirst = false;
+        }
+
+        builder.Append(']');
+        return builder.ToString();
+    }
+
+    /// <summary>
+    /// 將範圍字串集合格式化為 README 與主程式範例使用的顯示字串。
+    /// </summary>
+    /// <param name="values">要顯示的範圍字串集合。</param>
+    /// <returns>例如 ["0-&gt;2", "4"] 的字串。</returns>
+    private static string FormatStringList(IEnumerable<string> values)
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.Append('[');
+
+        bool isFirst = true;
+        foreach (string value in values)
+        {
+            if (!isFirst)
+            {
+                builder.Append(", ");
+            }
+
+            builder.Append('"').Append(value).Append('"');
+            isFirst = false;
+        }
+
+        builder.Append(']');
+        return builder.ToString();
+    }
+
+    /// <summary>
+    /// 表示一筆主程式範例，包含案例名稱、輸入陣列與預期範圍列表。
+    /// </summary>
+    /// <param name="Name">案例名稱與測試重點。</param>
+    /// <param name="Input">符合題目條件的已排序不重複整數陣列。</param>
+    /// <param name="Expected">預期輸出的範圍字串列表。</param>
+    private sealed record SampleCase(string Name, int[] Input, string[] Expected);
 }
