@@ -1,4 +1,4 @@
-﻿namespace leetcode_268;
+namespace leetcode_268;
 
 class Program
 {
@@ -7,97 +7,127 @@ class Program
     /// https://leetcode.com/problems/missing-number/description/
     /// 268. 丢失的数字
     /// https://leetcode.cn/problems/missing-number/description/
-    /// Given an array nums containing n distinct numbers in the range [0, n], 
+    /// Given an array nums containing n distinct numbers in the range [0, n],
     /// return the only number in the range that is missing from the array.
-    /// 
+    ///
     /// 給定一個陣列 nums，其中包含範圍 [0, n] 內 n 個互不相同的數字，
     /// 請回傳此範圍中唯一缺少的那個數字。
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solver = new Program();
+
+        Console.WriteLine("LeetCode 268 - Missing Number");
+        Console.WriteLine("================================");
+        Console.WriteLine();
+
+        RunSampleCase(solver, 1, new int[] { 3, 0, 1 }, 2);
+        RunSampleCase(solver, 2, new int[] { 0, 1 }, 2);
+        RunSampleCase(solver, 3, new int[] { 9, 6, 4, 2, 3, 5, 7, 0, 1 }, 8);
+        RunSampleCase(solver, 4, new int[] { 0 }, 1);
+        RunSampleCase(solver, 5, new int[] { 1 }, 0);
     }
 
     /// <summary>
-    /// 解法一:排序
-    /// 利用排序下去找出 缺少的
-    /// 題目有說 範圍: [0, n]
-    /// 從0開始
+    /// 使用排序解法找出缺少的數字。
+    /// 先將輸入陣列原地排序，再從索引 0 開始逐一比對「索引值」與「排序後的數字」，
+    /// 第一個不相等的位置就是缺少的數字。輸入必須是範圍 [0, n] 內互不重複的 n 個整數，
+    /// 輸出為唯一缺失的那個值。時間複雜度為 O(n log n)，空間複雜度依排序實作而定。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <returns></returns>
+    /// <param name="nums">包含 n 個互不重複整數的輸入陣列，數值範圍為 [0, n]。</param>
+    /// <returns>範圍 [0, n] 中唯一沒有出現在陣列裡的數字。</returns>
     public int MissingNumber(int[] nums)
     {
         Array.Sort(nums);
-        // 迴圈找出缺失的數字  0 <= i < n
-        for(int i = 0;i < nums.Length; i++)
+
+        // 排序後，第一個「數值 != 索引」的位置，就是缺少的數字。
+        for (int i = 0; i < nums.Length; i++)
         {
-            if(nums[i] != i)
+            if (nums[i] != i)
             {
                 return i;
             }
         }
-        // 上述迴圈都存在那就是缺失n; 上述迴圈不包含 n
+
+        // 如果 0 到 n - 1 都對得上，代表缺少的是尾端的 n。
         return nums.Length;
     }
 
     /// <summary>
-    /// 解法二: hashset
-    /// 使用哈希集合，可以将时间复杂度降低到 O(n)。
-    /// 首先遍历数组 nums，将数组中的每个元素加入哈希集合，
-    /// 然后依次检查从 0 到 n 的每个整数是否在哈希集合中，不在哈希集合
-    /// 中的数字即为丢失的数字。
-    /// 由于哈希集合的每次添加元素和查找元素的时间复杂度都是 O(1)，因此总时间复杂度是 O(n)
+    /// 使用 HashSet 解法找出缺少的數字。
+    /// 先把輸入陣列中的所有值放入雜湊集合，再從 0 掃描到 n，
+    /// 第一個不在集合中的值就是答案。輸入必須是範圍 [0, n] 內互不重複的 n 個整數，
+    /// 輸出為唯一缺失的那個值。時間複雜度為 O(n)，空間複雜度為 O(n)。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <returns></returns>
+    /// <param name="nums">包含 n 個互不重複整數的輸入陣列，數值範圍為 [0, n]。</param>
+    /// <returns>範圍 [0, n] 中唯一沒有出現在陣列裡的數字。</returns>
     public int MissingNumber2(int[] nums)
     {
         ISet<int> numSet = new HashSet<int>(nums);
         int n = nums.Length;
-        for(int i = 0; i < n; i++)
-        {
-            numSet.Add(nums[i]);
-        }
-
         int missingNumber = -1;
-        for(int i = 0; i <= n; i++)
+
+        // 依序檢查完整區間 [0, n]，哪個數字不在集合裡，哪個就是缺失值。
+        for (int i = 0; i <= n; i++)
         {
-            if(!numSet.Contains(i))
+            if (!numSet.Contains(i))
             {
                 missingNumber = i;
                 break;
             }
         }
+
         return missingNumber;
     }
 
     /// <summary>
-    /// 位元運算
-    /// 数组 nums 中有 n 个数，在这 n 个数的后面添加从 0 到 n 的每个整数，则添加了 n+1 个整数，共有 2n+1 个整数。
-    /// 在 2n+1 个整数中，丢失的数字只在后面 n+1 个整数中出现一次，其余的数字在前面 n 个整数中（即数组中）和后面 n+1
-    /// 个整数中各出现一次，即其余的数字都出现了两次。
-    /// 根据出现的次数的奇偶性，可以使用按位异或运算得到丢失的数字。按位异或运算 ⊕ 满足交换律和结合律，且对任意整数 x 都满
-    /// 足 x⊕x=0 和 x⊕0=x。
-    /// 由于上述 2n+1 个整数中，丢失的数字出现了一次，其余的数字都出现了两次，因此对上述 2n+1 个整数进行按位异或运算
-    /// 结果即为丢失的数字。
+    /// 使用位元 XOR 解法找出缺少的數字。
+    /// 將陣列中的所有值與完整區間 [0, n] 的所有整數全部做 XOR，
+    /// 成對出現的數字會互相抵消，最後留下來的值就是缺少的數字。輸入必須是範圍 [0, n] 內互不重複的 n 個整數，
+    /// 輸出為唯一缺失的那個值。時間複雜度為 O(n)，空間複雜度為 O(1)。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <returns></returns>
+    /// <param name="nums">包含 n 個互不重複整數的輸入陣列，數值範圍為 [0, n]。</param>
+    /// <returns>範圍 [0, n] 中唯一沒有出現在陣列裡的數字。</returns>
     public int MissingNumber3(int[] nums)
     {
         int xor = 0;
         int n = nums.Length;
-        for(int i = 0; i < n; i++)
+
+        for (int i = 0; i < n; i++)
         {
             xor ^= nums[i];
         }
 
-        for(int i = 0; i <= n; i++)
+        // 陣列值與完整範圍值全部 XOR 後，重複出現的數字會兩兩抵消。
+        for (int i = 0; i <= n; i++)
         {
             xor ^= i;
         }
+
         return xor;
+    }
+
+    /// <summary>
+    /// 執行單筆範例資料，輸出三種解法的結果，並檢查是否符合預期答案。
+    /// </summary>
+    /// <param name="solver">提供三種解法的程式實例。</param>
+    /// <param name="caseNumber">範例案例編號。</param>
+    /// <param name="nums">要驗證的輸入陣列。</param>
+    /// <param name="expected">此案例預期缺少的數字。</param>
+    private static void RunSampleCase(Program solver, int caseNumber, int[] nums, int expected)
+    {
+        // 排序解法會改動陣列內容，因此三種解法都使用複本，避免彼此互相影響。
+        int sortingResult = solver.MissingNumber((int[])nums.Clone());
+        int hashSetResult = solver.MissingNumber2((int[])nums.Clone());
+        int xorResult = solver.MissingNumber3((int[])nums.Clone());
+
+        Console.WriteLine($"Case {caseNumber}");
+        Console.WriteLine($"Input: [{string.Join(", ", nums)}]");
+        Console.WriteLine($"Expected: {expected}");
+        Console.WriteLine($"MissingNumber  (Sort)   : {sortingResult} {(sortingResult == expected ? "PASS" : "FAIL")}");
+        Console.WriteLine($"MissingNumber2 (HashSet): {hashSetResult} {(hashSetResult == expected ? "PASS" : "FAIL")}");
+        Console.WriteLine($"MissingNumber3 (XOR)    : {xorResult} {(xorResult == expected ? "PASS" : "FAIL")}");
+        Console.WriteLine();
     }
 }
