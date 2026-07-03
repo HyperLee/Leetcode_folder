@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch LeetCode 274",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build leetcode_274",
+      "program": "${workspaceFolder}\\leetcode_274\\bin\\Debug\\net10.0\\leetcode_274.dll",
+      "cwd": "${workspaceFolder}\\leetcode_274",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    }
+  ]
+}
