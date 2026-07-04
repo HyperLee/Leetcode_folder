@@ -21,4 +21,102 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 解法一:陣列排序
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <returns></returns>
+    public int FindDuplicate(int[] nums)
+    {
+        Array.Sort(nums);
+
+        for(int i = 1; i < nums.Length; i++)
+        {
+            if(nums[i] == nums[i - 1])
+            {
+                return nums[i];
+            }
+        }
+        return -1;
+    }
+
+    /// <summary>
+    /// 使用 Floyd 快慢指標解題
+    /// 
+    /// 可以參考 142. Linked List Cycle II
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <returns></returns>
+    public int FindDuplicate2(int[] nums)
+    {
+         // 0 一定不在环上，适合作为起点
+        int slow = 0;
+        int fast = 0;
+        // 第一階段：找到快慢指標相遇點
+        while(true)
+        {
+            // 等价于 slow = slow.next
+            slow = nums[slow];
+            // 等价于 fast = fast.next.next
+            fast = nums[nums[fast]];
+
+            if(slow == fast)
+            {
+                // 快慢指针移动到同一个节点
+                break;
+            }
+        }
+
+        // 第二階段：找到環的入口，也就是重複的數字
+        // 再用一个指针，从起点出发
+        slow = 0;
+        while(slow != fast)
+        {
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+        return slow;
+    }
+
+    /// <summary>
+    /// 解法三:二分法
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <returns></returns>
+    public int FindDuplicate3(int[] nums)
+    {
+        int n = nums.Length;
+        int left = 1;
+        int right = n - 1;
+        int res = -1;
+
+        while(left <= right)
+        {
+            int mid = left + (right - left) / 2;
+            int count = 0;
+
+            // 計算小於等於 mid 的數字個數
+            foreach(int num in nums)
+            {
+                if(num <= mid)
+                {
+                    count++;
+                }
+            }
+
+            if(count > mid)
+            {
+                // 重複的數字在左半邊
+                res = mid;
+                right = mid - 1;
+            }
+            else
+            {
+                // 重複的數字在右半邊
+                left = mid + 1;
+            }
+        }
+        return res;
+    }
 }
