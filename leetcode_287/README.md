@@ -1,0 +1,288 @@
+# LeetCode 287 - Find the Duplicate Number
+
+使用 .NET Console 專案整理 LeetCode 287 `Find the Duplicate Number` 的三種常見解法：排序、Floyd 快慢指標、值域二分搜尋。專案把題解、可執行示例與驗證輸出集中在 `leetcode_287/Program.cs`，方便直接 build、run，並逐一比較每一種解法的思路與限制。
+
+## 題目連結
+
+- [LeetCode 287. Find the Duplicate Number](https://leetcode.com/problems/find-the-duplicate-number/description/)
+- [LeetCode CN 287. 寻找重复数](https://leetcode.cn/problems/find-the-duplicate-number/description/)
+
+## 題目說明
+
+給定一個長度為 `n + 1` 的整數陣列 `nums`，其中每個元素都落在 `[1, n]` 範圍內。因為總共有 `n + 1` 個數字，卻只允許出現 `n` 種不同的值，所以根據抽屜原理，一定至少有一個數字重複出現。
+
+題目要求回傳那個重複的數字，而且還額外限制：
+
+- 不可以修改原始陣列 `nums`
+- 只能使用常數額外空間
+
+也就是說，這題不只是「找重複值」，而是要在特定限制下找出重複值。
+
+## 限制條件
+
+- `1 <= n <= 10^5`
+- `nums.length == n + 1`
+- `1 <= nums[i] <= n`
+- `nums` 中只有一個整數會重複出現
+- 這個重複整數可能出現兩次以上
+
+## 解題概念與出發點
+
+這題最重要的觀察有三個：
+
+1. 數值範圍固定在 `[1, n]`。
+2. 陣列長度卻是 `n + 1`。
+3. 只有一個值重複，但可能重複超過兩次。
+
+所以我們可以從三個角度思考：
+
+1. 先排序，讓重複值變成相鄰元素，直接掃描找答案。
+2. 把陣列解讀成「索引指向下一個索引」的鏈結結構，用 Floyd Cycle Detection 找環入口。
+3. 對值域 `[1, n]` 做二分搜尋，利用「小於等於某個門檻的數量是否過多」來縮小答案範圍。
+
+其中：
+
+- `FindDuplicate` 最直觀，但會修改輸入，不符合題目的嚴格限制。
+- `FindDuplicate2` 與 `FindDuplicate3` 都保留輸入，且只使用常數額外空間。
+- `FindDuplicate2` 是最貼近經典官方思路的版本。
+
+## 解法比較
+
+| 解法 | 核心想法 | 時間複雜度 | 空間複雜度 | 是否修改輸入 | 是否符合題目額外限制 |
+| --- | --- | --- | --- | --- | --- |
+| `FindDuplicate` | 排序後找相鄰重複值 | `O(n log n)` | 依排序實作而定 | 會 | 否 |
+| `FindDuplicate2` | 把陣列映射成環，找環入口 | `O(n)` | `O(1)` | 不會 | 是 |
+| `FindDuplicate3` | 對值域做二分，判斷重複值落在哪半邊 | `O(n log n)` | `O(1)` | 不會 | 是 |
+
+> [!NOTE]
+> `Main` 中的示例驗證會先複製輸入陣列，再分別交給三種解法，避免 `FindDuplicate` 的排序副作用污染其他方法的輸入資料。
+
+## 解法一：排序法 `FindDuplicate`
+
+### 設計說明
+
+這個方法最容易直覺理解。
+
+先將陣列由小到大排序後，重複的數字一定會排在一起。接著只要從左到右掃描，找第一組相鄰且相等的元素，就能得到答案。
+
+這種做法的優點是：
+
+- 好懂
+- 容易除錯
+- 很適合作為第一版確認思路
+
+缺點則是：
+
+- 需要排序，因此時間複雜度是 `O(n log n)`
+- 會直接修改輸入陣列，不符合題目「不可修改陣列」的要求
+
+### 範例演示流程
+
+以 `nums = [1, 3, 4, 2, 2]` 為例：
+
+1. 排序後得到 `[1, 2, 2, 3, 4]`
+2. 檢查 `1` 和 `2`，不同，繼續
+3. 檢查 `2` 和 `2`，相同
+4. 第一組相鄰重複值就是 `2`
+5. 回傳 `2`
+
+這個方法很適合拿來驗證基本正確性，但不是題目要求下的最佳答案。
+
+## 解法二：Floyd 快慢指標 `FindDuplicate2`
+
+### 設計說明
+
+這題的經典解法，是把陣列看成一個隱含的鏈結串列。
+
+做法是把：
+
+- 索引 `i` 視為節點
+- `nums[i]` 視為從節點 `i` 指向下一個節點的位置
+
+因為每個值都落在 `[1, n]`，所以每一步都會指向合法索引。又因為總共有 `n + 1` 個位置，卻只有 `n` 種可指向的值，最後一定會形成環。那個造成環入口的值，就是重複數字。
+
+Floyd 演算法分兩段：
+
+1. 用快慢指標先找到環上的相遇點
+2. 把其中一個指標移回起點，兩者再同步前進，下一次相遇的位置就是環入口
+
+這個方法的優點是：
+
+- 不修改輸入
+- 額外空間為 `O(1)`
+- 時間複雜度為 `O(n)`
+
+### 範例演示流程
+
+以 `nums = [1, 3, 4, 2, 2]` 為例：
+
+#### 第一階段：找相遇點
+
+- 起點設為索引 `0`
+- `slow = nums[0] = 1`
+- `fast = nums[nums[0]] = nums[1] = 3`
+
+繼續移動：
+
+1. `slow = nums[1] = 3`
+2. `fast = nums[nums[3]] = nums[2] = 4`
+3. `slow = nums[3] = 2`
+4. `fast = nums[nums[4]] = nums[2] = 4`
+5. `slow = nums[2] = 4`
+6. `fast = nums[nums[4]] = nums[2] = 4`
+
+此時 `slow == fast == 4`，代表兩者在環上相遇。
+
+#### 第二階段：找環入口
+
+- 把 `slow` 重設回 `0`
+- `fast` 留在相遇點 `4`
+
+再同步前進：
+
+1. `slow = nums[0] = 1`
+2. `fast = nums[4] = 2`
+3. `slow = nums[1] = 3`
+4. `fast = nums[2] = 4`
+5. `slow = nums[3] = 2`
+6. `fast = nums[4] = 2`
+
+兩者在值 `2` 相遇，這個位置就是環入口，也就是重複數字 `2`。
+
+## 解法三：值域二分搜尋 `FindDuplicate3`
+
+### 設計說明
+
+這個方法不是對陣列位置做二分，而是對「答案可能落在哪個值域」做二分。
+
+假設目前猜測中間值 `mid`，我們去統計：
+
+- 陣列中有多少個數字 `<= mid`
+
+如果沒有重複，理論上 `[1, mid]` 最多只能容納 `mid` 個不同數字。
+
+所以：
+
+- 如果 `count <= mid`，代表左半值域沒有擠爆，重複值一定在右半邊
+- 如果 `count > mid`，代表左半值域的數量過多，重複值一定在左半邊
+
+這就是這個方法可以持續縮小答案範圍的原因。
+
+它的優點是：
+
+- 不修改輸入
+- 額外空間為 `O(1)`
+- 思路直接建立在抽屜原理上
+
+缺點是每輪都要掃描整個陣列，因此整體時間複雜度是 `O(n log n)`。
+
+### 範例演示流程
+
+以 `nums = [3, 1, 3, 4, 2]` 為例：
+
+1. 值域為 `[1, 4]`
+2. `mid = 2`
+3. 計算 `<= 2` 的數字有 `1, 2`，共 `2` 個
+4. 因為 `count = 2`，沒有大於 `mid = 2`，代表左半值域沒有超載
+5. 所以答案不在 `[1, 2]`，改搜右半值域 `[3, 4]`
+6. 新的 `mid = 3`
+7. 計算 `<= 3` 的數字有 `3, 1, 3, 2`，共 `4` 個
+8. 因為 `count = 4 > mid = 3`，表示左半值域 `[1, 3]` 已經超載
+9. 因此重複值落在 `[3, 3]`
+10. 最終答案為 `3`
+
+## 專案中的可執行示例
+
+`Main` 目前固定執行以下五組案例，並讓三種解法各自輸出結果與 `PASS/FAIL`：
+
+- `[1, 3, 4, 2, 2] -> 2`
+- `[3, 1, 3, 4, 2] -> 3`
+- `[1, 1] -> 1`
+- `[1, 1, 2] -> 1`
+- `[2, 5, 9, 6, 9, 3, 8, 9, 7, 1] -> 9`
+
+這些案例涵蓋：
+
+- 題目代表案例
+- 重複值出現在前段與中段
+- 最小邊界
+- 重複值出現超過兩次的大型案例
+
+## 專案結構
+
+```text
+.
+├─ README.md
+├─ docs/
+│  └─ readme-template.md
+└─ leetcode_287/
+   ├─ Program.cs
+   └─ leetcode_287.csproj
+```
+
+## 建置與執行
+
+請在 `C:\GitHubFolder\Leetcode_folder\leetcode_287` 這個 repo 目錄下執行：
+
+```powershell
+dotnet build .\leetcode_287\leetcode_287.csproj
+dotnet run --project .\leetcode_287\leetcode_287.csproj
+```
+
+目前沒有獨立的測試專案，因此這題的驗證方式是：
+
+- 確認 `dotnet build` 成功
+- 確認 `dotnet run` 能跑出五組案例
+- 確認三種解法在每組案例都顯示 `PASS`
+
+## 範例輸出
+
+以下區塊應與目前 `Program.cs` 的實際執行結果一致：
+
+```text
+LeetCode 287 - Find the Duplicate Number
+================================
+
+Case 1
+Input: [1, 3, 4, 2, 2]
+Expected: 2
+FindDuplicate  (Sort)         : 2 PASS
+FindDuplicate2 (Floyd Cycle)  : 2 PASS
+FindDuplicate3 (Binary Search): 2 PASS
+
+Case 2
+Input: [3, 1, 3, 4, 2]
+Expected: 3
+FindDuplicate  (Sort)         : 3 PASS
+FindDuplicate2 (Floyd Cycle)  : 3 PASS
+FindDuplicate3 (Binary Search): 3 PASS
+
+Case 3
+Input: [1, 1]
+Expected: 1
+FindDuplicate  (Sort)         : 1 PASS
+FindDuplicate2 (Floyd Cycle)  : 1 PASS
+FindDuplicate3 (Binary Search): 1 PASS
+
+Case 4
+Input: [1, 1, 2]
+Expected: 1
+FindDuplicate  (Sort)         : 1 PASS
+FindDuplicate2 (Floyd Cycle)  : 1 PASS
+FindDuplicate3 (Binary Search): 1 PASS
+
+Case 5
+Input: [2, 5, 9, 6, 9, 3, 8, 9, 7, 1]
+Expected: 9
+FindDuplicate  (Sort)         : 9 PASS
+FindDuplicate2 (Floyd Cycle)  : 9 PASS
+FindDuplicate3 (Binary Search): 9 PASS
+```
+
+## 驗證重點
+
+- `FindDuplicate`、`FindDuplicate2`、`FindDuplicate3` 三種解法都保留在同一個 `Program.cs` 中，方便直接閱讀與比對。
+- `RunAllSampleCases` 與 `RunSampleCase` 提供固定案例輸出，可直接對照 README 的範例輸出。
+- `RunSampleCase` 會先複製輸入陣列，確保排序法不會污染後續解法的輸入。
+- README 中記錄的建置與執行指令，應與實際驗證結果完全一致。
+- 完成後還會額外執行 `git diff --check`，確認沒有多餘空白或換行問題。
