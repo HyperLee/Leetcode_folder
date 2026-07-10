@@ -76,7 +76,7 @@ internal static class Program
     }
 
     /// <summary>
-    /// Returns the Fizz Buzz representation of every integer from 1 through n.
+    /// 依 3、5 與 15 的整除規則產生 1 到 n 的 Fizz Buzz 字串；n 遵循 LeetCode 的正整數輸入契約，並依數值遞增順序回傳 IList&lt;string&gt;。
     /// </summary>
     public static IList<string> FizzBuzz(int n)
     {
@@ -84,8 +84,10 @@ internal static class Program
 
         for (int i = 1; i <= n; i++)
         {
+            // 同時為 3 與 5 的倍數必須優先處理，才能產生 FizzBuzz 而非單一標記。
             if (i % 15 == 0)
             {
+                // 數值 i 從 1 起算，寫入結果陣列時需對應至從 0 起算的索引 i - 1。
                 result[i - 1] = "FizzBuzz";
             }
             else if (i % 3 == 0)
@@ -105,6 +107,9 @@ internal static class Program
         return result;
     }
 
+    /// <summary>
+    /// 接收布林驗證結果；遞增總檢查計數，若為 true 也遞增通過計數，且不回傳值。
+    /// </summary>
     private static void RecordCheck(bool passed)
     {
         s_checks++;
@@ -115,6 +120,9 @@ internal static class Program
         }
     }
 
+    /// <summary>
+    /// 接收有序字串序列，並回傳以方括號包覆、各項以雙引號顯示的字串。
+    /// </summary>
     private static string FormatSequence(IEnumerable<string> values)
     {
         return $"[{string.Join(", ", values.Select(static value => $"\"{value}\""))}]";
