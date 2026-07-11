@@ -82,8 +82,14 @@ internal static class Program
     }
 
     /// <summary>
-    /// 計算 nums 中任兩個合法索引值 XOR 後的最大結果；依 LeetCode 的有效輸入契約，不另外定義無效輸入行為。
+    /// 計算陣列中任兩個元素 XOR 後的最大值。
     /// </summary>
+    /// <param name="nums">依 LeetCode 有效輸入契約提供的非負整數陣列；方法不另外定義無效輸入行為。</param>
+    /// <returns>可由陣列中兩個元素 XOR 取得的最大 <see langword="int"/> 結果。</returns>
+    /// <remarks>
+    /// 從第 30 位往第 0 位逐步貪婪決定答案：每輪以 <c>HashSet&lt;int&gt;</c> 收集各數右移後的高位前綴，
+    /// 並驗證假設目前位元為 1 的候選前綴是否能由兩個前綴配對形成。
+    /// </remarks>
     public static int FindMaximumXOR(int[] nums)
     {
         int maximumXor = 0;
@@ -94,6 +100,7 @@ internal static class Program
 
             foreach (int num in nums)
             {
+                // 右移捨去尚未決定的低位，只保留本輪位元判斷所需的高位前綴。
                 prefixes.Add(num >> bit);
             }
 
@@ -103,6 +110,7 @@ internal static class Program
 
             foreach (int prefix in prefixes)
             {
+                // XOR 反運算可由 candidate ^ prefix 推得互補前綴；集合中存在它即證明候選值可行。
                 if (prefixes.Contains(candidate ^ prefix))
                 {
                     candidateExists = true;
@@ -116,6 +124,13 @@ internal static class Program
         return maximumXor;
     }
 
+    /// <summary>
+    /// 執行一筆固定測資，輸出測資與比對結果，並更新驗收 harness 的檢查統計。
+    /// </summary>
+    /// <param name="name">顯示於輸出的測資名稱。</param>
+    /// <param name="nums">傳入 <see cref="FindMaximumXOR(int[])"/> 的測試陣列。</param>
+    /// <param name="expected">預期的最大 XOR 結果。</param>
+    /// <param name="inputDescription">選擇性的輸入說明；未提供時會格式化 <paramref name="nums"/>。</param>
     private static void RunCase(string name, int[] nums, int expected, string? inputDescription = null)
     {
         int actual = FindMaximumXOR(nums);
@@ -129,6 +144,10 @@ internal static class Program
         Console.WriteLine();
     }
 
+    /// <summary>
+    /// 記錄單一驗收結果，遞增總檢查數，並在通過時遞增通過數。
+    /// </summary>
+    /// <param name="passed">此筆測資是否通過預期值比對。</param>
     private static void RecordCheck(bool passed)
     {
         s_checks++;
@@ -139,6 +158,11 @@ internal static class Program
         }
     }
 
+    /// <summary>
+    /// 將整數序列格式化為驗收 harness 輸出使用的中括號清單字串。
+    /// </summary>
+    /// <param name="values">要顯示的整數序列。</param>
+    /// <returns>以逗號分隔且以中括號包覆的輸入表示字串。</returns>
     private static string FormatInput(IEnumerable<int> values)
     {
         return $"[{string.Join(", ", values)}]";
