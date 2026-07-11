@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug leetcode_443",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build leetcode_443",
+      "program": "${workspaceFolder}/leetcode_443/bin/Debug/net10.0/leetcode_443.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_443",
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    }
+  ]
+}
