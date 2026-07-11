@@ -1,97 +1,138 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace leetcode_443;
 
-namespace leetcode_443
+internal static class Program
 {
-    internal class Program
+    /// <summary>
+    /// <para>443. String Compression / 壓縮字串</para>
+    /// <para>English: Compress consecutive groups of characters in-place and return the length of the compressed prefix.</para>
+    /// <para>繁體中文：將連續相同字元原地壓縮，並回傳壓縮後前綴的長度。</para>
+    /// <para>https://leetcode.com/problems/string-compression/</para>
+    /// <para>https://leetcode.cn/problems/string-compression/</para>
+    /// </summary>
+    private static void Main()
     {
-        /// <summary>
-        /// 443. String Compression
-        /// https://leetcode.com/problems/string-compression/?envType=study-plan-v2&envId=leetcode-75
-        /// 443. 压缩字符串
-        /// https://leetcode.cn/problems/string-compression/
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        Console.WriteLine("LeetCode 443 acceptance harness");
+        Console.WriteLine();
+
+        CaseResult[] results =
+        [
+            RunCase("Case 1: Repeated runs", "aabbccc".ToCharArray(), "a2b2c3"),
+            RunCase("Case 2: Single character", "a".ToCharArray(), "a"),
+            RunCase("Case 3: Mixed run lengths", "aabcccccaaa".ToCharArray(), "a2bc5a3"),
+            RunCase("Case 4: Two-digit letter count", new string('a', 12).ToCharArray(), "a12"),
+            RunCase("Case 5: Digit character with two-digit count", new string('1', 12).ToCharArray(), "112"),
+            RunCase("Case 6: Four-digit count", new string('a', 2000).ToCharArray(), "a2000")
+        ];
+
+        int passedChecks = 0;
+
+        foreach (CaseResult result in results)
         {
-            char[] input = { 'a', 'a', 'b', 'b', 'c'};
-            Console.WriteLine(Compress(input));
-            Console.ReadKey();
-        }
-
-
-        /// <summary>
-        /// 方法1:
-        /// 官方解法 雙指針
-        /// https://leetcode.cn/problems/string-compression/solutions/948556/ya-suo-zi-fu-chuan-by-leetcode-solution-kbuc/
-        /// 
-        /// read指針移動到連續子字串最右側, write指針寫入該字符的子字串長度
-        /// 
-        /// 方法2:
-        /// https://leetcode.cn/problems/string-compression/solutions/1780095/by-stormsunshine-bvti/
-        /// </summary>
-        /// <param name="chars"></param>
-        /// <returns></returns>
-        public static int Compress(char[] chars)
-        {
-            int n = chars.Length;
-            int write = 0, left = 0;
-
-            for(int read = 0; read < n; read++)
+            if (result.Passed)
             {
-                // 字串結尾, 且下一個位置字符不連續, 代表為該連續字符最右邊
-                if(read == n - 1 || chars[read] != chars[read + 1])
-                {
-                    // read代表連續字串字符
-                    chars[write++] = chars[read];
-                    // 子字串長度, 壓縮長度
-                    int num = read - left + 1;
-
-                    if(num > 1)
-                    {
-                        int anchor = write;
-
-                        while(num > 0)
-                        {
-                            // 連續相同字符數量寫入 chars[]裡面
-                            chars[write++] = (char)(num % 10 + '0');
-                            num /= 10;
-                        }
-
-                        Reverse(chars, anchor, write - 1);
-                    }
-                    // 下一個位置
-                    left = read + 1;
-                }
+                passedChecks++;
             }
 
-            return write;
+            Console.WriteLine(result.Name);
+            Console.WriteLine($"Input: {result.Input}");
+            Console.WriteLine($"Expected: {result.Expected} (length {result.Expected.Length})");
+            Console.WriteLine($"Actual: {result.Actual} (length {result.ActualLength})");
+            Console.WriteLine(result.Passed ? "PASS" : "FAIL");
+            Console.WriteLine();
         }
 
+        int totalChecks = results.Length;
 
+        Console.WriteLine($"Summary: {passedChecks}/{totalChecks} checks passed.");
 
-        /// <summary>
-        /// 子字串長度 寫入 chars[]
-        /// </summary>
-        /// <param name="chars"></param>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        public static void Reverse(char[] chars, int left, int right)
+        if (passedChecks != totalChecks)
         {
-            while(left < right)
-            {
-                char temp = chars[left];
-                chars[left] = chars[right];
-                chars[right] = temp;
-
-                left++;
-                right--;
-            }
-
+            Environment.ExitCode = 1;
         }
-
     }
+
+    /// <summary>
+    /// 使用讀寫雙指標原地壓縮連續相同的字元，回傳壓縮前綴的長度。
+    /// </summary>
+    public static int Compress(char[] chars)
+    {
+        int read = 0;
+        int write = 0;
+
+        while (read < chars.Length)
+        {
+            char character = chars[read];
+            int runStart = read;
+
+            while (read < chars.Length && chars[read] == character)
+            {
+                read++;
+            }
+
+            int runLength = read - runStart;
+
+            // 每輪結束時 [0, write) 恰為所有已處理 runs 的正確壓縮前綴。
+            chars[write++] = character;
+
+            if (runLength > 1)
+            {
+                int digitStart = write;
+
+                while (runLength > 0)
+                {
+                    chars[write++] = (char)('0' + (runLength % 10));
+                    runLength /= 10;
+                }
+
+                // 數字先由個位數寫入；反轉後 [digitStart, write) 保持正常十進位順序。
+                Reverse(chars, digitStart, write - 1);
+            }
+        }
+
+        return write;
+    }
+
+    /// <summary>
+    /// 原地反轉指定範圍，將倒序寫入的十進位數字改回正常順序。
+    /// </summary>
+    private static void Reverse(char[] chars, int left, int right)
+    {
+        while (left < right)
+        {
+            (chars[left], chars[right]) = (chars[right], chars[left]);
+            left++;
+            right--;
+        }
+    }
+
+    /// <summary>
+    /// 執行一個壓縮案例，核對回傳長度與實際壓縮前綴，並回傳驗證結果。
+    /// </summary>
+    private static CaseResult RunCase(string name, char[] input, string expected)
+    {
+        char[] chars = (char[])input.Clone();
+        int actualLength = Compress(chars);
+        string actual = new string(chars, 0, actualLength);
+        bool passed = actualLength == expected.Length && actual == expected;
+
+        return new CaseResult(name, FormatInput(input), expected, actual, actualLength, passed);
+    }
+
+    /// <summary>
+    /// 將案例輸入轉為可閱讀文字；大型案例僅顯示字元與長度，避免輸出完整內容。
+    /// </summary>
+    private static string FormatInput(char[] chars)
+    {
+        return chars.Length > 50
+            ? $"{chars.Length} '{chars[0]}' characters"
+            : new string(chars);
+    }
+
+    private readonly record struct CaseResult(
+        string Name,
+        string Input,
+        string Expected,
+        string Actual,
+        int ActualLength,
+        bool Passed);
 }
