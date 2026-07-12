@@ -1,0 +1,27 @@
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results and generated files
+**/bin/
+**/obj/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+*.pdb
+*.dll
+*.exe
+*.log
+
+# Visual Studio and IDE caches
+.vs/
+.vscode/*.user
+
+# Test and coverage output
+TestResults/
+coverage*.json
+coverage*.xml
+coverage*.info
