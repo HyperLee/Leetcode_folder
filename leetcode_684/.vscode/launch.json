@@ -1,0 +1,1 @@
+{"version":"0.2.0","configurations":[{"name":"Debug leetcode_684","type":"coreclr","request":"launch","preLaunchTask":"build leetcode_684","program":"${workspaceFolder}/leetcode_684/bin/Debug/net10.0/leetcode_684.dll","args":[],"cwd":"${workspaceFolder}/leetcode_684","console":"integratedTerminal","stopAtEntry":false}]}
