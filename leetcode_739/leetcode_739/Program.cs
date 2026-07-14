@@ -1,143 +1,109 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
+namespace leetcode_739;
 
-namespace leetcode_739
+internal static class Program
 {
-    internal class Program
+    /// <summary>
+    /// 739. Daily Temperatures
+    /// https://leetcode.com/problems/daily-temperatures/
+    /// 739. 每日溫度
+    /// https://leetcode.cn/problems/daily-temperatures/
+    /// English: Given daily temperatures, return for every day how many days must pass before a warmer temperature; return zero when none exists.
+    /// 中文：給定每日溫度，回傳每一天還要等待幾天才會遇到更高溫；若之後不存在更高溫則回傳零。
+    /// </summary>
+    /// <remarks>
+    /// 原始需求：
+    /// 簡單說題目
+    /// 輸入一個陣列, 找出 i 位置後面第幾個比i大
+    /// 回傳 該位置 or 距離 (距離i 多少位置)
+    /// 要是都沒比他大 救回傳 0
+    /// </remarks>
+    /// <param name="args">命令列參數；本驗證器不使用此參數。</param>
+    private static void Main(string[] args)
     {
-        /// <summary>
-        /// 739. Daily Temperatures
-        /// https://leetcode.com/problems/daily-temperatures/description/?envType=daily-question&envId=2024-01-31
-        /// 739. 每日温度
-        /// https://leetcode.cn/problems/daily-temperatures/description/
-        /// 
-        /// 簡單說題目
-        /// 輸入一個陣列, 找出 i 位置後面第幾個比i大
-        /// 回傳 該位置 or 距離 (距離i 多少位置)
-        /// 要是都沒比他大 救回傳 0
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        (string CaseName, int[] Input, int[] Expected)[] testCases =
         {
-            int[] input = { 73, 74, 75, 71, 69, 72, 76, 73 };
-            //Console.WriteLine(DailyTemperatures(input));
-            var answer = DailyTemperatures2(input);
-            foreach (int i in answer) 
-            {
-                Console.Write(i + ", ");
-            }
+            ("Case 1: Official example", new[] { 73, 74, 75, 71, 69, 72, 76, 73 }, new[] { 1, 1, 4, 2, 1, 1, 0, 0 }),
+            ("Case 2: Minimum valid input", new[] { 30 }, new[] { 0 }),
+            ("Case 3: Strictly increasing", new[] { 30, 40, 50, 60 }, new[] { 1, 1, 1, 0 }),
+            ("Case 4: Strictly decreasing", new[] { 60, 50, 40, 30 }, new[] { 0, 0, 0, 0 }),
+            ("Case 5: Equal temperatures", new[] { 70, 70, 71 }, new[] { 2, 1, 0 }),
+            ("Case 6: Chained resolution", new[] { 70, 65, 60, 80 }, new[] { 3, 2, 1, 0 })
+        };
 
-            Console.ReadKey();
+        List<(string CaseName, string Input, string CheckName, string Expected, string Actual, bool Passed)> checks = new();
 
+        foreach ((string caseName, int[] input, int[] expected) in testCases)
+        {
+            int[] actual = DailyTemperatures(input);
+            checks.Add((caseName, FormatArray(input), "Waiting days", FormatArray(expected), FormatArray(actual), expected.SequenceEqual(actual)));
         }
 
+        int[] maximumInput = Enumerable.Repeat(30, 99_999).Append(100).ToArray();
+        int[] maximumActual = DailyTemperatures(maximumInput);
+        checks.Add(("Case 7: Maximum-length spot checks", "99,999 × 30 followed by 100", "Input length", "100000", maximumInput.Length.ToString(), maximumInput.Length == 100_000));
+        checks.Add(("Case 7: Maximum-length spot checks", "99,999 × 30 followed by 100", "First waiting days", "99999", maximumActual[0].ToString(), maximumActual[0] == 99_999));
+        checks.Add(("Case 7: Maximum-length spot checks", "99,999 × 30 followed by 100", "Penultimate waiting days", "1", maximumActual[^2].ToString(), maximumActual[^2] == 1));
+        checks.Add(("Case 7: Maximum-length spot checks", "99,999 × 30 followed by 100", "Last waiting days", "0", maximumActual[^1].ToString(), maximumActual[^1] == 0));
 
-        /// <summary>
-        /// 方法1
-        /// 這方法會 超時
-        /// 單純用雙迴圈判斷 硬跑判斷前後數值大小
-        /// 
-        /// </summary>
-        /// <param name="temperatures"></param>
-        /// <returns></returns>
-        public static int[] DailyTemperatures(int[] temperatures)
+        int passedCount = 0;
+        string? previousCaseName = null;
+
+        Console.WriteLine("LeetCode 739 acceptance harness");
+
+        foreach ((string caseName, string input, string checkName, string expected, string actual, bool passed) in checks)
         {
-            int n = temperatures.Length;
-            List<int> result = new List<int>();
-
-            // 雙迴圈 i 位置往後找出誰比他大
-            for(int i = 0; i < n; i++)
+            if (!string.Equals(caseName, previousCaseName, StringComparison.Ordinal))
             {
-                for(int j = i + 1; j < n; j++)
-                {
-                    int count = 0;
-
-                    if (temperatures[j] > temperatures[i])
-                    {
-                        result.Add(j - i);
-                        count++;
-                        break;
-                    }
-
-                    if(j == n - 1 && count == 0)
-                    {
-                        // 找到最後都沒比他大就塞 0
-                        result.Add(0);
-                    }
-                    
-                }
+                Console.WriteLine();
+                Console.WriteLine(caseName);
+                Console.WriteLine($"Input: {input}");
+                previousCaseName = caseName;
             }
 
-            // 陣列最後一個位置(n), 後面沒有人(不會出現 n + 1 位置)能比他大, 所以給 0
-            result.Add(0);
+            Console.WriteLine($"{(passed ? "PASS" : "FAIL")} | {checkName} | Expected: {expected} | Actual: {actual}");
 
-            return result.ToArray();
-
+            if (passed)
+            {
+                passedCount++;
+            }
         }
 
+        Console.WriteLine();
+        Console.WriteLine($"Summary: {passedCount}/{checks.Count} checks passed.");
 
-
-        /// <summary>
-        /// 方法2
-        /// https://leetcode.cn/problems/daily-temperatures/solutions/11967/jie-ti-si-lu-by-pulsaryu/
-        /// 跟上面相比 是從右往左找
-        /// 然後用差距(每人差距位置) 值來跳躍
-        /// 不再是每一個都下去找
-        /// 省下時間
-        /// 
-        /// 
-        /// 很不错的思路，看到了动态规划的影子？ 
-        /// 1.自上而下的递归思路：当前位置，询问下一个位置，你比我大，差值
-        /// 是1，你比我小，比你大的位置是谁，我去比较。这种思路很明显会出现重复子问题； 
-        /// 
-        /// 2.自下而上的DP思路：最
-        /// 后一个位置，知道自己是0，接着倒数第二个，依次类推
-        /// 
-        /// 
-        /// 還有一個方法3
-        /// 這可能比較是題目當初想考的方法原理 利用 stack
-        /// https://leetcode.cn/problems/daily-temperatures/solutions/1459174/by-stormsunshine-vvw0/
-        /// 想看可以參考這邊
-        /// 
-        /// 不過方法2太優質了
-        /// 
-        /// </summary>
-        /// <param name="temperatures"></param>
-        /// <returns></returns>
-        public static int[] DailyTemperatures2(int[] temperatures)
+        if (passedCount != checks.Count)
         {
-            int n = temperatures.Length;
-            int[] result = new int[n];
+            Environment.ExitCode = 1;
+        }
+    }
 
-            // 反方向 => 右往左方向找
-            // i = n - 2 => 陣列從0開始所以扣1, 
-            // 再來從倒數第二個開始找在扣1, 因為 後面還有一個迴圈 j 他是 i + 1 位置 開始計算
-            for (int i = n - 2; i >= 0; i--)
+    /// <summary>
+    /// 使用單調遞減索引堆疊計算每一天距離下一個更高溫日的等待天數。有效輸入必須符合題目限制；回傳與輸入等長的結果陣列，不會修改輸入陣列，也不會寫入主控台。
+    /// </summary>
+    /// <param name="temperatures">依日期排序的溫度陣列。</param>
+    /// <returns>每一天等待到下一個更高溫日的天數；不存在時為零。</returns>
+    public static int[] DailyTemperatures(int[] temperatures)
+    {
+        int[] waitingDays = new int[temperatures.Length];
+        Stack<int> unresolvedDays = new();
+
+        for (int day = 0; day < temperatures.Length; day++)
+        {
+            while (unresolvedDays.Count > 0 && temperatures[day] > temperatures[unresolvedDays.Peek()])
             {
-                // j += result[j] 利用已知結果來跳躍, 如果當前是1就找下一個,
-                // 如果當前是2 那就直接跳2 畢竟這中間差值都2沒必要每一個都去比對
-                for (int j = i + 1; j < n; j += result[j])
-                {
-                    if (temperatures[j] > temperatures[i])
-                    {
-                        result[i] = j - i;
-                        break;
-                    }
-                    else if (result[j] == 0)
-                    {
-                        // 遇到 0 表示後面不會有更大值, 那當然目前也是給0
-                        // 一開始都會是0, temperatures陣列最尾端,後面沒人(不會出現 n + 1 位置)肯定給 0
-                        result[i] = 0;
-                        break;
-                    }
-                }
+                // 首次遇到更高溫時，索引差即是這一天的最短等待天數。
+                int unresolvedDay = unresolvedDays.Pop();
+                waitingDays[unresolvedDay] = day - unresolvedDay;
             }
 
-            return result;
+            unresolvedDays.Push(day);
         }
+
+        return waitingDays;
+    }
+
+    private static string FormatArray(IEnumerable<int> values)
+    {
+        return $"[{string.Join(", ", values)}]";
     }
 }
