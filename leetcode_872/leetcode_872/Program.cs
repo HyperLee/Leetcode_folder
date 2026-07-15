@@ -1,103 +1,216 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace leetcode_872;
 
-namespace leetcode_872
+internal static class Program
 {
-    internal class Program
+    public sealed class TreeNode
     {
-        public class TreeNode
+        public int val;
+        public TreeNode? left;
+        public TreeNode? right;
+
+        public TreeNode(int val = 0, TreeNode? left = null, TreeNode? right = null)
         {
-            public int val;
-            public TreeNode left;
-            public TreeNode right;
-            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    /// <summary>
+    /// 872. Leaf-Similar Trees
+    /// https://leetcode.com/problems/leaf-similar-trees/
+    /// 872. 葉子相似的樹
+    /// https://leetcode.cn/problems/leaf-similar-trees/
+    /// Determine whether two binary trees have the same leaf values in left-to-right order.
+    /// 判斷兩棵二元樹由左至右的葉節點值序列是否相同。
+    /// </summary>
+    private static void Main()
+    {
+        TreeNode firstLongChain = BuildRightChain(200, 0, 200);
+        TreeNode secondLongChain = BuildRightChain(200, 199, 200);
+
+        (string Name, TreeNode Root1, TreeNode Root2, bool Expected, string InputDescription)[] cases =
+        [
+            (
+                "Official example: same leaf sequence",
+                BuildTree([3, 5, 1, 6, 2, 9, 8, null, null, 7, 4]),
+                BuildTree([3, 5, 1, 6, 7, 4, 2, null, null, null, null, null, null, 9, 8]),
+                true,
+                "root1 = [3,5,1,6,2,9,8,null,null,7,4], root2 = [3,5,1,6,7,4,2,null,null,null,null,null,null,9,8]"),
+            (
+                "Official example: different leaf order",
+                BuildTree([1, 2, 3]),
+                BuildTree([1, 3, 2]),
+                false,
+                "root1 = [1,2,3], root2 = [1,3,2]"),
+            (
+                "Same single node",
+                new TreeNode(7),
+                new TreeNode(7),
+                true,
+                "root1 = [7], root2 = [7]"),
+            (
+                "Different single nodes",
+                new TreeNode(0),
+                new TreeNode(200),
+                false,
+                "root1 = [0], root2 = [200]"),
+            (
+                "Different structure with the same leaves",
+                BuildTree([1, 2, 4, 6, 7]),
+                BuildTree([9, 6, 8, null, null, 10, 4, 7]),
+                true,
+                "leaf sequences = [6,7,4] and [6,7,4]"),
+            (
+                "Same values in a different order",
+                BuildTree([0, 1, 2]),
+                BuildTree([0, 2, 1]),
+                false,
+                "leaf sequences = [1,2] and [2,1]"),
+            (
+                "Repeated leaf multiplicity differs",
+                BuildTree([0, 1, 8, 5, 5]),
+                BuildTree([0, 5, 9, null, null, 8, 8]),
+                false,
+                "leaf sequences = [5,5,8] and [5,8,8]"),
+            (
+                "Boundary leaf values",
+                BuildTree([1, 0, 200]),
+                BuildTree([2, 3, 200, 0]),
+                true,
+                "leaf sequences = [0,200] and [0,200]"),
+            (
+                "Maximum-depth right chains",
+                firstLongChain,
+                secondLongChain,
+                true,
+                "two 200-node right chains; internal values differ; final leaf = 200")
+        ];
+
+        int passedCount = 0;
+        Console.WriteLine("LeetCode 872 acceptance harness");
+        Console.WriteLine();
+
+        for (int i = 0; i < cases.Length; i++)
+        {
+            (string name, TreeNode root1, TreeNode root2, bool expected, string inputDescription) = cases[i];
+            bool actual = LeafSimilar(root1, root2);
+            bool passed = expected == actual;
+
+            if (passed)
             {
-                this.val = val;
-                this.left = left;
-                this.right = right;
+                passedCount++;
             }
+
+            Console.WriteLine($"Case {i + 1}: {name}");
+            Console.WriteLine($"Input: {inputDescription}");
+            Console.WriteLine($"{(passed ? "PASS" : "FAIL")} | Expected: {expected.ToString().ToLowerInvariant()} | Actual: {actual.ToString().ToLowerInvariant()}");
+            Console.WriteLine();
         }
 
-        /// <summary>
-        /// leetcode 872
-        /// https://leetcode.com/problems/leaf-similar-trees/
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        Console.WriteLine($"Summary: {passedCount}/{cases.Length} checks passed.");
+
+        if (passedCount != cases.Length)
         {
-            TreeNode t1 = new TreeNode(1);
-            t1.left = new TreeNode(2);
-            //t1.left.left = new TreeNode(9);
-            t1.right = new TreeNode(3);
+            Environment.ExitCode = 1;
+        }
+    }
 
-            TreeNode t2 = new TreeNode(5);
-            t2.left = new TreeNode(2);
-            t2.right = new TreeNode(3);
+    /// <summary>
+    /// 收集兩棵樹由左至右的葉節點值，並判斷兩個序列是否完全相同。
+    /// </summary>
+    public static bool LeafSimilar(TreeNode root1, TreeNode root2)
+    {
+        List<int> firstLeaves = [];
+        List<int> secondLeaves = [];
 
-            Console.WriteLine(LeafSimilar(t1, t2));
-            Console.ReadKey();
+        CollectLeaves(root1, firstLeaves);
+        CollectLeaves(root2, secondLeaves);
 
+        return firstLeaves.SequenceEqual(secondLeaves);
+    }
+
+    /// <summary>
+    /// 以深度優先搜尋依左至右順序收集指定子樹的葉節點值。
+    /// </summary>
+    private static void CollectLeaves(TreeNode node, IList<int> leaves)
+    {
+        if (node.left is null && node.right is null)
+        {
+            leaves.Add(node.val);
+            return;
         }
 
-
-        /// <summary>
-        /// SequenceEqual: 如果根據其型別的預設相等比較子判斷，兩個來源序列的長度相等，而且其對應
-        /// 項目也相等，則為 true，否則為 false。
-        /// https://learn.microsoft.com/zh-tw/dotnet/api/system.linq.enumerable.sequenceequal?view=net-8.0
-        /// 
-        /// </summary>
-        /// <param name="root1"></param>
-        /// <param name="root2"></param>
-        /// <returns></returns>
-        public static bool LeafSimilar(TreeNode root1, TreeNode root2)
+        // 固定先走左子樹再走右子樹，維持葉序列的由左至右順序。
+        if (node.left is not null)
         {
-            IList<int> seq1 = new List<int>();
-            if (root1 != null)
-            {
-                DFS(root1, seq1);
-            }
-
-            IList<int> seq2 = new List<int>();
-            if (root2 != null)
-            {
-                DFS(root2, seq2);
-            }
-
-            return seq1.SequenceEqual(seq2);
+            CollectLeaves(node.left, leaves);
         }
 
-
-        /// <summary>
-        /// https://leetcode.cn/problems/leaf-similar-trees/solution/xie-zi-xiang-si-de-shu-by-leetcode-solut-z0w6/
-        /// 
-        /// 找出樹的葉節點 加入 List
-        /// </summary>
-        /// <param name="node"></param>
-        /// <param name="seq"></param>
-        public static void DFS(TreeNode node, IList<int> seq)
+        if (node.right is not null)
         {
-            // 葉節點位置,左右都為空. 最下層
-            if (node.left == null && node.right == null)
-            {
-                seq.Add(node.val);
-            }
-            else
-            {
-                if (node.left != null)
-                {
-                    //往左找
-                    DFS(node.left, seq);
-                }
-                if (node.right != null)
-                {
-                    // 往右找
-                    DFS(node.right, seq);
-                }
-            }
+            CollectLeaves(node.right, leaves);
+        }
+    }
+
+    private static TreeNode BuildTree(int?[] values)
+    {
+        if (values.Length == 0 || values[0] is null)
+        {
+            throw new ArgumentException("A fixture must contain a non-null root.", nameof(values));
         }
 
+        TreeNode root = new(values[0]!.Value);
+        Queue<TreeNode> parents = new();
+        parents.Enqueue(root);
+        int valueIndex = 1;
+
+        while (parents.Count > 0 && valueIndex < values.Length)
+        {
+            TreeNode parent = parents.Dequeue();
+
+            if (values[valueIndex] is int leftValue)
+            {
+                parent.left = new TreeNode(leftValue);
+                parents.Enqueue(parent.left);
+            }
+
+            valueIndex++;
+
+            if (valueIndex < values.Length && values[valueIndex] is int rightValue)
+            {
+                parent.right = new TreeNode(rightValue);
+                parents.Enqueue(parent.right);
+            }
+
+            valueIndex++;
+        }
+
+        return root;
+    }
+
+    private static TreeNode BuildRightChain(int nodeCount, int internalValue, int leafValue)
+    {
+        if (nodeCount < 1)
+        {
+            throw new ArgumentOutOfRangeException(nameof(nodeCount));
+        }
+
+        if (nodeCount == 1)
+        {
+            return new TreeNode(leafValue);
+        }
+
+        TreeNode root = new(internalValue);
+        TreeNode current = root;
+
+        for (int i = 1; i < nodeCount - 1; i++)
+        {
+            current.right = new TreeNode(internalValue);
+            current = current.right;
+        }
+
+        current.right = new TreeNode(leafValue);
+        return root;
     }
 }
