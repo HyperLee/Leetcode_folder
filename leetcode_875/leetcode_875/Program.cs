@@ -1,155 +1,107 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
+namespace leetcode_875;
 
-namespace leetcode_875
+internal static class Program
 {
-    internal class Program
+    /// <summary>
+    /// 875. Koko Eating Bananas
+    /// https://leetcode.com/problems/koko-eating-bananas/
+    /// 875. 愛吃香蕉的珂珂
+    /// https://leetcode.cn/problems/koko-eating-bananas/
+    /// Find the minimum integer eating speed that lets Koko finish every banana pile within h hours.
+    /// 找出能讓珂珂在 h 小時內吃完所有香蕉堆的最小整數速度。
+    /// </summary>
+    private static void Main()
     {
-        /// <summary>
-        /// leetcode 875
-        /// https://leetcode.com/problems/koko-eating-bananas/
-        /// 875. 爱吃香蕉的珂珂
-        /// https://leetcode.cn/problems/koko-eating-bananas/
-        /// 
-        /// 本題類似 leetcode 2187
-        /// https://leetcode.com/problems/minimum-time-to-complete-trips/
-        /// 都採二分法
-        /// 
-        /// 本題偏好 方法2, 沒額外寫 function
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        int[] maximumPileCount = Enumerable.Repeat(1_000_000_000, 10_000).ToArray();
+
+        (string Name, int[] Piles, int Hours, int Expected, string InputDescription)[] cases =
+        [
+            ("Official example 1", [3, 6, 7, 11], 8, 4, "piles = [3,6,7,11], h = 8"),
+            ("Official example 2", [30, 11, 23, 4, 20], 5, 30, "piles = [30,11,23,4,20], h = 5"),
+            ("Official example 3", [30, 11, 23, 4, 20], 6, 23, "piles = [30,11,23,4,20], h = 6"),
+            ("Single pile", [1], 1, 1, "piles = [1], h = 1"),
+            ("Many available hours", [1, 1, 1, 1], 1_000_000_000, 1, "piles = [1,1,1,1], h = 1000000000"),
+            ("One hour per pile", [2, 8, 4], 3, 8, "piles = [2,8,4], h = 3"),
+            ("Ceiling division boundary", [5, 5], 3, 5, "piles = [5,5], h = 3"),
+            ("Overflow regression", [1, 1, 1, 1_000_000_000], 1_000_000_000, 2, "piles = [1,1,1,1000000000], h = 1000000000"),
+            ("Maximum constraints", maximumPileCount, 1_000_000_000, 10_000, "10,000 piles, each 1000000000; h = 1000000000")
+        ];
+
+        int passedCount = 0;
+        Console.WriteLine("LeetCode 875 acceptance harness");
+        Console.WriteLine();
+
+        for (int i = 0; i < cases.Length; i++)
         {
-            int[] input = new int[] { 3, 6, 7, 11 };
-            int h = 8;
+            (string name, int[] piles, int hours, int expected, string inputDescription) = cases[i];
+            int actual = MinEatingSpeed(piles, hours);
+            bool passed = expected == actual;
 
-            Console.WriteLine(MinEatingSpeed2(input, h));
-            Console.ReadKey();
-        }
-
-
-        /// <summary>
-        /// https://leetcode.cn/problems/koko-eating-bananas/solution/ai-chi-xiang-jiao-de-ke-ke-by-leetcode-s-z4rt/
-        /// 
-        /// low 最少一根
-        /// high 取 香蕉堆裡面最大那一堆
-        /// 
-        /// 
-        /// </summary>
-        /// <param name="piles"></param>
-        /// <param name="h"></param>
-        /// <returns></returns>
-        public static int MinEatingSpeed(int[] piles, int h)
-        {
-            int low = 1;
-            int high = piles.Max();
-            int k = high;
-            
-            while (low < high)
+            if (passed)
             {
-                int speed = low + (high - low) / 2;
-                long time = GetTime(piles, speed);
-                if (time <= h)
-                {
-                    k = speed;
-                    high = speed;
-                }
-                else
-                {
-                    low = speed + 1;
-                }
-            }
-            return k;
-
-        }
-
-
-        /// <summary>
-        /// https://leetcode.cn/problems/koko-eating-bananas/solution/ai-chi-xiang-jiao-de-ke-ke-by-leetcode-s-z4rt/
-        /// 
-        /// </summary>
-        /// <param name="piles"></param>
-        /// <param name="speed"></param>
-        /// <returns></returns>
-        public static long GetTime(int[] piles, int speed)
-        {
-            long time = 0;
-            foreach (int pile in piles)
-            {
-                int curTime = (pile + speed - 1) / speed;
-                time += curTime;
-            }
-            return time;
-        }
-
-
-        /// <summary>
-        /// https://leetcode.cn/problems/koko-eating-bananas/solution/c-by-yym_nuaa-apnm/
-        /// 
-        /// 本題類似 leetcode 2187
-        /// https://leetcode.com/problems/minimum-time-to-complete-trips/
-        /// 都採二分法
-        /// 
-        /// https://leetcode.cn/problems/koko-eating-bananas/solution/er-fen-cha-zhao-ding-wei-su-du-by-liweiwei1419/
-        /// 
-        /// low 最少一根
-        /// high 取 香蕉堆裡面最大那一堆
-        /// 
-        /// 珂珂吃香蕉的速度越小，耗时越多。
-        /// 反之，速度越大，耗时越少
-        /// 
-        /// 每堆香蕉吃完的耗时 = 这堆香蕉的数量 / 珂珂一小时吃香蕉的数量
-        /// 根据题意，这里的 / 在不能整除的时候，需要 上取整。
-        /// 
-        /// 需要注意 關鍵寫法 取整數
-        /// 取整可以这样寫：
-        /// 1. totaltime += (pile + speed - 1) / speed; 
-        /// 2. totaltime += 1 + (piles[i] - 1) / speed;
-        /// 
-        /// 这是因为题目问的是「最小速度 」。
-        /// </summary>
-        /// <param name="piles"></param>
-        /// <param name="h"></param>
-        /// <returns></returns>
-
-        public static int MinEatingSpeed2(int[] piles, int h)
-        {
-            // 速度最小的时候，耗时最长
-            int low = 1;
-            // 速度最大的时候，耗时最短
-            int high = piles.Max();
-
-            while (low < high)
-            {
-                int speed = low + (high - low) / 2;
-                int totaltime = 0;
-
-                for (int i = 0; i < piles.Length; i++)
-                {
-                    // 全部所需時間
-                    totaltime += (piles[i] + speed - 1) / speed;
-                    // totaltime += 1 + (piles[i] - 1) / speed;
-                }
-
-                if (totaltime > h)
-                {
-                    // 耗时太多，说明速度太慢了
-                    low = speed + 1;
-                }
-                else
-                {
-                    // 耗時小 速度快
-                    high = speed;
-                }
+                passedCount++;
             }
 
-            return low;
+            Console.WriteLine($"Case {i + 1}: {name}");
+            Console.WriteLine($"Input: {inputDescription}");
+            Console.WriteLine($"Expected: {expected}");
+            Console.WriteLine($"Actual: {actual}");
+            Console.WriteLine(passed ? "PASS" : "FAIL");
+            Console.WriteLine();
         }
 
+        Console.WriteLine($"Summary: {passedCount}/{cases.Length} checks passed.");
 
+        if (passedCount != cases.Length)
+        {
+            Environment.ExitCode = 1;
+        }
+    }
+
+    /// <summary>
+    /// 在非空且每堆香蕉數量皆為正整數、h 不小於香蕉堆數的有效輸入下，
+    /// 以答案範圍的下界二分搜尋找出能在 h 小時內吃完所有香蕉的最小整數速度，
+    /// 並回傳該速度。
+    /// </summary>
+    public static int MinEatingSpeed(int[] piles, int h)
+    {
+        int low = 1;
+        int high = piles.Max();
+
+        while (low < high)
+        {
+            int speed = low + ((high - low) / 2);
+            long requiredHours = CalculateRequiredHours(piles, speed);
+
+            if (requiredHours <= h)
+            {
+                // 目前速度可行，保留它並繼續在左半段尋找更小的可行速度。
+                high = speed;
+            }
+            else
+            {
+                // 目前速度不可行，答案必定在更快的右半段。
+                low = speed + 1;
+            }
+        }
+
+        return low;
+    }
+
+    /// <summary>
+    /// 在香蕉堆與速度皆為正整數的有效輸入下，以整數上取整逐堆計算指定速度所需時數，
+    /// 使用 long 累加避免總時數溢位，並回傳吃完全部香蕉所需的總時數。
+    /// </summary>
+    private static long CalculateRequiredHours(int[] piles, int speed)
+    {
+        long requiredHours = 0;
+
+        foreach (int pile in piles)
+        {
+            // 先提升為 long，再以整數公式完成上取整，避免 pile + speed - 1 溢位。
+            requiredHours += ((long)pile + speed - 1) / speed;
+        }
+
+        return requiredHours;
     }
 }
