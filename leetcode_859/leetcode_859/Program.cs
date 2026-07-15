@@ -1,179 +1,116 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace leetcode_859;
 
-namespace leetcode_859
+internal static class Program
 {
-    internal class Program
+    /// <summary>
+    /// 859. Buddy Strings
+    /// https://leetcode.com/problems/buddy-strings/
+    /// 859. 親密字串
+    /// https://leetcode.cn/problems/buddy-strings/
+    /// Given two lowercase strings, determine whether swapping the characters at exactly two distinct indices in the first string can make it equal to the goal string.
+    /// 給定兩個小寫字串，判斷是否能交換第一個字串中兩個不同索引的字元，使結果等於目標字串。
+    /// </summary>
+    private static void Main()
     {
-        /// <summary>
-        /// 859. Buddy Strings
-        /// https://leetcode.com/problems/buddy-strings/
-        /// 859. 亲密字符串
-        /// https://leetcode.cn/problems/buddy-strings/
-        /// 
-        /// 題目好像沒明確說
-        /// 但是看個解法都只能交換一次
-        /// 意即只能有兩處位置不同
-        /// 超過就 false
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        string maximumSource = new string('a', 19_998) + "bc";
+        string maximumGoal = new string('a', 19_998) + "cb";
+
+        (string Name, string Source, string Goal, bool Expected, string InputDescription)[] cases =
+        [
+            ("Official example: one valid swap", "ab", "ba", true, "s = \"ab\", goal = \"ba\""),
+            ("Official example: equal without duplicate", "ab", "ab", false, "s = \"ab\", goal = \"ab\""),
+            ("Official example: equal with duplicate", "aa", "aa", true, "s = \"aa\", goal = \"aa\""),
+            ("Minimum length", "a", "a", false, "s = \"a\", goal = \"a\""),
+            ("Different lengths", "abc", "ab", false, "s = \"abc\", goal = \"ab\""),
+            ("Exactly one difference", "ab", "ac", false, "s = \"ab\", goal = \"ac\""),
+            ("Exactly two cross-matching differences", "abcd", "abdc", true, "s = \"abcd\", goal = \"abdc\""),
+            ("Two differences without cross-match", "ab", "ca", false, "s = \"ab\", goal = \"ca\""),
+            ("More than two differences", "abcd", "badc", false, "s = \"abcd\", goal = \"badc\""),
+            ("Maximum length spot check", maximumSource, maximumGoal, true, "length = 20,000; shared prefix = 19,998 x 'a'; suffix = \"bc\" -> \"cb\"")
+        ];
+
+        int passedCount = 0;
+        Console.WriteLine("LeetCode 859 acceptance harness");
+        Console.WriteLine();
+
+        for (int i = 0; i < cases.Length; i++)
         {
-            string s = "ab";
-            string goal = "ba";
-            Console.WriteLine(BuddyStrings(s, goal));
-            Console.ReadKey();
+            (string name, string source, string goal, bool expected, string inputDescription) = cases[i];
+            bool actual = BuddyStrings(source, goal);
+            bool passed = expected == actual;
 
-        }
-
-
-        /// <summary>
-        /// 官方解法
-        /// https://leetcode.cn/problems/buddy-strings/solution/qin-mi-zi-fu-chuan-by-leetcode-solution-yyis/
-        /// 
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
-        /// <param name="goal"></param>
-        /// <returns></returns>
-        public static bool BuddyStrings(string s, string goal)
-        {
-            // 兩輸入字串必須相同長度
-            if (s.Length != goal.Length)
+            if (passed)
             {
-                return false;
+                passedCount++;
             }
 
-            // s 與 goal 輸入字串相同case
-            if (s.Equals(goal))
+            Console.WriteLine($"Case {i + 1}: {name}");
+            Console.WriteLine($"Input: {inputDescription}");
+            Console.WriteLine($"{(passed ? "PASS" : "FAIL")} | Expected: {expected.ToString().ToLowerInvariant()} | Actual: {actual.ToString().ToLowerInvariant()}");
+            Console.WriteLine();
+        }
+
+        Console.WriteLine($"Summary: {passedCount}/{cases.Length} checks passed.");
+
+        if (passedCount != cases.Length)
+        {
+            Environment.ExitCode = 1;
+        }
+    }
+
+    /// <summary>
+    /// 以單次掃描找出 <paramref name="s"/> 與 <paramref name="goal"/> 的不同位置，並判斷交換 <paramref name="s"/> 中兩個不同索引後能否得到目標字串。有效輸入須符合題目定義的非空、僅含小寫英文字母字串；方法不會修改輸入，也不會寫入主控台。
+    /// </summary>
+    /// <param name="s">要執行恰好一次雙索引字元交換的題目有效字串。</param>
+    /// <param name="goal">交換後必須相等的題目有效目標字串。</param>
+    /// <returns>若存在一次合法交換可使兩字串相等則為 <see langword="true"/>；否則為 <see langword="false"/>。</returns>
+    public static bool BuddyStrings(string s, string goal)
+    {
+        if (s.Length != goal.Length)
+        {
+            return false;
+        }
+
+        bool[] seenLetters = new bool[26];
+        bool hasDuplicate = false;
+        int firstDifference = -1;
+        int secondDifference = -1;
+
+        for (int i = 0; i < s.Length; i++)
+        {
+            // 字串完全相同時，只有重複字母能讓兩個不同索引交換後仍維持原字串。
+            int letterIndex = s[i] - 'a';
+            hasDuplicate |= seenLetters[letterIndex];
+            seenLetters[letterIndex] = true;
+
+            if (s[i] == goal[i])
             {
-                // 統計 各字母 出現次數 or 頻率
-                int[] count = new int[26];
+                continue;
+            }
 
-                for (int i = 0; i < s.Length; i++)
-                {
-                    count[s[i] - 'a']++;
-                    // 有字母出現超過一次 就會有重覆的文字
-                    // 故交換重覆就會相同
-                    if (count[s[i] - 'a'] > 1)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
+            // 一次交換最多只能修正兩個不同位置；第三個 mismatch 可立即判定失敗。
+            if (firstDifference == -1)
+            {
+                firstDifference = i;
+            }
+            else if (secondDifference == -1)
+            {
+                secondDifference = i;
             }
             else
             {
-                // 兩輸入 字串不同 case
-                int first = -1, second = -1;
-
-                for (int i = 0; i < goal.Length; i++)
-                {
-                    // 找出僅有兩個相同位置,但是字母不同的情況下
-                    // 一個為 first, 另一個為second
-                    // 可以使得兩位置可以做swap
-                    if (s[i] != goal[i])
-                    {
-                        if (first == -1)
-                        {
-                            first = i;
-                        }
-                        else if (second == -1)
-                        {
-                            second = i;
-                        }
-                        else
-                        {
-                            // 超過兩個即太多不相同.
-                            return false;
-                        }
-                    }
-
-                }
-
-                // second為 -1, 代表first不是 -1. 以及兩字串交換後需要相同
-                return (second != -1 && s[first] == goal[second] && s[second] == goal[first]);
-            }
-
-        }
-
-
-        /// <summary>
-        /// 解法2
-        /// https://leetcode.cn/problems/buddy-strings/solution/gong-shui-san-xie-jian-dan-zi-fu-chuan-m-q056/
-        /// 
-        /// 1.当 s 与 goal 长度 或 词频不同，必然不为亲密字符；
-        /// ==>長度要相同 這是必須
-        /// 頻率也要相同
-        /// 因為 交換過後 兩邊要一致
-        /// 代表 原始順序可以不同
-        /// 但是 長度以及 出現字母的數量都要相同
-        /// 
-        /// 2.当「s 与 goal 不同的字符数量为 2（能够相互交换）」或「s 与 goal 不同的字符数量为 0
-        /// ，但同时 s 中有出现数量超过 2 的字符（能够相互交换）」时，两者必然为亲密字符。
-        /// ==> 前段為 可以swap好幾次.
-        /// ==> 後段為 單一字母頻率很多次. 即視為自己交換就好
-        /// ex: s:abb  goal:abb 
-        /// =>b交換就好 交換過也相同
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
-        /// <param name="goal"></param>
-        /// <returns></returns>
-        public bool buddyStrings2(String s, String goal)
-        {
-            int n = s.Length;
-            int m = goal.Length;
-
-            // 長度要一致
-            if(n != m)
-            {
                 return false;
             }
-
-            // 統計兩輸入字串字母頻率
-            int[] count1 = new int[26], count2 = new int[26];
-            int sum = 0;
-
-            for(int i = 0; i < n; i++)
-            {
-                int a = s[i] - 'a', b = goal[i] - 'a';
-                count1[a]++;
-                count2[b]++;
-
-                // 統計有多少個位置不同 字母數量
-                if(a != b)
-                {
-                    sum++;
-                }
-
-            }
-
-            bool ok = false;
-            for(int i = 0; i < 26; i++)
-            {
-                if (count1[i] != count2[i])
-                {
-                    // 兩邊輸入字串 字母出現頻率要一致
-                    return false;
-                }
-
-                if (count1[i] > 1)
-                {
-                    // 相同字母頻率超過一
-                    ok = true;
-                }
-            }
-
-            // 有兩處可交換, 或是 相同字母頻率超過一
-            return sum == 2 || (sum == 0 && ok);
-
         }
 
+        if (firstDifference == -1)
+        {
+            return hasDuplicate;
+        }
 
+        // 兩個 mismatch 必須能交叉配對，交換後才會同時等於 goal。
+        return secondDifference != -1
+            && s[firstDifference] == goal[secondDifference]
+            && s[secondDifference] == goal[firstDifference];
     }
 }
