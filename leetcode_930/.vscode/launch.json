@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": ".NET Debug leetcode_930",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build leetcode_930",
+      "program": "${workspaceFolder}/leetcode_930/bin/Debug/net10.0/leetcode_930.dll",
+      "cwd": "${workspaceFolder}/leetcode_930",
+      "args": [],
+      "stopAtEntry": false,
+      "console": "integratedTerminal"
+    }
+  ]
+}
