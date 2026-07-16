@@ -1,69 +1,115 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace leetcode_1436;
 
-namespace leetcode_1436
+internal class Program
 {
-    internal class Program
+    /// <summary>
+    /// 1436. Destination City
+    /// 1436. 旅行終點站
+    /// https://leetcode.com/problems/destination-city/
+    /// https://leetcode.cn/problems/destination-city/
+    /// Given directed travel paths that form one acyclic line, return the unique city with no outgoing path.
+    /// 給定形成一條無環路線的有向旅行路徑，回傳唯一沒有外出路徑的終點城市。
+    /// </summary>
+    /// <param name="args">主控台啟動參數；本驗證器不使用。</param>
+    private static void Main(string[] args)
     {
-        /// <summary>
-        /// 1436. Destination City
-        /// https://leetcode.com/problems/destination-city/?envType=daily-question&envId=2023-12-15
-        /// 1436. 旅行终点站
-        /// https://leetcode.cn/problems/destination-city/
-        /// 
-        /// IList<IList<string>> 宣告與初始化方法
-        /// https://stackoverflow.com/questions/9158483/how-can-i-initialize-a-ilistiliststring
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        IList<IList<string>> maximumPaths = [];
+        for (int index = 0; index < 100; index++)
         {
-            IList<IList<string>> matrix = new List<IList<string>>();
-            matrix.Add(new List<string> { "London", "New York" });
-            matrix.Add(new List<string> { "New York", "Lima" });
-            matrix.Add(new List<string> { "Lima", "Sao Paulo" });
-
-            Console.WriteLine(DestCity(matrix));
-            Console.ReadKey();
+            maximumPaths.Add([CreateCityName(index), CreateCityName(index + 1)]);
         }
 
+        TestCase[] testCases =
+        [
+            new("Official example 1", "[[London -> New York], [New York -> Lima], [Lima -> Sao Paulo]]", [["London", "New York"], ["New York", "Lima"], ["Lima", "Sao Paulo"]], "Sao Paulo"),
+            new("Official example 2", "[[B -> C], [D -> B], [C -> A]]", [["B", "C"], ["D", "B"], ["C", "A"]], "A"),
+            new("Official example 3 / minimum input", "[[A -> Z]]", [["A", "Z"]], "Z"),
+            new("Shuffled path order", "[[Gamma -> Delta], [Alpha -> Beta], [Beta -> Gamma]]", [["Gamma", "Delta"], ["Alpha", "Beta"], ["Beta", "Gamma"]], "Delta"),
+            new("Early destination candidate becomes a source", "[[A -> B], [C -> D], [B -> C]]", [["A", "B"], ["C", "D"], ["B", "C"]], "D"),
+            new("City names containing spaces", "[[New York -> Rio City], [Rio City -> Cape Town]]", [["New York", "Rio City"], ["Rio City", "Cape Town"]], "Cape Town"),
+            new("Case-sensitive city names", "[[A -> a]]", [["A", "a"]], "a"),
+            new("Maximum 100-path chain", "[100-path chain CityA -> ... -> CityCW]", maximumPaths, "CityCW")
+        ];
 
-
-        /// <summary>
-        /// 官方解法:
-        /// 我们可以遍历 cityBi，返回不在 cityAi 中的城市，即为答案。
-        /// https://leetcode.cn/problems/destination-city/solutions/1026156/lu-xing-zhong-dian-zhan-by-leetcode-solu-pscd/
-        /// 
-        /// 
-        /// 
-        /// 代码实现时，可以先将所有 cityAi​ 存于一哈希表中
-        /// ，然后遍历 cityBi​ 并查询 cityBi 是否在哈希表中。
-        /// </summary>
-        /// <param name="paths"></param>
-        /// <returns></returns>
-        public static string DestCity(IList<IList<string>> paths)
+        int passed = 0;
+        foreach (TestCase testCase in testCases)
         {
-            ISet<string> citiesA = new HashSet<string>();
-            // 將全部paths中的 cityAi​ 存入 hash表中
-            foreach (IList<string> path in paths) 
+            IList<IList<string>> originalPaths = ClonePaths(testCase.Paths);
+            string actual = DestCity(testCase.Paths);
+            bool isPassed = actual == testCase.Expected && PathsEqual(testCase.Paths, originalPaths);
+            if (isPassed)
             {
-                citiesA.Add(path[0]);
+                passed++;
             }
 
-            // 找出 cityBi 不存在於 cityAi 中的那個
-            foreach (IList<string> path in paths) 
-            {
-                if (!citiesA.Contains(path[1]))
-                {
-                    return path[1];
-                }
-            }
-
-            return "";
-
+            Console.WriteLine($"Case: {testCase.Name}");
+            Console.WriteLine($"Input: {testCase.Input}");
+            Console.WriteLine($"Expected: {testCase.Expected}");
+            Console.WriteLine($"Actual: {actual}");
+            Console.WriteLine($"Result: {(isPassed ? "PASS" : "FAIL")}");
+            Console.WriteLine();
         }
 
+        Console.WriteLine($"Summary: {passed}/{testCases.Length} checks passed.");
+        if (passed != testCases.Length)
+        {
+            Environment.ExitCode = 1;
+        }
     }
+
+    private static string CreateCityName(int index)
+    {
+        string suffix = string.Empty;
+        do
+        {
+            suffix = (char)('A' + index % 26) + suffix;
+            index = index / 26 - 1;
+        }
+        while (index >= 0);
+
+        return $"City{suffix}";
+    }
+
+    private static IList<IList<string>> ClonePaths(IList<IList<string>> paths)
+    {
+        return paths.Select(path => (IList<string>)[.. path]).ToList();
+    }
+
+    private static bool PathsEqual(IList<IList<string>> left, IList<IList<string>> right)
+    {
+        return left.Count == right.Count
+            && left.Zip(right).All(pair => pair.First.SequenceEqual(pair.Second));
+    }
+
+    /// <summary>
+    /// 在有效路徑形成單一無環旅行線的前提下，先收集所有出發城市，再找出唯一未出現在
+    /// 出發城市集合中的抵達城市，並將該城市作為旅行終點回傳。
+    /// </summary>
+    /// <param name="paths">每個元素皆為「出發城市、抵達城市」的有效二元素路徑。</param>
+    /// <returns>唯一沒有任何外出路徑的終點城市。</returns>
+    public static string DestCity(IList<IList<string>> paths)
+    {
+        HashSet<string> departureCities = [];
+        foreach (IList<string> path in paths)
+        {
+            departureCities.Add(path[0]);
+        }
+
+        foreach (IList<string> path in paths)
+        {
+            // 終點是唯一不曾作為任何路徑起點的抵達城市。
+            if (!departureCities.Contains(path[1]))
+            {
+                return path[1];
+            }
+        }
+
+        return string.Empty;
+    }
+
+    private sealed record TestCase(
+        string Name,
+        string Input,
+        IList<IList<string>> Paths,
+        string Expected);
 }
