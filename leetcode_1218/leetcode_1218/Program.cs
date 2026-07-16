@@ -1,113 +1,140 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace leetcode_1218;
 
-namespace leetcode_1218
+internal static class Program
 {
-    internal class Program
+    /// <summary>
+    /// 1218. Longest Arithmetic Subsequence of Given Difference
+    /// https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
+    /// 1218. 最長定差子序列
+    /// https://leetcode.cn/problems/longest-arithmetic-subsequence-of-given-difference/
+    /// English: Given an integer array and a fixed difference, return the length of the longest subsequence whose adjacent elements differ by exactly that value; deleting elements must not change the order of the remaining elements.
+    /// 中文：給定整數陣列與固定公差，回傳相鄰元素差恰為該公差的最長子序列長度；可以刪除元素，但不可改變其餘元素的順序。
+    /// </summary>
+    /// <remarks>
+    /// 找出 arr 中 等差為 difference  的 最常子序列
+    /// 可以刪除 element 但是不能 變更順序
+    /// </remarks>
+    /// <param name="args">命令列參數；驗證器不使用此參數。</param>
+    private static void Main(string[] args)
     {
-        /// <summary>
-        /// 1218. Longest Arithmetic Subsequence of Given Difference
-        /// https://leetcode.com/problems/longest-arithmetic-subsequence-of-given-difference/
-        /// 1218. 最长定差子序列
-        /// https://leetcode.cn/problems/longest-arithmetic-subsequence-of-given-difference/
-        /// 
-        /// 找出 arr 中 等差為 difference  的 最常子序列
-        /// 可以刪除 element 但是不能 變更順序
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        (string CaseName, int[] Values, int Difference, int Expected)[] testCases =
         {
-            int[] input = new int[] { 1, 1, 3, 4 };
-            int difference = 1;
+            ("Case 1: Official increasing example", new[] { 1, 2, 3, 4 }, 1, 4),
+            ("Case 2: Official no-chain example", new[] { 1, 3, 5, 7 }, 1, 1),
+            ("Case 3: Official negative-difference example", new[] { 1, 5, 7, 8, 5, 3, 4, 2, 1 }, -2, 4),
+            ("Case 4: Minimum valid input", new[] { 5 }, 7, 1),
+            ("Case 5: Zero difference with duplicates", new[] { 7, 7, 7, 7 }, 0, 4),
+            ("Case 6: Subsequence order regression", new[] { 4, 1, 2, 3 }, 1, 3),
+            ("Case 7: Value-range boundaries", new[] { -10_000, 0, 10_000 }, 10_000, 3)
+        };
 
-            Console.WriteLine(LongestSubsequence2(input, difference));
-            Console.ReadKey();
+        List<CaseResult> checks = new();
 
+        foreach ((string caseName, int[] values, int difference, int expected) in testCases)
+        {
+            string input = $"arr = {FormatArray(values)}, difference = {difference}";
+            int dictionaryActual = LongestSubsequence(values, difference);
+            int arrayActual = LongestSubsequence2(values, difference);
+            checks.Add(new CaseResult(caseName, input, "Dictionary DP", expected, dictionaryActual, expected == dictionaryActual));
+            checks.Add(new CaseResult(caseName, input, "Value-range array DP", expected, arrayActual, expected == arrayActual));
         }
 
-        /// <summary>
-        /// 官方
-        /// https://leetcode.cn/problems/longest-arithmetic-subsequence-of-given-difference/solution/zui-chang-ding-chai-zi-xu-lie-by-leetcod-xkua/
-        /// 
-        /// https://leetcode.cn/problems/longest-arithmetic-subsequence-of-given-difference/solution/1218-zui-chang-ding-chai-zi-xu-lie-by-st-zb7g/
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="difference"></param>
-        /// <returns></returns>
-        public static int LongestSubsequence(int[] arr, int difference)
-        {
-            int ans = 0;
-            Dictionary<int, int> dic = new Dictionary<int, int>();
+        int[] maximumInput = Enumerable.Repeat(7, 100_000).ToArray();
+        const int maximumExpected = 100_000;
+        int maximumDictionaryActual = LongestSubsequence(maximumInput, 0);
+        int maximumArrayActual = LongestSubsequence2(maximumInput, 0);
+        const string maximumInputSummary = "arr = 100,000 × 7, difference = 0";
+        checks.Add(new CaseResult("Case 8: Maximum-length spot check", maximumInputSummary, "Dictionary DP", maximumExpected, maximumDictionaryActual, maximumExpected == maximumDictionaryActual));
+        checks.Add(new CaseResult("Case 8: Maximum-length spot check", maximumInputSummary, "Value-range array DP", maximumExpected, maximumArrayActual, maximumExpected == maximumArrayActual));
 
-            foreach (int i in arr) 
+        int passedCount = 0;
+        Console.WriteLine("LeetCode 1218 acceptance harness");
+
+        foreach (IGrouping<string, CaseResult> caseGroup in checks.GroupBy(check => check.CaseName))
+        {
+            CaseResult firstCheck = caseGroup.First();
+            Console.WriteLine();
+            Console.WriteLine(firstCheck.CaseName);
+            Console.WriteLine($"Input: {firstCheck.Input}");
+
+            foreach (CaseResult check in caseGroup)
             {
-                int prev = dic.ContainsKey(i - difference) ? dic[i - difference] : 0;
+                Console.WriteLine($"{(check.Passed ? "PASS" : "FAIL")} | {check.CheckName} | Expected: {check.Expected} | Actual: {check.Actual}");
 
-                if(dic.ContainsKey(i))
+                if (check.Passed)
                 {
-                    dic[i] = prev + 1;
+                    passedCount++;
                 }
-                else
-                {
-                    dic.Add(i, prev + 1);
-                }
-
-                ans = Math.Max(ans, dic[i]);
             }
-
-            return ans;
         }
 
-        /// <summary>
-        /// 跟官方寫法差不多邏輯
-        /// 但是第一次看 可能比較好理解
-        /// https://leetcode.cn/problems/longest-arithmetic-subsequence-of-given-difference/solution/1218-zui-chang-ding-chai-zi-xu-lie-by-st-zb7g/
-        /// 
-        /// 当 i=0 时，以下标 i 结尾的子序列只有一个，长度是 1，公差可以是任意值，因此动态规划的边界
-        /// 情况是 dp[0]=1。
-        /// 
-        /// 当 i>0 时，只有当下标 i 的前面存在元素 arr[i]−difference 时
-        /// ，才可能有 dp[i]>1，否则 dp[i]=1
-        /// 
-        /// </summary>
-        /// <param name="arr"></param>
-        /// <param name="difference"></param>
-        /// <returns></returns>
-        public static int LongestSubsequence2(int[] arr, int difference)
+        Console.WriteLine();
+        Console.WriteLine($"Summary: {passedCount}/{checks.Count} checks passed.");
+
+        if (passedCount != checks.Count)
         {
-            int longest = 0;
-            Dictionary<int, int> maxLengths = new Dictionary<int, int>();
-            int n = arr.Length;
-
-            for (int i = 0; i < n; i++)
-            {
-                int num = arr[i];
-                int prev = num - difference;
-                // 在哈希表中寻找以 arr[i] - difference结尾的公差为 difference 的最长子序列长度
-                // 该长度加 1 之后的结果即为 dp[i]
-                // 如果 存在 maxLengths.ContainsKey(prev) 代表 前後順序等差 長度累加,否則就是從頭開始 也就是1
-                // 利用 prev 計算出 i的前一個 等差後 應該是多少 arr[j]才對. 存在就代表是預計中合理等差
-                int currLength = (maxLengths.ContainsKey(prev) ? maxLengths[prev] : 0) + 1;
-
-                if (maxLengths.ContainsKey(num))
-                {
-                    maxLengths[num] = currLength;
-                }
-                else
-                {
-                    maxLengths.Add(num, currLength);
-                }
-
-                longest = Math.Max(longest, currLength);
-            }
-
-            return longest;
-
+            Environment.ExitCode = 1;
         }
-
-
     }
+
+    /// <summary>
+    /// 使用雜湊動態規劃計算指定公差的最長子序列。對每個目前值保存以該值結尾的最佳長度，並由「目前值減去公差」的既有狀態延伸。有效輸入須符合題目定義的非空整數陣列與公差；方法不修改輸入，也不寫入主控台。
+    /// </summary>
+    /// <param name="arr">題目定義的非空整數陣列，元素順序即子序列可使用的順序。</param>
+    /// <param name="difference">相鄰子序列元素必須符合的固定差值。</param>
+    /// <returns>相鄰差皆為 <paramref name="difference"/> 的最長子序列長度。</returns>
+    public static int LongestSubsequence(int[] arr, int difference)
+    {
+        Dictionary<int, int> maxLengthByValue = new();
+        int longest = 0;
+
+        foreach (int value in arr)
+        {
+            int previousLength = maxLengthByValue.GetValueOrDefault(value - difference);
+            int currentLength = previousLength + 1;
+
+            // 依掃描順序延伸前驅狀態，確保只形成合法子序列而不是重排後的數列。
+            maxLengthByValue[value] = currentLength;
+            longest = Math.Max(longest, currentLength);
+        }
+
+        return longest;
+    }
+
+    /// <summary>
+    /// 利用題目固定值域，以陣列動態規劃計算指定公差的最長子序列。陣列索引代表結尾值，前驅值超出合法值域時視為沒有可延伸狀態。有效輸入須符合題目定義；方法不修改輸入，也不寫入主控台。
+    /// </summary>
+    /// <param name="arr">元素介於 -10,000 到 10,000 的題目有效非空陣列。</param>
+    /// <param name="difference">介於 -10,000 到 10,000 的固定差值。</param>
+    /// <returns>相鄰差皆為 <paramref name="difference"/> 的最長子序列長度。</returns>
+    public static int LongestSubsequence2(int[] arr, int difference)
+    {
+        const int minimumValue = -10_000;
+        const int maximumValue = 10_000;
+        const int offset = 10_000;
+        int[] maxLengthByValue = new int[maximumValue - minimumValue + 1];
+        int longest = 0;
+
+        foreach (int value in arr)
+        {
+            int previousValue = value - difference;
+            int previousLength = previousValue >= minimumValue && previousValue <= maximumValue
+                ? maxLengthByValue[previousValue + offset]
+                : 0;
+            int currentLength = previousLength + 1;
+
+            // 題目值域經 offset 後對應至 0..20,000，避免雜湊並維持固定空間。
+            maxLengthByValue[value + offset] = currentLength;
+            longest = Math.Max(longest, currentLength);
+        }
+
+        return longest;
+    }
+
+    private static string FormatArray(IEnumerable<int> values)
+    {
+        return $"[{string.Join(", ", values)}]";
+    }
+
+    private readonly record struct CaseResult(string CaseName, string Input, string CheckName, int Expected, int Actual, bool Passed);
 }
