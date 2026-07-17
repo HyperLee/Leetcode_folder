@@ -500,6 +500,7 @@ git diff --check -- leetcode_421
 
 - 完成單題實作後，必須進行一次獨立、唯讀 code review。
 - Reviewer 不得修改 tracked files、commit、push、建立 PR 或更新 Issue。
+- CodeRabbit 目前不是必要條件，因使用者無此帳號故無法使用。
 - 除非使用者日後明確啟用，預設略過 CodeRabbit，使用獨立唯讀 reviewer。
 
 ### 13.2 審查範圍
