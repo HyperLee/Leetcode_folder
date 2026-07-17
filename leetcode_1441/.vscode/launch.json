@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET Debug leetcode_1441",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/leetcode_1441/bin/Debug/net10.0/leetcode_1441.exe",
+            "cwd": "${workspaceFolder}/leetcode_1441",
+            "console": "integratedTerminal",
+            "stopAtEntry": false,
+            "preLaunchTask": "build leetcode_1441"
+        }
+    ]
+}
