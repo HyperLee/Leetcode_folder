@@ -36,37 +36,43 @@ class Program
     /// 
     /// 請依照上述規則，回傳建立 target 所需的堆疊操作。
     /// </summary>
+    /// <remarks>
+    /// 執行三組固定範例，並用相同輸入驗證三種解法的操作序列。
+    /// </remarks>
     /// <param name="args">Command-line arguments; this demo does not require input.</param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new Program();
+        int passed = 0;
+
+        passed += RunExample(solution, 1, [1, 3], 3, ["Push", "Push", "Pop", "Push"]);
+        passed += RunExample(solution, 2, [1, 2, 3], 3, ["Push", "Push", "Push"]);
+        passed += RunExample(solution, 3, [1, 2], 4, ["Push", "Push"]);
+
+        Console.WriteLine($"{passed}/9 passed.");
     }
 
     /// <summary>
-    /// 解法一:模擬
-    /// 操作的对象是 1 到 n 按顺序排列的数字，每次操作一个数字时，如果它在 target 中，则只需要将它 Push 入栈即可。如果不在 
-    /// target 中，可以先将其 Push 入栈，紧接着 Pop 出栈。因为 target 中数字是严格递增的，因此只要遍历 target，在 target 中每两
-    /// 个连续的数字 prev 和 number 中插入 number−prev−1 个 Push 和 Pop，再多加一个 Push 来插入当前数字即可。
+    /// 解法一：直接計算相鄰目標值之間的缺口。
+    /// 
+    /// 由於 <paramref name="target"/> 嚴格遞增，前一個目標值與當前目標值之間的數字都必須先
+    /// Push 再 Pop，當前目標值則只需 Push。
     /// 
     /// 
-    /// 效率較好
-    /// 關鍵就是要得出
-    /// 因为 target 中数字是严格递增的，因此只要遍历
-    /// target，在 target 中每两个连续的数字 prev 和 number 中插入 number − prev − 1
-    /// 个 Push 和 Pop，再多加一个 Push 来插入当前数字即可。
+    /// 輸入條件：<paramref name="target"/> 不可為空、必須嚴格遞增，且每個值都介於 1 與
+    /// <paramref name="n"/> 之間。輸出是按順序建立目標陣列所需的 Push/Pop 字串序列。
     /// 
-    /// 如果想不出來, 只能用方法2
     /// </summary>
-    /// <param name="target"></param>
-    /// <param name="n"></param>
-    /// <returns></returns>
+    /// <param name="target">要建立的非空、嚴格遞增目標陣列。</param>
+    /// <param name="n">資料流的上限；資料流包含 1 到 <paramref name="n"/>。</param>
+    /// <returns>建立 <paramref name="target"/> 所需的堆疊操作序列。</returns>
     public IList<string> BuildArray(int[] target, int n)
     {
         IList<string> res = new List<string>();
         int prev = 0;
         foreach(int number in target)
         {
-            // for迴圈條件是這解法關鍵
+            // number - prev - 1 就是兩個相鄰目標值之間必須捨棄的數字數量。
             for(int i = 0; i < number - prev - 1; i++)
             {
                 res.Add("Push");
@@ -79,23 +85,19 @@ class Program
     }
 
     /// <summary>
-    /// 解法二: 模擬
-    /// 看示例 1，n=3 意味着我们会依次读取 1,2,3 这三个数。
-    /// 1 在 target 中，入栈。
-    /// 2 不在 target 中，先入栈，再出栈。注意一定要入栈，这是题目要求。
-    /// 3 在 target 中，入栈。现在栈等于 target。
+    /// 解法二：只枚舉到最後一個目標值，並用指標追蹤下一個需要的數字。
     /// 
-    /// 怎么判断当前读取的数是否在 target 中？
-    /// 1. 设 target 的最后一个数为 mx。初始化指针 i=0，指向 target 的第一个数。
-    /// 2. 枚举读取的数为 x=1,2,…,mx。
-    /// 3. 先把 x 入栈。
-    /// 4. 如果 x = target[i]，那么 x 是我们要的数，把 i 加一，指向 target 的下一个数。
-    /// 5. 否则 x < target[i]，那么 x 不是我们要的数，把 x 出栈。
-    /// 由于 target 是严格递增的，所以 x≤target[i] 始终成立。
+    /// 每從資料流取出一個數字都先加入 Push；若它等於指標指向的目標值就移動指標，
+    /// 否則再加入 Pop 捨棄該數字。
+    /// 
+    /// 
+    /// 輸入條件：<paramref name="target"/> 不可為空、必須嚴格遞增，且每個值都介於 1 與
+    /// <paramref name="n"/> 之間。輸出是讀到最後一個目標值時所產生的堆疊操作序列。
+    /// 
     /// </summary>
-    /// <param name="target"></param>
-    /// <param name="n"></param>
-    /// <returns></returns>
+    /// <param name="target">要建立的非空、嚴格遞增目標陣列。</param>
+    /// <param name="n">資料流的上限；資料流包含 1 到 <paramref name="n"/>。</param>
+    /// <returns>建立 <paramref name="target"/> 所需的堆疊操作序列。</returns>
     public IList<string> BuildArray2(int[] target, int n)
     {
         List<string> ans = new List<string>();
@@ -103,17 +105,15 @@ class Program
         int i = 0;
         for(int x = 1; x <= mx; x++)
         {
-            // 先把 x 入棧(題目要求)
+            // 題目規定讀取數字後必須先 Push，不是目標值時才能緊接著 Pop。
             ans.Add("Push");
 
-            // x 是我們要的數
             if(x == target[i])
             {
                 i++;
             }
             else
             {
-                // x 不是我們要的數, 出棧
                 ans.Add("Pop");
             }
         }
@@ -121,27 +121,25 @@ class Program
     }
 
     /// <summary>
-    /// 方法三:模擬
-    /// 根据题意进行模拟即可：每次我们将当前处理到 i 压入栈中（往答案添加一个 Push），然后判断当前处理到的 i 是否最新的
-    /// 栈顶元素 target[j] 是否相同，若不相同则丢弃元素（往答案添加一个 Pop），若存在则将指针 j 后移，直到构建出目标答案。
+    /// 解法三：完整模擬 1 到 <paramref name="n"/> 的資料流，同時追蹤目標陣列位置。
     /// 
-    /// 當n 與target相符合 就 push
-    /// 否則只能pop 出去
+    /// 每個讀取值都先加入 Push；若不等於當前目標值就加入 Pop，否則移向下一個目標值。
+    /// 當資料流結束或所有目標值都已匹配時停止。
     /// 
-    /// 比較直覺 易懂
     /// 
-    /// [1, n] => 嚴格遞增 連續數字
-    /// 所以遇到 不要的就pop出去
+    /// 輸入條件：<paramref name="target"/> 不可為空、必須嚴格遞增，且每個值都介於 1 與
+    /// <paramref name="n"/> 之間。輸出是直接模擬資料流後所產生的堆疊操作序列。
+    /// 
     /// </summary>
-    /// <param name="target"></param>
-    /// <param name="n"></param>
-    /// <returns></returns>
+    /// <param name="target">要建立的非空、嚴格遞增目標陣列。</param>
+    /// <param name="n">資料流的上限；資料流包含 1 到 <paramref name="n"/>。</param>
+    /// <returns>建立 <paramref name="target"/> 所需的堆疊操作序列。</returns>
     public IList<string> BuildArray3(int[] target, int n)
     {
         IList<string> ans = new List<string>();
         int m = target.Length;
 
-        // i:[1, n], j = target長度
+        // j == m 代表目標已完成，此時必須停止讀取後續數字。
         for(int i = 1, j = 0; i <= n && j < m; i++)
         {
             ans.Add("Push");
@@ -152,10 +150,46 @@ class Program
             }
             else
             {
-                // 相同就繼續往下
                 j++;
             }
         }
         return ans;
+    }
+
+    /// <summary>
+    /// 以同一組非空、嚴格遞增的目標陣列執行三種解法，比對預期操作序列並輸出驗證結果。
+    /// </summary>
+    /// <param name="solution">提供三種解法的 <see cref="Program"/> 實例。</param>
+    /// <param name="caseNumber">顯示在主控台的範例編號。</param>
+    /// <param name="target">要建立的目標陣列。</param>
+    /// <param name="n">資料流的上限。</param>
+    /// <param name="expected">此範例預期的堆疊操作序列。</param>
+    /// <returns>通過預期結果比對的解法數量，範圍為 0 到 3。</returns>
+    private static int RunExample(Program solution, int caseNumber, int[] target, int n, string[] expected)
+    {
+        (string Name, Func<int[], int, IList<string>> Execute)[] methods =
+        [
+            (nameof(BuildArray), solution.BuildArray),
+            (nameof(BuildArray2), solution.BuildArray2),
+            (nameof(BuildArray3), solution.BuildArray3)
+        ];
+
+        Console.WriteLine($"Case {caseNumber}: target = [{string.Join(", ", target)}], n = {n}");
+
+        int passed = 0;
+        foreach((string name, Func<int[], int, IList<string>> execute) in methods)
+        {
+            IList<string> actual = execute(target, n);
+            bool isPassed = actual.SequenceEqual(expected);
+
+            Console.WriteLine($"  {name}: [{string.Join(", ", actual)}] | {(isPassed ? "PASS" : "FAIL")}");
+            if(isPassed)
+            {
+                passed++;
+            }
+        }
+
+        Console.WriteLine();
+        return passed;
     }
 }
