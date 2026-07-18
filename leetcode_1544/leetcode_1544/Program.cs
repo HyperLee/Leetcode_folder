@@ -1,83 +1,100 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace leetcode_1544;
 
-namespace leetcode_1544
+internal class Program
 {
-    internal class Program
+    /// <summary>
+    /// LeetCode 1544. Make The String Great.
+    /// LeetCode 1544. 整理字串。
+    /// English: Remove adjacent pairs of the same English letter whose cases differ,
+    /// repeating until no such pair remains, and return the resulting string.
+    /// 中文：反覆移除相鄰且為同一英文字母、但大小寫不同的字元對，直到不能再移除，
+    /// 並回傳最後的字串。
+    /// English: https://leetcode.com/problems/make-the-string-great/
+    /// 中文：https://leetcode.cn/problems/make-the-string-great/
+    /// </summary>
+    private static void Main()
     {
-        /// <summary>
-        /// leetcode 1544 1544. Make The String Great
-        /// https://leetcode.com/problems/make-the-string-great/
-        /// 1544. 整理字符串
-        /// https://leetcode.cn/problems/make-the-string-great/description/
-        /// 
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
-        {
-            string input = "";
-            input = "aAbc";
+        (string Input, string Expected)[] cases =
+        [
+            ("leEeetcode", "leetcode"),
+            ("abBAcC", string.Empty),
+            ("s", "s"),
+            ("aa", "aa"),
+            ("abA", "abA"),
+            ("aA", string.Empty),
+            ("Aa", string.Empty),
+            ("abBA", string.Empty),
+            ("aAbBc", "c"),
+            (string.Concat(Enumerable.Repeat("aA", 50)), string.Empty)
+        ];
 
-            Console.WriteLine(MakeGood(input));
-            Console.ReadKey();
+        int passedChecks = 0;
+
+        for (int index = 0; index < cases.Length; index++)
+        {
+            (string input, string expected) = cases[index];
+            string actual = MakeGood(input);
+            bool passed = actual == expected;
+
+            Console.WriteLine($"Case: {index + 1}");
+            Console.WriteLine($"Input: {Display(input)}");
+            Console.WriteLine($"Expected: {Display(expected)}");
+            Console.WriteLine($"Actual: {Display(actual)}");
+            Console.WriteLine($"Result: {(passed ? "PASS" : "FAIL")}");
+            Console.WriteLine();
+
+            if (passed)
+            {
+                passedChecks++;
+            }
         }
 
+        Console.WriteLine($"Summary: {passedChecks}/{cases.Length} checks passed.");
 
-        /// <summary>
-        /// 參考方法
-        /// https://leetcode.cn/problems/make-the-string-great/solution/zheng-li-zi-fu-chuan-zhan-shi-xian-by-han-song-yan/
-        /// 
-        /// https://leetcode.cn/problems/make-the-string-great/solutions/2575144/1544-zheng-li-zi-fu-chuan-by-stormsunshi-282x/
-        /// stack方式處理
-        /// 遇到相同單字相鄰(大小寫)者 剃除
-        /// 其餘繼續加入
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        public static string MakeGood(string s)
+        if (passedChecks != cases.Length)
         {
-            Stack<char> stack = new Stack<char>();
+            Environment.ExitCode = 1;
+        }
+    }
 
-            for (int i = 0; i < s.Length; i++)
+    private static string Display(string value)
+    {
+        return value.Length == 0 ? "(empty)" : value;
+    }
+
+    /// <summary>
+    /// 依題目保證的英文字母輸入，以堆疊維護已整理完成的前綴；相鄰同字母且大小寫相反時
+    /// 移除配對，否則保留字元，最後回傳整理後的字串。
+    /// </summary>
+    public static string MakeGood(string s)
+    {
+        Stack<char> stack = new();
+
+        foreach (char character in s)
+        {
+            // 堆疊中的內容永遠是目前輸入前綴已無可消除相鄰字元對的結果。
+            if (stack.Count > 0 && Math.Abs(stack.Peek() - character) == 32)
             {
-                if (stack.Count == 0)
-                {
-                    // stack為空就把資料塞入, 不讓stack為空.
-                    // 才能相鄰char 比對
-                    stack.Push(s[i]);
-                }
-                else
-                {
-                    // a-A=32 以此类推, ascii code 小寫 大寫 差距32
-                    if (Math.Abs(stack.Peek() - s[i]) == 32)
-                    {
-                        stack.Pop();
-                    }
-                    else
-                    {
-                        stack.Push(s[i]);
-                    }
-                }
-
+                stack.Pop();
             }
-
-            string ans = "";
-            // 大小為 stack.Count
-            char[] list = new char[stack.Count];
-            // 把處理過後資料丟到list裡面
-            list = stack.ToArray();
-            // stack 先進後出, 所以迴圈要反著拿 才是輸入順序
-            for (int i = list.Length - 1; i >= 0; i--)
+            else
             {
-                ans += list[i];
+                stack.Push(character);
             }
-
-            return ans;
         }
 
+        return string.Create(
+            stack.Count,
+            stack,
+            static (characters, source) =>
+            {
+                int targetIndex = source.Count - 1;
+
+                foreach (char character in source)
+                {
+                    characters[targetIndex] = character;
+                    targetIndex--;
+                }
+            });
     }
 }
