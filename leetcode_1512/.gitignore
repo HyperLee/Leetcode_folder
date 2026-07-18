@@ -1,0 +1,48 @@
+## Ignore Visual Studio temporary files, build results, and local editor state.
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+
+# Build results
+[Dd]ebug/
+[Rr]elease/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+artifacts/
+
+# IDE state
+.vs/
+_ReSharper*/
+*.DotSettings.user
+.idea/
+
+# .NET and test artifacts
+*.nupkg
+*.snupkg
+*.coverage
+*.coveragexml
+TestResults/
+
+# Local and generated files
+.env
+*.log
+*.tmp
+*.cache
+__pycache__/
+*.pyc
+node_modules/
+
+# VS Code files for those working on multiple tools
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
