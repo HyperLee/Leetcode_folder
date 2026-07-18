@@ -27,27 +27,37 @@ internal class Program
             new("Maximum length and k", Enumerable.Range(1, 1_000).ToArray(), 1_000, 2_000)
         ];
 
+        Solution[] solutions =
+        [
+            new(nameof(FindKthPositive), FindKthPositive),
+            new(nameof(FindKthPositive2), FindKthPositive2)
+        ];
+
         int passedChecks = 0;
-        int totalChecks = cases.Length * 2;
+        int totalChecks = cases.Length * solutions.Length * 2;
 
         foreach (TestCase testCase in cases)
         {
-            CaseResult result = RunCase(testCase);
-            passedChecks += result.ValuePassed ? 1 : 0;
-            passedChecks += result.InputPreserved ? 1 : 0;
+            foreach (Solution solution in solutions)
+            {
+                CaseResult result = RunCase(testCase, solution);
+                passedChecks += result.ValuePassed ? 1 : 0;
+                passedChecks += result.InputPreserved ? 1 : 0;
 
-            Console.WriteLine($"Case: {result.Name}");
-            Console.WriteLine($"Input: {FormatInput(result.Input)}");
-            Console.WriteLine($"k: {result.K.ToString(CultureInfo.InvariantCulture)}");
-            Console.WriteLine("Check: kth missing positive");
-            Console.WriteLine($"Expected: {result.Expected.ToString(CultureInfo.InvariantCulture)}");
-            Console.WriteLine($"Actual: {result.Actual.ToString(CultureInfo.InvariantCulture)}");
-            Console.WriteLine($"Result: {(result.ValuePassed ? "PASS" : "FAIL")}");
-            Console.WriteLine("Check: input preserved");
-            Console.WriteLine("Expected: True");
-            Console.WriteLine($"Actual: {result.InputPreserved}");
-            Console.WriteLine($"Result: {(result.InputPreserved ? "PASS" : "FAIL")}");
-            Console.WriteLine();
+                Console.WriteLine($"Case: {result.CaseName}");
+                Console.WriteLine($"Solution: {result.SolutionName}");
+                Console.WriteLine($"Input: {FormatInput(result.Input)}");
+                Console.WriteLine($"k: {result.K.ToString(CultureInfo.InvariantCulture)}");
+                Console.WriteLine("Check: kth missing positive");
+                Console.WriteLine($"Expected: {result.Expected.ToString(CultureInfo.InvariantCulture)}");
+                Console.WriteLine($"Actual: {result.Actual.ToString(CultureInfo.InvariantCulture)}");
+                Console.WriteLine($"Result: {(result.ValuePassed ? "PASS" : "FAIL")}");
+                Console.WriteLine("Check: input preserved");
+                Console.WriteLine("Expected: True");
+                Console.WriteLine($"Actual: {result.InputPreserved}");
+                Console.WriteLine($"Result: {(result.InputPreserved ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+            }
         }
 
         Console.WriteLine($"Summary: {passedChecks}/{totalChecks} checks passed.");
@@ -58,14 +68,15 @@ internal class Program
         }
     }
 
-    private static CaseResult RunCase(TestCase testCase)
+    private static CaseResult RunCase(TestCase testCase, Solution solution)
     {
         int[] input = (int[])testCase.Input.Clone();
         int[] snapshot = (int[])input.Clone();
-        int actual = FindKthPositive(input, testCase.K);
+        int actual = solution.Execute(input, testCase.K);
         bool inputPreserved = input.SequenceEqual(snapshot);
 
         return new CaseResult(
+            solution.Name,
             testCase.Name,
             testCase.Input,
             testCase.K,
@@ -106,6 +117,41 @@ internal class Program
         return current - 1;
     }
 
+    /// <summary>
+    /// 以二分搜尋找出嚴格遞增陣列中缺失的第 k 個正整數。
+    /// 索引 i 之前應有 i + 1 個正整數，因此 <c>arr[i] - i - 1</c> 是截至該位置的缺失數量；
+    /// 使用半開區間找出第一個缺失數量不少於 k 的索引，再以索引與 k 推導答案。
+    /// 每輪皆維持 <c>[left, right)</c> 包含第一個缺失數量不少於 k 的候選索引。
+    /// 僅處理題目定義的有效輸入，不修改輸入；時間複雜度為 O(log n)，輔助空間為 O(1)。
+    /// </summary>
+    /// <param name="arr">依題目限制提供的嚴格遞增正整數陣列。</param>
+    /// <param name="k">要尋找的缺失正整數序號。</param>
+    /// <returns>陣列中缺失的第 k 個正整數。</returns>
+    public static int FindKthPositive2(int[] arr, int k)
+    {
+        int left = 0;
+        int right = arr.Length;
+
+        while (left < right)
+        {
+            int middle = left + ((right - left) / 2);
+            int missingAtMiddle = arr[middle] - middle - 1;
+
+            // 保持 [left, right) 包含第一個缺失數量不少於 k 的候選索引。
+            if (missingAtMiddle < k)
+            {
+                left = middle + 1;
+            }
+            else
+            {
+                right = middle;
+            }
+        }
+
+        // left 是答案前已存在於陣列中的元素數量，因此第 k 個缺失值為 left + k。
+        return left + k;
+    }
+
     private static string FormatInput(int[] input)
     {
         const int compactThreshold = 10;
@@ -123,8 +169,11 @@ internal class Program
 
     private sealed record TestCase(string Name, int[] Input, int K, int Expected);
 
+    private sealed record Solution(string Name, Func<int[], int, int> Execute);
+
     private sealed record CaseResult(
-        string Name,
+        string SolutionName,
+        string CaseName,
         int[] Input,
         int K,
         int Expected,
