@@ -227,6 +227,9 @@ class Program
 
         for (int i = 0; i < l.Length; i++)
         {
+            // C# Range 語法: 陣列[開始索引..結束索引]; 
+            // 注意: 開始索引包含在範圍內，結束索引不包含在範圍內。
+            // 所以右端點要 + 1, 不然的話右端點會少一個元素計算會錯誤
             int[] sortedValues = nums[l[i]..(r[i] + 1)];
             Array.Sort(sortedValues);
 
