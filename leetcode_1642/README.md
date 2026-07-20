@@ -7,6 +7,7 @@
 
 - [題目說明](#題目說明)
 - [限制條件](#限制條件)
+- [C# PriorityQueue 用法](#c-priorityqueue-用法)
 - [解題概念與出發點](#解題概念與出發點)
 - [解法一：最大堆，先用磚塊再替換](#解法一最大堆先用磚塊再替換)
 - [解法二：最小堆，替梯子保留大落差](#解法二最小堆替梯子保留大落差)
@@ -40,6 +41,54 @@
 - `0 <= ladders <= heights.length`
 
 輸入陣列最多有十萬個元素，不能枚舉每次上升要選磚塊或梯子的所有組合。解法需要在由左到右掃描時，快速決定哪些高度差值得使用梯子。
+
+## C# PriorityQueue 用法
+
+.NET 的 `PriorityQueue<TElement, TPriority>` 是優先佇列。一般佇列按照加入的先後順序取出元素，PriorityQueue 則會按照 priority 的大小決定取出順序，而且預設是 **priority 最小的元素先出隊**。
+
+本題的兩個泛型型別都是 `int`：
+
+```csharp
+PriorityQueue<int, int> climbs = new PriorityQueue<int, int>();
+```
+
+- 第一個 `int` 是 `TElement`：實際存入與取出的資料，本題用來保存正高度差 `difference`。
+- 第二個 `int` 是 `TPriority`：只用來決定出隊順序，可以和 element 相同，也可以使用不同的值。
+
+常用成員如下：
+
+| 成員 | 用途 |
+| --- | --- |
+| `Enqueue(element, priority)` | 加入一個 element，並指定它的 priority |
+| `Dequeue()` | 移除並回傳目前 priority 最小的 element |
+| `Peek()` | 查看目前 priority 最小的 element，但不移除 |
+| `Count` | 取得佇列中的元素數量 |
+
+### 使用正數 priority：預設最小堆
+
+如果 element 與 priority 都使用高度差本身：
+
+```csharp
+climbs.Enqueue(3, 3);
+climbs.Enqueue(5, 5);
+climbs.Enqueue(2, 2);
+```
+
+priority 由小到大是 `2、3、5`，因此連續呼叫 `Dequeue()` 取得的 element 順序也是 `2、3、5`。這就是本題解法二需要的行為：快速取出最小高度差。
+
+### 使用負數 priority：模擬最大堆
+
+如果仍保存原本的正高度差，但將 priority 改成負數：
+
+```csharp
+climbs.Enqueue(3, -3);
+climbs.Enqueue(5, -5);
+climbs.Enqueue(2, -2);
+```
+
+三個 priority 是 `-3、-5、-2`，其中最小的是 `-5`，所以對應的 element `5` 會先出隊。連續呼叫 `Dequeue()` 取得的 element 順序為 `5、3、2`，效果等同最大堆。
+
+要特別注意：變成負數的只有第二個參數 priority。第一個參數 element 仍是正數 `difference`，所以 `Dequeue()` 回傳的是可以直接加回磚塊數量的正高度差，不需要再轉換正負號。
 
 ## 解題概念與出發點
 
@@ -89,6 +138,16 @@ difference = heights[i] - heights[i - 1]
 
 .NET 的 `PriorityQueue<TElement, TPriority>` 預設會讓最小 priority 先出隊。為了模擬最大堆，程式以 `-difference` 作為 priority，因此最大的高度差會有最小的負 priority，並最先被取出。
 
+### 為什麼解法一要使用負數
+
+解法一在磚塊不足時，要從所有暫定使用磚塊的攀升中找出 **最大高度差**，再改用梯子，這樣才能一次取回最多磚塊。但 C# PriorityQueue 預設先取出最小 priority，因此程式使用：
+
+```csharp
+brickClimbs.Enqueue(difference, -difference);
+```
+
+例如高度差 `3` 與 `5` 的 priority 分別是 `-3` 與 `-5`；因為 `-5` 比 `-3` 小，高度差 `5` 會先出隊。`Dequeue()` 回傳的 element 仍是正數 `5`，所以可以直接執行 `bricks += brickClimbs.Dequeue()` 取回磚塊。
+
 ### 範例演示
 
 使用官方範例 1：`heights = [4,2,7,6,9,14,12]`、`bricks = 5`、`ladders = 1`。
@@ -132,6 +191,16 @@ difference = heights[i] - heights[i - 1]
 
 當 `ladders = 0` 時，每個正高度差加入堆後都會立刻出隊並改用磚塊，同一套流程不需要額外分支。
 
+### 為什麼解法二不需要使用負數
+
+解法二先把正高度差暫定為使用梯子。當堆中的數量超過梯子數時，需要找出 **最小高度差** 改用磚塊，才能把梯子保留給較大的攀升。這正好就是 C# PriorityQueue 的預設行為，因此 element 與 priority 都直接使用正數 `difference`：
+
+```csharp
+ladderClimbs.Enqueue(difference, difference);
+```
+
+例如堆中有高度差 `3` 與 `5`，預設最小堆會先取出 `3`，讓 `3` 改用磚塊、`5` 繼續使用梯子。這裡若使用負數，反而會先取出最大的高度差，與解法二的目標相反。
+
 ### 範例演示
 
 同樣使用官方範例 1。表格中的「最小堆」只保存暫定由梯子負擔的高度差：
@@ -162,6 +231,8 @@ difference = heights[i] - heights[i - 1]
 | 起始假設 | 每次攀升先使用磚塊 | 每次攀升先暫定使用梯子 |
 | 調整時機 | 磚塊不足時 | 梯子名額超過時 |
 | 堆保存內容 | 仍由磚塊負擔的正高度差 | 應由梯子負擔的最大高度差 |
+| 使用的 priority | `-difference` | `difference` |
+| 使用負數的原因 | 將預設最小堆模擬成最大堆 | 不需要；預設最小堆就是所需行為 |
 | 出隊元素 | 最大高度差，改成梯子 | 最小高度差，改成磚塊 |
 | 時間複雜度 | `O(n log n)` | `O(n log(ladders + 1))` |
 | 額外空間 | `O(n)` | `O(ladders + 1)` |
