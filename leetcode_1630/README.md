@@ -86,54 +86,169 @@ a, a + d, a + 2d, ..., a + (k - 1)d
 
 ## 解法一：最小值、最大值與位置標記
 
-### 設計思路
+### 核心直覺：直接找出每個值排序後的位置
 
-若長度為 `k` 的數列能排列成等差數列，最小值 `minimum` 與最大值 `maximum` 之間一定存在 `k - 1` 個間隔。因此公差只能是：
+最直覺的做法是先排序子陣列，再比較相鄰差值。這個解法則不真的排序，而是先利用最小值、最大值和元素數量，推導出唯一可能的等差數列，再確認每個值是否剛好占據其中一個位置。
+
+假設某筆查詢包含 `k` 個元素。若它能重新排列成等差數列，排序後一定具有以下形式：
+
+```text
+minimum,
+minimum + difference,
+minimum + 2 × difference,
+...,
+minimum + (k - 1) × difference
+```
+
+因此只要確認兩件事：
+
+1. 最大值與最小值能否推導出整數公差。
+2. `k` 個元素能否分別落在 `k` 個不重複的等差位置上。
+
+### 為什麼公差只有一種可能？
+
+長度為 `k` 的數列共有 `k - 1` 個相鄰間隔。排序後，第一項是 `minimum`，最後一項是 `maximum`，所以必須滿足：
+
+```text
+maximum = minimum + difference × (k - 1)
+```
+
+移項後得到：
 
 ```text
 difference = (maximum - minimum) / (k - 1)
 ```
 
-這會帶出三個必要條件：
+程式中的 `intervalCount` 就是 `k - 1`。查詢範圍包含左右端點，因此：
 
-1. `maximum == minimum` 時，所有值都相同，公差為 `0`，可以直接判定成功。
-2. `maximum - minimum` 必須能被 `k - 1` 整除，否則公差不可能是整數。
-3. 每個值 `x` 都必須落在唯一的位置：
+```text
+k             = right - left + 1
+intervalCount = k - 1
+              = right - left
+```
 
-   ```text
-   position = (x - minimum) / difference
-   ```
+如果 `(maximum - minimum) % intervalCount != 0`，表示最大值與最小值之間無法平均切成 `k - 1` 個整數間隔。由於陣列元素都是整數，這筆查詢不可能形成等差數列，可以直接回傳 `false`。
 
-   `x - minimum` 必須能被公差整除，而且同一位置不能重複出現。
+### 每筆查詢的判斷流程
 
-程式使用 `bool[] seen` 記錄位置是否已被占用。這個方法不必排序，但仍能證明所有預期位置都恰好出現一次。
+1. 掃描查詢範圍，找出 `minimum` 與 `maximum`。
+2. 若兩者相等，代表所有元素相同，直接記錄 `true`。
+3. 計算間隔數量 `intervalCount = right - left`。
+4. 檢查 `maximum - minimum` 能否被 `intervalCount` 整除。
+5. 算出唯一可能的公差 `difference`，並建立長度為 `k` 的 `seen`。
+6. 將每個元素換算成等差數列中的位置；若位置不合法或重複，記錄 `false`。
+7. 所有元素都通過檢查時，記錄 `true`。
 
-### 範例演示：成功案例 `[4, 6, 5]`
+### `valueOffset`、`position` 與 `seen`
 
-1. 元素數量 `k = 3`，所以共有 `k - 1 = 2` 個間隔。
-2. `minimum = 4`、`maximum = 6`。
-3. 公差為 `(6 - 4) / 2 = 1`。
-4. 建立 `seen = [false, false, false]`。
+對目前元素 `x`，程式先計算它和最小值之間的距離：
 
-| 目前值 `x` | `x - minimum` | 推導位置 | 標記後的 `seen` |
+```text
+valueOffset = x - minimum
+```
+
+合法的等差元素必須符合：
+
+```text
+x = minimum + position × difference
+```
+
+所以也可以寫成：
+
+```text
+position = (x - minimum) / difference
+         = valueOffset / difference
+```
+
+這裡需要依序檢查：
+
+- `valueOffset % difference == 0`：確認 `x` 確實落在某個等差位置，而不是兩個位置之間。
+- `seen[position] == false`：確認該位置尚未被其他元素占用。
+
+通過後將 `seen[position]` 設為 `true`。`seen[0]` 代表最小值的位置，`seen[1]` 代表 `minimum + difference`，依此類推。
+
+### 完整追蹤：成功案例 `[4, 6, 5]`
+
+這筆查詢有 `k = 3` 個元素，因此共有 `2` 個間隔：
+
+```text
+minimum      = 4
+maximum      = 6
+intervalCount = 2
+difference   = (6 - 4) / 2 = 1
+```
+
+唯一可能的等差數列是 `[4, 5, 6]`，所以建立：
+
+```text
+seen = [false, false, false]
+```
+
+| 目前值 `x` | `valueOffset = x - 4` | `position = valueOffset / 1` | 標記後的 `seen` |
 | ---: | ---: | ---: | --- |
 | 4 | 0 | 0 | `[true, false, false]` |
 | 6 | 2 | 2 | `[true, false, true]` |
 | 5 | 1 | 1 | `[true, true, true]` |
 
-每個值都能被公差整除，而且沒有重複位置，因此可以重排成 `[4, 5, 6]`。
+三個元素都落在合法且不重複的位置，因此原本即使是 `[4, 6, 5]`，仍可重新排列成 `[4, 5, 6]`。
 
-### 範例演示：失敗案例 `[4, 6, 5, 9]`
+### 失敗情況一：最大值與最小值的差無法整除
 
-1. `k = 4`，共有 `3` 個間隔。
-2. `minimum = 4`、`maximum = 9`。
-3. `maximum - minimum = 5`，但 `5 % 3 != 0`。
+以 `[4, 6, 5, 9]` 為例：
 
-最大值與最小值之間無法切成三個相等的整數間隔，因此不必繼續掃描即可判定失敗。
+```text
+k              = 4
+intervalCount  = 3
+minimum        = 4
+maximum        = 9
+maximum - minimum = 5
+```
 
-### 公差為零
+因為 `5 % 3 != 0`，無法用整數公差把 `4` 到 `9` 平均切成三段，所以不必繼續檢查元素即可判定為 `false`。
 
-以 `[7, 7, 7, 7]` 為例，最小值與最大值都是 `7`。所有元素相同時，任意兩個相鄰元素的差都是 `0`，所以它本身就是等差數列。程式在這個分支直接回傳 `true`，也避免後續發生除以零。
+### 失敗情況二：不同元素占用相同位置
+
+以 `[3, 5, 5, 9]` 為例。根據最小值、最大值與元素數量，唯一可能的等差數列是 `[3, 5, 7, 9]`，公差為 `2`。
+
+兩個 `5` 都會得到：
+
+```text
+position = (5 - 3) / 2 = 1
+```
+
+第一個 `5` 將 `seen[1]` 設為 `true`；第二個 `5` 再次抵達位置 `1` 時就會發現重複。這也代表位置 `2` 應有的數字 `7` 缺少，因此不能形成完整的等差數列。
+
+### 常見疑問
+
+#### 為什麼要先處理公差為零？
+
+若 `minimum == maximum`，範圍內所有元素都相同，例如 `[7, 7, 7, 7]`。它們的相鄰差都是 `0`，本身就是等差數列，所以可以直接記錄 `true`。
+
+這個分支也避免後面執行 `valueOffset % difference` 時，因 `difference == 0` 而發生除以零例外。
+
+#### 為什麼 `position` 不會超出 `seen`？
+
+每個 `x` 都來自目前查詢範圍，因此必定滿足：
+
+```text
+minimum <= x <= maximum
+```
+
+在整除條件成立時，`maximum - minimum = difference × intervalCount`，所以合法位置一定介於 `0` 和 `intervalCount`。而 `seen` 的長度是 `intervalCount + 1`，合法索引正好也是 `0..intervalCount`。
+
+#### 為什麼最後不用再檢查每個 `seen` 都是 `true`？
+
+子陣列共有 `k` 個元素，`seen` 也剛好有 `k` 個合法位置。程式已確認每個元素都落在合法位置，而且沒有兩個元素使用同一位置。`k` 個元素放進 `k` 個互不重複的位置時，所有位置必然剛好各被占用一次，因此不需要再次掃描 `seen`。
+
+### 複雜度
+
+對長度為 `k` 的單筆查詢：
+
+- 第一次掃描找最小值與最大值，需要 O(k) 時間。
+- 第二次掃描驗證每個元素的位置，需要 O(k) 時間。
+- `seen` 陣列包含 `k` 個布林值，需要 O(k) 額外空間。
+
+因此每筆查詢的時間複雜度為 O(k)，額外空間複雜度為 O(k)。
 
 ## 解法二：複製後排序
 

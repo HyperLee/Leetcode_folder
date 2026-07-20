@@ -159,16 +159,16 @@ class Program
                 maximum = Math.Max(maximum, nums[j]);
             }
 
-            // 最大值等於最小值代表所有元素相同，公差為 0。
+            // 所有元素相同時，公差為 0 且一定成立；提前處理也能避免後續除以 0。
             if (minimum == maximum)
             {
                 results.Add(true);
                 continue;
             }
 
+            // k 個元素只有 k - 1 個間隔；最大值與最小值的距離必須能平均分配到這些間隔。
             int intervalCount = right - left;
 
-            // 最大與最小值的距離必須能平均分成 k - 1 段。
             if ((maximum - minimum) % intervalCount != 0)
             {
                 results.Add(false);
@@ -177,13 +177,14 @@ class Program
 
             int difference = (maximum - minimum) / intervalCount;
             bool isArithmetic = true;
+            // seen[position] 表示該等差位置是否已被元素占用，陣列長度正好等於元素數量 k。
             bool[] seen = new bool[intervalCount + 1];
 
             for (int j = left; j <= right; j++)
             {
                 int valueOffset = nums[j] - minimum;
 
-                // 不能被公差整除，代表該值不在預期的等差位置上。
+                // 合法元素必須符合 value = minimum + position × difference。
                 if (valueOffset % difference != 0)
                 {
                     isArithmetic = false;
@@ -192,7 +193,7 @@ class Program
 
                 int position = valueOffset / difference;
 
-                // 公差非零時，每個等差位置只能出現一次。
+                // 同一位置重複代表某個必要位置缺值，無法組成完整的等差數列。
                 if (seen[position])
                 {
                     isArithmetic = false;
