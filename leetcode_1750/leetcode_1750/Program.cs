@@ -1,65 +1,95 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace leetcode_1750;
 
-namespace leetcode_1750
+internal static class Program
 {
-    internal class Program
+    /// <summary>
+    /// LeetCode 1750. Minimum Length of String After Deleting Similar Ends.
+    /// LeetCode 1750. 刪除字串兩端相同字元後的最短長度。
+    /// English: Repeatedly choose non-overlapping, non-empty prefixes and suffixes
+    /// made of the same character, delete them, and return the minimum remaining length.
+    /// 中文：反覆選擇互不重疊、非空且各自由相同字元組成的前綴與後綴；兩者字元相同時
+    /// 將其刪除，並回傳最終可得到的最短剩餘長度。
+    /// English: https://leetcode.com/problems/minimum-length-of-string-after-deleting-similar-ends/
+    /// 中文：https://leetcode.cn/problems/minimum-length-of-string-after-deleting-similar-ends/
+    /// </summary>
+    private static void Main()
     {
-        /// <summary>
-        /// 1750. Minimum Length of String After Deleting Similar Ends
-        /// https://leetcode.com/problems/minimum-length-of-string-after-deleting-similar-ends/description/?envType=daily-question&envId=2024-03-05
-        /// 1750. 删除字符串两端相同字符后的最短长度
-        /// https://leetcode.cn/problems/minimum-length-of-string-after-deleting-similar-ends/description/
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        CaseResult[] cases =
+        [
+            RunCase("Official example 1", "ca", 2),
+            RunCase("Official example 2", "cabaabac", 0),
+            RunCase("Official example 3", "aabccabba", 3),
+            RunCase("Minimum input", "a", 1),
+            RunCase("Two matching characters", "aa", 0),
+            RunCase("Longer left boundary run", "aaabca", 2),
+            RunCase("Chained complete deletion", "abbbbbba", 0),
+            RunCase("Single character remains", "aaaabaaaa", 1),
+            RunCase(
+                "Maximum length all equal",
+                new string('a', 100_000),
+                0,
+                "100000 x 'a'"),
+            RunCase(
+                "Maximum length different ends",
+                $"a{new string('b', 99_998)}c",
+                100_000,
+                "'a' + 99998 x 'b' + 'c'")
+        ];
+
+        for (int index = 0; index < cases.Length; index++)
         {
-            string input = "aabccabba";
-            Console.WriteLine(MinimumLength(input));
-            Console.ReadKey();
+            CaseResult caseResult = cases[index];
+            Console.WriteLine($"Case: {index + 1} - {caseResult.Name}");
+            Console.WriteLine($"Input: {caseResult.Input}");
+            Console.WriteLine($"Expected: {caseResult.Expected}");
+            Console.WriteLine($"Actual: {caseResult.Actual}");
+            Console.WriteLine($"Result: {(caseResult.Passed ? "PASS" : "FAIL")}");
+            Console.WriteLine();
         }
 
+        int passedCount = cases.Count(caseResult => caseResult.Passed);
+        Console.WriteLine($"Summary: {passedCount}/{cases.Length} checks passed.");
 
-        /// <summary>
-        /// 雙指針
-        /// https://leetcode.cn/problems/minimum-length-of-string-after-deleting-similar-ends/solutions/2033813/shan-chu-zi-fu-chuan-liang-duan-xiang-to-biep/
-        /// 
-        /// 這題型一看直覺就是雙指針
-        /// 指向一左一右
-        /// 往內靠攏
-        /// 計算出長度
-        /// 
-        /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
-        public static int MinimumLength(string s)
+        if (passedCount != cases.Length)
         {
-            int n = s.Length;
-            int left = 0;
-            int right = n - 1;
+            Environment.ExitCode = 1;
+        }
+    }
 
-            while(left < right && s[left] == s[right])
+    private static CaseResult RunCase(string name, string input, int expected, string? inputDescription = null)
+    {
+        int actual = MinimumLength(input);
+        return new CaseResult(name, inputDescription ?? $"\"{input}\"", expected, actual, expected == actual);
+    }
+
+    /// <summary>
+    /// 對題目保證由 <c>a</c>、<c>b</c>、<c>c</c> 組成且長度介於 1 到 100,000 的字串，
+    /// 以左右指標表示尚未刪除的區間；當兩端字元相同時跳過兩側完整的同字元區段，
+    /// 最後回傳無法再刪除的字串長度。此方法不修改輸入，也不產生主控台輸出。
+    /// </summary>
+    public static int MinimumLength(string s)
+    {
+        int left = 0;
+        int right = s.Length - 1;
+
+        while (left < right && s[left] == s[right])
+        {
+            char boundaryCharacter = s[left];
+
+            // 每輪結束後，[left, right] 恰好是刪除兩側完整同字元區段後的剩餘範圍。
+            while (left <= right && s[left] == boundaryCharacter)
             {
-                char _char = s[left];
-
-                while(left <= right && s[left] == _char)
-                {
-                    // char相同就往右縮小範圍
-                    left++;
-                }
-
-                while(left <= right && s[right] == _char)
-                {
-                    // char相同就往左縮小範圍
-                    right--;
-                }
+                left++;
             }
 
-            return right - left + 1;
+            while (left <= right && s[right] == boundaryCharacter)
+            {
+                right--;
+            }
         }
 
+        return right - left + 1;
     }
+
+    private sealed record CaseResult(string Name, string Input, int Expected, int Actual, bool Passed);
 }
