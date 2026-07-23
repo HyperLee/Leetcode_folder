@@ -39,35 +39,49 @@ internal static class Program
             CaseResult result = results[index];
             Console.WriteLine($"Case: {index + 1} - {result.Name}");
             Console.WriteLine($"Input: {result.Input}");
-            Console.WriteLine($"Expected: {result.Expected}");
-            Console.WriteLine($"Actual: {result.Actual}");
-            Console.WriteLine($"Input preserved: {result.InputPreserved}");
-            Console.WriteLine($"Result: {(result.Passed ? "PASS" : "FAIL")}");
+            Console.WriteLine(PrintCheck("MakeEqual result", result.Expected, result.MakeEqualActual));
+            Console.WriteLine(PrintCheck("MakeEqual input preserved", true, result.MakeEqualInputPreserved));
+            Console.WriteLine(PrintCheck("MakeEqual2 result", result.Expected, result.MakeEqual2Actual));
+            Console.WriteLine(PrintCheck("MakeEqual2 input preserved", true, result.MakeEqual2InputPreserved));
             Console.WriteLine();
         }
 
-        int passedCount = results.Count(result => result.Passed);
-        Console.WriteLine($"Summary: {passedCount}/{results.Length} checks passed.");
+        int passedCount = results.Sum(result => result.PassedCheckCount);
+        const int totalCheckCount = 32;
+        Console.WriteLine($"Summary: {passedCount}/{totalCheckCount} checks passed.");
 
-        if (passedCount != results.Length)
+        if (passedCount != totalCheckCount)
         {
             Environment.ExitCode = 1;
         }
     }
 
+    private static string PrintCheck(string checkName, bool expected, bool actual)
+    {
+        string status = expected == actual ? "PASS" : "FAIL";
+        return $"{status} {checkName} | Expected: {expected} | Actual: {actual}";
+    }
+
     private static CaseResult RunCase(TestCase testCase)
     {
-        string[] originalWords = [.. testCase.Words];
-        bool actual = MakeEqual(testCase.Words);
-        bool inputPreserved = testCase.Words.SequenceEqual(originalWords);
+        string[] makeEqualWords = [.. testCase.Words];
+        string[] originalMakeEqualWords = [.. makeEqualWords];
+        bool makeEqualActual = MakeEqual(makeEqualWords);
+        bool makeEqualInputPreserved = makeEqualWords.SequenceEqual(originalMakeEqualWords);
+
+        string[] makeEqual2Words = [.. testCase.Words];
+        string[] originalMakeEqual2Words = [.. makeEqual2Words];
+        bool makeEqual2Actual = MakeEqual2(makeEqual2Words);
+        bool makeEqual2InputPreserved = makeEqual2Words.SequenceEqual(originalMakeEqual2Words);
 
         return new CaseResult(
             testCase.Name,
             testCase.Input,
             testCase.Expected,
-            actual,
-            inputPreserved,
-            actual == testCase.Expected && inputPreserved);
+            makeEqualActual,
+            makeEqualInputPreserved,
+            makeEqual2Actual,
+            makeEqual2InputPreserved);
     }
 
     /// <summary>
@@ -103,13 +117,53 @@ internal static class Program
         return true;
     }
 
+    /// <summary>
+    /// 以固定小寫英文字母表的 26 格計數陣列，判斷字元能否重新分配為相同字串。對題目
+    /// 保證的有效輸入（words 與其中字串長度皆介於 1 至 100，且只含小寫英文字母），每個
+    /// 字元的總數可被 words.Length 整除，是可平均分配的充要不變量。方法只讀取輸入，
+    /// 不修改 words、其中的字串或主控台狀態；符合不變量時回傳 true，否則回傳 false。
+    /// 時間複雜度為 O(C)，其中 C 為所有字元總數；固定 26 格計數陣列的輔助空間為 O(1)。
+    /// </summary>
+    /// <param name="words">題目限制內、由小寫英文字母組成的字串陣列。</param>
+    /// <returns>每種小寫字元總次數都可被 words.Length 整除時為 true；否則為 false。</returns>
+    public static bool MakeEqual2(string[] words)
+    {
+        int[] characterCounts = new int[26];
+
+        foreach (string word in words)
+        {
+            foreach (char character in word)
+            {
+                characterCounts[character - 'a']++;
+            }
+        }
+
+        foreach (int count in characterCounts)
+        {
+            if (count % words.Length != 0)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private sealed record TestCase(string Name, string Input, string[] Words, bool Expected);
 
     private sealed record CaseResult(
         string Name,
         string Input,
         bool Expected,
-        bool Actual,
-        bool InputPreserved,
-        bool Passed);
+        bool MakeEqualActual,
+        bool MakeEqualInputPreserved,
+        bool MakeEqual2Actual,
+        bool MakeEqual2InputPreserved)
+    {
+        public int PassedCheckCount =>
+            (MakeEqualActual == Expected ? 1 : 0) +
+            (MakeEqualInputPreserved ? 1 : 0) +
+            (MakeEqual2Actual == Expected ? 1 : 0) +
+            (MakeEqual2InputPreserved ? 1 : 0);
+    }
 }
