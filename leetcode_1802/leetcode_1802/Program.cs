@@ -1,117 +1,116 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace leetcode_1802;
 
-namespace leetcode_1802
+internal static class Program
 {
-    internal class Program
+    /// <summary>
+    /// LeetCode 1802: Maximum Value at a Given Index in a Bounded Array /
+    /// 有界陣列中指定索引處的最大值。
+    /// https://leetcode.com/problems/maximum-value-at-a-given-index-in-a-bounded-array/
+    /// https://leetcode.cn/problems/maximum-value-at-a-given-index-in-a-bounded-array/
+    /// Given a positive integer array of length n whose adjacent values differ by at most
+    /// one and whose sum is at most maxSum, maximize the value at index. 給定長度為 n 的
+    /// 正整數陣列，相鄰元素差的絕對值不得超過一且總和不得超過 maxSum，求指定 index
+    /// 可取得的最大值。
+    /// </summary>
+    private static void Main()
     {
-        /// <summary>
-        /// 1802. Maximum Value at a Given Index in a Bounded Array
-        /// https://leetcode.com/problems/maximum-value-at-a-given-index-in-a-bounded-array/
-        /// 
-        /// 1802. 有界数组中指定下标处的最大值
-        /// https://leetcode.cn/problems/maximum-value-at-a-given-index-in-a-bounded-array/
-        /// 
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
-        {
-            int n = 4, index = 2, maxSum = 6;
+        List<CaseResult> cases =
+        [
+            RunCase("Official example 1", 4, 2, 6, 2),
+            RunCase("Official example 2", 6, 1, 10, 3),
+            RunCase("Minimum valid input", 1, 0, 1, 1),
+            RunCase("Single element maximum budget", 1, 0, 1_000_000_000, 1_000_000_000),
+            RunCase("Peak at left boundary", 4, 0, 7, 3),
+            RunCase("Peak at right boundary", 4, 3, 7, 3),
+            RunCase("Both sides reach one", 5, 2, 10, 3),
+            RunCase("Tight adjacent boundary", 2, 0, 3, 2),
+            RunCase("Large arithmetic-series sum", 3, 1, 1_000_000_000, 333_333_334),
+            RunCase("Maximum length minimum budget", 1_000_000_000, 500_000_000, 1_000_000_000, 1)
+        ];
 
-            Console.WriteLine(MaxValue(n, index, maxSum));
-            Console.ReadKey();
+        foreach (CaseResult caseResult in cases)
+        {
+            Console.WriteLine($"Case: {caseResult.Name}");
+            Console.WriteLine($"Input: {caseResult.Input}");
+            Console.WriteLine($"Expected: {caseResult.Expected}");
+            Console.WriteLine($"Actual: {caseResult.Actual}");
+            Console.WriteLine($"Result: {(caseResult.Passed ? "PASS" : "FAIL")}");
+            Console.WriteLine();
         }
 
-        /// <summary>
-        /// 官方解法
-        /// 方法一：贪心 + 二分查找
-        /// https://leetcode.cn/problems/maximum-value-at-a-given-index-in-a-bounded-array/solution/you-jie-shu-zu-zhong-zhi-ding-xia-biao-c-aav4/
-        /// 
-        /// 有點納悶
-        /// 左邊界從一開始
-        /// mid算法 竟然還要 + 1 ?
-        /// 
-        /// 和以往的不同
-        /// 左邊界改成從0開始
-        /// mid改成 (right - left) / 2 + left 
-        /// 這組合會超時
-        /// 
-        /// 
-        /// </summary>
-        /// <param name="n"></param>
-        /// <param name="index"></param>
-        /// <param name="maxSum"></param>
-        /// <returns></returns>
+        int passedCount = cases.Count(caseResult => caseResult.Passed);
+        Console.WriteLine($"Summary: {passedCount}/{cases.Count} checks passed.");
 
-        public static int MaxValue(int n, int index, int maxSum)
+        if (passedCount != cases.Count)
         {
-            int left = 1, right = maxSum;
+            Environment.ExitCode = 1;
+        }
+    }
 
-            while (left < right)
+    /// <summary>
+    /// 對題目保證有效的 n、index 與 maxSum，以二分搜尋找出指定索引可配置的最大正整數。
+    /// 每次以最省總和的山形陣列判斷候選峰值是否可行，回傳不超過 maxSum 的最大峰值。
+    /// </summary>
+    public static int MaxValue(int n, int index, int maxSum)
+    {
+        int left = 1;
+        int right = maxSum;
+
+        while (left < right)
+        {
+            // 上取中點讓可行的 mid 能安全取代 left，避免只剩兩個候選時停滯。
+            int mid = left + (right - left + 1) / 2;
+
+            if (IsFeasible(mid, n, index, maxSum))
             {
-                int mid = (left + right + 1) / 2;
-
-                if (Valid(mid, n, index, maxSum))
-                {
-                    left = mid;
-                }
-                else
-                {
-                    right = mid - 1;
-                }
-            }
-
-            return left;
-        }
-
-
-        /// <summary>
-        /// 函数 valid用来判断当前的 nums[index] 对应的 numsSum 是否满足条件。
-        /// numsSumnumsSum 由三部分组成，nums[index]
-        /// ，nums[index] 左边的部分之和，和 nums[index] 右边的部分之和。
-        /// </summary>
-        /// <param name="mid"></param>
-        /// <param name="n"></param>
-        /// <param name="index"></param>
-        /// <param name="maxSum"></param>
-        /// <returns></returns>
-
-        public static bool Valid(int mid, int n, int index, int maxSum)
-        {
-            int left = index;
-            int right = n - index - 1;
-            return mid + Cal(mid, left) + Cal(mid, right) <= maxSum;
-
-        }
-
-
-        /// <summary>
-        /// cal 用来计算单边的元素和，需要考虑边界元素是否早已下降到 1 的情况。
-        /// </summary>
-        /// <param name="big"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
-
-        public static long Cal(int big, int length)
-        {
-            if (length + 1 < big)
-            {
-                int small = big - length;
-
-                return (long)(big - 1 + small) * length / 2;
+                left = mid;
             }
             else
             {
-                int ones = length - (big - 1);
-
-                return (long)big * (big - 1) / 2 + ones;
+                right = mid - 1;
             }
-
         }
 
-
+        return left;
     }
+
+    /// <summary>
+    /// 判斷題目保證有效的尺寸與預算下，指定 peak 能否放在 index；計算峰值與左右兩側
+    /// 逐步下降且最低為 1 的最小必要總和，若不超過 maxSum 則回傳 true。
+    /// </summary>
+    private static bool IsFeasible(int peak, int n, int index, int maxSum)
+    {
+        long minimumSum = peak
+            + CalculateSideSum(peak, index)
+            + CalculateSideSum(peak, n - index - 1);
+
+        return minimumSum <= maxSum;
+    }
+
+    /// <summary>
+    /// 計算峰值一側 length 個位置的最小總和；有效 peak 至少為 1、length 至少為 0。
+    /// 數值從 peak - 1 每格下降 1，降到 1 後以 1 補足，並以 long 回傳避免大數乘法溢位。
+    /// </summary>
+    private static long CalculateSideSum(int peak, int length)
+    {
+        int descendingLength = peak - 1;
+
+        if (length < descendingLength)
+        {
+            int smallestValue = peak - length;
+            return (long)(peak - 1 + smallestValue) * length / 2;
+        }
+
+        long descendingSum = (long)peak * descendingLength / 2;
+        int ones = length - descendingLength;
+        return descendingSum + ones;
+    }
+
+    private static CaseResult RunCase(string name, int n, int index, int maxSum, int expected)
+    {
+        int actual = MaxValue(n, index, maxSum);
+        return new CaseResult(name, $"n={n}, index={index}, maxSum={maxSum}", expected, actual, expected == actual);
+    }
+
+    private sealed record CaseResult(string Name, string Input, int Expected, int Actual, bool Passed);
 }
