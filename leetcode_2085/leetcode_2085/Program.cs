@@ -73,13 +73,21 @@ internal static class Program
             CaseResult result = results[index];
             Console.WriteLine($"Case: {index + 1} - {result.Name}");
             Console.WriteLine($"Input: {result.Input}");
-            Console.WriteLine(PrintCheck("CountWords result", result.Expected, result.Actual));
-            Console.WriteLine(PrintCheck("Input preserved", true, result.InputPreserved));
+            Console.WriteLine(PrintCheck("CountWords result", result.Expected, result.CountWordsActual));
+            Console.WriteLine(PrintCheck(
+                "CountWords input preserved",
+                true,
+                result.CountWordsInputPreserved));
+            Console.WriteLine(PrintCheck("CountWords2 result", result.Expected, result.CountWords2Actual));
+            Console.WriteLine(PrintCheck(
+                "CountWords2 input preserved",
+                true,
+                result.CountWords2InputPreserved));
             Console.WriteLine();
         }
 
         int passedCount = results.Sum(result => result.PassedCheckCount);
-        const int totalCheckCount = 18;
+        const int totalCheckCount = 36;
         Console.WriteLine($"Summary: {passedCount}/{totalCheckCount} checks passed.");
 
         if (passedCount != totalCheckCount)
@@ -96,16 +104,32 @@ internal static class Program
 
     private static CaseResult RunCase(TestCase testCase)
     {
-        string[] words1 = [.. testCase.Words1];
-        string[] words2 = [.. testCase.Words2];
-        string[] originalWords1 = [.. words1];
-        string[] originalWords2 = [.. words2];
-        int actual = CountWords(words1, words2);
-        bool inputPreserved =
-            words1.SequenceEqual(originalWords1) &&
-            words2.SequenceEqual(originalWords2);
+        string[] countWordsWords1 = [.. testCase.Words1];
+        string[] countWordsWords2 = [.. testCase.Words2];
+        string[] originalCountWordsWords1 = [.. countWordsWords1];
+        string[] originalCountWordsWords2 = [.. countWordsWords2];
+        int countWordsActual = CountWords(countWordsWords1, countWordsWords2);
+        bool countWordsInputPreserved =
+            countWordsWords1.SequenceEqual(originalCountWordsWords1) &&
+            countWordsWords2.SequenceEqual(originalCountWordsWords2);
 
-        return new CaseResult(testCase.Name, testCase.Input, testCase.Expected, actual, inputPreserved);
+        string[] countWords2Words1 = [.. testCase.Words1];
+        string[] countWords2Words2 = [.. testCase.Words2];
+        string[] originalCountWords2Words1 = [.. countWords2Words1];
+        string[] originalCountWords2Words2 = [.. countWords2Words2];
+        int countWords2Actual = CountWords2(countWords2Words1, countWords2Words2);
+        bool countWords2InputPreserved =
+            countWords2Words1.SequenceEqual(originalCountWords2Words1) &&
+            countWords2Words2.SequenceEqual(originalCountWords2Words2);
+
+        return new CaseResult(
+            testCase.Name,
+            testCase.Input,
+            testCase.Expected,
+            countWordsActual,
+            countWordsInputPreserved,
+            countWords2Actual,
+            countWords2InputPreserved);
     }
 
     /// <summary>
@@ -149,6 +173,71 @@ internal static class Program
         return commonWordCount;
     }
 
+    /// <summary>
+    /// 以單一狀態字典追蹤題目限制內第一個陣列出現過的字串，再用第二個陣列將候選狀態更新為
+    /// 兩邊各一次或第二邊重複。方法只讀取 <paramref name="words1"/> 與
+    /// <paramref name="words2"/>，不修改輸入或主控台狀態；回傳最終狀態為兩邊各一次的
+    /// 字串數量。時間複雜度為 O(n + m)，輔助空間為 O(u)，結果空間為 O(1)。
+    /// </summary>
+    /// <param name="words1">長度 1 至 1000，且元素為長度 1 至 30 小寫英文字串的第一個陣列。</param>
+    /// <param name="words2">長度 1 至 1000，且元素為長度 1 至 30 小寫英文字串的第二個陣列。</param>
+    /// <returns>在兩個陣列中都恰好出現一次的字串數量。</returns>
+    public static int CountWords2(string[] words1, string[] words2)
+    {
+        Dictionary<string, WordState> wordStates = [];
+
+        foreach (string word in words1)
+        {
+            if (!wordStates.TryGetValue(word, out WordState state))
+            {
+                wordStates[word] = WordState.SeenOnceInFirst;
+            }
+            else if (state == WordState.SeenOnceInFirst)
+            {
+                // 本題只需區分一次與多次；進入重複狀態後不必繼續累加精確次數。
+                wordStates[word] = WordState.RepeatedInFirst;
+            }
+        }
+
+        foreach (string word in words2)
+        {
+            if (!wordStates.TryGetValue(word, out WordState state))
+            {
+                // 未出現在第一個陣列的字串不可能成為答案，因此不為它配置字典項目。
+                continue;
+            }
+
+            if (state == WordState.SeenOnceInFirst)
+            {
+                wordStates[word] = WordState.SeenOnceInBoth;
+            }
+            else if (state == WordState.SeenOnceInBoth)
+            {
+                wordStates[word] = WordState.RepeatedInSecond;
+            }
+        }
+
+        int commonWordCount = 0;
+        foreach (WordState state in wordStates.Values)
+        {
+            // 只有 SeenOnceInBoth 同時代表兩邊都出現且各自恰好一次。
+            if (state == WordState.SeenOnceInBoth)
+            {
+                commonWordCount++;
+            }
+        }
+
+        return commonWordCount;
+    }
+
+    private enum WordState : byte
+    {
+        SeenOnceInFirst = 1,
+        RepeatedInFirst,
+        SeenOnceInBoth,
+        RepeatedInSecond
+    }
+
     private sealed record TestCase(
         string Name,
         string Input,
@@ -160,11 +249,15 @@ internal static class Program
         string Name,
         string Input,
         int Expected,
-        int Actual,
-        bool InputPreserved)
+        int CountWordsActual,
+        bool CountWordsInputPreserved,
+        int CountWords2Actual,
+        bool CountWords2InputPreserved)
     {
         public int PassedCheckCount =>
-            (Actual == Expected ? 1 : 0) +
-            (InputPreserved ? 1 : 0);
+            (CountWordsActual == Expected ? 1 : 0) +
+            (CountWordsInputPreserved ? 1 : 0) +
+            (CountWords2Actual == Expected ? 1 : 0) +
+            (CountWords2InputPreserved ? 1 : 0);
     }
 }
