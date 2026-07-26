@@ -44,31 +44,35 @@ class Program
     {
         Program solution = new();
         int passed = 0;
-        const int total = 4;
+        const int total = 8;
+        (string Name, int[] Nums, int[] Expected)[] testCases =
+        [
+            ("官方範例一", [1, 2, 3, 4, 5], [-3, -1, 1, 3, 5]),
+            ("官方範例二", [3, 2, 3, 4, 2], [-2, -1, 0, 2, 3]),
+            ("單一元素", [1], [1]),
+            ("全部重複", [5, 5, 5], [0, 0, 1])
+        ];
+        (string Name, Func<int[], int[]> Solver)[] solvers =
+        [
+            ("解法一", solution.DistinctDifferenceArray),
+            ("解法二", solution.DistinctDifferenceArray2)
+        ];
 
         Console.WriteLine("LeetCode 2670 - Find the Distinct Difference Array");
         Console.WriteLine();
 
-        passed += RunTestCase(
-            solution,
-            "官方範例一",
-            [1, 2, 3, 4, 5],
-            [-3, -1, 1, 3, 5]) ? 1 : 0;
-        passed += RunTestCase(
-            solution,
-            "官方範例二",
-            [3, 2, 3, 4, 2],
-            [-2, -1, 0, 2, 3]) ? 1 : 0;
-        passed += RunTestCase(
-            solution,
-            "單一元素",
-            [1],
-            [1]) ? 1 : 0;
-        passed += RunTestCase(
-            solution,
-            "全部重複",
-            [5, 5, 5],
-            [0, 0, 1]) ? 1 : 0;
+        foreach ((string solutionName, Func<int[], int[]> solver) in solvers)
+        {
+            foreach ((string caseName, int[] nums, int[] expected) in testCases)
+            {
+                passed += RunTestCase(
+                    solutionName,
+                    caseName,
+                    solver,
+                    nums,
+                    expected) ? 1 : 0;
+            }
+        }
 
         Console.WriteLine($"Result: {passed}/{total} passed.");
 
@@ -119,20 +123,84 @@ class Program
     }
 
     /// <summary>
-    /// 執行單一固定案例，呼叫相異元素數量差解法並比較完整結果陣列。
-    /// 輸入包含案例名稱、待測陣列與預期結果；輸出案例明細並回傳是否通過。
+    /// 使用固定大小頻率陣列，同步維護前綴與後綴的相異元素數量。
+    /// <para>
+    /// 先統計整個陣列作為初始後綴，再由左向右將目前元素從後綴移至前綴；
+    /// 每一步直接以兩側相異元素計數相減，不需要 HashSet 或長度為 n 的後綴陣列。
+    /// </para>
     /// </summary>
-    /// <param name="solution">提供 <see cref="DistinctDifferenceArray"/> 解法的物件。</param>
-    /// <param name="name">顯示於主控台的案例名稱。</param>
+    /// <param name="nums">
+    /// 長度介於 1 到 50 的整數陣列，且每個元素介於 1 到 50。
+    /// </param>
+    /// <returns>
+    /// 與 <paramref name="nums"/> 等長的陣列；第 <c>i</c> 個值為
+    /// <c>nums[0..i]</c> 的相異元素數量減去 <c>nums[i+1..n-1]</c> 的相異元素數量。
+    /// </returns>
+    public int[] DistinctDifferenceArray2(int[] nums)
+    {
+        const int maxValue = 50;
+        int[] suffixFrequency = new int[maxValue + 1];
+        int suffixDistinct = 0;
+
+        // 先把所有元素視為後綴；某個值首次出現時，後綴相異元素數量增加。
+        foreach (int num in nums)
+        {
+            if (suffixFrequency[num] == 0)
+            {
+                suffixDistinct++;
+            }
+
+            suffixFrequency[num]++;
+        }
+
+        bool[] prefixSeen = new bool[maxValue + 1];
+        int prefixDistinct = 0;
+        int[] result = new int[nums.Length];
+
+        for (int i = 0; i < nums.Length; i++)
+        {
+            int num = nums[i];
+
+            // 將 nums[i] 從後綴移至前綴；只有頻率歸零或前綴首次出現時，兩側相異數量才會改變。
+            suffixFrequency[num]--;
+            if (suffixFrequency[num] == 0)
+            {
+                suffixDistinct--;
+            }
+
+            if (!prefixSeen[num])
+            {
+                prefixSeen[num] = true;
+                prefixDistinct++;
+            }
+
+            result[i] = prefixDistinct - suffixDistinct;
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// 執行單一固定案例，呼叫相異元素數量差解法並比較完整結果陣列。
+    /// 輸入包含解法、案例名稱、待測陣列與預期結果；輸出案例明細並回傳是否通過。
+    /// </summary>
+    /// <param name="solutionName">顯示於主控台的解法名稱。</param>
+    /// <param name="caseName">顯示於主控台的案例名稱。</param>
+    /// <param name="solver">要執行的相異元素數量差解法。</param>
     /// <param name="nums">傳入解法的測試陣列。</param>
     /// <param name="expected">預期的完整相異元素數量差陣列。</param>
     /// <returns>實際結果與預期結果逐項相同時為 <see langword="true"/>，否則為 <see langword="false"/>。</returns>
-    private static bool RunTestCase(Program solution, string name, int[] nums, int[] expected)
+    private static bool RunTestCase(
+        string solutionName,
+        string caseName,
+        Func<int[], int[]> solver,
+        int[] nums,
+        int[] expected)
     {
-        int[] actual = solution.DistinctDifferenceArray(nums);
+        int[] actual = solver((int[])nums.Clone());
         bool passed = actual.SequenceEqual(expected);
 
-        Console.WriteLine($"[{(passed ? "PASS" : "FAIL")}] {name}");
+        Console.WriteLine($"[{(passed ? "PASS" : "FAIL")}] {solutionName} - {caseName}");
         Console.WriteLine($"  Input:    [{string.Join(", ", nums)}]");
         Console.WriteLine($"  Expected: [{string.Join(", ", expected)}]");
         Console.WriteLine($"  Actual:   [{string.Join(", ", actual)}]");
