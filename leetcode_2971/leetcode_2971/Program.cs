@@ -1,69 +1,84 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+namespace leetcode_2971;
 
-namespace leetcode_2971
+internal static class Program
 {
-    internal class Program
+    private static int s_checks;
+    private static int s_passed;
+
+    /// <summary>
+    /// 2971. Find Polygon With the Largest Perimeter
+    /// https://leetcode.com/problems/find-polygon-with-the-largest-perimeter/
+    /// 2971. 找到最大周長的多邊形
+    /// https://leetcode.cn/problems/find-polygon-with-the-largest-perimeter/
+    /// Given an array of positive integers, return the largest perimeter of a polygon that can be formed from its values, or -1 if no polygon is possible.
+    /// 給定一個正整數陣列，回傳可由其中邊長組成之多邊形的最大周長；若無法組成多邊形則回傳 -1。
+    /// </summary>
+    private static void Main()
     {
-        /// <summary>
-        /// 2971. Find Polygon With the Largest Perimeter
-        /// https://leetcode.com/problems/find-polygon-with-the-largest-perimeter/description/?envType=daily-question&envId=2024-02-15
-        /// 2971. 找到最大周长的多边形
-        /// https://leetcode.cn/problems/find-polygon-with-the-largest-perimeter/description/
-        /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        Console.WriteLine("LeetCode 2971 acceptance harness");
+        Console.WriteLine();
+
+        RunCase("Official example 1", [5, 5, 5], 15);
+        RunCase("Official example 2", [1, 12, 1, 2, 5, 50, 3], 12);
+        RunCase("Official example 3", [5, 5, 50], -1);
+        RunCase("Minimum valid input", [1, 1, 1], 3);
+        RunCase("Strict inequality", [1, 1, 2], -1);
+        RunCase("Complete valid prefix", [1, 2, 3, 4, 5], 15);
+        RunCase("Three-side regression", [2, 3, 3], 8);
+        RunCase("64-bit perimeter", [1_000_000_000, 1_000_000_000, 1_000_000_000], 3_000_000_000);
+        RunCase(
+            "Upper-bound spot check",
+            Enumerable.Repeat(1_000_000_000, 100_000).ToArray(),
+            100_000_000_000_000,
+            "[1_000_000_000 repeated 100000 times]");
+
+        Console.WriteLine();
+        Console.WriteLine($"Summary: {s_passed}/{s_checks} checks passed.");
+
+        if (s_passed != s_checks)
         {
-            int[] input = { 1, 12, 1, 2, 5, 50, 3 };
-            Console.WriteLine(LargestPerimeter(input));
-            Console.ReadKey();
+            Environment.ExitCode = 1;
         }
+    }
 
+    /// <summary>
+    /// 將符合 LeetCode 有效輸入契約的正整數邊長陣列就地排序，使用前綴和判斷可形成多邊形的最大前綴，並回傳最大周長；若不存在有效多邊形則回傳 -1。
+    /// </summary>
+    public static long LargestPerimeter(int[] nums)
+    {
+        long largestPerimeter = -1;
+        long prefixSum = 0;
 
-        /// <summary>
-        /// https://leetcode.cn/problems/find-polygon-with-the-largest-perimeter/solutions/2578019/2971-zhao-dao-zui-da-zhou-chang-de-duo-b-fnpe/
-        /// 
-        /// 多边形 指的是一个至少有 3 条边的封闭二维图形。多边形的 最长边 一定 小于 所有其他边长度之和。
-        /// 
-        /// 如果遍历到的前缀元素個數小於 3，
-        /// 则一定不满足前缀和大於该前缀的最大元素的两倍，
-        /// 只有在遍历到的前缀元素個數大於等於 3 的情况下才可能满足遍历到的前缀的所有元素可以构造多边形。
-        /// 
-        /// 這解法重點在於理解 
-        /// 要滿足
-        /// 1. 三條邊
-        /// 2. 前綴和 取兩倍
-        /// 
-        /// sum: 前綴和 <前n個數量加總>
-        /// num: 當下最長邊
-        /// maxperimeter: 最大週長(邊總和)
-        /// </summary>
-        /// <param name="nums"></param>
-        /// <returns></returns>
-        public static long LargestPerimeter(int[] nums)
+        Array.Sort(nums);
+
+        foreach (int edgeLength in nums)
         {
-            // 題目說長度不會有負數, 故拿負數來當初使值
-            long maxperimeter = -1;
-            long sum = 0;
+            prefixSum += edgeLength;
 
-            Array.Sort(nums);
-            
-            foreach(int num in nums) 
+            // 排序後目前邊長是前綴中的最長邊；只有其他邊總和嚴格大於它時才能形成多邊形。
+            if (prefixSum > 2L * edgeLength)
             {
-                sum += num;
-
-                // 多邊形的 最長邊 一定 小於 所有其他邊長度之和
-                if (sum > num * 2)
-                {
-                    maxperimeter = sum;
-                }
+                largestPerimeter = prefixSum;
             }
-
-            return maxperimeter;
-
         }
+
+        return largestPerimeter;
+    }
+
+    private static void RunCase(string name, int[] nums, long expected, string? inputDescription = null)
+    {
+        string input = inputDescription ?? $"[{string.Join(", ", nums)}]";
+        long actual = LargestPerimeter(nums);
+        bool passed = expected == actual;
+
+        s_checks++;
+
+        if (passed)
+        {
+            s_passed++;
+        }
+
+        Console.WriteLine(
+            $"{(passed ? "PASS" : "FAIL")} | {name} | Input: {input} | Expected: {expected} | Actual: {actual}");
     }
 }
