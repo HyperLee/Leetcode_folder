@@ -101,16 +101,20 @@ internal static class Program
             CaseResult result = results[index];
             Console.WriteLine($"Case: {index + 1} - {result.Name}");
             Console.WriteLine($"Input: {result.Input}");
-            Console.WriteLine(PrintCheck("Result list count", 2, result.ResultListCount));
-            Console.WriteLine(PrintCheck("nums1-only values", true, result.FirstOnlyMatches));
-            Console.WriteLine(PrintCheck("nums2-only values", true, result.SecondOnlyMatches));
-            Console.WriteLine(PrintCheck("nums1 input preserved", true, result.Nums1Preserved));
-            Console.WriteLine(PrintCheck("nums2 input preserved", true, result.Nums2Preserved));
+            foreach (SolutionResult solution in result.Solutions)
+            {
+                Console.WriteLine(PrintCheck($"{solution.Name} result list count", 2, solution.ResultListCount));
+                Console.WriteLine(PrintCheck($"{solution.Name} nums1-only values", true, solution.FirstOnlyMatches));
+                Console.WriteLine(PrintCheck($"{solution.Name} nums2-only values", true, solution.SecondOnlyMatches));
+                Console.WriteLine(PrintCheck($"{solution.Name} nums1 input preserved", true, solution.Nums1Preserved));
+                Console.WriteLine(PrintCheck($"{solution.Name} nums2 input preserved", true, solution.Nums2Preserved));
+            }
+
             Console.WriteLine();
         }
 
         int passedCount = results.Sum(result => result.PassedCheckCount);
-        const int totalCheckCount = 40;
+        const int totalCheckCount = 80;
         Console.WriteLine($"Summary: {passedCount}/{totalCheckCount} checks passed.");
 
         if (passedCount != totalCheckCount)
@@ -143,6 +147,56 @@ internal static class Program
         return [firstOnly.ToList(), secondOnly.ToList()];
     }
 
+    /// <summary>
+    /// 對題目保證的有效輸入 <paramref name="nums1"/> 與 <paramref name="nums2"/>，
+    /// 以 2,001 格的位元狀態表記錄每個值出現在哪一側，再回傳只出現在第一個陣列與只出現在
+    /// 第二個陣列中的相異整數。方法不修改輸入且不輸出主控台；目前掃描會產生升冪結果，
+    /// 但公開契約仍允許任意順序。時間複雜度為 O(n + m + 2,001)，輔助空間為 O(2,001)，
+    /// 結果空間為 O(n + m)。
+    /// </summary>
+    /// <param name="nums1">長度 1 至 1,000、元素介於 -1,000 至 1,000 的第一個整數陣列。</param>
+    /// <param name="nums2">長度 1 至 1,000、元素介於 -1,000 至 1,000 的第二個整數陣列。</param>
+    /// <returns>
+    /// 長度為 2 的列表；第一個列表是只在 <paramref name="nums1"/> 出現的相異值，
+    /// 第二個列表是只在 <paramref name="nums2"/> 出現的相異值。
+    /// </returns>
+    public static IList<IList<int>> FindDifference2(int[] nums1, int[] nums2)
+    {
+        const int valueOffset = 1000;
+        const int valueCount = 2001;
+        const byte seenInNums1 = 1;
+        const byte seenInNums2 = 2;
+        byte[] states = new byte[valueCount];
+
+        // 每格的兩個 bit 分別代表兩側；重複值只會重設同一 bit，狀態 3 則代表兩側皆出現。
+        foreach (int value in nums1)
+        {
+            states[value + valueOffset] |= seenInNums1;
+        }
+
+        foreach (int value in nums2)
+        {
+            states[value + valueOffset] |= seenInNums2;
+        }
+
+        List<int> firstOnly = [];
+        List<int> secondOnly = [];
+        for (int index = 0; index < states.Length; index++)
+        {
+            // 只收集狀態 1 或 2；依索引掃描也讓目前實作自然產生升冪結果。
+            if (states[index] == seenInNums1)
+            {
+                firstOnly.Add(index - valueOffset);
+            }
+            else if (states[index] == seenInNums2)
+            {
+                secondOnly.Add(index - valueOffset);
+            }
+        }
+
+        return [firstOnly, secondOnly];
+    }
+
     private static string PrintCheck<T>(string checkName, T expected, T actual)
     {
         string status = EqualityComparer<T>.Default.Equals(expected, actual) ? "PASS" : "FAIL";
@@ -151,19 +205,32 @@ internal static class Program
 
     private static CaseResult RunCase(TestCase testCase)
     {
+        return new CaseResult(
+            testCase.Name,
+            testCase.Input,
+            [
+                RunSolution(nameof(FindDifference), FindDifference, testCase),
+                RunSolution(nameof(FindDifference2), FindDifference2, testCase)
+            ]);
+    }
+
+    private static SolutionResult RunSolution(
+        string name,
+        Func<int[], int[], IList<IList<int>>> solution,
+        TestCase testCase)
+    {
         int[] nums1Input = [.. testCase.Nums1];
         int[] nums2Input = [.. testCase.Nums2];
         int[] nums1Original = [.. nums1Input];
         int[] nums2Original = [.. nums2Input];
 
-        IList<IList<int>>? actual = FindDifference(nums1Input, nums2Input);
+        IList<IList<int>>? actual = solution(nums1Input, nums2Input);
         int resultListCount = actual?.Count ?? 0;
         IList<int>? firstOnly = resultListCount > 0 ? actual![0] : null;
         IList<int>? secondOnly = resultListCount > 1 ? actual![1] : null;
 
-        return new CaseResult(
-            testCase.Name,
-            testCase.Input,
+        return new SolutionResult(
+            name,
             resultListCount,
             ValuesMatch(firstOnly, testCase.ExpectedFirstOnly),
             ValuesMatch(secondOnly, testCase.ExpectedSecondOnly),
@@ -188,6 +255,13 @@ internal static class Program
     private sealed record CaseResult(
         string Name,
         string Input,
+        SolutionResult[] Solutions)
+    {
+        public int PassedCheckCount => Solutions.Sum(solution => solution.PassedCheckCount);
+    }
+
+    private sealed record SolutionResult(
+        string Name,
         int ResultListCount,
         bool FirstOnlyMatches,
         bool SecondOnlyMatches,
