@@ -30,9 +30,20 @@ internal class Program
         int passed = 0;
         foreach (TestCase testCase in testCases)
         {
-            int[] originalNumbers = [.. testCase.Numbers];
-            int actual = MaxProduct(testCase.Numbers);
-            bool isPassed = actual == testCase.Expected && testCase.Numbers.SequenceEqual(originalNumbers);
+            int[] maxProductInput = [.. testCase.Numbers];
+            int[] maxProduct2Input = [.. testCase.Numbers];
+            int[] maxProduct3Input = [.. testCase.Numbers];
+
+            int maxProductActual = MaxProduct(maxProductInput);
+            int maxProduct2Actual = MaxProduct2(maxProduct2Input);
+            int maxProduct3Actual = MaxProduct3(maxProduct3Input);
+            bool inputsPreserved = maxProductInput.SequenceEqual(testCase.Numbers)
+                && maxProduct2Input.SequenceEqual(testCase.Numbers)
+                && maxProduct3Input.SequenceEqual(testCase.Numbers);
+            bool isPassed = maxProductActual == testCase.Expected
+                && maxProduct2Actual == testCase.Expected
+                && maxProduct3Actual == testCase.Expected
+                && inputsPreserved;
             if (isPassed)
             {
                 passed++;
@@ -41,7 +52,10 @@ internal class Program
             Console.WriteLine($"Case: {testCase.Name}");
             Console.WriteLine($"Input: {testCase.Input}");
             Console.WriteLine($"Expected: {testCase.Expected}");
-            Console.WriteLine($"Actual: {actual}");
+            Console.WriteLine($"MaxProduct: {maxProductActual}");
+            Console.WriteLine($"MaxProduct2: {maxProduct2Actual}");
+            Console.WriteLine($"MaxProduct3: {maxProduct3Actual}");
+            Console.WriteLine($"Input preserved: {inputsPreserved}");
             Console.WriteLine($"Result: {(isPassed ? "PASS" : "FAIL")}");
             Console.WriteLine();
         }
@@ -54,8 +68,9 @@ internal class Program
     }
 
     /// <summary>
-    /// 在 nums 長度至少為二且每個值皆符合題目限制的有效輸入下，單趟掃描維護最大與次大值，
-    /// 以計算兩個元素依題意各減一後的最大乘積；回傳該最大乘積。
+    /// 計算陣列中兩個不同元素各減一後的最大乘積。單趟掃描維護目前最大值與次大值，
+    /// 適用於題目定義的有效輸入；不修改 <paramref name="nums"/>，並回傳最大乘積。
+    /// 時間複雜度為 O(n)，結果與輔助空間皆為 O(1)。
     /// </summary>
     /// <param name="nums">長度介於 2 至 500，且元素介於 1 至 1000 的有效整數陣列。</param>
     /// <returns>兩個不同元素各減一後可得到的最大乘積。</returns>
@@ -79,6 +94,44 @@ internal class Program
         }
 
         return (largest - 1) * (secondLargest - 1);
+    }
+
+    /// <summary>
+    /// 計算陣列中兩個不同元素各減一後的最大乘積。先複製並排序陣列，再取最大的兩個值，
+    /// 適用於題目定義的有效輸入；不修改 <paramref name="nums"/>，並回傳最大乘積。
+    /// 時間複雜度為 O(n log n)，結果空間為 O(1)，輔助空間為 O(n)。
+    /// </summary>
+    /// <param name="nums">長度介於 2 至 500，且元素介於 1 至 1000 的有效整數陣列。</param>
+    /// <returns>兩個不同元素各減一後可得到的最大乘積。</returns>
+    public static int MaxProduct2(int[] nums)
+    {
+        // 排序副本即可取得最大的兩個值，同時保留呼叫端的原始陣列。
+        int[] sortedNumbers = [.. nums];
+        Array.Sort(sortedNumbers);
+
+        return (sortedNumbers[^1] - 1) * (sortedNumbers[^2] - 1);
+    }
+
+    /// <summary>
+    /// 計算陣列中兩個不同元素各減一後的最大乘積。依序枚舉右側元素，同時維護其左側
+    /// 已出現的最大值與目前最佳乘積，適用於題目定義的有效輸入；不修改
+    /// <paramref name="nums"/>，並回傳最大乘積。時間複雜度為 O(n)，結果與輔助空間皆為 O(1)。
+    /// </summary>
+    /// <param name="nums">長度介於 2 至 500，且元素介於 1 至 1000 的有效整數陣列。</param>
+    /// <returns>兩個不同元素各減一後可得到的最大乘積。</returns>
+    public static int MaxProduct3(int[] nums)
+    {
+        int answer = 0;
+        int largestOnLeft = 0;
+
+        foreach (int number in nums)
+        {
+            // 先用左側最大值計算候選答案，再納入目前值，確保選到的是兩個不同索引。
+            answer = Math.Max(answer, (largestOnLeft - 1) * (number - 1));
+            largestOnLeft = Math.Max(largestOnLeft, number);
+        }
+
+        return answer;
     }
 
     private sealed record TestCase(string Name, string Input, int[] Numbers, int Expected);
