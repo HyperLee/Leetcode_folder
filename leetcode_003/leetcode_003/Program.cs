@@ -7,10 +7,17 @@ namespace leetcode_003
         /// <summary>
         /// 3. Longest Substring Without Repeating Characters
         /// https://leetcode.com/problems/longest-substring-without-repeating-characters/
-        /// 3. 无重复字符的最长子串
+        /// 3. 無重複字元的最長子字串
         /// https://leetcode.cn/problems/longest-substring-without-repeating-characters/
+        ///
+        /// English:
+        /// Given a string s, find the length of the longest substring without duplicate characters.
+        ///
+        /// 繁體中文：
+        /// 給定一個字串 s，找出其中不含重複字元的最長子字串之長度。
+        ///
         /// 滑動視窗 解題觀念
-        /// 
+        ///
         /// 類似題目:
         /// leetcode 3, 30, 76, 159, 209, 239, 567, 632, 727
         /// </summary>
