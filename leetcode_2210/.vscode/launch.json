@@ -5,7 +5,7 @@
       "type": "coreclr",
       "request": "launch",
       "name": "Launch .NET Console App",
-      "program": "${workspaceFolder}/leetcode_2210/bin/Debug/net8.0/leetcode_2210.dll",
+      "program": "${workspaceFolder}/leetcode_2210/bin/Debug/net10.0/leetcode_2210.dll",
       "preLaunchTask": "build"
     }
   ]

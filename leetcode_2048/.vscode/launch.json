@@ -5,7 +5,7 @@
       "type": "coreclr",
       "request": "launch",
       "name": "Launch Program",
-      "program": "${workspaceFolder}/leetcode_2048/bin/Debug/net8.0/leetcode_2048.dll",
+      "program": "${workspaceFolder}/leetcode_2048/bin/Debug/net10.0/leetcode_2048.dll",
       "cwd": "${workspaceFolder}/leetcode_2048",
       "preLaunchTask": "build"
     }

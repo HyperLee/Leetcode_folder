@@ -5,18 +5,11 @@
       "type": "coreclr",
       "request": "launch",
       "name": "Launch .NET Core Console App",
-      "program": "${workspaceFolder}/leetcode_1957/bin/Debug/net8.0/${input:executableName}.dll",
+      "program": "${workspaceFolder}/leetcode_1957/bin/Debug/net10.0/leetcode_1957.dll",
       "args": [],
       "cwd": "${workspaceFolder}/leetcode_1957",
       "stopAtEntry": true,
       "preLaunchTask": "build"
-    }
-  ],
-  "inputs": [
-    {
-      "id": "executableName",
-      "type": "promptString",
-      "description": "leetcode_1957"
     }
   ]
 }

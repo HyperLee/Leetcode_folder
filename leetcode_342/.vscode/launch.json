@@ -5,7 +5,7 @@
       "type": "coreclr",
       "request": "launch",
       "name": "Launch leetcode_342",
-      "program": "${workspaceFolder}/leetcode_342/bin/Debug/net8.0/leetcode_342.dll",
+      "program": "${workspaceFolder}/leetcode_342/bin/Debug/net10.0/leetcode_342.dll",
       "cwd": "${workspaceFolder}/leetcode_342",
       "preLaunchTask": "build",
       "console": "integratedTerminal",

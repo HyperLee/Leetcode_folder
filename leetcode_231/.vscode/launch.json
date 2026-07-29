@@ -5,7 +5,7 @@
       "type": "coreclr",
       "request": "launch",
       "name": "Debug leetcode_231",
-      "program": "${workspaceFolder}/leetcode_231/bin/Debug/net8.0/leetcode_231.dll",
+      "program": "${workspaceFolder}/leetcode_231/bin/Debug/net10.0/leetcode_231.dll",
       "cwd": "${workspaceFolder}/leetcode_231",
       "stopAtEntry": false,
       "console": "internalConsole",

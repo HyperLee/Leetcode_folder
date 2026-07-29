@@ -6,7 +6,7 @@
       "request": "launch",
       "name": "Launch leetcode_165 (Debug)",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/leetcode_165/bin/Debug/net8.0/leetcode_165.dll",
+      "program": "${workspaceFolder}/leetcode_165/bin/Debug/net10.0/leetcode_165.dll",
       "args": [],
       "cwd": "${workspaceFolder}/leetcode_165",
       "console": "internalConsole",

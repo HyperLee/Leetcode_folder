@@ -6,7 +6,7 @@
       "request": "launch",
       "name": ".NET Launch (console)",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/leetcode_961/bin/Debug/net8.0/leetcode_961.dll",
+      "program": "${workspaceFolder}/leetcode_961/bin/Debug/net10.0/leetcode_961.dll",
       "args": [],
       "cwd": "${workspaceFolder}/leetcode_961",
       "stopAtEntry": false

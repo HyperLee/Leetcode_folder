@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run leetcode_994",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build leetcode_994",
+      "program": "${workspaceFolder}/leetcode_994/bin/Debug/net10.0/leetcode_994.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_994",
+      "stopAtEntry": false,
+      "console": "integratedTerminal"
+    }
+  ]
+}

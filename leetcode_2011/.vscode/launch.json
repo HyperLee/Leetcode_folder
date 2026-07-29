@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/leetcode_2011/bin/Debug/net8.0/leetcode_2011.dll",
+      "program": "${workspaceFolder}/leetcode_2011/bin/Debug/net10.0/leetcode_2011.dll",
       "args": [],
       "cwd": "${workspaceFolder}/leetcode_2011",
       "console": "integratedTerminal",

@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/leetcode_3190/bin/Debug/net8.0/leetcode_3190.dll",
+      "program": "${workspaceFolder}/leetcode_3190/bin/Debug/net10.0/leetcode_3190.dll",
       "args": [],
       "cwd": "${workspaceFolder}/leetcode_3190",
       "stopAtEntry": false,

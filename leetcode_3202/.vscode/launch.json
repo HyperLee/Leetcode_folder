@@ -1,19 +1,12 @@
 {
-	"version": "0.2.0",
-	"configurations": [
-		{
-			"type": "coreclr",
-			"request": "launch",
-			"name": "Launch .NET Core Console App",
-			"program": "${workspaceFolder}/leetcode_3202/bin/Debug/net8.0/${input:executableName}.dll",
-			"preLaunchTask": "build"
-		}
-	],
-	"inputs": [
-		{
-			"id": "executableName",
-			"type": "promptString",
-			"description": "leetcode_3202"
-		}
-	]
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "coreclr",
+      "request": "launch",
+      "name": "Launch .NET Core Console App",
+      "program": "${workspaceFolder}/leetcode_3202/bin/Debug/net10.0/leetcode_3202.dll",
+      "preLaunchTask": "build"
+    }
+  ]
 }

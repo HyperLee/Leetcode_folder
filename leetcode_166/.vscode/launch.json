@@ -6,7 +6,7 @@
       "request": "launch",
       "name": "Launch leetcode_166 (no prompt)",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/leetcode_166/bin/Debug/net8.0/leetcode_166.dll",
+      "program": "${workspaceFolder}/leetcode_166/bin/Debug/net10.0/leetcode_166.dll",
       "args": [],
       "cwd": "${workspaceFolder}/leetcode_166",
       "stopAtEntry": false,

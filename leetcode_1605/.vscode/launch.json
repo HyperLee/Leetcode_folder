@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run leetcode_1605",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build leetcode_1605",
+      "program": "${workspaceFolder}/leetode_1605/bin/Debug/net10.0/leetode_1605.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetode_1605",
+      "stopAtEntry": false,
+      "console": "integratedTerminal"
+    }
+  ]
+}

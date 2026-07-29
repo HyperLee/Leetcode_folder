@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "build",
-      "program": "${workspaceFolder}/leetcode_224/bin/Debug/net9.0/leetcode_224.dll",
+      "program": "${workspaceFolder}/leetcode_224/bin/Debug/net10.0/leetcode_224.dll",
       "cwd": "${workspaceFolder}/leetcode_224",
       "console": "integratedTerminal",
       "stopAtEntry": false

@@ -6,7 +6,7 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet build",
-      "program": "${workspaceFolder}/leetcode_2154/bin/Debug/net8.0/leetcode_2154.dll",
+      "program": "${workspaceFolder}/leetcode_2154/bin/Debug/net10.0/leetcode_2154.dll",
       "args": [],
       "cwd": "${workspaceFolder}/leetcode_2154",
       "console": "integratedTerminal",
@@ -18,8 +18,10 @@
       "type": "coreclr",
       "request": "launch",
       "preLaunchTask": "dotnet build",
-      "program": "${workspaceFolder}/leetcode_2154/bin/Debug/net8.0/leetcode_2154.dll",
-      "args": ["DefaultName"],
+      "program": "${workspaceFolder}/leetcode_2154/bin/Debug/net10.0/leetcode_2154.dll",
+      "args": [
+        "DefaultName"
+      ],
       "cwd": "${workspaceFolder}/leetcode_2154",
       "console": "integratedTerminal",
       "stopAtEntry": false,
