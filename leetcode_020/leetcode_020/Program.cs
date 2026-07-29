@@ -11,14 +11,66 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string a = "";
-            a = "()[]{}";
+            (string Name, string Input, bool Expected)[] testCases =
+            {
+                ("空字串", "", true),
+                ("最小有效配對", "()", true),
+                ("多種類連續配對", "()[]{}", true),
+                ("多層巢狀配對", "{[()]}", true),
+                ("左右括號種類不同", "(]", false),
+                ("關閉順序錯誤", "([)]", false),
+                ("仍有未配對左括號", "((", false),
+                ("右括號先出現", "][", false)
+            };
 
-            //bool r = false;
-            //r = IsValid(a);
-            Console.WriteLine("result:" + IsValid(a));
+            int passedChecks = 0;
+            foreach ((string name, string input, bool expected) in testCases)
+            {
+                (
+                    bool firstActual,
+                    bool firstPassed,
+                    bool secondActual,
+                    bool secondPassed
+                ) = RunCase(input, expected);
+
+                Console.WriteLine($"測試案例：{name}");
+                Console.WriteLine($"輸入：\"{input}\"");
+                Console.WriteLine($"預期：{expected}");
+                Console.WriteLine($"解法一實際：{firstActual}，結果：{(firstPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine($"解法二實際：{secondActual}，結果：{(secondPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+
+                passedChecks += firstPassed ? 1 : 0;
+                passedChecks += secondPassed ? 1 : 0;
+            }
+
+            Console.WriteLine($"總結：{passedChecks}/{testCases.Length * 2} 項檢查通過");
         }
 
+        /// <summary>
+        /// 使用兩種 Stack 解法執行同一筆有效括號案例，並分別比較實際結果與預期值。
+        /// 輸入必須只包含三種左右括號或為空字串；回傳兩種解法的結果與是否通過檢查。
+        /// </summary>
+        /// <param name="input">要驗證的括號字串。</param>
+        /// <param name="expected">此案例預期是否為有效括號字串。</param>
+        /// <returns>兩種解法的實際結果，以及各自是否符合預期。</returns>
+        private static (
+            bool FirstActual,
+            bool FirstPassed,
+            bool SecondActual,
+            bool SecondPassed
+        ) RunCase(string input, bool expected)
+        {
+            bool firstActual = IsValid(input);
+            bool secondActual = IsValid2(input);
+
+            return (
+                firstActual,
+                firstActual == expected,
+                secondActual,
+                secondActual == expected
+            );
+        }
 
         /// <summary>
         /// https://leetcode.com/problems/valid-parentheses/
@@ -53,10 +105,9 @@
         /// <returns></returns>
         public static bool IsValid(string s)
         {
-            // 字串取每個單字宣告為 char
-            Stack<char> _stack = new Stack<char>();
+            Stack<char> expectedClosings = new Stack<char>();
 
-            // 長度需要是 2 的倍數 因為括號是兩個為一對. 必須是偶數
+            // 每一組合法括號都包含兩個字元，奇數長度不可能完全配對。
             if (s.Length % 2 != 0)
             {
                 return false;
@@ -64,46 +115,85 @@
 
             for (int i = 0; i < s.Length; i++)
             {
-                //Console.WriteLine("string s[i]: " + s[i]);
-
                 if (s[i] == '(')
                 {
-                    _stack.Push(')');
+                    expectedClosings.Push(')');
                 }
                 else if (s[i] == '[')
                 {
-                    _stack.Push(']');
+                    expectedClosings.Push(']');
                 }
                 else if (s[i] == '{')
                 {
-                    _stack.Push('}');
+                    expectedClosings.Push('}');
                 }
-                else if (_stack.Count == 0)
+                else if (expectedClosings.Count == 0)
                 {
-                    // 剩餘左括號沒有可以配對
+                    // 尚未遇到左括號便出現右括號，沒有可完成的配對。
                     return false;
                 }
-                else if (s[i] == _stack.Peek())
+                else if (s[i] == expectedClosings.Peek())
                 {
-                    // 先前遇到一個左括號, 就push 一個右括號進入stack
-                    // 現在遇到右括號與stack裡面相同, 就pop出去
-                    _stack.Pop();
-                    //Console.WriteLine("Loop i:" + i + ", pop _stack:" + s[i]);
+                    // Stack 頂端是最近一個左括號所期待的右括號，符合後才能完成配對。
+                    expectedClosings.Pop();
                 }
                 else
                 {
                     return false;
                 }
-
             }
 
-            // 為 0 代表全部括號都是成對的且方向與順序都沒問題
-            if (_stack.Count == 0)
+            // Stack 為空代表每一個左括號都已依正確種類與順序閉合。
+            return expectedClosings.Count == 0;
+        }
+
+        /// <summary>
+        /// 以 Stack 保存尚未配對的左括號，遇到右括號時核對最近的左括號種類。
+        /// 輸入必須只包含三種左右括號或為空字串；全部括號種類與順序都正確時回傳 <see langword="true"/>。
+        /// </summary>
+        /// <param name="s">要驗證的括號字串。</param>
+        /// <returns>字串中的所有括號是否皆以正確種類與順序完成配對。</returns>
+        public static bool IsValid2(string s)
+        {
+            Stack<char> openings = new Stack<char>();
+
+            // 每一組合法括號都包含兩個字元，奇數長度不可能完全配對。
+            if (s.Length % 2 != 0)
             {
-                return true;
+                return false;
             }
 
-            return false;
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (s[i] == '(' || s[i] == '[' || s[i] == '{')
+                {
+                    openings.Push(s[i]);
+                    continue;
+                }
+
+                // 右括號必須和最近尚未配對的左括號形成同種類的一組。
+                if (openings.Count == 0 || !IsMatchingPair(openings.Pop(), s[i]))
+                {
+                    return false;
+                }
+            }
+
+            // Stack 為空代表沒有遺留任何尚未配對的左括號。
+            return openings.Count == 0;
+        }
+
+        /// <summary>
+        /// 判斷指定的左括號與右括號是否屬於同一組，供保存左括號的解法集中核對種類。
+        /// 輸入應為題目允許的括號字元；只有 <c>()</c>、<c>[]</c> 或 <c>{}</c> 會回傳 <see langword="true"/>。
+        /// </summary>
+        /// <param name="opening">較早出現且等待配對的左括號。</param>
+        /// <param name="closing">目前要核對的右括號。</param>
+        /// <returns>兩個括號是否為相同種類的一組。</returns>
+        private static bool IsMatchingPair(char opening, char closing)
+        {
+            return (opening == '(' && closing == ')')
+                || (opening == '[' && closing == ']')
+                || (opening == '{' && closing == '}');
         }
     }
 }
