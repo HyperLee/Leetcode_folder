@@ -38,82 +38,144 @@ class Program
     static void Main(string[] args)
     {
         Program program = new Program();
-        
-        // 測試用例
-        string[] testCases = {
-            "12",       // 可以解碼為 "AB"(1 2) 或 "L"(12)，應返回 2
-            "226",      // 可以解碼為 "BZ"(2 26)、"VF"(22 6) 或 "BBF"(2 2 6)，應返回 3
-            "06",       // 無法解碼，應返回 0
-            "10",       // 只能解碼為 "J"，應返回 1
-            "2101",     // 可以解碼為 "BAA"(2 10 1) 或 "UA"(21 0 1)，但 0 不合法，應返回 1
-            "123123"    // 較複雜的測試用例
-        };
-        
-        // 預期結果
-        int[] expected = { 2, 3, 0, 1, 1, 9 };
-        
-        Console.WriteLine("LeetCode 91. Decode Ways 測試結果：");
-        Console.WriteLine("--------------------------------");
-        
-        for (int i = 0; i < testCases.Length; i++)
+
+        (string Input, int Expected)[] testCases =
         {
-            int result = program.NumDecodings(testCases[i]);
-            bool isPassed = result == expected[i];
-            
-            Console.WriteLine($"測試用例: \"{testCases[i]}\"");
-            Console.WriteLine($"預期結果: {expected[i]}");
-            Console.WriteLine($"實際結果: {result}");
-            Console.WriteLine($"測試 {(isPassed ? "通過" : "失敗")}");
-            Console.WriteLine("--------------------------------");
+            ("12", 2),
+            ("226", 3),
+            ("06", 0),
+            ("0", 0),
+            ("10", 1),
+            ("27", 1),
+            ("11106", 2),
+            ("2101", 1),
+            ("123123", 9)
+        };
+
+        (string Name, Func<string, int> Solver)[] solutions =
+        {
+            ("NumDecodings", program.NumDecodings),
+            ("NumDecodings2", program.NumDecodings2)
+        };
+
+        int passed = 0;
+        int total = testCases.Length * solutions.Length;
+
+        Console.WriteLine("LeetCode 91. Decode Ways");
+
+        foreach ((string name, Func<string, int> solver) in solutions)
+        {
+            foreach ((string input, int expected) in testCases)
+            {
+                if (RunTestCase(name, solver, input, expected))
+                {
+                    passed++;
+                }
+            }
         }
+
+        Console.WriteLine($"Summary: {passed}/{total} passed.");
     }
 
+    /// <summary>
+    /// 執行一筆固定案例，呼叫指定解法並比較預期值與實際值。
+    /// 輸入必須符合題目的純數字非空字串限制；輸出指出該次檢查是否通過。
+    /// </summary>
+    /// <param name="solutionName">顯示於測試結果中的解法名稱。</param>
+    /// <param name="solution">接受數字字串並回傳解碼方法數的解法。</param>
+    /// <param name="input">本次要解碼的純數字非空字串。</param>
+    /// <param name="expected">預期的解碼方法數。</param>
+    /// <returns>實際結果與預期結果相同時回傳 <see langword="true"/>，否則回傳 <see langword="false"/>。</returns>
+    private static bool RunTestCase(
+        string solutionName,
+        Func<string, int> solution,
+        string input,
+        int expected)
+    {
+        int actual = solution(input);
+        bool passed = actual == expected;
+
+        Console.WriteLine(
+            $"[{(passed ? "PASS" : "FAIL")}] {solutionName} | s=\"{input}\" | expected={expected} | actual={actual}");
+
+        return passed;
+    }
 
     /// <summary>
-    /// 解碼方法 (Decode Ways) 的動態規劃解法
-    /// 
-    /// 解題概念：
-    /// 1. 使用動態規劃 (Dynamic Programming) 解決此問題
-    /// 2. 定義 dp[i] 為字串 s 前 i 個字元的解碼方法數量
-    /// 3. 考慮兩種可能的解碼方式：單個數字 (1-9) 或兩個數字 (10-26)
-    /// 
-    /// 解題思路：
-    /// - 若當前數字 s[i] 可以單獨解碼 (1-9)，則 dp[i] 可以繼承 dp[i-1] 的解碼方法數
-    /// - 若當前數字與前一個數字組合 s[i-1:i] 可以解碼 (10-26)，則 dp[i] 可以加上 dp[i-2] 的解碼方法數
-    /// - 若兩種情況都不滿足，則 dp[i] = 0，表示無法解碼
-    /// 
-    /// 同时，由于在大部分语言中，字符串的下标是从 0 而不是 1 开始的，因此在代码的编写过程中，
-    /// 我们需要将所有字符串的下标减去 1，与使用的语言保持一致。
+    /// 使用動態規劃陣列計算數字字串的解碼方法數。
+    /// 令 <c>dp[i]</c> 表示前 i 個字元的解碼方法數，分別累加有效個位數 1–9 的
+    /// <c>dp[i - 1]</c> 與有效雙位數 10–26 的 <c>dp[i - 2]</c>。
+    /// 輸入必須是長度 1–100 的純數字非空字串；輸出為完整字串可被解碼的方法總數。
     /// </summary>
-    /// <param name="s">包含數字的字串，表示需要解碼的訊息</param>
-    /// <returns>可能的解碼方法總數</returns>
-    public int NumDecodings(string s) 
+    /// <param name="s">符合題目限制、可能含前導零的純數字非空字串。</param>
+    /// <returns>完整字串的有效解碼方法總數；無法解碼時回傳 0。</returns>
+    public int NumDecodings(string s)
     {
         int n = s.Length;
-        s = " " + s; // 將索引轉為 1-based，方便後續計算
-        int[] dp = new int[n + 1]; // dp[i]表示s[1..i]的解碼方法數
-        dp[0] = 1; // 空字串的解碼方法數為1（基礎情況）
+        s = " " + s;
+        int[] dp = new int[n + 1];
+
+        // 空前綴只有一種組合方式，讓第一個合法數字能從 dp[0] 延伸。
+        dp[0] = 1;
         char[] sChar = s.ToCharArray();
 
-        for(int i = 1; i <= n; i++)
+        for (int i = 1; i <= n; i++)
         {
-            int a = sChar[i] - '0'; // 當前數字的值
-            int b = (sChar[i - 1] - '0') * 10 + (sChar[i] - '0'); // 當前數字與前一個數字組合的值
+            int singleDigit = sChar[i] - '0';
+            int doubleDigits = (sChar[i - 1] - '0') * 10 + singleDigit;
 
-            // 情況1: 當前數字可以單獨解碼（1-9）
-            if(1 <= a && a <= 9) // 確保當前字元不是 '0'
+            // 目前字元為 1–9 時，可以接在所有前 i-1 個字元的解法後面。
+            if (1 <= singleDigit && singleDigit <= 9)
             {
-                dp[i] = dp[i - 1]; // 繼承前一個狀態的解碼方法數
+                dp[i] = dp[i - 1];
             }
 
-            // 情況2: 當前數字與前一個數字的組合可以解碼（10-26）
-            if(10 <= b && b <= 26) // 確保組合在有效範圍內
+            // 最近兩個字元為 10–26 時，可以接在所有前 i-2 個字元的解法後面。
+            if (10 <= doubleDigits && doubleDigits <= 26)
             {
-                dp[i] += dp[i - 2]; // 加上前兩個狀態的解碼方法數
+                dp[i] += dp[i - 2];
             }
-
-            // 隱含情況: 如果兩種情況都不滿足，dp[i] 會保持為 0，表示無法解碼
         }
-        return dp[n]; // 返回整個字串的解碼方法數
+
+        return dp[n];
+    }
+
+    /// <summary>
+    /// 使用滾動變數計算數字字串的解碼方法數。
+    /// 此解法沿用動態規劃轉移，但只保留 <c>dp[i - 2]</c> 與 <c>dp[i - 1]</c>，
+    /// 將額外空間由 O(n) 降為 O(1)。
+    /// 輸入必須是長度 1–100 的純數字非空字串；輸出為完整字串可被解碼的方法總數。
+    /// </summary>
+    /// <param name="s">符合題目限制、可能含前導零的純數字非空字串。</param>
+    /// <returns>完整字串的有效解碼方法總數；無法解碼時回傳 0。</returns>
+    public int NumDecodings2(string s)
+    {
+        int previousTwo = 1;
+        int previousOne = s[0] == '0' ? 0 : 1;
+
+        for (int i = 1; i < s.Length; i++)
+        {
+            int current = 0;
+
+            // 非零字元可單獨解碼，因此延續前一個位置的所有解法。
+            if (s[i] != '0')
+            {
+                current += previousOne;
+            }
+
+            int doubleDigits = (s[i - 1] - '0') * 10 + (s[i] - '0');
+
+            // 10–26 可視為一個字母，因此加入前兩個位置的解法數。
+            if (10 <= doubleDigits && doubleDigits <= 26)
+            {
+                current += previousTwo;
+            }
+
+            // 下一輪只需要目前位置與前一個位置的狀態。
+            previousTwo = previousOne;
+            previousOne = current;
+        }
+
+        return previousOne;
     }
 }
