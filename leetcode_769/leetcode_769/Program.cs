@@ -15,39 +15,56 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] input = { 4, 3, 2, 1, 0 };
+            var testCases = new (string Name, int[] Input, int Expected)[]
+            {
+                ("Official example 1", [4, 3, 2, 1, 0], 1),
+                ("Official example 2", [1, 0, 2, 3, 4], 4),
+                ("Minimum input", [0], 1),
+                ("Already sorted", [0, 1, 2, 3, 4], 5),
+                ("Multi-element prefix", [2, 0, 1, 3, 4], 3),
+                ("Delayed prefix boundary", [1, 2, 0, 3], 2),
+                ("Maximum-length mixed chunks", [0, 2, 1, 4, 3, 5, 7, 6, 9, 8], 6)
+            };
 
-            Console.WriteLine("method1: " + MaxChunksToSorted(input));
-            Console.WriteLine("method2: " + MaxChunksToSorted2(input));
+            int passedChecks = 0;
+            int totalChecks = 0;
+
+            Console.WriteLine("LeetCode 769 acceptance harness");
+            Console.WriteLine();
+
+            foreach ((string name, int[] input, int expected) in testCases)
+            {
+                (int casePassed, int caseTotal) = RunCase(name, input, expected);
+                passedChecks += casePassed;
+                totalChecks += caseTotal;
+            }
+
+            Console.WriteLine($"Summary: {passedChecks}/{totalChecks} checks passed.");
+            Environment.ExitCode = passedChecks == totalChecks ? 0 : 1;
         }
 
 
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/max-chunks-to-make-sorted/solutions/1886333/zui-duo-neng-wan-cheng-pai-xu-de-kuai-by-gc4k/
-        /// https://leetcode.cn/problems/max-chunks-to-make-sorted/solutions/1888391/by-ac_oier-4uny/
-        /// https://leetcode.cn/problems/max-chunks-to-make-sorted/solutions/2019566/by-stormsunshine-chzk/
-        /// 
-        /// input資料是 0 ~ n - 1
-        /// 所以 if 用 index == i 似乎可以理解
-        /// 能對上是最好
-        /// 代表 A = B + C
-        /// B 與 C 排序後 可以對應上 A
-        /// 
-        /// 如果前 i + 1 个数的最大值为 i ，那么前 i + 1 个数排序后一定是 [0,1,2,...,i]
+        /// 計算陣列最多能切成幾個獨立排序後仍可組成完整升冪排列的區塊。
+        /// 解法由左至右維護前綴最大值；此前綴最大值等於目前索引時，代表前綴恰好包含
+        /// <c>0</c> 到目前索引的所有值，因此可以在此結束一個區塊。
+        /// 輸入必須是長度 <c>n</c> 且由 <c>0</c> 到 <c>n - 1</c> 組成的有效排列，
+        /// 方法不會修改輸入，並回傳可形成的最大區塊數。
         /// </summary>
-        /// <param name="arr"></param>
-        /// <returns></returns>
+        /// <param name="arr">由 <c>0</c> 到 <c>arr.Length - 1</c> 組成的排列。</param>
+        /// <returns>個別排序後仍能使整體有序的最大區塊數。</returns>
+        /// <remarks>時間複雜度為 <c>O(n)</c>，輔助空間與結果空間皆為 <c>O(1)</c>。</remarks>
         public static int MaxChunksToSorted(int[] arr)
         {
             int m = 0;
             int res = 0;
 
-            for(int i = 0; i < arr.Length; i++)
+            for (int i = 0; i < arr.Length; i++)
             {
                 m = Math.Max(m, arr[i]);
-                if(m == i)
+                if (m == i)
                 {
+                    // 前綴最大值等於右端索引，表示此前綴排序後正好會落在相同索引範圍。
                     res++;
                 }
             }
@@ -57,36 +74,31 @@
 
 
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/max-chunks-to-make-sorted/solutions/1888391/by-ac_oier-4uny/
-        /// 
-        /// i: 右邊界 index
-        /// j: 左邊界 index, 初始值為 0.
-        /// 
-        /// min: 當前劃分區塊中的 element 最小值, 初始為 arr[0] or n (取 Min 所以初始給大值)
-        /// max: 當前劃分區塊中的 element 最大值, 初始為 arr[1] or -1 (取 Max 所以初始給小值)
-        /// 
-        /// j == min && i == max => [j, i] 排序後 [min, max]
-        /// 上述條件成立 res++.
-        /// 然後重新開始初始化變數, 繼續循環找下一組答案
-        /// 
+        /// 計算陣列最多能切成幾個獨立排序後仍可組成完整升冪排列的區塊。
+        /// 解法追蹤目前候選區塊的左右邊界與最小、最大值；當區塊的最小值等於左邊界，
+        /// 且最大值等於右邊界時，該區塊恰好包含邊界範圍內的所有整數，可以安全切分。
+        /// 輸入必須是長度 <c>n</c> 且由 <c>0</c> 到 <c>n - 1</c> 組成的有效排列，
+        /// 方法不會修改輸入，並回傳可形成的最大區塊數。
         /// </summary>
-        /// <param name="arr"></param>
-        /// <returns></returns>
+        /// <param name="arr">由 <c>0</c> 到 <c>arr.Length - 1</c> 組成的排列。</param>
+        /// <returns>個別排序後仍能使整體有序的最大區塊數。</returns>
+        /// <remarks>時間複雜度為 <c>O(n)</c>，輔助空間與結果空間皆為 <c>O(1)</c>。</remarks>
         public static int MaxChunksToSorted2(int[] arr)
         {
             int n = arr.Length;
             int res = 0;
 
-            for(int i = 0, j = 0, min = n, max = -1; i < n; i++)
+            for (int i = 0, j = 0, min = n, max = -1; i < n; i++)
             {
                 min = Math.Min(min, arr[i]);
                 max = Math.Max(max, arr[i]);
 
-                if(j == min && i == max)
+                if (j == min && i == max)
                 {
+                    // [j, i] 的值域與索引範圍完全一致，因此排序後可獨立歸位。
                     res++;
-                    // 左邊界右移
+
+                    // 從下一個索引開始追蹤新區塊，並還原最小值與最大值的哨兵。
                     j = i + 1;
                     min = n;
                     max = -1;
@@ -94,6 +106,47 @@
             }
 
             return res;
+        }
+
+        /// <summary>
+        /// 以同一組有效排列分別驗證兩種主要解法，檢查回傳值是否符合預期，
+        /// 並確認兩次呼叫都不會修改各自的輸入副本。方法會輸出案例、四項檢查結果，
+        /// 並回傳通過項目數與總項目數供主要進入點彙總。
+        /// </summary>
+        /// <param name="name">顯示於主控台的案例名稱。</param>
+        /// <param name="input">符合題目排列限制的測試資料。</param>
+        /// <param name="expected">兩種解法都應回傳的最大區塊數。</param>
+        /// <returns>此案例的通過檢查數與總檢查數。</returns>
+        private static (int Passed, int Total) RunCase(string name, int[] input, int expected)
+        {
+            int[] method1Input = [.. input];
+            int[] method2Input = [.. input];
+
+            int method1Actual = MaxChunksToSorted(method1Input);
+            int method2Actual = MaxChunksToSorted2(method2Input);
+            bool method1InputPreserved = method1Input.SequenceEqual(input);
+            bool method2InputPreserved = method2Input.SequenceEqual(input);
+
+            var checks = new (string Label, string Expected, string Actual, bool Passed)[]
+            {
+                ("MaxChunksToSorted result", expected.ToString(), method1Actual.ToString(), method1Actual == expected),
+                ("MaxChunksToSorted input preserved", bool.TrueString, method1InputPreserved.ToString(), method1InputPreserved),
+                ("MaxChunksToSorted2 result", expected.ToString(), method2Actual.ToString(), method2Actual == expected),
+                ("MaxChunksToSorted2 input preserved", bool.TrueString, method2InputPreserved.ToString(), method2InputPreserved)
+            };
+
+            Console.WriteLine($"Case: {name}");
+            Console.WriteLine($"Input: [{string.Join(", ", input)}]");
+
+            foreach ((string label, string expectedValue, string actualValue, bool passed) in checks)
+            {
+                Console.WriteLine(
+                    $"{(passed ? "PASS" : "FAIL")} | {label} | Expected: {expectedValue} | Actual: {actualValue}");
+            }
+
+            Console.WriteLine();
+
+            return (checks.Count(check => check.Passed), checks.Length);
         }
     }
 }
