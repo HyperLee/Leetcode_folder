@@ -7,22 +7,74 @@
         /// https://leetcode.com/problems/climbing-stairs/submissions/
         /// 70. 爬楼梯
         /// https://leetcode.cn/problems/climbing-stairs/
-        /// 
+        ///
         /// 本題目推薦, 解法三
         /// 易懂好寫
         /// 類似 fibonacci 優化解法
+        ///
+        /// 程式主要進入點。使用固定測試案例依序驗證黃金比例公式、純遞迴與
+        /// 迭代動態規劃三種解法，輸入為題目限制內的階梯數，輸出每筆案例的
+        /// 預期值、實際值、PASS/FAIL 狀態，以及所有案例的通過總數。
         /// </summary>
-        /// <param name="args"></param>
+        /// <param name="args">命令列參數；本範例不使用此參數。</param>
         static void Main(string[] args)
         {
-            int n = 10;
+            (int N, int Expected)[] testCases =
+            [
+                (1, 1),
+                (2, 2),
+                (3, 3),
+                (5, 8),
+                (10, 89)
+            ];
 
-            Console.WriteLine("Method1, total step:" + ClimbStairs(n));
-            Console.WriteLine("Method2, total step:" + ClimbStairs2(n));
-            Console.WriteLine("Method3, total step:" + ClimbStairs3(n));
+            int passed = 0;
+            const int solutionCount = 3;
 
+            Console.WriteLine("LeetCode 70 - Climbing Stairs");
+
+            foreach ((int n, int expected) in testCases)
+            {
+                passed += RunTestCase(n, expected);
+            }
+
+            int total = testCases.Length * solutionCount;
+            Console.WriteLine($"Overall: {passed}/{total} passed.");
         }
 
+        /// <summary>
+        /// 執行單一階梯數的完整驗證。此方法用相同輸入呼叫三種爬樓梯解法，
+        /// 將各解法結果與預期答案比較並輸出 PASS/FAIL；輸入必須符合
+        /// <c>1 &lt;= n &lt;= 45</c>，回傳本案例通過驗證的解法數量（0 到 3）。
+        /// </summary>
+        /// <param name="n">到達頂端所需的階梯數，範圍為 1 到 45。</param>
+        /// <param name="expected">此階梯數的預期走法總數。</param>
+        /// <returns>三種解法中結果符合預期值的數量。</returns>
+        private static int RunTestCase(int n, int expected)
+        {
+            (string Name, int Actual)[] results =
+            [
+                (nameof(ClimbStairs), ClimbStairs(n)),
+                (nameof(ClimbStairs2), ClimbStairs2(n)),
+                (nameof(ClimbStairs3), ClimbStairs3(n))
+            ];
+
+            int passed = 0;
+            Console.WriteLine($"n={n}, expected={expected}");
+
+            foreach ((string name, int actual) in results)
+            {
+                bool isPassed = actual == expected;
+                Console.WriteLine($"  {name}: actual={actual}, {(isPassed ? "PASS" : "FAIL")}");
+
+                if (isPassed)
+                {
+                    passed++;
+                }
+            }
+
+            return passed;
+        }
 
         /// <summary>
         /// https://leetcode.com/problems/climbing-stairs/
@@ -42,17 +94,23 @@
         /// 黃金比例恆等式解法
         /// 黃金比例恆等式解法
         /// 因此得到 F_n的一般式：
-        /// 
+        ///
         /// https://leetcode.cn/problems/climbing-stairs/solution/pa-lou-ti-by-leetcode-solution/
         /// 套公式
+        ///
+        /// 使用費波那契數列的黃金比例一般式直接計算 F(n+1)。輸入為 1 到 45
+        /// 的階梯數，輸出每次可走 1 或 2 階時到達頂端的不同走法總數。
         /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
+        /// <param name="n">到達頂端所需的階梯數，範圍為 1 到 45。</param>
+        /// <returns>到達第 <paramref name="n"/> 階的不同走法總數。</returns>
         public static int ClimbStairs(int n)
         {
+            // 爬 n 階對應 F(n+1)，以黃金比例及其共軛項直接計算該數值。
             double a1 = 1 / Math.Sqrt(5);
             double b2 = Math.Pow((1 + Math.Sqrt(5)) / 2, n + 1);
             double c3 = Math.Pow((1 - Math.Sqrt(5)) / 2, n + 1);
+
+            // 題目範圍內的結果為整數；轉型移除浮點運算可能留下的小數部分。
             int fx = (int)(a1 * (b2 - c3));
             return fx;
         }
@@ -61,54 +119,61 @@
         /// <summary>
         /// 遞迴
         /// 當輸入很大時候, 要跑很久
+        ///
+        /// 以最後一步來自第 n-1 階或第 n-2 階建立純遞迴關係。輸入為 1 到 45
+        /// 的階梯數，輸出所有不同走法的總數；此版本會重複計算相同子問題。
         /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
+        /// <param name="n">到達頂端所需的階梯數，範圍為 1 到 45。</param>
+        /// <returns>到達第 <paramref name="n"/> 階的不同走法總數。</returns>
         public static int ClimbStairs2(int n)
         {
+            // 一階只有 1 種走法，二階有 2 種走法，作為遞迴終止條件。
             if (n <= 2)
             {
                 return n;
             }
 
+            // 最後走 1 階或 2 階的情況互斥，因此將兩個子問題的結果相加。
             return ClimbStairs2(n - 1) + ClimbStairs2(n - 2);
         }
 
 
         /// <summary>
         /// 方法3
-        /// 
+        ///
         /// 為方法2 遞迴方法 優化
         /// 在 n 非常大時候 比較明顯
         /// 也比單純公式推理簡單
-        /// 
+        ///
         /// 此方法原先用來解 fibonacci
         /// 也可以用來這題目使用
         /// 類似情境
-        /// 
+        ///
         /// 要小心迴圈計算開始位置
         /// i 從 2 開始, 如果從 3 開始就會計算不到 3 的答案了
         /// 迴圈是從前一個開始計算
-        /// 
+        ///
         /// n 範圍: [1, n], 沒有 0
+        ///
+        /// 以兩個變數保存相鄰階梯的答案，逐階套用 f(n)=f(n-1)+f(n-2)，
+        /// 避免純遞迴的重複子問題。輸入為 1 到 45 的階梯數，輸出所有不同
+        /// 走法的總數，並只使用固定數量的額外空間。
         /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
+        /// <param name="n">到達頂端所需的階梯數，範圍為 1 到 45。</param>
+        /// <returns>到達第 <paramref name="n"/> 階的不同走法總數。</returns>
         public static int ClimbStairs3(int n)
         {
-            // i: 0, 1 直接回傳 n
+            // 一階與二階是迭代遞推所需的兩個初始答案。
             if (n <= 2)
             {
                 return n;
             }
 
             int result = 0;
-            // i == 0
             int pre = 1;
-            // i == 1
             int next = 2;
 
-            // i 從 2 開始, 需要注意
+            // 每輪先算下一階，再同步前移兩個狀態，避免覆蓋仍需使用的舊值。
             for (int i = 2; i < n; i++)
             {
                 result = pre + next;
