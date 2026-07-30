@@ -25,175 +25,216 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        // 測試資料
-        int[][] matrix = new int[][]
-        {
-            new int[] {1, 4, 7, 11, 15},
-            new int[] {2, 5, 8, 12, 19},
-            new int[] {3, 6, 9, 16, 22},
-            new int[] {10, 13, 14, 17, 24},
-            new int[] {18, 21, 23, 26, 30}
-        };
-        int target1 = 5;
-        int target2 = 20;
-
-        Program p = new Program();
-
-        // 使用暴力法驗證
-        bool result1 = p.SearchMatrix(matrix, target1);
-        bool result2 = p.SearchMatrix(matrix, target2);
-        Console.WriteLine($"[暴力法] 搜尋 {target1} 結果: {result1}"); // 預期 true
-        Console.WriteLine($"[暴力法] 搜尋 {target2} 結果: {result2}"); // 預期 false
-
-        // 使用二分搜尋法驗證
-        bool result3 = p.SearchMatrix_binary(matrix, target1);
-        bool result4 = p.SearchMatrix_binary(matrix, target2);
-        Console.WriteLine($"[二分法] 搜尋 {target1} 結果: {result3}"); // 預期 true
-        Console.WriteLine($"[二分法] 搜尋 {target2} 結果: {result4}"); // 預期 false
-
-        // 使用從右上角開始搜尋法驗證
-        bool result5 = p.SearchMatrix_RightTop(matrix, target1);
-        bool result6 = p.SearchMatrix_RightTop(matrix, target2);
-        Console.WriteLine($"[右上角法] 搜尋 {target1} 結果: {result5}"); // 預期 true
-        Console.WriteLine($"[右上角法] 搜尋 {target2} 結果: {result6}"); // 預期 false
+        RunSamples();
     }
 
+    /// <summary>
+    /// 建立六組符合題目排序條件的固定案例，依序執行暴力法、逐列二分搜尋與右上角排除法。
+    /// 每組輸入皆為至少一列、至少一欄的非遞減矩陣，方法會將實際結果與預期布林值比較，
+    /// 最後輸出每項 PASS/FAIL 與通過總數。
+    /// </summary>
+    private static void RunSamples()
+    {
+        int[][] officialMatrix =
+        [
+            [1, 4, 7, 11, 15],
+            [2, 5, 8, 12, 19],
+            [3, 6, 9, 16, 22],
+            [10, 13, 14, 17, 24],
+            [18, 21, 23, 26, 30]
+        ];
+
+        SampleCase[] samples =
+        [
+            new("官方範例：命中矩陣中的值", officialMatrix, 5, true),
+            new("官方範例：目標值不存在", officialMatrix, 20, false),
+            new("單元素矩陣：命中唯一元素", [[1]], 1, true),
+            new("單元素矩陣：目標值不存在", [[1]], 2, false),
+            new(
+                "矩形矩陣：命中負數與重複值",
+                [
+                    [-5, -3, -3, 4],
+                    [-3, -1, 2, 8],
+                    [0, 2, 5, 10]
+                ],
+                -3,
+                true),
+            new(
+                "矩形矩陣：目標值超出上界",
+                [
+                    [1, 4, 7],
+                    [2, 5, 8]
+                ],
+                9,
+                false)
+        ];
+
+        Program solution = new();
+        (string Name, Func<int[][], int, bool> Search)[] methods =
+        [
+            ("暴力法", solution.SearchMatrix),
+            ("逐列二分搜尋", solution.SearchMatrix_binary),
+            ("右上角排除法", solution.SearchMatrix_RightTop)
+        ];
+
+        int passed = 0;
+        int total = samples.Length * methods.Length;
+
+        for (int i = 0; i < samples.Length; i++)
+        {
+            SampleCase sample = samples[i];
+            Console.WriteLine($"案例 {i + 1}：{sample.Name}");
+            Console.WriteLine($"輸入：matrix = {FormatMatrix(sample.Matrix)}, target = {sample.Target}");
+            Console.WriteLine($"Expected = {sample.Expected}");
+
+            foreach ((string methodName, Func<int[][], int, bool> search) in methods)
+            {
+                bool actual = search(sample.Matrix, sample.Target);
+                bool isPassed = actual == sample.Expected;
+                passed += isPassed ? 1 : 0;
+                Console.WriteLine(
+                    $"  {methodName}：Actual = {actual} => {(isPassed ? "PASS" : "FAIL")}");
+            }
+
+            Console.WriteLine();
+        }
+
+        Console.WriteLine($"總結：{passed}/{total} 項驗證通過");
+    }
 
     /// <summary>
-    /// 方法1: 暴力法
-    /// 逐行、逐列檢查二維矩陣中是否存在目標值 target。
-    /// 時間複雜度為 O(m*n)，其中 m 為行數，n 為列數。
-    /// 若找到目標值則回傳 true，否則回傳 false。
+    /// 將至少包含一列的鋸齒狀整數陣列轉成易於閱讀的單行矩陣字串。
+    /// 輸入陣列不會被修改，輸出格式為 <c>[[row1], [row2]]</c>。
     /// </summary>
-    /// <param name="matrix">二維整數陣列，每一個 row 代表一行</param>
-    /// <param name="target">要搜尋的目標值</param>
-    /// <returns>若找到目標值則回傳 true，否則回傳 false</returns>
-    public bool SearchMatrix(int[][] matrix, int target) 
+    /// <param name="matrix">要格式化的非 null 二維整數陣列。</param>
+    /// <returns>保留列界線與元素順序的矩陣字串。</returns>
+    private static string FormatMatrix(int[][] matrix)
     {
-        // 逐行遍歷矩陣
-        foreach(int[] row in matrix)
+        return $"[{string.Join(", ", matrix.Select(row => $"[{string.Join(", ", row)}]"))}]";
+    }
+
+    /// <summary>
+    /// 使用暴力法搜尋矩陣，逐列檢查所有元素，不依賴矩陣的排序性。
+    /// 輸入須為非 null 且至少包含一個元素的整數矩陣；找到 <paramref name="target"/>
+    /// 時回傳 <see langword="true"/>，完整掃描後仍未找到則回傳 <see langword="false"/>。
+    /// </summary>
+    /// <param name="matrix">至少含一列、一欄的整數矩陣。</param>
+    /// <param name="target">要搜尋的目標整數。</param>
+    /// <returns>矩陣包含目標值時為 <see langword="true"/>，否則為 <see langword="false"/>。</returns>
+    public bool SearchMatrix(int[][] matrix, int target)
+    {
+        foreach (int[] row in matrix)
         {
-            // 逐列檢查當前行的每個元素
-            foreach(int element in row)
+            foreach (int element in row)
             {
-                // 若元素等於目標值，立即回傳 true
-                if(element == target)
+                if (element == target)
                 {
                     return true;
                 }
             }
         }
-        // 若全部檢查完都沒找到，回傳 false
+
         return false;
     }
 
     /// <summary>
-    /// 方法2: 二分法
-    /// 對每一行(row)使用二分搜尋法來尋找目標值 target。
-    /// 時間複雜度為 O(m*logn)，其中 m 為行數，n 為列數。
-    /// 若任一行找到目標值則回傳 true，否則回傳 false。
-    /// 
-    /// ref:
-    /// https://leetcode.cn/problems/search-a-2d-matrix-ii/solutions/1062538/sou-suo-er-wei-ju-zhen-ii-by-leetcode-so-9hcx/
+    /// 使用逐列二分搜尋法尋找目標值，利用每一列由左至右非遞減的條件縮小搜尋範圍。
+    /// 輸入須為非 null、至少一列一欄且每列皆已排序的矩陣；任一列找到目標值時回傳
+    /// <see langword="true"/>，所有列都搜尋完仍未找到則回傳 <see langword="false"/>。
     /// </summary>
-    /// <param name="matrix">二維整數陣列，每一個 row 代表一行</param>
-    /// <param name="target">要搜尋的目標值</param>
-    /// <returns>若找到目標值則回傳 true，否則回傳 false</returns>
-    public bool SearchMatrix_binary(int[][] matrix, int target) 
+    /// <param name="matrix">至少含一列、一欄，且各列非遞減排列的整數矩陣。</param>
+    /// <param name="target">要搜尋的目標整數。</param>
+    /// <returns>矩陣包含目標值時為 <see langword="true"/>，否則為 <see langword="false"/>。</returns>
+    public bool SearchMatrix_binary(int[][] matrix, int target)
     {
-        // 逐行遍歷矩陣
-        foreach(int[] row in matrix)
+        foreach (int[] row in matrix)
         {
-            // 對當前行使用二分搜尋法
             int index = Search(row, target);
-            // 若找到目標值，立即回傳 true
-            if(index >= 0)
+            if (index >= 0)
             {
                 return true;
             }
         }
-        // 若全部行都沒找到，回傳 false
+
         return false;
     }
 
     /// <summary>
-    /// 一維陣列的二分搜尋法。
-    /// 簡單說就是對每一行做二分法搜尋。
-    /// 在已排序的整數陣列 nums 中搜尋目標值 target。
-    /// 若找到則回傳目標值的索引，否則回傳 -1。
+    /// 在非遞減整數陣列中使用二分搜尋尋找目標值，每次比較後排除不可能的一半區間。
+    /// 輸入須為非 null 且已排序的陣列；找到時回傳其中一個相符索引，否則回傳 <c>-1</c>。
     /// </summary>
-    /// <param name="nums">已排序的一維整數陣列</param>
-    /// <param name="target">要搜尋的目標值</param>
-    /// <returns>若找到目標值則回傳其索引，否則回傳 -1</returns>
-    public int Search(int[] nums, int target) 
+    /// <param name="nums">依非遞減順序排列的非 null 整數陣列。</param>
+    /// <param name="target">要搜尋的目標整數。</param>
+    /// <returns>任一相符元素的索引；不存在時回傳 <c>-1</c>。</returns>
+    public int Search(int[] nums, int target)
     {
         int low = 0;
         int high = nums.Length - 1;
-        // 當 low <= high 時持續搜尋
+
         while (low <= high)
         {
-            // 取中間索引
             int mid = low + (high - low) / 2;
             int num = nums[mid];
-            // 若中間值等於目標值，回傳索引
             if (num == target)
             {
                 return mid;
             }
-            // 若中間值小於目標值，縮小搜尋範圍到右半部
             else if (num < target)
             {
+                // 中間值與其左側都不可能等於更大的 target。
                 low = mid + 1;
             }
-            // 若中間值大於目標值，縮小搜尋範圍到左半部
             else
             {
+                // 中間值與其右側都不可能等於更小的 target。
                 high = mid - 1;
             }
         }
-        // 若沒找到，回傳 -1
+
         return -1;
     }
 
-
     /// <summary>
-    /// 方法3: 從右上角開始搜尋法
-    /// 從矩陣的右上角 (第一行最後一列) 開始，根據當前元素與目標值的比較結果，
-    /// 決定往左(減少列)或往下(增加行)移動，直到找到目標值或超出邊界。
-    /// 時間複雜度為 O(m+n)，其中 m 為行數，n 為列數。
-    /// 若找到目標值則回傳 true，否則回傳 false。
-    /// 
-    /// ref:
-    /// https://leetcode.cn/problems/search-a-2d-matrix-ii/solutions/2783938/tu-jie-pai-chu-fa-yi-tu-miao-dong-python-kytg/
+    /// 從右上角開始搜尋，同時利用列與欄皆非遞減的條件：較大時左移排除一欄，
+    /// 較小時下移排除一列。輸入須為非 null、至少一列一欄且列欄皆已排序的矩陣；
+    /// 找到目標值時回傳 <see langword="true"/>，走出矩陣邊界則回傳
+    /// <see langword="false"/>。
     /// </summary>
-    /// <param name="matrix">二維整數陣列，每一個 row 代表一行</param>
-    /// <param name="target">要搜尋的目標值</param>
-    /// <returns>若找到目標值則回傳 true，否則回傳 false</returns>
-    public bool SearchMatrix_RightTop(int[][] matrix, int target) 
+    /// <param name="matrix">至少含一列、一欄，且各列各欄皆非遞減排列的整數矩陣。</param>
+    /// <param name="target">要搜尋的目標整數。</param>
+    /// <returns>矩陣包含目標值時為 <see langword="true"/>，否則為 <see langword="false"/>。</returns>
+    public bool SearchMatrix_RightTop(int[][] matrix, int target)
     {
-        // 從右上角 (第0行, 最後一列) 開始
         int i = 0;
         int j = matrix[0].Length - 1;
-        // 當 i 未超過行數且 j 未小於0時持續搜尋
+
         while (i < matrix.Length && j >= 0)
         {
-            // 若當前元素等於目標值，回傳 true
             if (matrix[i][j] == target)
             {
                 return true;
             }
-            // 若當前元素大於目標值，往左移動(減少列)
             else if (matrix[i][j] > target)
             {
+                // 當前值下方只會更大，左移即可排除整個目前欄。
                 j--;
             }
-            // 若當前元素小於目標值，往下移動(增加行)
             else
             {
+                // 當前值左側只會更小，下移即可排除整個目前列。
                 i++;
             }
         }
-        // 若沒找到，回傳 false
+
         return false;
     }
+
+    /// <summary>
+    /// 表示一組固定搜尋案例，包含案例名稱、符合排序條件的矩陣、目標值與預期結果。
+    /// </summary>
+    /// <param name="Name">顯示於 console 的案例名稱。</param>
+    /// <param name="Matrix">至少含一列、一欄，且列欄皆非遞減排列的矩陣。</param>
+    /// <param name="Target">要搜尋的目標整數。</param>
+    /// <param name="Expected">目標值是否應存在於矩陣中。</param>
+    private sealed record SampleCase(string Name, int[][] Matrix, int Target, bool Expected);
 }
