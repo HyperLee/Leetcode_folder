@@ -2,6 +2,8 @@
 {
     internal class Program
     {
+        private static int simulatedFirstBadVersion;
+
         /// <summary>
         /// 278. First Bad Version
         /// https://leetcode.cn/problems/first-bad-version/description/
@@ -9,56 +11,91 @@
         /// 278. 第一个错误的版本
         /// https://leetcode.cn/problems/first-bad-version/description/
         /// </summary>
-        /// <param name="args"></param>
+        /// <remarks>
+        /// 主程式會執行固定測資，驗證二分搜尋能在第一版、最後一版、中間版本與整數上限等情境找到第一個錯誤版本。
+        /// </remarks>
+        /// <param name="args">命令列參數；本範例程式不需要使用。</param>
         static void Main(string[] args)
         {
-            int n = 5;
-            Console.WriteLine("res: " + FirstBadVersion(n));
+            RunSamples();
         }
 
+        /// <summary>
+        /// 執行六筆固定案例，逐筆設定本機錯誤版本邊界並比對預期與實際結果。
+        /// </summary>
+        /// <remarks>
+        /// 測資涵蓋官方範例、單一版本、第一版即錯、最後一版才錯、一般中段與 <see cref="int.MaxValue"/> 上界。
+        /// 每筆案例都符合 <c>1 &lt;= bad &lt;= n</c>，並輸出 PASS/FAIL 與最終通過數。
+        /// </remarks>
+        private static void RunSamples()
+        {
+            SampleCase[] samples =
+            [
+                new SampleCase("官方範例 - 第 4 版開始錯誤", 5, 4, 4),
+                new SampleCase("單一版本 - 唯一版本即為錯誤版本", 1, 1, 1),
+                new SampleCase("第一版即錯 - 所有版本皆錯誤", 10, 1, 1),
+                new SampleCase("最後一版才錯 - 前面版本皆正確", 10, 10, 10),
+                new SampleCase("一般中段 - 第 5 版開始錯誤", 8, 5, 5),
+                new SampleCase("整數上限 - 驗證中點計算不溢位", int.MaxValue, int.MaxValue, int.MaxValue)
+            ];
 
+            int passedCount = 0;
+
+            Console.WriteLine("LeetCode 278 - First Bad Version");
+            Console.WriteLine("解法：在單調的版本區間中使用二分搜尋定位第一個錯誤版本");
+            Console.WriteLine();
+
+            for (int i = 0; i < samples.Length; i++)
+            {
+                SampleCase sample = samples[i];
+                simulatedFirstBadVersion = sample.Bad;
+
+                int actual = FirstBadVersion(sample.N);
+                bool passed = actual == sample.Expected;
+
+                if (passed)
+                {
+                    passedCount++;
+                }
+
+                Console.WriteLine($"案例 {i + 1}：{sample.Description}");
+                Console.WriteLine($"n：{sample.N}");
+                Console.WriteLine($"bad：{sample.Bad}");
+                Console.WriteLine($"預期：{sample.Expected}");
+                Console.WriteLine($"實際：{actual} => {(passed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"總結：{passedCount}/{samples.Length} 筆測試通過");
+        }
 
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/first-bad-version/solutions/824522/di-yi-ge-cuo-wu-de-ban-ben-by-leetcode-s-pf8h/
-        /// https://leetcode.cn/problems/first-bad-version/solutions/1594074/by-stormsunshine-wu83/
-        /// 二分法,
-        /// 輸入範圍[1, n]
-        /// 由于 bad 一定在范围 [1,n] 内，因此初始时二分查找的范围的下界和上界是 low=1，high=n。
-        /// 每次查找时，取 mid 为 left 和 right 的平均数向下取整，对 mid 调用接口，根据结果调整二分查找的范围。
-        /// 如果 mid 是错误的，则 bad 小于等于 mid，因此在范围 [left,mid] 中继续查找。
-        /// 如果 mid 是正确的，则 bad 大于 mid，因此在范围 [mid + 1,high] 中继续查找。
-        /// 当 left == right 时，结束查找，此时 left 即为 bad，返回 low。
-        /// 
-        /// 錯誤版本會連續, 假如第四筆開始錯誤, 那之後的 也都會是錯誤
-        /// 遇到 API 回傳錯誤的, 哪就要把左邊界右移. (因為先前版本都是正確)
-        /// 反之
-        /// 遇到 API 回傳正確, 那就是要把右邊界左移. (因為右邊都是錯誤版本)
-        /// 
-        /// 此題目描述不好, 去找其他題目
-        /// 同樣是二分法的會比較好理解
+        /// 使用二分搜尋，在版本範圍 <c>[1, n]</c> 中找出第一個錯誤版本。
         /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// 錯誤狀態具有單調性：第一個錯誤版本之前皆為正確版本，從該版本起皆為錯誤版本。
+        /// 搜尋期間維持答案位於閉區間 <c>[left, right]</c>；每次透過 <see cref="IsBadVersion"/> 將範圍縮小一半。
+        /// </remarks>
+        /// <param name="n">最後一個版本號；依題目保證介於 1 與 <see cref="int.MaxValue"/> 之間，且範圍內至少有一個錯誤版本。</param>
+        /// <returns>範圍 <c>[1, n]</c> 中第一個錯誤版本的版本號。</returns>
         public static int FirstBadVersion(int n)
         {
             int left = 1;
             int right = n;
 
-            // 循环直至区间左右端点相同
+            // 閉區間 [left, right] 始終包含第一個錯誤版本，直到兩個邊界收斂。
             while (left < right)
             {
                 int mid = left + (right - left) / 2;
-                if(IsBadVersion(mid))
+
+                if (IsBadVersion(mid))
                 {
-                    // 答案在区间 [left, mid] 中
-                    // 右邊界往左
+                    // mid 可能正是第一個錯誤版本，因此保留 mid 並縮小右邊界。
                     right = mid;
                 }
                 else
                 {
-                    // 答案在区间 [mid + 1, right] 中
-                    // 左邊界往右
+                    // mid 為正確版本，可排除 [left, mid]，答案只可能在右側。
                     left = mid + 1;
                 }
             }
@@ -66,27 +103,26 @@
             return left;
         }
 
+        /// <summary>
+        /// 模擬 LeetCode 提供的版本檢查 API，判斷指定版本是否位於錯誤版本區間。
+        /// </summary>
+        /// <remarks>
+        /// <see cref="RunSamples"/> 會在每筆案例執行前設定錯誤起點；實際提交至 LeetCode 時，平台會提供真正的 <c>isBadVersion</c> API。
+        /// </remarks>
+        /// <param name="version">要檢查的版本號；案例保證介於 1 與目前的版本總數之間。</param>
+        /// <returns>若版本號大於或等於目前設定的第一個錯誤版本則回傳 <c>true</c>；否則回傳 <c>false</c>。</returns>
+        public static bool IsBadVersion(int version)
+        {
+            return version >= simulatedFirstBadVersion;
+        }
 
         /// <summary>
-        /// 這個 API 呼叫是參考題目測試資料第一筆 寫死的
-        /// 實際上, 要在 LEETCODE 呼叫才對
-        /// 才是實際 測試資料
-        /// 
-        /// 第 n == 4 筆開始版本都是錯誤的.
-        /// 
-        /// 上述輸入範圍是 [1, n]
-        /// 但是陣列是從 0 開始
-        /// 所以取資料要變成 n - 1 才對
+        /// 表示一筆可執行案例，包含案例目的、版本上限、錯誤起點與預期答案。
         /// </summary>
-        /// <param name="n"></param>
-        /// <returns></returns>
-        public static bool IsBadVersion(int n)
-        {
-            bool[] input = { false, false, false, true, true};
-
-            bool value = input[n - 1];
-
-            return value;
-        }
+        /// <param name="Description">案例涵蓋的情境與驗證目的。</param>
+        /// <param name="N">案例中的最後一個版本號。</param>
+        /// <param name="Bad">案例中第一個錯誤版本，範圍為 <c>[1, N]</c>。</param>
+        /// <param name="Expected">預期由 <see cref="FirstBadVersion"/> 找到的版本號。</param>
+        private sealed record SampleCase(string Description, int N, int Bad, int Expected);
     }
 }
