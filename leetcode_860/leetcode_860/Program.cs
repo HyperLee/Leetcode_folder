@@ -12,88 +12,113 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] input = { 5, 5, 5, 10, 20 };
-
-            Console.WriteLine(LemonadeChange(input));
-            Console.ReadKey();
+            RunSamples();
         }
 
+        /// <summary>
+        /// 執行七組固定案例，逐案驗證貪心找零演算法。
+        /// 輸入由方法內定義，皆為只包含 5、10、20 的非空帳單陣列；
+        /// 輸出每案的輸入、預期結果、實際結果、PASS/FAIL 與通過總數。
+        /// </summary>
+        private static void RunSamples()
+        {
+            SampleCase[] samples =
+            [
+                new("官方範例：所有顧客皆可正確找零", [5, 5, 5, 10, 20], true),
+                new("官方範例：最後一位顧客無法找零", [5, 5, 10, 10, 20], false),
+                new("最小長度：收到 5 元不必找零", [5], true),
+                new("起手收到 10 元", [10], false),
+                new("起手收到 20 元", [20], false),
+                new("使用三張 5 元找 20 元", [5, 5, 5, 20], true),
+                new("優先使用 10 元加 5 元保留零錢", [5, 5, 5, 5, 5, 10, 20, 10, 10], true)
+            ];
+
+            int passedChecks = 0;
+
+            for (int index = 0; index < samples.Length; index++)
+            {
+                SampleCase sample = samples[index];
+                bool actual = LemonadeChange(sample.Bills);
+                bool passed = actual == sample.Expected;
+
+                passedChecks += passed ? 1 : 0;
+
+                Console.WriteLine($"案例 {index + 1}：{sample.Name}");
+                Console.WriteLine($"bills = {FormatBills(sample.Bills)}");
+                Console.WriteLine($"預期：{sample.Expected.ToString().ToLowerInvariant()}");
+                Console.WriteLine($"實際：{actual.ToString().ToLowerInvariant()} => {(passed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"總結：{passedChecks}/{samples.Length} 項驗證通過");
+            if (passedChecks != samples.Length)
+            {
+                Environment.ExitCode = 1;
+            }
+        }
 
         /// <summary>
-        /// 根據題目原意
-        /// 每一杯檸檬水都是 5 塊錢
-        /// 顧客只會買一杯
-        /// 會拿 以下 三種面額來購買
-        /// 1. 5
-        /// 2. 10
-        /// 3. 20
-        /// 
-        /// ----- 因為每杯單價固定, 面額不同而已
-        /// 所以 統計收入, 再來判斷 顧客給予哪一種面額
-        /// 來決定 能不能找零
-        /// 
-        /// 還有題目有說顧客是按照順序 ( bills ) 的消費
-        /// 所以不能找時候 就是錯誤
-        /// 
-        /// 能夠用來找零的面額就兩種
-        /// 1. 5
-        /// 2. 10
-        /// 
-        /// -> 面額 20 無法找零. 顧客最大面額就 20 而已
-        /// 所以找零面額需要小於 20
-        /// 
-        /// 收到 5 塊, 不用找零
-        /// 收到 10 塊, 找 5 塊
-        /// 收到 20 塊, 可區分兩種找零方式
-        /// 1. 3 個 5 塊錢
-        /// 2. 10 塊 + 5 塊
-        /// 
-        /// 初始化 手上無任何面額零錢
-        /// 所以要先收錢, 才能找零
-        /// 
+        /// 將帳單陣列格式化為緊湊的方括號字串，供驗收輸出與 README 對照。
+        /// 輸入為任意整數陣列，輸出格式如 <c>[5,10,20]</c>。
         /// </summary>
-        /// <param name="bills"></param>
-        /// <returns></returns>
+        /// <param name="bills">要格式化的帳單陣列。</param>
+        /// <returns>以逗號分隔各張帳單的方括號字串。</returns>
+        private static string FormatBills(int[] bills)
+        {
+            return $"[{string.Join(",", bills)}]";
+        }
+
+        /// <summary>
+        /// 依顧客順序模擬交易，使用貪心策略判斷是否能為每位顧客正確找零。
+        /// 輸入須為只包含 5、10、20 的非空帳單陣列；方法不會修改輸入。
+        /// 所有交易都能完成時回傳 <see langword="true"/>，首次無法找零時回傳 <see langword="false"/>。
+        /// </summary>
+        /// <param name="bills">依顧客付款順序排列的帳單陣列。</param>
+        /// <returns>是否能按照順序為全部顧客正確找零。</returns>
         public static bool LemonadeChange(int[] bills)
         {
-            // 能夠用來找零的面額
-            int five = 0, ten = 0;
+            // 20 元不會用來找零，因此只需追蹤手上的 5 元與 10 元張數。
+            int fiveDollarBills = 0;
+            int tenDollarBills = 0;
 
-            foreach (int b in bills) 
+            foreach (int bill in bills)
             {
-                if (b == 5)
+                if (bill == 5)
                 {
-                    // 收到 5 塊, 無須找零
-                    five++;
+                    fiveDollarBills++;
                 }
-                else if (b == 10)
+                else if (bill == 10)
                 {
-                    // 收到 10塊, 找 5 塊
-                    five--;
-                    ten++;
+                    fiveDollarBills--;
+                    tenDollarBills++;
                 }
-                else if (ten > 0)
+                else if (tenDollarBills > 0)
                 {
-                    // 有 10 塊面額
-                    // 收到 20, 找 10, 5 塊
-                    five--;
-                    ten--;
+                    // 收到 20 元時優先找 10+5，盡量保留用途更廣的 5 元鈔票。
+                    fiveDollarBills--;
+                    tenDollarBills--;
                 }
                 else
                 {
-                    // 沒有 10 塊面額
-                    // 收到 20, 找 5, 5, 5 塊
-                    five -= 3;
+                    fiveDollarBills -= 3;
                 }
 
-                if(five < 0)
+                // 5 元是所有找零組合的必要面額，張數不足時後續也無法補救。
+                if (fiveDollarBills < 0)
                 {
-                    // 無法找零
                     return false;
                 }
             }
 
             return true;
         }
+
+        /// <summary>
+        /// 表示一組驗收案例，保存案例名稱、付款順序與預期是否能完成全部交易。
+        /// </summary>
+        /// <param name="Name">案例顯示名稱。</param>
+        /// <param name="Bills">符合題目限制的帳單陣列。</param>
+        /// <param name="Expected">預期是否能為全部顧客找零。</param>
+        private sealed record SampleCase(string Name, int[] Bills, bool Expected);
     }
 }
