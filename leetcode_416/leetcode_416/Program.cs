@@ -9,90 +9,176 @@
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        int[] input = {1,5,11,5};
-
-        Console.WriteLine("res: " + CanPartition(input));
-    }
-
-
-    /// <summary>
-    /// ref:
-    /// 1. https://leetcode.cn/problems/partition-equal-subset-sum/solutions/442320/fen-ge-deng-he-zi-ji-by-leetcode-solution/
-    /// 2. https://leetcode.cn/problems/partition-equal-subset-sum/solutions/2785266/0-1-bei-bao-cong-ji-yi-hua-sou-suo-dao-d-ev76/
-    /// 3. https://leetcode.cn/problems/partition-equal-subset-sum/solutions/2276785/416-fen-ge-deng-he-zi-ji-by-stormsunshin-lwfo/// //  
-    /// 
-    /// 如果可以將數組分割成兩個元素和相等的子集，則必須同時滿足兩個條件：第一個條件是數組元素和是偶數，第二個條件是數組的最大元素不能超過數組元素和的一半。
-    /// 1.分割的兩部分是子集，所以不需要考慮順序
-    /// 2.分割的兩個子集的和是相等的, 合併起來為輸入的陣列並且每個元素只能使用一次
-    /// 3.單獨一個元素也是一個子集, 空元素和全部元素不是子集 
-    /// 
-    /// dp[i][j]: i 表示前 i 個元素，j 表示和為 j
-    /// 定義dfs ( i ,j )表示能否從nums [ 0 ]到nums [ i ]中選出一個和剛好等於 j的子序列。 
-    /// 考慮nums [ i ]選或不選：
-    /// 選：問題變成能否從nums [ 0 ]到nums [ i−1 ]中選出一個和剛好等於 j−nums [ i ]的子序列，即dfs ( i−1 ,j−nums [ i ])。
-    /// 不選：問題變成能否從nums [ 0 ]到nums [ i−1 ]中選出一個和剛好等於 j的子序列，即dfs ( i−1 ,j )。
-    /// 這兩個只要有一個成立，dfs ( i ,j )就是true。
-    // 所以有dp[i][j] = dp[i−1][j] || dp[i−1][j−nums[i]]。// /// </summary>
-    /// 
-    /// dp[i][j]: i - 1：表示考慮前 i-1 個數字（不包含當前數字）
-    /// 
-    /// j - nums[i - 1]：
-    /// nums[i - 1] 是當前要考慮的數字
-    /// j 是目標和
-    /// j - nums[i - 1] 表示從目標和中減去當前數字後的新目標和
-    /// <param name="nums"></param>
-    /// <returns></returns>
-    public static bool CanPartition(int[] nums)
-    {
-        int sum = 0;
-        // 計算所有元素的總和
-        foreach (var num in nums)
+        (string Name, int[] Input, bool Expected)[] testCases =
         {
-            sum += num;
+            ("官方範例一", new[] { 1, 5, 11, 5 }, true),
+            ("官方範例二", new[] { 1, 2, 3, 5 }, false),
+            ("單一元素", new[] { 1 }, false),
+            ("最大元素值", new[] { 100, 100 }, true),
+            ("偶數總和但不可分割", new[] { 2, 2, 3, 5 }, false),
+            ("多種組合可達目標", new[] { 3, 3, 3, 4, 5 }, true)
+        };
+
+        int passedChecks = 0;
+
+        for (int index = 0; index < testCases.Length; index++)
+        {
+            (string name, int[] input, bool expected) = testCases[index];
+            int[] inputForDynamicProgramming = [.. input];
+            int[] inputForMemoizedSearch = [.. input];
+
+            bool dynamicProgrammingResult = CanPartition(inputForDynamicProgramming);
+            bool memoizedSearchResult = CanPartition2(inputForMemoizedSearch);
+            bool dynamicProgrammingPassed =
+                dynamicProgrammingResult == expected &&
+                inputForDynamicProgramming.SequenceEqual(input);
+            bool memoizedSearchPassed =
+                memoizedSearchResult == expected &&
+                inputForMemoizedSearch.SequenceEqual(input);
+
+            passedChecks += dynamicProgrammingPassed ? 1 : 0;
+            passedChecks += memoizedSearchPassed ? 1 : 0;
+
+            Console.WriteLine($"案例 {index + 1}：{name}");
+            Console.WriteLine($"  輸入：[{string.Join(", ", input)}]");
+            Console.WriteLine($"  預期：{expected}");
+            Console.WriteLine(
+                $"  解法一（二維動態規劃）：{dynamicProgrammingResult} => " +
+                $"{(dynamicProgrammingPassed ? "PASS" : "FAIL")}");
+            Console.WriteLine(
+                $"  解法二（記憶化 DFS）：{memoizedSearchResult} => " +
+                $"{(memoizedSearchPassed ? "PASS" : "FAIL")}");
+            Console.WriteLine();
         }
 
-        // 如果總和是奇數，返回 false
-        // 偶數才能分成兩個相等的子集
-        if (sum % 2 != 0)
+        int totalChecks = testCases.Length * 2;
+        Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項驗證通過");
+    }
+
+    /// <summary>
+    /// 判斷正整數陣列能否分割成兩個元素總和相等的子集。
+    /// 解題概念是先將目標轉換為總和的一半，再以二維 0/1 背包動態規劃判斷
+    /// 前 <c>i</c> 個元素能否組成指定總和；每個元素只能選取一次。
+    /// 輸入需符合 <c>1 &lt;= nums.Length &lt;= 200</c> 且
+    /// <c>1 &lt;= nums[i] &lt;= 100</c>。若可分割則回傳 <see langword="true"/>，
+    /// 否則回傳 <see langword="false"/>。時間與額外空間複雜度皆為
+    /// O(n × target)，其中 <c>target</c> 是陣列總和的一半。
+    /// </summary>
+    /// <param name="nums">由正整數組成、要判斷能否等和分割的陣列。</param>
+    /// <returns>能分割成兩個等和子集時為 <see langword="true"/>；否則為 <see langword="false"/>。</returns>
+    public static bool CanPartition(int[] nums)
+    {
+        int totalSum = 0;
+
+        foreach (int num in nums)
+        {
+            totalSum += num;
+        }
+
+        // 兩個子集的總和相等時，原陣列總和必須是偶數。
+        if (totalSum % 2 != 0)
         {
             return false;
         }
 
+        int target = totalSum / 2;
         int n = nums.Length;
-        // 將 sum 除以 2，問題轉換為是否存在一個子集的和為 sum / 2
-        sum /= 2;
-        // dp[i, j] = true 如果在 nums[0, i] 中有一個子集的和為 j
-        bool[,] dp = new bool[n + 1, sum + 1];
+        bool[,] dp = new bool[n + 1, target + 1];
 
-        // 初始化：dp[i, 0] = true 表示對於任意的前 i 個數字，
-        // 都可以構成和為 0 的子集（即不選取任何元素）
+        // 不選取任何元素即可組成總和 0，因此每一列的基底狀態都是 true。
         for (int i = 0; i <= n; i++)
         {
             dp[i, 0] = true;
         }
 
-        // 動態規劃
         for (int i = 1; i <= n; i++)
         {
-            // 從 1 遍歷到 sum
-            for (int j = 1; j <= sum; j++)
+            int currentNumber = nums[i - 1];
+
+            for (int currentSum = 1; currentSum <= target; currentSum++)
             {
-                // 如果 j - nums[i - 1] < 0，表示當前元素大於 sum
-                // 所以我們不能包含它
-                // 只能選擇不包含當前元素
-                if (j - nums[i - 1] < 0)
+                // 先沿用「不選目前元素」的結果；放得下時再合併「選取」分支。
+                dp[i, currentSum] = dp[i - 1, currentSum];
+
+                if (currentNumber <= currentSum)
                 {
-                    // 如果我們不能包含當前元素，那麼結果與前一個相同
-                    dp[i, j] = dp[i - 1, j];
-                }
-                else
-                {
-                    // 如果我們能找到一個子集的和為 j - nums[i - 1]，那麼我們可以包含當前元素
-                    dp[i, j] = dp[i - 1, j] || dp[i - 1, j - nums[i - 1]];
+                    dp[i, currentSum] =
+                        dp[i, currentSum] ||
+                        dp[i - 1, currentSum - currentNumber];
                 }
             }
         }
 
-        return dp[n, sum];
+        return dp[n, target];
+    }
+
+    /// <summary>
+    /// 判斷正整數陣列能否分割成兩個元素總和相等的子集。
+    /// 解題概念是以記憶化深度優先搜尋處理每個元素「選取或略過」的決策，
+    /// 並以索引及剩餘目標總和作為快取狀態，避免重複搜尋相同子問題。
+    /// 輸入需符合 <c>1 &lt;= nums.Length &lt;= 200</c> 且
+    /// <c>1 &lt;= nums[i] &lt;= 100</c>。若可分割則回傳 <see langword="true"/>，
+    /// 否則回傳 <see langword="false"/>。時間與記憶化表空間複雜度皆為
+    /// O(n × target)，遞迴堆疊空間為 O(n)。
+    /// </summary>
+    /// <param name="nums">由正整數組成、要判斷能否等和分割的陣列。</param>
+    /// <returns>能分割成兩個等和子集時為 <see langword="true"/>；否則為 <see langword="false"/>。</returns>
+    public static bool CanPartition2(int[] nums)
+    {
+        int totalSum = 0;
+
+        foreach (int num in nums)
+        {
+            totalSum += num;
+        }
+
+        if (totalSum % 2 != 0)
+        {
+            return false;
+        }
+
+        int target = totalSum / 2;
+        bool?[,] memo = new bool?[nums.Length, target + 1];
+
+        return CanReachTarget(nums, 0, target, memo);
+    }
+
+    /// <summary>
+    /// 從指定索引開始搜尋能否選出總和等於剩餘目標的子集。
+    /// 每個狀態可選取或略過目前元素，結果以索引及剩餘目標快取；
+    /// 剩餘目標為 0 時表示成功，用完元素仍未達標時表示失敗。
+    /// </summary>
+    /// <param name="nums">由正整數組成且不會在搜尋過程中被修改的輸入陣列。</param>
+    /// <param name="index">目前要決定是否選取的元素索引。</param>
+    /// <param name="remaining">仍需組成的非負目標總和。</param>
+    /// <param name="memo">以元素索引及剩餘目標為座標的記憶化結果表。</param>
+    /// <returns>從目前狀態可組成剩餘目標時為 <see langword="true"/>；否則為 <see langword="false"/>。</returns>
+    private static bool CanReachTarget(int[] nums, int index, int remaining, bool?[,] memo)
+    {
+        if (remaining == 0)
+        {
+            return true;
+        }
+
+        if (index == nums.Length)
+        {
+            return false;
+        }
+
+        if (memo[index, remaining].HasValue)
+        {
+            return memo[index, remaining]!.Value;
+        }
+
+        // 只有目前元素不超過剩餘目標時才進入選取分支，避免產生負數狀態。
+        bool canInclude =
+            nums[index] <= remaining &&
+            CanReachTarget(nums, index + 1, remaining - nums[index], memo);
+        bool result =
+            canInclude ||
+            CanReachTarget(nums, index + 1, remaining, memo);
+
+        memo[index, remaining] = result;
+        return result;
     }
 }
