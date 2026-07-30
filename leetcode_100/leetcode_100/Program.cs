@@ -3,14 +3,25 @@
 class Program
 {
     /// <summary>
-    /// 
+    /// 表示二元樹中的單一節點，保存節點值以及可為空的左右子節點參考。
+    /// 輸入節點值與左右子樹即可組成題目使用的二元樹；建構後的節點可作為
+    /// <see cref="IsSameTree"/> 的輸入。
     /// </summary>
     public class TreeNode
     {
         public int val;
-        public TreeNode left;
-        public TreeNode right;
-        public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+        public TreeNode? left;
+        public TreeNode? right;
+
+        /// <summary>
+        /// 建立一個二元樹節點。節點值預設為 0，左右子節點可省略；
+        /// 省略或傳入 <see langword="null"/> 代表該方向沒有子樹。
+        /// 建構結果是包含指定值與子樹參考的新節點。
+        /// </summary>
+        /// <param name="val">節點儲存的整數值，題目限制為 -10^4 到 10^4。</param>
+        /// <param name="left">左子節點；沒有左子樹時為 <see langword="null"/>。</param>
+        /// <param name="right">右子節點；沒有右子樹時為 <see langword="null"/>。</param>
+        public TreeNode(int val = 0, TreeNode? left = null, TreeNode? right = null)
         {
             this.val = val;
             this.left = left;
@@ -46,56 +57,99 @@ class Program
     /// - 樹中節點數目在範圍 [0, 100] 內
     /// - -10^4 <= Node.val <= 10^4
     /// </summary>
-    /// <param name="args"></param>
-    static void Main(string[] args)
+    /// <remarks>
+    /// 以五組固定案例執行目前的遞迴解法，逐一輸出 PASS/FAIL，最後彙整整體結果。
+    /// </remarks>
+    /// <param name="args">命令列參數；本範例不需要額外輸入。</param>
+    private static void Main(string[] args)
     {
-        TreeNode p= new TreeNode(1);
-        p.left = new TreeNode(2);
-        p.right = new TreeNode(3);
+        int passedCount = 0;
+        const int totalCount = 5;
 
-        TreeNode q = new TreeNode(1);
-        q.left = new TreeNode(2);
-        q.right = new TreeNode(3);
+        passedCount += RunTestCase(
+            "兩棵空樹",
+            null,
+            null,
+            true) ? 1 : 0;
+        passedCount += RunTestCase(
+            "相同的三節點樹",
+            new TreeNode(1, new TreeNode(2), new TreeNode(3)),
+            new TreeNode(1, new TreeNode(2), new TreeNode(3)),
+            true) ? 1 : 0;
+        passedCount += RunTestCase(
+            "左右結構不同",
+            new TreeNode(1, new TreeNode(2)),
+            new TreeNode(1, null, new TreeNode(2)),
+            false) ? 1 : 0;
+        passedCount += RunTestCase(
+            "相同結構但節點值不同",
+            new TreeNode(1, new TreeNode(2), new TreeNode(1)),
+            new TreeNode(1, new TreeNode(1), new TreeNode(2)),
+            false) ? 1 : 0;
+        passedCount += RunTestCase(
+            "單邊為空樹",
+            new TreeNode(1),
+            null,
+            false) ? 1 : 0;
 
-        Console.WriteLine("ans: " + IsSameTree(p, q));
+        Console.WriteLine();
+        Console.WriteLine($"{passedCount}/{totalCount} test cases passed.");
+        Console.WriteLine(passedCount == totalCount ? "Overall: PASS" : "Overall: FAIL");
     }
 
 
     /// <summary>
-    /// 解題思路：
-    /// 1. 使用遞迴方式，同時比較兩棵樹的節點
-    /// 2. 判斷順序：
-    ///    - 先檢查節點是否同時為 null (代表該分支完全相同)
-    ///    - 再檢查是否其中一個節點為 null (代表結構不同)
-    ///    - 接著比較節點值是否相等
-    ///    - 最後遞迴比較左右子樹
-    /// 3. 時間複雜度 O(min(p,q)) - 只需遍歷到較小的樹的節點數
-    /// 4. 空間複雜度 O(min(p,q)) - 遞迴調用的棧空間
-    /// 
+    /// 執行單一固定案例，呼叫 <see cref="IsSameTree"/>
+    /// 比較兩棵輸入樹，再將實際結果與預期布林值比對。
+    /// 輸入樹可以為空；方法會輸出案例名稱、PASS/FAIL、預期值與實際值，
+    /// 並回傳案例是否通過，供主要進入點統計結果。
     /// </summary>
-    /// <param name="p">trees p</param>
-    /// <param name="q">trees q</param>
-    /// <returns>如果兩樹相同返回 true，否則返回 false</returns>
-    public static bool IsSameTree(TreeNode p, TreeNode q)
+    /// <param name="caseName">顯示於主控台的案例名稱。</param>
+    /// <param name="p">第一棵待比較的二元樹根節點；空樹時為 <see langword="null"/>。</param>
+    /// <param name="q">第二棵待比較的二元樹根節點；空樹時為 <see langword="null"/>。</param>
+    /// <param name="expected">此案例預期的樹比較結果。</param>
+    /// <returns>實際結果與預期結果相同時為 <see langword="true"/>，否則為 <see langword="false"/>。</returns>
+    private static bool RunTestCase(string caseName, TreeNode? p, TreeNode? q, bool expected)
+    {
+        bool actual = IsSameTree(p, q);
+        bool passed = actual == expected;
+
+        Console.WriteLine(
+            $"[{(passed ? "PASS" : "FAIL")}] {caseName} | Expected: {expected} | Actual: {actual}");
+
+        return passed;
+    }
+
+
+    /// <summary>
+    /// 判斷兩棵二元樹是否具有完全相同的結構與節點值。
+    /// 解法從兩個根節點同步遞迴：先處理空節點與值不同的終止條件，
+    /// 再分別比較左右子樹；只有左右兩側都相同才回傳
+    /// <see langword="true"/>。輸入可為空樹，且方法不會修改任何節點。
+    /// </summary>
+    /// <param name="p">第一棵待比較的二元樹根節點；空樹時為 <see langword="null"/>。</param>
+    /// <param name="q">第二棵待比較的二元樹根節點；空樹時為 <see langword="null"/>。</param>
+    /// <returns>兩棵樹的結構及對應節點值完全相同時為 <see langword="true"/>，否則為 <see langword="false"/>。</returns>
+    public static bool IsSameTree(TreeNode? p, TreeNode? q)
     {
         if (p == null && q == null)
         {
-            // 兩樹 root 皆為空
+            // 兩邊同時走到空節點，表示目前分支的結構與內容完全一致。
             return true;
         }
         else if (p == null || q == null)
         {
-            // 兩樹 root 其中一個為空
+            // 僅一邊為空代表樹形不同，不需要再向下比較。
             return false;
         }
         else if (p.val != q.val)
         {
-            // 兩樹 root 都不為空 就比較 root 的數值是否一樣
+            // 目前位置的節點值不同，兩棵樹不可能相同。
             return false;
         }
         else
         {
-            // 比較兩樹 各自的左右子樹
+            // 左右子樹必須同時相同；任一側失敗即可提前結束。
             return IsSameTree(p.left, q.left) && IsSameTree(p.right, q.right);
         }
     }
