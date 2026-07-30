@@ -9,54 +9,94 @@
         /// 67. 二进制求和
         /// https://leetcode.cn/problems/add-binary/description/
         /// </summary>
-        /// <param name="args"></param>
+        /// <remarks>
+        /// 以固定案例依序驗證兩種二進位字串加法，並輸出每次執行的預期值、實際值與通過狀態。
+        /// </remarks>
+        /// <param name="args">命令列參數；此範例不需要傳入任何參數。</param>
         static void Main(string[] args)
         {
-            string a = "11";
-            string b = "01";
+            (string A, string B, string Expected)[] testCases =
+            [
+                ("11", "1", "100"),
+                ("1010", "1011", "10101"),
+                ("0", "0", "0"),
+                ("1111", "1", "10000")
+            ];
 
-            Console.WriteLine("res: " + AddBinary(a, b));
+            int passed = 0;
+            int total = testCases.Length * 2;
+
+            for (int index = 0; index < testCases.Length; index++)
+            {
+                (string a, string b, string expected) = testCases[index];
+                passed += RunTestCase(index + 1, a, b, expected);
+            }
+
+            Console.WriteLine($"Overall: {passed}/{total} passed.");
+        }
+
+        /// <summary>
+        /// 執行一組二進位字串相加案例，讓 <see cref="AddBinary"/> 與
+        /// <see cref="AddBinary2"/> 使用相同輸入，並分別比對預期結果。
+        /// 輸入必須符合題目限制：兩個字串皆非空、只含 <c>0</c> 或 <c>1</c>；
+        /// 回傳值為本案例通過的解法數量，範圍為 0 到 2。
+        /// </summary>
+        /// <param name="caseNumber">顯示於主控台的案例編號。</param>
+        /// <param name="a">第一個合法的二進位字串。</param>
+        /// <param name="b">第二個合法的二進位字串。</param>
+        /// <param name="expected">兩個輸入相加後的預期二進位字串。</param>
+        /// <returns>本案例中結果符合預期值的解法數量。</returns>
+        private static int RunTestCase(int caseNumber, string a, string b, string expected)
+        {
+            string result1 = AddBinary(a, b);
+            string result2 = AddBinary2(a, b);
+            bool solution1Passed = result1 == expected;
+            bool solution2Passed = result2 == expected;
+
+            Console.WriteLine(
+                $"Case {caseNumber}: a = \"{a}\", b = \"{b}\", Expected = \"{expected}\"");
+            Console.WriteLine(
+                $"  AddBinary:  Actual = \"{result1}\", {(solution1Passed ? "PASS" : "FAIL")}");
+            Console.WriteLine(
+                $"  AddBinary2: Actual = \"{result2}\", {(solution2Passed ? "PASS" : "FAIL")}");
+            Console.WriteLine();
+
+            return (solution1Passed ? 1 : 0) + (solution2Passed ? 1 : 0);
         }
 
 
         /// <summary>
-        /// https://leetcode.cn/problems/add-binary/solution/er-jin-zhi-qiu-he-by-yicheng2020/
-        /// 從兩個 string 的尾端開始往前計算
-        /// 二進位從低位開始往高位做計算 <右邊往左邊計算>
-        /// 低位遇到進位問題,要給高位來進位
-        /// 
-        /// result.ToArray()
-        /// ToArray() 方法的作用是將集合（如 List<char> 或其他支持 IEnumerable 的集合）轉換為一個字符陣列（char[]）。
-        /// result.ToArray() 會將 List<char> 轉換為 char[] 陣列
+        /// 將兩個二進位字串相加。此解法使用兩個索引從最低位往最高位掃描，
+        /// 將每一位與前一輪進位相加，再由 <see cref="GetCarryAndUpdateResult"/>
+        /// 對加總值 0、1、2、3 決定結果位元與下一輪進位。
+        /// 輸入字串必須非空、只包含 <c>0</c> 或 <c>1</c>，且除 <c>"0"</c>
+        /// 以外不含前導零；輸出為不含前導零的二進位總和字串。
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">第一個合法的二進位字串。</param>
+        /// <param name="b">第二個合法的二進位字串。</param>
+        /// <returns><paramref name="a"/> 與 <paramref name="b"/> 相加後的二進位字串。</returns>
         public static string AddBinary(string a, string b)
         {
             List<char> result = new List<char>();
-
-            // carry 紀錄相加之後是否需要進位
             int carry = 0;
 
-            // i--, j-- 後往前  右往左 低位往高位
+            // 二進位加法必須由最低位向左處理，較短字串缺少的高位視為 0。
             for (int i = a.Length - 1, j = b.Length - 1; i >= 0 || j >= 0; i--, j--)
             {
                 int aElement = i >= 0 ? int.Parse(a[i].ToString()) : 0;
                 int bElement = j >= 0 ? int.Parse(b[j].ToString()) : 0;
                 int tempResult = carry + aElement + bElement;
 
-                // 計算進位，將當前答案更新至 result
                 carry = GetCarryAndUpdateResult(result, tempResult);
             }
 
-            // 如果最後運算有進位, 需要再多進位一次
+            // 最高位計算完仍有進位時，答案需要再補上一個 1。
             if (carry == 1)
             {
                 result.Add('1');
             }
 
-            // 因當初是反向計算(右邊開始先計算, 由右至左加入答案), 所以答案輸出要反轉
+            // 位元依低位到高位加入，因此輸出前要反轉成正常閱讀順序。
             result.Reverse();
 
             return new string(result.ToArray());
@@ -64,29 +104,61 @@
 
 
         /// <summary>
-        /// 副程式
-        /// 管理 是否進位
-        /// 以及相加之後
-        /// 數值是多少
-        /// 
-        /// *** 
-        /// tempResult 加總後數值, 可區分下列幾種 case
-        /// case 0: 答案 0, 不需進位
-        /// case 1: 答案 1, 不需進位
-        /// case 2: 答案 0 (1 + 1 要進位), 進位
-        /// case 3: 答案 1 (1 + 1 + 1), 進位
-        /// 
-        /// 二進位相加最多就上述幾種 case
-        /// 
-        /// 二進位從低位開始往高位做計算 <右邊往左邊計算>
-        /// 低位遇到進位問題,要給高位來進位
+        /// 將兩個二進位字串相加。此解法同樣從最低位往最高位掃描，
+        /// 但直接以 <c>sum % 2</c> 取得當前位元、以 <c>sum / 2</c>
+        /// 取得下一輪進位，並使用 <see cref="System.Text.StringBuilder"/> 暫存反向結果。
+        /// 輸入字串必須非空、只包含 <c>0</c> 或 <c>1</c>，且除 <c>"0"</c>
+        /// 以外不含前導零；輸出為不含前導零的二進位總和字串。
         /// </summary>
-        /// <param name="result">儲存答案</param>
-        /// <param name="tempResult">加總後數值</param>
-        /// <returns></returns>
+        /// <param name="a">第一個合法的二進位字串。</param>
+        /// <param name="b">第二個合法的二進位字串。</param>
+        /// <returns><paramref name="a"/> 與 <paramref name="b"/> 相加後的二進位字串。</returns>
+        public static string AddBinary2(string a, string b)
+        {
+            System.Text.StringBuilder reversedResult = new System.Text.StringBuilder();
+            int carry = 0;
+
+            // 兩個索引各自向左移動，較短字串超出範圍後不再加入位元。
+            for (int i = a.Length - 1, j = b.Length - 1; i >= 0 || j >= 0; i--, j--)
+            {
+                int sum = carry;
+
+                if (i >= 0)
+                {
+                    sum += a[i] - '0';
+                }
+
+                if (j >= 0)
+                {
+                    sum += b[j] - '0';
+                }
+
+                reversedResult.Append((char)('0' + (sum % 2)));
+                carry = sum / 2;
+            }
+
+            if (carry == 1)
+            {
+                reversedResult.Append('1');
+            }
+
+            char[] result = reversedResult.ToString().ToCharArray();
+            Array.Reverse(result);
+
+            return new string(result);
+        }
+
+
+        /// <summary>
+        /// 根據單一位元欄位的加總值更新反向結果，並回傳下一個高位要使用的進位。
+        /// 加總值只能是 0、1、2 或 3：0 與 1 不進位，2 與 3 進位；
+        /// 寫入的結果位元依序為 0、1、0、1。
+        /// </summary>
+        /// <param name="result">依低位到高位順序暫存答案位元的集合。</param>
+        /// <param name="tempResult">兩個當前位元加上舊進位後的值，範圍為 0 到 3。</param>
+        /// <returns>下一個高位使用的進位值，必為 0 或 1。</returns>
         private static int GetCarryAndUpdateResult(List<char> result, int tempResult)
         {
-            // 進位
             int carry = 0;
 
             switch (tempResult)
