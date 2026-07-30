@@ -24,76 +24,134 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        // 測試資料
-        int[] ratings1 = { 1, 0, 2 };
-        int[] ratings2 = { 1, 2, 2 };
-        int[] ratings3 = { 1, 3, 4, 5, 2 };
-        int[] ratings4 = { 5, 4, 3, 2, 1 };
-        int[] ratings5 = { 1, 2, 3, 2, 1 };
-        var solver = new Program();
-        Console.WriteLine($"方法1-測試1: {solver.Candy(ratings1)} (預期: 5)");
-        Console.WriteLine($"方法1-測試2: {solver.Candy(ratings2)} (預期: 4)");
-        Console.WriteLine($"方法1-測試3: {solver.Candy(ratings3)} (預期: 11)");
-        Console.WriteLine($"方法1-測試4: {solver.Candy(ratings4)} (預期: 15)");
-        Console.WriteLine($"方法1-測試5: {solver.Candy(ratings5)} (預期: 9)");
-        Console.WriteLine($"方法2-測試1: {solver.Candy2(ratings1)} (預期: 5)");
-        Console.WriteLine($"方法2-測試2: {solver.Candy2(ratings2)} (預期: 4)");
-        Console.WriteLine($"方法2-測試3: {solver.Candy2(ratings3)} (預期: 11)");
-        Console.WriteLine($"方法2-測試4: {solver.Candy2(ratings4)} (預期: 15)");
-        Console.WriteLine($"方法2-測試5: {solver.Candy2(ratings5)} (預期: 9)");
+        RunSamples();
     }
 
+    /// <summary>
+    /// 建立固定測試案例，依序執行兩次遍歷與單次遍歷解法，並統計每一項結果是否符合預期。
+    /// 輸入條件由方法內的七組合法 ratings 陣列提供；輸出為各案例的 Expected、Actual、
+    /// PASS/FAIL，以及全部十四項驗證的通過數量。
+    /// </summary>
+    private static void RunSamples()
+    {
+        SampleCase[] cases =
+        [
+            new("官方範例一", [1, 0, 2], 5),
+            new("官方範例二（相同評分）", [1, 2, 2], 4),
+            new("連續上升後下降", [1, 3, 4, 5, 2], 11),
+            new("完全遞減", [5, 4, 3, 2, 1], 15),
+            new("對稱山峰", [1, 2, 3, 2, 1], 9),
+            new("單一小孩", [1], 1),
+            new("谷底", [2, 1, 2], 5)
+        ];
+
+        Program solver = new();
+        (string Name, Func<int[], int> Solve)[] solutions =
+        [
+            ("方法一：兩次遍歷", solver.Candy),
+            ("方法二：單次遍歷", solver.Candy2)
+        ];
+
+        int passedChecks = 0;
+        int totalChecks = cases.Length * solutions.Length;
+
+        Console.WriteLine("LeetCode 135 - 分發糖果");
+        Console.WriteLine();
+
+        foreach ((string solutionName, Func<int[], int> solve) in solutions)
+        {
+            Console.WriteLine(solutionName);
+
+            for (int i = 0; i < cases.Length; i++)
+            {
+                if (RunCase(i + 1, cases[i], solve))
+                {
+                    passedChecks++;
+                }
+            }
+        }
+
+        Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項驗證通過");
+    }
 
     /// <summary>
-    /// 根據 ratings 分發糖果，確保每個小孩至少 1 顆，且評分高者比鄰居多。
-    /// 解題說明：
-    /// 1. 先初始化每個小孩 1 顆糖果。
-    /// 2. 從左到右遍歷，若 ratings[i] > ratings[i-1]，則 candies[i] = candies[i-1] + 1。
-    /// 3. 再從右到左遍歷，若 ratings[i] > ratings[i+1]，則 candies[i] = Math.Max(candies[i], candies[i+1] + 1)。
-    /// 4. 最後 candies 陣列總和即為最少所需糖果數。
-    /// 
-    /// 上述 2, 3 點的簡易思考就是要比前一個 index 大就好
-    /// 左到右 前一個就是 i 比 i - 1 大
-    /// 右到左 後一個就是 i 比 i + 1 大
+    /// 執行單一解法與案例，將輸入複製後交給演算法，避免不同解法之間共享可變狀態。
+    /// 輸入包含案例編號、合法測試資料與待驗證函式；輸出為實際結果是否等於預期值，
+    /// 並同步在主控台列印可供 README 使用的穩定驗證格式。
     /// </summary>
-    /// <param name="ratings">每個小孩的評分陣列</param>
-    /// <returns>最少所需糖果數</returns>
+    /// <param name="caseNumber">從 1 開始顯示的案例編號。</param>
+    /// <param name="sample">包含案例名稱、評分陣列與預期糖果總數的測試資料。</param>
+    /// <param name="solve">接收評分陣列並回傳最少糖果數的解法。</param>
+    /// <returns>實際結果與預期結果相同時為 <see langword="true"/>，否則為 <see langword="false"/>。</returns>
+    private static bool RunCase(int caseNumber, SampleCase sample, Func<int[], int> solve)
+    {
+        int actual = solve((int[])sample.Ratings.Clone());
+        bool passed = actual == sample.Expected;
+
+        Console.WriteLine($"案例 {caseNumber}：{sample.Name}");
+        Console.WriteLine($"輸入：{FormatArray(sample.Ratings)}");
+        Console.WriteLine($"Expected：{sample.Expected}");
+        Console.WriteLine($"Actual：{actual} => {(passed ? "PASS" : "FAIL")}");
+        Console.WriteLine();
+
+        return passed;
+    }
+
+    /// <summary>
+    /// 將整數陣列格式化為具有固定逗號與空格的中括號表示法。
+    /// 輸入可為空但不可為 <see langword="null"/> 的陣列；輸出例如 <c>[1, 0, 2]</c>，
+    /// 供主控台輸出與 README 範例保持一致。
+    /// </summary>
+    /// <param name="values">要格式化的整數陣列。</param>
+    /// <returns>以中括號包住、以逗號及空格分隔的陣列文字。</returns>
+    private static string FormatArray(int[] values)
+    {
+        return $"[{string.Join(", ", values)}]";
+    }
+
+    /// <summary>
+    /// 使用兩次遍歷計算符合相鄰評分規則的最少糖果數。
+    /// 先由左至右滿足左鄰居約束，再由右至左以較大值補足右鄰居約束，
+    /// 因而能同時保留兩個方向的最低合法分配。
+    /// 輸入須為非 <see langword="null"/> 的評分陣列；題目保證長度至少為 1，
+    /// 方法亦保留空陣列回傳 0 的既有行為。輸出為完成合法分配所需的最少糖果總數。
+    /// </summary>
+    /// <param name="ratings">依站位順序排列的每位小孩評分。</param>
+    /// <returns>滿足所有相鄰評分規則的最少糖果總數。</returns>
     public int Candy(int[] ratings)
     {
         int n = ratings.Length;
-        if (n == 0) return 0;
+        if (n == 0)
+        {
+            return 0;
+        }
 
         int[] candies = new int[n];
-        // 初始化每個小孩至少 1 顆糖果
         for (int i = 0; i < n; i++)
         {
             candies[i] = 1;
         }
 
-        // 從左到右遍歷，確保右邊比左邊分高時糖果數增加
+        // 第一趟只處理左鄰居約束：評分上升時，糖果必須比左側多一顆。
         for (int i = 1; i < n; i++)
         {
-            // 比前一個大， i 的前一個就是 i - 1
             if (ratings[i] > ratings[i - 1])
             {
                 candies[i] = candies[i - 1] + 1;
             }
         }
 
-        // 從右到左遍歷，確保左邊比右邊分高時糖果數增加
+        // 第二趟補足右鄰居約束；取最大值才能保留第一趟已建立的左側約束。
         for (int i = n - 2; i >= 0; i--)
         {
-            // 比後一個大， i 的後一個就是 i + 1
             if (ratings[i] > ratings[i + 1])
             {
-                // 注意這是關鍵點: 取最大值，確保不會因為右邊的增加而影響左邊的糖果數
                 candies[i] = Math.Max(candies[i], candies[i + 1] + 1);
             }
         }
 
-        // 計算總糖果數量
         int totalCandies = 0;
-        foreach (var candy in candies)
+        foreach (int candy in candies)
         {
             totalCandies += candy;
         }
@@ -103,44 +161,59 @@ class Program
 
 
     /// <summary>
-    /// 方法二：優化的單次遍歷
-    /// 解題說明：
-    /// 這個演算法只需一次遍歷即可計算最少糖果數。
-    /// 主要思路：
-    /// 1. 用 inc 記錄當前遞增序列長度，dec 記錄遞減序列長度，pre 記錄前一位分到的糖果數。
-    /// 2. 若 ratings[i] >= ratings[i-1]，代表遞增或持平，重設 dec，pre 根據是否持平決定是 1 或 pre+1，並加到總數。
-    /// 3. 若 ratings[i] < ratings[i-1]，代表遞減，dec 累加，若 dec == inc 需額外補一顆糖果給遞增序列起點，避免違規。
-    /// 4. 最後回傳總糖果數。
-    /// ref: https://leetcode.cn/problems/candy/solutions/533150/fen-fa-tang-guo-by-leetcode-solution-f01p/?envType=daily-question&envId=2025-06-02
+    /// 使用一次遍歷與遞增、遞減序列狀態計算最少糖果數。
+    /// <c>inc</c> 記錄最近上升序列峰值的糖果數，<c>dec</c> 記錄目前下降長度，
+    /// <c>pre</c> 記錄前一位糖果數；當下降長度碰到峰值時額外補一顆，
+    /// 使峰頂仍多於相鄰小孩。輸入須為非 <see langword="null"/> 且至少含一筆評分的陣列；
+    /// 輸出為符合所有相鄰評分規則的最少糖果總數。
     /// </summary>
-    /// <param name="ratings">每個小孩的評分陣列</param>
-    /// <returns>最少所需糖果數</returns>
+    /// <param name="ratings">依站位順序排列，且至少包含一個元素的評分陣列。</param>
+    /// <returns>滿足所有相鄰評分規則的最少糖果總數。</returns>
+    /// <remarks>
+    /// 參考：
+    /// https://leetcode.cn/problems/candy/solutions/533150/fen-fa-tang-guo-by-leetcode-solution-f01p/
+    /// </remarks>
     public int Candy2(int[] ratings)
     {
         int n = ratings.Length;
-        int res = 1; // 總糖果數，第一個小孩至少 1 顆
-        int inc = 1, dec = 0, pre = 1; // inc: 遞增序列長度, dec: 遞減序列長度, pre: 前一位分到的糖果數
+        int res = 1;
+        int inc = 1;
+        int dec = 0;
+        int pre = 1;
 
         for (int i = 1; i < n; i++)
         {
-            if (ratings[i] >= ratings[i - 1]) // 遞增或持平
+            if (ratings[i] >= ratings[i - 1])
             {
-                dec = 0; // 遞減序列歸零
-                pre = ratings[i] == ratings[i - 1] ? 1 : pre + 1; // 持平給 1，否則 +1
-                res += pre; // 累加糖果數
-                inc = pre; // 更新遞增序列長度
+                // 上升時延續糖果數；持平沒有大小約束，因此重新從一顆開始。
+                dec = 0;
+                pre = ratings[i] == ratings[i - 1] ? 1 : pre + 1;
+                res += pre;
+                inc = pre;
             }
-            else // 遞減
+            else
             {
-                dec++; // 遞減序列長度 +1
-                if (dec == inc) // 若遞減長度等於遞增長度，需補一顆給遞增起點
+                dec++;
+                if (dec == inc)
                 {
+                    // 下降序列追上峰值時補一顆，確保峰頂仍嚴格高於右鄰居。
                     dec++;
                 }
-                res += dec; // 累加遞減序列糖果數
-                pre = 1; // 遞減時當前只給 1 顆
+                res += dec;
+                pre = 1;
             }
         }
+
         return res;
     }
+
+    /// <summary>
+    /// 表示一組可重複執行的糖果分配測試資料。
+    /// 輸入為案例名稱、符合題目限制的評分陣列及預期最少糖果數；
+    /// 輸出由不可變屬性保存，供兩種解法共享同一份驗證規格。
+    /// </summary>
+    /// <param name="Name">案例的教學名稱。</param>
+    /// <param name="Ratings">依站位順序排列的評分陣列。</param>
+    /// <param name="Expected">預期的最少糖果總數。</param>
+    private sealed record SampleCase(string Name, int[] Ratings, int Expected);
 }
