@@ -26,43 +26,73 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string[] input = { "2", "1", "+", "3", "*" };
-            Console.WriteLine("res: " + EvalRPN(input));
+            RunSamples();
         }
 
+        /// <summary>
+        /// 執行固定的逆波蘭表示法範例，逐筆比較預期值與
+        /// <see cref="EvalRPN(string[])"/> 的實際結果，最後輸出通過筆數。
+        /// 輸入資料皆為題目保證有效的非空 token 陣列；本方法不接收參數，
+        /// 並將每筆案例的 Tokens、Expected、Actual 與 PASS/FAIL 寫入主控台。
+        /// </summary>
+        private static void RunSamples()
+        {
+            (string[] Tokens, int Expected)[] samples =
+            {
+                (new[] { "2", "1", "+", "3", "*" }, 9),
+                (new[] { "4", "13", "5", "/", "+" }, 6),
+                (new[] { "10", "6", "9", "3", "+", "-11", "*", "/", "*", "17", "+", "5", "+" }, 22),
+                (new[] { "5" }, 5),
+                (new[] { "3", "-4", "+" }, -1),
+                (new[] { "7", "-3", "/" }, -2)
+            };
+
+            int passedCount = 0;
+
+            for (int i = 0; i < samples.Length; i++)
+            {
+                (string[] tokens, int expected) = samples[i];
+                int actual = EvalRPN(tokens);
+                bool passed = actual == expected;
+
+                if (passed)
+                {
+                    passedCount++;
+                }
+
+                Console.WriteLine($"案例 {i + 1}");
+                Console.WriteLine($"Tokens: {FormatTokens(tokens)}");
+                Console.WriteLine($"Expected: {expected}");
+                Console.WriteLine($"Actual: {actual}");
+                Console.WriteLine($"Result: {(passed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"總結：{passedCount}/{samples.Length} 筆測試通過");
+        }
 
         /// <summary>
-        /// https://leetcode.cn/problems/evaluate-reverse-polish-notation/solutions/1456145/by-stormsunshine-cxqe/
-        /// 採用方法一
-        /// 比較直覺類似 wiki說明方式
-        /// 
-        /// 在 C# 中，Stack 是一個後進先出（LIFO, Last In, First Out）的資料結構，常用於處理需要回溯的場景，例如遞迴處理、括號配對或歷史記錄等。
-        /// 後進先出： 最後加入的元素會最先被移除。
-        /// 動態大小： 棧的容量會根據需要動態調整。
-        /// 泛型支持： C# 提供了 Stack<T>，可以存放任意類型的元素，避免了類型轉換的問題。
-        /// 非线程安全： 默认的 Stack 和 Stack<T> 不是线程安全的，在多线程環境下需要額外的同步處理。
-        /// 
-        /// Push： 將元素添加到棧頂。
-        /// Pop： 移除並返回棧頂元素。
-        /// Peek： 返回棧頂元素，但不移除它。
-        /// Contains： 判斷棧中是否包含某個元素。
-        /// Clear： 清空棧中的所有元素。
-        /// 
-        /// 棧的應用場景
-        /// 函數調用： 函數的參數、返回值和局部變量通常存儲在棧中。
-        /// 表達式求值： 棧可以用来實現後綴表達式求值。
-        /// 回溯算法： 棧可以用来實現回溯算法，例如迷宮求解、八皇后問題等, DFS 演算法或找路徑, 深度優先搜尋（DFS），使用 Stack 來追蹤路徑。。
-        /// 撤銷操作： 棧可以用来實現撤銷操作，例如文字編輯器中的撤銷功能。
-        /// 平衡符號：如括號配對驗證。
-        /// 暫存資料：例如實作瀏覽器的前進和後退功能。
-        /// 表達式計算：在計算機科學中，Stack 常用於解析和計算數學表達式。
-        /// 
+        /// 將有效的逆波蘭表示法 token 陣列轉為易讀字串，供範例輸出使用。
+        /// 輸入必須是非 null 的字串陣列；輸出會以雙引號包住每個 token，
+        /// 並以方括號及逗號呈現，例如 <c>["2", "1", "+"]</c>。
         /// </summary>
-        /// <param name="tokens"></param>
-        /// <returns></returns>
+        /// <param name="tokens">要格式化的非 null token 陣列。</param>
+        /// <returns>適合顯示於主控台與 README 的 token 清單。</returns>
+        private static string FormatTokens(string[] tokens)
+        {
+            return $"[{string.Join(", ", tokens.Select(token => $"\"{token}\""))}]";
+        }
+
+        /// <summary>
+        /// 計算有效逆波蘭表示法 token 陣列的整數結果。
+        /// 依序將運算元推入後進先出的 Stack；遇到運算子時取出右、左運算元，
+        /// 完成四則運算後再將結果推回。輸入必須是題目保證有效的非空運算式，
+        /// 且所有中間結果皆可用 32 位元整數表示；輸出為整個運算式的值。
+        /// </summary>
+        /// <param name="tokens">由整數字串及 <c>+、-、*、/</c> 組成的有效 token 陣列。</param>
+        /// <returns>逆波蘭表示法運算式的整數計算結果。</returns>
         public static int EvalRPN(string[] tokens)
         {
-            // 回傳答案是 int 型態
             Stack<int> stack = new Stack<int>();
             int length = tokens.Length;
 
@@ -72,19 +102,16 @@
 
                 if (IsNumber(token) == true)
                 {
-                    // 數字就直接 push 進入 stack
-                    // 別忘記型態轉換, 初始宣告是 string 要轉 int
+                    // 運算元先保留在 Stack，等待後續運算子使用。
                     stack.Push(int.Parse(token));
                 }
                 else
                 {
-                    // 遇到符號就要運算( 將數字 pop 出來, 再進行符號運算後.在計算完畢數字 push 進入 stack )
-                    // 最上方(後進入)兩個數字抓出來運算
-                    // stack 先進後出(後進的會先出去), 所以宣告先大在小合理
+                    // Stack 後進先出，因此先取得右運算元，再取得左運算元。
                     int num2 = stack.Pop();
                     int num1 = stack.Pop();
 
-                    // 注意 num1 與 num2 順序不能互換. 計算會出錯
+                    // 減法與除法不可交換運算元；C# 整數除法會向零截斷。
                     switch (token)
                     {
                         case "+":
@@ -108,24 +135,15 @@
             return stack.Pop();
         }
 
-
         /// <summary>
-        /// 判斷是不是數字
-        /// 在 C# 中，char.IsDigit 方法用于判断指定字符是否是一个数字。它返回一个布尔值，表示字符是否是 0 到 9 之间的数字。
-        ///
-        /// 輸入是 string, 要轉 char 才能判斷
-        /// 所以用 陣列方式表達
-        /// 陣列從 0 開始, 所以要減 1
-        /// 
-        /// ex:
-        /// string str = "A";
-        /// char c = str[0]; 
+        /// 判斷 token 是否代表整數。題目輸入只會包含有效整數或四種運算子，
+        /// 因此檢查非空 token 的最後一個字元是否為數字，即可同時辨識正整數、
+        /// 零與負整數；輸出為是否可當作運算元處理的布林值。
         /// </summary>
-        /// <param name="token"></param>
-        /// <returns></returns>
+        /// <param name="token">題目保證非空的整數或運算子字串。</param>
+        /// <returns>若 token 代表整數則為 <see langword="true"/>，否則為 <see langword="false"/>。</returns>
         public static bool IsNumber(string token)
         {
-            // string 要轉 char 判斷是不是數字
             return char.IsDigit(token[token.Length - 1]);
         }
     }
