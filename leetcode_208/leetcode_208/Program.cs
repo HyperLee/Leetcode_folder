@@ -13,181 +13,271 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            Trie obj = new Trie();
-            obj.Insert("apple");
-
-            bool param_2 = obj.Search("apple");
-            Console.WriteLine("param_2: " + param_2);
-
-            bool param_3 = obj.StartsWith("app");
-            Console.WriteLine("param_3: " + param_3);
-
-            bool param_4 = obj.Search("app");
-            Console.WriteLine("param_4: " + param_4);
-
-            obj.Insert("app");
-
-            bool param_5 = obj.Search("app");
-            Console.WriteLine("param_5: " + param_5);
+            RunSamples();
         }
 
+        /// <summary>
+        /// 執行固定的 Trie 操作序列；每組案例都使用獨立實例，逐項比較查詢的預期值與實際值。
+        /// 輸入涵蓋官方流程、共享前綴、重複插入與單字元邊界，輸出為案例結果及查詢通過統計。
+        /// </summary>
+        private static void RunSamples()
+        {
+            TrieTestCase[] testCases =
+            [
+                new(
+                    "官方範例 - apple 與 app",
+                    [
+                        TrieOperation.Insert("apple"),
+                        TrieOperation.Search("apple", true),
+                        TrieOperation.Search("app", false),
+                        TrieOperation.StartsWith("app", true),
+                        TrieOperation.Insert("app"),
+                        TrieOperation.Search("app", true)
+                    ]),
+                new(
+                    "共享前綴與不存在路徑",
+                    [
+                        TrieOperation.Insert("car"),
+                        TrieOperation.Insert("card"),
+                        TrieOperation.Insert("care"),
+                        TrieOperation.Search("car", true),
+                        TrieOperation.Search("ca", false),
+                        TrieOperation.StartsWith("ca", true),
+                        TrieOperation.StartsWith("cat", false),
+                        TrieOperation.Search("card", true),
+                        TrieOperation.Search("care", true)
+                    ]),
+                new(
+                    "重複插入同一單字",
+                    [
+                        TrieOperation.Insert("dog"),
+                        TrieOperation.Insert("dog"),
+                        TrieOperation.Search("dog", true),
+                        TrieOperation.StartsWith("do", true),
+                        TrieOperation.Search("dogs", false)
+                    ]),
+                new(
+                    "單字元與不存在分支",
+                    [
+                        TrieOperation.Insert("a"),
+                        TrieOperation.Search("a", true),
+                        TrieOperation.StartsWith("a", true),
+                        TrieOperation.Search("b", false),
+                        TrieOperation.StartsWith("z", false)
+                    ])
+            ];
+
+            int passedCases = 0;
+            int passedQueries = 0;
+            int totalQueries = 0;
+
+            Console.WriteLine("LeetCode 208 - Implement Trie (Prefix Tree)");
+            Console.WriteLine("解法：每個節點使用 26 格子節點陣列，並以 isEnd 區分完整單字與前綴");
+            Console.WriteLine();
+
+            foreach (TrieTestCase testCase in testCases)
+            {
+                Trie trie = new();
+                List<bool> expectedValues = [];
+                List<bool> actualValues = [];
+
+                foreach (TrieOperation operation in testCase.Operations)
+                {
+                    if (operation.Type == TrieOperationType.Insert)
+                    {
+                        trie.Insert(operation.Value);
+                        continue;
+                    }
+
+                    bool actual = operation.Type == TrieOperationType.Search
+                        ? trie.Search(operation.Value)
+                        : trie.StartsWith(operation.Value);
+                    bool expected = operation.Expected.GetValueOrDefault();
+
+                    expectedValues.Add(expected);
+                    actualValues.Add(actual);
+                    totalQueries++;
+
+                    if (actual == expected)
+                    {
+                        passedQueries++;
+                    }
+                }
+
+                bool passed = expectedValues.SequenceEqual(actualValues);
+                if (passed)
+                {
+                    passedCases++;
+                }
+
+                Console.WriteLine(
+                    $"[{(passed ? "PASS" : "FAIL")}] {testCase.Name} | " +
+                    $"Expected: [{string.Join(", ", expectedValues)}] | " +
+                    $"Actual: [{string.Join(", ", actualValues)}]");
+            }
+
+            Console.WriteLine();
+            Console.WriteLine(
+                $"總結：{passedCases}/{testCases.Length} 組案例通過，" +
+                $"{passedQueries}/{totalQueries} 次查詢驗證通過。");
+        }
+
+        /// <summary>
+        /// 表示可重播的 Trie 操作種類：插入完整單字、搜尋完整單字或檢查既有單字前綴。
+        /// </summary>
+        private enum TrieOperationType
+        {
+            Insert,
+            Search,
+            StartsWith
+        }
+
+        /// <summary>
+        /// 表示一筆 Trie 操作；輸入值須為長度 1 到 2000 的小寫英文字母字串，
+        /// 查詢操作同時保存預期布林結果，插入操作不產生回傳值。
+        /// </summary>
+        /// <param name="Type">要執行的插入、完整單字搜尋或前綴搜尋。</param>
+        /// <param name="Value">要插入或查詢的非空小寫英文字母字串。</param>
+        /// <param name="Expected">查詢的預期結果；插入操作為 <see langword="null"/>。</param>
+        private sealed record TrieOperation(
+            TrieOperationType Type,
+            string Value,
+            bool? Expected)
+        {
+            /// <summary>
+            /// 建立不包含預期回傳值的插入操作。
+            /// </summary>
+            /// <param name="word">要插入的非空小寫英文字母單字。</param>
+            /// <returns>可供驗證器重播的插入操作。</returns>
+            public static TrieOperation Insert(string word) =>
+                new(TrieOperationType.Insert, word, null);
+
+            /// <summary>
+            /// 建立完整單字搜尋操作，並記錄該單字是否應已被插入。
+            /// </summary>
+            /// <param name="word">要搜尋的非空小寫英文字母單字。</param>
+            /// <param name="expected">該完整單字預期是否存在。</param>
+            /// <returns>可供驗證器重播與比對的搜尋操作。</returns>
+            public static TrieOperation Search(string word, bool expected) =>
+                new(TrieOperationType.Search, word, expected);
+
+            /// <summary>
+            /// 建立前綴搜尋操作，並記錄是否應存在以該字串開頭的已插入單字。
+            /// </summary>
+            /// <param name="prefix">要檢查的非空小寫英文字母前綴。</param>
+            /// <param name="expected">預期是否存在符合前綴的單字。</param>
+            /// <returns>可供驗證器重播與比對的前綴搜尋操作。</returns>
+            public static TrieOperation StartsWith(string prefix, bool expected) =>
+                new(TrieOperationType.StartsWith, prefix, expected);
+        }
+
+        /// <summary>
+        /// 表示一組使用獨立 Trie 執行的具名案例，操作會依陣列順序重播並驗證所有查詢結果。
+        /// </summary>
+        /// <param name="Name">顯示於主控台的案例名稱。</param>
+        /// <param name="Operations">依序執行的插入與查詢操作。</param>
+        private sealed record TrieTestCase(string Name, TrieOperation[] Operations);
     }
 
     /// <summary>
-    /// 實現 Trie (前綴樹)
-    /// 
-    /// 解題想法與概念：
-    /// 1. Trie (發音為 "try") 是一種特殊的樹形資料結構，專門用於儲存和檢索字串集合
-    /// 2. 核心特點：
-    ///    - 節點不儲存完整字串，而是以字元為基礎構建路徑
-    ///    - 共享前綴的字串共享相同的節點路徑，節省空間
-    ///    - 查詢時間複雜度為 O(m)，其中 m 是字串長度，不受已儲存字串數量影響
-    /// 3. 實現方式：
-    ///    - 每個節點有 26 個子節點指針（對應 26 個英文小寫字母）
-    ///    - 使用 isEnd 標記表示某條路徑是否構成一個完整的單字
-    ///    - 利用字元減去 'a' 計算索引位置，確保快速存取
-    /// 
-    /// 優勢：
-    /// - 前綴查詢高效（複雜度 O(m)，m 為前綴長度）
-    /// - 適合實現自動完成、拼寫檢查等功能
-    /// 
-    /// 時間複雜度：
-    /// - 插入：O(m)，m 為字串長度
-    /// - 搜尋：O(m)，m 為字串長度
-    /// - 前綴搜尋：O(m)，m 為前綴長度
-    /// 
-    /// 空間複雜度：
-    /// - O(T)，T 是所有字串的總字元數
-    /// 
-    /// ref:
-    /// https://leetcode.cn/problems/implement-trie-prefix-tree/solutions/717239/shi-xian-trie-qian-zhui-shu-by-leetcode-ti500/
-    /// https://leetcode.cn/problems/implement-trie-prefix-tree/solutions/2993894/cong-er-cha-shu-dao-er-shi-liu-cha-shu-p-xsj4/
+    /// 使用固定 26 格子節點陣列實作 Trie；共享前綴共用路徑，並以 <c>isEnd</c>
+    /// 標記路徑是否為已插入的完整單字。所有輸入須為非空小寫英文字母字串。
     /// </summary>
     public class Trie
     {
         /// <summary>
-        /// 標記當前節點是否代表一個完整單字的結尾
-        /// 例如: 插入 "apple" 後，路徑 a->p->p->l->e 的最後一個節點 e 的 isEnd 為 true
+        /// 標記目前節點是否為已插入完整單字的結尾。
         /// </summary>
         private bool isEnd;
-        
+
         /// <summary>
-        /// 子節點陣列，索引對應 26 個小寫字母 (children[0] 代表 'a'，children[1] 代表 'b'...)
-        /// 若 children[i] 不為 null，表示當前節點有對應的子節點
+        /// 保存 26 個小寫字母的可選子節點；索引 0 對應 <c>a</c>，索引 25 對應 <c>z</c>。
         /// </summary>
-        private Trie[] children;
-
+        private readonly Trie?[] children;
 
         /// <summary>
-        /// Trie 的建構函式，初始化前綴樹資料結構
+        /// 建立空的 Trie 節點；初始不代表任何完整單字，且 26 個子節點都不存在。
         /// </summary>
         public Trie()
         {
-            // 初始化節點，預設不是任何單字的結尾
             isEnd = false;
-            // 建立長度為 26 的陣列，對應 26 個英文小寫字母的可能子節點
-            children = new Trie[26];
+            children = new Trie?[26];
         }
 
-
         /// <summary>
-        /// 將單字插入到 Trie 前綴樹中
+        /// 將非空小寫英文字母單字插入 Trie；沿既有前綴走訪，只為缺少的字元建立節點，
+        /// 最後標記完整單字結尾。此方法不產生回傳值，重複插入不會改變查詢結果。
         /// </summary>
-        /// <param name="word">要插入的單字</param>
+        /// <param name="word">長度 1 到 2000、只含 <c>a</c> 到 <c>z</c> 的單字。</param>
         public void Insert(string word)
         {
-            // 從根節點開始遍歷
             Trie node = this;
-            int length = word.Length;
-            
-            // 逐字元處理單字
-            for(int i = 0; i < length; i++)
+
+            foreach (char character in word)
             {
-                char c = word[i];
-                // 計算當前字元對應的陣列索引 (a->0, b->1, ..., z->25)
-                int index = c - 'a';
-                
-                // 如果當前節點的子節點中不包含當前字元，則建立一個新的子節點
-                if (node.children[index] == null)
+                int index = character - 'a';
+                Trie? child = node.children[index];
+
+                // 共享前綴直接沿用既有節點，只有路徑缺少目前字元時才配置新節點。
+                if (child is null)
                 {
-                    node.children[index] = new Trie();
+                    child = new Trie();
+                    node.children[index] = child;
                 }
-                
-                // 移動到子節點，繼續處理下一個字元
-                node = node.children[index];
+
+                node = child;
             }
-            
-            // 標記單字結束位置
+
             node.isEnd = true;
         }
 
-
         /// <summary>
-        /// 在 Trie 中搜尋完整單字
-        /// Search 除了路徑存在外，還要求是完整單字的結尾
-        /// 例如: 插入 "apple" 後，"apple" 返回 true，但 "app" 返回 false
+        /// 搜尋非空小寫英文字母單字；先走訪完整路徑，再以結尾標記區分完整單字與較長單字的前綴。
         /// </summary>
-        /// <param name="word">要搜尋的單字</param>
-        /// <returns>單字是否存在於 Trie 中</returns>
+        /// <param name="word">長度 1 到 2000、只含 <c>a</c> 到 <c>z</c> 的待搜尋單字。</param>
+        /// <returns>路徑存在且曾被標記為完整單字時回傳 <see langword="true"/>；否則回傳 <see langword="false"/>。</returns>
         public bool Search(string word)
         {
-            // 呼叫 SearchPrefix 方法先找到這個單字的前綴路徑
-            Trie node = SearchPrefix(word);
-            // 只有當路徑存在 (node != null) 且最後一個節點標記為單字結尾 (node.isEnd) 時才返回 true
-            // 這確保了我們找到的是一個完整單字，而不只是某個更長單字的前綴
-            return node != null && node.isEnd;
+            Trie? node = SearchPrefix(word);
+
+            // 路徑存在仍不代表完整單字；例如只插入 apple 時，app 尚未被標記為結尾。
+            return node is not null && node.isEnd;
         }
 
-
         /// <summary>
-        /// 檢查 Trie 中是否有任何單字以給定前綴開頭
-        /// StartsWith 只關心路徑是否存在，不需要檢查是否為完整單字
-        /// 例如: 插入 "apple" 後，"app" 是 "apple" 的前綴，返回 true
+        /// 檢查是否有已插入單字以指定非空小寫英文字母前綴開頭；只要求路徑存在，不檢查完整單字標記。
         /// </summary>
-        /// <param name="prefix">要檢查的前綴</param>
-        /// <returns>是否存在以給定前綴開頭的單字</returns>
+        /// <param name="prefix">長度 1 到 2000、只含 <c>a</c> 到 <c>z</c> 的前綴。</param>
+        /// <returns>前綴的每個字元路徑都存在時回傳 <see langword="true"/>；否則回傳 <see langword="false"/>。</returns>
         public bool StartsWith(string prefix)
         {
-            // 呼叫 SearchPrefix 方法尋找前綴路徑
-            Trie node = SearchPrefix(prefix);
-            // 只要前綴路徑存在（不論是否為完整單字的結尾），即返回 true
-            return node != null;
+            return SearchPrefix(prefix) is not null;
         }
 
-
         /// <summary>
-        /// 在 Trie 中搜尋前綴路徑
-        /// 這是一個輔助方法，被 Search 和 StartsWith 方法呼叫
+        /// 從目前節點沿指定小寫英文字母前綴逐層走訪，供完整單字搜尋與前綴搜尋共用。
         /// </summary>
-        /// <param name="prefix">要搜尋的前綴</param>
-        /// <returns>如果前綴存在，返回對應的節點；否則返回 null</returns>
-        private Trie SearchPrefix(string prefix)
+        /// <param name="prefix">長度 1 到 2000、只含 <c>a</c> 到 <c>z</c> 的前綴或單字。</param>
+        /// <returns>完整路徑存在時回傳最後一個節點；任一字元缺少對應子節點時回傳 <see langword="null"/>。</returns>
+        private Trie? SearchPrefix(string prefix)
         {
-            // 從根節點開始搜尋
             Trie node = this;
-            int length = prefix.Length;
-            
-            // 逐字元遍歷前綴
-            for(int i = 0; i < length; i++)
+
+            foreach (char character in prefix)
             {
-                char c = prefix[i];
-                // 計算當前字元對應的陣列索引
-                int index = c - 'a';
-                
-                // 如果在當前路徑上找不到對應字元的子節點，表示前綴不存在
-                if (node.children[index] == null)
+                int index = character - 'a';
+                Trie? child = node.children[index];
+
+                // 任一段路徑不存在，就不可能形成指定完整單字或前綴。
+                if (child is null)
                 {
                     return null;
                 }
-                
-                // 移動到子節點，繼續搜尋
-                node = node.children[index];
+
+                node = child;
             }
 
-            // 返回前綴最後一個字元對應的節點
-            // 如果想確認這是一個完整單字，還需要檢查 isEnd 屬性
             return node;
         }
     }
-
 }
