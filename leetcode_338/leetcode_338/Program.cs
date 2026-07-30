@@ -17,97 +17,99 @@ class Program
     static void Main(string[] args)
     {
         Program solution = new Program();
-        
-        // 測試案例
-        int[] testCases = { 2, 5, 8 };
-        
-        foreach (int n in testCases)
+
+        (string Name, int Input, int[] Expected)[] testCases =
         {
-            Console.WriteLine($"\n測試 n = {n}:");
-            
-            // 測試第一種解法
-            int[] result1 = solution.CountBits(n);
-            Console.WriteLine($"解法1結果: [{string.Join(", ", result1)}]");
-            
-            // 測試第二種解法
-            int[] result2 = solution.CountBits2(n);
-            Console.WriteLine($"解法2結果: [{string.Join(", ", result2)}]");
-            
-            // 驗證兩種解法結果是否相同
-            bool isEqual = Enumerable.SequenceEqual(result1, result2);
-            Console.WriteLine($"兩種解法結果{(isEqual ? "相同" : "不同")}");
+            ("題目下界", 0, new[] { 0 }),
+            ("最小正整數", 1, new[] { 0, 1 }),
+            ("官方範例一", 2, new[] { 0, 1, 1 }),
+            ("官方範例二", 5, new[] { 0, 1, 1, 2, 1, 2 }),
+            ("跨越 2 的三次方", 8, new[] { 0, 1, 1, 2, 1, 2, 2, 3, 1 }),
+            (
+                "跨越 2 的四次方",
+                16,
+                new[] { 0, 1, 1, 2, 1, 2, 2, 3, 1, 2, 2, 3, 2, 3, 3, 4, 1 })
+        };
+
+        int passedChecks = 0;
+
+        for (int index = 0; index < testCases.Length; index++)
+        {
+            (string name, int input, int[] expected) = testCases[index];
+            int[] result1 = solution.CountBits(input);
+            int[] result2 = solution.CountBits2(input);
+            bool result1Passed = result1.SequenceEqual(expected);
+            bool result2Passed = result2.SequenceEqual(expected);
+
+            passedChecks += result1Passed ? 1 : 0;
+            passedChecks += result2Passed ? 1 : 0;
+
+            Console.WriteLine($"案例 {index + 1}：{name}");
+            Console.WriteLine($"  輸入：{input}");
+            Console.WriteLine($"  預期：[{string.Join(", ", expected)}]");
+            Console.WriteLine(
+                $"  解法一（右移＋最低位）：[{string.Join(", ", result1)}] => {(result1Passed ? "PASS" : "FAIL")}");
+            Console.WriteLine(
+                $"  解法二（奇偶遞推）：[{string.Join(", ", result2)}] => {(result2Passed ? "PASS" : "FAIL")}");
+            Console.WriteLine();
         }
+
+        int totalChecks = testCases.Length * 2;
+        Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項驗證通過");
     }
 
 
     /// <summary>
-    /// 計算從0到n的每個數字中1的位元數
-    /// 使用動態規劃的方法，利用已計算的結果來加速計算
-    /// 時間複雜度：O(n)，空間複雜度：O(n)
-    /// 效能好,
+    /// 計算從 0 到 <paramref name="n"/> 每個整數的二進位表示中 1 的個數。
+    /// 解題概念是移除目前數字的最低位，重用 <c>dp[i >> 1]</c>，
+    /// 再以 <c>i &amp; 1</c> 判斷被移除的最低位是否為 1。
+    /// 輸入需符合 <c>0 &lt;= n &lt;= 100000</c>；輸出索引 <c>i</c>
+    /// 對應數字 <c>i</c> 的位元 1 數量。時間複雜度為 O(n)，回傳陣列空間為 O(n)，
+    /// 不計回傳陣列時的額外空間為 O(1)。
     /// </summary>
-    /// <param name="n">輸入範圍的上限值</param>
-    /// <returns>返回一個整數陣列，其中ans[i]表示數字i的二進位表示中1的個數</returns>
-    public int[] CountBits(int n) 
+    /// <param name="n">要計算的非負整數上限，範圍為 0 到 100000。</param>
+    /// <returns>長度為 <c>n + 1</c> 的陣列，其中索引 <c>i</c> 的值為 <c>i</c> 的位元 1 數量。</returns>
+    public int[] CountBits(int n)
     {
-        // 創建一個長度為n+1的陣列來儲存結果
         int[] dp = new int[n + 1];
-        
-        // 遍歷從1到n的每個數字
+
         for (int i = 1; i <= n; i++)
         {
-            // 對於每個數字i，其二進位中1的個數等於：
-            // 1. i右移一位後的數字中1的個數 (dp[i >> 1])
-            // 2. 加上i的最後一位是否為1 (i & 1)
+            // 右移移除最低位；再把最低位是否為 1 加回已知結果。
             dp[i] = dp[i >> 1] + (i & 1);
         }
-        
+
         return dp;
     }
 
     /// <summary>
-    /// 計算從0到n的每個數字中1的位元數的替代解法
-    /// 使用動態規劃，基於奇偶性質來計算
-    /// 時間複雜度：O(n)，空間複雜度：O(n)
-    /// 
-    /// ex:偶數
-    ///  2 = 10       4 = 100       8 = 1000
-    ///  3 = 11       5 = 101       9 = 1001
-    /// 
-    /// ex:奇數
-    /// 0 = 0       1 = 1
-    /// 2 = 10      3 = 11
-    /// 
-    /// 易讀
-    /// 奇數：其1的個數等於前一個數(偶數)的1的個數加1
-    /// 偶數：其1的個數等於該數除以2的數字的1的個數(直接除以2)
-    /// <param name="n">輸入範圍的上限值</param>
-    /// <returns>返回一個整數陣列，其中result[i]表示數字i的二進位表示中1的個數</returns>
-    public int[] CountBits2(int n) 
+    /// 計算從 0 到 <paramref name="n"/> 每個整數的二進位表示中 1 的個數。
+    /// 解題概念是依奇偶性重用較小數字的結果：偶數除以 2 後位元 1 數量不變，
+    /// 奇數則比前一個偶數多一個最低位 1。
+    /// 輸入需符合 <c>0 &lt;= n &lt;= 100000</c>；輸出索引 <c>i</c>
+    /// 對應數字 <c>i</c> 的位元 1 數量。時間複雜度為 O(n)，回傳陣列空間為 O(n)，
+    /// 不計回傳陣列時的額外空間為 O(1)。
+    /// </summary>
+    /// <param name="n">要計算的非負整數上限，範圍為 0 到 100000。</param>
+    /// <returns>長度為 <c>n + 1</c> 的陣列，其中索引 <c>i</c> 的值為 <c>i</c> 的位元 1 數量。</returns>
+    public int[] CountBits2(int n)
     {
-        // 創建結果陣列並初始化
         int[] result = new int[n + 1];
-        // 由於0的二進位表示中沒有1，所以result[0] = 0
-        // 這裡的result[0] = 0是多餘的，因為陣列初始化時已經是0了
-        // result[0] = 0;
 
-        // 遍歷從1到n的每個數字
         for (int i = 1; i <= n; i++)
         {
             if (i % 2 == 1)
             {
-                // 對於奇數：其1的個數等於前一個數(偶數)的1的個數加1
-                // 因為奇數是在偶數的二進位表示後加上一個1
+                // 奇數由前一個偶數補上最低位 1，因此位元 1 數量多一個。
                 result[i] = result[i - 1] + 1;
             }
             else
             {
-                // 對於偶數：其1的個數等於該數除以2的數字的1的個數
-                // 因為偶數是將某個數左移一位（乘2）得到的，1的個數不變
+                // 偶數除以 2 等同右移一位，不會移除任何位元 1。
                 result[i] = result[i / 2];
             }
         }
-        
+
         return result;
     }
 }
