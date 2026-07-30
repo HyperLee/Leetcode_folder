@@ -18,119 +18,234 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] input1 = { 1, 2, 2, 1 };
-            int[] input2 = { 2, 2 };
+            int[] maximumLengthNums1 = Enumerable.Repeat(1000, 1000).ToArray();
+            int[] maximumLengthNums2 = Enumerable.Repeat(0, 999).Append(1000).ToArray();
+            TestCase[] testCases =
+            [
+                new("Official example 1", "[1, 2, 2, 1]", "[2, 2]", [1, 2, 2, 1], [2, 2], [2, 2]),
+                new("Official example 2", "[4, 9, 5]", "[9, 4, 9, 8, 4]", [4, 9, 5], [9, 4, 9, 8, 4], [4, 9]),
+                new("No intersection", "[1, 2, 3]", "[4, 5, 6]", [1, 2, 3], [4, 5, 6], []),
+                new("Asymmetric duplicate counts", "[1, 1, 1, 2]", "[1, 1, 2, 2]", [1, 1, 1, 2], [1, 1, 2, 2], [1, 1, 2]),
+                new("Minimum lengths and value", "[0]", "[0]", [0], [0], [0]),
+                new("Complete intersection in different order", "[0, 500, 1000]", "[1000, 500, 0]", [0, 500, 1000], [1000, 500, 0], [0, 500, 1000]),
+                new("Second array is shorter", "[1, 2, 2, 3, 3]", "[2, 3]", [1, 2, 2, 3, 3], [2, 3], [2, 3]),
+                new(
+                    "Maximum lengths and value",
+                    "[length 1000; all values are 1000]",
+                    "[length 1000; 999 zeros followed by 1000]",
+                    maximumLengthNums1,
+                    maximumLengthNums2,
+                    [1000])
+            ];
 
-            var res = Intersect(input1, input2);
-
-            foreach(var value in res)
+            int passed = 0;
+            foreach (TestCase testCase in testCases)
             {
-                Console.Write(value + ", ");
+                int[] intersectNums1 = [.. testCase.Nums1];
+                int[] intersectNums2 = [.. testCase.Nums2];
+                int[] intersect2Nums1 = [.. testCase.Nums1];
+                int[] intersect2Nums2 = [.. testCase.Nums2];
+
+                int[] intersectActual = Intersect(intersectNums1, intersectNums2);
+                int[] intersect2Actual = Intersect2(intersect2Nums1, intersect2Nums2);
+                bool inputsPreserved = intersectNums1.SequenceEqual(testCase.Nums1)
+                    && intersectNums2.SequenceEqual(testCase.Nums2)
+                    && intersect2Nums1.SequenceEqual(testCase.Nums1)
+                    && intersect2Nums2.SequenceEqual(testCase.Nums2);
+                bool isPassed = IsSameMultiset(intersectActual, testCase.Expected)
+                    && IsSameMultiset(intersect2Actual, testCase.Expected)
+                    && inputsPreserved;
+
+                if (isPassed)
+                {
+                    passed++;
+                }
+
+                Console.WriteLine($"Case: {testCase.Name}");
+                Console.WriteLine($"Nums1: {testCase.Nums1Display}");
+                Console.WriteLine($"Nums2: {testCase.Nums2Display}");
+                Console.WriteLine($"Expected: {FormatArray(testCase.Expected)}");
+                Console.WriteLine($"Intersect: {FormatArray(intersectActual)}");
+                Console.WriteLine($"Intersect2: {FormatArray(intersect2Actual)}");
+                Console.WriteLine($"Inputs preserved: {inputsPreserved}");
+                Console.WriteLine($"Result: {(isPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
             }
 
-            Console.ReadKey();
+            Console.WriteLine($"Summary: {passed}/{testCases.Length} checks passed.");
+            if (passed != testCases.Length)
+            {
+                Environment.ExitCode = 1;
+            }
         }
 
+        /// <summary>
+        /// 比較兩個整數陣列是否代表相同的多重集合。
+        /// 方法會排序各自的副本，因此可忽略輸出順序並保留重複元素的數量，
+        /// 且不會修改傳入陣列。
+        /// </summary>
+        /// <param name="actual">演算法實際回傳的非 <see langword="null"/> 陣列。</param>
+        /// <param name="expected">測試案例預期的非 <see langword="null"/> 陣列。</param>
+        /// <returns>元素與每個元素的出現次數完全相同時回傳 <see langword="true"/>。</returns>
+        private static bool IsSameMultiset(int[] actual, int[] expected)
+        {
+            int[] sortedActual = [.. actual];
+            int[] sortedExpected = [.. expected];
+            Array.Sort(sortedActual);
+            Array.Sort(sortedExpected);
+
+            return sortedActual.SequenceEqual(sortedExpected);
+        }
 
         /// <summary>
-        /// https://leetcode.cn/problems/intersection-of-two-arrays-ii/solutions/327356/liang-ge-shu-zu-de-jiao-ji-ii-by-leetcode-solution/
-        /// https://leetcode.cn/problems/intersection-of-two-arrays-ii/solutions/48971/jin-jie-san-wen-by-user5707f/
-        /// https://leetcode.cn/problems/intersection-of-two-arrays-ii/solutions/683821/ha-xi-biao-liang-ge-shu-zu-de-jiao-ji-ii-fkwo/
-        /// https://leetcode.cn/problems/intersection-of-two-arrays-ii/solutions/1773063/by-stormsunshine-373a/
-        /// 
-        /// 找出兩個陣列有交集的元素
-        /// 但是需要小心
-        /// 輸入兩陣列有可能 長度不同
-        /// 所以判斷時候要小心
-        /// 大的要包含小的才比較完整
-        /// 相反的話可能會導致element遺漏
-        /// 沒有被比較到
-        /// 
+        /// 將整數陣列格式化為穩定且易讀的文字。
+        /// 顯示前只排序副本，不改變演算法輸出或測試資料。
         /// </summary>
-        /// <param name="nums1"></param>
-        /// <param name="nums2"></param>
-        /// <returns></returns>
+        /// <param name="numbers">要顯示的非 <see langword="null"/> 整數陣列。</param>
+        /// <returns>以中括號包住、由小到大排列的逗號分隔字串。</returns>
+        private static string FormatArray(int[] numbers)
+        {
+            int[] sortedNumbers = [.. numbers];
+            Array.Sort(sortedNumbers);
+
+            return $"[{string.Join(", ", sortedNumbers)}]";
+        }
+
+        /// <summary>
+        /// 使用 Dictionary 次數表計算兩個整數陣列的交集。
+        /// 方法先選擇較短陣列建立次數表，再掃描較長陣列並消耗可用次數，
+        /// 因此每個共同元素會依兩側較少的出現次數加入結果。
+        /// 適用於題目限制內的非 <see langword="null"/> 陣列，不修改輸入；
+        /// 平均時間複雜度為 <c>O(n + m)</c>。
+        /// </summary>
+        /// <param name="nums1">長度介於 1 至 1000，元素介於 0 至 1000 的整數陣列。</param>
+        /// <param name="nums2">長度介於 1 至 1000，元素介於 0 至 1000 的整數陣列。</param>
+        /// <returns>包含兩個輸入共同元素的陣列；重複次數正確，元素順序不保證。</returns>
         public static int[] Intersect(int[] nums1, int[] nums2)
         {
-            int n1 = nums1.Length;
-            int n2 = nums2.Length;
-
-            if(n1 > n2)
+            if (nums1.Length > nums2.Length)
             {
                 return GetIntersection(nums2, nums1);
             }
-            else
-            {
-                return GetIntersection(nums1, nums2);
-            }
+
+            return GetIntersection(nums1, nums2);
         }
 
-
         /// <summary>
-        /// 輸入的兩個陣列, 有長度不一致問題
-        /// 所以呼叫function時候 要先做判斷
-        /// 
-        /// 1. List 用來儲存結果資料
-        /// 2. Dictionary 用來統計每個element以及個數
-        /// 3. 先將小陣列資料儲存進Dictionary
-        /// 4. 再將上述儲存資料, 拿去與長陣列對比,
-        ///    查看是否有交集
-        /// 5. 有交集,就把資料加入 List
-        /// 6. 然後扣減Dictionary數量
-        /// 7. 當Dictionary數量扣減至0, 需要移出Dictionary
-        /// 8. 回傳結果要轉陣列格式
-        /// 
-        /// 為什麼需要使用 Dictionary
-        /// 因為題目有說明, 取兩陣列的交集element
-        /// element 數量需要一致, 不能只回傳一次
-        /// 所以 需要使用 Dictionary 來統計 element 數量
-        /// 6, 7步驟也是因此才產生的行為
-        /// 
+        /// 由較短陣列建立元素次數表，再掃描較長陣列產生交集。
+        /// 找到共同元素後立即扣減剩餘次數，歸零時移除該鍵，
+        /// 避免同一元素被加入超過短陣列所提供的數量。
+        /// 輸入必須是符合題目限制的非 <see langword="null"/> 陣列，
+        /// 且 <paramref name="shortNumbers"/> 的長度不得大於
+        /// <paramref name="longNumbers"/>；方法不修改輸入。
+        /// 平均時間複雜度為 <c>O(n + m)</c>，輔助空間為
+        /// <c>O(min(n, m))</c>，結果空間為 <c>O(k)</c>。
         /// </summary>
-        /// <param name="nums">輸入短陣列</param>
-        /// <param name="Lnums">輸入長陣列</param>
-        /// <returns></returns>
-        public static int[] GetIntersection(int[] Snums, int[] Lnums)
+        /// <param name="shortNumbers">用來建立次數表的較短整數陣列。</param>
+        /// <param name="longNumbers">用來逐一查找共同元素的較長整數陣列。</param>
+        /// <returns>依較長陣列掃描順序建立的交集陣列；每個值最多出現兩側次數的較小值。</returns>
+        public static int[] GetIntersection(int[] shortNumbers, int[] longNumbers)
         {
-            // 宣告List用來儲存結果, 回傳時候要轉陣列格式
-            IList<int> res = new List<int>();
-            // 暫存, 用來儲存element以及個數
-            IDictionary<int, int> dic = new Dictionary<int, int>();
+            List<int> intersection = new List<int>();
+            Dictionary<int, int> remainingCounts = new Dictionary<int, int>();
 
-            // 統計短陣列內每個element和個數
-            foreach (int num in Snums)
+            // 只為較短陣列建立次數表，可將雜湊表空間控制在 O(min(n, m))。
+            foreach (int number in shortNumbers)
             {
-                if(!dic.ContainsKey(num))
+                if (remainingCounts.TryGetValue(number, out int count))
                 {
-                    dic.Add(num, 1);
+                    remainingCounts[number] = count + 1;
                 }
                 else
                 {
-                    dic[num]++;
+                    remainingCounts.Add(number, 1);
                 }
             }
 
-            // 去長陣列比較找出交集element
-            foreach(int num in Lnums)
+            foreach (int number in longNumbers)
             {
-                // 暫存已經存在該element
-                if(dic.ContainsKey(num))
+                if (!remainingCounts.TryGetValue(number, out int count))
                 {
-                    // 加入結果
-                    res.Add(num);
-                    // 當加入結果, 就要扣減暫存數量
-                    dic[num]--;
+                    continue;
+                }
 
-                    // 數量扣減至0, 就要移出暫存
-                    if (dic[num] == 0)
-                    {
-                        dic.Remove(num);
-                    }
+                intersection.Add(number);
+
+                // 歸零後移除鍵，後續相同值便不會超量加入結果。
+                if (count == 1)
+                {
+                    remainingCounts.Remove(number);
+                }
+                else
+                {
+                    remainingCounts[number] = count - 1;
                 }
             }
 
-            // 回傳陣列格式
-            return res.ToArray();
+            return intersection.ToArray();
         }
+
+        /// <summary>
+        /// 使用排序副本與雙指標計算兩個整數陣列的交集。
+        /// 兩個指標分別走訪排序後的陣列：值相等時加入結果並同時前進，
+        /// 否則只前進值較小的一側，因此可正確保留共同元素的重複次數。
+        /// 適用於題目限制內的非 <see langword="null"/> 陣列；
+        /// 排序只作用於副本，不修改輸入。
+        /// 時間複雜度為 <c>O(n log n + m log m)</c>，輔助空間為
+        /// <c>O(n + m)</c>，結果空間為 <c>O(k)</c>。
+        /// </summary>
+        /// <param name="nums1">長度介於 1 至 1000，元素介於 0 至 1000 的整數陣列。</param>
+        /// <param name="nums2">長度介於 1 至 1000，元素介於 0 至 1000 的整數陣列。</param>
+        /// <returns>由小到大排列的交集陣列；每個值最多出現兩側次數的較小值。</returns>
+        public static int[] Intersect2(int[] nums1, int[] nums2)
+        {
+            int[] sortedNums1 = [.. nums1];
+            int[] sortedNums2 = [.. nums2];
+            Array.Sort(sortedNums1);
+            Array.Sort(sortedNums2);
+
+            List<int> intersection = new List<int>();
+            int nums1Index = 0;
+            int nums2Index = 0;
+
+            while (nums1Index < sortedNums1.Length && nums2Index < sortedNums2.Length)
+            {
+                if (sortedNums1[nums1Index] == sortedNums2[nums2Index])
+                {
+                    intersection.Add(sortedNums1[nums1Index]);
+                    nums1Index++;
+                    nums2Index++;
+                }
+                else if (sortedNums1[nums1Index] < sortedNums2[nums2Index])
+                {
+                    // 較小值不可能和另一側目前或後續值相交，只前進 nums1。
+                    nums1Index++;
+                }
+                else
+                {
+                    // 同理，nums2 目前值較小時只前進 nums2。
+                    nums2Index++;
+                }
+            }
+
+            return intersection.ToArray();
+        }
+
+        /// <summary>
+        /// 定義一組可重複執行的交集驗證資料。
+        /// </summary>
+        /// <param name="Name">案例名稱。</param>
+        /// <param name="Nums1Display">第一個陣列的穩定顯示文字。</param>
+        /// <param name="Nums2Display">第二個陣列的穩定顯示文字。</param>
+        /// <param name="Nums1">第一個輸入陣列。</param>
+        /// <param name="Nums2">第二個輸入陣列。</param>
+        /// <param name="Expected">預期的交集多重集合。</param>
+        private sealed record TestCase(
+            string Name,
+            string Nums1Display,
+            string Nums2Display,
+            int[] Nums1,
+            int[] Nums2,
+            int[] Expected);
     }
 }
