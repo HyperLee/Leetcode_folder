@@ -3,14 +3,25 @@
     internal class Program
     {
         /// <summary>
-        /// 
+        /// 表示二元樹中的單一節點，保存節點值以及可為空的左右子節點參考。
+        /// 節點可作為 <see cref="MaxDepth"/> 與 <see cref="MaxDepth2"/> 的輸入，
+        /// 兩種解法都只讀取樹的結構與節點值，不會修改節點。
         /// </summary>
         public class TreeNode
         {
             public int val;
-            public TreeNode left;
-            public TreeNode right;
-            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            public TreeNode? left;
+            public TreeNode? right;
+
+            /// <summary>
+            /// 建立具有指定值與左右子樹的二元樹節點。
+            /// 左右子節點可省略或傳入 <see langword="null"/>，代表該方向沒有子樹；
+            /// 建構結果是可連接至其他節點的新節點。
+            /// </summary>
+            /// <param name="val">節點儲存的整數值；題目限制為 -100 到 100。</param>
+            /// <param name="left">左子節點；沒有左子樹時為 <see langword="null"/>。</param>
+            /// <param name="right">右子節點；沒有右子樹時為 <see langword="null"/>。</param>
+            public TreeNode(int val = 0, TreeNode? left = null, TreeNode? right = null)
             {
                 this.val = val;
                 this.left = left;
@@ -35,84 +46,126 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            TreeNode root = new TreeNode(3);
+            int passedChecks = 0;
+            const int totalChecks = 10;
 
-            root.left = new TreeNode(9);
-            root.right = new TreeNode(20);
+            passedChecks += RunTestCase("空樹", null, 0);
+            passedChecks += RunTestCase("單一節點（下限值）", new TreeNode(-100), 1);
+            passedChecks += RunTestCase(
+                "官方範例",
+                new TreeNode(
+                    3,
+                    new TreeNode(9),
+                    new TreeNode(20, new TreeNode(15), new TreeNode(7))),
+                3);
+            passedChecks += RunTestCase(
+                "完全右偏樹",
+                new TreeNode(
+                    1,
+                    right: new TreeNode(
+                        2,
+                        right: new TreeNode(
+                            3,
+                            right: new TreeNode(4)))),
+                4);
+            passedChecks += RunTestCase(
+                "左右不等深且含重複值",
+                new TreeNode(
+                    1,
+                    new TreeNode(
+                        2,
+                        new TreeNode(3, new TreeNode(4))),
+                    new TreeNode(
+                        2,
+                        right: new TreeNode(3))),
+                4);
 
-            root.right.right = new TreeNode(7);
-            root.right.left = new TreeNode(15);
-
-            Console.WriteLine("MaxDepth: " + MaxDepth(root));
-            Console.WriteLine("MaxDepth2: " + MaxDepth2(root));
+            Console.WriteLine();
+            Console.WriteLine($"{passedChecks}/{totalChecks} checks passed.");
+            Console.WriteLine(passedChecks == totalChecks ? "Overall: PASS" : "Overall: FAIL");
         }
 
 
         /// <summary>
-        /// https://ithelp.ithome.com.tw/articles/10226788
-        /// 遞迴概念
-        /// 1. 判斷 root 是否為 null，若是則回傳 0
-        /// 2. 回傳此節點的深度 
-        ///     遞迴找出 root 的 right 右節點 最大深度
-        ///     遞迴找出 root 的 left 左節點 最大深度
-        ///     比較兩個節點的最大深度，使用 Math.Max 取 最大值
-        ///     最後並 + 1，代表需要往上多加這一層
-        ///     
-        /// root 為第一層, 每往下一層都要 + 1
-        /// 不要忽略 root 是第一層
+        /// 執行一組固定案例，分別呼叫 <see cref="MaxDepth"/> 與
+        /// <see cref="MaxDepth2"/> 計算同一棵樹的最大深度。
+        /// 輸入可以是空樹；方法會將兩個實際結果與預期深度比較，
+        /// 輸出 Expected、Actual 與 PASS/FAIL，並回傳通過的檢查數。
         /// </summary>
-        /// <param name="root"></param>
-        /// <returns></returns>
-        public static int MaxDepth(TreeNode root)
+        /// <param name="caseName">顯示於主控台的案例名稱。</param>
+        /// <param name="root">待測二元樹的根節點；空樹時為 <see langword="null"/>。</param>
+        /// <param name="expected">此案例預期的最大深度。</param>
+        /// <returns>兩種解法中實際結果符合預期值的數量，範圍為 0 到 2。</returns>
+        private static int RunTestCase(string caseName, TreeNode? root, int expected)
+        {
+            int maxDepthResult = MaxDepth(root);
+            int maxDepth2Result = MaxDepth2(root);
+            bool maxDepthPassed = maxDepthResult == expected;
+            bool maxDepth2Passed = maxDepth2Result == expected;
+
+            Console.WriteLine(
+                $"[{(maxDepthPassed ? "PASS" : "FAIL")}] {caseName} | MaxDepth | Expected: {expected} | Actual: {maxDepthResult}");
+            Console.WriteLine(
+                $"[{(maxDepth2Passed ? "PASS" : "FAIL")}] {caseName} | MaxDepth2 | Expected: {expected} | Actual: {maxDepth2Result}");
+
+            return (maxDepthPassed ? 1 : 0) + (maxDepth2Passed ? 1 : 0);
+        }
+
+
+        /// <summary>
+        /// 以直接遞迴計算二元樹的最大深度。
+        /// 解法將空節點視為深度 0，分別取得左右子樹深度後選擇較大值，
+        /// 再加上目前節點所占的一層。輸入可以是空樹，且不會被修改。
+        /// </summary>
+        /// <param name="root">待計算的二元樹根節點；空樹時為 <see langword="null"/>。</param>
+        /// <returns>從根節點到最遠葉節點路徑上的節點數；空樹回傳 0。</returns>
+        public static int MaxDepth(TreeNode? root)
         {
             if (root == null)
             {
+                // 空分支不包含節點，作為遞迴向上合併深度的基底。
                 return 0;
             }
 
+            // 目前層的深度等於較深子樹的深度再加上目前節點。
             return Math.Max(MaxDepth(root.right), MaxDepth(root.left)) + 1;
         }
 
 
         /// <summary>
-        /// 方法二,
-        /// 參考 leetcode_111 Minimum Depth of Binary Tree
-        /// 修改而來
-        /// 
-        /// root 為第一層, 每往下一層都要 + 1
-        /// 不要忽略 root 是第一層
+        /// 以明確區分葉節點與存在子樹的遞迴流程計算二元樹最大深度。
+        /// 解法先處理空樹與葉節點，再只遞迴走訪實際存在的左右子樹，
+        /// 保存其中較大的子樹深度並加上目前層。輸入可以是空樹，且不會被修改。
         /// </summary>
-        /// <param name="root"></param>
-        /// <returns></returns>
-        public static int MaxDepth2(TreeNode root)
+        /// <param name="root">待計算的二元樹根節點；空樹時為 <see langword="null"/>。</param>
+        /// <returns>從根節點到最遠葉節點路徑上的節點數；空樹回傳 0。</returns>
+        public static int MaxDepth2(TreeNode? root)
         {
             if (root == null)
             {
                 return 0;
             }
 
-            // 只有 root 沒有左右子樹
+            // 葉節點本身就是一層，無須再對兩個空子節點遞迴。
             if (root.left == null && root.right == null)
             {
                 return 1;
             }
 
-            // 紀錄最大深度
             int maxDepth = int.MinValue;
 
-            // 找出左子樹最大深度
+            // 只走訪實際存在的子樹，持續保留目前找到的最大深度。
             if (root.left != null)
             {
                 maxDepth = Math.Max(MaxDepth2(root.left), maxDepth);
             }
 
-            // 找出右子樹最大深度
             if (root.right != null)
             {
                 maxDepth = Math.Max(MaxDepth2(root.right), maxDepth);
             }
 
-            // 最後並 + 1，代表需要往上多加這一層
+            // 子樹深度加一，將目前節點所在層納入結果。
             return maxDepth + 1;
         }
     }
