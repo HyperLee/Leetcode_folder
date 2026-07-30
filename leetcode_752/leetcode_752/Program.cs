@@ -11,139 +11,260 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string[] deadends = { "8888" };
-            string target = "0009";
-
-            Console.WriteLine(OpenLock(deadends, target));
-            Console.ReadKey();
+            RunSamples();
         }
 
+        /// <summary>
+        /// 執行固定範例，分別呼叫單向與雙向廣度優先搜尋，並將預期值、實際值與驗證結果輸出到主控台。
+        /// 測試資料皆符合四位數字字串與死路清單的題目輸入條件；本方法不接受輸入，也不回傳結果。
+        /// </summary>
+        private static void RunSamples()
+        {
+            SampleCase[] samples =
+            [
+                new(
+                    "官方一般案例",
+                    ["0201", "0101", "0102", "1212", "2002"],
+                    "0202",
+                    6),
+                new(
+                    "環繞旋轉一步",
+                    ["8888"],
+                    "0009",
+                    1),
+                new(
+                    "目標四周皆為死路",
+                    ["8887", "8889", "8878", "8898", "8788", "8988", "7888", "9888"],
+                    "8888",
+                    -1),
+                new(
+                    "起點即為死路",
+                    ["0000"],
+                    "8888",
+                    -1),
+                new(
+                    "目標就是起點",
+                    ["8888"],
+                    "0000",
+                    0),
+                new(
+                    "最遠轉輪距離",
+                    ["9999"],
+                    "5555",
+                    20)
+            ];
 
+            int passedChecks = 0;
+            int totalChecks = samples.Length * 2;
+
+            Console.WriteLine("LeetCode 752 - Open the Lock");
+            Console.WriteLine();
+
+            for (int i = 0; i < samples.Length; i++)
+            {
+                SampleCase sample = samples[i];
+                int singleBfsResult = OpenLock(sample.Deadends, sample.Target);
+                int bidirectionalBfsResult = OpenLock2(sample.Deadends, sample.Target);
+                bool singleBfsPassed = singleBfsResult == sample.Expected;
+                bool bidirectionalBfsPassed = bidirectionalBfsResult == sample.Expected;
+
+                if (singleBfsPassed)
+                {
+                    passedChecks++;
+                }
+
+                if (bidirectionalBfsPassed)
+                {
+                    passedChecks++;
+                }
+
+                Console.WriteLine($"案例 {i + 1}：{sample.Name}");
+                Console.WriteLine($"deadends = [{string.Join(", ", sample.Deadends.Select(value => $"\"{value}\""))}]");
+                Console.WriteLine($"target = \"{sample.Target}\"");
+                Console.WriteLine($"預期：{sample.Expected}");
+                Console.WriteLine($"單向 BFS：{singleBfsResult} => {(singleBfsPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine($"雙向 BFS：{bidirectionalBfsResult} => {(bidirectionalBfsPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項驗證通過");
+        }
+
+        private sealed record SampleCase(
+            string Name,
+            string[] Deadends,
+            string Target,
+            int Expected);
 
         /// <summary>
-        /// ref:
-        /// 1. https://leetcode.cn/problems/open-the-lock/solutions/843687/da-kai-zhuan-pan-suo-by-leetcode-solutio-l0xo/
-        /// 2. https://leetcode.cn/problems/open-the-lock/solutions/843986/gong-shui-san-xie-yi-ti-shuang-jie-shuan-wyr9/
-        /// 3. https://leetcode.cn/problems/open-the-lock/solutions/1871305/by-stormsunshine-t4j1/
-        /// 
-        /// 
-        /// 先說結論, 題目我就看不是很懂
-        /// 應該是要旋轉出解答, 但是要最小次數
-        /// 然後不能踩到dead數字, 否則會卡住 不能旋轉
-        /// Queue 用法,不熟. 很少用
-        /// https://learn.microsoft.com/zh-tw/dotnet/api/system.collections.queue?view=net-7.0
-        /// https://learn.microsoft.com/zh-tw/dotnet/api/system.collections.generic.queue-1?view=net-8.0
-        /// https://medium.com/@ehowming/%E8%A4%87%E7%BF%92%E6%95%B4%E7%90%86-%E5%9F%BA%E7%A4%8E%E8%B3%87%E6%96%99%E7%B5%90%E6%A7%8B-c%E8%AA%9E%E8%A8%80-%E4%BD%87%E5%88%97-queue-1e707b525d8f
-        ///  Enqueue(data)：從佇列尾端存入資料
-        ///  Dequeue()：從佇列前端移除資料
-        ///  
+        /// 使用單向廣度優先搜尋，從初始狀態 <c>0000</c> 逐層探索所有可旋轉到的狀態。
+        /// 輸入的死路與目標皆須為四位數字字串，且目標不在死路清單中。
+        /// 因為每一層代表一次旋轉，首次找到目標時即回傳最少旋轉次數；無法到達則回傳 <c>-1</c>。
         /// </summary>
-        /// <param name="deadends"></param>
-        /// <param name="target"></param>
-        /// <returns></returns>
+        /// <param name="deadends">不可進入的四位數字狀態。</param>
+        /// <param name="target">要解鎖的四位數字狀態。</param>
+        /// <returns>從 <c>0000</c> 到目標的最少旋轉次數；無法到達時為 <c>-1</c>。</returns>
         public static int OpenLock(string[] deadends, string target)
         {
-            // 如果target初始為 0000 ,直接回傳答案 0
-            if("0000".Equals(target))
-            {
-                return 0;
-            }
+            const string start = "0000";
+            HashSet<string> dead = new(deadends);
 
-            // 儲存 deadends 數字
-            ISet<string> dead = new HashSet<string>();
-            foreach(string deadend in deadends)
-            {
-                dead.Add(deadend);
-            }
-
-            // 找不到答案 回傳 -1
-            if(dead.Contains("0000"))
+            if (dead.Contains(start))
             {
                 return -1;
             }
 
-            // 旋转的次数为 step
-            int step = 0;
-            Queue<string> queue = new Queue<string>();
-            queue.Enqueue("0000");
-            ISet<string> seen = new HashSet<string>();
-            seen.Add("0000");
-            
-            while(queue.Count > 0) 
+            if (target == start)
             {
-                step++;
-                int size = queue.Count;
-                
-                for(int i = 0; i < size; i++)
+                return 0;
+            }
+
+            int step = 0;
+            Queue<string> queue = new();
+            HashSet<string> seen = [start];
+            queue.Enqueue(start);
+
+            while (queue.Count > 0)
+            {
+                // 先固定本層大小，確保 step 每次只增加一個旋轉距離。
+                int levelSize = queue.Count;
+
+                for (int i = 0; i < levelSize; i++)
                 {
-                    // 设当前搜索到的数字为 status
                     string status = queue.Dequeue();
-                    // 设其中的某个数字为 nextstatus
-                    foreach (string nextstatus in Get(status))
+
+                    foreach (string nextStatus in Get(status))
                     {
-                        // 沒有被找過
-                        if(!seen.Contains(nextstatus) && !dead.Contains(nextstatus))
+                        // 死路不能進入；已拜訪狀態也不必再次加入佇列。
+                        if (dead.Contains(nextStatus) || !seen.Add(nextStatus))
                         {
-                            if(nextstatus.Equals(target))
-                            {
-                                // 找到 target 回傳次數
-                                return step;
-                            }
-                            // 沒找到 加入 queue
-                            queue.Enqueue(nextstatus);
-                            seen.Add(nextstatus);
+                            continue;
                         }
+
+                        if (nextStatus == target)
+                        {
+                            return step + 1;
+                        }
+
+                        queue.Enqueue(nextStatus);
                     }
                 }
+
+                step++;
             }
 
             return -1;
-
         }
 
+        /// <summary>
+        /// 使用雙向廣度優先搜尋，分別從 <c>0000</c> 與目標建立搜尋邊界，並優先擴展狀態數較少的一側。
+        /// 輸入的死路與目標皆須為四位數字字串，且目標不在死路清單中。
+        /// 兩側邊界首次相遇時回傳最少旋轉次數；若任一邊界耗盡仍未相遇則回傳 <c>-1</c>。
+        /// </summary>
+        /// <param name="deadends">不可進入的四位數字狀態。</param>
+        /// <param name="target">要解鎖的四位數字狀態。</param>
+        /// <returns>從 <c>0000</c> 到目標的最少旋轉次數；無法到達時為 <c>-1</c>。</returns>
+        public static int OpenLock2(string[] deadends, string target)
+        {
+            const string start = "0000";
+            HashSet<string> dead = new(deadends);
+
+            if (dead.Contains(start))
+            {
+                return -1;
+            }
+
+            if (target == start)
+            {
+                return 0;
+            }
+
+            HashSet<string> frontier = [start];
+            HashSet<string> oppositeFrontier = [target];
+            HashSet<string> seen = [start];
+            int step = 0;
+
+            while (frontier.Count > 0 && oppositeFrontier.Count > 0)
+            {
+                // 每輪擴展較小的邊界，通常可減少需要展開的狀態數。
+                if (frontier.Count > oppositeFrontier.Count)
+                {
+                    (frontier, oppositeFrontier) = (oppositeFrontier, frontier);
+                }
+
+                HashSet<string> nextFrontier = [];
+
+                foreach (string status in frontier)
+                {
+                    foreach (string nextStatus in Get(status))
+                    {
+                        if (oppositeFrontier.Contains(nextStatus))
+                        {
+                            return step + 1;
+                        }
+
+                        if (dead.Contains(nextStatus) || !seen.Add(nextStatus))
+                        {
+                            continue;
+                        }
+
+                        nextFrontier.Add(nextStatus);
+                    }
+                }
+
+                frontier = nextFrontier;
+                step++;
+            }
+
+            return -1;
+        }
 
         /// <summary>
-        /// 
+        /// 取得轉輪數字往前一格的結果；輸入須為 <c>'0'</c> 到 <c>'9'</c>。
+        /// 一般數字減一，<c>'0'</c> 則環繞為 <c>'9'</c>，並回傳旋轉後的字元。
         /// </summary>
-        /// <param name="x"></param>
-        /// <returns></returns>
+        /// <param name="x">目前轉輪上的數字字元。</param>
+        /// <returns>往前旋轉一格後的數字字元。</returns>
         public static char NumtPre(char x)
         {
             return x == '0' ? '9' : (char)(x - 1);
         }
 
-
         /// <summary>
-        /// 
+        /// 取得轉輪數字往後一格的結果；輸入須為 <c>'0'</c> 到 <c>'9'</c>。
+        /// 一般數字加一，<c>'9'</c> 則環繞為 <c>'0'</c>，並回傳旋轉後的字元。
         /// </summary>
-        /// <returns></returns>
+        /// <param name="x">目前轉輪上的數字字元。</param>
+        /// <returns>往後旋轉一格後的數字字元。</returns>
         public static char NumSucc(char x)
         {
             return x == '9' ? '0' : (char)(x + 1);
         }
 
-
         /// <summary>
-        /// 枚举 status 通过一次旋转得到的数字
+        /// 列舉四位轉盤狀態旋轉一次可以到達的所有相鄰狀態。
+        /// 輸入須為恰好四位的數字字串；每一位各產生往前與往後兩種結果，合計回傳八個狀態。
         /// </summary>
-        /// <param name="status"></param>
-        /// <returns></returns>
+        /// <param name="status">目前的四位數字狀態。</param>
+        /// <returns>旋轉任一轉輪一格後可到達的八個四位數字狀態。</returns>
         public static IList<string> Get(string status)
         {
-            IList<string> ret = new List<string>();
+            IList<string> result = new List<string>(8);
             char[] array = status.ToCharArray();
-            for(int i = 0; i < 4; i++)
+
+            for (int i = 0; i < 4; i++)
             {
-                char num = array[i];
-                array[i] = NumtPre(num);
-                ret.Add(new string(array));
-                array[i] = NumSucc(num);
-                ret.Add(new string(array));
-                array[i] = num;
+                char originalDigit = array[i];
+                array[i] = NumtPre(originalDigit);
+                result.Add(new string(array));
+                array[i] = NumSucc(originalDigit);
+                result.Add(new string(array));
+
+                // 下一個位置必須從原狀態開始，避免前一個轉輪的修改累積進結果。
+                array[i] = originalDigit;
             }
 
-            return ret;
+            return result;
         }
-
     }
 }
