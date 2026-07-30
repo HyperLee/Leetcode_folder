@@ -26,24 +26,50 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        (int Value, bool Expected)[] samples =
+        RunSamples();
+    }
+
+    /// <summary>
+    /// 執行快樂數的固定範例驗證，並逐筆比較 HashSet 與 Floyd 兩種解法的結果。
+    /// 解題驗證概念是讓兩種演算法共用相同輸入與預期值，分別計算每一項是否通過，
+    /// 輸入涵蓋快樂數、非快樂數、非正數及 Int32 上界；輸出為各案例結果與通過項目總數。
+    /// </summary>
+    private static void RunSamples()
+    {
+        SampleCase[] samples =
         [
-            (1, true),
-            (7, true),
-            (19, true),
-            (2, false),
-            (20, false)
+            new(1, true),
+            new(7, true),
+            new(19, true),
+            new(2, false),
+            new(20, false),
+            new(0, false),
+            new(-1, false),
+            new(int.MaxValue, false)
         ];
 
-        foreach ((int value, bool expected) in samples)
+        int passedChecks = 0;
+
+        for (int index = 0; index < samples.Length; index++)
         {
-            bool hashSetResult = IsHappy(value);
-            bool floydResult = IsHappy2(value);
-            bool match = hashSetResult == expected && floydResult == expected;
+            SampleCase sample = samples[index];
+            bool hashSetResult = IsHappy(sample.Value);
+            bool floydResult = IsHappy2(sample.Value);
+            bool hashSetPassed = hashSetResult == sample.Expected;
+            bool floydPassed = floydResult == sample.Expected;
+
+            // 兩種解法各算一項驗證，讓總結能精確指出是否有任一實作偏離預期。
+            passedChecks += hashSetPassed ? 1 : 0;
+            passedChecks += floydPassed ? 1 : 0;
 
             Console.WriteLine(
-                $"n={value} | HashSet={hashSetResult} | Floyd={floydResult} | Expected={expected} | Match={match}");
+                $"案例 {index + 1}: n={sample.Value} | 預期={sample.Expected} | " +
+                $"HashSet={hashSetResult} ({(hashSetPassed ? "PASS" : "FAIL")}) | " +
+                $"Floyd={floydResult} ({(floydPassed ? "PASS" : "FAIL")})");
         }
+
+        int totalChecks = samples.Length * 2;
+        Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項驗證通過");
     }
 
     /// <summary>
@@ -125,4 +151,12 @@ class Program
 
         return fastRunner == 1;
     }
+
+    /// <summary>
+    /// 表示一筆快樂數範例資料，保存待測整數及其預期判斷結果，
+    /// 供範例驗證器以相同條件比較兩種解法並輸出各自的通過狀態。
+    /// </summary>
+    /// <param name="Value">要傳入快樂數判斷方法的整數。</param>
+    /// <param name="Expected">該整數依題意應得到的布林結果。</param>
+    private readonly record struct SampleCase(int Value, bool Expected);
 }

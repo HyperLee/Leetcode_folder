@@ -1,6 +1,6 @@
 # 202. Happy Number
 
-使用 C# 與 .NET 10 實作 LeetCode 202「Happy Number（快樂數）」的兩種解法，並在 `Main` 入口直接提供可執行的示範資料，方便快速驗證結果與比對不同解題策略。
+使用 C# 與 .NET 10 實作 LeetCode 202「Happy Number（快樂數）」的兩種解法，並由 `Main` 啟動可執行的示範驗證器，方便快速核對結果與比較不同解題策略。
 
 ## 題目連結
 
@@ -24,6 +24,7 @@
 
 - 題目語意下，`n` 應為正整數。
 - 本專案的兩種解法都額外加入防禦式處理：若 `n <= 0`，直接回傳 `false`。
+- 方法以 C# `int` 接收輸入，因此可處理至 `int.MaxValue`；範例驗證也包含這個邊界值。
 - 核心轉換規則固定為「各位數字平方和」，不涉及字串轉換或額外資料結構以外的特殊技巧。
 
 ## 解題概念與出發點
@@ -70,8 +71,28 @@
 
 ### 複雜度
 
-- 時間複雜度：`O(k)`，`k` 為進入 `1` 或循環前的轉換次數。
+- 時間複雜度：`O(k × d)`，`k` 為進入 `1` 或循環前的轉換次數，`d` 為每次處理的位數。
 - 空間複雜度：`O(k)`，因為需要額外儲存已出現過的中間值。
+
+對固定的 Int32 輸入而言，`d` 最多為 10，可視為常數，因此也常簡寫成 `O(k)`。
+
+### 範例演示：`n = 2`
+
+`HashSet` 在每輪轉換前保存目前值，並在下一輪開始前確認該值是否已出現：
+
+| 輪次 | 目前值 | 加入後的 `seen` | 下一個值 |
+| ---: | ---: | --- | ---: |
+| 1 | 2 | `{2}` | 4 |
+| 2 | 4 | `{2, 4}` | 16 |
+| 3 | 16 | `{2, 4, 16}` | 37 |
+| 4 | 37 | `{2, 4, 16, 37}` | 58 |
+| 5 | 58 | `{2, 4, 16, 37, 58}` | 89 |
+| 6 | 89 | `{2, 4, 16, 37, 58, 89}` | 145 |
+| 7 | 145 | `{2, 4, 16, 37, 58, 89, 145}` | 42 |
+| 8 | 42 | `{2, 4, 16, 37, 58, 89, 145, 42}` | 20 |
+| 9 | 20 | `{2, 4, 16, 37, 58, 89, 145, 42, 20}` | 4 |
+
+下一輪開始時，`4` 已存在於 `seen`，代表後續只會重複相同循環，因此回傳 `false`。
 
 ## 解法二：Floyd 快慢指標
 
@@ -102,8 +123,22 @@
 
 ### 複雜度
 
-- 時間複雜度：`O(k)`，`k` 為進入 `1` 或循環前的轉換次數。
+- 時間複雜度：`O(k × d)`，`k` 為收斂到 `1` 或快慢指標相遇前的輪數，`d` 為每次平方和轉換處理的位數。
 - 空間複雜度：`O(1)`，只使用固定數量變數。
+
+Int32 的 `d` 最多為 10，因此在固定整數型別下，也可以把時間複雜度簡寫成 `O(k)`。
+
+### 範例演示：`n = 19`
+
+兩個指標都從 `19` 出發，但 `do...while` 會先移動再檢查停止條件：
+
+| 狀態 | `slowRunner`（一步） | `fastRunner`（兩步） | 判斷 |
+| --- | ---: | ---: | --- |
+| 初始 | 19 | 19 | 尚未比較是否相遇 |
+| 第 1 輪 | 82 | 68 | 尚未到 `1`，也未相遇 |
+| 第 2 輪 | 68 | 1 | `fastRunner == 1`，停止 |
+
+快指標到達 `1`，因此 `19` 是快樂數，方法回傳 `true`。
 
 ### 為什麼這裡用 `do...while`
 
@@ -135,12 +170,7 @@ while (fastRunner != 1 && slowRunner != fastRunner);
    - `fastRunner == 1`：代表序列已收斂到 `1`，所以 `n` 是快樂數。
    - `slowRunner == fastRunner`：代表兩者在非 `1` 的循環內相遇，所以 `n` 不是快樂數。
 
-如果用極短的示意來看，假設 `n = 19`：
-
-- 初始狀態：`slowRunner = 19`、`fastRunner = 19`
-- 第 1 輪後：`slowRunner = 82`、`fastRunner = 68`
-
-此時兩個指標都已經真的往前走過，接下來再比較是否到 `1` 或是否相遇，才有意義。這也是這裡 `do...while` 最值得記住的地方：**先跑一次，再判斷是否停止。**
+前面的 `n = 19` 表格可以看出，兩個指標先真正往前走過，再比較是否到 `1` 或是否相遇，判斷才有意義。這也是這裡 `do...while` 最值得記住的地方：**先跑一次，再判斷是否停止。**
 
 ### 另一種常見寫法：先讓快指標走一步，再用 `while`
 
@@ -179,7 +209,7 @@ while (fastRunner != 1 && slowRunner != fastRunner)
 | 迴圈型式 | `do...while`，先執行再判斷 | `while`，先判斷再執行 |
 | 為什麼可行 | 同起點，因此必須先跑一次 | 快指標先偷跑一步，避開起點重合 |
 | 初學者可讀性 | 較對稱，較貼近 Floyd 經典寫法 | 對不熟 `do...while` 的讀者通常更直觀 |
-| 時間複雜度 | `O(k)` | `O(k)` |
+| 時間複雜度 | `O(k × d)` | `O(k × d)` |
 | 空間複雜度 | `O(1)` | `O(1)` |
 | 效能差異 | 幾乎可忽略 | 幾乎可忽略 |
 
@@ -206,7 +236,7 @@ while (fastRunner != 1 && slowRunner != fastRunner)
 - `1 % 10 = 1`，再累加 `1 * 1 = 1`
 - 總和為 `82`
 
-## 範例演示流程
+## 共用轉換規則演示
 
 ### 範例一：`19` 是快樂數
 
@@ -249,6 +279,7 @@ while (fastRunner != 1 && slowRunner != fastRunner)
 | --- | --- | --- |
 | 核心思路 | 記錄看過的值，重複就停止 | 用快慢速度差偵測循環 |
 | 可讀性 | 高，容易理解 | 稍抽象，但技巧性強 |
+| 時間複雜度 | `O(k × d)` | `O(k × d)` |
 | 額外空間 | `O(k)` | `O(1)` |
 | 適合情境 | 初學、快速實作、重視可讀性 | 想節省空間、熟悉循環偵測技巧 |
 
@@ -257,6 +288,7 @@ while (fastRunner != 1 && slowRunner != fastRunner)
 ```text
 leetcode_202/
 ├── README.md
+├── leetcode_202.sln
 ├── docs/
 │   └── readme-template.md
 └── leetcode_202/
@@ -267,7 +299,7 @@ leetcode_202/
 ## 驗證指令
 
 > [!NOTE]
-> 這個 repo 根目錄目前沒有 `.sln` 或根層 `csproj`，因此 `dotnet build` 與 `dotnet test` 直接在根目錄執行會得到 `MSB1003`。實際驗證請指定專案檔路徑。
+> 根目錄包含 `leetcode_202.sln`，實際應用程式專案則位於 `leetcode_202/leetcode_202.csproj`。本專案沒有正式測試專案，因此以下使用明確的專案路徑建置，再透過 `Main` 範例驗證器檢查兩種解法。
 
 ### 建置
 
@@ -278,7 +310,7 @@ dotnet build leetcode_202/leetcode_202.csproj
 ### 執行範例
 
 ```bash
-dotnet run --project leetcode_202/leetcode_202.csproj
+dotnet run --project leetcode_202/leetcode_202.csproj --no-build
 ```
 
 ## 實際執行輸出
@@ -286,16 +318,20 @@ dotnet run --project leetcode_202/leetcode_202.csproj
 以下為本專案目前實際驗證過的輸出：
 
 ```text
-n=1 | HashSet=True | Floyd=True | Expected=True | Match=True
-n=7 | HashSet=True | Floyd=True | Expected=True | Match=True
-n=19 | HashSet=True | Floyd=True | Expected=True | Match=True
-n=2 | HashSet=False | Floyd=False | Expected=False | Match=True
-n=20 | HashSet=False | Floyd=False | Expected=False | Match=True
+案例 1: n=1 | 預期=True | HashSet=True (PASS) | Floyd=True (PASS)
+案例 2: n=7 | 預期=True | HashSet=True (PASS) | Floyd=True (PASS)
+案例 3: n=19 | 預期=True | HashSet=True (PASS) | Floyd=True (PASS)
+案例 4: n=2 | 預期=False | HashSet=False (PASS) | Floyd=False (PASS)
+案例 5: n=20 | 預期=False | HashSet=False (PASS) | Floyd=False (PASS)
+案例 6: n=0 | 預期=False | HashSet=False (PASS) | Floyd=False (PASS)
+案例 7: n=-1 | 預期=False | HashSet=False (PASS) | Floyd=False (PASS)
+案例 8: n=2147483647 | 預期=False | HashSet=False (PASS) | Floyd=False (PASS)
+總結：16/16 項驗證通過
 ```
 
 ## 實作重點摘要
 
-- `Main` 直接提供固定測試資料，方便肉眼驗證兩種解法是否一致。
+- `Main` 呼叫 `RunSamples()`，以 8 筆固定資料執行兩種解法的 16 項獨立驗證。
 - `IsHappy(int n)` 使用 `HashSet<int>` 偵測重複狀態。
 - `IsHappy2(int n)` 使用 Floyd 快慢指標，在不額外儲存歷史值的情況下判斷是否進入循環。
 - `SumOfSquaredDigits(int value)` 抽出共用轉換邏輯，讓兩種解法都能重複使用同一套規則。
