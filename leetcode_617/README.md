@@ -4,158 +4,130 @@
 [![Difficulty](https://img.shields.io/badge/Difficulty-Easy-green?style=flat-square)](https://leetcode.com/problems/merge-two-binary-trees/)
 [![.NET](https://img.shields.io/badge/.NET-10.0-512BD4?style=flat-square)](https://dotnet.microsoft.com/)
 
-合併兩棵二元樹的 LeetCode 解題實作。
+以 C# 與遞迴方式合併兩棵二元樹，並提供六組可直接執行、會自動判定整棵樹是否正確的範例資料。
 
-## 題目描述
+## 題目說明
 
-給定兩棵二元樹 `root1` 與 `root2`。假設把其中一棵覆蓋在另一棵之上，部分節點會重疊，其他則不會。請將兩棵樹合併為一棵新的二元樹。
+給定兩棵二元樹 `root1` 與 `root2`。將兩棵樹從根節點開始疊合，並依下列規則產生合併結果：
 
-**合併規則：**
-- 當兩節點重疊時，合併節點的值為兩節點值的**總和**
-- 當只有一個節點存在時，使用該**非 null** 的節點作為合併後的節點
+- 兩個對應節點都存在時，新節點值為兩者之和。
+- 只有一個對應節點存在時，使用該非 `null` 節點及其子樹。
+- 兩個對應節點都不存在時，結果也是 `null`。
+
+例如：
+
+```text
+root1:            root2:            merged:
+    1                 2                 3
+   / \               / \               / \
+  3   2             1   3             4   5
+ /                   \   \           / \   \
+5                     4   7         5   4   7
+
+root1 = [1,3,2,5]
+root2 = [2,1,3,null,4,null,7]
+output = [3,4,5,5,4,null,7]
+```
 
 > [!NOTE]
-> 合併過程需從兩棵樹的**根節點**開始。
+> 陣列採用 level-order（由上到下、由左到右）表示，`null` 代表該位置沒有節點。
 
-### 範例
+## 限制條件
 
-**範例 1：**
+- 兩棵樹的節點總數皆在 `[0, 2000]` 範圍內。
+- `-10⁴ <= Node.val <= 10⁴`。
+- `root1` 與 `root2` 都可能是空樹。
 
-```
-輸入: root1 = [1,3,2,5], root2 = [2,1,3,null,4,null,7]
+## 解題概念與出發點
 
-Tree 1:       1              Tree 2:       2
-             / \                          / \
-            3   2                        1   3
-           /                              \   \
-          5                                4   7
+### 為什麼適合使用遞迴
 
-輸出: [3,4,5,5,4,null,7]
+二元樹本身就是遞迴結構：每個節點都可視為「目前節點、左子樹、右子樹」。因此「合併兩棵樹」可以拆成三個相同型態的小問題：
 
-合併後:       3
-             / \
-            4   5
-           / \   \
-          5   4   7
-```
+1. 決定目前兩個節點要如何合併。
+2. 合併兩者的左子樹。
+3. 合併兩者的右子樹。
 
-**範例 2：**
+每次遞迴都只需要處理一對對應節點，不需要額外維護父節點或整棵樹的狀態。
 
-```
-輸入: root1 = [1], root2 = [1,2]
-輸出: [2,2]
-```
+### 邊界條件
 
-### 限制條件
+當任一節點為 `null` 時，不必繼續走訪另一棵樹的剩餘分支，可直接回傳非空節點：
 
-- 兩棵樹的節點數量範圍為 `[0, 2000]`
-- 節點值範圍為 `-10⁴ <= Node.val <= 10⁴`
+- `root1 == null`：回傳 `root2`，包括 `root2` 的完整子樹。
+- `root2 == null`：回傳 `root1`，包括 `root1` 的完整子樹。
+- 兩者皆為 `null`：第一個條件自然回傳 `null`。
 
-## 解題思路
+這個設計讓遞迴只深入兩棵樹實際重疊的部分。
 
-### 核心概念
+## 解法一：深度優先遞迴
 
-這道題目的關鍵在於理解**遞迴遍歷**的特性。我們需要同時遍歷兩棵樹的對應節點位置，並根據節點是否存在來決定合併方式。
+### 設計流程
 
-### 解題出發點
-
-1. **分治思想**：將大問題拆解為小問題 — 合併兩棵樹等於合併根節點 + 合併左子樹 + 合併右子樹
-2. **邊界條件處理**：當其中一棵樹的節點為空時，直接使用另一棵樹的節點
-3. **遞迴終止**：當兩個節點都為空時，返回 null
-
-### 演算法步驟
-
-```
-1. 若 root1 與 root2 皆為 null → 返回 null
-2. 若 root1 為 null → 返回 root2（包含其所有子樹）
-3. 若 root2 為 null → 返回 root1（包含其所有子樹）
-4. 兩節點皆存在時：
-   a. 建立新節點，值 = root1.val + root2.val
-   b. 遞迴合併左子樹
-   c. 遞迴合併右子樹
-5. 返回合併後的新節點
-```
-
-## 解法實作
+1. 檢查 `root1` 是否為 `null`；若是，直接回傳 `root2`。
+2. 檢查 `root2` 是否為 `null`；若是，直接回傳 `root1`。
+3. 兩個節點都存在時，建立值為 `root1.val + root2.val` 的新節點。
+4. 使用相同規則遞迴合併左右子樹。
+5. 將左右合併結果接到新節點並回傳。
 
 ```csharp
-public TreeNode MergeTrees(TreeNode root1, TreeNode root2)
+public TreeNode? MergeTrees(TreeNode? root1, TreeNode? root2)
 {
-    // 終止條件：若兩個節點都為 null，不需要合併，直接返回 null
-    if (root1 is null && root2 is null)
-    {
-        return null;
-    }
-
-    // 若 root1 為空，直接返回 root2（包含其所有子樹）
-    if (root1 is null && root2 is not null)
+    if (root1 is null)
     {
         return root2;
     }
 
-    // 若 root2 為空，直接返回 root1（包含其所有子樹）
-    if (root1 is not null && root2 is null)
+    if (root2 is null)
     {
         return root1;
     }
 
-    // 兩個節點都存在時，建立新節點，值為兩節點值的總和
-    TreeNode mergedNode = new TreeNode(root1.val + root2.val);
-
-    // 遞迴合併左子樹
-    mergedNode.left = MergeTrees(root1.left, root2.left);
-
-    // 遞迴合併右子樹
-    mergedNode.right = MergeTrees(root1.right, root2.right);
+    TreeNode mergedNode = new(root1.val + root2.val)
+    {
+        left = MergeTrees(root1.left, root2.left),
+        right = MergeTrees(root1.right, root2.right)
+    };
 
     return mergedNode;
 }
 ```
 
-## 複雜度分析
+### 節點配置與輸入影響
 
-| 複雜度 | 分析 |
-|--------|------|
-| **時間複雜度** | O(min(m, n))，其中 m 和 n 分別為兩棵樹的節點數。只需遍歷重疊的部分。 |
-| **空間複雜度** | O(min(h₁, h₂))，其中 h₁ 和 h₂ 分別為兩棵樹的高度。遞迴呼叫堆疊的深度取決於較矮的樹。 |
+- 對應位置都有節點時，解法會配置一個新的合併節點，不會改寫兩個原節點的值或連結。
+- 只有一側存在時，解法直接沿用該側既有的節點參考與完整子樹，避免不必要的複製。
+- 因此輸入樹本身不會被修改，但輸出樹的非重疊分支可能與輸入樹共享節點。
+
+若呼叫端需要一棵與輸入完全沒有共享參考的深層副本，必須在非重疊分支額外複製節點；本專案維持題目常見的直接沿用設計。
+
+### 複雜度分析
+
+令 `m`、`n` 分別為兩棵樹的節點數，`h1`、`h2` 為兩棵樹的高度，`k` 為兩棵樹重疊位置的節點對數。
+
+| 項目 | 複雜度 | 說明 |
+|---|---:|---|
+| 時間 | `O(min(m, n))` | 只需繼續走訪兩棵樹都存在的重疊區域。 |
+| 遞迴輔助空間 | `O(min(h1, h2))` | 最深呼叫鏈不會超過兩棵樹重疊的高度。 |
+| 新配置節點空間 | `O(k)` | 每個重疊位置建立一個新節點；非重疊子樹直接沿用。 |
 
 ## 範例演示流程
 
-以範例 1 為例，詳細說明合併過程：
+以官方完整範例說明：
 
-```
-初始狀態:
-Tree1:  1          Tree2:  2
-       / \                / \
-      3   2              1   3
-     /                    \   \
-    5                      4   7
+| 步驟 | 對應節點 | 判斷 | 回傳結果 |
+|---:|---|---|---|
+| 1 | `(1, 2)` | 兩者存在 | 建立 `3`，繼續處理左右子樹 |
+| 2 | `(3, 1)` | 兩者存在 | 建立 `4` |
+| 3 | `(5, null)` | 右側為空 | 沿用節點 `5` |
+| 4 | `(null, 4)` | 左側為空 | 沿用節點 `4` |
+| 5 | `(2, 3)` | 兩者存在 | 建立 `5` |
+| 6 | `(null, null)` | 兩者皆空 | 回傳 `null` |
+| 7 | `(null, 7)` | 左側為空 | 沿用節點 `7` |
 
-步驟 1: 合併根節點 (1, 2)
-├─ 兩節點皆存在 → 建立新節點 val = 1 + 2 = 3
-├─ 遞迴處理左子樹 MergeTrees(3, 1)
-└─ 遞迴處理右子樹 MergeTrees(2, 3)
+組合遞迴結果後：
 
-步驟 2: 合併節點 (3, 1) — 左子樹
-├─ 兩節點皆存在 → 建立新節點 val = 3 + 1 = 4
-├─ 遞迴處理左子樹 MergeTrees(5, null)
-└─ 遞迴處理右子樹 MergeTrees(null, 4)
-
-步驟 3: 合併節點 (5, null)
-└─ root2 為 null → 直接返回 root1 (節點 5)
-
-步驟 4: 合併節點 (null, 4)
-└─ root1 為 null → 直接返回 root2 (節點 4)
-
-步驟 5: 合併節點 (2, 3) — 右子樹
-├─ 兩節點皆存在 → 建立新節點 val = 2 + 3 = 5
-├─ 遞迴處理左子樹 MergeTrees(null, null) → 返回 null
-└─ 遞迴處理右子樹 MergeTrees(null, 7)
-
-步驟 6: 合併節點 (null, 7)
-└─ root1 為 null → 直接返回 root2 (節點 7)
-
-最終結果:
+```text
         3
        / \
       4   5
@@ -163,50 +135,93 @@ Tree1:  1          Tree2:  2
     5   4   7
 ```
 
-## 快速開始
+level-order 結果為 `[3,4,5,5,4,null,7]`。
 
-### 環境需求
+## 可執行驗證
 
-- [.NET 10 SDK](https://dotnet.microsoft.com/download)
+`Main` 內含六組案例。每組資料會：
 
-### 執行方式
+1. 將 level-order 陣列建立為二元樹。
+2. 呼叫 `MergeTrees`。
+3. 將完整結果樹序列化回 level-order。
+4. 比對 `expected` 與 `actual` 的所有節點位置。
+5. 輸出 `PASS` 或 `FAIL`；任一案例失敗時，程式會設定非零結束碼。
+
+案例涵蓋官方範例、兩棵空樹、僅單側存在，以及含負值的完全重疊樹。
+
+## 建置與執行
+
+環境需求：[.NET 10 SDK](https://dotnet.microsoft.com/download)
+
+從本 README 所在的專案根目錄執行：
 
 ```bash
-# 進入專案目錄
-cd leetcode_617
-
-# 建構專案
-dotnet build
-
-# 執行程式
-dotnet run
+dotnet build leetcode_617/leetcode_617.csproj --nologo
+dotnet run --no-build --project leetcode_617/leetcode_617.csproj
 ```
 
-### 預期輸出
+### 實際執行結果
 
-```
+以下內容來自 `dotnet run --no-build --project leetcode_617/leetcode_617.csproj`：
+
+```text
 617. Merge Two Binary Trees
-==============================
+===========================
 
-範例 1:
-合併後根節點值: 3
-合併後左子節點值: 4
-合併後右子節點值: 5
+Case 1: 官方完整範例
+  root1:    [1,3,2,5]
+  root2:    [2,1,3,null,4,null,7]
+  expected: [3,4,5,5,4,null,7]
+  actual:   [3,4,5,5,4,null,7]
+  result:   PASS
 
-範例 2: (其中一棵樹為空)
-合併後根節點值: 1
+Case 2: 官方第二範例
+  root1:    [1]
+  root2:    [1,2]
+  expected: [2,2]
+  actual:   [2,2]
+  result:   PASS
 
-範例 3: (兩棵樹都為空)
-合併後結果: null
+Case 3: 兩棵空樹
+  root1:    []
+  root2:    []
+  expected: []
+  actual:   []
+  result:   PASS
+
+Case 4: 僅第一棵存在
+  root1:    [1,null,2]
+  root2:    []
+  expected: [1,null,2]
+  actual:   [1,null,2]
+  result:   PASS
+
+Case 5: 僅第二棵存在
+  root1:    []
+  root2:    [0,-1,1]
+  expected: [0,-1,1]
+  actual:   [0,-1,1]
+  result:   PASS
+
+Case 6: 含負值且完全重疊
+  root1:    [-10,-5,3]
+  root2:    [10,5,-3]
+  expected: [0,0,0]
+  actual:   [0,0,0]
+  result:   PASS
+
+Summary: 6/6 checks passed.
 ```
 
-## 相關題目
+## 專案結構
 
-- [100. Same Tree](https://leetcode.com/problems/same-tree/)
-- [101. Symmetric Tree](https://leetcode.com/problems/symmetric-tree/)
-- [104. Maximum Depth of Binary Tree](https://leetcode.com/problems/maximum-depth-of-binary-tree/)
+| 路徑 | 用途 |
+|---|---|
+| `leetcode_617/Program.cs` | 遞迴解法、樹資料結構、測試資料與 console harness |
+| `leetcode_617/leetcode_617.csproj` | .NET 10 console 專案設定 |
+| `docs/readme-template.md` | README 的內容與驗證原則 |
 
 ## 參考資料
 
-- [LeetCode 617 題目連結](https://leetcode.com/problems/merge-two-binary-trees/)
-- [LeetCode 617 中文版](https://leetcode.cn/problems/merge-two-binary-trees/)
+- [LeetCode 617 — Merge Two Binary Trees](https://leetcode.com/problems/merge-two-binary-trees/)
+- [LeetCode 中國站 617 — 合併二叉樹](https://leetcode.cn/problems/merge-two-binary-trees/)
