@@ -1,6 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-
-namespace leetcode_592
+﻿namespace leetcode_592
 {
     internal class Program
     {
@@ -14,100 +12,123 @@ namespace leetcode_592
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string input = "1/3-1/2";
+            (string Expression, string Expected)[] testCases =
+            [
+                ("-1/2+1/2", "0/1"),
+                ("-1/2+1/2+1/3", "1/3"),
+                ("1/3-1/2", "-1/6"),
+                ("1/1", "1/1"),
+                ("5/3+1/3", "2/1"),
+                ("1/2+1/3+1/4", "13/12"),
+                ("-10/7+3/7", "-1/1"),
+                ("1/10+1/10+1/10+1/10+1/10+1/10+1/10+1/10+1/10+1/10", "1/1")
+            ];
 
-            Console.WriteLine(FractionAddition(input));
-            Console.ReadKey();
+            int passedCount = 0;
+
+            for (int index = 0; index < testCases.Length; index++)
+            {
+                (string expression, string expected) = testCases[index];
+                string actual = FractionAddition(expression);
+                bool passed = actual == expected;
+
+                if (passed)
+                {
+                    passedCount++;
+                }
+
+                Console.WriteLine($"案例 {index + 1}：expression = \"{expression}\"");
+                Console.WriteLine($"預期：\"{expected}\"");
+                Console.WriteLine($"實際：\"{actual}\"");
+                Console.WriteLine($"結果：{(passed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"總結：{passedCount}/{testCases.Length} 筆測試通過");
         }
 
 
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/fraction-addition-and-subtraction/solutions/1699131/fen-shu-jia-jian-yun-suan-by-leetcode-so-2mto/
-        /// https://leetcode.cn/problems/fraction-addition-and-subtraction/solutions/1701526/by-ac_oier-rmpy/
-        /// https://leetcode.cn/problems/fraction-addition-and-subtraction/solutions/1818029/by-stormsunshine-pdbi/
-        /// 
-        /// 
-        /// 基本知識
-        /// 兩個分數
-        /// x1 / y1 與 x2 / y2 相加結果為 x1 * y2 + x2 * y1 / y1 * y2
-        /// 
-        /// 初始化 x = 0, y = 1
-        /// 從輸入端讀取每一個 分子為 x1, 分母為 y1
-        /// 利用上述公式 計算 每一個讀取進來的 分數
-        /// x = x * y1 + x1 * y
-        /// y = y * y1
-        /// 
+        /// 計算由分數加法與減法組成的合法運算式，並回傳最簡分數。
+        /// 逐字解析每個分數的符號、分子與分母，再以交叉相乘的方式累加至共同分母，
+        /// 最後使用最大公約數同時約分累積結果的分子與分母。
         /// </summary>
-        /// <param name="expression"></param>
-        /// <returns></returns>
+        /// <param name="expression">
+        /// 至少包含一個合法最簡分數的運算式；每個分數的分母皆為正數，分數之間以
+        /// <c>+</c> 或 <c>-</c> 連接。
+        /// </param>
+        /// <returns>
+        /// 最簡分數格式的計算結果；正值不含前導正號，整數以分母 <c>1</c> 表示，
+        /// 零固定回傳 <c>0/1</c>。
+        /// </returns>
         public static string FractionAddition(string expression)
         {
-            // 分子分母, 分母不為 0
-            long x = 0, y = 1;
-            int index = 0, n = expression.Length;
+            long numerator = 0;
+            long denominator = 1;
+            int index = 0;
+            int length = expression.Length;
 
-            while (index < n) 
+            while (index < length)
             {
-                // 讀取分子
-                long x1 = 0, sign = 1;
+                // 每一段可能有正負號；第一個正分數則直接從數字開始。
+                long fractionNumerator = 0;
+                long sign = 1;
                 if (expression[index] == '-' || expression[index] == '+')
                 {
-                    // 先讀取判斷 正負
-                    // '-' = -1, 否則 1
                     sign = expression[index] == '-' ? -1 : 1;
                     index++;
                 }
 
-                while(index < n && char.IsDigit(expression[index]))
+                while (index < length && char.IsDigit(expression[index]))
                 {
-                    // *10 是考慮分子為兩位數（如10）要讀取
-                    // expression[index] - '0' 實際就是减去‘0’的 ASCII 碼值 48 ，是一个整数，即將字符数字類型串轉化為整數數字類型。
-                    x1 = x1 * 10 + expression[index] - '0';
+                    fractionNumerator = fractionNumerator * 10 + expression[index] - '0';
                     index++;
                 }
 
-                x1 = sign * x1;
+                fractionNumerator *= sign;
+
+                // 題目保證格式合法，因此分子後的下一個字元必定是 '/'。
                 index++;
 
-                // 讀取分母
-                long y1 = 0;
-                while(index < n && char.IsDigit(expression[index]))
+                long fractionDenominator = 0;
+                while (index < length && char.IsDigit(expression[index]))
                 {
-                    // *10 是考慮分子為兩位數（如10）要讀取
-                    y1 = y1 * 10 + expression[index] - '0';
+                    fractionDenominator = fractionDenominator * 10 + expression[index] - '0';
                     index++;
                 }
 
-                // 兩個分數相乘
-                x = x * y1 + x1 * y;
-                y *= y1;
-
+                // a/b + c/d = (a*d + c*b) / (b*d)，逐段累加即可保留精確分數。
+                numerator = numerator * fractionDenominator + fractionNumerator * denominator;
+                denominator *= fractionDenominator;
             }
 
-            if(x == 0)
+            if (numerator == 0)
             {
-                // 若分子為 0, 回傳 0/1
+                // 零可寫成任意 0/n，題目要求統一正規化為 0/1。
                 return "0/1";
             }
 
-            // 獲取最大公約數
-            long g = GCD(Math.Abs(x), y);
+            long greatestCommonDivisor = GCD(Math.Abs(numerator), denominator);
 
-            return (x / g).ToString() + "/" + (y / g).ToString();
+            return (numerator / greatestCommonDivisor).ToString()
+                + "/"
+                + (denominator / greatestCommonDivisor).ToString();
         }
 
 
         /// <summary>
-        /// 最大公約數 GCD 迭代实现
+        /// 使用迭代版歐幾里得演算法計算兩個非負整數的最大公約數。
+        /// 每輪以 <c>(b, a % b)</c> 取代原值，直到餘數為零；此方法由
+        /// <see cref="FractionAddition(string)"/> 用來將最終分數約為最簡形式。
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">第一個非負整數；與 <paramref name="b"/> 不應同時為零。</param>
+        /// <param name="b">第二個非負整數；與 <paramref name="a"/> 不應同時為零。</param>
+        /// <returns><paramref name="a"/> 與 <paramref name="b"/> 的最大公約數。</returns>
         public static long GCD(long a, long b)
         {
-            while(b != 0)
+            while (b != 0)
             {
+                // gcd(a, b) = gcd(b, a mod b)，替換後不會改變最大公約數。
                 long temp = b;
                 b = a % b;
                 a = temp;
@@ -118,20 +139,21 @@ namespace leetcode_592
 
 
         /// <summary>
-        /// 最大公約數 GCD 遞迴
+        /// 使用遞迴版歐幾里得演算法計算兩個非負整數的最大公約數。
+        /// 每層把問題縮小為 <c>GCD2(b, a % b)</c>，並在第二個參數為零時回傳結果；
+        /// 此方法保留作為迭代版 <see cref="GCD(long, long)"/> 的教學比較。
         /// </summary>
-        /// <param name="a"></param>
-        /// <param name="b"></param>
-        /// <returns></returns>
+        /// <param name="a">第一個非負整數；與 <paramref name="b"/> 不應同時為零。</param>
+        /// <param name="b">第二個非負整數；與 <paramref name="a"/> 不應同時為零。</param>
+        /// <returns><paramref name="a"/> 與 <paramref name="b"/> 的最大公約數。</returns>
         public static long GCD2(long a, long b)
         {
-            if(b == 0)
+            if (b == 0)
             {
                 return a;
             }
 
             return GCD2(b, a % b);
         }
-
     }
 }
