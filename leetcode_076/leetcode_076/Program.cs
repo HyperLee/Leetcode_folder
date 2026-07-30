@@ -12,232 +12,198 @@ class Program
     /// 子串必須包含 t 中所有字符，包括重複的字符
     /// 需要找出最小長度的符合條件子串 
     /// </summary>
-    /// <param name="args"></param> 
+    /// <remarks>
+    /// 主要進入點會以固定案例執行兩種滑動視窗解法，比對實際值與期望值，
+    /// 並將每筆結果及總通過數輸出至主控台。
+    /// </remarks>
+    /// <param name="args">命令列參數；此範例程式不使用命令列輸入。</param>
     static void Main(string[] args)
     {
-        // 測試案例 1: 一般情況
-        string s1 = "ADOBECODEBANC";
-        string t1 = "ABC";
-        Console.WriteLine("測試案例 1 (一般情況):");
-        Console.WriteLine($"輸入: s = {s1}, t = {t1}");
-        Console.WriteLine($"輸出: {MinWindow(s1, t1)}\n");
+        (string Name, string S, string T, string Expected)[] testCases =
+        [
+            ("官方一般案例", "ADOBECODEBANC", "ABC", "BANC"),
+            ("單字元", "a", "a", "a"),
+            ("目標字串較長", "a", "aa", ""),
+            ("重複需求字元", "ADOBECODEBANCBA", "AABC", "ANCBA"),
+            ("整段即答案", "ABC", "ABC", "ABC"),
+            ("答案位於尾端", "bba", "ab", "ba")
+        ];
 
-        // 測試案例 2: 目標字串包含重複字符
-        string s2 = "ADOBECODEBANCBA";
-        string t2 = "AABC";
-        Console.WriteLine("測試案例 2 (重複字符):");
-        Console.WriteLine($"輸入: s = {s2}, t = {t2}");
-        Console.WriteLine($"輸出: {MinWindow(s2, t2)}\n");
+        (string Name, Func<string, string, string> Solve)[] solutions =
+        [
+            (nameof(MinWindow), MinWindow),
+            (nameof(MinWindowOptimized), MinWindowOptimized)
+        ];
 
-        // 測試案例 3: 找不到符合的子串
-        string s3 = "ADOBECODEBANC";
-        string t3 = "XYZ";
-        Console.WriteLine("測試案例 3 (無解情況):");
-        Console.WriteLine($"輸入: s = {s3}, t = {t3}");
-        Console.WriteLine($"輸出: {MinWindow(s3, t3)}\n");
+        int passed = 0;
+        foreach ((string name, Func<string, string, string> solve) in solutions)
+        {
+            passed += RunTestCases(name, solve, testCases);
+        }
 
-        // 測試案例 4: 完全相同的字串
-        string s4 = "ABC";
-        string t4 = "ABC";
-        Console.WriteLine("測試案例 4 (完全相同):");
-        Console.WriteLine($"輸入: s = {s4}, t = {t4}");
-        Console.WriteLine($"輸出: {MinWindow(s4, t4)}\n");
-
-        // 測試案例 5: 單字符情況
-        string s5 = "A";
-        string t5 = "A";
-        Console.WriteLine("測試案例 5 (單字符):");
-        Console.WriteLine($"輸入: s = {s5}, t = {t5}");
-        Console.WriteLine($"輸出: {MinWindow(s5, t5)}");
-
-        Console.WriteLine("\n===== 測試優化版本 MinWindowOptimized =====\n");
-
-        // 測試案例 1: 一般情況
-        Console.WriteLine("測試案例 1 (一般情況) - 優化版本:");
-        Console.WriteLine($"輸入: s = {s1}, t = {t1}");
-        Console.WriteLine($"輸出: {MinWindowOptimized(s1, t1)}\n");
-
-        // 測試案例 2: 目標字串包含重複字符
-        Console.WriteLine("測試案例 2 (重複字符) - 優化版本:");
-        Console.WriteLine($"輸入: s = {s2}, t = {t2}");
-        Console.WriteLine($"輸出: {MinWindowOptimized(s2, t2)}\n");
-
-        // 測試案例 3: 找不到符合的子串
-        Console.WriteLine("測試案例 3 (無解情況) - 優化版本:");
-        Console.WriteLine($"輸入: s = {s3}, t = {t3}");
-        Console.WriteLine($"輸出: {MinWindowOptimized(s3, t3)}\n");
-
-        // 測試效能比較案例
-        string longS = "ADOBECODEBANCBANCBANCBANCBANC";
-        string longT = "ABC";
-        Console.WriteLine("效能比較測試案例:");
-        Console.WriteLine($"輸入: s = {longS}, t = {longT}");
-        
-        var sw = System.Diagnostics.Stopwatch.StartNew();
-        var result1 = MinWindow(longS, longT);
-        sw.Stop();
-        Console.WriteLine($"原始版本耗時: {sw.ElapsedTicks} ticks");
-
-        sw.Restart();
-        var result2 = MinWindowOptimized(longS, longT);
-        sw.Stop();
-        Console.WriteLine($"優化版本耗時: {sw.ElapsedTicks} ticks");
+        int total = solutions.Length * testCases.Length;
+        Console.WriteLine($"總計: {passed}/{total} 通過");
+        Environment.ExitCode = passed == total ? 0 : 1;
     }
 
     /// <summary>
-    /// 解題思路：使用滑動窗口（Sliding Window）技術
-    /// 1. 使用兩個指針 left 和 right 形成一個窗口
-    /// 2. 右指針不斷向右移動擴大窗口，直到窗口包含所有 t 中的字符
-    /// 3. 當找到一個可行解後，左指針向右移動縮小窗口，尋找最優解
-    /// 4. 在這個過程中不斷更新最小窗口的位置
-    /// 時間複雜度：O(n)，其中 n 是字符串 s 的長度
-    /// 空間複雜度：O(k)，其中 k 是字符集大小，本題中 k=128
+    /// 依序執行指定解法的固定案例，使用序數字串比較檢查實際值與期望值，
+    /// 將每筆 PASS/FAIL 與小計輸出至主控台。
     /// </summary>
-    /// <param name="S">源字符串</param>
-    /// <param name="t">目標字符串</param>
-    /// <returns>包含所有目標字符的最小子串</returns>
+    /// <param name="solutionName">顯示於測試區段標題的解法名稱。</param>
+    /// <param name="solve">接受來源字串與目標字串，並回傳最小覆蓋子串的解法。</param>
+    /// <param name="testCases">包含案例名稱、輸入字串及期望結果的固定案例集合。</param>
+    /// <returns>實際結果符合期望結果的案例數量。</returns>
+    private static int RunTestCases(
+        string solutionName,
+        Func<string, string, string> solve,
+        (string Name, string S, string T, string Expected)[] testCases)
+    {
+        Console.WriteLine($"===== {solutionName} =====");
+
+        int passed = 0;
+        foreach ((string name, string s, string t, string expected) in testCases)
+        {
+            string actual = solve(s, t);
+            bool isPassed = string.Equals(actual, expected, StringComparison.Ordinal);
+            passed += isPassed ? 1 : 0;
+
+            string status = isPassed ? "PASS" : "FAIL";
+            Console.WriteLine(
+                $"[{status}] {name}: s=\"{s}\", t=\"{t}\", " +
+                $"expected=\"{FormatResult(expected)}\", actual=\"{FormatResult(actual)}\"");
+        }
+
+        Console.WriteLine($"小計: {passed}/{testCases.Length} 通過");
+        Console.WriteLine();
+        return passed;
+    }
+
+    /// <summary>
+    /// 將演算法結果轉成易讀的主控台文字，避免空字串在輸出中無法辨識。
+    /// </summary>
+    /// <param name="value">要顯示的最小覆蓋子串結果。</param>
+    /// <returns>非空結果的原值；空字串則回傳 <c>&lt;empty&gt;</c>。</returns>
+    private static string FormatResult(string value)
+    {
+        return value.Length == 0 ? "<empty>" : value;
+    }
+
+    /// <summary>
+    /// 使用滑動視窗與兩個 ASCII 次數陣列尋找最小覆蓋子串。
+    /// 右邊界負責納入字元；視窗涵蓋目標後，左邊界持續收縮並更新最短答案。
+    /// </summary>
+    /// <param name="S">只含大小寫英文字母且長度至少為 1 的來源字串。</param>
+    /// <param name="t">只含大小寫英文字母且長度至少為 1 的目標字串，重複字元必須全部被涵蓋。</param>
+    /// <returns>涵蓋 <paramref name="t"/> 全部字元的最短子串；不存在時回傳空字串。</returns>
     public static string MinWindow(string S, string t)
     {
         char[] s = S.ToCharArray();
         int m = s.Length;
-        int ansLeft = -1;           // 最小窗口的左邊界
-        int ansRight = m;           // 最小窗口的右邊界
-        int[] cntS = new int[128];  // 記錄當前窗口中每個字符的出現次數
-        int[] cntT = new int[128];  // 記錄目標字符串中每個字符的出現次數
+        int ansLeft = -1;
+        int ansRight = m;
+        int[] cntS = new int[128];
+        int[] cntT = new int[128];
 
-        // 統計目標字符串中每個字符的出現次數
-        foreach(char c in t.ToCharArray())
+        foreach (char c in t)
         {
-            // 視窗擴展
             cntT[c]++;
         }
 
-        int left = 0;  // 窗口左邊界
-        for(int right = 0; right < m; right++)  
+        int left = 0;
+        for (int right = 0; right < m; right++)
         {
-            // 擴大窗口：將右邊界的字符納入統計
-            // 加入新字符
-            cntS[s[right]]++;  
+            // 先擴張右界取得可行視窗，再收縮左界以逼近最短答案。
+            cntS[s[right]]++;
 
-            // 當前窗口包含所有目標字符時，嘗試縮小窗口
-            // 檢查是否包含所有目標字符
-            while(isCovered(cntS, cntT))  
+            while (isCovered(cntS, cntT))
             {
-                // 更新最小窗口的位置
-                // 更新最佳解
-                if(right - left < ansRight - ansLeft)  
+                if (right - left < ansRight - ansLeft)
                 {
                     ansLeft = left;
                     ansRight = right;
                 }
 
-                // 縮小窗口：將左邊界的字符移出統計
                 cntS[s[left]]--;
                 left++;
             }
         }
-        // 如果沒找到可行解，返回空字符串；否則返回最小窗口子串
+
         return ansLeft < 0 ? "" : S.Substring(ansLeft, ansRight - ansLeft + 1);
     }
 
     /// <summary>
-    /// 檢查當前窗口是否包含目標字符串的所有字符
-    /// 通過比較當前窗口中每個字符的出現次數是否大於等於目標字符串中對應字符的出現次數
-    /// 
-    /// 這個函數在滑動窗口算法中被反複調用，用於：
-    /// 1. 判斷當前窗口是否可以開始收縮
-    /// 2. 確保窗口收縮過程中維持所需的所有字符
-    /// 
-    /// 只檢查 ASCII 範圍內有出現在目標字串的字符
-    /// 避免檢查不必要的字符範圍 
+    /// 比較兩個固定長度的 ASCII 次數陣列，判斷目前視窗是否已滿足目標字串
+    /// 每一種必要字元的數量，供滑動視窗決定是否能繼續收縮。
     /// </summary>
-    /// <param name="cntS">當前窗口中字符的出現次數數組</param>
-    /// <param name="cntT">目標字符串中字符的出現次數數組</param>
-    /// <returns>true 表示當前窗口涵蓋所有目標字符，false 則表示未涵蓋</returns>
+    /// <param name="cntS">目前視窗的 ASCII 字元次數陣列，長度必須至少為 128。</param>
+    /// <param name="cntT">目標字串的 ASCII 字元次數陣列，長度必須至少為 128。</param>
+    /// <returns><see langword="true"/> 表示視窗涵蓋全部目標字元；否則為 <see langword="false"/>。</returns>
     private static bool isCovered(int[] cntS, int[] cntT)
     {
-        // 只檢查目標字串中出現的字符
         for (int i = 0; i < 128; i++)
         {
-            // 如果 cntT[i] > 0，表示這個字符是我們需要匹配的目標字符, 這樣可以跳過不需要關注的字符，提高效率
-            // 如果 cntS[i] < cntT[i]，表示當前窗口中缺少足夠的字符 i
+            // 非目標字元不影響覆蓋條件；任一必要字元不足即不可收縮。
             if (cntT[i] > 0 && cntS[i] < cntT[i])
             {
                 return false;
             }
         }
+
         return true;
     }
 
     /// <summary>
-    /// 優化的滑動視窗解法 (計數優化版)
-    /// 核心概念：
-    /// 1. 使用單一計數數組，同時記錄目標字符和當前窗口的字符統計
-    /// 2. 通過計數器(count)追蹤待匹配的字符數量
-    /// 3. 當 count 為 0 時，表示找到有效窗口
-    /// 
-    /// 優化重點：
-    /// 1. 使用單一數組減少空間使用
-    /// 2. 減少額外的字符匹配檢查
-    /// 3. 使用計數器代替完整的數組比較
-    /// 
-    /// 時間複雜度：O(n)，其中 n 是字符串 s 的長度
-    /// 空間複雜度：O(1)，使用固定大小的數組(128)
-    /// 
-    /// line 232 ~ 236 if(map[s[start]]++ == 0)
-    /// 當進入這判斷式時候，如果該 char 是目標字符此時數量會為 0，如果不是目標字符數量為 -1
-    /// 
+    /// 使用單一 ASCII 差額陣列與剩餘需求計數執行滑動視窗。
+    /// 右界遇到仍缺少的字元時遞減 <c>count</c>；當 <c>count</c> 為 0，
+    /// 左界持續收縮，直到移除必要字元使視窗再次失效。
     /// </summary>
-    /// <param name="S">源字符串</param>
-    /// <param name="t">目標字符串</param>
-    /// <returns>包含所有目標字符的最小子串</returns>
+    /// <param name="s">只含大小寫英文字母且長度至少為 1 的來源字串。</param>
+    /// <param name="t">只含大小寫英文字母且長度至少為 1 的目標字串，重複字元必須全部被涵蓋。</param>
+    /// <returns>涵蓋 <paramref name="t"/> 全部字元的最短子串；不存在時回傳空字串。</returns>
     public static string MinWindowOptimized(string s, string t)
     {
-        if(string.IsNullOrEmpty(s) || string.IsNullOrEmpty(t))
+        if (string.IsNullOrEmpty(s) || string.IsNullOrEmpty(t))
         {
             return "";
         }
 
         int[] map = new int[128];
         int count = t.Length;
-        // 當前視窗左邊界
         int start = 0;
-        // 當前視窗右邊界
         int end = 0;
         int minStart = 0;
-        // 要找最小,所以初始化給最大
         int minLen = int.MaxValue;
 
-        // 記錄目標字符串中每個字符的出現次數
-        foreach(char c in t)
+        foreach (char c in t)
         {
-            map[c]++;  // 正值表示目標字符需要的數量
+            map[c]++;
         }
 
-        while(end < s.Length)
+        while (end < s.Length)
         {
-            // 當遇到目標字符時，減少待匹配數量
-            if(map[s[end]]-- > 0)  // 遇到目標字符時 map 值會 > 0
+            // 正值代表仍缺少該字元；零或負值代表目前視窗已足夠或有多餘。
+            if (map[s[end]]-- > 0)
             {
-                count--;  // 待匹配字符減少
+                count--;
             }
+
             end++;
 
-            // count 為 0 表示找到所有目標字符
-            while(count == 0)
+            while (count == 0)
             {
-                // 更新最小窗口位置和長度
-                if(end - start < minLen)
+                if (end - start < minLen)
                 {
                     minStart = start;
                     minLen = end - start;
                 }
 
-                // 移動左邊界時，如果遇到目標字符，增加待匹配數量
-                if(map[s[start]]++ == 0)  // 遇到目標字符時 map 值會 == 0
+                // 移除前的差額為零，表示即將拿走剛好足夠的必要字元。
+                if (map[s[start]]++ == 0)
                 {
-                    count++;  // 待匹配字符增加
+                    count++;
                 }
+
                 start++;
             }
         }
