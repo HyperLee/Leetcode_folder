@@ -15,78 +15,143 @@
         /// 
         /// 不能使用API呼叫排序
         /// </summary>
-        /// <param name="args"></param>
+        /// <remarks>
+        /// 主要進入點會以六組固定資料依序驗證五種排序解法，並統一輸出預期結果、
+        /// 實際結果與 PASS/FAIL。命令列參數不參與測試。
+        /// </remarks>
+        /// <param name="args">命令列參數；本範例不使用。</param>
         static void Main(string[] args)
         {
-            int[] input1 = { 2, 0, 2, 1, 1, 0 };
-            int[] input2 = { 2, 0, 2, 1, 1, 0 };
-            int[] input3 = { 2, 0, 2, 1, 1, 0 };
-            int[] input4 = { 2, 0, 2, 1, 1, 0 };
-            int[] input5 = { 2, 0, 2, 1, 1, 0 };
-            SortColors(input1);
-            SortColors2(input2);
-            CountingSortAlgorithm(input3);
-            SortColors3(input4);
-            SortColors4(input5);
+            (string Name, int[] Input, int[] Expected)[] testCases =
+            {
+                ("官方範例 1", new[] { 2, 0, 2, 1, 1, 0 }, new[] { 0, 0, 1, 1, 2, 2 }),
+                ("官方範例 2", new[] { 2, 0, 1 }, new[] { 0, 1, 2 }),
+                ("單一元素", new[] { 1 }, new[] { 1 }),
+                ("已排序", new[] { 0, 0, 1, 1, 2, 2 }, new[] { 0, 0, 1, 1, 2, 2 }),
+                ("反向排列", new[] { 2, 2, 1, 1, 0, 0 }, new[] { 0, 0, 1, 1, 2, 2 }),
+                ("全部相同", new[] { 2, 2, 2 }, new[] { 2, 2, 2 })
+            };
 
+            (string Name, Action<int[]> Sort)[] solutions =
+            {
+                ("SortColors / BubbleSortAlgorithm", SortColors),
+                ("SortColors2", SortColors2),
+                ("CountingSortAlgorithm", CountingSortAlgorithm),
+                ("SortColors3", SortColors3),
+                ("SortColors4", SortColors4)
+            };
+
+            int passed = 0;
+            int total = 0;
+
+            foreach ((string solutionName, Action<int[]> sort) in solutions)
+            {
+                Console.WriteLine($"[{solutionName}]");
+
+                foreach ((string caseName, int[] input, int[] expected) in testCases)
+                {
+                    total++;
+                    if (RunTestCase(caseName, input, expected, sort))
+                    {
+                        passed++;
+                    }
+                }
+
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"Overall: {passed}/{total} passed.");
         }
 
+        /// <summary>
+        /// 執行一筆排序驗證。方法會複製輸入陣列後呼叫指定解法，以免原地排序影響其他測試，
+        /// 再比較實際與預期陣列並輸出測試結果。輸入必須符合題目條件：長度為 1 到 300，
+        /// 且每個元素只能是 0、1 或 2；回傳值表示實際結果是否完全符合預期。
+        /// </summary>
+        /// <param name="caseName">顯示於主控台的案例名稱。</param>
+        /// <param name="input">尚未排序的合法測試資料；方法不會修改此陣列。</param>
+        /// <param name="expected">預期的非遞減排序結果。</param>
+        /// <param name="sort">接受整數陣列並進行原地排序的解法。</param>
+        /// <returns>實際排序結果與預期結果相同時為 <see langword="true"/>，否則為 <see langword="false"/>。</returns>
+        private static bool RunTestCase(
+            string caseName,
+            int[] input,
+            int[] expected,
+            Action<int[]> sort)
+        {
+            int[] actual = (int[])input.Clone();
+            sort(actual);
+
+            bool passed = actual.SequenceEqual(expected);
+            Console.WriteLine(
+                $"{caseName} | Input: {FormatArray(input)} | Expected: {FormatArray(expected)} | " +
+                $"Actual: {FormatArray(actual)} | {(passed ? "PASS" : "FAIL")}");
+
+            return passed;
+        }
 
         /// <summary>
-        /// 
+        /// 將整數陣列格式化為 README 與測試輸出使用的緊湊表示法。
+        /// 輸入可為任何非 <see langword="null"/> 的整數陣列；輸出格式為方括號包住、
+        /// 以逗號分隔的元素，例如 <c>[2,0,1]</c>，且不會修改原陣列。
         /// </summary>
-        /// <param name="nums"></param>
+        /// <param name="nums">要格式化的整數陣列。</param>
+        /// <returns>陣列的緊湊字串表示。</returns>
+        private static string FormatArray(int[] nums)
+        {
+            return $"[{string.Join(",", nums)}]";
+        }
+
+        /// <summary>
+        /// 使用泡沫排序將顏色陣列原地排成 0、1、2 的順序，並委派給
+        /// <see cref="BubbleSortAlgorithm(int[])"/> 完成相鄰元素比較與交換。
+        /// 輸入長度必須為 1 到 300，元素只能是 0、1 或 2；完成後原陣列會按非遞減順序排列。
+        /// </summary>
+        /// <param name="nums">要原地排序的顏色陣列。</param>
         public static void SortColors(int[] nums)
         {
             BubbleSortAlgorithm(nums);
         }
 
-
         /// <summary>
-        /// bubble sort
+        /// 使用泡沫排序反覆比較相鄰元素，若前者較大便交換，讓每一輪尚未排序區間中的最大值
+        /// 移到右端。輸入長度必須為 1 到 300，元素只能是 0、1 或 2；
+        /// 完成後原陣列會按非遞減順序排列。
         /// </summary>
-        /// <param name="arr"></param>
+        /// <param name="arr">要原地排序的顏色陣列。</param>
         public static void BubbleSortAlgorithm(int[] arr)
         {
             int n = arr.Length;
             for (int i = 0; i < n - 1; i++)
             {
+                // 每完成一輪，右側便多一個已定位的最大值，因此下一輪可縮短比較範圍。
                 for (int j = 0; j < n - i - 1; j++)
                 {
                     if (arr[j] > arr[j + 1])
                     {
-                        // swap arr[j] and arr[j+1]
                         int temp = arr[j];
                         arr[j] = arr[j + 1];
                         arr[j + 1] = temp;
                     }
                 }
             }
-
-            Console.Write("SortColors: ");
-            foreach (int num in arr)
-            {
-                Console.Write(num + " ");
-            }
-            Console.WriteLine();
         }
 
-
         /// <summary>
-        /// https://leetcode.cn/problems/sort-colors/solutions/1522053/by-stormsunshine-bhqo/
-        /// 计数排序
+        /// 使用針對 0、1、2 最佳化的計數排序。先以固定三格陣列統計每種顏色的數量，
+        /// 再依顏色順序覆寫原陣列。輸入長度必須為 1 到 300，元素只能是 0、1 或 2；
+        /// 完成後原陣列會按非遞減順序排列。
         /// </summary>
-        /// <param name="nums"></param>
+        /// <param name="nums">要原地排序的顏色陣列。</param>
         public static void SortColors2(int[] nums)
         {
-            // 先計數, 每個element 數量
             int[] counts = new int[3];
             foreach (int num in nums)
             {
                 counts[num]++;
             }
 
-            // 依據結果, 再去排序
+            // 依序消耗各顏色的計數，直接把 0、1、2 寫回原陣列。
             int n = nums.Length;
             for (int i = 0, j = 0; i < n; i++)
             {
@@ -98,27 +163,19 @@
                 nums[i] = j;
                 counts[j]--;
             }
-
-            Console.Write("SortColors2: ");
-            foreach (int num in nums)
-            {
-                Console.Write(num + " ");
-            }
-            Console.WriteLine();
-
         }
 
-
         /// <summary>
-        /// 計數排序
+        /// 使用一般化的穩定計數排序。方法會找出最大值、建立各值的出現次數與累積位置，
+        /// 從右向左放入輸出陣列後再複製回原陣列。輸入長度必須為 1 到 300，
+        /// 元素只能是 0、1 或 2；完成後原陣列會按非遞減順序排列。
         /// </summary>
-        /// <param name="arr"></param>
+        /// <param name="arr">要原地呈現排序結果的顏色陣列。</param>
         public static void CountingSortAlgorithm(int[] arr)
         {
             int n = arr.Length;
             int[] output = new int[n];
 
-            // Find the maximum element of the array
             int max = arr[0];
             for (int i = 1; i < n; i++)
             {
@@ -126,80 +183,48 @@
                     max = arr[i];
             }
 
-            // Create a count array to store count of individual elements
             int[] count = new int[max + 1];
 
-            // Initialize count array with all zeros
-            for (int i = 0; i <= max; ++i)
-            {
-                count[i] = 0;
-            }
-
-            // Store count of each character
             for (int i = 0; i < n; ++i)
             {
                 ++count[arr[i]];
             }
 
-            // Change count[i] so that count[i] now contains actual position of this element in output array
-            // 修改計數數組
+            // 累積計數代表每個值在輸出陣列中的右邊界位置。
             for (int i = 1; i <= max; ++i)
             {
                 count[i] += count[i - 1];
             }
 
-            // Build the output array
-            // 構建排序後的數組
+            // 從右向左放置可保留相同值的原始相對順序，使計數排序維持穩定。
             for (int i = n - 1; i >= 0; i--)
             {
                 output[count[arr[i]] - 1] = arr[i];
                 --count[arr[i]];
             }
 
-            // Copy the output array to arr, so that arr now contains sorted characters
-            // 複製回原始數組
             for (int i = 0; i < n; ++i)
             {
                 arr[i] = output[i];
             }
-
-
-            // print
-            Console.Write("CountingSortAlgorithm: ");
-            foreach (int num in arr)
-            {
-                Console.Write(num + " ");
-            }
-            Console.WriteLine();
         }
 
-
         /// <summary>
-        /// 這段程式碼使用 雙指標（Two Pointers）+ 單次遍歷（One-pass） 的方法來解決問題：
-        /// p0：指向下一個 0 的位置的指針（最左側）。
-        /// p2：指向下一個 2 的位置的指針（最右側）。
-        /// 
-        /// 結論:
-        /// 該方法使用兩個指針，p0 和 p2，分別跟蹤 0 和 2 的位置。
-        /// 它遍歷數組，通過交換元素來確保所有的 0 都在開頭，所有的 2 都在末尾，而 1 自然落在中間。
-        /// 
-        /// 時間複雜度為 O(n)，空間複雜度為 O(1)。
+        /// 使用左右雙指標搭配單次掃描：<c>p0</c> 指向下一個 0 的位置，
+        /// <c>p2</c> 指向下一個 2 的位置，掃描後讓 1 自然留在中間。
+        /// 輸入長度必須為 1 到 300，元素只能是 0、1 或 2；
+        /// 完成後原陣列會按非遞減順序排列。
         /// </summary>
-        /// <param name="nums"></param>
+        /// <param name="nums">要原地排序的顏色陣列。</param>
         public static void SortColors3(int[] nums)
         {
             int n = nums.Length;
-            // p0 指向應該放 0 的位置
             int p0 = 0;
-            // p2 指向應該放 2 的位置
             int p2 = n - 1;
 
-            // 遍歷數組
             for (int i = 0; i < n; i++)
             {
-                // 處理 2： 若 nums[i] == 2，則將 nums[i] 和 nums[p2] 交換，並減小 p2，
-                // 但 i 不變（因為交換後的新 nums[i] 仍需檢查）。
-                // 這確保所有的 2 都被移動到數組的末尾。
+                // 與右側交換回來的值尚未分類，因此固定 i 並持續檢查，直到它不再是 2。
                 while (i <= p2 && nums[i] == 2)
                 {
                     int temp = nums[i];
@@ -208,9 +233,7 @@
                     p2--;
                 }
 
-                // 處理 0： 若 nums[i] == 0，則將 nums[i] 和 nums[p0] 交換，
-                // 並增大 p0，同時繼續前進 i。
-                // 這確保所有的 0 都被移動到數組的開頭。
+                // 此時若為 0，便放到左側已分類區間的下一格；其餘的 1 留在中間。
                 if (nums[i] == 0)
                 {
                     int temp = nums[i];
@@ -218,85 +241,54 @@
                     nums[p0] = temp;
                     p0++;
                 }
-
             }
-
-            Console.Write("SortColors3: ");
-            foreach (int num in nums)
-            {
-                Console.Write(num + " ");
-            }
-            Console.WriteLine();
         }
 
-
         /// <summary>
-        /// 雙指針 類似 SortColors3 方法
-        /// 
-        /// 將包含 0、1 和 2 的陣列就地排序。
-        /// 
-        /// mid 類似於遍歷陣列的指標，low 和 high 是用於交換元素的指標。
-        /// 也就是 for 迴圈的 i 變數
+        /// 使用荷蘭國旗三指標法將陣列分成三個區域：<c>low</c> 左側全為 0、
+        /// <c>high</c> 右側全為 2，<c>mid</c> 掃描尚未分類的元素。
+        /// 輸入長度必須為 1 到 300，元素只能是 0、1 或 2；
+        /// 完成後原陣列會按非遞減順序排列。
         /// </summary>
         /// <param name="nums">要排序的整數陣列。</param>
         public static void SortColors4(int[] nums)
         {
-            // 指向應該放 0 的位置
             int low = 0;
-            // 指向應該放 2 的位置
             int high = nums.Length - 1;
-            // 用於遍歷陣列的指標
-            int mid = 0; 
+            int mid = 0;
             int temp = 0;
 
-            // 從頭到尾遍歷陣列
             while (mid <= high)
             {
                 switch (nums[mid])
                 {
-                    // 如果元素是 0
                     case 0:
                         {
-                            // 將 mid 位置的元素與 low 位置的元素交換
                             temp = nums[low];
                             nums[low] = nums[mid];
                             nums[mid] = temp;
-                            // 左邊界往右移動
                             low++;
                             mid++;
                             break;
                         }
-                    // 如果元素是 1
                     case 1:
                         {
-                            // 移動到下一個元素
                             mid++;
                             break;
                         }
-                    // 如果元素是 2
                     case 2:
                         {
                             // 將 mid 位置的元素與 high 位置的元素交換
                             temp = nums[mid];
                             nums[mid] = nums[high];
                             nums[high] = temp;
-                            // 右邊界往左移動
                             high--;
+
+                            // 右側換回來的值仍未分類，所以 mid 必須留在原位再次判斷。
                             break;
                         }
                 }
             }
-
-            // 輸出排序後的陣列
-            Console.Write("SortColors4: ");
-            foreach (int num in nums)
-            {
-                Console.Write(num + " ");
-            }
-            Console.WriteLine();
-
-
         }
-
     }
 }
