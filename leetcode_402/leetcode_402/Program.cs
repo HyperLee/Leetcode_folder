@@ -13,68 +13,170 @@ namespace leetcode_402
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string input = "001";
-            int k = 1;
-            Console.WriteLine(RemoveKdigits(input, k));
-            Console.ReadKey();
-        }
+            SampleCase[] samples =
+            [
+                new("官方範例一", "1432219", 3, "1219"),
+                new("移除高位並去除前導零", "10200", 1, "200"),
+                new("刪除全部數字", "10", 2, "0"),
+                new("單調遞增時從尾端刪除", "123456", 3, "123"),
+                new("刪除後產生多個前導零", "10001", 1, "1"),
+                new("重複數字", "1111", 2, "11"),
+                new("最小合法輸入", "0", 1, "0"),
+                new("連續遞減數字", "9876543210", 9, "0")
+            ];
 
+            int passedChecks = 0;
+            int totalChecks = samples.Length * 2;
+
+            for (int i = 0; i < samples.Length; i++)
+            {
+                SampleCase sample = samples[i];
+                string stackResult = RemoveKdigits(sample.Number, sample.DigitsToRemove);
+                string simulationResult = RemoveKdigits2(sample.Number, sample.DigitsToRemove);
+                bool stackPassed = stackResult == sample.Expected;
+                bool simulationPassed = simulationResult == sample.Expected;
+
+                if (stackPassed)
+                {
+                    passedChecks++;
+                }
+
+                if (simulationPassed)
+                {
+                    passedChecks++;
+                }
+
+                Console.WriteLine($"案例 {i + 1}：{sample.Name}");
+                Console.WriteLine(
+                    $"輸入：num = {FormatResult(sample.Number)}, k = {sample.DigitsToRemove}");
+                Console.WriteLine($"Expected:       {FormatResult(sample.Expected)}");
+                Console.WriteLine($"解法一 Actual: {FormatResult(stackResult)}");
+                Console.WriteLine($"解法一結果：{(stackPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine($"解法二 Actual: {FormatResult(simulationResult)}");
+                Console.WriteLine($"解法二結果：{(simulationPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項檢查通過");
+        }
 
         /// <summary>
-        /// https://leetcode.cn/problems/remove-k-digits/solutions/1456933/by-stormsunshine-4s4a/
-        /// https://leetcode.cn/problems/remove-k-digits/solutions/290203/yi-zhao-chi-bian-li-kou-si-dao-ti-ma-ma-zai-ye-b-5/
-        /// 
-        /// 要使得輸出結果值最小,那就要移除比較大的element
-        /// 開頭越大代表總和越大.
-        /// 所以高位要移除element大的
-        /// 
-        /// 1. num[i] > num[i + 1] 要把 nums[i] 移除
-        /// 2. 開頭不能為 0
-        /// 
+        /// 使用單調遞增堆疊移除指定數量的數字，使剩餘數字最小。
+        /// 掃描輸入時優先移除高位中比目前數字大的元素，讓較小數字盡早出現在前方；
+        /// 輸入必須是沒有非法前導零的數字字串，且 <paramref name="k"/> 介於 1 與字串長度之間。
+        /// 回傳結果不含前導零，若所有位數都被移除或只剩零，則回傳 <c>"0"</c>。
         /// </summary>
-        /// <param name="num"></param>
-        /// <param name="k"></param>
-        /// <returns></returns>
+        /// <param name="num">僅由數字組成，且除 <c>"0"</c> 外不含前導零的非負整數字串。</param>
+        /// <param name="k">必須移除的數字位數，範圍為 1 到 <paramref name="num"/> 的長度。</param>
+        /// <returns>移除恰好 <paramref name="k"/> 位後可得到的最小數字字串。</returns>
         public static string RemoveKdigits(string num, int k)
         {
-            int length = num.Length;
-            StringBuilder sb = new StringBuilder();
-            int top = -1;
+            StringBuilder stack = new();
+            int remainingRemovals = k;
 
-            for(int i = 0; i < length; i++)
+            foreach (char digit in num)
             {
-                char c = num[i];
-
-                // 前面位置數字不能比後面大
-                while(sb.Length > 0 && sb[top] > c && k > 0)
+                // 較大的高位會使整體數值變大，因此遇到較小數字時優先彈出高位。
+                while (stack.Length > 0 &&
+                       remainingRemovals > 0 &&
+                       stack[^1] > digit)
                 {
-                    // 如果 前面比後面大, 那前面會被移除
-                    sb.Length = top;
-                    top--;
-                    k--;
+                    stack.Length--;
+                    remainingRemovals--;
                 }
-                sb.Append(c);
-                top++;
+
+                stack.Append(digit);
             }
 
-            // 計算 輸出答案 要擷取位置(長度)
-            while(k > 0)
+            // 若輸入一路非遞減，前方已是最小排列，只能從影響最小的尾端刪除。
+            while (remainingRemovals > 0)
             {
-                sb.Length = top;
-                top--; 
-                k--;
+                stack.Length--;
+                remainingRemovals--;
             }
 
-            int remainlength = sb.Length;
-            int startindex = 0;
-
-            // 開頭不能有0; ex: 0200 => 200
-            while(startindex < remainlength && sb[startindex] == '0')
-            {
-                startindex++;
-            }
-
-            return startindex == remainlength ? "0" : sb.ToString().Substring(startindex);
+            return NormalizeResult(stack);
         }
+
+        /// <summary>
+        /// 使用直觀貪心模擬逐次移除數字，使剩餘數字最小。
+        /// 每一輪刪除第一個大於右鄰數字的高位；若整體非遞減，則刪除最後一位。
+        /// 輸入必須是沒有非法前導零的數字字串，且 <paramref name="k"/> 介於 1 與字串長度之間。
+        /// 回傳結果不含前導零，若所有位數都被移除或只剩零，則回傳 <c>"0"</c>。
+        /// </summary>
+        /// <param name="num">僅由數字組成，且除 <c>"0"</c> 外不含前導零的非負整數字串。</param>
+        /// <param name="k">必須移除的數字位數，範圍為 1 到 <paramref name="num"/> 的長度。</param>
+        /// <returns>移除恰好 <paramref name="k"/> 位後可得到的最小數字字串。</returns>
+        public static string RemoveKdigits2(string num, int k)
+        {
+            StringBuilder digits = new(num);
+
+            for (int removal = 0; removal < k; removal++)
+            {
+                int removalIndex = digits.Length - 1;
+
+                // 第一個下降位置代表目前能改善的最高位；找不到時才刪除尾端。
+                for (int i = 0; i < digits.Length - 1; i++)
+                {
+                    if (digits[i] > digits[i + 1])
+                    {
+                        removalIndex = i;
+                        break;
+                    }
+                }
+
+                digits.Remove(removalIndex, 1);
+            }
+
+            return NormalizeResult(digits);
+        }
+
+        /// <summary>
+        /// 將演算法產生的數字序列正規化為題目要求的輸出格式。
+        /// 輸入可為空或含有前導零；方法略過所有前導零，
+        /// 並回傳無前導零的字串，若沒有非零數字則回傳 <c>"0"</c>。
+        /// </summary>
+        /// <param name="digits">要正規化的可變數字序列。</param>
+        /// <returns>不含前導零的數字字串，或代表零的 <c>"0"</c>。</returns>
+        private static string NormalizeResult(StringBuilder digits)
+        {
+            int firstNonZeroIndex = 0;
+
+            // 輸出不得保留前導零；全零與空序列最後都統一表示為 "0"。
+            while (firstNonZeroIndex < digits.Length && digits[firstNonZeroIndex] == '0')
+            {
+                firstNonZeroIndex++;
+            }
+
+            return firstNonZeroIndex == digits.Length
+                ? "0"
+                : digits.ToString(firstNonZeroIndex, digits.Length - firstNonZeroIndex);
+        }
+
+        /// <summary>
+        /// 將數字字串加上雙引號，讓空字串、零與一般數字在主控台輸出中清楚可辨。
+        /// 輸入為任意字串，輸出為前後各包含一個雙引號的顯示文字。
+        /// </summary>
+        /// <param name="value">要顯示的數字字串。</param>
+        /// <returns>以雙引號包住的顯示字串。</returns>
+        private static string FormatResult(string value)
+        {
+            return $"\"{value}\"";
+        }
+
+        /// <summary>
+        /// 表示一組移除 K 位數字的可執行案例。
+        /// 資料包含案例名稱、合法數字字串、刪除位數與預期最小結果，
+        /// 供進入點同時驗證兩種解法並輸出逐案結果。
+        /// </summary>
+        /// <param name="Name">案例的繁體中文顯示名稱。</param>
+        /// <param name="Number">符合題目限制的非負整數字串。</param>
+        /// <param name="DigitsToRemove">必須移除的數字位數。</param>
+        /// <param name="Expected">移除後預期得到的最小數字字串。</param>
+        private sealed record SampleCase(
+            string Name,
+            string Number,
+            int DigitsToRemove,
+            string Expected);
     }
 }
