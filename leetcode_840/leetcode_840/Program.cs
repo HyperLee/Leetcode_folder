@@ -2,6 +2,9 @@
 {
     internal class Program
     {
+        private const string ClockwiseMagicRing = "4381672943816729";
+        private const string CounterclockwiseMagicRing = "9276183492761834";
+
         /// <summary>
         /// 840. Magic Squares In Grid
         /// https://leetcode.com/problems/magic-squares-in-grid/description/?envType=daily-question&envId=2024-08-09
@@ -12,125 +15,283 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[][] input = new int[][]
+            (string Description, int[][] Grid, int Expected)[] samples =
             {
-                 new int[]{ 4,3,8,4 },
-                 new int[]{ 9,5,1,9 },
-                 new int[]{ 2,7,6,2}
+                (
+                    "官方範例",
+                    new int[][]
+                    {
+                        new int[] { 4, 3, 8, 4 },
+                        new int[] { 9, 5, 1, 9 },
+                        new int[] { 2, 7, 6, 2 }
+                    },
+                    1
+                ),
+                (
+                    "尺寸不足 3 x 3",
+                    new int[][]
+                    {
+                        new int[] { 8 }
+                    },
+                    0
+                ),
+                (
+                    "標準洛書",
+                    new int[][]
+                    {
+                        new int[] { 4, 3, 8 },
+                        new int[] { 9, 5, 1 },
+                        new int[] { 2, 7, 6 }
+                    },
+                    1
+                ),
+                (
+                    "鏡射洛書",
+                    new int[][]
+                    {
+                        new int[] { 8, 3, 4 },
+                        new int[] { 1, 5, 9 },
+                        new int[] { 6, 7, 2 }
+                    },
+                    1
+                ),
+                (
+                    "重複數字",
+                    new int[][]
+                    {
+                        new int[] { 5, 5, 5 },
+                        new int[] { 5, 5, 5 },
+                        new int[] { 5, 5, 5 }
+                    },
+                    0
+                ),
+                (
+                    "包含超出 1 到 9 的數字",
+                    new int[][]
+                    {
+                        new int[] { 4, 3, 8 },
+                        new int[] { 9, 5, 1 },
+                        new int[] { 2, 7, 15 }
+                    },
+                    0
+                ),
+                (
+                    "同一網格包含兩個幻方",
+                    new int[][]
+                    {
+                        new int[] { 4, 3, 8, 4, 3, 8 },
+                        new int[] { 9, 5, 1, 9, 5, 1 },
+                        new int[] { 2, 7, 6, 2, 7, 6 }
+                    },
+                    2
+                )
             };
 
-            Console.WriteLine(NumMagicSquaresInside(input));
-            Console.ReadKey();
+            int passedChecks = 0;
+
+            for (int i = 0; i < samples.Length; i++)
+            {
+                (string description, int[][] grid, int expected) = samples[i];
+                passedChecks += RunSample(i + 1, description, grid, expected);
+            }
+
+            int totalChecks = samples.Length * 2;
+            Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項驗證通過");
+
+            if (passedChecks != totalChecks)
+            {
+                Environment.ExitCode = 1;
+            }
         }
 
 
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/magic-squares-in-grid/solutions/107797/ju-zhen-zhong-de-huan-fang-by-leetcode-2/
-        /// https://leetcode.cn/problems/magic-squares-in-grid/solutions/199750/fei-bao-li-nu-li-xie-chu-you-ya-de-dai-ma-shuang-b/
-        /// https://leetcode.cn/problems/magic-squares-in-grid/solutions/2690676/840-ju-zhen-zhong-de-huan-fang-by-storms-jmlx/
-        /// 
-        /// 提示:
-        /// 1. 3 * 3 矩陣的 中心點 數值為 5
-        /// 2. 填充的數字為 1 ~ 9
-        /// 3. 對角線總和相同
-        /// 4. 每一行/列以及對角, 加總後總和為 15
-        /// 5. 四角全為偶數, 中間皆為奇數
-        /// 6. 共八種型態
-        /// 
+        /// 計算網格內所有 3 x 3 幻方子矩陣的數量。
+        /// 逐一枚舉可能的中心點，並透過數字 1 到 9 的唯一性、
+        /// 三列三行與兩條對角線總和皆為 15，完整驗證每個候選區域。
         /// </summary>
-        /// <param name="grid"></param>
-        /// <returns></returns>
+        /// <param name="grid">
+        /// 符合題目限制的非空矩形整數網格；每列長度相同，元素介於 0 到 15。
+        /// </param>
+        /// <returns>網格內符合定義的 3 x 3 幻方子矩陣數量。</returns>
         public static int NumMagicSquaresInside(int[][] grid)
         {
-            int res = 0;
-            int row = grid.Length, col = grid[0].Length;
-            for(int i = 1; i < row - 1; i++)
+            int result = 0;
+            int rowCount = grid.Length;
+            int columnCount = grid[0].Length;
+
+            for (int row = 1; row < rowCount - 1; row++)
             {
-                for(int j = 1; j < col - 1; j++)
+                for (int column = 1; column < columnCount - 1; column++)
                 {
-                    // (i, j)為子矩陣的中心點
-                    if(IsMagicSquare(grid, i, j))
+                    // 3 x 3 候選區域可由中心點唯一決定，只需掃描不位於邊界的座標。
+                    if (IsMagicSquare(grid, row, column))
                     {
-                        res++;
+                        result++;
                     }
                 }
             }
 
-            return res;
+            return result;
         }
 
 
         /// <summary>
-        /// 遍歷輸入的 grid 中 所有 3 * 3 大小的矩陣
-        /// 判斷是不是 Magic Squares
-        /// 
-        /// Magic Squares: 3 * 3 大小
-        /// 
-        /// 对于 row×col 的矩阵，其中的任意 3×3 的子矩阵的中心位置的行下标和列下标的取值范围分别是 [1,row−2] 和 [1,col−2]。
-        /// 
-        /// 輸入的 centerRow 與 centerCol 為這次子矩陣的中心點
-        /// 因為是 3 * 3, 已該位置為中心點
-        /// 已中心點為基準, 上下左右增減擴展找出 3 * 3 矩陣
-        /// 
-        /// -1, 0, 1 => 共移動三次
+        /// 判斷指定中心點周圍的 3 x 3 區域是否為幻方。
+        /// 先利用中心必為 5 快速排除，再確認 1 到 9 各出現一次，
+        /// 最後驗證每一列、每一行與兩條對角線的總和皆為 15。
         /// </summary>
-        /// <param name="grid"></param>
-        /// <param name="centerRow"></param>
-        /// <param name="centerCol"></param>
-        /// <returns></returns>
+        /// <param name="grid">符合題目限制的非空矩形整數網格。</param>
+        /// <param name="centerRow">候選 3 x 3 區域的中心列索引，必須避開上下邊界。</param>
+        /// <param name="centerCol">候選 3 x 3 區域的中心欄索引，必須避開左右邊界。</param>
+        /// <returns>指定區域符合 3 x 3 幻方定義時回傳 <see langword="true"/>。</returns>
         public static bool IsMagicSquare(int[][] grid, int centerRow, int centerCol)
         {
             if (grid[centerRow][centerCol] != 5)
             {
-                // 中心點要為 5
+                // 四條穿過中心的線總和為 60；扣除外圈總和後可推得中心只能是 5。
                 return false;
             }
 
-            // 紀錄出現過數字
-            ISet<int> set = new HashSet<int>();
-            for(int i = -1; i <= 1; i++)
+            ISet<int> seenNumbers = new HashSet<int>();
+            for (int rowOffset = -1; rowOffset <= 1; rowOffset++)
             {
-                for(int j = -1; j <= 1; j++)
+                for (int columnOffset = -1; columnOffset <= 1; columnOffset++)
                 {
-                    int num = grid[centerRow + i][centerCol + j];
-                    if(num < 1 || num > 9 || !set.Add(num))
+                    int number = grid[centerRow + rowOffset][centerCol + columnOffset];
+                    if (number < 1 || number > 9 || !seenNumbers.Add(number))
                     {
-                        // 數字範圍 1 ~ 9 必須在這範圍內, 不能超出
-                        // 且僅能出現一次, 超出就錯誤
+                        // 九格必須恰好使用 1 到 9；越界或重複都不可能是正常幻方。
                         return false;
                     }
                 }
             }
 
-            for(int i = -1; i <= 1; i++)
+            for (int offset = -1; offset <= 1; offset++)
             {
-                int rowsum = 0, colsum = 0;
-                for(int j = -1; j <= 1; j++)
+                int rowSum = 0;
+                int columnSum = 0;
+
+                for (int lineOffset = -1; lineOffset <= 1; lineOffset++)
                 {
-                    rowsum += grid[centerRow + i][centerCol + j];
-                    colsum += grid[centerRow + j][centerCol + i];
+                    rowSum += grid[centerRow + offset][centerCol + lineOffset];
+                    columnSum += grid[centerRow + lineOffset][centerCol + offset];
                 }
 
-                if(rowsum != 15 || colsum != 15)
+                if (rowSum != 15 || columnSum != 15)
                 {
-                    // 每一 行/列 總和都要是 15
+                    // 1 到 9 總和為 45，平均分配到三列或三行後，每條線必須為 15。
                     return false;
                 }
             }
 
-            int diagonalsum1 = 0, diagonalsum2 = 0;
-            for(int i = -1, j = 1; i <= 1; i++, j--)
+            int mainDiagonalSum = 0;
+            int antiDiagonalSum = 0;
+
+            for (int offset = -1; offset <= 1; offset++)
             {
-                // 兩條斜對角總和都要是 15
-                // diagonalsum1: 左上 -> 右下
-                // diagonalsum2: 右上 -> 左下
-                diagonalsum1 += grid[centerRow + i][centerCol + i];
-                diagonalsum2 += grid[centerRow + i][centerCol + j];
+                mainDiagonalSum += grid[centerRow + offset][centerCol + offset];
+                antiDiagonalSum += grid[centerRow + offset][centerCol - offset];
             }
 
-            return diagonalsum1 == 15 && diagonalsum2 == 15;
+            return mainDiagonalSum == 15 && antiDiagonalSum == 15;
         }
 
+        /// <summary>
+        /// 使用洛書外圈的循環排列，計算網格內所有 3 x 3 幻方子矩陣數量。
+        /// 每個候選中心只需檢查中心值與八個外圈數字形成的正向或反向模式，
+        /// 便可涵蓋同一個正常幻方的四種旋轉與四種鏡射。
+        /// </summary>
+        /// <param name="grid">
+        /// 符合題目限制的非空矩形整數網格；每列長度相同，元素介於 0 到 15。
+        /// </param>
+        /// <returns>網格內符合外圈洛書模式的 3 x 3 幻方子矩陣數量。</returns>
+        public static int NumMagicSquaresInside2(int[][] grid)
+        {
+            int result = 0;
+            int rowCount = grid.Length;
+            int columnCount = grid[0].Length;
+
+            for (int row = 1; row < rowCount - 1; row++)
+            {
+                for (int column = 1; column < columnCount - 1; column++)
+                {
+                    if (IsMagicSquareByOuterRing(grid, row, column))
+                    {
+                        result++;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// 判斷指定中心點周圍的 3 x 3 區域是否符合洛書外圈模式。
+        /// 正常 3 x 3 幻方中心必為 5；其餘八個數字依順時針排列時，
+        /// 必為基準外圈的某個循環位移，或鏡射後反向外圈的循環位移。
+        /// </summary>
+        /// <param name="grid">符合題目限制的非空矩形整數網格。</param>
+        /// <param name="centerRow">候選 3 x 3 區域的中心列索引，必須避開上下邊界。</param>
+        /// <param name="centerCol">候選 3 x 3 區域的中心欄索引，必須避開左右邊界。</param>
+        /// <returns>中心與外圈構成任一旋轉或鏡射洛書時回傳 <see langword="true"/>。</returns>
+        public static bool IsMagicSquareByOuterRing(int[][] grid, int centerRow, int centerCol)
+        {
+            if (grid[centerRow][centerCol] != 5)
+            {
+                return false;
+            }
+
+            // 從左上角開始順時針繞行，刻意略過已獨立驗證的中心位置。
+            string outerRing =
+                $"{grid[centerRow - 1][centerCol - 1]}" +
+                $"{grid[centerRow - 1][centerCol]}" +
+                $"{grid[centerRow - 1][centerCol + 1]}" +
+                $"{grid[centerRow][centerCol + 1]}" +
+                $"{grid[centerRow + 1][centerCol + 1]}" +
+                $"{grid[centerRow + 1][centerCol]}" +
+                $"{grid[centerRow + 1][centerCol - 1]}" +
+                $"{grid[centerRow][centerCol - 1]}";
+
+            // 將八位模式重複一次，可讓任何旋轉都成為連續子字串；反向模式涵蓋鏡射。
+            return ClockwiseMagicRing.Contains(outerRing, StringComparison.Ordinal)
+                || CounterclockwiseMagicRing.Contains(outerRing, StringComparison.Ordinal);
+        }
+
+        /// <summary>
+        /// 執行一組網格案例，分別呼叫完整驗證法與外圈序列法，
+        /// 並輸出輸入內容、預期數量、實際結果及通過狀態。
+        /// </summary>
+        /// <param name="caseNumber">顯示在主控台上的案例編號。</param>
+        /// <param name="description">說明案例所涵蓋情境的名稱。</param>
+        /// <param name="grid">符合題目限制的矩形整數網格。</param>
+        /// <param name="expected">人工推導的 3 x 3 幻方數量。</param>
+        /// <returns>本案例兩種解法通過的驗證項數，範圍為 0 到 2。</returns>
+        private static int RunSample(int caseNumber, string description, int[][] grid, int expected)
+        {
+            int result1 = NumMagicSquaresInside(grid);
+            int result2 = NumMagicSquaresInside2(grid);
+            bool passed1 = result1 == expected;
+            bool passed2 = result2 == expected;
+
+            Console.WriteLine($"案例 {caseNumber}：{description}");
+            Console.WriteLine($"輸入：grid = {FormatGrid(grid)}");
+            Console.WriteLine($"預期：{expected}");
+            Console.WriteLine($"解法一（完整驗證）：{result1}（{(passed1 ? "PASS" : "FAIL")}）");
+            Console.WriteLine($"解法二（外圈序列）：{result2}（{(passed2 ? "PASS" : "FAIL")}）");
+            Console.WriteLine();
+
+            return (passed1 ? 1 : 0) + (passed2 ? 1 : 0);
+        }
+
+        /// <summary>
+        /// 將矩形整數網格格式化成穩定的巢狀方括號文字，方便主控台與 README 對照。
+        /// </summary>
+        /// <param name="grid">要格式化的矩形整數網格。</param>
+        /// <returns>以逗號與空格分隔元素的單行網格文字。</returns>
+        private static string FormatGrid(int[][] grid)
+        {
+            return $"[{string.Join(", ", grid.Select(row => $"[{string.Join(", ", row)}]"))}]";
+        }
     }
 }
