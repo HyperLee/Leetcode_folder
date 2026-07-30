@@ -11,103 +11,128 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        // 測試加法
-        int a = 1, b = 2;
-        Console.WriteLine($"加法測試:");
-        Console.WriteLine($"a = {a}, b = {b} => GetSum(a, b) = {GetSum(a, b)}");
-        a = 2; b = 3;
-        Console.WriteLine($"a = {a}, b = {b} => GetSum(a, b) = {GetSum(a, b)}");
-
-        // 測試減法
-        Console.WriteLine($"\n減法測試:");
-        a = 5; b = 3;
-        Console.WriteLine($"a = {a}, b = {b} => GetDiff(a, b) = {GetDiff(a, b)}"); // 應該輸出 2
-        a = 10; b = 7;
-        Console.WriteLine($"a = {a}, b = {b} => GetDiff(a, b) = {GetDiff(a, b)}"); // 應該輸出 3
-        a = 3; b = 2;
-        Console.WriteLine($"a = {a}, b = {b} => GetDiff(a, b) = {GetDiff(a, b)}"); // 應該輸出 1
+        RunSamples();
     }
 
     /// <summary>
-    /// 原理說明（位元加法）：
-	/// 加法可以拆成兩個部分：
-	/// 1. 不進位的加法：用 XOR（^）來做。
-	/// 2. 進位值的處理：用 AND（&）再左移一位（<< 1）。
-	/// 然後重複這兩個步驟，直到沒有進位為止。
-    /// 
-    /// 條件	作用
-    /// b != 0	還有進位，繼續處理
-    /// a == 0	沒有影響，因為它只是加總結果的一部分
-    /// 
-    /// 判斷 b != 0 是因為 只要還有進位，就不能停。
-    /// 判斷 a != 0 是多餘的，因為 a 本來就可能是 0、或變來變去，重點是 b。
-    /// a 是「目前的加總結果」，它會一直更新。
-    /// 我們 不需要它等於 0 才停，因為 a 有可能一開始就是非零，而且我們的目的就是要得到 a + b 的結果。
-    /// 最後當 b == 0，代表沒有新的進位了，此時的 a 就是我們要的結果！
+    /// 執行固定的加法與減法案例，逐筆比較預期值和實際值，並輸出 PASS/FAIL 與通過總數。
+    /// 案例不需要外部輸入，涵蓋正數、負數、零、異號、互相抵消與題目限制邊界。
     /// </summary>
-    /// <param name="a"></param>
-    /// <param name="b"></param>
-    /// <returns></returns>
-    public static int GetSum(int a, int b) 
+    private static void RunSamples()
     {
-        // 1. 计算 a 和 b 的按位与，得到进位 carry
-        // 2. 计算 a 和 b 的按位异或，得到不带进位的和 sum
-        // 3. 将 carry 左移一位，准备加到 sum 上
-        // 4. 重复步骤 1-3，直到 carry 为 0
-        // 此方法使用位元運算來實現兩數相加，不使用 + 運算符
-        // 例如: 計算 3 + 2
-        // 3 的二進位是 0011
-        // 2 的二進位是 0010
-        
-        while (b != 0) 
+        SampleCase[] additionCases =
+        [
+            new("官方範例一", 1, 2, 3),
+            new("官方範例二", 2, 3, 5),
+            new("兩個零", 0, 0, 0),
+            new("兩個負數", -4, -7, -11),
+            new("異號相加", -5, 8, 3),
+            new("互相抵消", -9, 9, 0),
+            new("限制上界", 1000, 1000, 2000)
+        ];
+
+        SampleCase[] subtractionCases =
+        [
+            new("正差", 5, 3, 2),
+            new("負差", 3, 5, -2),
+            new("雙負數", -5, -3, -2),
+            new("負數減正數", -3, 5, -8),
+            new("兩個零", 0, 0, 0),
+            new("上下界相減", 1000, -1000, 2000)
+        ];
+
+        int passedCount = RunCases("GetSum 位元加法", "+", GetSum, additionCases);
+        Console.WriteLine();
+        passedCount += RunCases("GetDiff 二補數減法", "-", GetDiff, subtractionCases);
+
+        int totalCount = additionCases.Length + subtractionCases.Length;
+        Console.WriteLine();
+        Console.WriteLine($"總結：{passedCount}/{totalCount} 項驗證通過");
+    }
+
+    /// <summary>
+    /// 以指定的二元整數運算執行一組案例，逐筆輸入兩個 <see cref="int"/> 值並比較預期與實際結果。
+    /// 所有主控台輸出都集中在此方法；回傳值是這一組案例的通過數量。
+    /// </summary>
+    /// <param name="title">顯示於案例區段開頭的運算名稱。</param>
+    /// <param name="operationSymbol">顯示輸入算式時使用的運算符號。</param>
+    /// <param name="operation">接收兩個整數並回傳整數結果的待驗證方法。</param>
+    /// <param name="samples">包含名稱、兩個輸入與預期結果的固定案例。</param>
+    /// <returns>實際結果等於預期結果的案例數量。</returns>
+    private static int RunCases(
+        string title,
+        string operationSymbol,
+        Func<int, int, int> operation,
+        SampleCase[] samples)
+    {
+        Console.WriteLine(title);
+        int passedCount = 0;
+
+        for (int index = 0; index < samples.Length; index++)
         {
-            // Step 1: 計算進位 (carry)
-            // 使用位元AND運算 (&) 找出哪些位置需要進位
-            // 例如: 0011 & 0010 = 0010 (表示第1位需要進位)
-            int carry = a & b;
+            SampleCase sample = samples[index];
+            int actual = operation(sample.A, sample.B);
+            bool passed = actual == sample.Expected;
 
-            // Step 2: 計算不帶進位的和
-            // 使用位元XOR運算 (^) 計算單純的相加結果
-            // 例如: 0011 ^ 0010 = 0001
-            a = a ^ b;
+            if (index > 0)
+            {
+                Console.WriteLine();
+            }
 
-            // Step 3: 進位處理
-            // 將進位值左移一位 (<<1)，因為進位要加到左邊一位
-            // 例如: 0010 << 1 = 0100
-            b = carry << 1;
+            Console.WriteLine($"案例 {index + 1}：{sample.Name}");
+            Console.WriteLine($"輸入：a = {sample.A}, b = {sample.B}（{sample.A} {operationSymbol} {sample.B}）");
+            Console.WriteLine($"預期：{sample.Expected}");
+            Console.WriteLine($"實際：{actual}");
+            Console.WriteLine($"結果：{(passed ? "PASS" : "FAIL")}");
 
-            // Step 4: 重複此過程
-            // 現在 a = 0001, b = 0100
-            // 繼續循環直到沒有進位 (b = 0)
+            if (passed)
+            {
+                passedCount++;
+            }
         }
-        
-        // 最終 a 包含了完整的加法結果
+
+        return passedCount;
+    }
+
+    /// <summary>
+    /// 不使用加號或減號，利用 XOR 計算不進位的和，並以 AND 後左移一位計算進位。
+    /// 輸入為任意兩個 32 位元有號整數；反覆合併部分和與進位後，回傳相同位元寬度下的整數和。
+    /// </summary>
+    /// <param name="a">第一個 32 位元有號整數。</param>
+    /// <param name="b">第二個 32 位元有號整數，迴圈中也用來保存尚未合併的進位。</param>
+    /// <returns>兩個輸入在 32 位元二補數規則下相加的結果。</returns>
+    public static int GetSum(int a, int b)
+    {
+        while (b != 0)
+        {
+            // XOR 只合併不同的位元；AND 找出同為 1 的位置，左移後才是下一輪進位。
+            int carry = (a & b) << 1;
+            a ^= b;
+            b = carry;
+        }
+
         return a;
     }
 
     /// <summary>
-    /// 減法實現原理：
-    /// 1. 減法可以轉換為加上一個數的補數
-    /// 2. 例如：5-3 = 5+(-3)，所以我們需要計算 -3
-    /// 3. 在電腦中，負數是用二補數表示：
-    ///    - 先對數字取反(NOT操作)
-    ///    - 然後加1
-    /// 4. 最後用之前的加法函數計算結果
+    /// 不使用減號，把減去 <paramref name="b"/> 轉換成加上其二補數 <c>~b + 1</c>，並重用
+    /// <see cref="GetSum(int, int)"/> 完成運算。輸入為任意兩個 32 位元有號整數。
     /// </summary>
-    /// <param name="a">被減數</param>
-    /// <param name="b">減數</param>
-    /// <returns>差值</returns>
+    /// <param name="a">被減數。</param>
+    /// <param name="b">減數。</param>
+    /// <returns>兩個輸入在 32 位元二補數規則下相減的結果。</returns>
     public static int GetDiff(int a, int b)
     {
-        // Step 1: 將減法轉換為加法
-        // 計算 b 的負數 (-b)
-        // 在二進位中，負數是用二補數表示
-        // 例如：要計算 5-3：
-        // 3 的二進位：0011
-        // 1. 取反：1100
-        // 2. 加1：1101 (這就是-3的二補數表示)
-        
-        // 使用 ~ 運算符取反，再加1
+        // 對 b 逐位取反再加 1 可取得 -b，因此減法可完全交由 GetSum 處理。
         return GetSum(a, GetSum(~b, 1));
     }
+
+    /// <summary>
+    /// 表示一筆可執行整數運算案例，包含案例名稱、兩個輸入以及預期結果。
+    /// </summary>
+    /// <param name="Name">顯示於主控台的案例名稱。</param>
+    /// <param name="A">第一個輸入整數。</param>
+    /// <param name="B">第二個輸入整數。</param>
+    /// <param name="Expected">此運算預期得到的整數結果。</param>
+    private sealed record SampleCase(string Name, int A, int B, int Expected);
 }
