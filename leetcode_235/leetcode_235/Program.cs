@@ -2,14 +2,24 @@
 {
     internal class Program
     {
+        /// <summary>
+        /// 表示二元搜尋樹節點；節點值必須唯一，左右子節點可為空。
+        /// </summary>
         public class TreeNode
         {
             public int val;
-            public TreeNode left;
-            public TreeNode right;
-            public TreeNode(int x) { val = x; }
-        }
+            public TreeNode? left;
+            public TreeNode? right;
 
+            /// <summary>
+            /// 建立指定值的葉節點，左右子節點初始皆為空。
+            /// </summary>
+            /// <param name="x">節點儲存的整數值。</param>
+            public TreeNode(int x)
+            {
+                val = x;
+            }
+        }
 
         /// <summary>
         /// 235. Lowest Common Ancestor of a Binary Search Tree
@@ -18,88 +28,220 @@
         /// 235. 二叉搜索树的最近公共祖先
         /// https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/description/
         /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        /// <param name="args">命令列參數；本範例不使用。</param>
+        private static void Main(string[] args)
         {
-            TreeNode root = new TreeNode(6);
-            root.left = new TreeNode(2);
-            root.right = new TreeNode(8);
+            (string Name, int[] Values, int P, int Q, int Expected)[] testCases =
+            [
+                ("Official example 1 / split at root", [6, 2, 8, 0, 4, 7, 9, 3, 5], 2, 8, 6),
+                ("Official example 2 / ancestor is p", [6, 2, 8, 0, 4, 7, 9, 3, 5], 2, 4, 2),
+                ("Official example 3 / minimum tree", [2, 1], 2, 1, 2),
+                ("Deep nodes in left subtree", [6, 2, 8, 0, 4, 7, 9, 3, 5], 3, 5, 4),
+                ("Nodes in right subtree", [6, 2, 8, 0, 4, 7, 9, 3, 5], 7, 9, 8),
+                ("Reversed p and q", [6, 2, 8, 0, 4, 7, 9, 3, 5], 8, 2, 6),
+                ("Negative values", [-2, -4, 1, -5, -3, 0, 2], -5, -3, -4),
+                ("Right-skewed tree", [1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 8, 10, 8),
+            ];
 
-            root.left.left = new TreeNode(0);
-            root.left.right = new TreeNode(4);
+            int passedChecks = 0;
 
-            root.left.right.left = new TreeNode(3);
-            root.left.right.right = new TreeNode(5);
+            Console.WriteLine("LeetCode 235 - Lowest Common Ancestor of a Binary Search Tree");
+            Console.WriteLine(new string('=', 68));
+            Console.WriteLine();
 
-            root.right.left = new TreeNode(7);
-            root.right.right = new TreeNode(9);
+            for (int i = 0; i < testCases.Length; i++)
+            {
+                (string name, int[] values, int p, int q, int expected) = testCases[i];
+                passedChecks += RunCase(i + 1, name, values, p, q, expected);
+            }
 
-            TreeNode p = new TreeNode(2);
-            TreeNode q = new TreeNode(8);
+            int totalChecks = testCases.Length * 2;
+            Console.WriteLine($"Summary: {passedChecks}/{totalChecks} checks passed.");
 
-            // output root.val 
-            Console.WriteLine("res: " + LowestCommonAncestor(root, p, q).val);
+            if (passedChecks != totalChecks)
+            {
+                Environment.ExitCode = 1;
+            }
         }
 
-
         /// <summary>
+        /// 使用遞迴搜尋二元搜尋樹中兩個既存節點的最近公共祖先。
+        /// 若兩個目標值都小於或大於目前節點，就只搜尋對應子樹；
+        /// 否則目前節點即為分岔點或其中一個目標節點。
         /// ref: 
         /// https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/solutions/428633/er-cha-sou-suo-shu-de-zui-jin-gong-gong-zu-xian-26/
         /// https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/solutions/2023873/zui-jin-gong-gong-zu-xian-yi-ge-shi-pin-8h2zc/
         /// https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/solutions/1456138/235-er-cha-sou-suo-shu-de-zui-jin-gong-g-lccn/
         /// 
-        /// 二元搜尋樹 (BST) 的基本概念
-        /// 二元搜尋樹是一種二元樹，其中每個節點最多有兩個子節點，且左子節點的值小於父節點的值，右子節點的值大於父節點的值。
-        /// 左子樹中所有節點的值都小於根節點的值。
-        /// 右子樹中所有節點的值都大於根節點的值。
-        /// 每個子樹也是一個二元搜尋樹。
-        /// 
-        ///  -- 簡單說 --
-        /// 數值小的 node.val 都在 root 左邊子樹
-        /// 數值大的 node.val 都在 root 右邊子樹
-        /// 
-        /// 本方法會一次性遍歷 p, q 兩節點
-        /// 分開遍歷比較耗時
-        /// 簡單說明流程
-        /// 1.從根結點開始遍歷
-        /// 2.如果當前節點值大於 p 和 q 的值, 說明 p 和 q 應該在當前節點的左子樹, 因此將當前節點移動到他的左子樹子節點
-        /// 3.如果當前節點值小於 p 和 q 的值, 說明 p 和 q 應該在當前節點的右子樹, 因此將當前節點移動到他的右子樹子節點
-        /// 4.如果當前節點的值不滿足上述兩條件要求, 那麼說明當前節點就是"分岔點", 此時 p 和 q 要麼在當前節點的不同子樹中, 要麼其中一個節點就是當前節點
-        /// 4-1: 
-        /// p 和 q 分別在左右子樹 ||
-        /// 當前節點是 p          || => 返回當前節點
-        /// 當前節點是 q          || => 返回當前節點
-        /// 
         /// 題目說明:
         /// 1. 所有節點的值都是唯一
         /// 2. p, q 為不同節點且均從在於給定的 BST 中
         /// ==> 保證存在以及唯一性且不為空
-        /// 
-        /// 時間複雜度: O(n), n 為 BST 節點數量
-        /// 空間複雜度: O(1)
         /// </summary>
-        /// <param name="root"></param>
-        /// <param name="p"></param>
-        /// <param name="q"></param>
-        /// <returns></returns>
+        /// <param name="root">非空的二元搜尋樹根節點。</param>
+        /// <param name="p">存在於樹中的第一個目標節點。</param>
+        /// <param name="q">存在於樹中的第二個目標節點。</param>
+        /// <returns>同時包含 <paramref name="p"/> 與 <paramref name="q"/> 的最低層祖先節點。</returns>
+        /// <remarks>時間複雜度為 O(h)，遞迴呼叫堆疊的輔助空間為 O(h)，h 為樹高。</remarks>
         public static TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
         {
-            int x = root.val;
+            int currentValue = root.val;
 
-            if(p.val < x && q.val < x)
+            if (p.val < currentValue && q.val < currentValue)
             {
-                // p 和 q 都在左子樹
-                return LowestCommonAncestor(root.left, p, q);
+                // 兩個目標都較小，最近公共祖先只可能位於左子樹。
+                return LowestCommonAncestor(root.left!, p, q);
             }
 
-            if(p.val > x && q.val > x)
+            if (p.val > currentValue && q.val > currentValue)
             {
-                // p 和 q 都在右子樹
-                return LowestCommonAncestor(root.right, p, q);
+                // 兩個目標都較大，最近公共祖先只可能位於右子樹。
+                return LowestCommonAncestor(root.right!, p, q);
             }
 
-            // 其他
+            // 目標分居兩側，或目前節點就是其中一個目標；此處即為最低分岔點。
             return root;
+        }
+
+        /// <summary>
+        /// 使用迭代方式搜尋二元搜尋樹中兩個既存節點的最近公共祖先。
+        /// 每輪依兩個目標值與目前節點值的關係縮小到單一子樹，
+        /// 遇到分岔點或目標節點本身時回傳目前節點。
+        /// </summary>
+        /// <param name="root">非空的二元搜尋樹根節點。</param>
+        /// <param name="p">存在於樹中的第一個目標節點。</param>
+        /// <param name="q">存在於樹中的第二個目標節點。</param>
+        /// <returns>同時包含 <paramref name="p"/> 與 <paramref name="q"/> 的最低層祖先節點。</returns>
+        /// <remarks>時間複雜度為 O(h)，輔助空間為 O(1)，h 為樹高。</remarks>
+        public static TreeNode LowestCommonAncestor2(TreeNode root, TreeNode p, TreeNode q)
+        {
+            TreeNode current = root;
+
+            while (true)
+            {
+                if (p.val < current.val && q.val < current.val)
+                {
+                    // 只保留仍可能包含最近公共祖先的左子樹。
+                    current = current.left!;
+                }
+                else if (p.val > current.val && q.val > current.val)
+                {
+                    // 只保留仍可能包含最近公共祖先的右子樹。
+                    current = current.right!;
+                }
+                else
+                {
+                    // 目前節點是最低分岔點，或等於 p、q 其中之一。
+                    return current;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 建立一棵用於範例驗證的二元搜尋樹。
+        /// 依輸入順序逐一插入互不重複的值，第一個值成為根節點。
+        /// </summary>
+        /// <param name="values">至少包含一個元素且所有值互不重複的插入序列。</param>
+        /// <returns>依序插入完成的非空二元搜尋樹根節點。</returns>
+        private static TreeNode BuildBinarySearchTree(int[] values)
+        {
+            TreeNode root = new TreeNode(values[0]);
+
+            for (int i = 1; i < values.Length; i++)
+            {
+                TreeNode current = root;
+
+                while (true)
+                {
+                    if (values[i] < current.val)
+                    {
+                        if (current.left is null)
+                        {
+                            current.left = new TreeNode(values[i]);
+                            break;
+                        }
+
+                        current = current.left;
+                    }
+                    else
+                    {
+                        if (current.right is null)
+                        {
+                            current.right = new TreeNode(values[i]);
+                            break;
+                        }
+
+                        current = current.right;
+                    }
+                }
+            }
+
+            return root;
+        }
+
+        /// <summary>
+        /// 利用二元搜尋樹的排序特性尋找指定值的既存節點。
+        /// 每輪只進入可能包含目標值的一側子樹。
+        /// </summary>
+        /// <param name="root">要搜尋的非空二元搜尋樹根節點。</param>
+        /// <param name="target">必須存在於樹中的唯一目標值。</param>
+        /// <returns>樹中值等於 <paramref name="target"/> 的節點參考。</returns>
+        /// <exception cref="InvalidOperationException">樹中不存在目標值時擲出。</exception>
+        private static TreeNode FindNode(TreeNode root, int target)
+        {
+            TreeNode? current = root;
+
+            while (current is not null)
+            {
+                if (current.val == target)
+                {
+                    return current;
+                }
+
+                current = target < current.val ? current.left : current.right;
+            }
+
+            throw new InvalidOperationException($"Node {target} was not found.");
+        }
+
+        /// <summary>
+        /// 建立單一測試樹並驗證遞迴與迭代解法是否回傳預期的實際節點。
+        /// 輸入必須構成合法 BST，且 p、q 與預期值都必須存在於樹中。
+        /// </summary>
+        /// <param name="number">顯示用的案例編號。</param>
+        /// <param name="name">案例名稱。</param>
+        /// <param name="values">建立 BST 的節點插入順序。</param>
+        /// <param name="pValue">第一個目標節點值。</param>
+        /// <param name="qValue">第二個目標節點值。</param>
+        /// <param name="expectedValue">預期最近公共祖先的節點值。</param>
+        /// <returns>本案例通過的解法檢查數，範圍為 0 到 2。</returns>
+        private static int RunCase(
+            int number,
+            string name,
+            int[] values,
+            int pValue,
+            int qValue,
+            int expectedValue)
+        {
+            TreeNode root = BuildBinarySearchTree(values);
+            TreeNode p = FindNode(root, pValue);
+            TreeNode q = FindNode(root, qValue);
+            TreeNode expected = FindNode(root, expectedValue);
+            TreeNode recursiveResult = LowestCommonAncestor(root, p, q);
+            TreeNode iterativeResult = LowestCommonAncestor2(root, p, q);
+            bool recursivePassed = ReferenceEquals(recursiveResult, expected);
+            bool iterativePassed = ReferenceEquals(iterativeResult, expected);
+
+            Console.WriteLine($"[{number}] {name}");
+            Console.WriteLine($"Tree insertion order: [{string.Join(", ", values)}]");
+            Console.WriteLine($"p = {pValue}, q = {qValue}, expected node = {expectedValue}");
+            Console.WriteLine(
+                $"Recursive: {recursiveResult.val} ({(recursivePassed ? "PASS" : "FAIL")})");
+            Console.WriteLine(
+                $"Iterative: {iterativeResult.val} ({(iterativePassed ? "PASS" : "FAIL")})");
+            Console.WriteLine();
+
+            return Convert.ToInt32(recursivePassed) + Convert.ToInt32(iterativePassed);
         }
     }
 }
