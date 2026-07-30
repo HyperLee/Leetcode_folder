@@ -26,93 +26,89 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            // 測試案例1: 基本案例，有冷卻時間
-            char[] chars1 = {'A', 'A', 'A', 'B', 'B', 'B'};
-            int n1 = 2;
-            Console.WriteLine("Test Case 1 - 有冷卻時間:");
-            Console.WriteLine($"Input: tasks = [{string.Join(",", chars1)}], n = {n1}");
-            Console.WriteLine($"Output: {LeastInterval(chars1, n1)}\n");
+            SampleCase[] sampleCases =
+            [
+                new("官方冷卻案例", ['A', 'A', 'A', 'B', 'B', 'B'], 2, 8),
+                new("任務種類足以填滿間隔", ['A', 'B', 'C', 'D', 'E', 'A', 'B', 'C', 'D', 'E'], 1, 10),
+                new("單一任務重複", ['A', 'A', 'A', 'A'], 2, 10),
+                new("單一任務搭配大冷卻值", ['A'], 100, 1),
+                new("無冷卻時間", ['A', 'A', 'B', 'B'], 0, 4),
+                new("多個最高頻任務剛好填滿排程", ['A', 'A', 'A', 'B', 'B', 'B', 'C', 'C'], 2, 8)
+            ];
 
-            // 測試案例2: 任務種類多，幾乎不需要冷卻時間
-            char[] chars2 = {'A', 'B', 'C', 'D', 'E', 'A', 'B', 'C', 'D', 'E'};
-            int n2 = 1;
-            Console.WriteLine("Test Case 2 - 任務種類多:");
-            Console.WriteLine($"Input: tasks = [{string.Join(",", chars2)}], n = {n2}");
-            Console.WriteLine($"Output: {LeastInterval(chars2, n2)}\n");
+            int passedCount = 0;
 
-            // 測試案例3: 單一任務重複多次
-            char[] chars3 = {'A', 'A', 'A', 'A'};
-            int n3 = 2;
-            Console.WriteLine("Test Case 3 - 單一任務重複:");
-            Console.WriteLine($"Input: tasks = [{string.Join(",", chars3)}], n = {n3}");
-            Console.WriteLine($"Output: {LeastInterval(chars3, n3)}");
+            for (int index = 0; index < sampleCases.Length; index++)
+            {
+                SampleCase sampleCase = sampleCases[index];
+                int actual = LeastInterval(sampleCase.Tasks, sampleCase.Cooldown);
+                bool isPassed = actual == sampleCase.Expected;
+
+                if (isPassed)
+                {
+                    passedCount++;
+                }
+
+                Console.WriteLine($"案例 {index + 1}：{sampleCase.Name}");
+                Console.WriteLine($"Input: tasks = [{string.Join(", ", sampleCase.Tasks)}], n = {sampleCase.Cooldown}");
+                Console.WriteLine($"Expected: {sampleCase.Expected}");
+                Console.WriteLine($"Actual: {actual}");
+                Console.WriteLine($"Result: {(isPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"總結：{passedCount}/{sampleCases.Length} 筆測試通過");
+
+            if (passedCount != sampleCases.Length)
+            {
+                Environment.ExitCode = 1;
+            }
         }
 
         /// <summary>
-        /// 參考:
-        /// https://leetcode.cn/problems/task-scheduler/solutions/2020840/by-stormsunshine-hxv6/
-        /// https://leetcode.cn/problems/task-scheduler/solutions/510292/c-jie-fa-by-jian-wei-z-km3w/
-        /// https://leetcode.cn/problems/task-scheduler/solutions/509687/ren-wu-diao-du-qi-by-leetcode-solution-ur9w/
-        /// https://leetcode.cn/problems/task-scheduler/solutions/1924711/by-ac_oier-3560/
-        /// 
-        /// 須注意
-        /// case 1:
-        /// 任務種類較少(輸入的英文字母種類少), 要插入任務需要的時間(理解為要增加間隔或是cd時間)
-        /// 即為公式計算 (n + 1) * (maxcount - 1) + maxtasks;
-        /// 
-        /// (n + 1) * (maxcount - 1) 可計算出不包含冷卻時間光char輪流插入所需耗時
-        /// 再加上 maxtasks(可視為冷卻時間 or 任務種類次數) 即為總需要時間
-        /// 
-        /// case 2:
-        /// 任務種類較多(輸入的英文字母種類多), 不太會出現冷卻時間可以插入情況(不需要等待間隔或是cd時間), 所以就要改計算任務次數
-        /// 
-        /// 
-        /// 任務調度器解題思路：
-        /// 1. 核心概念是找出執行次數最多的任務(maxcount)和相同最多次數的任務數量(maxtasks)
-        /// 2. 計算方式分為兩種情況：
-        ///    - 當任務種類少時：需考慮冷卻時間，使用公式 (n + 1) * (maxcount - 1) + maxtasks
-        ///    - 當任務種類多時：實際執行時間就是任務總數，即 tasks.Length
-        /// 3. 最後取兩者較大值作為答案
-        /// 
-        /// 時間複雜度：O(N)，其中 N 為任務總數
-        /// 空間複雜度：O(1)，使用固定大小的數組存儲計數
+        /// 計算完成所有任務所需的最少單位時間。
+        /// 先以固定 26 格陣列統計各任務頻率，再由最高頻率建立包含冷卻間隔的排程框架，
+        /// 最後取框架長度與任務總數的較大值，避免任務種類充足時低估實際執行時間。
         /// </summary>
-        /// <param name="tasks"></param>
-        /// <param name="n"></param>
-        /// <returns></returns>
+        /// <param name="tasks">
+        /// 非 null 且長度介於 1 到 10,000 的任務陣列；每個元素皆為大寫英文字母 A 到 Z。
+        /// </param>
+        /// <param name="n">相同任務之間的冷卻時間，範圍為 0 到 100。</param>
+        /// <returns>完成全部任務所需的最少單位時間，包含必要的閒置時間。</returns>
+        /// <remarks>
+        /// 時間複雜度為 O(N)，其中 N 為任務數量；額外空間複雜度為 O(1)。
+        /// </remarks>
         public static int LeastInterval(char[] tasks, int n)
         {
-            // 步驟1: 初始化變數
-            int maxcount = 0;              // 記錄最多的任務出現次數
-            int[] counts = new int[26];    // 用於統計每個任務的出現次數
+            int maxCount = 0;
+            int[] counts = new int[26];
 
-            // 步驟2: 統計每個任務出現"次數"並找出"最大值"
-            foreach (char c in tasks) 
+            // 統計各任務頻率時同步保存最高頻率，後續只需再掃描固定大小的計數陣列。
+            foreach (char task in tasks)
             {
-                counts[c - 'A']++;         // 將字母轉換為索引並計數
-                maxcount = Math.Max(maxcount, counts[c - 'A']);
+                counts[task - 'A']++;
+                maxCount = Math.Max(maxCount, counts[task - 'A']);
             }
 
-            // 步驟3: 計算具有最大出現"次數"的任務數量
-            int maxtasks = 0;
+            int maxFrequencyTaskCount = 0;
             foreach (int count in counts)
             {
-                if(count == maxcount)
+                if (count == maxCount)
                 {
-                    maxtasks++;  // 累計具有最大出現次數的任務種類數
+                    maxFrequencyTaskCount++;
                 }
             }
 
-            // 步驟4: 計算總需要時間
-            // (n + 1): 表示每輪任務間隔
-            // (maxcount - 1): 表示需要的輪數
-            // maxtasks: 最後一輪的任務數
-            int total = (n + 1) * (maxcount - 1) + maxtasks;
+            // 前 maxCount - 1 輪各占 n + 1 格，最後一輪只需放入所有最高頻任務。
+            int scheduleFrameLength = (n + 1) * (maxCount - 1) + maxFrequencyTaskCount;
 
-            // 步驟5: 返回實際所需的最少時間
-            // 比較公式計算結果與任務總數，取較大值
-            // 步驟5以前都是在處理 case1 情況.
-            return Math.Max(total, tasks.Length);
+            // 冷卻框架與任務總數都是答案下界；任務種類充足時由 tasks.Length 主導。
+            return Math.Max(scheduleFrameLength, tasks.Length);
         }
+
+        /// <summary>
+        /// 表示一筆可執行範例，包含案例名稱、合法任務陣列、冷卻時間與預期最少單位時間。
+        /// </summary>
+        private sealed record SampleCase(string Name, char[] Tasks, int Cooldown, int Expected);
     }
 }
