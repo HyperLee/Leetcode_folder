@@ -18,56 +18,133 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string s = "abccccdd";
-            Console.WriteLine("res: " + LongestPalindrome(s));
+            RunSamples();
         }
 
+        /// <summary>
+        /// 執行固定範例，逐一比較兩種最長迴文長度解法的預期值與實際值，
+        /// 並在所有案例完成後輸出通過數；若任一驗證失敗，程式會以非零結束碼結束。
+        /// </summary>
+        private static void RunSamples()
+        {
+            SampleCase[] cases =
+            [
+                new("空字串（防禦性）", string.Empty, 0),
+                new("單一字元", "a", 1),
+                new("單一字元配對", "aa", 2),
+                new("兩個不同字元", "ab", 1),
+                new("官方範例", "abccccdd", 7),
+                new("大小寫敏感", "Aa", 1),
+                new("多組奇數次字元", "cccaaa", 5)
+            ];
+
+            int passedChecks = 0;
+            foreach (SampleCase sample in cases)
+            {
+                passedChecks += RunSample(sample);
+            }
+
+            int totalChecks = cases.Length * 2;
+            Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項驗證通過");
+
+            if (passedChecks != totalChecks)
+            {
+                Environment.ExitCode = 1;
+            }
+        }
 
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/longest-palindrome/solutions/156931/zui-chang-hui-wen-chuan-by-leetcode-solution/
-        /// https://leetcode.cn/problems/longest-palindrome/solutions/2571176/409-zui-chang-hui-wen-chuan-by-stormsuns-tgye/
-        /// 
-        /// 迴文（Palindrome）是一種正著讀和反著讀都一樣的字串或數字。換句話說，迴文的內容從左到右和從右到左是一模一樣的。
-        /// 特點:
-        /// 1. 迴文的結構以中心對稱（中心可以是單個字符或兩個字符之間的間隙）。
-        /// 2. 在迴文中，所有字符的出現次數（除了最多一個）必須是偶數次。
-        /// 
-        /// 解法概念:
-        /// 每個 char 文字出現 v 次
-        /// 1. 迴文字串左右兩邊分別各放 v / 2 個 char 文字
-        ///    所以兩邊加總就會是  (v / 2) * 2 個數量
-        /// 2. 如果有 char 文字 只出現一次, 可以放在迴文字串的正中間位置,
-        ///    但是注意只能一個.且必須是迴文字串長度為偶數情況下才可以放入.
-        ///    簡單說迴文字串中奇數的 char 只能出現一個 char 文字且只能一次
+        /// 以一組非 null 字串與預期長度呼叫兩種解法，輸出各自的實際結果與驗證狀態，
+        /// 並回傳本案例通過的解法數量，範圍為 0 到 2。
         /// </summary>
-        /// <param name="s"></param>
-        /// <returns></returns>
+        /// <param name="sample">包含案例名稱、輸入字串與預期最長迴文長度的測試資料。</param>
+        /// <returns>此案例通過驗證的解法數量。</returns>
+        private static int RunSample(SampleCase sample)
+        {
+            int result1 = LongestPalindrome(sample.Input);
+            int result2 = LongestPalindrome2(sample.Input);
+            bool passed1 = result1 == sample.Expected;
+            bool passed2 = result2 == sample.Expected;
+
+            Console.WriteLine($"案例：{sample.Description}");
+            Console.WriteLine($"輸入：s = \"{sample.Input}\"");
+            Console.WriteLine($"預期（Expected）：{sample.Expected}");
+            Console.WriteLine(
+                $"實際（LongestPalindrome）：{result1} => {(passed1 ? "PASS" : "FAIL")}");
+            Console.WriteLine(
+                $"實際（LongestPalindrome2）：{result2} => {(passed2 ? "PASS" : "FAIL")}");
+            Console.WriteLine();
+
+            return (passed1 ? 1 : 0) + (passed2 ? 1 : 0);
+        }
+
+        /// <summary>
+        /// 表示一組可重複執行的範例，包含顯示名稱、非 null 輸入字串與預期回傳值。
+        /// </summary>
+        /// <param name="Description">案例用途或邊界條件的說明。</param>
+        /// <param name="Input">要傳入兩種解法的字串。</param>
+        /// <param name="Expected">可由輸入字元構成的最長迴文長度。</param>
+        private sealed record SampleCase(string Description, string Input, int Expected);
+
+        /// <summary>
+        /// 計算由指定字串字元可構成的最長迴文長度。
+        /// 此解法以 ASCII 計數陣列統計每個字元，先取出所有偶數配對，
+        /// 若存在奇數次字元，再選其中一個放在迴文中心。
+        /// </summary>
+        /// <param name="s">僅包含大小寫英文字母的非 null 字串；空字串亦會回傳 0。</param>
+        /// <returns>使用輸入字元可構成的最長迴文長度。</returns>
         public static int LongestPalindrome(string s)
         {
             int[] count = new int[128];
 
-            // 統計每個 char 文字出現次數
             foreach (char c in s)
             {
                 count[c]++;
             }
 
-            int res = 0;
-            // 計算迴文字串長度
-            foreach(int v in count)
+            int length = 0;
+            bool hasOddCount = false;
+            foreach (int frequency in count)
             {
-                // 迴文字串左右兩邊長度計算
-                res += (v / 2) * 2;
-                // 奇數 char 文字 + 迴文字串長度為偶數,
-                // 將該奇數 char 文字 放入迴文字串正中間位置
-                if(v % 2 == 1 && res % 2 == 0)
+                // 每一對相同字元可分別放在迴文的左右兩側。
+                length += (frequency / 2) * 2;
+                if (frequency % 2 == 1)
                 {
-                    res++;
+                    hasOddCount = true;
                 }
             }
 
-            return res;
+            // 不論有幾種奇數次字元，迴文中心最多只能再放一個字元。
+            return hasOddCount ? length + 1 : length;
+        }
+
+        /// <summary>
+        /// 計算由指定字串字元可構成的最長迴文長度。
+        /// 此解法以 HashSet 保存尚未配對的字元；再次遇到相同字元時完成一組配對，
+        /// 最後若集合仍有剩餘字元，取其中一個作為迴文中心。
+        /// </summary>
+        /// <param name="s">僅包含大小寫英文字母的非 null 字串；空字串亦會回傳 0。</param>
+        /// <returns>使用輸入字元可構成的最長迴文長度。</returns>
+        public static int LongestPalindrome2(string s)
+        {
+            HashSet<char> unmatchedCharacters = [];
+            int length = 0;
+
+            foreach (char c in s)
+            {
+                if (unmatchedCharacters.Remove(c))
+                {
+                    // 第二次遇到相同字元時完成配對，分別放到迴文左右兩側。
+                    length += 2;
+                }
+                else
+                {
+                    unmatchedCharacters.Add(c);
+                }
+            }
+
+            // 尚未配對的字元中，最多只能選一個放在迴文中心。
+            return unmatchedCharacters.Count > 0 ? length + 1 : length;
         }
     }
 }
