@@ -46,73 +46,66 @@ class Program
     static void Main(string[] args)
     {
         Program solution = new Program();
-        
-        // 測試案例1：包含正數的情況
-        int[] test1 = new int[] { 2, 3, -2, 4 };
-        Console.WriteLine($"Test Case 1: Input: [{string.Join(", ", test1)}]");
-        Console.WriteLine($"Output: {solution.MaxProduct(test1)}"); // 預期輸出：6
-        
-        // 測試案例2：包含負數的情況
-        int[] test2 = new int[] { -2, 0, -1 };
-        Console.WriteLine($"Test Case 2: Input: [{string.Join(", ", test2)}]");
-        Console.WriteLine($"Output: {solution.MaxProduct(test2)}"); // 預期輸出：0
-        
-        // 測試案例3：全負數的情況
-        int[] test3 = new int[] { -2, -3, -4 };
-        Console.WriteLine($"Test Case 3: Input: [{string.Join(", ", test3)}]");
-        Console.WriteLine($"Output: {solution.MaxProduct(test3)}"); // 預期輸出：12
-        
-        // 測試案例4：包含零的情況
-        int[] test4 = new int[] { -2, 3, 0, -4 };
-        Console.WriteLine($"Test Case 4: Input: [{string.Join(", ", test4)}]");
-        Console.WriteLine($"Output: {solution.MaxProduct(test4)}"); // 預期輸出：3
 
-        Console.WriteLine("\n=== Testing MaxProductTwoPointers Method ===");
-    
-        // 測試案例1：包含正數的情況
-        Console.WriteLine($"Test Case 1 (Two Pointers): Input: [{string.Join(", ", test1)}]");
-        Console.WriteLine($"Output: {solution.MaxProductTwoPointers(test1)}"); // 預期輸出：6
-        
-        // 測試案例2：包含負數的情況
-        Console.WriteLine($"Test Case 2 (Two Pointers): Input: [{string.Join(", ", test2)}]");
-        Console.WriteLine($"Output: {solution.MaxProductTwoPointers(test2)}"); // 預期輸出：0
-        
-        // 測試案例3：全負數的情況
-        Console.WriteLine($"Test Case 3 (Two Pointers): Input: [{string.Join(", ", test3)}]");
-        Console.WriteLine($"Output: {solution.MaxProductTwoPointers(test3)}"); // 預期輸出：12
-        
-        // 測試案例4：包含零的情況
-        Console.WriteLine($"Test Case 4 (Two Pointers): Input: [{string.Join(", ", test4)}]");
-        Console.WriteLine($"Output: {solution.MaxProductTwoPointers(test4)}"); // 預期輸出：3
-        
-        // 新增測試案例5：空陣列的情況
-        int[] test5 = new int[] { };
-        Console.WriteLine($"Test Case 5 (Two Pointers): Input: []");
-        Console.WriteLine($"Output: {solution.MaxProductTwoPointers(test5)}"); // 預期輸出：0
+        (string Name, int[] Input, int Expected)[] testCases =
+        [
+            ("官方範例 1：正負數混合", [2, 3, -2, 4], 6),
+            ("官方範例 2：零切割區段", [-2, 0, -1], 0),
+            ("單一負數", [-2], -2),
+            ("奇數個負數", [-2, -3, -4], 12),
+            ("偶數個負數", [-2, -3], 6),
+            ("零後重新累積", [-2, 3, 0, -4], 3),
+            ("重複負數", [-2, -2, -2], 4)
+        ];
+
+        (string Name, Func<int[], int> Solve)[] solutions =
+        [
+            (nameof(MaxProduct), solution.MaxProduct),
+            (nameof(MaxProductTwoPointers), solution.MaxProductTwoPointers)
+        ];
+
+        int passedChecks = 0;
+        int totalChecks = testCases.Length * solutions.Length;
+
+        for (int i = 0; i < testCases.Length; i++)
+        {
+            (string name, int[] input, int expected) = testCases[i];
+            Console.WriteLine($"案例 {i + 1}：{name}");
+            Console.WriteLine($"輸入：[{string.Join(", ", input)}]");
+            Console.WriteLine($"預期：{expected}");
+
+            foreach ((string solutionName, Func<int[], int> solve) in solutions)
+            {
+                int actual = solve([.. input]);
+                bool passed = actual == expected;
+                passedChecks += passed ? 1 : 0;
+                Console.WriteLine($"{solutionName}：{actual}（{(passed ? "PASS" : "FAIL")}）");
+            }
+
+            Console.WriteLine();
+        }
+
+        Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項驗證通過");
     }
 
     /// <summary>
-    /// 解題思路：
-    /// 1. 使用動態規劃，維護兩個變數 max 和 min
-    /// 2. max 儲存到目前為止的最大乘積，min 儲存到目前為止的最小乘積
-    /// 3. 因為負數乘以負數會變成正數，所以需要同時追蹤最小值
-    /// 4. 當遇到負數時，最大值和最小值會互換，因為負數會使最大變最小，最小變最大
-    /// 時間複雜度：O(n)，空間複雜度：O(1)
+    /// 計算非空整數陣列中，乘積最大的連續子陣列乘積。
+    /// 此動態規劃解法同時維護以目前位置結尾的最大與最小乘積，
+    /// 讓負數可將先前的最小負值轉成新的最大正值；每個元素也可選擇自行成為新區段。
+    /// 輸入須至少包含一個元素，回傳值為最大非空連續子陣列乘積。
+    /// 時間複雜度為 O(n)，額外空間複雜度為 O(1)。
     /// </summary>
-    /// <param name="nums">輸入整數陣列</param>
-    /// <returns>返回連續子陣列的最大乘積</returns>
+    /// <param name="nums">至少包含一個元素的整數陣列。</param>
+    /// <returns>所有非空連續子陣列中的最大乘積。</returns>
     public int MaxProduct(int[] nums)
     {
-        // 初始化：設定第一個元素為初始的最大值、最小值和結果
         int max = nums[0];
         int min = nums[0];
         int result = nums[0];
 
-        // 從第二個元素開始遍歷陣列
         for (int i = 1; i < nums.Length; i++)
         {
-            // 遇到負數時，最大值和最小值互換
-            // 因為負數會使最大變最小，最小變最大
+            // 乘上負數會顛倒大小關係，先交換才能延續正確的最大與最小狀態。
             if (nums[i] < 0)
             {
                 int temp = max;
@@ -120,15 +113,9 @@ class Program
                 min = temp;
             }
 
-            // 計算當前位置的最大值
-            // 可能是當前數字本身，或是之前的最大值乘以當前數字
+            // 選擇延續前一區段，或由目前元素重新開始一段連續子陣列。
             max = Math.Max(nums[i], max * nums[i]);
-
-            // 計算當前位置的最小值
-            // 可能是當前數字本身，或是之前的最小值乘以當前數字
             min = Math.Min(nums[i], min * nums[i]);
-
-            // 更新全局最大值
             result = Math.Max(result, max);
         }
 
@@ -136,67 +123,44 @@ class Program
     }
 
     /// <summary>
-    /// 使用雙指針法解決乘積最大子數組問題
-    /// 
-    /// 解題概念：
-    /// 1. 使用兩個指針分別從左右方向遍歷陣列
-    /// 2. 同時計算左右兩個方向的乘積
-    /// 3. 這種方法可以巧妙處理負數的情況，因為：
-    ///    - 如果有偶數個負數，從左到右或從右到左的乘積會包含全部數字
-    ///    - 如果有奇數個負數，從左到右和從右到左會分別找到不同的子陣列
-    /// 
-    /// 優勢：
-    /// 1. 不需要額外的空間來存儲最大和最小值
-    /// 2. 程式碼較為簡潔
-    /// 3. 可以有效處理包含零的情況
-    /// 
-    /// 時間複雜度：O(n)，空間複雜度：O(1)
-    /// 
-    /// 不需要類似方法一 遇到負數時交換最大最小值的邏輯
-    /// 因為雙指針法自然處理了這種情況
+    /// 使用左右雙向乘積掃描，計算非空整數陣列中最大的連續子陣列乘積。
+    /// 對每個由零分隔的區段同時累積前綴與後綴乘積；當負數個數為奇數時，
+    /// 最佳答案必然能由捨棄第一個負數以前的前綴，或最後一個負數以後的後綴取得。
+    /// 輸入依題意須至少包含一個元素，回傳值為最大非空連續子陣列乘積。
+    /// 時間複雜度為 O(n)，額外空間複雜度為 O(1)。
     /// </summary>
-    /// <param name="nums">輸入整數陣列</param>
-    /// <returns>返回連續子陣列的最大乘積</returns>
+    /// <param name="nums">至少包含一個元素的整數陣列。</param>
+    /// <returns>所有非空連續子陣列中的最大乘積；空值或空陣列會回傳 0。</returns>
     public int MaxProductTwoPointers(int[] nums)
     {
-        if (nums == null || nums.Length == 0) 
+        if (nums == null || nums.Length == 0)
         {
-            return 0; // 處理空陣列的情況
+            return 0;
         }
-        
-        // 初始化最大乘積為第一個元素
-        // 這樣可以處理陣列中只有一個元素的情況
+
         int maxProduct = nums[0];
         int n = nums.Length;
-        
-        // 初始化左右指針的乘積
-        // 因為是乘法所以初始值設為 1
-        // 這樣可以避免乘積為 0 的情況
         int leftProduct = 1;
         int rightProduct = 1;
-        
+
         for (int i = 0; i < n; i++)
         {
-            // 從左向右累積乘積
             leftProduct *= nums[i];
-            // 從右向左累積乘積（同時進行）
             rightProduct *= nums[n - 1 - i];
-            
-            // 在每一步更新最大值，取左右指針乘積的較大者
             maxProduct = Math.Max(maxProduct, Math.Max(leftProduct, rightProduct));
-            
-            // 遇到 0 時重置乘積
-            // 這樣可以處理陣列中包含 0 的情況，將陣列分成多個子陣列處理
-            if (leftProduct == 0) 
+
+            // 零會切斷連續乘積；重設為乘法單位元，讓下一個區段重新累積。
+            if (leftProduct == 0)
             {
-                leftProduct = 1; // 重置左乘積
+                leftProduct = 1;
             }
-            if (rightProduct == 0) 
+
+            if (rightProduct == 0)
             {
-                rightProduct = 1; // 重置右乘積
+                rightProduct = 1;
             }
         }
-        
+
         return maxProduct;
     }
 }
