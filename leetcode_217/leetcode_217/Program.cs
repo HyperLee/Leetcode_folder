@@ -13,67 +13,69 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            // 測試案例1: 有重複元素
-            int[] nums1 = { 1, 2, 3, 1 };
-            Console.WriteLine("測試案例1 (有重複元素):");
-            Console.WriteLine($"Input: [{string.Join(", ", nums1)}]");
-            Console.WriteLine("method1: " + ContainsDuplicate(nums1));
-            Console.WriteLine("method2: " + ContainsDuplicate2(nums1));
-            Console.WriteLine();
+            TestCase[] testCases =
+            [
+                new("官方案例 1：非相鄰重複值", [1, 2, 3, 1], true),
+                new("官方案例 2：所有元素皆不重複", [1, 2, 3, 4], false),
+                new("官方案例 3：多個數值重複出現", [1, 1, 1, 3, 3, 4, 3, 2, 4, 2], true),
+                new("防禦性案例：空陣列", [], false),
+                new("邊界案例：單一元素", [1], false),
+                new("邊界案例：包含負數重複值", [-1, 0, -1], true),
+                new("邊界案例：最小值與最大值", [-1_000_000_000, 1_000_000_000, -1_000_000_000], true)
+            ];
 
-            // 測試案例2: 沒有重複元素
-            int[] nums2 = { 1, 2, 3, 4 };
-            Console.WriteLine("測試案例2 (沒有重複元素):");
-            Console.WriteLine($"Input: [{string.Join(", ", nums2)}]");
-            Console.WriteLine("method1: " + ContainsDuplicate(nums2));
-            Console.WriteLine("method2: " + ContainsDuplicate2(nums2));
-            Console.WriteLine();
+            int passedChecks = 0;
 
-            // 測試案例3: 所有元素都重複
-            int[] nums3 = { 1, 1, 1, 1 };
-            Console.WriteLine("測試案例3 (所有元素都重複):");
-            Console.WriteLine($"Input: [{string.Join(", ", nums3)}]");
-            Console.WriteLine("method1: " + ContainsDuplicate(nums3));
-            Console.WriteLine("method2: " + ContainsDuplicate2(nums3));
-            Console.WriteLine();
+            Console.WriteLine("LeetCode 217 - Contains Duplicate");
+            Console.WriteLine("==================================================");
 
-            // 測試案例4: 空陣列
-            int[] nums4 = { };
-            Console.WriteLine("測試案例4 (空陣列):");
-            Console.WriteLine($"Input: [{string.Join(", ", nums4)}]");
-            Console.WriteLine("method1: " + ContainsDuplicate(nums4));
-            Console.WriteLine("method2: " + ContainsDuplicate2(nums4));
-            Console.WriteLine();
+            foreach (TestCase testCase in testCases)
+            {
+                int[] sortingInput = [.. testCase.Numbers];
+                int[] dictionaryInput = [.. testCase.Numbers];
+                bool sortingResult = ContainsDuplicate(sortingInput);
+                bool dictionaryResult = ContainsDuplicate2(dictionaryInput);
+                bool sortingPassed = sortingResult == testCase.Expected;
+                bool dictionaryPassed = dictionaryResult == testCase.Expected;
 
-            // 測試案例5: 單一元素
-            int[] nums5 = { 1 };
-            Console.WriteLine("測試案例5 (單一元素):");
-            Console.WriteLine($"Input: [{string.Join(", ", nums5)}]");
-            Console.WriteLine("method1: " + ContainsDuplicate(nums5));
-            Console.WriteLine("method2: " + ContainsDuplicate2(nums5));
+                passedChecks += sortingPassed ? 1 : 0;
+                passedChecks += dictionaryPassed ? 1 : 0;
+
+                Console.WriteLine($"Case: {testCase.Name}");
+                Console.WriteLine($"Input: [{string.Join(", ", testCase.Numbers)}]");
+                Console.WriteLine($"Expected: {testCase.Expected}");
+                Console.WriteLine($"ContainsDuplicate: {sortingResult} ({(sortingPassed ? "PASS" : "FAIL")})");
+                Console.WriteLine($"ContainsDuplicate2: {dictionaryResult} ({(dictionaryPassed ? "PASS" : "FAIL")})");
+                Console.WriteLine();
+            }
+
+            int totalChecks = testCases.Length * 2;
+            Console.WriteLine($"Summary: {passedChecks}/{totalChecks} checks passed.");
+            if (passedChecks != totalChecks)
+            {
+                Environment.ExitCode = 1;
+            }
         }
 
 
         /// <summary>
-        /// 陣列相鄰位置比對
-        /// 
-        /// 1. 陣列先排序，排序後相同數字會在相鄰位置
-        /// 2. 因為已經排序過，所以找出相鄰 index 是不是相同數字即可
-        /// 3. 因題目說至少連續兩次(含)，所以只需要比對 i 與 i + 1
-        /// 
-        /// 時間複雜度: O(NlogN)，其中 N 陣列長度。需要對陣列排序。
-        /// 空間複雜度: O(logN)，其中 N 陣列長度。
+        /// 檢查整數陣列是否包含重複值。先原地排序，讓相同數值相鄰，再逐對比較；
+        /// 適用於非 <see langword="null"/> 的輸入，會改變陣列順序，並回傳是否存在重複值。
+        /// 時間複雜度為 O(n log n)，輔助空間為 O(log n)，結果空間為 O(1)。
         /// </summary>
-        /// <param name="nums"></param>
-        /// <returns></returns>
+        /// <param name="nums">
+        /// 要檢查的整數陣列；官方有效輸入長度為 1 至 100000，本方法對空陣列亦回傳
+        /// <see langword="false"/>。
+        /// </param>
+        /// <returns>若任一數值至少出現兩次則回傳 <see langword="true"/>；否則回傳 <see langword="false"/>。</returns>
         public static bool ContainsDuplicate(int[] nums)
         {
             Array.Sort(nums);
-            // 迴圈條件要注意, nums.Length - 1
-            // 不要造成溢位問題
-            for (int i = 0; i < nums.Length - 1; i++)
+
+            // 排序後相同值必定相鄰，因此只需檢查相鄰元素，不必枚舉所有索引組合。
+            for (int i = 1; i < nums.Length; i++)
             {
-                if (nums[i] == nums[i + 1])
+                if (nums[i - 1] == nums[i])
                 {
                     return true;
                 }
@@ -84,38 +86,33 @@
 
 
         /// <summary>
-        /// 使用 Dictionary 統計每個輸入的數字出現的次數(頻率)
-        /// 只要遇到次數(頻率)為 2
-        /// 就停止運算
-        /// 直接回傳 true
-        /// 節省時間
-        /// 
-        /// 時間複雜度: O(N)，其中 N 陣列長度。
-        /// 空間複雜度: O(N)，其中 N 陣列長度。
+        /// 檢查整數陣列是否包含重複值。使用 <see cref="Dictionary{TKey, TValue}"/> 記錄
+        /// 已看過的數值，第二次遇到相同鍵時立即回傳；適用於非 <see langword="null"/>
+        /// 的輸入，不會改變陣列內容。平均時間複雜度為 O(n)，輔助空間為 O(n)，結果空間為 O(1)。
         /// </summary>
-        /// <param name="nums"></param>
-        /// <returns></returns>
-
+        /// <param name="nums">
+        /// 要檢查的整數陣列；官方有效輸入長度為 1 至 100000，本方法對空陣列亦回傳
+        /// <see langword="false"/>。
+        /// </param>
+        /// <returns>若任一數值至少出現兩次則回傳 <see langword="true"/>；否則回傳 <see langword="false"/>。</returns>
         public static bool ContainsDuplicate2(int[] nums)
         {
-            Dictionary<int, int> dic = new Dictionary<int, int>();
+            Dictionary<int, int> seenNumbers = new Dictionary<int, int>();
 
-            foreach(int num in nums)
+            foreach (int num in nums)
             {
-                if (dic.ContainsKey(num))
+                if (seenNumbers.ContainsKey(num))
                 {
-                    // 次數(頻率)為 2, 即可停止. 回傳答案
-                    // 不需要持續累加
+                    // 字典已有此鍵，代表目前值至少是第二次出現，可以立即確定答案。
                     return true;
                 }
-                else
-                {
-                    //dic.Add(num, 1);
-                    dic[num] = 1;  // 改用索引器寫法
-                }
+
+                seenNumbers[num] = 1;
             }
 
             return false;
         }
+
+        private sealed record TestCase(string Name, int[] Numbers, bool Expected);
     }
 }
