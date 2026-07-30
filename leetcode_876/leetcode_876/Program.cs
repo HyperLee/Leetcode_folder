@@ -3,13 +3,21 @@
     internal class Program
     {
         /// <summary>
-        /// 
+        /// 表示單向鏈結串列的一個節點，保存目前節點值以及下一個節點的參考。
+        /// 節點值與鏈結結構遵循題目輸入；串列尾端的 <see cref="next"/> 為
+        /// <see langword="null"/>。
         /// </summary>
         public class ListNode
         {
             public int val;
-            public ListNode next;
-            public ListNode(int val = 0, ListNode next = null)
+            public ListNode? next;
+
+            /// <summary>
+            /// 建立一個單向鏈結串列節點，並可選擇連接已存在的下一個節點。
+            /// </summary>
+            /// <param name="val">目前節點保存的整數值。</param>
+            /// <param name="next">下一個節點；若目前節點為尾端則為 <see langword="null"/>。</param>
+            public ListNode(int val = 0, ListNode? next = null)
             {
                 this.val = val;
                 this.next = next;
@@ -29,66 +37,63 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            ListNode listNode = new ListNode(1);
-            listNode.next = new ListNode(2);
-            listNode.next.next = new ListNode(3);
-            listNode.next.next.next = new ListNode(4);
+            SampleCase[] samples =
+            [
+                new("單一節點", [1], [1]),
+                new("兩個節點", [1, 2], [2]),
+                new("奇數長度", [1, 2, 3, 4, 5], [3, 4, 5]),
+                new("偶數長度", [1, 2, 3, 4, 5, 6], [4, 5, 6]),
+                new("既有四節點案例", [1, 2, 3, 4], [3, 4]),
+                new("重複節點值", [7, 7, 7, 7], [7, 7])
+            ];
 
-            var res = MiddleNode(listNode);
-            Console.Write("method1: ");
-            while (res != null)
+            int passedChecks = 0;
+
+            for (int index = 0; index < samples.Length; index++)
             {
-                Console.Write(res.val + ", ");
-                res = res.next;
+                SampleResult result = RunCase(samples[index]);
+                passedChecks += result.FastSlowPassed ? 1 : 0;
+                passedChecks += result.TwoPassPassed ? 1 : 0;
+
+                Console.WriteLine($"案例 {index + 1}：{result.Name}");
+                Console.WriteLine($"輸入：[{FormatValues(result.Input)}]");
+                Console.WriteLine($"預期：[{FormatValues(result.Expected)}]");
+                Console.WriteLine(
+                    $"快慢指標：[{FormatValues(result.FastSlowActual)}] => " +
+                    $"{(result.FastSlowPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine(
+                    $"兩次走訪：[{FormatValues(result.TwoPassActual)}] => " +
+                    $"{(result.TwoPassPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
             }
 
-            Console.WriteLine("");
-            Console.Write("method2: ");
-            ListNode listNode2 = new ListNode(1);
-            listNode2.next = new ListNode(2);
-            listNode2.next.next = new ListNode(3);
-            listNode2.next.next.next = new ListNode(4);
+            int totalChecks = samples.Length * 2;
+            Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項解法檢查通過");
 
-            var res2 = MiddleNode2(listNode2);
-            while (res2 != null)
+            if (passedChecks != totalChecks)
             {
-                Console.Write(res2.val + ", ");
-                res2 = res2.next;
+                Environment.ExitCode = 1;
             }
-            Console.WriteLine("");
-
         }
 
 
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/middle-of-the-linked-list/solution/lian-biao-de-zhong-jian-jie-dian-by-leetcode-solut/
-        /// https://leetcode.cn/problems/middle-of-the-linked-list/solution/kuai-man-zhi-zhen-zhu-yao-zai-yu-diao-shi-by-liwei/
-        /// 
-        /// method2 快慢針
-        /// slow 每次走一步
-        /// fast 每次走兩步
-        /// 這樣當 fast 走到結束時候
-        /// slow 走到中間
-        /// 
-        /// while 停止條件判斷: 快針不能為空且能繼續走
-        ///  要注意這邊不要寫錯, 快針不為空, 就代表能繼續走
-        /// 
-        /// 時間複雜度: O(N), N 是節點數量
-        /// 空間複雜度: O(1), 常數空間變數 slow, fast
+        /// 使用快慢指標在一次走訪內找出單向鏈結串列的中間節點。
+        /// 慢指標每次前進一個節點，快指標每次前進兩個節點；快指標抵達尾端時，
+        /// 慢指標恰好位於中點。輸入必須是符合題目限制、至少含一個節點的無環串列。
+        /// 若節點數為偶數，回傳兩個中間節點中的第二個。
         /// </summary>
-        /// <param name="head"></param>
-        /// <returns></returns>
+        /// <param name="head">非空單向鏈結串列的頭節點。</param>
+        /// <returns>中間節點；從此節點沿著鏈結即可取得題目要求的完整尾段。</returns>
         public static ListNode MiddleNode(ListNode head)
         {
-            ListNode slow = head, fast = head;
+            ListNode slow = head;
+            ListNode? fast = head;
 
-            // 快針不能為空且下一步能繼續走
-            while (fast != null && fast.next != null)
+            while (fast is not null && fast.next is not null)
             {
-                // 每次走一步
-                slow = slow.next;
-                // 每次走兩步
+                // 快指標走兩步、慢指標走一步；偶數長度時慢指標會落在第二個中點。
+                slow = slow.next!;
                 fast = fast.next.next;
             }
 
@@ -97,38 +102,121 @@
 
 
         /// <summary>
-        /// 單指針法:
-        /// 
-        /// 1. 第一次遍歷, 先統計總長度 n
-        /// 2. 第二次遍歷, 再去運算 中間節點  n / 2 位置
-        /// 2-1. ListNode index 從 0 開始, 所以走到 n / 2 剛好是中間位置
-        /// 
-        /// 時間複雜度: O(N), N 是節點數量
-        /// 空間複雜度: O(1), 常數空間變數
+        /// 使用兩次走訪找出單向鏈結串列的中間節點。
+        /// 第一次走訪計算總節點數，第二次從頭前進「節點數除以二」步；
+        /// 因索引從零開始，偶數長度時會自然選到第二個中點。
+        /// 輸入必須是符合題目限制、至少含一個節點的無環串列。
         /// </summary>
-        /// <param name="head"></param>
-        /// <returns></returns>
+        /// <param name="head">非空單向鏈結串列的頭節點。</param>
+        /// <returns>中間節點；從此節點沿著鏈結即可取得題目要求的完整尾段。</returns>
         public static ListNode MiddleNode2(ListNode head)
         {
-            int n = 0;
-            ListNode cur = head;
-            // 計算總長度
-            while (cur != null)
+            int length = 0;
+            ListNode? current = head;
+
+            // 第一次走訪只計算長度，不變更任何節點或鏈結。
+            while (current is not null)
             {
-                n++;
-                cur = cur.next;
+                length++;
+                current = current.next;
             }
 
-            int k = 0;
-            // cur 重置
-            cur = head;
-            // 取中間值位置出來
-            while (k < n / 2)
+            ListNode middle = head;
+
+            // 從零起算前進 length / 2 步，即為奇數中點或偶數的第二個中點。
+            for (int step = 0; step < length / 2; step++)
             {
-                k++;
-                cur = cur.next;
+                middle = middle.next!;
             }
-            return cur;
+
+            return middle;
+        }
+
+        /// <summary>
+        /// 對同一組有效節點資料建立兩條獨立鏈結串列，分別執行快慢指標與兩次走訪解法，
+        /// 再將兩個回傳尾段轉為陣列，供呼叫端與預期結果進行完整內容比對。
+        /// </summary>
+        /// <param name="sample">包含案例名稱、非空輸入與預期尾段的固定測試案例。</param>
+        /// <returns>包含兩種解法實際尾段與各自通過狀態的案例結果。</returns>
+        private static SampleResult RunCase(SampleCase sample)
+        {
+            ListNode fastSlowInput = BuildList(sample.Input);
+            ListNode twoPassInput = BuildList(sample.Input);
+            int[] fastSlowActual = ToArray(MiddleNode(fastSlowInput));
+            int[] twoPassActual = ToArray(MiddleNode2(twoPassInput));
+
+            return new SampleResult(
+                sample.Name,
+                sample.Input,
+                sample.Expected,
+                fastSlowActual,
+                twoPassActual);
+        }
+
+        /// <summary>
+        /// 依照給定的非空整數陣列順序建立單向鏈結串列。
+        /// 每次呼叫都建立全新的節點，讓不同解法不會共享輸入狀態。
+        /// </summary>
+        /// <param name="values">至少包含一個元素、且節點值符合題目限制的陣列。</param>
+        /// <returns>新建立之單向鏈結串列的頭節點。</returns>
+        private static ListNode BuildList(int[] values)
+        {
+            ListNode head = new(values[0]);
+            ListNode tail = head;
+
+            for (int index = 1; index < values.Length; index++)
+            {
+                ListNode nextNode = new(values[index]);
+                tail.next = nextNode;
+                tail = nextNode;
+            }
+
+            return head;
+        }
+
+        /// <summary>
+        /// 從指定節點走訪至串列尾端，依序收集每個節點值。
+        /// 輸入可以是任意節點或 <see langword="null"/>，且不會修改原串列。
+        /// </summary>
+        /// <param name="node">要開始轉換的節點；為空時產生空陣列。</param>
+        /// <returns>依鏈結順序排列的節點值陣列。</returns>
+        private static int[] ToArray(ListNode? node)
+        {
+            List<int> values = [];
+            ListNode? current = node;
+
+            while (current is not null)
+            {
+                values.Add(current.val);
+                current = current.next;
+            }
+
+            return [.. values];
+        }
+
+        /// <summary>
+        /// 將整數序列格式化為主控台與 README 共用的逗號分隔內容。
+        /// 輸入為案例或執行結果陣列，輸出不包含外層方括號。
+        /// </summary>
+        /// <param name="values">要格式化的整數序列。</param>
+        /// <returns>以逗號與空格分隔的節點值文字。</returns>
+        private static string FormatValues(IEnumerable<int> values)
+        {
+            return string.Join(", ", values);
+        }
+
+        private sealed record SampleCase(string Name, int[] Input, int[] Expected);
+
+        private sealed record SampleResult(
+            string Name,
+            int[] Input,
+            int[] Expected,
+            int[] FastSlowActual,
+            int[] TwoPassActual)
+        {
+            public bool FastSlowPassed => Expected.SequenceEqual(FastSlowActual);
+
+            public bool TwoPassPassed => Expected.SequenceEqual(TwoPassActual);
         }
     }
 }
