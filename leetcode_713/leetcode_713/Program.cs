@@ -12,41 +12,43 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] input = { 10, 5, 2, 6 };
-            int k = 100;
-            Console.WriteLine(NumSubarrayProductLessThanK(input, k));
-            Console.ReadKey();
+            (int[] Nums, int K, int Expected)[] samples =
+            {
+                (new int[] { 10, 5, 2, 6 }, 100, 8),
+                (new int[] { 1, 2, 3 }, 0, 0),
+                (new int[] { 1, 2, 3 }, 1, 0),
+                (new int[] { 1 }, 2, 1),
+                (new int[] { 1, 1, 1 }, 2, 6)
+            };
+
+            int passedCount = 0;
+
+            for (int i = 0; i < samples.Length; i++)
+            {
+                (int[] nums, int k, int expected) = samples[i];
+
+                if (RunSample(i + 1, nums, k, expected))
+                {
+                    passedCount++;
+                }
+            }
+
+            Console.WriteLine($"總結：{passedCount}/{samples.Length} 筆測試通過");
+
+            if (passedCount != samples.Length)
+            {
+                Environment.ExitCode = 1;
+            }
         }
 
-
-
         /// <summary>
-        /// 滑動視窗概念題型
-        /// https://leetcode.cn/problems/subarray-product-less-than-k/solutions/1463527/cheng-ji-xiao-yu-k-de-zi-shu-zu-by-leetc-92wl/
-        /// https://leetcode.cn/problems/subarray-product-less-than-k/solutions/1732841/by-stormsunshine-628t/
-        /// 
-        /// [start, end] => 把這整個視窗(範圍)持續往右走, 找出新的組合(範圍)
-        /// 概念: 整個視窗(範圍)會往右邊走(滑動)
-        /// end往右就是 加入新的element 乘積必須乘上新的element
-        /// 同時需要考慮題目條件, 
-        /// 乘積不能大於等於k
-        /// 所以當發現大於等於時候
-        /// start必須往右走, 也就是移除element 做除法運算
-        /// 
-        /// end一直往右走, 表示將乘積變大
-        /// 當發現乘積超過 k
-        /// 此時把start往右走, 可縮小乘積數值
-        /// 
-        /// 要保持[start, end]不能超過乘積
-        /// 兩者持續往右走, 找出新的sub-array
-        /// 
-        /// 
-        /// end往右走是乘法, 因為加入新的element.
-        /// start往右走是除法, 因為去除該element.
+        /// 計算乘積嚴格小於 <paramref name="k"/> 的連續非空子陣列數量。
+        /// 利用元素皆為正整數時乘積的單調性維護滑動視窗；右端加入元素後，
+        /// 若乘積不再符合條件便移動左端，讓每個元素最多進出視窗一次。
         /// </summary>
-        /// <param name="nums"></param>
-        /// <param name="k"></param>
-        /// <returns></returns>
+        /// <param name="nums">符合題目限制的非空正整數陣列。</param>
+        /// <param name="k">子陣列乘積必須嚴格小於的非負整數上限。</param>
+        /// <returns>乘積嚴格小於 <paramref name="k"/> 的連續非空子陣列數量。</returns>
         public static int NumSubarrayProductLessThanK(int[] nums, int k)
         {
             int count = 0;
@@ -54,26 +56,57 @@
             int length = nums.Length;
             int start = 0, end = 0;
 
-            while(end < length) 
+            while (end < length)
             {
-                // 加入新的end element
+                // 右端加入新元素，product 始終代表目前 [start, end] 視窗的乘積。
                 product *= nums[end];
 
-                while(start <= end && product >= k)
+                while (start <= end && product >= k)
                 {
-                    // 當 product太大, 
-                    // 把 start往右移動(去除該element), 也可說是除法.表示乘積太大
+                    // 乘積過大時移除左端元素，直到視窗重新符合嚴格小於 k 的條件。
                     product /= nums[start];
                     start++;
                 }
 
-                // 累計 計算sub-array 數量
+                // 固定 end 後，從 start 到 end 的每個起點都形成一個新的合法子陣列。
                 count += end - start + 1;
-                // end 往右走
                 end++;
             }
 
             return count;
+        }
+
+        /// <summary>
+        /// 執行一組範例並輸出輸入、預期值、實際值與驗證結果。
+        /// </summary>
+        /// <param name="caseNumber">輸出時顯示的案例編號。</param>
+        /// <param name="nums">要交給解法計算的正整數陣列。</param>
+        /// <param name="k">子陣列乘積的嚴格上限。</param>
+        /// <param name="expected">手動推導的預期子陣列數量。</param>
+        /// <returns>實際結果等於預期值時回傳 <see langword="true"/>。</returns>
+        private static bool RunSample(int caseNumber, int[] nums, int k, int expected)
+        {
+            int actual = NumSubarrayProductLessThanK(nums, k);
+            bool passed = actual == expected;
+
+            Console.WriteLine($"案例 {caseNumber}");
+            Console.WriteLine($"輸入：nums = [{FormatArray(nums)}], k = {k}");
+            Console.WriteLine($"預期：{expected}");
+            Console.WriteLine($"實際：{actual}");
+            Console.WriteLine($"結果：{(passed ? "PASS" : "FAIL")}");
+            Console.WriteLine();
+
+            return passed;
+        }
+
+        /// <summary>
+        /// 將整數陣列格式化成適合主控台顯示的逗號分隔文字。
+        /// </summary>
+        /// <param name="numbers">要格式化的整數陣列。</param>
+        /// <returns>不含方括號的逗號分隔元素文字。</returns>
+        private static string FormatArray(int[] numbers)
+        {
+            return string.Join(", ", numbers);
         }
     }
 }
