@@ -17,85 +17,227 @@
         /// 所以兩題有差異
         /// 
         /// </summary>
+        /// <remarks>
+        /// 主要進入點不使用命令列參數，會執行三組固定案例，驗證兩種回溯解法並輸出 PASS/FAIL 摘要。
+        /// </remarks>
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] nums = { 1, 2, 3 };
-
-            var result = Permute(nums);
-            foreach (var item in result)
+            var testCases = new (string Name, int[] Input, int[][] Expected)[]
             {
-                Console.WriteLine(string.Join(",", item));
+                (
+                    "Case 1",
+                    new[] { 1, 2, 3 },
+                    new[]
+                    {
+                        new[] { 1, 2, 3 },
+                        new[] { 1, 3, 2 },
+                        new[] { 2, 1, 3 },
+                        new[] { 2, 3, 1 },
+                        new[] { 3, 1, 2 },
+                        new[] { 3, 2, 1 }
+                    }
+                ),
+                (
+                    "Case 2",
+                    new[] { 0, 1 },
+                    new[]
+                    {
+                        new[] { 0, 1 },
+                        new[] { 1, 0 }
+                    }
+                ),
+                (
+                    "Case 3",
+                    new[] { 1 },
+                    new[]
+                    {
+                        new[] { 1 }
+                    }
+                )
+            };
+
+            int passed = 0;
+            int total = 0;
+
+            foreach (var testCase in testCases)
+            {
+                passed += RunTestCase(testCase.Name, testCase.Input, testCase.Expected);
+                total += 2;
             }
-            Console.WriteLine();
+
+            Console.WriteLine($"Overall: {passed}/{total} passed.");
+        }
+
+        /// <summary>
+        /// 執行單一固定案例，分別呼叫路徑回溯法與交換回溯法，並以完整排列集合驗證結果。
+        /// 輸入必須符合題目條件：陣列長度為 1 到 6、元素互不相同；回傳通過驗證的解法數量。
+        /// </summary>
+        /// <param name="caseName">顯示於主控台的案例名稱。</param>
+        /// <param name="input">要產生全排列的相異整數陣列。</param>
+        /// <param name="expected">該輸入預期產生的完整排列集合。</param>
+        /// <returns>此案例中通過驗證的解法數量，範圍為 0 到 2。</returns>
+        private static int RunTestCase(string caseName, int[] input, IReadOnlyList<int[]> expected)
+        {
+            var solutions = new (string Name, Func<int[], IList<IList<int>>> Solve)[]
+            {
+                (nameof(Permute), Permute),
+                (nameof(PermuteBySwapping), PermuteBySwapping)
+            };
+
+            HashSet<string> expectedSet = NormalizePermutations(expected);
+            int passed = 0;
+
+            Console.WriteLine($"{caseName}: nums = {FormatArray(input)}");
+
+            foreach (var solution in solutions)
+            {
+                int[] inputCopy = (int[])input.Clone();
+                IList<IList<int>> actual = solution.Solve(inputCopy);
+                HashSet<string> actualSet = NormalizePermutations(actual);
+                bool inputUnchanged = input.SequenceEqual(inputCopy);
+                bool isCorrect =
+                    actual.Count == expected.Count &&
+                    actualSet.Count == actual.Count &&
+                    actualSet.SetEquals(expectedSet) &&
+                    inputUnchanged;
+
+                if (isCorrect)
+                {
+                    passed++;
+                }
+
+                Console.WriteLine(
+                    $"  {solution.Name}: {(isCorrect ? "PASS" : "FAIL")} " +
+                    $"(expected: {expected.Count}, actual: {actual.Count}, " +
+                    $"unique: {actualSet.Count}, input unchanged: {(inputUnchanged ? "Yes" : "No")})");
+            }
+
+            return passed;
+        }
+
+        /// <summary>
+        /// 將排列集合轉成可比較的字串集合，使驗證不受各解法的列舉順序影響。
+        /// 輸入中的每個排列皆可包含任意整數；回傳值可用於集合相等與重複排列檢查。
+        /// </summary>
+        /// <param name="permutations">要正規化的排列集合。</param>
+        /// <returns>以逗號分隔各排列內容的唯一字串集合。</returns>
+        private static HashSet<string> NormalizePermutations(IEnumerable<IEnumerable<int>> permutations)
+        {
+            return permutations
+                .Select(permutation => string.Join(",", permutation))
+                .ToHashSet();
+        }
+
+        /// <summary>
+        /// 將整數序列格式化為易讀的方括號表示法，供固定案例輸出使用。
+        /// 輸入可為任意整數序列；回傳格式例如 <c>[1, 2, 3]</c>。
+        /// </summary>
+        /// <param name="values">要格式化的整數序列。</param>
+        /// <returns>以逗號與空白分隔的方括號字串。</returns>
+        private static string FormatArray(IEnumerable<int> values)
+        {
+            return $"[{string.Join(", ", values)}]";
         }
 
 
         /// <summary>
-        /// Backtrack 需要先對 nums 排序嗎?
-        /// 在 LeetCode 46: Permutations 這題中，排序 nums 不會影響最終的結果，也不會提升效能，因為：
-        /// 1. 不影響遞迴樹的結構：
-        ///  排列（Permutations）問題是要找出所有可能的順序，而無論 nums 是否排序，所有排列的數量和遞迴樹的結構都相同。
-        ///  例如，nums = {3,1,2} 和 nums = {1,2,3} 都會產生 6 種排列。
-        /// 2. 不影響回溯過程的剪枝：
-        ///  如果這題是 組合（Combinations），我們可以透過排序來減少不必要的遞迴（如 Combination Sum 類題）。
-        ///  但 排列問題不涉及「選擇過的數不能再選」的情況，所以排序不會讓 Backtrack() 早點返回。
-        /// 3. 程式運行時間相同：
-        ///  排列問題的時間複雜度是 O(N * N!)，遠大於排序的 O(N log N)，所以排序的影響可以忽略不計。
-        ///  排序後，遞迴仍然會嘗試所有可能的排列，所以效能沒有實質提升。
+        /// 使用路徑清單進行回溯，逐層選取尚未出現在路徑中的元素，產生所有可能的全排列。
+        /// 輸入必須包含 1 到 6 個互不相同的整數；回傳所有排列，排列順序不限定，且不修改輸入陣列。
         /// </summary>
-        /// <param name="nums"></param>
-        /// <returns></returns>
+        /// <param name="nums">要產生全排列的相異整數陣列。</param>
+        /// <returns>包含 <c>nums.Length!</c> 組結果的排列集合。</returns>
         public static IList<IList<int>> Permute(int[] nums)
         {
-            // 初始化 result 來存儲所有排列
             IList<IList<int>> result = new List<IList<int>>();
-            // 建立 list（用來存放當前排列）
-            List<int> list = new List<int>();
-            Backtrack(nums, list, result);
+            List<int> path = new List<int>();
+            Backtrack(nums, path, result);
             return result;
         }
 
 
         /// <summary>
-        /// 回溯法：透過 選擇 → 遞迴 → 回溯 產生排列
-        /// 避免重複：使用 list.Contains(nums[i])
-        /// 時間複雜度 O(N * N!)
-        /// 
-        /// 回溯步驟:
-        /// 選擇 數字
-        /// 遞迴 探索
-        /// 回溯 撤銷選擇，嘗試其他可能性
+        /// 延伸路徑清單中的部分排列，透過「選擇、遞迴、撤銷選擇」走訪完整排列樹。
+        /// 輸入陣列的元素必須互不相同；當路徑長度等於輸入長度時，將路徑副本加入結果集合。
         /// </summary>
-        /// <param name="nums"></param>
-        /// <param name="list"></param>
-        /// <param name="result"></param>
-        private static void Backtrack(int[] nums, List<int> list, IList<IList<int>> result)
+        /// <param name="nums">提供每一層候選值的相異整數陣列。</param>
+        /// <param name="path">目前已選取的部分排列。</param>
+        /// <param name="result">收集完整排列的結果集合。</param>
+        private static void Backtrack(int[] nums, List<int> path, IList<IList<int>> result)
         {
-            // 若 list 長度等於 nums.Length，表示找到一組排列，加入 result
-            if (list.Count == nums.Length)
+            if (path.Count == nums.Length)
             {
-                // 存入結果（要建立新 List 避免引用問題, 新的一組）
-                result.Add(new List<int>(list));
+                // 必須複製目前路徑，否則後續回溯會改動已加入的結果。
+                result.Add(new List<int>(path));
                 return;
             }
 
-            // 遍歷所有數字
             for (int i = 0; i < nums.Length; i++)
             {
-                // 若 list 已經包含該數字，則跳過（避免重複）
-                if (list.Contains(nums[i]))
+                // 相異元素在同一條路徑中只能使用一次。
+                if (path.Contains(nums[i]))
                 {
-                    continue; // 剪枝：避免重复选择
+                    continue;
                 }
 
-                // 選擇當前數字
-                list.Add(nums[i]);
-                // 遞迴繼續
-                Backtrack(nums, list, result);
-                // 回溯：移除最後一個數字
-                list.RemoveAt(list.Count - 1);
+                path.Add(nums[i]);
+                Backtrack(nums, path, result);
+                path.RemoveAt(path.Count - 1);
             }
+        }
+
+        /// <summary>
+        /// 使用原地交換概念進行回溯，依序固定每個索引位置並交換其後的候選元素。
+        /// 輸入必須包含 1 到 6 個互不相同的整數；方法在內部複製陣列，因此回傳所有排列後不會修改呼叫端輸入。
+        /// </summary>
+        /// <param name="nums">要產生全排列的相異整數陣列。</param>
+        /// <returns>包含 <c>nums.Length!</c> 組結果的排列集合。</returns>
+        public static IList<IList<int>> PermuteBySwapping(int[] nums)
+        {
+            int[] workingCopy = (int[])nums.Clone();
+            IList<IList<int>> result = new List<IList<int>>();
+            BacktrackBySwapping(workingCopy, 0, result);
+            return result;
+        }
+
+        /// <summary>
+        /// 固定 <paramref name="startIndex"/> 之前的排列前綴，逐一交換候選值到目前位置並遞迴處理下一格。
+        /// 輸入陣列的元素必須互不相同；當索引到達陣列尾端時，將目前陣列副本加入結果集合。
+        /// </summary>
+        /// <param name="nums">目前正在交換與還原的工作陣列。</param>
+        /// <param name="startIndex">本層要固定的索引位置，範圍為 0 到 <c>nums.Length</c>。</param>
+        /// <param name="result">收集完整排列的結果集合。</param>
+        private static void BacktrackBySwapping(
+            int[] nums,
+            int startIndex,
+            IList<IList<int>> result)
+        {
+            if (startIndex == nums.Length)
+            {
+                result.Add(new List<int>(nums));
+                return;
+            }
+
+            for (int candidateIndex = startIndex; candidateIndex < nums.Length; candidateIndex++)
+            {
+                Swap(nums, startIndex, candidateIndex);
+                BacktrackBySwapping(nums, startIndex + 1, result);
+
+                // 還原本層交換，讓下一個候選值從相同的排列狀態開始。
+                Swap(nums, startIndex, candidateIndex);
+            }
+        }
+
+        /// <summary>
+        /// 交換工作陣列中的兩個位置，供交換回溯法進行選擇與還原。
+        /// 索引必須位於陣列有效範圍內；方法完成後兩個指定位置的值會互換。
+        /// </summary>
+        /// <param name="nums">要原地交換內容的工作陣列。</param>
+        /// <param name="firstIndex">第一個有效索引。</param>
+        /// <param name="secondIndex">第二個有效索引。</param>
+        private static void Swap(int[] nums, int firstIndex, int secondIndex)
+        {
+            (nums[firstIndex], nums[secondIndex]) = (nums[secondIndex], nums[firstIndex]);
         }
 
     }
