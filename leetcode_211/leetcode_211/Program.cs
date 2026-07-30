@@ -19,191 +19,343 @@ class Program
     /// </summary>
     static void Main(string[] args)
     {
-        Console.WriteLine("211. 添加與搜尋單字 - 資料結構設計");
-        
-        // 建立 WordDictionary 物件
-        WordDictionary wordDictionary = new WordDictionary();
-        
-        // 添加單字測試
-        Console.WriteLine("添加單字: bad, dad, mad");
-        wordDictionary.AddWord("bad");
-        wordDictionary.AddWord("dad");
-        wordDictionary.AddWord("mad");
-        
-        // 搜尋單字測試
-        Console.WriteLine("\n搜尋結果:");
-        Console.WriteLine($"搜尋 'pad': {wordDictionary.Search("pad")}");  // 應返回 False
-        Console.WriteLine($"搜尋 'bad': {wordDictionary.Search("bad")}");  // 應返回 True
-        Console.WriteLine($"搜尋 '.ad': {wordDictionary.Search(".ad")}");  // 應返回 True (匹配 bad, dad, mad)
-        Console.WriteLine($"搜尋 'b..': {wordDictionary.Search("b..")}");  // 應返回 True (匹配 bad)
-        Console.WriteLine($"搜尋 'b.e': {wordDictionary.Search("b.e")}");  // 應返回 False
-        
-        // 添加更多測試案例
-        Console.WriteLine("\n添加更多單字: apple, apply");
-        wordDictionary.AddWord("apple");
-        wordDictionary.AddWord("apply");
-        
-        Console.WriteLine("\n進階搜尋測試:");
-        Console.WriteLine($"搜尋 'a...e': {wordDictionary.Search("a...e")}");  // 應返回 True (匹配 apple)
-        Console.WriteLine($"搜尋 'a...y': {wordDictionary.Search("a...y")}");  // 應返回 True (匹配 apply)
-        Console.WriteLine($"搜尋 'ap..y': {wordDictionary.Search("ap..y")}");  // 應返回 True (匹配 apply)
-        Console.WriteLine($"搜尋 '....': {wordDictionary.Search("....")}");     // 應返回 False (無4字元單字)
-        Console.WriteLine($"搜尋 '.....': {wordDictionary.Search(".....")}");    // 應返回 True (匹配 apple, apply)
+        var stages = new[]
+        {
+            new
+            {
+                Name = "官方基本案例",
+                Words = new[] { "bad", "dad", "mad" },
+                Searches = new (string Pattern, bool Expected)[]
+                {
+                    ("pad", false),
+                    ("bad", true),
+                    (".ad", true),
+                    ("b..", true)
+                }
+            },
+            new
+            {
+                Name = "共享前綴與長度",
+                Words = new[] { "apple", "apply" },
+                Searches = new (string Pattern, bool Expected)[]
+                {
+                    ("app", false),
+                    ("a..le", true),
+                    ("a..ly", true),
+                    ("app.", false)
+                }
+            },
+            new
+            {
+                Name = "前綴成為完整單字",
+                Words = new[] { "app", "app" },
+                Searches = new (string Pattern, bool Expected)[]
+                {
+                    ("app", true),
+                    ("ap.", true)
+                }
+            },
+            new
+            {
+                Name = "單字元、長度與失敗分支",
+                Words = new[] { "a", "at", "code", "coder" },
+                Searches = new (string Pattern, bool Expected)[]
+                {
+                    (".", true),
+                    ("..", true),
+                    ("c.de", true),
+                    ("c..er", true),
+                    ("z.", false)
+                }
+            }
+        };
 
-        Console.WriteLine("\n測試完成！");
+        WordDictionary trieDictionary = new WordDictionary();
+        WordDictionary2 bucketDictionary = new WordDictionary2();
+        var solutions = new (string Name, Action<string> AddWord, Func<string, bool> Search)[]
+        {
+            ("解法一：固定陣列 Trie + DFS", trieDictionary.AddWord, trieDictionary.Search),
+            ("解法二：長度分桶 + 逐字比對", bucketDictionary.AddWord, bucketDictionary.Search)
+        };
+
+        int passedChecks = 0;
+        int totalChecks = 0;
+
+        Console.WriteLine("LeetCode 211：添加與搜尋單字 - 雙解法驗證");
+
+        foreach (var solution in solutions)
+        {
+            int solutionPassed = 0;
+            int solutionTotal = 0;
+
+            Console.WriteLine($"\n{solution.Name}");
+
+            for (int stageIndex = 0; stageIndex < stages.Length; stageIndex++)
+            {
+                var stage = stages[stageIndex];
+                Console.WriteLine($"  階段 {stageIndex + 1}：{stage.Name}");
+                Console.WriteLine($"  AddWord: {string.Join(", ", stage.Words)}");
+
+                foreach (string word in stage.Words)
+                {
+                    solution.AddWord(word);
+                }
+
+                foreach (var searchCase in stage.Searches)
+                {
+                    bool actual = solution.Search(searchCase.Pattern);
+                    bool passed = actual == searchCase.Expected;
+                    solutionTotal++;
+                    totalChecks++;
+
+                    if (passed)
+                    {
+                        solutionPassed++;
+                        passedChecks++;
+                    }
+
+                    Console.WriteLine(
+                        $"    Search(\"{searchCase.Pattern}\") | Expected: {searchCase.Expected} | " +
+                        $"Actual: {actual} => {(passed ? "PASS" : "FAIL")}");
+                }
+            }
+
+            Console.WriteLine($"  小計：{solutionPassed}/{solutionTotal} 項驗證通過");
+        }
+
+        Console.WriteLine($"\n總結：{passedChecks}/{totalChecks} 項驗證通過");
+        Console.WriteLine($"Overall: {(passedChecks == totalChecks ? "PASS" : "FAIL")}");
+
+        if (passedChecks != totalChecks)
+        {
+            Environment.ExitCode = 1;
+        }
     }
 }
 
 /// <summary>
-/// 使用字典樹(Trie)實現的單字查詢資料結構
-/// 解題概念：
-/// 1. 使用字典樹結構儲存所有添加的單字
-/// 2. 每個節點代表一個字元，並有指向26個可能的子節點
-/// 3. 搜尋時支援萬用字元'.'，表示可以匹配任何字元
-/// 4. 對於萬用字元的情況，使用深度優先搜尋(DFS)嘗試所有可能的路徑
+/// 使用固定 26 個子節點的字典樹實作單字查詢資料結構。
+/// 加入單字時共享相同字首的路徑；搜尋普通字元時沿唯一子節點前進，
+/// 遇到句點萬用字元時則以深度優先搜尋嘗試目前節點的所有有效分支。
 /// </summary>
 public class WordDictionary
 {
-    // 字典樹的根節點
-    private Trie root;
-    
+    private readonly Trie _root;
+
     /// <summary>
-    /// 初始化字典資料結構
+    /// 初始化空的固定陣列字典樹。
+    /// 建構式不需要輸入；完成後根節點尚未標記任何完整單字，
+    /// 可透過 <see cref="AddWord"/> 加入單字並以 <see cref="Search"/> 查詢。
     /// </summary>
     public WordDictionary()
     {
-        root = new Trie();
+        _root = new Trie();
     }
 
     /// <summary>
-    /// 添加單字到字典中
+    /// 將只含小寫英文字母的非空單字逐字插入字典樹。
+    /// 方法沿既有字首路徑前進並只建立缺少的節點；沒有回傳值，
+    /// 完成後最後一個節點會標記為完整單字結尾。
     /// </summary>
-    /// <param name="word">要添加的單字</param>
+    /// <param name="word">要加入的單字，長度介於 1 到 25，且只含小寫英文字母。</param>
     public void AddWord(string word)
     {
-        // 直接利用Trie的Insert方法添加單字
-        root.Insert(word);
+        _root.Insert(word);
     }
 
     /// <summary>
-    /// 搜尋單字是否存在於字典中，支援萬用字元'.'
+    /// 從根節點以深度優先搜尋判斷是否存在與指定模式完整匹配的單字。
+    /// 輸入模式可包含小寫英文字母與最多兩個代表任一單一字元的句點；
+    /// 只有走完整個模式且停在單字結尾時才回傳 <see langword="true"/>。
     /// </summary>
-    /// <param name="word">要搜尋的單字，可包含萬用字元'.'</param>
-    /// <returns>單字存在返回true，否則返回false</returns>
+    /// <param name="word">要搜尋的完整單字或含句點萬用字元的模式，長度介於 1 到 25。</param>
+    /// <returns>存在完整匹配的已加入單字時為 <see langword="true"/>；否則為 <see langword="false"/>。</returns>
     public bool Search(string word)
     {
-        // 從根節點開始進行深度優先搜尋
-        return DFS(word, 0, root);
+        return DFS(word, 0, _root);
     }
 
     /// <summary>
-    /// 使用深度優先搜尋遞迴查詢單字
+    /// 從指定節點與模式索引開始遞迴比對剩餘字元。
+    /// 普通字元只走對應子節點，句點則嘗試所有現存子節點；
+    /// 剩餘模式能抵達完整單字結尾時回傳 <see langword="true"/>。
     /// </summary>
-    /// <param name="word">要搜尋的單字</param>
-    /// <param name="index">目前處理的字元索引</param>
-    /// <param name="node">目前搜尋到的節點</param>
-    /// <returns>找到匹配返回true，否則返回false</returns>
-    private bool DFS(string word, int index, Trie node)
+    /// <param name="word">完整搜尋模式。</param>
+    /// <param name="index">目前要處理的模式索引，範圍從 0 到模式長度。</param>
+    /// <param name="node">目前已匹配字首所對應的字典樹節點。</param>
+    /// <returns>從目前狀態可完成一條完整匹配路徑時為 <see langword="true"/>；否則為 <see langword="false"/>。</returns>
+    private static bool DFS(string word, int index, Trie node)
     {
-        // 遞迴終止條件：已到達單字末尾
-        if(index == word.Length)
+        if (index == word.Length)
         {
-            // 檢查目前節點是否是單字結尾
+            // 走完模式仍須確認目前位置是完整單字，而不只是較長單字的字首。
             return node.isEnd;
         }
-        
+
         char ch = word[index];
-        if(ch == '.') // 處理萬用字元情況
+        if (ch == '.')
         {
-            // 嘗試所有可能的子節點
-            for (int i = 0; i < 26; i++) 
-			{
-                Trie child = node.children[i];
-                // 如果子節點存在且後續字元也匹配，則返回true
-                if (child != null && DFS(word, index + 1, child)) 
-				{
+            // 句點可以選擇任一現存子節點，任一分支完成匹配即可提早結束。
+            for (int childIndex = 0; childIndex < node.children.Length; childIndex++)
+            {
+                Trie? child = node.children[childIndex];
+                if (child != null && DFS(word, index + 1, child))
+                {
                     return true;
                 }
             }
+
+            return false;
         }
-        else // 處理普通字元情況
-        {
-            // 計算字元對應的索引
-            int childIndex = ch - 'a';
-            Trie child = node.children[childIndex];
-            // 檢查子節點是否存在，並繼續檢查後續字元
-            if (child != null && DFS(word, index + 1, child)) 
-			{
-                return true;
-            }
-        }
-        // 如果所有可能性都不匹配，返回false
-        return false;
+
+        int exactChildIndex = ch - 'a';
+        Trie? exactChild = node.children[exactChildIndex];
+        return exactChild != null && DFS(word, index + 1, exactChild);
     }
 }
 
 /// <summary>
-/// 字典樹(Trie)實作
-/// 解題概念：
-/// 1. 字典樹是一種樹形資料結構，專為字串搜尋優化設計
-/// 2. 每個節點代表一個字元，從根到葉節點的路徑形成一個單字
-/// 3. 共享前綴的單字共享相同的路徑，節省空間
-/// 4. 搜尋和插入操作的時間複雜度為 O(m)，其中 m 是單字長度
+/// 使用單字長度分桶實作的單字查詢資料結構。
+/// 每個長度對應一個不重複單字集合；搜尋時只檢查長度相同的候選，
+/// 再逐字判斷普通字元或萬用字元是否匹配。
+/// </summary>
+public class WordDictionary2
+{
+    private readonly Dictionary<int, HashSet<string>> _wordsByLength;
+
+    /// <summary>
+    /// 初始化空的長度分桶單字資料結構。
+    /// 建構式不需要輸入；完成後可透過 <see cref="AddWord"/> 加入單字，
+    /// 並透過 <see cref="Search"/> 查詢完整單字或包含萬用字元的模式。
+    /// </summary>
+    public WordDictionary2()
+    {
+        _wordsByLength = new Dictionary<int, HashSet<string>>();
+    }
+
+    /// <summary>
+    /// 將只含小寫英文字母的非空單字加入其長度所對應的集合。
+    /// 相同單字重複加入時集合內容不會重複；方法沒有回傳值，
+    /// 完成後該單字可由精確模式或合法的萬用字元模式找到。
+    /// </summary>
+    /// <param name="word">要加入的單字，長度介於 1 到 25，且只含小寫英文字母。</param>
+    public void AddWord(string word)
+    {
+        if (!_wordsByLength.TryGetValue(word.Length, out HashSet<string>? words))
+        {
+            words = new HashSet<string>();
+            _wordsByLength[word.Length] = words;
+        }
+
+        words.Add(word);
+    }
+
+    /// <summary>
+    /// 搜尋是否存在與指定模式完整匹配的單字。
+    /// 輸入模式長度介於 1 到 25，可包含小寫英文字母與最多兩個
+    /// 代表任一單一字元的句點；方法只掃描同長度分桶，
+    /// 找到完整匹配時回傳 <see langword="true"/>，否則回傳 <see langword="false"/>。
+    /// </summary>
+    /// <param name="word">要搜尋的完整單字或含句點萬用字元的模式。</param>
+    /// <returns>存在完整匹配的已加入單字時為 <see langword="true"/>；否則為 <see langword="false"/>。</returns>
+    public bool Search(string word)
+    {
+        if (!_wordsByLength.TryGetValue(word.Length, out HashSet<string>? words))
+        {
+            return false;
+        }
+
+        if (!word.Contains('.'))
+        {
+            return words.Contains(word);
+        }
+
+        // 萬用字元不改變長度，因此只需逐一檢查相同長度的候選單字。
+        foreach (string candidate in words)
+        {
+            if (Matches(word, candidate))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 逐字比較搜尋模式與相同長度的候選單字。
+    /// 模式中的句點可接受候選位置上的任一小寫英文字母；
+    /// 所有位置皆相容時回傳 <see langword="true"/>，否則回傳 <see langword="false"/>。
+    /// </summary>
+    /// <param name="pattern">可包含句點萬用字元的搜尋模式。</param>
+    /// <param name="candidate">與模式長度相同、只含小寫英文字母的候選單字。</param>
+    /// <returns>候選單字與整個模式匹配時為 <see langword="true"/>；否則為 <see langword="false"/>。</returns>
+    private static bool Matches(string pattern, string candidate)
+    {
+        for (int index = 0; index < pattern.Length; index++)
+        {
+            if (pattern[index] != '.' && pattern[index] != candidate[index])
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}
+
+/// <summary>
+/// 表示固定小寫英文字母表的單一字典樹節點。
+/// 節點保存 26 個可能的下一字元位置與完整單字結尾標記；
+/// 從根節點沿字元路徑前進即可表示並共享多個單字的相同字首。
 /// </summary>
 public class Trie
 {
     /// <summary>
-    /// 子節點陣列，每個索引對應一個小寫英文字母 (a-z)
-    /// 例如：children[0] 代表字母 'a'，children[1] 代表字母 'b'，以此類推
-    /// 屬性使用 {get;} 表示這是一個只讀屬性，建構後不能被修改
-    /// 
-    /// 注意: 萬用字元 '.', 不會儲存在 children 裡面
-    /// 所以這裡的 children 陣列大小是 26
-    /// 當遇到比對 萬用字元 '.' 時，會有特別 if 去判斷
-    /// 會往後一個 char 繼續比對是否相同.
+    /// 取得 26 個子節點位置；索引 0 到 25 分別對應小寫字母
+    /// <c>a</c> 到 <c>z</c>。句點是搜尋模式，不會儲存在此陣列。
     /// </summary>
-    public Trie[] children{get;}
-    
+    public Trie[] children { get; }
+
     /// <summary>
-    /// 標記當前節點是否是某個單字的結尾
-    /// 屬性使用 {get;set;} 表示可以讀取也可以修改
+    /// 取得或設定目前節點是否代表某個已加入單字的結尾。
     /// </summary>
-    public bool isEnd{get;set;}
-    
+    public bool isEnd { get; set; }
+
     /// <summary>
-    /// 初始化字典樹節點
+    /// 初始化沒有子節點且尚未代表單字結尾的字典樹節點。
+    /// 建構式不需要輸入；輸出節點包含長度為 26 的空子節點陣列。
     /// </summary>
     public Trie()
     {
-        // 建立長度為26的陣列，對應26個小寫英文字母
         children = new Trie[26];
-        // 初始時不是單字結尾
         isEnd = false;
     }
 
     /// <summary>
-    /// 將單字插入字典樹中
+    /// 從目前節點開始將指定單字插入字典樹。
+    /// 輸入必須是只含小寫英文字母的非空字串；方法重用既有字首節點、
+    /// 建立缺少的路徑，最後將終點標記為完整單字且不回傳值。
     /// </summary>
-    /// <param name="word">要插入的單字</param>
+    /// <param name="word">要插入的單字，長度介於 1 到 25，且只含小寫英文字母。</param>
     public void Insert(string word)
     {
-        // 從當前節點開始
         Trie node = this;
-        // 遍歷單字的每個字元
-        for(int i = 0; i < word.Length; i++)
+
+        for (int index = 0; index < word.Length; index++)
         {
-            char ch = word[i];
-            // 計算字元在children陣列中的索引 (0-25)
-            int index = ch - 'a';
-            // 如果該字元對應的子節點不存在，則建立新節點
-            if(node.children[index] == null)
+            int childIndex = word[index] - 'a';
+
+            // 共享既有字首，只在目前字元尚無路徑時建立新節點。
+            if (node.children[childIndex] == null)
             {
-                node.children[index] = new Trie();
+                node.children[childIndex] = new Trie();
             }
-            // 移動到下一個節點，繼續處理單字的下一個字元
-            node = node.children[index];
+
+            node = node.children[childIndex];
         }
-        // 單字插入完成後，標記最後一個節點為單字結尾
+
+        // 相同路徑可能同時是較長單字的字首，必須另外記錄完整單字終點。
         node.isEnd = true;
     }
 }
