@@ -20,93 +20,121 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        // 測試資料
-        int[] nums = { 2, 0, 2, 1, 1, 0 };
-        Console.WriteLine($"原始陣列: {string.Join(", ", nums)}");
+        Program program = new Program();
+        (string Name, int[] Input, int[] Expected)[] testCases =
+        {
+            ("官方範例一", new[] { 2, 0, 2, 1, 1, 0 }, new[] { 0, 0, 1, 1, 2, 2 }),
+            ("官方範例二", new[] { 2, 0, 1 }, new[] { 0, 1, 2 }),
+            ("最小長度邊界", new[] { 1 }, new[] { 1 }),
+            ("全部重複值", new[] { 2, 2, 2, 2 }, new[] { 2, 2, 2, 2 })
+        };
 
-        // 建立 Program 物件並呼叫 SortColors 進行排序
-        Program p = new Program();
-        p.SortColors(nums);
-        Console.WriteLine($"SortColors 排序後陣列: {string.Join(", ", nums)}");
-        int[] expected = { 0, 0, 1, 1, 2, 2 };
-        bool isCorrect = nums.SequenceEqual(expected);
-        Console.WriteLine($"SortColors 排序正確: {isCorrect}");
+        int passed = 0;
+        foreach ((string name, int[] input, int[] expected) in testCases)
+        {
+            passed += RunTestCase(program, name, input, expected);
+        }
 
-        // 測試 SortColors2
-        int[] nums2 = { 2, 0, 2, 1, 1, 0 };
-        Console.WriteLine($"\n原始陣列: {string.Join(", ", nums2)}");
-        p.SortColors2(nums2);
-        Console.WriteLine($"SortColors2 排序後陣列: {string.Join(", ", nums2)}");
-        bool isCorrect2 = nums2.SequenceEqual(expected);
-        Console.WriteLine($"SortColors2 排序正確: {isCorrect2}");
-
-        // 測試 SortColors3
-        int[] nums3 = { 2, 0, 2, 1, 1, 0 };
-        Console.WriteLine($"\n原始陣列: {string.Join(", ", nums3)}");
-        p.SortColors3(nums3);
-        Console.WriteLine($"SortColors3 排序後陣列: {string.Join(", ", nums3)}");
-        bool isCorrect3 = nums3.SequenceEqual(expected);
-        Console.WriteLine($"SortColors3 排序正確: {isCorrect3}");
+        const int solutionCount = 3;
+        int total = testCases.Length * solutionCount;
+        Console.WriteLine($"{passed}/{total} passed.");
     }
 
+    /// <summary>
+    /// 執行一組固定案例，分別驗證三種原地排序解法。
+    /// 每次呼叫解法前都會複製輸入陣列，避免前一種解法的修改影響後續結果。
+    /// 輸入陣列須至少包含一個元素，且每個元素只能是 0、1 或 2；
+    /// 回傳值是本案例通過驗證的解法數量，範圍為 0 到 3。
+    /// </summary>
+    /// <param name="program">提供三種排序方法的 <see cref="Program"/> 執行個體。</param>
+    /// <param name="caseName">顯示於主控台的案例名稱。</param>
+    /// <param name="input">符合題目限制、尚未排序的輸入陣列。</param>
+    /// <param name="expected">輸入陣列依 0、1、2 排列後的預期結果。</param>
+    /// <returns>本案例中實際結果與預期結果相同的解法數量。</returns>
+    private static int RunTestCase(Program program, string caseName, int[] input, int[] expected)
+    {
+        (string Name, Action<int[]> Sort)[] solutions =
+        {
+            (nameof(SortColors), program.SortColors),
+            (nameof(SortColors2), program.SortColors2),
+            (nameof(SortColors3), program.SortColors3)
+        };
+
+        Console.WriteLine($"案例：{caseName}");
+        Console.WriteLine($"輸入：[{string.Join(", ", input)}]");
+        Console.WriteLine($"預期：[{string.Join(", ", expected)}]");
+
+        int passed = 0;
+        foreach ((string name, Action<int[]> sort) in solutions)
+        {
+            int[] actual = (int[])input.Clone();
+            sort(actual);
+
+            bool isCorrect = actual.SequenceEqual(expected);
+            if (isCorrect)
+            {
+                passed++;
+            }
+
+            Console.WriteLine(
+                $"{name}: [{string.Join(", ", actual)}] => {(isCorrect ? "PASS" : "FAIL")}");
+        }
+
+        Console.WriteLine();
+        return passed;
+    }
 
     /// <summary>
-    /// 無腦氣泡排序
-    /// 這個解法是最簡單的，但效率不高，時間複雜度是 O(n^2)，空間複雜度是 O(1)
-    /// 這個解法的思路是，從頭到尾遍歷數組，對於每一對相鄰的元素，如果前一個元素大於後一個元素，就交換它們的位置。這樣，每次遍歷都能把最大的元素放到最後面。
-    /// 這樣重複 n-1 次，就能把所有的元素都排好序了。
+    /// 使用氣泡排序將顏色陣列原地排列為 0、1、2。
+    /// 每一輪比較相鄰元素並交換逆序配對，使尚未排序區間的最大值移到尾端；
+    /// 若某輪沒有交換則提前結束。輸入陣列須至少包含一個元素，且只能包含 0、1、2。
+    /// 執行完成後，原陣列會由小到大排列。最差時間複雜度為 O(n²)，額外空間為 O(1)。
     /// </summary>
     /// <param name="nums">待排序的整數陣列，僅包含 0、1、2</param>
     public void SortColors(int[] nums)
     {
         int n = nums.Length;
-        // 外層 for 迴圈控制排序輪數
         for (int i = 0; i < n - 1; i++)
         {
-            bool swap = false; // 標記本輪是否有交換
+            bool swap = false;
 
-            // 內層 for 迴圈進行相鄰元素比較與交換
             for (int j = 0; j < n - i - 1; j++)
             {
-                if (nums[j] > nums[j + 1]) // 若前一個元素大於後一個，則交換
+                if (nums[j] > nums[j + 1])
                 {
                     int temp = nums[j];
                     nums[j] = nums[j + 1];
                     nums[j + 1] = temp;
-                    swap = true; // 有交換則設為 true
+                    swap = true;
                 }
             }
 
+            // 本輪沒有逆序配對，代表整個陣列已經排序完成。
             if (!swap)
             {
-                // 若本輪無交換，代表已排序完成，可提前結束
                 break;
             }
         }
     }
 
-
     /// <summary>
-    /// 計數排序    
-    /// 這個解法的時間複雜度是 O(n)，空間複雜度是 O(1)
-    /// 這個解法的思路是，先遍歷數組，計算每個顏色的個數，然後根據計數結果重新填充原陣列。
-    /// 這樣就能在 O(n) 的時間內完成排序。
-    /// 這個解法的優點是簡單易懂，且效率較高，適合用於數量較少的顏色分類問題。
-    /// 這個解法的缺點是需要額外的空間來存儲計數結果，對於顏色數量較多的情況，可能會浪費空間。
-    /// 這個解法的適用場景是數量較少的顏色分類問題，例如 0、1、2 的情況。
+    /// 使用固定大小的計數陣列將顏色陣列原地排列為 0、1、2。
+    /// 第一階段統計三種數值的出現次數，第二階段依計數覆寫原陣列。
+    /// 輸入陣列須至少包含一個元素，且只能包含 0、1、2；
+    /// 執行完成後，原陣列會由小到大排列。時間複雜度為 O(n)，額外空間為 O(1)。
     /// </summary>
-    /// <param name="nums"></param>
+    /// <param name="nums">待排序的整數陣列，僅包含 0、1、2。</param>
     public void SortColors2(int[] nums)
     {
-        int[] count = new int[3]; // 計數陣列，分別計算 0、1、2 的個數
+        int[] count = new int[3];
 
-        // 計算每個顏色的個數
+        // 數值本身就是固定三格計數陣列的索引。
         for (int i = 0; i < nums.Length; i++)
         {
             count[nums[i]]++;
         }
 
-        // 根據計數結果重新填充原陣列
+        // 依照 0、1、2 的計數順序覆寫，直接得到排序結果。
         int index = 0;
         for (int i = 0; i < count.Length; i++)
         {
@@ -117,34 +145,30 @@ class Program
         }
     }
 
-
     /// <summary>
-    /// 雙指針法（荷蘭國旗問題）
-    /// 解題方法說明：
-    /// 本方法利用三個指標：p0、p1 以及當前索引 i。
-    /// - p0：指向下一個應該放 0 的位置。
-    /// - p1：指向下一個應該放 1 的位置。
-    /// - i：遍歷整個陣列。
-    /// 當 nums[i] == 0 時，將其與 p0 位置交換，若 p0 < p1，還需與 p1 位置交換，確保 1 的順序。
-    /// 當 nums[i] == 1 時，將其與 p1 位置交換。
-    /// 這樣一次遍歷即可完成排序，時間複雜度 O(n)，空間複雜度 O(1)。
+    /// 使用 p0、p1 與目前索引進行一次掃描，將顏色陣列原地排列為 0、1、2。
+    /// 掃描期間維持已處理區間依序分成 0、1、2 三段；遇到 0 時擴張前兩段，
+    /// 遇到 1 時只擴張 1 的區段，遇到 2 時保留在後段。
+    /// 輸入陣列須至少包含一個元素，且只能包含 0、1、2；
+    /// 執行完成後，原陣列會由小到大排列。時間複雜度為 O(n)，額外空間為 O(1)。
     /// </summary>
-    /// <param name="nums">待排序的整數陣列，僅包含 0、1、2</param>
+    /// <param name="nums">待排序的整數陣列，僅包含 0、1、2。</param>
     public void SortColors3(int[] nums)
     {
         int n = nums.Length;
-        int p0 = 0; // 指向當前要放置 0 的位置
-        int p1 = 0; // 指向當前要放置 1 的位置
+        int p0 = 0;
+        int p1 = 0;
 
         for (int i = 0; i < n; i++)
         {
+            // 進入本輪時：[0, p0) 是 0，[p0, p1) 是 1，[p1, i) 是 2。
             if (nums[i] == 0)
             {
-                // 將 0 放到 p0 位置
                 int temp = nums[i];
                 nums[i] = nums[p0];
                 nums[p0] = temp;
-                // 若 p0 < p1，需再將 1 放到 p1 位置，確保 1 的順序
+
+                // p0 後方已有 1 時，第一次交換會把它移到 i，須再交換到 p1。
                 if (p0 < p1)
                 {
                     temp = nums[i];
@@ -162,7 +186,6 @@ class Program
                 nums[p1] = temp;
                 p1++;
             }
-            // 若為 2，直接跳過，因為 2 會自然留在最後
         }
     }
 }
