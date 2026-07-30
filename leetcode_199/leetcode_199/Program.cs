@@ -2,12 +2,24 @@
 {
     internal class Program
     {
+        /// <summary>
+        /// 表示二元樹中的單一節點，保存節點值與可為空的左右子節點參考。
+        /// 節點可組合成題目使用的二元樹，並作為右視圖方法的輸入。
+        /// </summary>
         public class TreeNode
         {
             public int val;
-            public TreeNode left;
-            public TreeNode right;
-            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            public TreeNode? left;
+            public TreeNode? right;
+
+            /// <summary>
+            /// 建立一個二元樹節點。輸入節點值與可省略的左右子節點，
+            /// 輸出為保存指定值及子樹參考的新節點。
+            /// </summary>
+            /// <param name="val">節點值，題目限制為 -100 到 100。</param>
+            /// <param name="left">左子節點；沒有左子樹時為 <see langword="null"/>。</param>
+            /// <param name="right">右子節點；沒有右子樹時為 <see langword="null"/>。</param>
+            public TreeNode(int val = 0, TreeNode? left = null, TreeNode? right = null)
             {
                 this.val = val;
                 this.left = left;
@@ -156,50 +168,91 @@
         /// https://leetcode.cn/problems/binary-tree-right-side-view/solutions/2015061/ru-he-ling-huo-yun-yong-di-gui-lai-kan-s-r1nc/
         /// https://leetcode.cn/problems/binary-tree-right-side-view/solutions/1459266/199-er-cha-shu-de-you-shi-tu-by-stormsun-dj0b/
         /// 
-        /// 取得二叉樹的右視圖
-        /// 使用深度優先搜索(DFS)，優先遍歷右子樹
-        /// 當遍歷到新的深度時，第一個看到的節點即為該層右視圖可見的節點
+        /// 使用深度優先搜尋取得二元樹的右視圖。
+        /// 解法攜帶目前深度並固定先走右子樹，因此首次抵達新深度的節點
+        /// 就是該層從右側可見的節點。輸入可為空樹且不會被修改；
+        /// 輸出依照由上到下的順序保存每層最右側節點值。
         /// </summary>
-        /// <param name="root">二叉樹根節點</param>
-        /// <returns>右視圖節點值的列表</returns>
-        public static IList<int> RightSideView(TreeNode root)
+        /// <param name="root">待觀察的二元樹根節點；空樹時為 <see langword="null"/>。</param>
+        /// <returns>由上到下排列的右視圖節點值；空樹回傳空集合。</returns>
+        public static IList<int> RightSideView(TreeNode? root)
         {
-            List<int> res = new List<int>();
-            dfs(root, 0, res);
-            return res;
+            IList<int> result = new List<int>();
+            Dfs(root, 0, result);
+            return result;
         }
 
         /// <summary>
-        /// 深度優先搜索遍歷二叉樹
-        /// 先遍歷右子樹，再遍歷左子樹，確保同一深度先訪問到右邊的節點
-        /// 
-        /// 為什麼第一個看到的節點會是該層右視圖的節點：
-        /// 因為我們首先訪問右子樹，當我們到達新的深度時，右子樹的節點會最先被訪問到。
-        /// 如果右子樹是空的，那麼左子樹的節點會被訪問到。
-        /// 因此，第一個訪問到的節點一定是該層最右邊的節點。
-        /// 
+        /// 以右子樹優先的 DFS 走訪目前分支，並在首次抵達新深度時記錄節點值。
+        /// 輸入節點可為空，深度從 0 開始，結果集合由呼叫端累積；
+        /// 方法完成後，結果會包含已走訪各層的最右側節點。
         /// </summary>
-        /// <param name="root">當前節點</param>
-        /// <param name="depth">當前深度</param>
-        /// <param name="ans">結果列表</param>
-        private static void dfs(TreeNode root, int depth, IList<int> ans)
+        /// <param name="node">目前走訪的節點；空節點會直接結束目前分支。</param>
+        /// <param name="depth">目前節點距離根節點的深度，根節點為 0。</param>
+        /// <param name="result">依深度累積右視圖節點值的結果集合。</param>
+        private static void Dfs(TreeNode? node, int depth, IList<int> result)
         {
-            // 如果節點為空，則返回
-            if (root == null)
+            if (node == null)
             {
                 return;
             }
 
-            // 如果當前深度等於結果列表的長度，表示是該層第一個訪問的節點
-            // 將該節點的值加入結果列表
-            if (depth == ans.Count)
+            // 先右後左會讓每個新深度首次遇到的節點正好位於該層最右側。
+            if (depth == result.Count)
             {
-                ans.Add(root.val);
+                result.Add(node.val);
             }
 
-            depth++; // 深度加1
-            dfs(root.right, depth, ans); // 優先遍歷右子樹
-            dfs(root.left, depth, ans);  // 再遍歷左子樹
+            Dfs(node.right, depth + 1, result);
+            Dfs(node.left, depth + 1, result);
+        }
+
+        /// <summary>
+        /// 使用廣度優先搜尋取得二元樹的右視圖。
+        /// 解法以佇列逐層走訪，先固定目前層的節點數，再將該層最後取出的
+        /// 節點加入結果。輸入可為空樹且不會被修改；
+        /// 輸出依照由上到下的順序保存每層最右側節點值。
+        /// </summary>
+        /// <param name="root">待觀察的二元樹根節點；空樹時為 <see langword="null"/>。</param>
+        /// <returns>由上到下排列的右視圖節點值；空樹回傳空集合。</returns>
+        public static IList<int> RightSideView2(TreeNode? root)
+        {
+            IList<int> result = new List<int>();
+            if (root == null)
+            {
+                return result;
+            }
+
+            Queue<TreeNode> queue = new Queue<TreeNode>();
+            queue.Enqueue(root);
+
+            while (queue.Count > 0)
+            {
+                // 固定本層節點數，處理時加入的子節點會完整留給下一層。
+                int levelSize = queue.Count;
+                for (int i = 0; i < levelSize; i++)
+                {
+                    TreeNode node = queue.Dequeue();
+
+                    // 由左至右出列時，本層最後一個節點就是右視圖可見節點。
+                    if (i == levelSize - 1)
+                    {
+                        result.Add(node.val);
+                    }
+
+                    if (node.left != null)
+                    {
+                        queue.Enqueue(node.left);
+                    }
+
+                    if (node.right != null)
+                    {
+                        queue.Enqueue(node.right);
+                    }
+                }
+            }
+
+            return result;
         }
     }
 }
