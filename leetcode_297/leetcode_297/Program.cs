@@ -17,62 +17,90 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Codec codec = new Codec();
-
-        // 測試用例 1: 一般二叉樹
-        TreeNode root1 = new TreeNode(1) {
-            left = new TreeNode(2),
-            right = new TreeNode(3) {
-                left = new TreeNode(4),
-                right = new TreeNode(5)
-            }
-        };
-        Console.WriteLine("測試用例 1:");
-        string serialized1 = codec.serialize(root1);
-        Console.WriteLine($"序列化結果: {serialized1}");
-        TreeNode deserialized1 = codec.deserialize(serialized1);
-        //Console.WriteLine($"反序列化後根節點值: {deserialized1.val}");
-        //Console.WriteLine("反序列化後的樹結構-視覺化結構:");
-        //PrintTree(deserialized1, "", true);
-        Console.Write("反序列化後的樹結構-字串: ");
-        PrintTree2(deserialized1, "", true);
-        Console.WriteLine();  // 換行
-
-        // 測試用例 2: 空樹
-        TreeNode root2 = null;
-        Console.WriteLine("\n測試用例 2:");
-        string serialized2 = codec.serialize(root2);
-        Console.WriteLine($"序列化結果: {serialized2}");
-        TreeNode deserialized2 = codec.deserialize(serialized2);
-        //Console.WriteLine($"反序列化後結果: {(deserialized2 == null ? "null" : deserialized2.val.ToString())}");
-        //Console.WriteLine("反序列化後的樹結構-視覺化結構:");
-        //PrintTree(deserialized2, "", true);        
-        Console.Write("反序列化後的樹結構-字串: ");
-        PrintTree2(deserialized2, "", true);
-        Console.WriteLine();  // 換行
-
-        // 測試用例 3: 只有一個節點的樹
-        TreeNode root3 = new TreeNode(1);
-        Console.WriteLine("\n測試用例 3:");
-        string serialized3 = codec.serialize(root3);
-        Console.WriteLine($"序列化結果: {serialized3}");
-        TreeNode deserialized3 = codec.deserialize(serialized3);
-        //Console.WriteLine($"反序列化後根節點值: {deserialized3.val}");
-        //Console.WriteLine("反序列化後的樹結構-視覺化結構:");
-        //PrintTree(deserialized3, "", true);   
-        Console.Write("反序列化後的樹結構-字串: ");
-        PrintTree2(deserialized3, "", true);
-        Console.WriteLine();  // 換行             
+        RunSamples();
     }
 
     /// <summary>
-    /// 新增輔助方法來印出樹的結構
-    /// 視覺化結構輸出
+    /// 執行固定的二元樹案例，分別驗證序列化結果與反序列化後的往返結果。
+    /// 案例涵蓋一般樹、空樹、單一節點、負值不平衡樹與重複值；不需要外部輸入。
     /// </summary>
-    /// <param name="node"></param>
-    /// <param name="prefix"></param>
-    /// <param name="isLeft"></param>
-    private static void PrintTree(TreeNode node, string prefix, bool isLeft)
+    private static void RunSamples()
+    {
+        SampleCase[] samples =
+        [
+            new(
+                "一般二元樹",
+                new TreeNode(1)
+                {
+                    left = new TreeNode(2),
+                    right = new TreeNode(3)
+                    {
+                        left = new TreeNode(4),
+                        right = new TreeNode(5)
+                    }
+                },
+                "1,2,null,null,3,4,null,null,5,null,null"),
+            new("空樹", null, "null"),
+            new("單一節點", new TreeNode(1), "1,null,null"),
+            new(
+                "含負值的不平衡樹",
+                new TreeNode(-1)
+                {
+                    left = new TreeNode(-2)
+                    {
+                        right = new TreeNode(3)
+                    }
+                },
+                "-1,-2,null,3,null,null,null"),
+            new(
+                "重複值樹",
+                new TreeNode(7)
+                {
+                    left = new TreeNode(7),
+                    right = new TreeNode(7)
+                },
+                "7,7,null,null,7,null,null")
+        ];
+
+        Codec codec = new Codec();
+        int passedCount = 0;
+
+        for (int index = 0; index < samples.Length; index++)
+        {
+            SampleCase sample = samples[index];
+            string actual = codec.serialize(sample.Root);
+            string roundTrip = codec.serialize(codec.deserialize(actual));
+            bool passed = actual == sample.Expected && roundTrip == sample.Expected;
+
+            if (index > 0)
+            {
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"案例 {index + 1}：{sample.Name}");
+            Console.WriteLine($"預期序列化：{sample.Expected}");
+            Console.WriteLine($"實際序列化：{actual}");
+            Console.WriteLine($"往返序列化：{roundTrip}");
+            Console.WriteLine($"結果：{(passed ? "PASS" : "FAIL")}");
+
+            if (passed)
+            {
+                passedCount++;
+            }
+        }
+
+        Console.WriteLine();
+        Console.WriteLine($"總結：{passedCount}/{samples.Length} 筆測試通過");
+    }
+
+    /// <summary>
+    /// 以帶有分支線的多行格式輸出二元樹，遞迴顯示節點與缺少的子節點。
+    /// 輸入可以是空樹；此方法直接寫入主控台，不回傳資料。
+    /// </summary>
+    /// <param name="node">目前要輸出的節點；空值代表缺少的子節點。</param>
+    /// <param name="prefix">目前深度所需的縮排與分支線前綴。</param>
+    /// <param name="isLeft">決定目前節點使用結尾分支或中段分支符號。</param>
+    private static void PrintTree(TreeNode? node, string prefix, bool isLeft)
     {
         if (node == null)
         {
@@ -82,21 +110,23 @@ class Program
 
         Console.WriteLine($"{prefix}{(isLeft ? "└── " : "├── ")}{node.val}");
 
-        if (node.left == null && node.right == null) return;
+        if (node.left == null && node.right == null)
+        {
+            return;
+        }
 
-        // 處理左子樹
         PrintTree(node.left, prefix + (isLeft ? "    " : "│   "), false);
-        // 處理右子樹
         PrintTree(node.right, prefix + (isLeft ? "    " : "│   "), true);
     }
 
     /// <summary>
-    /// 字串輸出
+    /// 以前序走訪順序將二元樹寫入主控台，並以 <c>null</c> 保留缺少的子節點。
+    /// 輸入可以是空樹；輸出為逗號分隔的節點 token，不回傳資料。
     /// </summary>
-    /// <param name="node"></param>
-    /// <param name="prefix"></param>
-    /// <param name="isLeft"></param>
-    private static void PrintTree2(TreeNode node, string prefix, bool isLeft)
+    /// <param name="node">目前要輸出的節點；空值會輸出 <c>null</c>。</param>
+    /// <param name="prefix">保留給樹狀輸出呼叫慣例的前綴，目前字串格式不使用。</param>
+    /// <param name="isLeft">保留給樹狀輸出呼叫慣例的方向旗標，目前字串格式不使用。</param>
+    private static void PrintTree2(TreeNode? node, string prefix, bool isLeft)
     {
         if (node == null)
         {
@@ -104,43 +134,35 @@ class Program
             return;
         }
 
-        // 前序遍歷輸出：根->左->右
         Console.Write($"{node.val},");
-        
-        // 遞迴處理左子樹
+
+        // 前序走訪固定依根、左、右遞迴，null token 才能保留原始樹形。
         PrintTree2(node.left, "", false);
-        
-        // 遞迴處理右子樹
         PrintTree2(node.right, "", true);
     }
 
+    /// <summary>
+    /// 表示一筆可執行範例，包含案例名稱、允許為空的樹根與手動推導的預期序列。
+    /// </summary>
+    /// <param name="Name">顯示於主控台的案例名稱。</param>
+    /// <param name="Root">要驗證的二元樹根節點；空值表示空樹。</param>
+    /// <param name="Expected">以前序走訪和 <c>null</c> 標記表示的預期序列。</param>
+    private sealed record SampleCase(string Name, TreeNode? Root, string Expected);
 }
 
 /// <summary>
-/// 我們可以使用**遞歸（Recursion）**來解決這個問題，並透過 DFS（深度優先搜尋） 來遍歷二叉樹。
-/// 解題思路：
-/// 1. 序列化(Serialize)：
-///    - 使用前序遍歷(Pre-order Traversal)，按照 根->左->右 的順序訪問節點
-///    - 使用深度優先搜索(DFS)遍歷整棵樹
-///    - 將 null 節點也記錄下來，確保能完整重建樹的結構
-///
-/// 2. 反序列化(Deserialize)：
-///    - 將序列化的字串分割成節點值陣列
-///    - 使用佇列(Queue)儲存節點值，方便按順序處理
-///    - 通過遞迴方式重建樹結構，遵循與序列化相同的前序遍歷順序
+/// 使用 DFS 前序走訪序列化與反序列化二元樹。
+/// 每個缺少的子節點都記錄為 <c>null</c>，因此節點值與樹形都能完整往返。
 /// </summary>
-public class Codec 
+public class Codec
 {
-    // Encodes a tree to a single string.
     /// <summary>
-    /// 序列化: 使用前序遍歷 (DFS)
-    /// null 節點用 "null" 表示，節點值用 "," 分隔。 
-    /// 
-    /// 序列化過程：將二叉樹轉換為字串表示
-    /// 時間複雜度：O(n)，其中 n 是樹中的節點數
-    /// 空間複雜度：O(n)，用於儲存結果陣列
+    /// 以根、左、右的 DFS 前序順序序列化二元樹，並用 <c>null</c> 保留空分支。
+    /// 輸入可以是空樹；輸出為逗號分隔且可供 <see cref="deserialize"/> 還原的字串。
     /// </summary>
-    public string serialize(TreeNode root) 
+    /// <param name="root">要序列化的樹根；空值表示空樹。</param>
+    /// <returns>包含節點值與 <c>null</c> 標記的前序序列。</returns>
+    public string serialize(TreeNode? root)
     {
         List<string> res = new List<string>();
         SerializeHelper(root, res);
@@ -148,88 +170,81 @@ public class Codec
     }
 
     /// <summary>
-    /// 序列化輔助函式：使用前序遍歷處理每個節點
+    /// 遞迴走訪目前節點，把節點值或空分支標記依前序順序加入結果集合。
     /// </summary>
-    /// <param name="node">當前處理的節點</param>
-    /// <param name="res">用於儲存序列化結果的列表</param>
-    private void SerializeHelper(TreeNode node, List<string> res)
+    /// <param name="node">目前節點；空值表示此分支已結束。</param>
+    /// <param name="res">依走訪順序累積 token 的集合。</param>
+    private void SerializeHelper(TreeNode? node, List<string> res)
     {
-        // 步驟1: 處理空節點情況
-        if(node == null)
+        if (node == null)
         {
-            res.Add("null"); // 將null節點記錄為字串"null"
+            res.Add("null");
             return;
         }
 
-        // 步驟2: 處理當前節點 - 加入節點值
         res.Add(node.val.ToString());
-        
-        // 步驟3: 遞迴處理左子樹
+
+        // 每個空分支也必須寫入，否則不同樹形可能得到相同的節點值序列。
         SerializeHelper(node.left, res);
-        
-        // 步驟4: 遞迴處理右子樹
         SerializeHelper(node.right, res);
     }
 
-    // Decodes your encoded data to tree.
     /// <summary>
-    /// 反序列化: 使用前序遍歷還原 (DFS)
-    /// 使用 Queue 來解反序列化
-    /// 讀取字串並轉換為陣列（Queue）。
-    /// 透過遞歸構建二叉樹：
-    /// 取出當前節點值，若為 "null" 則回傳 null。
-    /// 否則建立節點，並對左子樹、右子樹進行遞歸還原。
-    /// 
-    /// 反序列化過程：將字串還原為二叉樹
-    /// 時間複雜度：O(n)，其中 n 是節點數
-    /// 空間複雜度：O(n)，用於佇列和遞迴調用棧
+    /// 將合法的逗號分隔前序序列放入佇列，再依根、左、右順序遞迴重建二元樹。
+    /// 輸入必須由 <see cref="serialize"/> 的格式產生；<c>null</c> 會還原成空樹或空分支。
     /// </summary>
-    public TreeNode deserialize(string data) 
+    /// <param name="data">包含整數節點值與 <c>null</c> 標記的合法序列。</param>
+    /// <returns>重建的樹根；若輸入表示空樹則回傳空值。</returns>
+    public TreeNode? deserialize(string data)
     {
-        // 用","來區分每個node.val
         Queue<string> nodes = new Queue<string>(data.Split(','));
         return DeserializeHelper(nodes);
     }
 
     /// <summary>
-    /// 反序列化輔助函式：從佇列中重建二叉樹
+    /// 從前序 token 佇列消耗目前節點，並遞迴建立其左、右子樹。
     /// </summary>
-    /// <param name="nodes">包含所有節點值的佇列</param>
-    /// <returns>重建的二叉樹節點</returns>
-    private TreeNode DeserializeHelper(Queue<string> nodes)
+    /// <param name="nodes">尚未處理的前序 token 佇列。</param>
+    /// <returns>目前子樹的根節點；<c>null</c> token 或空佇列會回傳空值。</returns>
+    private TreeNode? DeserializeHelper(Queue<string> nodes)
     {
-        // 步驟1: 檢查佇列是否為空
-        if(nodes.Count == 0)
+        if (nodes.Count == 0)
         {
             return null;
         }
 
-        // 步驟2: 取出當前節點值
         string val = nodes.Dequeue();
-        
-        // 步驟3: 處理空節點情況
-        if(val == "null")
+
+        if (val == "null")
         {
             return null;
         }
 
-        // 步驟4: 建立新節點
         TreeNode node = new TreeNode(int.Parse(val));
-        
-        // 步驟5: 遞迴建立左子樹
+
+        // 每個非空 token 都會依序消耗左、右子樹，與序列化順序完全對稱。
         node.left = DeserializeHelper(nodes);
-        
-        // 步驟6: 遞迴建立右子樹
         node.right = DeserializeHelper(nodes);
 
         return node;
     }
 }
 
-public class TreeNode 
+/// <summary>
+/// 表示二元樹節點，包含整數值以及允許為空的左、右子節點。
+/// </summary>
+public class TreeNode
 {
     public int val;
-    public TreeNode left;
-    public TreeNode right;
-    public TreeNode(int x) { val = x; }
+    public TreeNode? left;
+    public TreeNode? right;
+
+    /// <summary>
+    /// 建立具有指定整數值且左右子節點皆為空的新節點。
+    /// </summary>
+    /// <param name="x">節點要保存的整數值。</param>
+    public TreeNode(int x)
+    {
+        val = x;
+    }
 }
