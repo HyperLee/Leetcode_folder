@@ -5,8 +5,14 @@
         public class ListNode
         {
             public int val;
-            public ListNode next;
-            public ListNode(int val = 0, ListNode next = null)
+            public ListNode? next;
+
+            /// <summary>
+            /// 建立單向鏈結串列節點，保存目前節點值及下一個節點的參考。
+            /// </summary>
+            /// <param name="val">目前節點的整數值，需符合題目限制 -5000 到 5000。</param>
+            /// <param name="next">下一個節點；若目前節點是尾端，則為 <see langword="null"/>。</param>
+            public ListNode(int val = 0, ListNode? next = null)
             {
                 this.val = val;
                 this.next = next;
@@ -27,130 +33,178 @@
         /// 將 node 轉換至新的 ListNode
         /// 輪到當初暫存來當新的 head
         /// </summary>
-        /// <param name="args"></param>
+        /// <remarks>
+        /// 主程式會以五組固定案例分別驗證兩種迭代解法，並列出預期值、實際值與 PASS/FAIL。
+        /// </remarks>
+        /// <param name="args">命令列參數；本範例程式不使用。</param>
         static void Main(string[] args)
         {
-            ListNode l1 = new ListNode(1);
-            l1.next = new ListNode(2);
-            l1.next.next = new ListNode(3);
-            l1.next.next.next = new ListNode(4);
-            l1.next.next.next.next = new ListNode(5);
-            //l1.next.next.next.next.next = new ListNode(9);
-            //l1.next.next.next.next.next.next = new ListNode(77);
-
-            var res = ReverseList(l1);
-            while (res != null)
-            {
-                Console.WriteLine("Ans:" + res.val);
-                res = res.next;
-            }
-
-            Console.WriteLine("--------------");
-
-            ListNode l2 = new ListNode(1);
-            l2.next = new ListNode(2);
-            l2.next.next = new ListNode(3);
-            l2.next.next.next = new ListNode(4);
-            l2.next.next.next.next = new ListNode(5);
-
-            var res2 = ReverseList2(l2);
-            while (res2 != null)
-            {
-                Console.WriteLine("Ans2:" + res2.val);
-                res2 = res2.next;
-            }
-
+            RunSamples();
         }
 
-
         /// <summary>
-        /// 解法來源:
-        /// 本解法為 Iteration
-        /// https://ithelp.ithome.com.tw/articles/10225226
-        /// 主要是邊找下一個 head node，邊將 head node 串接到新的 LinkedList root 前面，這樣就會是反轉的
-        /// 
-        /// 另有 Recursion
-        /// https://ithelp.ithome.com.tw/articles/10224711
-        /// 
-        /// -- 解題概念
-        /// 0. 宣告  ListNode root 為回傳答案使用, 新的  ListNode
-        /// 1. 先宣告一個暫存的 ListNode next, 儲存下一個要交換得目標節點
-        /// 2. 將 head.next 指向 root
-        /// 3. 上述步驟已經指向了, 所以這邊可以直接接收 root = head
-        /// 4. 因為 head 已經給 root 了, 所以要輪到暫存的 next 來當作新的 head . 
-        /// 5. 持續上述步驟
+        /// 執行五組固定案例，分別驗證 <see cref="ReverseList"/> 與 <see cref="ReverseList2"/> 的反轉結果。
         /// </summary>
-        /// <param name="head"></param>
-        /// <returns></returns>
-        public static ListNode ReverseList(ListNode head)
+        /// <remarks>
+        /// 每個解法都會從原始陣列重新建立鏈結串列，避免第一個原地反轉結果影響第二個解法。
+        /// 輸出包含案例輸入、預期結果、兩種實際結果及最終通過項數。
+        /// </remarks>
+        private static void RunSamples()
         {
-            if (head == null)
+            SampleCase[] samples =
+            [
+                new SampleCase("一般多節點", [1, 2, 3, 4, 5], [5, 4, 3, 2, 1]),
+                new SampleCase("兩個節點", [1, 2], [2, 1]),
+                new SampleCase("單一節點", [1], [1]),
+                new SampleCase("空鏈結串列", [], []),
+                new SampleCase("包含重複值與負值", [-1, 2, 2, 0], [0, 2, 2, -1])
+            ];
+
+            int passedCount = 0;
+            int totalChecks = samples.Length * 2;
+
+            Console.WriteLine("LeetCode 206 - Reverse Linked List");
+            Console.WriteLine();
+
+            for (int i = 0; i < samples.Length; i++)
             {
-                return head;
+                SampleCase sample = samples[i];
+                int[] firstActual = ToArray(ReverseList(BuildList(sample.Input)));
+                int[] secondActual = ToArray(ReverseList2(BuildList(sample.Input)));
+                bool firstPassed = firstActual.SequenceEqual(sample.Expected);
+                bool secondPassed = secondActual.SequenceEqual(sample.Expected);
+
+                if (firstPassed)
+                {
+                    passedCount++;
+                }
+
+                if (secondPassed)
+                {
+                    passedCount++;
+                }
+
+                Console.WriteLine($"案例 {i + 1}：{sample.Description}");
+                Console.WriteLine($"輸入：{FormatList(sample.Input)}");
+                Console.WriteLine($"預期：{FormatList(sample.Expected)}");
+                Console.WriteLine($"解法一實際：{FormatList(firstActual)} => {(firstPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine($"解法二實際：{FormatList(secondActual)} => {(secondPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
             }
 
-            // 回傳答案
-            ListNode root = null;
+            Console.WriteLine($"總結：{passedCount}/{totalChecks} 項驗證通過");
+        }
+
+        /// <summary>
+        /// 依照整數陣列的順序建立單向鏈結串列，供每次演算法驗證使用。
+        /// </summary>
+        /// <param name="values">要依序放入節點的整數；空陣列表示空鏈結串列。</param>
+        /// <returns>建立完成的頭節點；輸入為空陣列時回傳 <see langword="null"/>。</returns>
+        private static ListNode? BuildList(int[] values)
+        {
+            if (values.Length == 0)
+            {
+                return null;
+            }
+
+            ListNode head = new ListNode(values[0]);
+            ListNode current = head;
+
+            for (int i = 1; i < values.Length; i++)
+            {
+                current.next = new ListNode(values[i]);
+                current = current.next;
+            }
+
+            return head;
+        }
+
+        /// <summary>
+        /// 將鏈結串列節點依序轉為整數陣列，方便比對演算法結果及格式化輸出。
+        /// </summary>
+        /// <param name="head">要讀取的鏈結串列頭節點；可為 <see langword="null"/>。</param>
+        /// <returns>依目前節點順序產生的陣列；空串列會回傳空陣列。</returns>
+        private static int[] ToArray(ListNode? head)
+        {
+            List<int> values = [];
+            ListNode? current = head;
+
+            while (current != null)
+            {
+                values.Add(current.val);
+                current = current.next;
+            }
+
+            return [.. values];
+        }
+
+        /// <summary>
+        /// 將整數序列格式化為方括號表示法，使主控台內容與題目範例容易對照。
+        /// </summary>
+        /// <param name="values">要顯示的整數序列，可為空陣列。</param>
+        /// <returns>例如 <c>[1, 2, 3]</c>；空序列回傳 <c>[]</c>。</returns>
+        private static string FormatList(int[] values)
+        {
+            return $"[{string.Join(", ", values)}]";
+        }
+
+        /// <summary>
+        /// 以「逐節點拆下並接到新串列頭部」的迭代方式原地反轉單向鏈結串列。
+        /// </summary>
+        /// <remarks>
+        /// 每輪先保存尚未處理的下一個節點，再把目前節點接到 <c>root</c> 前端。
+        /// 輸入可為空串列，節點值不影響反轉流程；方法會修改原始節點的 <c>next</c> 指向。
+        /// </remarks>
+        /// <param name="head">要反轉的頭節點；空串列可傳入 <see langword="null"/>。</param>
+        /// <returns>反轉後的新頭節點；輸入為空串列時回傳 <see langword="null"/>。</returns>
+        public static ListNode? ReverseList(ListNode? head)
+        {
+            ListNode? root = null;
 
             while (head != null)
             {
-                // 宣告 ListNode next 記錄當下的 next node 是誰
-                ListNode next = head.next;
-                // next 改 串接 root
+                // 先保存尚未處理的下一節點，避免反轉 next 後遺失剩餘串列。
+                ListNode? next = head.next;
                 head.next = root;
-                // 把原先輸入 list 的 head 放到 新的 ListNode root 裡面當 root; root 則改為已經串接好的 head
                 root = head;
-                // 第二個 node 給 head 達到交換; head 則改為原本的 next
-                head = next; 
+                head = next;
             }
 
-            // 回傳已經反轉的 LinkedList
-            return root; 
+            return root;
         }
 
-
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/reverse-linked-list/solutions/551596/fan-zhuan-lian-biao-by-leetcode-solution-d1k2/
-        /// https://leetcode.cn/problems/reverse-linked-list/solutions/1992225/you-xie-cuo-liao-yi-ge-shi-pin-jiang-tou-o5zy/
-        /// 
-        /// 假设链表为 1→2→3→∅，我们想要把它改成 ∅←1←2←3。
-        /// 在遍历链表时，将当前节点的 next 指针改为指向前一个节点。由于节点没有引用其前一个节点，因此必须事先存储其前一个节点。
-        /// 在更改引用之前，还需要存储后一个节点。最后返回新的头引用。
-        /// 
-        /// 做这种题时，关键是有一个意识，去想象”空“的存在，链表的前和后都有”空“的存在，而尾节点更是指向”空“ 然后，记得要有3个指针，prev，curr，
-        /// next，它们组成一个前中后关系，从链表的一头移向另一头，起始时 prev 为空，结束时 next 为空。翻转链表时不要去想象一个新链表，而是想象对
-        /// 旧链表的指针做修改，开始时，prev 指向空，curr 指向头节点，next 尚未存在。进入循环后，next 成为 curr.next，curr 指向 prev，prev 成为 curr，
-        /// curr 成为 next
-        /// 
+        /// 以 <c>prev</c>、<c>curr</c>、<c>next</c> 三指標迭代並原地反轉單向鏈結串列。
         /// </summary>
-        /// <param name="head"></param>
-        /// <returns></returns>
-        public static ListNode ReverseList2(ListNode head)
+        /// <remarks>
+        /// 迴圈中 <c>prev</c> 保持已反轉區段的頭，<c>curr</c> 指向目前節點，<c>next</c> 暫存尚未處理區段。
+        /// 輸入可為空串列，節點值不影響反轉流程；方法會修改原始節點的 <c>next</c> 指向。
+        /// </remarks>
+        /// <param name="head">要反轉的頭節點；空串列可傳入 <see langword="null"/>。</param>
+        /// <returns>反轉後的新頭節點；輸入為空串列時回傳 <see langword="null"/>。</returns>
+        public static ListNode? ReverseList2(ListNode? head)
         {
-            if(head == null)
-            {
-                return head;
-            }
+            ListNode? prev = null;
+            ListNode? curr = head;
 
-            // 回傳答案
-            ListNode prev = null;
-            // 現在 node
-            ListNode curr = head;
-
-            while(curr != null)
+            while (curr != null)
             {
-                // 未来出于现在; 暫存下一個交換目標
-                ListNode next = curr.next;
-                // 现在指向过去; 先指向至新的 ListNode
+                // 保存未處理區段後，將 curr 指回 prev，再讓三個指標同步向前推進。
+                ListNode? next = curr.next;
                 curr.next = prev;
-                // 过去成为现在; 因為上個步驟已經指向了, 所以可以把 node 給轉過去新的 ListNode
                 prev = curr;
-                // 现在成为未来; 原先的 head 已經轉去給新的 ListNode, 所以原先的 head.next 變成新的 head node
                 curr = next;
             }
 
             return prev;
         }
+
+        /// <summary>
+        /// 表示一筆可執行案例，包含案例說明、原始節點值與預期反轉順序。
+        /// </summary>
+        /// <param name="Description">案例所覆蓋的輸入情境。</param>
+        /// <param name="Input">用來建立鏈結串列的節點值。</param>
+        /// <param name="Expected">反轉後預期取得的節點值順序。</param>
+        private sealed record SampleCase(string Description, int[] Input, int[] Expected);
     }
 }
