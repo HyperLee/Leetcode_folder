@@ -1,82 +1,92 @@
 ﻿namespace leetcode_084;
 
-public class Solution 
+public class Solution
 {
     /// <summary>
-    /// 計算直方圖中最大矩形面積
-    /// 解題思路：
-    /// 1. 使用單調棧（Monotonic Stack）來找出每個柱子左右兩側第一個比它矮的柱子
-    /// 2. 對每個柱子，計算以它為高度的最大矩形面積
-    /// 3. 時間複雜度：O(n)，空間複雜度：O(n)
-    /// 
-    /// 注意:不要設錯哨兵，否則會出現邊界問題
-    /// left[i] = (monoStack.Count == 0 ? -1 : monoStack.Peek());
-    /// 哨兵預設是 -1，如果棧為空，表示左側沒有更矮的柱子
-    /// 否則，棧頂元素即為左側第一個較矮的柱子
-    /// 
-    /// right[i] = (monoStack.Count == 0 ? n : monoStack.Peek());
-    /// 哨兵預設是 n，表示右側沒有更矮的柱子
-    /// 否則，棧頂元素即為右側第一個較矮的柱子
-    /// 
-    /// left[i] 和 right[i] 分別表示第 i 個柱子的左右邊界
-    /// 面積 = (right[i] - left[i] - 1) * heights[i]
-    /// monoStack 存儲的是柱子的索引，而不是柱子的高度 
-    /// 
-    /// 附件檔案: 單調棧.MD, 可以先閱讀後再閱讀此代碼
+    /// 計算直方圖可形成的最大矩形面積。此解法分別由左至右、由右至左維護
+    /// 單調遞增索引棧，找出每根柱子兩側第一根嚴格較矮的柱子，再以該柱高
+    /// 乘上可延伸寬度。輸入須為題目限制內的非負柱高陣列，回傳最大矩形面積。
+    /// 時間複雜度為 O(n)，額外空間複雜度為 O(n)。
+    /// </summary>
     /// <param name="heights">表示直方圖高度的整數陣列</param>
     /// <returns>最大矩形面積</returns>
-    public int LargestRectangleArea(int[] heights) 
+    public int LargestRectangleArea(int[] heights)
     {
         int n = heights.Length;
-        // 儲存每個柱子左側第一個較矮的柱子的索引(index)
         int[] left = new int[n];
-        // 儲存每個柱子右側第一個較矮的柱子的索引(index)
         int[] right = new int[n];
-        
-        // 使用單調遞增棧來找尋左/右側邊界
         Stack<int> monoStack = new Stack<int>();
-        
-        // 從左向右遍歷，找尋左側邊界
-        for (int i = 0; i < n; i++) 
+
+        for (int i = 0; i < n; i++)
         {
-            // 當棧不為空且當前柱子高度小於等於棧頂柱子高度時，彈出棧頂
-            while (monoStack.Count > 0 && heights[monoStack.Peek()] >= heights[i]) 
+            // 移除不夠矮的柱子，留下的棧頂才是左側第一個嚴格較矮位置。
+            while (monoStack.Count > 0 && heights[monoStack.Peek()] >= heights[i])
             {
                 monoStack.Pop();
             }
-            // 如果棧為空，表示左側沒有更矮的柱子，設為-1
-            // 否則，棧頂元素即為左側第一個較矮的柱子
-            left[i] = (monoStack.Count == 0 ? -1 : monoStack.Peek());
-            // 將當前柱子索引入棧
+
+            left[i] = monoStack.Count == 0 ? -1 : monoStack.Peek();
             monoStack.Push(i);
         }
 
-        // 清空棧，準備找尋右側邊界
         monoStack.Clear();
-        // 從右向左遍歷，找尋右側邊界
-        for (int i = n - 1; i >= 0; i--) 
+        for (int i = n - 1; i >= 0; i--)
         {
-            // 邏輯同上，但方向相反
-            while (monoStack.Count > 0 && heights[monoStack.Peek()] >= heights[i]) 
+            while (monoStack.Count > 0 && heights[monoStack.Peek()] >= heights[i])
             {
                 monoStack.Pop();
             }
-            // 如果棧為空，表示右側沒有更矮的柱子，設為n
-            right[i] = (monoStack.Count == 0 ? n : monoStack.Peek());
-            // 將當前柱子索引入棧
+
+            // n 是右側邊界外的哨兵，與左側的 -1 共同簡化寬度公式。
+            right[i] = monoStack.Count == 0 ? n : monoStack.Peek();
             monoStack.Push(i);
         }
-        
-        // 計算最大面積
-        int res = 0;
-        for (int i = 0; i < n; i++) 
+
+        int maximumArea = 0;
+        for (int i = 0; i < n; i++)
         {
-            // 對每個柱子，計算以它為高度的矩形面積
-            // 寬度 = 右邊界 - 左邊界 - 1
-            // 高度 = heights[i]
-            res = Math.Max(res, (right[i] - left[i] - 1) * heights[i]);
+            int width = right[i] - left[i] - 1;
+            maximumArea = Math.Max(maximumArea, width * heights[i]);
         }
-        return res;
+
+        return maximumArea;
+    }
+
+    /// <summary>
+    /// 計算直方圖可形成的最大矩形面積。此解法只由左至右掃描一次，使用
+    /// 單調遞增索引棧保存尚未確定右邊界的柱子；遇到較矮柱子時，彈出柱子並
+    /// 立即計算其最大寬度。輸入須為題目限制內的非負柱高陣列，回傳最大矩形
+    /// 面積，且不會修改輸入。時間複雜度為 O(n)，額外空間複雜度為 O(n)。
+    /// </summary>
+    /// <param name="heights">表示直方圖高度的整數陣列。</param>
+    /// <returns>直方圖中可形成的最大矩形面積。</returns>
+    public int LargestRectangleArea2(int[] heights)
+    {
+        Stack<int> monoStack = new Stack<int>();
+        int maximumArea = 0;
+
+        for (int i = 0; i <= heights.Length; i++)
+        {
+            // 掃描到陣列尾端時使用虛擬高度 0，迫使所有待處理柱子出棧。
+            int currentHeight = i == heights.Length ? 0 : heights[i];
+
+            while (monoStack.Count > 0 && heights[monoStack.Peek()] >= currentHeight)
+            {
+                int height = heights[monoStack.Pop()];
+                int leftBoundary = monoStack.Count == 0 ? -1 : monoStack.Peek();
+                int width = i - leftBoundary - 1;
+
+                maximumArea = Math.Max(maximumArea, height * width);
+            }
+
+            // 虛擬哨兵不屬於輸入，因此只負責清棧，不儲存其索引。
+            if (i < heights.Length)
+            {
+                monoStack.Push(i);
+            }
+        }
+
+        return maximumArea;
     }
 }
 
@@ -98,34 +108,74 @@ class Program
     ///    - 時間複雜度為 O(n)，比暴力解法 O(n^2) 更優
     ///    - 能有效找出每個柱子左右兩側第一個較矮的柱子
     ///    - 空間複雜度為 O(n)，用於存儲左右邊界
-    /// <param name="args"></param>
+    ///
+    /// 此進入點會使用固定測試資料執行兩種單調棧解法，
+    /// 並輸出每項檢查的預期值、實際值及通過狀態。
+    /// </summary>
+    /// <param name="args">命令列參數；本範例不使用此參數。</param>
     static void Main(string[] args)
     {
         Solution solution = new Solution();
-        
-        // 測試案例 1：基本案例
-        int[] test1 = new int[] { 2, 1, 5, 6, 2, 3 };
-        Console.WriteLine("測試案例 1：[2, 1, 5, 6, 2, 3]");
-        Console.WriteLine($"結果：{solution.LargestRectangleArea(test1)}"); // 預期輸出：10
-        
-        // 測試案例 2：遞增序列
-        int[] test2 = new int[] { 1, 2, 3, 4, 5 };
-        Console.WriteLine("\n測試案例 2：[1, 2, 3, 4, 5]");
-        Console.WriteLine($"結果：{solution.LargestRectangleArea(test2)}"); // 預期輸出：9
-        
-        // 測試案例 3：遞減序列
-        int[] test3 = new int[] { 5, 4, 3, 2, 1 };
-        Console.WriteLine("\n測試案例 3：[5, 4, 3, 2, 1]");
-        Console.WriteLine($"結果：{solution.LargestRectangleArea(test3)}"); // 預期輸出：9
-        
-        // 測試案例 4：全相等
-        int[] test4 = new int[] { 2, 2, 2, 2 };
-        Console.WriteLine("\n測試案例 4：[2, 2, 2, 2]");
-        Console.WriteLine($"結果：{solution.LargestRectangleArea(test4)}"); // 預期輸出：8
-        
-        // 測試案例 5：極端案例
-        int[] test5 = new int[] { 1 };
-        Console.WriteLine("\n測試案例 5：[1]");
-        Console.WriteLine($"結果：{solution.LargestRectangleArea(test5)}"); // 預期輸出：1
+
+        (string Name, int[] Heights, int Expected)[] testCases =
+        [
+            ("官方範例 1", [2, 1, 5, 6, 2, 3], 10),
+            ("官方範例 2", [2, 4], 4),
+            ("高度為零", [0], 0),
+            ("單一柱子", [1], 1),
+            ("嚴格遞增", [1, 2, 3, 4, 5], 9),
+            ("嚴格遞減", [5, 4, 3, 2, 1], 9),
+            ("重複高度", [2, 2, 2, 2], 8),
+            ("中央低谷", [2, 1, 2], 3)
+        ];
+
+        int passedChecks = 0;
+        foreach ((string name, int[] heights, int expected) in testCases)
+        {
+            passedChecks += RunTestCase(solution, name, heights, expected);
+        }
+
+        int totalChecks = testCases.Length * 2;
+        Console.WriteLine($"Summary: {passedChecks}/{totalChecks} checks passed.");
+
+        if (passedChecks != totalChecks)
+        {
+            Environment.ExitCode = 1;
+        }
+    }
+
+    /// <summary>
+    /// 執行單一固定案例，分別呼叫雙向邊界與單次掃描解法，
+    /// 比較每種解法的實際結果與預期結果，並輸出 PASS 或 FAIL。
+    /// </summary>
+    /// <param name="solution">提供兩種最大矩形面積解法的物件。</param>
+    /// <param name="name">顯示於主控台的案例名稱。</param>
+    /// <param name="heights">符合題目限制的非負柱高陣列。</param>
+    /// <param name="expected">此案例預期的最大矩形面積。</param>
+    /// <returns>兩種解法中通過檢查的數量，範圍為 0 到 2。</returns>
+    private static int RunTestCase(Solution solution, string name, int[] heights, int expected)
+    {
+        (string Name, Func<int[], int> Solve)[] solutions =
+        [
+            ("解法一：雙向邊界", solution.LargestRectangleArea),
+            ("解法二：單次掃描", solution.LargestRectangleArea2)
+        ];
+
+        Console.WriteLine($"案例：{name}");
+        Console.WriteLine($"輸入：[{string.Join(", ", heights)}]");
+
+        int passedChecks = 0;
+        foreach ((string solutionName, Func<int[], int> solve) in solutions)
+        {
+            int actual = solve(heights);
+            bool passed = actual == expected;
+            passedChecks += passed ? 1 : 0;
+
+            Console.WriteLine(
+                $"{solutionName} | Expected: {expected}, Actual: {actual} | {(passed ? "PASS" : "FAIL")}");
+        }
+
+        Console.WriteLine();
+        return passedChecks;
     }
 }
