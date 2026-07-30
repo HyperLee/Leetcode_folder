@@ -1,10 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using System.Data.Common;
-using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-
-namespace leetcode_786
+﻿namespace leetcode_786
 {
     internal class Program
     {
@@ -15,76 +9,178 @@ namespace leetcode_786
         /// https://leetcode.cn/problems/k-th-smallest-prime-fraction/description/
         /// </summary>
         /// <param name="args"></param>
+        /// <remarks>
+        /// 主要進入點會執行兩種解法的固定案例，不使用命令列參數；
+        /// 輸出每項驗證結果，若有任一失敗則設定非零結束碼。
+        /// </remarks>
         static void Main(string[] args)
         {
-            int[] input = { 1, 2, 3, 5 };
-            int k = 3;
-
-            KthSmallestPrimeFraction(input, k);
-
-            Console.ReadKey();
+            RunSamples();
         }
 
+        /// <summary>
+        /// 執行固定範例並比較兩種解法的結果。測試資料皆符合題目限制，
+        /// 每一筆都會輸出輸入、預期結果、實際結果及是否通過。
+        /// </summary>
+        private static void RunSamples()
+        {
+            SampleCase[] samples =
+            {
+                new("官方範例一", new[] { 1, 2, 3, 5 }, 3, new[] { 2, 5 }),
+                new("官方範例二", new[] { 1, 7 }, 1, new[] { 1, 7 }),
+                new("最小順位", new[] { 1, 2, 3, 5 }, 1, new[] { 1, 5 }),
+                new("最大順位", new[] { 1, 2, 3, 5 }, 6, new[] { 2, 3 }),
+                new("較長陣列的中間順位", new[] { 1, 2, 3, 5, 7 }, 7, new[] { 1, 2 })
+            };
 
+            int passedChecks = 0;
+            int totalChecks = samples.Length * 2;
+
+            for (int index = 0; index < samples.Length; index++)
+            {
+                SampleCase sample = samples[index];
+                int[] sortingResult = KthSmallestPrimeFraction(sample.Input, sample.K);
+                int[] heapResult = KthSmallestPrimeFraction2(sample.Input, sample.K);
+
+                Console.WriteLine($"案例 {index + 1}：{sample.Name}");
+                Console.WriteLine($"輸入：arr = {FormatArray(sample.Input)}, k = {sample.K}");
+                Console.WriteLine($"預期：{FormatArray(sample.Expected)}");
+                passedChecks += PrintResult("解法一（列舉排序）", sortingResult, sample.Expected);
+                passedChecks += PrintResult("解法二（最小堆）", heapResult, sample.Expected);
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項驗證通過");
+
+            if (passedChecks != totalChecks)
+            {
+                Environment.ExitCode = 1;
+            }
+        }
 
         /// <summary>
-        /// ref: 方法一：自定义排序
-        /// https://leetcode.cn/problems/k-th-smallest-prime-fraction/solutions/1127103/di-k-ge-zui-xiao-de-su-shu-fen-shu-by-le-argw/
-        /// https://leetcode.cn/problems/k-th-smallest-prime-fraction/solutions/1127751/gong-shui-san-xie-yi-ti-shuang-jie-you-x-8ymk/
-        /// https://leetcode.cn/problems/k-th-smallest-prime-fraction/solutions/2726838/786-di-k-ge-zui-xiao-de-zhi-shu-fen-shu-pu5wt/
-        /// 
-        /// 此方法需要注意
-        /// 正常比較方法是
-        /// a/b 與 c/d 比較大小
-        /// 但是這邊用
-        /// a * d < b * c 來取代上述方法計算比較
-        /// 因浮點數計算會有誤差問題
-        /// 詳細推導方式 要去看上述ref連結說明
-        /// 
-        /// 以长度为 2 的整数数组返回你的答案, 这里 answer[0] == arr[i] 且 answer[1] == arr[j] 。
+        /// 顯示單一解法的實際結果並與預期陣列比較。
+        /// 輸入為解法名稱、兩元素結果與預期值，輸出為通過檢查的數量（0 或 1）。
         /// </summary>
-        /// <param name="arr">輸入資料, array</param>
-        /// <param name="k">第K個最小分數</param>
-        /// <returns></returns>
+        private static int PrintResult(string solutionName, int[] actual, int[] expected)
+        {
+            bool passed = actual.SequenceEqual(expected);
+            Console.WriteLine(
+                $"{solutionName}：{FormatArray(actual)} => {(passed ? "PASS" : "FAIL")}");
+            return passed ? 1 : 0;
+        }
+
+        /// <summary>
+        /// 將整數陣列格式化為 README 與主控台共用的方括號表示法。
+        /// 輸入可為任意整數陣列，輸出格式例如 <c>[1, 2, 3]</c>。
+        /// </summary>
+        private static string FormatArray(int[] values)
+        {
+            return $"[{string.Join(", ", values)}]";
+        }
+
+        /// <summary>
+        /// 表示一筆可執行範例，保存案例名稱、合法輸入、順位及預期的分子分母。
+        /// </summary>
+        private sealed record SampleCase(string Name, int[] Input, int K, int[] Expected);
+
+        /// <summary>
+        /// 列舉所有分子索引小於分母索引的分數，再以交叉相乘排序。
+        /// 輸入必須是由 1 與不重複質數組成的嚴格遞增陣列，且 k 位於合法順位；
+        /// 輸出為第 k 小分數的兩元素陣列 <c>[分子, 分母]</c>。
+        /// </summary>
+        /// <param name="arr">包含 1 與不重複質數的嚴格遞增陣列。</param>
+        /// <param name="k">要尋找的分數順位，從 1 開始計算。</param>
+        /// <returns>第 k 小分數的分子與分母。</returns>
         public static int[] KthSmallestPrimeFraction(int[] arr, int k)
         {
             int n = arr.Length;
-            List<int[]> list = new List<int[]>();
+            List<int[]> fractions = new List<int[]>();
 
-            // 枚舉arr中 所有排列組合資料, 塞入 list裡面
+            // 只建立 i < j 的組合，確保每個分數皆小於 1 且不重複列舉。
             for (int i = 0; i < n; i++)
             {
-                for(int j = i + 1; j < n; j++)
+                for (int j = i + 1; j < n; j++)
                 {
-                    list.Add(new int[] { arr[i], arr[j] });
+                    fractions.Add(new[] { arr[i], arr[j] });
                 }
             }
 
-            // 分數; 排序 遞增排序 小至大; a * d < b * c
-            list.Sort((x, y) => x[0] * y[1] - y[0] * x[1]);
+            fractions.Sort(static (left, right) =>
+                CompareFractions(
+                    (left[0], left[1]),
+                    (right[0], right[1])));
 
-            ////////////////////// console輸出//////////////////////////
-            int count = 0;
-            // 使用 foreach 迴圈來迭代 List 中的每個陣列
-            foreach (int[] array in list)
+            return fractions[k - 1];
+        }
+
+        /// <summary>
+        /// 使用最小堆合併多條已排序的分數序列。每個分母先放入最小分子，
+        /// 取出目前最小值後再推進同一分母的下一個分子；輸入條件與解法一相同，
+        /// 輸出為第 k 小分數的兩元素陣列 <c>[分子, 分母]</c>。
+        /// </summary>
+        /// <param name="arr">包含 1 與不重複質數的嚴格遞增陣列。</param>
+        /// <param name="k">要尋找的分數順位，從 1 開始計算。</param>
+        /// <returns>第 k 小分數的分子與分母。</returns>
+        public static int[] KthSmallestPrimeFraction2(int[] arr, int k)
+        {
+            IComparer<(int Numerator, int Denominator)> fractionComparer =
+                Comparer<(int Numerator, int Denominator)>.Create(CompareFractions);
+            PriorityQueue<
+                (int NumeratorIndex, int DenominatorIndex),
+                (int Numerator, int Denominator)> minHeap = new PriorityQueue<
+                    (int NumeratorIndex, int DenominatorIndex),
+                    (int Numerator, int Denominator)>(fractionComparer);
+
+            // 每個分母各自形成遞增序列，初始只放入該序列最小的 arr[0] / arr[j]。
+            for (int denominatorIndex = 1; denominatorIndex < arr.Length; denominatorIndex++)
             {
-                // 使用內嵌的 foreach 迴圈來迭代每個陣列中的元素
-                foreach (int element in array)
+                minHeap.Enqueue(
+                    (0, denominatorIndex),
+                    (arr[0], arr[denominatorIndex]));
+            }
+
+            (int NumeratorIndex, int DenominatorIndex) current = default;
+
+            for (int rank = 1; rank <= k; rank++)
+            {
+                current = minHeap.Dequeue();
+
+                if (rank == k)
                 {
-                    // 輸出第 k - 1 筆資料
-                    if (count == k - 1)
-                    {
-                        Console.Write(element + ", ");
-                    }
+                    break;
                 }
 
-                count++;
-                //Console.WriteLine(); // 換行以分隔每個陣列
+                int nextNumeratorIndex = current.NumeratorIndex + 1;
+
+                // 同一分母只推進一格，且分子索引必須維持小於分母索引。
+                if (nextNumeratorIndex < current.DenominatorIndex)
+                {
+                    minHeap.Enqueue(
+                        (nextNumeratorIndex, current.DenominatorIndex),
+                        (arr[nextNumeratorIndex], arr[current.DenominatorIndex]));
+                }
             }
-            //////////////////////////////////////////////////////////////
-            
-            // 回傳第 k 個
-            return list[k - 1];
+
+            return new[]
+            {
+                arr[current.NumeratorIndex],
+                arr[current.DenominatorIndex]
+            };
+        }
+
+        /// <summary>
+        /// 以交叉相乘精確比較兩個正分數，不轉換成浮點數。
+        /// 輸入為兩組分子與分母，輸出負數、零或正數供排序與最小堆判定順序。
+        /// </summary>
+        private static int CompareFractions(
+            (int Numerator, int Denominator) left,
+            (int Numerator, int Denominator) right)
+        {
+            // a / b 與 c / d 的大小可由 a * d 與 c * b 決定，long 可避免乘法溢位。
+            long leftProduct = (long)left.Numerator * right.Denominator;
+            long rightProduct = (long)right.Numerator * left.Denominator;
+            return leftProduct.CompareTo(rightProduct);
         }
     }
 }
