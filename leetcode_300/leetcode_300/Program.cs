@@ -29,194 +29,153 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
+        SampleCase[] samples =
+        [
+            new("案例 1：官方範例一", [10, 9, 2, 5, 3, 7, 101, 18], 4),
+            new("案例 2：官方範例二", [0, 1, 0, 3, 2, 3], 4),
+            new("案例 3：所有元素相同", [7, 7, 7, 7, 7, 7, 7], 1),
+            new("案例 4：混合上升路徑", [1, 3, 6, 7, 9, 4, 10, 5, 6], 6),
+            new("案例 5：空陣列防禦", [], 0),
+            new("案例 6：單一元素", [42], 1),
+            new("案例 7：嚴格遞減", [5, 4, 3, 2, 1], 1)
+        ];
+
+        Program program = new();
+        int passedChecks = 0;
+        int totalChecks = samples.Length * 2;
+
         Console.WriteLine("300. 最長遞增子序列測試");
         Console.WriteLine("========================");
 
-        // 測試案例 1: [10, 9, 2, 5, 3, 7, 101, 18]
-        // 預期結果: 4 (子序列為 [2, 3, 7, 18] 或 [2, 3, 7, 101])
-        int[] test1 = { 10, 9, 2, 5, 3, 7, 101, 18 };
-        TestLIS(test1, "案例 1");
+        foreach (SampleCase sample in samples)
+        {
+            int dynamicProgrammingResult = program.LengthOfLIS(sample.Numbers);
+            int binarySearchResult = program.LengthOfLIS2(sample.Numbers);
+            bool dynamicProgrammingPassed = dynamicProgrammingResult == sample.Expected;
+            bool binarySearchPassed = binarySearchResult == sample.Expected;
 
-        // 測試案例 2: [0, 1, 0, 3, 2, 3]
-        // 預期結果: 4 (子序列為 [0, 1, 2, 3])
-        int[] test2 = { 0, 1, 0, 3, 2, 3 };
-        TestLIS(test2, "案例 2");
+            passedChecks += dynamicProgrammingPassed ? 1 : 0;
+            passedChecks += binarySearchPassed ? 1 : 0;
 
-        // 測試案例 3: [7, 7, 7, 7, 7, 7, 7]
-        // 預期結果: 1 (所有元素相同，最長遞增子序列長度為 1)
-        int[] test3 = { 7, 7, 7, 7, 7, 7, 7 };
-        TestLIS(test3, "案例 3");
-        
-        // 測試案例 4: [1, 3, 6, 7, 9, 4, 10, 5, 6]
-        // 預期結果: 6
-        int[] test4 = { 1, 3, 6, 7, 9, 4, 10, 5, 6 };
-        TestLIS(test4, "案例 4");
+            Console.WriteLine();
+            Console.WriteLine(sample.Name);
+            Console.WriteLine($"輸入：[{string.Join(", ", sample.Numbers)}]");
+            Console.WriteLine($"預期：{sample.Expected}");
+            Console.WriteLine(
+                $"動態規劃：Expected = {sample.Expected}, Actual = {dynamicProgrammingResult} => " +
+                $"{(dynamicProgrammingPassed ? "PASS" : "FAIL")}");
+            Console.WriteLine(
+                $"二分搜尋：Expected = {sample.Expected}, Actual = {binarySearchResult} => " +
+                $"{(binarySearchPassed ? "PASS" : "FAIL")}");
+        }
+
+        Console.WriteLine();
+        Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項驗證通過");
     }
 
     /// <summary>
-    /// 測試並比較兩種最長遞增子序列演算法
+    /// 使用動態規劃計算整數陣列的最長嚴格遞增子序列長度。
+    /// 以 <c>dp[i]</c> 表示以 <c>nums[i]</c> 結尾的最佳長度，逐一檢查
+    /// 所有較早且數值較小的元素；時間複雜度為 O(n²)，空間複雜度為 O(n)。
     /// </summary>
-    /// <param name="nums">測試用的整數陣列</param>
-    /// <param name="testName">測試案例名稱</param>
-    static void TestLIS(int[] nums, string testName)
-    {
-        Program p = new Program();
-        
-        // 執行兩種演算法
-        int result1 = p.LengthOfLIS(nums);
-        int result2 = p.LengthOfLIS2(nums);
-        
-        // 顯示輸入資料
-        Console.WriteLine($"\n{testName}: [{string.Join(", ", nums)}]");
-        
-        // 顯示結果
-        Console.WriteLine($"動態規劃解法 (O(n²)) 結果: {result1}");
-        Console.WriteLine($"二分搜尋優化解法 (O(n log n)) 結果: {result2}");
-        
-        // 驗證兩種演算法結果是否一致
-        if (result1 == result2)
-        {
-            Console.WriteLine($"兩種演算法結果一致: {result1}");
-        }
-        else
-        {
-            Console.WriteLine($"警告: 兩種演算法結果不一致! ({result1} vs {result2})");
-        }
-    }
-
-    /// <summary>
-    /// 給定一個無序的整數陣列，找到其中最長上升子序列的長度。
-    /// 
-    /// 解題概念：動態規劃
-    /// - 定義 dp[i] 為以 nums[i] 結尾的最長遞增子序列長度
-    /// - 對於每個位置 i，檢查所有 j < i 的位置，如果 nums[i] > nums[j]，則可以將 nums[i] 接在以 nums[j] 結尾的子序列後面
-    /// - 時間複雜度：O(n²)，空間複雜度：O(n)
-    /// </summary>
-    /// <param name="nums"></param>
-    /// <returns>最長上升子序列的長度</returns>
+    /// <param name="nums">
+    /// 不可為 <see langword="null"/> 的整數陣列；題目限制長度至少為 1，
+    /// 此實作亦防禦性支援空陣列。
+    /// </param>
+    /// <returns>最長嚴格遞增子序列的長度；空陣列回傳 0。</returns>
     public int LengthOfLIS(int[] nums)
     {
-        // 取得數組長度
         int n = nums.Length;
-        
-        // 處理邊界情況：如果數組為空，最長遞增子序列長度為0
-        if (n == 0) 
+
+        if (n == 0)
         {
             return 0;
         }
-        
-        // 初始化動態規劃數組，dp[i] 表示以 nums[i] 結尾的最長遞增子序列的長度
+
         int[] dp = new int[n];
-        
-        // 初始化所有位置的最長遞增子序列長度為1（至少包含自身元素）
         Array.Fill(dp, 1);
 
-        // 初始最長長度為1（至少包含一個元素）
-        int maxLength = 1; 
-        
-        // 從第二個元素開始遍歷數組
+        int maxLength = 1;
+
         for (int i = 1; i < n; i++)
         {
-            // 對於每個位置i，檢查之前的所有位置j
             for (int j = 0; j < i; j++)
             {
-                // 如果當前元素大於之前的某個元素，可以形成更長的遞增子序列
                 if (nums[i] > nums[j])
                 {
-                    // 更新dp[i]：取原值與「dp[j] + 1」中的較大者
-                    // dp[j] + 1 表示將nums[i]加到以nums[j]結尾的最長遞增子序列後面
+                    // nums[i] 可以接到以 nums[j] 結尾的序列後方，形成更長候選。
                     dp[i] = Math.Max(dp[i], dp[j] + 1);
-                    // 更新當前的最長遞增子序列長度
-                    maxLength = Math.Max(maxLength, dp[i]); 
                 }
             }
+
+            maxLength = Math.Max(maxLength, dp[i]);
         }
-        
-        // 返回整個dp數組中的最大值，即為最長遞增子序列的長度
-        // 也可以用 dp.Max() 來獲取最大值
+
         return maxLength;
     }
 
-
     /// <summary>
-    /// 動態規劃 + 二分搜尋法解法
-    /// 
-    /// 解題概念：
-    /// - 使用一個陣列 g 維護「目前為止找到的最長遞增子序列」
-    /// - g 中的元素不一定是真正的最長遞增子序列，但 g 的長度就是最長遞增子序列的長度
-    /// - 對於每個元素，如果它大於 g 的最後一個元素，表示可以直接添加到 g 尾部形成更長的遞增序列
-    /// - 如果元素小於 g 的最後一個元素，則使用二分搜尋找到 g 中第一個大於等於它的位置，並替換該位置的值
-    /// - 這樣可以保持 g 的單調遞增特性，同時「為未來可能的更長序列創造潛力」
-    /// - 時間複雜度：O(n log n)，空間複雜度：O(n)
+    /// 使用 tails 陣列搭配二分搜尋，計算整數陣列的最長嚴格遞增子序列長度。
+    /// tails 的第 i 個值代表長度為 i + 1 的遞增子序列目前可取得的最小尾值；
+    /// 每個元素以 lower bound 決定追加或替換位置。時間複雜度為 O(n log n)，
+    /// 空間複雜度為 O(n)。
     /// </summary>
-    /// <param name="nums">整數陣列</param>
-    /// <returns>最長上升子序列的長度</returns>
+    /// <param name="nums">
+    /// 不可為 <see langword="null"/> 的整數陣列；題目限制長度至少為 1，
+    /// 此實作亦防禦性支援空陣列。
+    /// </param>
+    /// <returns>最長嚴格遞增子序列的長度；空陣列回傳 0。</returns>
     public int LengthOfLIS2(int[] nums)
     {
-        // 創建一個動態陣列 g，用於存儲目前為止的「最長遞增子序列候選」
-        List<int> res = new List<int>();
-        
-        // 遍歷輸入陣列中的每個元素
-        foreach (var num in nums)
+        List<int> tails = [];
+
+        foreach (int num in nums)
         {
-            // 情況1: res 為空或當前數字大於 res 的最後一個元素
-            // 可以直接將當前數字添加到 res 尾部，形成更長的遞增序列
-            if (res.Count == 0 || num > res[res.Count - 1])
+            if (tails.Count == 0 || num > tails[^1])
             {
-                res.Add(num);
+                tails.Add(num);
             }
             else
             {
-                // 情況2: 當前數字不大於 res 的最後一個元素
-                // 使用二分搜尋找到 res 中第一個大於等於 num 的位置
-                int index = LowerBound(res, num);
-                // 用 num 替換該位置的值，保持 res 的遞增特性
-                // 這樣可以為未來可能出現的更長序列創造潛力
-                res[index] = num;
+                // 以更小或相同的尾值取代原位置，保留未來延伸成更長序列的空間。
+                int index = LowerBound(tails, num);
+                tails[index] = num;
             }
         }
 
-        // res 的長度即為最長遞增子序列的長度
-        return res.Count;
+        // tails 不保證是一條實際子序列，但其長度必定等於 LIS 長度。
+        return tails.Count;
     }
 
     /// <summary>
-    /// 二分搜尋法實作：找出陣列中第一個大於等於目標值的元素位置
-    /// 
-    /// 解題概念：
-    /// - 使用二分搜尋來降低搜尋時間複雜度，從 O(n) 降到 O(log n)
-    /// - 在遞增有序陣列中查找第一個大於等於目標值的元素的索引位置
-    /// - 當找不到大於等於目標值的元素時，返回陣列長度
+    /// 在遞增排列的 tails 中，以二分搜尋尋找第一個大於或等於目標值的位置，
+    /// 讓呼叫端能以較小尾值替換該位置並維持遞增順序。
     /// </summary>
-    /// <param name="g">遞增有序的整數陣列</param>
-    /// <param name="target">要查找的目標值</param>
-    /// <returns>第一個大於等於目標值的元素位置</returns>
-    private int LowerBound(List<int> res, int target)
+    /// <param name="tails">不可為空且遞增排列的尾值串列。</param>
+    /// <param name="target">要插入或替換的目標值。</param>
+    /// <returns>第一個大於或等於 <paramref name="target"/> 的索引；若不存在則回傳串列長度。</returns>
+    private int LowerBound(List<int> tails, int target)
     {
-        // 初始化左右指針
-        int left = 0, right = res.Count - 1;
-        
-        // 使用二分搜尋循環，當左指針超過右指針時結束
+        int left = 0;
+        int right = tails.Count - 1;
+
         while (left <= right)
         {
-            // 計算中間位置，避免整數溢出的寫法
             int mid = left + (right - left) / 2;
-            
-            // 如果中間元素小於目標值，目標位置在右半部
-            if (res[mid] < target)
+
+            if (tails[mid] < target)
             {
-                // 將搜尋範圍縮小到右半部
                 left = mid + 1;
             }
             else
             {
-                // 如果中間元素大於等於目標值，目標位置在左半部或就是中間位置
-                // 繼續向左搜尋以找到第一個符合條件的位置
+                // mid 已符合條件，繼續向左收斂以確認是否有更早的位置。
                 right = mid - 1;
             }
         }
-        
-        // 循環結束後，left 指向第一個大於等於目標值的位置
+
         return left;
     }
+
+    private sealed record SampleCase(string Name, int[] Numbers, int Expected);
 }
