@@ -18,38 +18,127 @@
         ///    - 如果不重疊，將當前區間加入結果清單。
         /// 4. 最後返回結果清單。
         /// </summary>
-        /// <param name="args"></param>
+        /// <remarks>
+        /// 使用六組固定案例分別驗證排序合併法與座標事件掃描法，
+        /// 並輸出每一種解法的預期結果、實際結果與 PASS/FAIL。
+        /// </remarks>
+        /// <param name="args">命令列參數；此範例不使用任何參數。</param>
         static void Main(string[] args)
         {
-            // 新增測試資料與驗證
-            int[][] testInput1 = new int[][]
+            (string Name, int[][] Input, int[][] Expected)[] testCases =
             {
-                new int[]{ 1, 4 },
-                new int[]{ 4, 5 }
+                (
+                    "Case 1 - Typical overlaps",
+                    new int[][] { new[] { 1, 3 }, new[] { 2, 6 }, new[] { 8, 10 }, new[] { 15, 18 } },
+                    new int[][] { new[] { 1, 6 }, new[] { 8, 10 }, new[] { 15, 18 } }
+                ),
+                (
+                    "Case 2 - Touching intervals",
+                    new int[][] { new[] { 1, 4 }, new[] { 4, 5 } },
+                    new int[][] { new[] { 1, 5 } }
+                ),
+                (
+                    "Case 3 - Unsorted touching intervals",
+                    new int[][] { new[] { 4, 7 }, new[] { 1, 4 } },
+                    new int[][] { new[] { 1, 7 } }
+                ),
+                (
+                    "Case 4 - Chained overlaps",
+                    new int[][] { new[] { 1, 4 }, new[] { 0, 2 }, new[] { 3, 5 } },
+                    new int[][] { new[] { 0, 5 } }
+                ),
+                (
+                    "Case 5 - Duplicate and contained intervals",
+                    new int[][] { new[] { 1, 3 }, new[] { 1, 3 }, new[] { 2, 2 } },
+                    new int[][] { new[] { 1, 3 } }
+                ),
+                (
+                    "Case 6 - Coordinate boundaries",
+                    new int[][] { new[] { 0, 10000 } },
+                    new int[][] { new[] { 0, 10000 } }
+                )
             };
 
-            int[][] testInput2 = new int[][]
-            {
-                new int[]{ 1, 4 },
-                new int[]{ 0, 2 },
-                new int[]{ 3, 5 }
-            };
+            int passedChecks = 0;
+            const int solutionCount = 2;
 
-            Console.WriteLine("測試資料 1:");
-            var testResult1 = Merge(testInput1);
-            foreach (var item in testResult1)
+            foreach ((string name, int[][] input, int[][] expected) in testCases)
             {
-                Console.WriteLine(string.Join(",", item));
+                passedChecks += RunTestCase(name, input, expected);
             }
 
-            Console.WriteLine("測試資料 2:");
-            var testResult2 = Merge(testInput2);
-            foreach (var item in testResult2)
-            {
-                Console.WriteLine(string.Join(",", item));
-            }
+            int totalChecks = testCases.Length * solutionCount;
+            Console.WriteLine($"Overall: {passedChecks}/{totalChecks} passed.");
         }
 
+        /// <summary>
+        /// 使用同一組輸入與預期結果執行所有合併區間解法。
+        /// 每次呼叫解法前都會深層複製輸入，以隔離可能修改陣列的實作；
+        /// 回傳通過驗證的解法數量，並輸出各解法的 Expected、Actual 與 PASS/FAIL。
+        /// </summary>
+        /// <param name="caseName">顯示於主控台的案例名稱。</param>
+        /// <param name="input">符合題目限制的區間陣列。</param>
+        /// <param name="expected">案例預期得到的已排序、不重疊區間。</param>
+        /// <returns>此案例中通過結果比對的解法數量。</returns>
+        private static int RunTestCase(string caseName, int[][] input, int[][] expected)
+        {
+            (string Name, Func<int[][], int[][]> Solve)[] solutions =
+            {
+                (nameof(Merge), Merge),
+                (nameof(MergeBySweepLine), MergeBySweepLine)
+            };
+
+            int passedChecks = 0;
+            Console.WriteLine($"{caseName}: Input = {FormatIntervals(input)}");
+
+            foreach ((string name, Func<int[][], int[][]> solve) in solutions)
+            {
+                int[][] actual = solve(CloneIntervals(input));
+                bool passed = AreIntervalsEqual(expected, actual);
+                passedChecks += passed ? 1 : 0;
+
+                Console.WriteLine(
+                    $"  {name}: Expected = {FormatIntervals(expected)}, " +
+                    $"Actual = {FormatIntervals(actual)}, {(passed ? "PASS" : "FAIL")}");
+            }
+
+            return passedChecks;
+        }
+
+        /// <summary>
+        /// 深層複製二維區間陣列，讓會排序或修改端點的解法不影響原始測試資料。
+        /// 輸入必須由非 null 的二元素區間組成，輸出為內容相同但彼此獨立的新陣列。
+        /// </summary>
+        /// <param name="intervals">要複製的區間陣列。</param>
+        /// <returns>包含獨立內層陣列的深層副本。</returns>
+        private static int[][] CloneIntervals(int[][] intervals)
+        {
+            return intervals.Select(interval => interval.ToArray()).ToArray();
+        }
+
+        /// <summary>
+        /// 依序比較兩組合併結果的區間數量與每個端點。
+        /// 輸入應為已排序的合併結果；完全相同時回傳 true，否則回傳 false。
+        /// </summary>
+        /// <param name="expected">預期的合併結果。</param>
+        /// <param name="actual">解法實際產生的合併結果。</param>
+        /// <returns>兩組二維陣列是否依序相等。</returns>
+        private static bool AreIntervalsEqual(int[][] expected, int[][] actual)
+        {
+            return expected.Length == actual.Length
+                && expected.Zip(actual).All(pair => pair.First.SequenceEqual(pair.Second));
+        }
+
+        /// <summary>
+        /// 將二維區間陣列格式化成容易閱讀且可直接放入 README 的文字。
+        /// 輸入為合法區間陣列，輸出格式例如 <c>[[1, 3], [6, 9]]</c>。
+        /// </summary>
+        /// <param name="intervals">要格式化的區間陣列。</param>
+        /// <returns>以方括號表示的單行區間字串。</returns>
+        private static string FormatIntervals(int[][] intervals)
+        {
+            return $"[{string.Join(", ", intervals.Select(interval => $"[{interval[0]}, {interval[1]}]"))}]";
+        }
 
         /// <summary>
         /// ref:
