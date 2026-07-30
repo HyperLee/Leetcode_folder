@@ -26,237 +26,411 @@ class Program
     /// </summary>
     static void Main(string[] args)
     {
-        // 測試案例
-        LRUCache lRUCache = new LRUCache(2);  // 建立容量為 2 的 LRU 快取
-        lRUCache.Put(1, 1);                   // cache is {1=1}
-        lRUCache.Put(2, 2);                   // cache is {1=1, 2=2}
-        Console.WriteLine(lRUCache.Get(1));   // 返回 1
-        lRUCache.Put(3, 3);                   // LRU key was 2, evicts key 2, cache is {1=1, 3=3}
-        Console.WriteLine(lRUCache.Get(2));   // 返回 -1 (未找到)
-        lRUCache.Put(4, 4);                   // LRU key was 1, evicts key 1, cache is {4=4, 3=3}
-        Console.WriteLine(lRUCache.Get(1));   // 返回 -1 (未找到)
-        Console.WriteLine(lRUCache.Get(3));   // 返回 3
-        Console.WriteLine(lRUCache.Get(4));   // 返回 4
+        CacheTestCase[] testCases =
+        [
+            new(
+                "官方範例",
+                2,
+                [
+                    CacheOperation.Put(1, 1),
+                    CacheOperation.Put(2, 2),
+                    CacheOperation.Get(1, 1),
+                    CacheOperation.Put(3, 3),
+                    CacheOperation.Get(2, -1),
+                    CacheOperation.Put(4, 4),
+                    CacheOperation.Get(1, -1),
+                    CacheOperation.Get(3, 3),
+                    CacheOperation.Get(4, 4)
+                ]),
+            new(
+                "更新既有鍵",
+                2,
+                [
+                    CacheOperation.Put(1, 1),
+                    CacheOperation.Put(2, 2),
+                    CacheOperation.Put(1, 10),
+                    CacheOperation.Put(3, 3),
+                    CacheOperation.Get(1, 10),
+                    CacheOperation.Get(2, -1),
+                    CacheOperation.Get(3, 3)
+                ]),
+            new(
+                "容量為 1",
+                1,
+                [
+                    CacheOperation.Put(1, 1),
+                    CacheOperation.Get(1, 1),
+                    CacheOperation.Put(2, 2),
+                    CacheOperation.Get(1, -1),
+                    CacheOperation.Get(2, 2)
+                ]),
+            new(
+                "鍵值邊界",
+                2,
+                [
+                    CacheOperation.Put(0, 0),
+                    CacheOperation.Put(10000, 100000),
+                    CacheOperation.Get(0, 0),
+                    CacheOperation.Get(10000, 100000)
+                ])
+        ];
+
+        (string Name, Func<int, ILruCache> Create)[] solutions =
+        [
+            ("解法一：手寫雙向鏈結串列", capacity => new LRUCache(capacity)),
+            ("解法二：.NET LinkedList<T>", capacity => new LRUCache2(capacity))
+        ];
+
+        int passedCases = 0;
+        int totalCases = 0;
+        int passedGets = 0;
+        int totalGets = 0;
+
+        foreach ((string name, Func<int, ILruCache> create) in solutions)
+        {
+            Console.WriteLine($"=== {name} ===");
+            (int solutionPassedCases, int solutionTotalCases, int solutionPassedGets, int solutionTotalGets) =
+                RunTestSuite(create, testCases);
+            passedCases += solutionPassedCases;
+            totalCases += solutionTotalCases;
+            passedGets += solutionPassedGets;
+            totalGets += solutionTotalGets;
+            Console.WriteLine();
+        }
+
+        Console.WriteLine($"總結：{passedCases}/{totalCases} 組案例通過，{passedGets}/{totalGets} 次 Get 驗證通過。");
     }
 
     /// <summary>
-    /// LRU (Least Recently Used) 是一種快取置換演算法，基於「最近使用的資料更可能被再次使用」的原則。
-    /// 資料結構設計
-    /// 結合兩種資料結構來達到 O(1) 的時間複雜度：
-    /// 1. 雙向鏈結串列 (Doubly Linked List)
-    /// 用於維護資料的使用順序
-    /// 最前面的節點 = 最近使用
-    /// 最後面的節點 = 最久未使用
-    /// 支援 O(1) 時間的節點移動和刪除
-    /// 2. 雜湊表 (Dictionary)
-    /// 儲存 key 到節點的映射
-    /// 支援 O(1) 時間的查詢操作
-    /// 
-    /// LRU (Least Recently Used) 快取實作
-    /// 使用雙向鏈結串列 + 雜湊表(Dictionary)的組合來實現O(1)的存取時間複雜度
-    /// - 雙向鏈結串列用於維護資料的使用順序，最近使用的在前面，最少使用的在後面
-    /// - 雜湊表用於實現O(1)時間的查詢操作
-    /// 空間複雜度：O(capacity)
-    /// 
-    /// ref:建議看連結圖示說明 比較好初步理解題目需求
-    /// https://leetcode.cn/problems/lru-cache/solutions/2456294/tu-jie-yi-zhang-tu-miao-dong-lrupythonja-czgt/
-    /// https://leetcode.cn/problems/lru-cache/solutions/259678/lruhuan-cun-ji-zhi-by-leetcode-solution/
-    /// https://leetcode.cn/problems/lru-cache/solutions/1449572/by-stormsunshine-d7c6/
-    /// https://ithelp.ithome.com.tw/articles/10244749
+    /// 執行同一組 LRU 測試案例，逐案建立指定容量的快取並比較所有 Get 的預期值與實際值。
+    /// 輸入的工廠必須能建立遵守 <see cref="ILruCache"/> 契約的快取；回傳案例與查詢的通過統計。
     /// </summary>
-    public class LRUCache 
+    /// <param name="createCache">依容量建立待測 LRU 快取的工廠。</param>
+    /// <param name="testCases">包含容量及 Put、Get 操作序列的固定測試案例。</param>
+    /// <returns>通過案例數、案例總數、通過 Get 數與 Get 總數。</returns>
+    private static (int PassedCases, int TotalCases, int PassedGets, int TotalGets) RunTestSuite(
+        Func<int, ILruCache> createCache,
+        CacheTestCase[] testCases)
+    {
+        int passedCases = 0;
+        int passedGets = 0;
+        int totalGets = 0;
+
+        foreach (CacheTestCase testCase in testCases)
+        {
+            ILruCache cache = createCache(testCase.Capacity);
+            List<int> expectedValues = [];
+            List<int> actualValues = [];
+
+            foreach (CacheOperation operation in testCase.Operations)
+            {
+                if (operation.Type == CacheOperationType.Put)
+                {
+                    cache.Put(operation.Key, operation.Value);
+                    continue;
+                }
+
+                int actual = cache.Get(operation.Key);
+                expectedValues.Add(operation.Expected);
+                actualValues.Add(actual);
+                totalGets++;
+
+                if (actual == operation.Expected)
+                {
+                    passedGets++;
+                }
+            }
+
+            bool passed = expectedValues.SequenceEqual(actualValues);
+            if (passed)
+            {
+                passedCases++;
+            }
+
+            Console.WriteLine(
+                $"[{(passed ? "PASS" : "FAIL")}] {testCase.Name} | " +
+                $"Expected: [{string.Join(", ", expectedValues)}] | " +
+                $"Actual: [{string.Join(", ", actualValues)}]");
+        }
+
+        return (passedCases, testCases.Length, passedGets, totalGets);
+    }
+
+    /// <summary>
+    /// 表示測試案例中的操作種類；Put 寫入鍵值，Get 查詢並比對預期結果。
+    /// </summary>
+    private enum CacheOperationType
+    {
+        Get,
+        Put
+    }
+
+    /// <summary>
+    /// 表示一筆可重播的 LRU 操作，保存操作種類、鍵、寫入值及 Get 的預期結果。
+    /// </summary>
+    /// <param name="Type">要執行的 Get 或 Put 操作。</param>
+    /// <param name="Key">題目限制內的快取鍵。</param>
+    /// <param name="Value">Put 要寫入的值；Get 操作不使用此欄位。</param>
+    /// <param name="Expected">Get 預期回傳的值；Put 操作不使用此欄位。</param>
+    private sealed record CacheOperation(
+        CacheOperationType Type,
+        int Key,
+        int Value,
+        int Expected)
     {
         /// <summary>
-        /// 雙向鏈結串列的節點類別
-        /// 儲存鍵值對及前後節點的參考
+        /// 建立一筆 Put 操作，以指定鍵和值更新快取，不產生查詢結果。
         /// </summary>
-        private class Node
+        /// <param name="key">要寫入的鍵，範圍為 0 到 10000。</param>
+        /// <param name="value">要寫入的值，範圍為 0 到 100000。</param>
+        /// <returns>可供測試執行器重播的 Put 操作。</returns>
+        public static CacheOperation Put(int key, int value) =>
+            new(CacheOperationType.Put, key, value, 0);
+
+        /// <summary>
+        /// 建立一筆 Get 操作，以指定鍵查詢快取並記錄預期回傳值。
+        /// </summary>
+        /// <param name="key">要查詢的鍵，範圍為 0 到 10000。</param>
+        /// <param name="expected">鍵存在時為對應值，不存在時為 -1。</param>
+        /// <returns>可供測試執行器重播並比對的 Get 操作。</returns>
+        public static CacheOperation Get(int key, int expected) =>
+            new(CacheOperationType.Get, key, 0, expected);
+    }
+
+    /// <summary>
+    /// 表示一組獨立的 LRU 測試案例，指定名稱、正容量與依序執行的操作。
+    /// </summary>
+    /// <param name="Name">顯示於主控台的案例名稱。</param>
+    /// <param name="Capacity">快取容量，題目保證介於 1 到 3000。</param>
+    /// <param name="Operations">依時間順序執行的 Put、Get 操作。</param>
+    private sealed record CacheTestCase(
+        string Name,
+        int Capacity,
+        CacheOperation[] Operations);
+
+    /// <summary>
+    /// 定義 LRU 快取的共同操作契約。實作必須在題目保證的正容量與鍵值範圍內，
+    /// 讓 Get 與 Put 都達到平均 O(1)，並在查詢或更新後維護最近使用順序。
+    /// </summary>
+    public interface ILruCache
+    {
+        /// <summary>
+        /// 查詢指定鍵；命中時將該鍵標記為最近使用並回傳其值，未命中時回傳 -1。
+        /// </summary>
+        /// <param name="key">要查詢的鍵，範圍為 0 到 10000。</param>
+        /// <returns>鍵對應的值，若鍵不存在則為 -1。</returns>
+        int Get(int key);
+
+        /// <summary>
+        /// 寫入或更新指定鍵值；操作後該鍵為最近使用，超過容量時淘汰最久未使用的鍵。
+        /// </summary>
+        /// <param name="key">要寫入的鍵，範圍為 0 到 10000。</param>
+        /// <param name="value">要寫入的值，範圍為 0 到 100000。</param>
+        void Put(int key, int value);
+    }
+
+    /// <summary>
+    /// 使用 Dictionary 與手寫環狀雙向鏈結串列實作 LRU 快取。
+    /// Dictionary 以平均 O(1) 定位節點，串列則以 O(1) 移動節點；
+    /// 哨兵後方是最近使用項目，哨兵前方是最久未使用項目。
+    /// </summary>
+    public class LRUCache : ILruCache
+    {
+        /// <summary>
+        /// 儲存一筆快取鍵值及前後節點參考；建立時先自我連結，加入串列後再改接相鄰節點。
+        /// </summary>
+        private sealed class Node
         {
-            public int Key { get; set; }
+            public int Key { get; }
             public int Value { get; set; }
             public Node Prev { get; set; }
             public Node Next { get; set; }
 
+            /// <summary>
+            /// 建立指定鍵值的獨立節點。鍵和值須符合題目限制，節點初始為安全的自我環狀結構。
+            /// </summary>
+            /// <param name="key">節點保存的鍵。</param>
+            /// <param name="value">節點保存的值。</param>
             public Node(int key, int value)
             {
                 Key = key;
                 Value = value;
+                Prev = this;
+                Next = this;
             }
         }
 
         private readonly int _capacity;
-
-        ///<summary>
-        /// 使用哨兵節點 (_dummy) 簡化鏈結串列的操作
-        /// 放在 linklist 的最前面 第一個
-        /// 但是記住 這是雙向的
-        /// 既然是第一個,
-        /// _dummy.prev 會是結尾
-        /// </summary>
-        /// <returns></returns>
-        private readonly Node _dummy = new Node(0, 0); // 哨兵節點
+        private readonly Node _dummy = new(0, 0);
+        private readonly Dictionary<int, Node> _keyToNode = [];
 
         /// <summary>
-        /// 建立一個雜湊表（Dictionary），用來儲存 key-value 對：
-        /// Key: 整數型別 (int)，代表快取中的鍵值
-        /// Value: Node 型別，指向雙向鏈結串列中對應的節點
-
+        /// 建立具有指定正容量的 LRU 快取，並初始化空的環狀哨兵串列。
+        /// 題目保證容量介於 1 到 3000；建構完成後快取不包含任何鍵值。
         /// </summary>
-        /// <typeparam name="int"></typeparam>
-        /// <typeparam name="Node"></typeparam>
-        /// <returns></returns>
-        private readonly Dictionary<int, Node> _keyToNode = new Dictionary<int, Node>();
-
+        /// <param name="capacity">快取可容納的最大鍵數，範圍為 1 到 3000。</param>
         public LRUCache(int capacity)
         {
             _capacity = capacity;
-            _dummy.Prev = _dummy;
-            _dummy.Next = _dummy;
         }
 
         /// <summary>
-        /// 從快取中獲取值，如果鍵存在則同時將其移動到最前面（最近使用）
-        /// 
-        /// 若 key 存在：
-        /// 1. 取得對應節點
-        /// 2. 將節點移到最前面
-        /// 3. 返回節點的值
-        /// 否則：
-        /// 返回 -1
+        /// 以 Dictionary 查詢指定鍵；命中時把節點移至哨兵後方並回傳值，未命中時回傳 -1。
+        /// 輸入鍵範圍為 0 到 10000，平均時間複雜度為 O(1)。
         /// </summary>
-        /// <param name="key">要查詢的鍵值</param>
-        /// <returns>如果鍵存在則返回對應的值，否則返回-1</returns>
+        /// <param name="key">要查詢的鍵。</param>
+        /// <returns>鍵對應的值，若鍵不存在則為 -1。</returns>
         public int Get(int key)
         {
-            // 步驟 1: 呼叫 GetNode 取得節點
-            // - 如果節點存在，GetNode 會將其移至最前端
-            // - 如果不存在，GetNode 會返回 null
-            Node node = GetNode(key);
-            
-            // 步驟 2: 返回結果
-            // - 如果節點存在（非 null），返回其值
-            // - 如果節點不存在（null），返回 -1
-            return node != null ? node.Value : -1;
+            Node? node = GetNode(key);
+            return node?.Value ?? -1;
         }
 
         /// <summary>
-        /// 將鍵值對放入快取中
-        /// 如果鍵已存在，則更新其值
-        /// 如果鍵不存在，則插入新的鍵值對
-        /// 當快取容量已滿時，刪除最久未使用的項目
-        /// 
-        /// 若 key 已存在：
-        /// 1. 更新節點的值
-        /// 2. 將節點移到最前面
-        /// 否則：
-        /// 1. 建立新節點
-        /// 2. 加入雜湊表
-        /// 3. 放到鏈結串列最前面
-        /// 4. 如果超過容量，刪除最後一個節點
+        /// 寫入或更新指定鍵值並將其移至最近使用位置；新增後若超過容量，
+        /// 會同時從 Dictionary 與串列移除哨兵前方的最久未使用節點。
         /// </summary>
-        /// <param name="key">要插入的鍵</param>
-        /// <param name="value">要插入的值</param>
+        /// <param name="key">要寫入的鍵，範圍為 0 到 10000。</param>
+        /// <param name="value">要寫入的值，範圍為 0 到 100000。</param>
         public void Put(int key, int value)
         {
-            // 步驟 1: 檢查 key 是否存在
-            Node node = GetNode(key);
-            
-            // 步驟 2a: 如果 key 已存在
-            if (node != null)
+            Node? node = GetNode(key);
+            if (node is not null)
             {
-                // - 更新節點的值
-                // - GetNode 已經將節點移至最前端
                 node.Value = value;
                 return;
             }
 
-            // 步驟 2b: 如果 key 不存在
-            // - 建立新節點
             node = new Node(key, value);
-            // - 將節點加入雜湊表
             _keyToNode[key] = node;
-            // - 將節點加入鏈結串列最前端
             PushFront(node);
 
-            // 步驟 3: 檢查容量是否超過上限
-            if (_keyToNode.Count > _capacity)
+            if (_keyToNode.Count <= _capacity)
             {
-                // - 取得最後一個節點（最久未使用）
-                Node backNode = _dummy.Prev;
-                // - 從雜湊表中移除
-                _keyToNode.Remove(backNode.Key);
-                // - 從鏈結串列中移除
-                Remove(backNode);
+                return;
             }
+
+            // 哨兵的前一個節點永遠是目前最久未使用的項目。
+            Node leastRecentlyUsed = _dummy.Prev;
+            _keyToNode.Remove(leastRecentlyUsed.Key);
+            Remove(leastRecentlyUsed);
         }
 
         /// <summary>
-        /// 獲取鍵對應的節點，如果存在則將其移到鏈結串列的前端
-        /// 
-        /// 注意此段程式碼的步驟 3.
-        /// 先移除再加入, 所以原先存入的順序要改變
-        /// 被移除會消失, 再加入會讓順序在儲存的 Dic 裡面的最後面位置
-        /// 這行為恰巧就是 LRU 的行為
+        /// 以一次 Dictionary 查詢取得指定鍵的節點；命中時先從原位置移除再放到串列前端。
         /// </summary>
-        private Node GetNode(int key)
+        /// <param name="key">要尋找的鍵。</param>
+        /// <returns>已移到最近使用位置的節點；鍵不存在時為 null。</returns>
+        private Node? GetNode(int key)
         {
-            // 步驟 1: 檢查 key 是否存在於雜湊表中
-            if (!_keyToNode.ContainsKey(key))
+            if (!_keyToNode.TryGetValue(key, out Node? node))
             {
                 return null;
             }
 
-            // 步驟 2: 從雜湊表中取得節點
-            Node node = _keyToNode[key];
-
-            // 步驟 3: 將節點移到最前端
-            // - 從當前位置移除節點
             Remove(node);
-            // - 將節點加入最前端
             PushFront(node);
-
-            // 步驟 4: 返回節點
             return node;
         }
 
         /// <summary>
-        /// 從雙向鏈結串列中移除指定節點
-        /// 圖示說明:
-        /// [0] <-> x <-> [1] 刪除節點 x 之前
-        /// [0] <-> [1] 刪除後
+        /// 重新連接指定節點的前後鄰居，在 O(1) 時間內將節點移出雙向鏈結串列。
         /// </summary>
-        private void Remove(Node x)
+        /// <param name="node">目前已位於串列中的非哨兵節點。</param>
+        private static void Remove(Node node)
         {
-            // 步驟 1: 將前一個節點的 Next 指向後一個節點
-            x.Prev.Next = x.Next;
-            // 步驟 2: 將後一個節點的 Prev 指向前一個節點
-            x.Next.Prev = x.Prev;
+            node.Prev.Next = node.Next;
+            node.Next.Prev = node.Prev;
         }
 
         /// <summary>
-        /// 將節點添加到雙向鏈結串列的前端
-        /// [前端(最新使用), 後端(久未使用)]
-        /// 開頭是 dummy 後面接上各 node
-        /// 最前端（最新）的節點總是接在 dummy 節點後面
-        /// 最後端（最舊）的節點總是在鏈結串列的尾部
-        /// 圖示說明:
-        /// [哨] <-> [0] 插入節點 x 之前
-        /// [哨] <-> [x] <-> [0]
+        /// 將指定節點插入哨兵後方，使其成為最近使用項目；原本的第一個節點順延。
         /// </summary>
-        private void PushFront(Node x)
+        /// <param name="node">要加入最近使用位置的節點。</param>
+        private void PushFront(Node node)
         {
-            // 步驟 1: 設定新節點的前後連結
-            // - 新節點的前節點指向哨兵節點
-            x.Prev = _dummy;
-            // - 新節點的後節點指向原本的第一個節點
-            x.Next = _dummy.Next;
+            node.Prev = _dummy;
+            node.Next = _dummy.Next;
+            _dummy.Next.Prev = node;
+            _dummy.Next = node;
+        }
+    }
 
-            // 步驟 2: 更新相鄰節點的連結
-            // - 更新哨兵節點的 Next
-            // dummy 的下一個變成新節點
-            x.Prev.Next = x;
-            // - 更新原本第一個節點的 Prev
-            x.Next.Prev = x;
+    /// <summary>
+    /// 使用 .NET LinkedList 與 Dictionary 實作 LRU 快取。
+    /// LinkedList 的 First 表示最近使用項目、Last 表示最久未使用項目，
+    /// Dictionary 保存鍵到 LinkedListNode 的映射，使查詢、移動與淘汰皆為平均 O(1)。
+    /// </summary>
+    public class LRUCache2 : ILruCache
+    {
+        private readonly int _capacity;
+        private readonly LinkedList<(int Key, int Value)> _usageOrder = [];
+        private readonly Dictionary<int, LinkedListNode<(int Key, int Value)>> _keyToNode = [];
+
+        /// <summary>
+        /// 建立具有指定正容量的空 LRU 快取。
+        /// 題目保證容量介於 1 到 3000；建構後 LinkedList 與 Dictionary 均為空。
+        /// </summary>
+        /// <param name="capacity">快取可容納的最大鍵數，範圍為 1 到 3000。</param>
+        public LRUCache2(int capacity)
+        {
+            _capacity = capacity;
+        }
+
+        /// <summary>
+        /// 以 Dictionary 查詢指定鍵；命中時把對應 LinkedListNode 移至表頭並回傳值，
+        /// 未命中時回傳 -1。輸入鍵範圍為 0 到 10000，平均時間複雜度為 O(1)。
+        /// </summary>
+        /// <param name="key">要查詢的鍵。</param>
+        /// <returns>鍵對應的值，若鍵不存在則為 -1。</returns>
+        public int Get(int key)
+        {
+            if (!_keyToNode.TryGetValue(key, out LinkedListNode<(int Key, int Value)>? node))
+            {
+                return -1;
+            }
+
+            MoveToFront(node);
+            return node.Value.Value;
+        }
+
+        /// <summary>
+        /// 寫入或更新指定鍵值並將節點移至 LinkedList 表頭；新增後若超過容量，
+        /// 會移除表尾的最久未使用節點及其 Dictionary 映射。
+        /// </summary>
+        /// <param name="key">要寫入的鍵，範圍為 0 到 10000。</param>
+        /// <param name="value">要寫入的值，範圍為 0 到 100000。</param>
+        public void Put(int key, int value)
+        {
+            if (_keyToNode.TryGetValue(key, out LinkedListNode<(int Key, int Value)>? node))
+            {
+                node.Value = (key, value);
+                MoveToFront(node);
+                return;
+            }
+
+            LinkedListNode<(int Key, int Value)> newNode = _usageOrder.AddFirst((key, value));
+            _keyToNode[key] = newNode;
+
+            if (_keyToNode.Count <= _capacity)
+            {
+                return;
+            }
+
+            // LinkedList 尾端保存目前最久未使用的項目。
+            LinkedListNode<(int Key, int Value)> leastRecentlyUsed = _usageOrder.Last!;
+            _usageOrder.RemoveLast();
+            _keyToNode.Remove(leastRecentlyUsed.Value.Key);
+        }
+
+        /// <summary>
+        /// 將已存在於 LinkedList 的節點移至表頭，使其成為最近使用項目。
+        /// </summary>
+        /// <param name="node">要更新使用順序的 LinkedList 節點。</param>
+        private void MoveToFront(LinkedListNode<(int Key, int Value)> node)
+        {
+            _usageOrder.Remove(node);
+            _usageOrder.AddFirst(node);
         }
     }
 }
