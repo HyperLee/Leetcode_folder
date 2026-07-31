@@ -2,12 +2,24 @@
 {
     internal class Program
     {
+        /// <summary>
+        /// 表示二元搜尋樹的節點。
+        /// 每個節點保存整數值，並可連結至左、右子節點；缺少子節點時以 <see langword="null"/> 表示。
+        /// </summary>
         public class TreeNode
         {
             public int val;
-            public TreeNode left;
-            public TreeNode right;
-            public TreeNode(int val = 0, TreeNode left = null, TreeNode right = null)
+            public TreeNode? left;
+            public TreeNode? right;
+
+            /// <summary>
+            /// 建立一個二元搜尋樹節點。
+            /// 輸入節點值與可選的左右子樹，輸出可被串接成二元樹的節點物件。
+            /// </summary>
+            /// <param name="val">節點保存的整數值。</param>
+            /// <param name="left">左子節點；沒有左子節點時為 <see langword="null"/>。</param>
+            /// <param name="right">右子節點；沒有右子節點時為 <see langword="null"/>。</param>
+            public TreeNode(int val = 0, TreeNode? left = null, TreeNode? right = null)
             {
                 this.val = val;
                 this.left = left;
@@ -33,74 +45,131 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            TreeNode root = new TreeNode(4);
-            root.left = new TreeNode(1);
-            root.right = new TreeNode(6);
-            root.left.left = new TreeNode(0);
-            root.left.right = new TreeNode(2);
-            root.right.left = new TreeNode(5);
-            root.right.right = new TreeNode(7);
-            root.left.right.right = new TreeNode(3);
-            root.right.right.right = new TreeNode(8);
+            TreeNode officialExample = new TreeNode(
+                4,
+                new TreeNode(
+                    1,
+                    new TreeNode(0),
+                    new TreeNode(2, right: new TreeNode(3))),
+                new TreeNode(
+                    6,
+                    new TreeNode(5),
+                    new TreeNode(7, right: new TreeNode(8))));
 
-            Console.WriteLine(BstToGst(root));
-            Console.ReadKey();
+            int passedCount = 0;
+            passedCount += RunTestCase(
+                "官方完整 BST",
+                officialExample,
+                "[30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]");
+            passedCount += RunTestCase(
+                "兩個節點",
+                new TreeNode(0, right: new TreeNode(1)),
+                "[1,null,1]");
+            passedCount += RunTestCase(
+                "單一節點",
+                new TreeNode(1),
+                "[1]");
+            passedCount += RunTestCase(
+                "空樹",
+                null,
+                "[]");
+
+            const int totalCount = 4;
+            Console.WriteLine($"Summary: {passedCount}/{totalCount} tests passed.");
+            Environment.ExitCode = passedCount == totalCount ? 0 : 1;
         }
-
-        public static int presum = 0;
-
 
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/binary-search-tree-to-greater-sum-tree/solutions/421601/cong-er-cha-sou-suo-shu-dao-geng-da-he-shu-by-leet/
-        /// https://leetcode.cn/problems/binary-search-tree-to-greater-sum-tree/solutions/2552797/jian-ji-xie-fa-li-yong-er-cha-sou-suo-sh-r5zm/
-        /// https://leetcode.cn/problems/binary-search-tree-to-greater-sum-tree/solutions/2552959/gong-shui-san-xie-bst-de-zhong-xu-bian-l-vtu1/
-        /// https://leetcode.cn/problems/binary-search-tree-to-greater-sum-tree/solutions/1461253/1038-ba-er-cha-sou-suo-shu-zhuan-huan-we-2r8o/
-        /// 
-        /// 二元搜尋樹
-        /// 以root來區分
-        /// 左邊小
-        /// 右邊大
-        /// 
-        /// 正常的中序 會是 遞增 也就是取道小的, 這不是我們要的
-        /// 
-        /// 把中序給反向
-        /// 變成
-        /// 右 中 左 
-        /// 原本中序 數值是遞增
-        /// 反向就會是 遞減
-        /// 這樣就可以拿到 前一個數值 是比較大的
-        /// 然後累加目前的node.val
-        /// 
-        /// 題目要求 節點值加上 比節點還要大的值( 比node大簡單說就是要取右子樹)
-        /// 透過反向中序 即可 達成
-        /// 
-        /// 反向就是取大值
-        /// 也就是 node + presum = new node value
-        /// 
-        /// 從右子樹開始累計node.val
+        /// 執行單一測試案例並顯示預期結果、實際結果與通過狀態。
+        /// 輸入必須是二元搜尋樹或空樹，預期結果使用層序陣列字串；
+        /// 輸出為 1（通過）或 0（失敗），供進入點累計通過案例數。
         /// </summary>
-        /// <param name="root"></param>
-        /// <returns></returns>
-        public static TreeNode BstToGst(TreeNode root)
+        /// <param name="name">顯示於主控台的案例名稱。</param>
+        /// <param name="root">待轉換的二元搜尋樹根節點；空樹可傳入 <see langword="null"/>。</param>
+        /// <param name="expected">預期的層序陣列字串。</param>
+        /// <returns>案例通過時為 1，否則為 0。</returns>
+        private static int RunTestCase(string name, TreeNode? root, string expected)
         {
-            if(root == null)
-            {
-                return root;
-            }
+            TreeNode? convertedRoot = BstToGst(root);
+            string actual = SerializeLevelOrder(convertedRoot);
+            bool passed = actual == expected;
 
-            // 遞迴右子樹
-            BstToGst(root.right);
-            presum += root.val;
+            Console.WriteLine($"Case: {name}");
+            Console.WriteLine($"Expected: {expected}");
+            Console.WriteLine($"Actual:   {actual}");
+            Console.WriteLine($"Result: {(passed ? "PASS" : "FAIL")}");
+            Console.WriteLine();
 
-            // 此時 presum 就是 >= node.val 的所有數之和
-            root.val = presum;
-
-            // 遞迴左子樹
-            BstToGst(root.left);
-             
-            return root;
+            return passed ? 1 : 0;
         }
 
+        /// <summary>
+        /// 將二元樹轉成 LeetCode 慣用的層序陣列字串，以便精確比較樹的結構與節點值。
+        /// 輸入可為任意二元樹或空樹；輸出會保留中間必要的 <c>null</c>，
+        /// 並移除尾端不影響結構的 <c>null</c>。
+        /// </summary>
+        /// <param name="root">要序列化的根節點；空樹可傳入 <see langword="null"/>。</param>
+        /// <returns>層序陣列字串；空樹輸出 <c>[]</c>。</returns>
+        private static string SerializeLevelOrder(TreeNode? root)
+        {
+            if (root is null)
+            {
+                return "[]";
+            }
+
+            List<string> values = [];
+            Queue<TreeNode?> nodes = new();
+            nodes.Enqueue(root);
+
+            while (nodes.Count > 0)
+            {
+                TreeNode? node = nodes.Dequeue();
+                if (node is null)
+                {
+                    values.Add("null");
+                    continue;
+                }
+
+                values.Add(node.val.ToString());
+                nodes.Enqueue(node.left);
+                nodes.Enqueue(node.right);
+            }
+
+            while (values.Count > 0 && values[^1] == "null")
+            {
+                values.RemoveAt(values.Count - 1);
+            }
+
+            return $"[{string.Join(",", values)}]";
+        }
+
+        /// <summary>
+        /// 將二元搜尋樹原地轉換為較大和樹。
+        /// 透過「右子樹、根節點、左子樹」的反向中序走訪，由大到小累加節點值；
+        /// 輸入必須是節點值互異的有效二元搜尋樹或空樹，輸出為同一棵已更新的樹。
+        /// </summary>
+        /// <param name="root">待轉換的二元搜尋樹根節點；空樹可傳入 <see langword="null"/>。</param>
+        /// <returns>轉換後的原根節點；輸入空樹時回傳 <see langword="null"/>。</returns>
+        public static TreeNode? BstToGst(TreeNode? root)
+        {
+            int accumulatedSum = 0;
+
+            void Traverse(TreeNode? node)
+            {
+                if (node is null)
+                {
+                    return;
+                }
+
+                // 反向中序確保處理目前節點時，所有比它大的值都已加入累加器。
+                Traverse(node.right);
+                accumulatedSum += node.val;
+                node.val = accumulatedSum;
+                Traverse(node.left);
+            }
+
+            Traverse(root);
+            return root;
+        }
     }
 }
