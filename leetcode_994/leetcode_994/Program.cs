@@ -8,143 +8,237 @@
         /// 994. 腐烂的橘子
         /// https://leetcode.cn/problems/rotting-oranges/description/
         /// </summary>
-        /// <param name="args"></param>
+        /// <remarks>
+        /// 不需要命令列參數；主程式會以七組合法案例分別驗證兩種多源 BFS 解法，
+        /// 並輸出每次檢查的預期值、實際值與 PASS/FAIL 結果。
+        /// </remarks>
+        /// <param name="args">未使用的命令列參數。</param>
         static void Main(string[] args)
         {
-            int[][] input = new int[][]
-            {
-                 new int[]{ 2, 1, 1 },
-                 new int[]{ 1, 1, 0 },
-                 new int[]{ 0, 1, 1 }
-            };
+            SampleCase[] cases =
+            [
+                new("官方範例一：可完全腐爛", [[2, 1, 1], [1, 1, 0], [0, 1, 1]], 4),
+                new("官方範例二：存在不可達橘子", [[2, 1, 1], [0, 1, 1], [1, 0, 1]], -1),
+                new("官方範例三：起始時沒有新鮮橘子", [[0, 2]], 0),
+                new("單一空格", [[0]], 0),
+                new("單一新鮮橘子", [[1]], -1),
+                new("全部已腐爛", [[2, 2], [2, 2]], 0),
+                new("對角多腐爛源", [[2, 1, 1], [1, 1, 1], [1, 1, 2]], 2)
+            ];
 
-            Console.WriteLine("res: " + OrangesRotting(input)); // 4
+            int passedChecks = 0;
+
+            Console.WriteLine("LeetCode 994：腐爛的橘子");
+            Console.WriteLine();
+
+            for (int i = 0; i < cases.Length; i++)
+            {
+                SampleCase sample = cases[i];
+                int actual1 = OrangesRotting(CloneGrid(sample.Grid));
+                int actual2 = OrangesRotting2(CloneGrid(sample.Grid));
+                bool passed1 = actual1 == sample.Expected;
+                bool passed2 = actual2 == sample.Expected;
+
+                passedChecks += passed1 ? 1 : 0;
+                passedChecks += passed2 ? 1 : 0;
+
+                Console.WriteLine($"案例 {i + 1}：{sample.Name}");
+                Console.WriteLine($"輸入：grid = {FormatGrid(sample.Grid)}");
+                Console.WriteLine($"預期：{sample.Expected}");
+                Console.WriteLine($"OrangesRotting：實際 = {actual1}，結果 = {(passed1 ? "PASS" : "FAIL")}");
+                Console.WriteLine($"OrangesRotting2：實際 = {actual2}，結果 = {(passed2 ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"總結：{passedChecks}/{cases.Length * 2} 項驗證通過");
         }
 
-        // dr 和 dc 陣列分別儲存了上、左、下、右四個方向的行和列的偏移量。它們用於遍歷相鄰的單元格。
-        // 列(垂直)
-        static int[] dr = new int[] { -1, 0, 1, 0};
-        // 行(水平)
-        static int[] dc = new int[] { 0, -1, 0, 1 };
+        // 依序表示上、左、下、右，兩個陣列使用相同索引即可得到一組相鄰座標。
+        private static readonly int[] RowOffsets = [-1, 0, 1, 0];
+        private static readonly int[] ColumnOffsets = [0, -1, 0, 1];
 
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/rotting-oranges/solutions/124765/fu-lan-de-ju-zi-by-leetcode-solution/
-        /// https://leetcode.cn/problems/rotting-oranges/solutions/2773461/duo-yuan-bfsfu-ti-dan-pythonjavacgojsrus-yfmh/
-        /// https://leetcode.cn/problems/rotting-oranges/solutions/1862399/by-stormsunshine-6lvs/
-        /// GPT解釋解法步驟
-        /// 
-        /// 廣度優先搜索 (BFS)：BFS 是一種非常適合用於尋找最短路徑的演算法。在這題目中，我們使用 BFS 找到從初始腐爛橘子到其他橘子的最短路徑，即最短的腐爛時間。
-        /// 
-        /// 座標編碼： 使用 r * n + c 這種方式將二維座標轉換為一維編碼，方便儲存和查找。
-        /// 時間複雜度: O(M * N)，其中 M 和 N 分別是橘子矩陣的行數和列數。
-        /// 空間複雜度: O(M * N)，用於儲存佇列和深度資訊。
-        /// 
-        /// -----------------------------------------------------------------------------------------------------------------------------------------------------------
-        /// 座標編碼：將二維座標(2D)轉換為一維編碼(1D)
-        /// 為什麼要進行座標編碼？
-        /// 在許多演算法和資料結構中，我們常常需要將二維空間中的點（例如，圖像中的像素、棋盤上的格子）映射到一維的索引上。這種映射可以簡化資料結構，提高查找效率。
-        /// 編碼 (code) = 行索引 (row) * 網格寬度 (n) + 列索引 (column) 編碼的原理
-        /// 行索引 (row)：代表單元格所在的水平位置，通常從 0 開始編號。
-        /// 列索引 (column)：代表單元格所在的垂直位置，通常從 0 開始編號。
-        /// 網格寬度 (n)：代表網格每一列有多少個單元格。這也等於網格的總列數。
-        /// 這個公式將二維座標 (r, c) 映射到一個唯一的整數 index 上。這個整數可以作為陣列或其他資料結構的索引，從而實現對二維空間的線性存取。
-        /// 為什麼使用 r * n + c 這種方式？
-        /// 簡單直觀： 公式簡單易懂，實現起來也很方便。
-        /// 唯一映射： 每個二維座標都對應一個唯一的編碼，不會產生衝突。
-        /// 高效查找： 通過編碼，可以快速地在一個一維陣列中找到對應的元素。
-        /// 
-        /// 後續如何還原 2D座標
-        /// 1.取得行索引 (row)
-        /// 整數除法結果：  code / n (整數除法) ≈ row
-        /// 實際上，更精確地說，整數除法 code / n 的結果正好等於 行索引 (row)。  
-        /// 因為整數除法會捨去小數部分，所以 (row * n + column) / n 的整數部分就只剩下 row。
-        /// 因此，行索引的解碼公式為：
-        /// 行索引 (row) = 編碼 (code) / 網格寬度 (n)   (整數除法)
-        /// 
-        /// 2.取得列索引 (column)
-        /// 列索引 (column) = 編碼 (code) % 網格寬度 (n)  (取餘數)
-        /// -----------------------------------------------------------------------------------------------------------------------------------------------------------
+        /// 使用座標壓縮與深度字典執行多源廣度優先搜尋。
+        /// 所有初始腐爛橘子都從第 0 分鐘開始，首次抵達新鮮橘子的深度就是它腐爛的最短時間。
+        /// 輸入須為符合題目限制的非空矩形網格，元素只能是 0、1 或 2；
+        /// 回傳全部新鮮橘子腐爛所需的最少分鐘數，若有橘子無法抵達則回傳 -1。
         /// </summary>
-        /// <param name="grid"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// 方法會原地將已腐爛的新鮮橘子由 1 改為 2。時間與額外空間複雜度皆為 O(m × n)。
+        /// 二維座標以 <c>row * columns + column</c> 壓縮，並可用除法及餘數還原。
+        /// </remarks>
+        /// <param name="grid">符合題目限制的橘子網格。</param>
+        /// <returns>全部腐爛的最少分鐘數；無法全部腐爛時回傳 -1。</returns>
         public static int OrangesRotting(int[][] grid)
         {
-            // 行數(水平)
-            int m = grid.Length;
-            // 列數(垂直)
-            int n = grid[0].Length;
-            // 初始化一個隊列 queue 來追蹤腐爛橘子的位置信息（壓縮成單一數字）。
+            int rows = grid.Length;
+            int columns = grid[0].Length;
             Queue<int> queue = new Queue<int>();
-            // key: code, value: depth; 使用字典 depth 來存儲每個橘子變爛的時間（深度）。
             IDictionary<int, int> depth = new Dictionary<int, int>();
 
-            // **步驟 1：將所有初始的腐爛橘子加入佇列**
-            for (int r = 0; r < m; r++)
+            // 多源 BFS 必須讓所有初始腐爛橘子同時位於第 0 層。
+            for (int row = 0; row < rows; row++)
             {
-                for (int c = 0; c < n; c++)
+                for (int column = 0; column < columns; column++)
                 {
-                    // 腐爛的橘子為 2
-                    if (grid[r][c] == 2)
+                    if (grid[row][column] == 2)
                     {
-                        // 對於每個腐爛橘子，計算其位置編碼（r * n + c），將其加入隊列; 壓縮座標（1D 表示法）
-                        int code = r * n + c;
+                        int code = row * columns + column;
                         queue.Enqueue(code);
-                        // ，並將其深度(初始時間)設置為 0。
                         depth.Add(code, 0);
                     }
                 }
             }
 
-            // 最終結果（所有橘子腐爛所需時間）
-            int res = 0;
-            // **步驟 2：開始 BFS 傳播腐爛**
+            int minutes = 0;
+
             while (queue.Count > 0)
             {
-                // 取出當前腐爛的橘子
                 int code = queue.Dequeue();
-                // 還原成 2D 座標 (r, c)
-                int r = code / n;
-                int c = code % n;
-                // 遍歷四個方向（上、左、下、右）
-                for (int i = 0; i < 4; i++)
+                int row = code / columns;
+                int column = code % columns;
+
+                for (int direction = 0; direction < RowOffsets.Length; direction++)
                 {
-                    // 新橘子的 row
-                    int newR = r + dr[i];
-                    // 新橘子的 col
-                    int newC = c + dc[i];
-                    // **條件判斷**：確保新座標有效且為新鮮橘子
-                    if (newR >= 0 && newR < m && newC >= 0 && newC < n && grid[newR][newC] == 1)
+                    int nextRow = row + RowOffsets[direction];
+                    int nextColumn = column + ColumnOffsets[direction];
+
+                    if (nextRow >= 0
+                        && nextRow < rows
+                        && nextColumn >= 0
+                        && nextColumn < columns
+                        && grid[nextRow][nextColumn] == 1)
                     {
-                        // 讓新鮮橘子變成腐爛
-                        grid[newR][newC] = 2;
-                        // 壓縮新座標
-                        int newCode = newR * n + newC;
-                        // 加入 BFS 佇列
-                        queue.Enqueue(newCode);
-                        // 更新腐爛時間
-                        depth.Add(newCode, depth[code] + 1);
-                        // 更新最長時間
-                        res = depth[newCode];
+                        // 入列時立即標記，避免同一顆橘子被不同來源重複加入。
+                        grid[nextRow][nextColumn] = 2;
+                        int nextCode = nextRow * columns + nextColumn;
+                        int nextDepth = depth[code] + 1;
+                        queue.Enqueue(nextCode);
+                        depth.Add(nextCode, nextDepth);
+                        minutes = nextDepth;
                     }
                 }
             }
 
-            // **步驟 3：確認是否還有新鮮橘子**
-            foreach (var row in grid)
+            foreach (int[] row in grid)
             {
-                foreach (var v in row)
+                foreach (int cell in row)
                 {
-                    // 如果還有新鮮橘子
-                    if (v == 1)
+                    if (cell == 1)
                     {
+                        // BFS 結束仍有新鮮橘子，表示它與所有腐爛來源都不連通。
                         return -1;
                     }
                 }
             }
 
-            // 返回總時間
-            return res;
+            return minutes;
         }
+
+        /// <summary>
+        /// 使用逐層佇列與剩餘新鮮橘子計數執行多源廣度優先搜尋。
+        /// 每次處理進入該分鐘前已在佇列中的所有腐爛橘子，完成一層後分鐘數加一。
+        /// 輸入須為符合題目限制的非空矩形網格，元素只能是 0、1 或 2；
+        /// 回傳全部新鮮橘子腐爛所需的最少分鐘數，若最後仍有新鮮橘子則回傳 -1。
+        /// </summary>
+        /// <remarks>
+        /// 方法會原地將已腐爛的新鮮橘子由 1 改為 2。時間與額外空間複雜度皆為 O(m × n)。
+        /// </remarks>
+        /// <param name="grid">符合題目限制的橘子網格。</param>
+        /// <returns>全部腐爛的最少分鐘數；無法全部腐爛時回傳 -1。</returns>
+        public static int OrangesRotting2(int[][] grid)
+        {
+            int rows = grid.Length;
+            int columns = grid[0].Length;
+            Queue<(int Row, int Column)> queue = new Queue<(int Row, int Column)>();
+            int freshCount = 0;
+
+            for (int row = 0; row < rows; row++)
+            {
+                for (int column = 0; column < columns; column++)
+                {
+                    if (grid[row][column] == 2)
+                    {
+                        queue.Enqueue((row, column));
+                    }
+                    else if (grid[row][column] == 1)
+                    {
+                        freshCount++;
+                    }
+                }
+            }
+
+            int minutes = 0;
+
+            // 固定本層數量，確保本分鐘新腐爛的橘子要到下一分鐘才繼續傳播。
+            while (queue.Count > 0 && freshCount > 0)
+            {
+                int currentLevelCount = queue.Count;
+
+                for (int i = 0; i < currentLevelCount; i++)
+                {
+                    (int row, int column) = queue.Dequeue();
+
+                    for (int direction = 0; direction < RowOffsets.Length; direction++)
+                    {
+                        int nextRow = row + RowOffsets[direction];
+                        int nextColumn = column + ColumnOffsets[direction];
+
+                        if (nextRow >= 0
+                            && nextRow < rows
+                            && nextColumn >= 0
+                            && nextColumn < columns
+                            && grid[nextRow][nextColumn] == 1)
+                        {
+                            grid[nextRow][nextColumn] = 2;
+                            freshCount--;
+                            queue.Enqueue((nextRow, nextColumn));
+                        }
+                    }
+                }
+
+                minutes++;
+            }
+
+            return freshCount == 0 ? minutes : -1;
+        }
+
+        /// <summary>
+        /// 深層複製橘子網格，避免會原地修改輸入的演算法污染固定測試資料。
+        /// 輸入須為符合題目限制的非空矩形網格；回傳內容相同且各列皆獨立的新網格。
+        /// </summary>
+        /// <param name="grid">要複製的橘子網格。</param>
+        /// <returns>不與輸入共用任何陣列實例的網格副本。</returns>
+        private static int[][] CloneGrid(int[][] grid)
+        {
+            int[][] clone = new int[grid.Length][];
+
+            for (int row = 0; row < grid.Length; row++)
+            {
+                clone[row] = [.. grid[row]];
+            }
+
+            return clone;
+        }
+
+        /// <summary>
+        /// 將橘子網格轉換成適合 console 與 README 閱讀的巢狀方括號格式。
+        /// 輸入須為符合題目限制的非空矩形網格；回傳例如
+        /// <c>[[2, 1], [1, 0]]</c> 的單行字串，且不會修改輸入。
+        /// </summary>
+        /// <param name="grid">要格式化的橘子網格。</param>
+        /// <returns>以逗號與空格分隔的巢狀方括號字串。</returns>
+        private static string FormatGrid(int[][] grid)
+        {
+            return $"[{string.Join(", ", grid.Select(row => $"[{string.Join(", ", row)}]"))}]";
+        }
+
+        /// <summary>
+        /// 表示一筆固定驗證案例，包含顯示名稱、合法網格及手動推導的預期分鐘數。
+        /// </summary>
+        /// <param name="Name">案例顯示名稱。</param>
+        /// <param name="Grid">符合題目限制的輸入網格。</param>
+        /// <param name="Expected">預期的最少分鐘數，或無法全部腐爛時的 -1。</param>
+        private sealed record SampleCase(string Name, int[][] Grid, int Expected);
     }
 }
