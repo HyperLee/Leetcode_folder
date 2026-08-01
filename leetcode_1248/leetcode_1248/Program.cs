@@ -12,112 +12,142 @@
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            int[] nums = { 1, 1, 2, 1, 1 };
-            int k = 3;
+            (int[] Nums, int K, int Expected)[] cases =
+            [
+                ([1, 1, 2, 1, 1], 3, 2),
+                ([2, 4, 6], 1, 0),
+                ([2, 2, 2, 1, 2, 2, 1, 2, 2, 2], 2, 16),
+                ([1], 1, 1),
+                ([2, 1, 2], 2, 0),
+                ([2, 2, 1, 2, 2], 1, 9),
+                ([1, 3, 5, 7], 2, 3)
+            ];
 
-            Console.WriteLine(NumberOfSubarrays2(nums, k));
-            Console.ReadKey();
+            int passedChecks = 0;
+            int totalChecks = cases.Length * 2;
+
+            for (int i = 0; i < cases.Length; i++)
+            {
+                (int[] nums, int k, int expected) = cases[i];
+                int slidingWindowActual = NumberOfSubarrays([.. nums], k);
+                int oddIndicesActual = NumberOfSubarrays2([.. nums], k);
+                bool slidingWindowPassed = slidingWindowActual == expected;
+                bool oddIndicesPassed = oddIndicesActual == expected;
+
+                if (slidingWindowPassed)
+                {
+                    passedChecks++;
+                }
+
+                if (oddIndicesPassed)
+                {
+                    passedChecks++;
+                }
+
+                Console.WriteLine($"Case {i + 1}: nums = [{string.Join(", ", nums)}], k = {k}");
+                Console.WriteLine($"Expected: {expected}");
+                Console.WriteLine($"NumberOfSubarrays Actual: {slidingWindowActual} => {(slidingWindowPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine($"NumberOfSubarrays2 Actual: {oddIndicesActual} => {(oddIndicesPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"Summary: {passedChecks}/{totalChecks} checks passed.");
+            Environment.ExitCode = passedChecks == totalChecks ? 0 : 1;
         }
 
 
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/count-number-of-nice-subarrays/solutions/211268/tong-ji-you-mei-zi-shu-zu-by-leetcode-solution/
-        /// https://leetcode.cn/problems/count-number-of-nice-subarrays/solutions/1735354/by-stormsunshine-b714/
-        /// 滑動視窗解法
-        /// https://leetcode.cn/problems/count-number-of-nice-subarrays/solutions/213352/hua-dong-chuang-kou-qian-zhui-he-bi-xu-miao-dong-b/
+        /// 使用滑動視窗計算恰好包含 <paramref name="k"/> 個奇數的連續子陣列數量。
+        /// 當視窗包含指定數量的奇數時，分別計算第一個奇數左側與最後一個奇數右側可選的偶數邊界，
+        /// 將兩側選擇數相乘並累加。輸入需符合題目限制：陣列長度為 1 到 50000、元素為 1 到 100000，
+        /// 且 <paramref name="k"/> 介於 1 與陣列長度之間；回傳所有符合條件的非空連續子陣列數量。
         /// </summary>
-        /// <param name="nums"></param>
-        /// <param name="k"></param>
-        /// <returns></returns>
+        /// <param name="nums">要檢查的正整數陣列；此方法不會修改陣列內容。</param>
+        /// <param name="k">每個目標子陣列必須包含的奇數個數。</param>
+        /// <returns>恰好包含 <paramref name="k"/> 個奇數的連續子陣列數量。</returns>
         public static int NumberOfSubarrays(int[] nums, int k)
         {
-            int left = 0, right = 0, oddCount = 0, res = 0;
+            int left = 0;
+            int right = 0;
+            int oddCount = 0;
+            int result = 0;
 
-            while(right < nums.Length)
+            while (right < nums.Length)
             {
-                // 右指針往右走, 遇到奇數就把 oddcount + 1
+                // 擴張右邊界，直到視窗內累積到第 k 個奇數。
                 if ((nums[right++] & 1) == 1)
                 {
                     oddCount++;
                 }
 
-                //  若当前滑动窗口 [left, right) 中有 k 个奇数了，进入此分支统计当前滑动窗口中的优美子数组个数。
                 if (oddCount == k)
                 {
-                    // 先将滑动窗口的右边界向右拓展，直到遇到下一个奇数（或出界）
-                    // rightEvenCnt 即为第 k 个奇数右边的偶数的个数
-                    int tmp = right;
+                    // 第 k 個奇數右側連續偶數的數量，決定合法結尾的選擇數。
+                    int nextOddIndex = right;
                     while (right < nums.Length && (nums[right] & 1) == 0)
                     {
                         right++;
                     }
-                    int rightEvenCnt = right - tmp;
+                    int rightEvenCount = right - nextOddIndex;
 
-                    // leftEvenCnt 即为第 1 个奇数左边的偶数的个数
-                    int leftEvenCnt = 0;
+                    // 第一個奇數左側連續偶數的數量，決定合法起點的選擇數。
+                    int leftEvenCount = 0;
                     while ((nums[left] & 1) == 0)
                     {
-                        leftEvenCnt++;
+                        leftEvenCount++;
                         left++;
                     }
 
-                    // 第 1 个奇数左边的 leftEvenCnt 个偶数都可以作为优美子数组的起点
-                    // (因为第1个奇数左边可以1个偶数都不取，所以起点的选择有 leftEvenCnt + 1 种）
-                    // 第 k 个奇数右边的 rightEvenCnt 个偶数都可以作为优美子数组的终点
-                    // (因为第k个奇数右边可以1个偶数都不取，所以终点的选择有 rightEvenCnt + 1 种）
-                    // 所以该滑动窗口中，优美子数组左右起点的选择组合数为 (leftEvenCnt + 1) * (rightEvenCnt + 1)
-                    res += (leftEvenCnt + 1) * (rightEvenCnt + 1);
+                    // 左右都可以不取偶數，因此各多一種選擇；兩側組合數即為本輪答案。
+                    result += (leftEvenCount + 1) * (rightEvenCount + 1);
 
-                    // 此时 left 指向的是第 1 个奇数，因为该区间已经统计完了，因此 left 右移一位，oddCnt--
+                    // 移除視窗中的第一個奇數，讓下一輪尋找下一組 k 個奇數。
                     left++;
                     oddCount--;
                 }
-
             }
 
-            return res;
-
+            return result;
         }
 
 
         /// <summary>
-        /// https://leetcode.cn/problems/count-number-of-nice-subarrays/solutions/211268/tong-ji-you-mei-zi-shu-zu-by-leetcode-solution/
-        /// 
+        /// 使用奇數索引與頭尾哨兵計算恰好包含 <paramref name="k"/> 個奇數的連續子陣列數量。
+        /// 對每一組連續的 <paramref name="k"/> 個奇數，將第一個奇數與前一個奇數的索引差，
+        /// 乘上最後一個奇數與下一個奇數的索引差。輸入需符合題目限制：陣列長度為 1 到 50000、
+        /// 元素為 1 到 100000，且 <paramref name="k"/> 介於 1 與陣列長度之間；回傳所有合法邊界組合數。
         /// </summary>
-        /// <param name="nums"></param>
-        /// <param name="k"></param>
-        /// <returns></returns>
+        /// <param name="nums">要檢查的正整數陣列；此方法不會修改陣列內容。</param>
+        /// <param name="k">每個目標子陣列必須包含的奇數個數。</param>
+        /// <returns>恰好包含 <paramref name="k"/> 個奇數的連續子陣列數量。</returns>
         public static int NumberOfSubarrays2(int[] nums, int k)
         {
-            int n = nums.Length;
-            // 紀錄奇數index位置, +2分別是頭尾擴大陣列 防止出界
-            int[] odd = new int[n + 2];
-            int ans = 0, cnt = 0;
+            int length = nums.Length;
+            int[] oddIndices = new int[length + 2];
+            int oddCount = 0;
+            int result = 0;
 
-            for(int i = 0; i < n; i++)
+            for (int i = 0; i < length; i++)
             {
-                // 判斷是不是 奇數
                 if ((nums[i] & 1) != 0)
                 {
-                    // 紀錄 每一個奇數下標(index)位置
-                    odd[++cnt] = i;
+                    oddIndices[++oddCount] = i;
                 }
             }
 
-            // 頭 給值, 邊界運算
-            odd[0] = -1;
-            // 尾 給值
-            odd[++cnt] = n;
+            // 頭尾哨兵代表陣列外側邊界，統一首尾兩組奇數的距離計算。
+            oddIndices[0] = -1;
+            oddIndices[oddCount + 1] = length;
 
-            for (int i = 1; i + k <= n; i++)
+            for (int firstOdd = 1; firstOdd + k <= oddCount + 1; firstOdd++)
             {
-                // 左右兩邊[l,r]  計算個數
-                // 對於每個奇數, 計算以他為第一個起始位置能構成的優美子數組 列入答案加總
-                ans += (odd[i] - odd[i - 1]) * (odd[i + k] - odd[i + k - 1]);
+                // 左側索引差是起點選擇數，右側索引差是終點選擇數。
+                int leftChoices = oddIndices[firstOdd] - oddIndices[firstOdd - 1];
+                int rightChoices = oddIndices[firstOdd + k] - oddIndices[firstOdd + k - 1];
+                result += leftChoices * rightChoices;
             }
 
-            return ans;
+            return result;
         }
     }
 }
