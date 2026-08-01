@@ -1,6 +1,4 @@
-﻿using System.Runtime.ExceptionServices;
-
-namespace leetcode_1395
+﻿namespace leetcode_1395
 {
     internal class Program
     {
@@ -17,132 +15,133 @@ namespace leetcode_1395
         /// index 可以是非連續
         /// 
         /// </summary>
-        /// <param name="args"></param>
+        /// <remarks>
+        /// 執行固定測試案例，分別比對三層枚舉與枚舉中間點兩種解法的預期值與實際值。
+        /// 任一檢查失敗時，程式會設定非零結束碼，方便在終端機或自動化環境中驗收。
+        /// </remarks>
+        /// <param name="args">命令列參數；本範例不使用此參數。</param>
         static void Main(string[] args)
         {
-            int[] input = { 1, 2, 3, 4 };
+            var testCases = new (string Name, int[] Rating, int Expected)[]
+            {
+                ("官方範例：遞增與遞減隊伍並存", new[] { 2, 5, 3, 4, 1 }, 3),
+                ("最小長度：無法形成有效隊伍", new[] { 2, 1, 3 }, 0),
+                ("完全遞增", new[] { 1, 2, 3, 4 }, 4),
+                ("完全遞減", new[] { 4, 3, 2, 1 }, 4),
+                ("混合排列", new[] { 1, 3, 2, 4 }, 2)
+            };
 
-            Console.WriteLine("枚舉  方式: " + NumTeams(input));
-            Console.WriteLine("枚舉中間點: " + NumTeams2(input));
-            
-            Console.ReadKey();
+            int passedChecks = 0;
+            int totalChecks = testCases.Length * 2;
+
+            for (int caseIndex = 0; caseIndex < testCases.Length; caseIndex++)
+            {
+                var testCase = testCases[caseIndex];
+                int enumerationActual = NumTeams(testCase.Rating);
+                int middlePointActual = NumTeams2(testCase.Rating);
+                bool enumerationPassed = enumerationActual == testCase.Expected;
+                bool middlePointPassed = middlePointActual == testCase.Expected;
+
+                passedChecks += enumerationPassed ? 1 : 0;
+                passedChecks += middlePointPassed ? 1 : 0;
+
+                Console.WriteLine($"Case {caseIndex + 1}: {testCase.Name}");
+                Console.WriteLine($"Input: [{string.Join(", ", testCase.Rating)}]");
+                Console.WriteLine($"Expected: {testCase.Expected}");
+                Console.WriteLine($"NumTeams  Actual: {enumerationActual} | {(enumerationPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine($"NumTeams2 Actual: {middlePointActual} | {(middlePointPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+            }
+
+            Console.WriteLine($"Summary: {passedChecks}/{totalChecks} checks passed.");
+            Environment.ExitCode = passedChecks == totalChecks ? 0 : 1;
         }
 
-
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/count-number-of-teams/solutions/186425/tong-ji-zuo-zhan-dan-wei-shu-by-leetcode-solution/
-        /// https://leetcode.cn/problems/count-number-of-teams/solutions/1609413/by-ac_oier-qm3a/
-        /// https://leetcode.cn/problems/count-number-of-teams/solutions/1460260/by-flix-3lu9/
-        /// 
-        /// 枚舉方式  將可能組合 都列出來
-        /// 3 個index為一個組合
-        /// 評分組合順序為 遞增 || 遞減
-        /// 符合就 res++
-        /// i, j, k 可為非連續 index.
-        /// 0 <= i < j < k < n
-        /// 
-        /// i, j, k 分段判斷
-        /// 
-        /// 時間複雜度：O(N^3), 3個for迴圈。
-        /// 空間複雜度：O(1)。
+        /// 以三層迴圈枚舉所有索引滿足 <c>i &lt; j &lt; k</c> 的三人組合，
+        /// 計算評分嚴格遞增或嚴格遞減的有效隊伍數量。
+        /// 輸入必須是至少包含三個互異正整數的非 <see langword="null"/> 陣列；回傳所有有效隊伍的總數。
         /// </summary>
-        /// <param name="rating"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// 時間複雜度為 O(n³)，額外空間複雜度為 O(1)，且不會修改輸入陣列。
+        /// </remarks>
+        /// <param name="rating">依站位順序排列的士兵評分，評分值彼此互異。</param>
+        /// <returns>符合嚴格遞增或嚴格遞減條件的三人士兵隊伍數量。</returns>
         public static int NumTeams(int[] rating)
         {
-            int n = rating.Length;
-            int res = 0;
+            int soldierCount = rating.Length;
+            int teamCount = 0;
 
-            for(int i = 0; i < n; i++)
+            for (int i = 0; i < soldierCount; i++)
             {
-                for(int j = i + 1; j < n; j++)
+                for (int j = i + 1; j < soldierCount; j++)
                 {
-                    for(int k = j + 1; k < n; k++)
+                    for (int k = j + 1; k < soldierCount; k++)
                     {
-                        // 評分組合為 遞增 || 遞減 組合, i, j, k 可為非連續
+                        // 索引順序已由迴圈保證，這裡只需檢查三個評分是否保持同一單調方向。
                         if ((rating[i] < rating[j] && rating[j] < rating[k]) || (rating[i] > rating[j] && rating[j] > rating[k]))
                         {
-                            res++;
+                            teamCount++;
                         }
                     }
                 }
             }
 
-            return res;
+            return teamCount;
         }
 
-
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/count-number-of-teams/solutions/186425/tong-ji-zuo-zhan-dan-wei-shu-by-leetcode-solution/
-        /// https://leetcode.cn/problems/count-number-of-teams/solutions/1609413/by-ac_oier-qm3a/
-        /// https://leetcode.cn/problems/count-number-of-teams/solutions/1460260/by-flix-3lu9/
-        /// 
-        /// 枚舉中間點,  以位置 j 來當作中間點(固定不動, 找出會變動的左右兩邊)
-        /// 固定好 j 之後, 接下來有幾種情況. 能找出 遞增 || 遞減
-        /// 1. 位置 j 左方, 出現 評分比 j 還要低的 i_low
-        /// 2. 位置 j 左方, 出現 評分比 j 還要高得 i_height
-        /// 3. 位置 j 右方, 出現 評分比 j 還要低的 k_low
-        /// 4. 位置 j 右方, 出現 評分比 j 還要高的 k_height
-        /// 
-        /// 上述四情況可組合出
-        /// (i_low, j, k_height) => 遞增
-        /// (i_height, j, k_low) => 遞減
-        /// 
-        /// 時間複雜度：O(N^2), 2個for迴圈
-        /// 空間複雜度：O(1)。
+        /// 依序固定每個中間位置 <c>j</c>，統計其左右兩側較低與較高的評分數量，
+        /// 以乘法原理加總嚴格遞增與嚴格遞減的隊伍組合。
+        /// 輸入必須是至少包含三個互異正整數的非 <see langword="null"/> 陣列；回傳所有有效隊伍的總數。
         /// </summary>
-        /// <param name="rating"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// 時間複雜度為 O(n²)，額外空間複雜度為 O(1)，且不會修改輸入陣列。
+        /// </remarks>
+        /// <param name="rating">依站位順序排列的士兵評分，評分值彼此互異。</param>
+        /// <returns>符合嚴格遞增或嚴格遞減條件的三人士兵隊伍數量。</returns>
         public static int NumTeams2(int[] rating)
         {
-            int n = rating.Length;
-            int res = 0;
+            int soldierCount = rating.Length;
+            int teamCount = 0;
 
-            // i 在 j 前面, 故從 1 開始
-            // j 後面還有k, 故 n - 1
-            for(int j = 1; j < n - 1; j++)
+            // 中間點必須同時保留左、右兩側各至少一位士兵。
+            for (int j = 1; j < soldierCount - 1; j++)
             {
-                int i_low = 0, i_high = 0;
-                int k_low = 0, k_high = 0;
+                int leftLowerCount = 0;
+                int leftHigherCount = 0;
+                int rightLowerCount = 0;
+                int rightHigherCount = 0;
 
-                // 找出 i 的 遞增與遞減, i 在 j 前面
-                for(int i = 0; i < j; i++)
+                for (int i = 0; i < j; i++)
                 {
                     if (rating[i] < rating[j])
                     {
-                        // 遞增
-                        i_low++;
+                        leftLowerCount++;
                     }
                     else if (rating[i] > rating[j])
                     {
-                        // 遞減
-                        i_high++;
+                        leftHigherCount++;
                     }
                 }
 
-                // 找出 k 的 遞減與遞增, k 在 j 後面
-                for (int k = j + 1; k < n; k++)
+                for (int k = j + 1; k < soldierCount; k++)
                 {
                     if (rating[k] < rating[j])
                     {
-                        // 遞減
-                        k_low++;
+                        rightLowerCount++;
                     }
                     else if (rating[k] > rating[j])
                     {
-                        // 遞增
-                        k_high++;
+                        rightHigherCount++;
                     }
                 }
 
-                // 計算組合數量 先乘法在相加
-                res += i_low * k_high + i_high * k_low;
+                // 左低×右高形成遞增隊伍；左高×右低形成遞減隊伍。
+                teamCount += leftLowerCount * rightHigherCount + leftHigherCount * rightLowerCount;
             }
 
-            return res;
+            return teamCount;
         }
-
     }
 }
