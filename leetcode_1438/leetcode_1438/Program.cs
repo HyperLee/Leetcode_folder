@@ -8,67 +8,193 @@
         /// 1438. 绝对差不超过限制的最长连续子数组
         /// https://leetcode.cn/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/description/
         /// </summary>
-        /// <param name="args"></param>
+        /// <remarks>
+        /// 執行固定的題目範例與回歸案例，逐一比較三種解法的結果，並以程序結束碼表示是否全部通過。
+        /// </remarks>
+        /// <param name="args">主控台啟動參數；本範例不使用外部輸入。</param>
         static void Main(string[] args)
         {
-            int[] input = { 8, 2, 4, 7 };
-            int limit = 4;
-
-            Console.WriteLine(LongestSubarray(input, limit));
+            int failedCases = RunSamples();
+            Environment.ExitCode = failedCases == 0 ? 0 : 1;
         }
 
-
         /// <summary>
+        /// 執行固定測試資料，確認每種解法都回傳題目要求的最長合法連續子陣列長度。
+        /// </summary>
+        /// <returns>失敗案例數；全部通過時回傳 0。</returns>
+        private static int RunSamples()
+        {
+            var testCases = new[]
+            {
+                (Name: "Example 1", Nums: new[] { 8, 2, 4, 7 }, Limit: 4, Expected: 2),
+                (Name: "Example 2", Nums: new[] { 10, 1, 2, 4, 7, 2 }, Limit: 5, Expected: 4),
+                (Name: "Example 3", Nums: new[] { 4, 2, 2, 2, 4, 4, 2, 2 }, Limit: 0, Expected: 3),
+                (Name: "Single element", Nums: new[] { 5 }, Limit: 0, Expected: 1),
+                (Name: "Duplicate values", Nums: new[] { 2, 2, 2, 2 }, Limit: 0, Expected: 4),
+                (Name: "All values valid", Nums: new[] { 1, 3, 2, 4 }, Limit: 3, Expected: 4),
+                (Name: "Regression - middle value reconnect", Nums: new[] { 1, 10, 5 }, Limit: 5, Expected: 2),
+                (Name: "Empty input", Nums: Array.Empty<int>(), Limit: 0, Expected: 0)
+            };
+
+            int failedCases = 0;
+
+            foreach (var testCase in testCases)
+            {
+                int monotonicQueueActual = LongestSubarray(testCase.Nums, testCase.Limit);
+                int sortedSetActual = LongestSubarrayWithSortedSet(testCase.Nums, testCase.Limit);
+                int bruteForceActual = LongestSubarrayBruteForce(testCase.Nums, testCase.Limit);
+                bool passed = monotonicQueueActual == testCase.Expected
+                    && sortedSetActual == testCase.Expected
+                    && bruteForceActual == testCase.Expected;
+
+                Console.WriteLine(
+                    $"[{testCase.Name}] nums=[{string.Join(", ", testCase.Nums)}], limit={testCase.Limit}; "
+                    + $"Expected={testCase.Expected}; LongestSubarray={monotonicQueueActual}; "
+                    + $"LongestSubarrayWithSortedSet={sortedSetActual}; "
+                    + $"LongestSubarrayBruteForce={bruteForceActual}; {(passed ? "PASS" : "FAIL")}");
+
+                if (!passed)
+                {
+                    failedCases++;
+                }
+            }
+
+            Console.WriteLine($"Summary: {testCases.Length - failedCases}/{testCases.Length} cases passed.");
+            return failedCases;
+        }
+        /// <summary>
+        /// 使用兩個單調佇列維護滑動視窗中的最大值與最小值，回傳符合最大差值限制的最長連續子陣列長度。
+        /// 當視窗超過限制時，移動左界並移除過期索引；每個索引最多進出各佇列一次，因此整體為 O(n)。
+        /// </summary>
+        /// <remarks>
         /// https://leetcode.cn/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/solutions/1767774/by-chusep-knqg/
         /// https://leetcode.cn/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/solutions/612773/he-gua-de-shu-ju-jie-gou-hua-dong-chuang-v46j/
         /// https://leetcode.cn/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/solutions/230223/longest-continuous-subarray-by-ikaruga/
         /// https://leetcode.cn/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/solutions/612688/jue-dui-chai-bu-chao-guo-xian-zhi-de-zui-5bki/
-        /// </summary>
-        /// <param name="nums"></param>
-        /// <param name="limit"></param>
-        /// <returns></returns>
+        /// </remarks>
+        /// <param name="nums">待檢查的整數陣列；依題目限制至少包含一個元素。</param>
+        /// <param name="limit">子陣列中最大值與最小值的差值上限。</param>
+        /// <returns>符合限制的最長非空連續子陣列長度；空陣列時回傳 0。</returns>
         public static int LongestSubarray(int[] nums, int limit)
         {
-            int max = 0;
-            int min = int.MaxValue;
-            int n = nums.Length;
-            int res = 0;
-
-            for(int i = 0, start = 0; i < n; i++)
+            if (nums.Length == 0)
             {
-                // 初始化/每輪更新 最大最小數值
-                min = Math.Min(min, nums[i]);
-                max = Math.Max(max, nums[i]);
-
-                // 當絕對差值超過 limit時候
-                if(max - min > limit)
-                {
-                    // 將滑動視窗 起始點移動至 i(想像成視窗往右移動)
-                    // , 因位置移動, 所以需要更新最大最小數值
-                    start = i;
-                    min = nums[i];
-                    max = nums[i];
-
-                    // 不斷將開始位置往前(左邊界移動)推到超過limit位置
-                    while (Math.Abs(nums[i] - nums[start]) <= limit)
-                    {
-                        // 視窗右邊走到 nums[i]位置, 此時更新視窗左邊位置
-                        // 視窗右邊界固定不動 nums[i], 此時開始更新視窗左邊界
-                        // 找出視窗內合乎 絕對差值內的. 更新最大最小數值
-                        max = Math.Max(max, nums[start]);
-                        min = Math.Min (min, nums[start]);
-                        start--;
-                    }
-
-                    // 開始位置為不滿足時的最後一位
-                    start++;
-                }
-
-                // 更新結果, 長度為當前位置扣除子數組開始時候位置+1
-                res = Math.Max(res, i - start + 1);
+                return 0;
             }
 
-            return res;
+            var maxDeque = new LinkedList<int>();
+            var minDeque = new LinkedList<int>();
+            int left = 0;
+            int best = 0;
+
+            for (int right = 0; right < nums.Length; right++)
+            {
+                // 保持最大值佇列遞減、最小值佇列遞增；被新值支配的索引不必再保留。
+                while (maxDeque.Last is not null && nums[maxDeque.Last.Value] <= nums[right])
+                {
+                    maxDeque.RemoveLast();
+                }
+
+                maxDeque.AddLast(right);
+
+                while (minDeque.Last is not null && nums[minDeque.Last.Value] >= nums[right])
+                {
+                    minDeque.RemoveLast();
+                }
+
+                minDeque.AddLast(right);
+
+                // 任意兩元素的最大絕對差等於 max - min；超限時只需右移左界恢復合法性。
+                while (left <= right
+                    && (long)nums[maxDeque.First!.Value] - nums[minDeque.First!.Value] > limit)
+                {
+                    // 左界離開視窗時，只有位於佇列首端的索引需要同步移除。
+                    if (maxDeque.First!.Value == left)
+                    {
+                        maxDeque.RemoveFirst();
+                    }
+
+                    if (minDeque.First!.Value == left)
+                    {
+                        minDeque.RemoveFirst();
+                    }
+
+                    left++;
+                }
+
+                best = Math.Max(best, right - left + 1);
+            }
+
+            return best;
+        }
+
+        /// <summary>
+        /// 使用可排序集合維護滑動視窗中的所有值，透過集合首尾取得最小值與最大值，回傳最長合法連續子陣列長度。
+        /// 此方法以值與索引組成唯一項目，因此能正確保留重複值；每次加入或移除元素的成本為 O(log n)。
+        /// </summary>
+        /// <param name="nums">待檢查的整數陣列；依題目限制至少包含一個元素。</param>
+        /// <param name="limit">子陣列中最大值與最小值的差值上限。</param>
+        /// <returns>符合限制的最長非空連續子陣列長度；空陣列時回傳 0。</returns>
+        public static int LongestSubarrayWithSortedSet(int[] nums, int limit)
+        {
+            if (nums.Length == 0)
+            {
+                return 0;
+            }
+
+            var window = new SortedSet<(int Value, int Index)>();
+            int left = 0;
+            int best = 0;
+
+            for (int right = 0; right < nums.Length; right++)
+            {
+                // 索引是值相同時的第二排序鍵，讓 SortedSet 不會合併重複元素。
+                window.Add((nums[right], right));
+
+                while (window.Count > 0
+                    && (long)window.Max.Value - window.Min.Value > limit)
+                {
+                    window.Remove((nums[left], left));
+                    left++;
+                }
+
+                best = Math.Max(best, right - left + 1);
+            }
+
+            return best;
+        }
+
+        /// <summary>
+        /// 枚舉每個可能的左界並逐步延伸右界，直接維護目前範圍的最小值與最大值，作為容易理解的正確性基準解。
+        /// 當目前範圍已超過限制時，繼續延伸只會讓範圍更差，因此可提早停止該左界的搜尋；最壞時間複雜度為 O(n²)。
+        /// </summary>
+        /// <param name="nums">待檢查的整數陣列；依題目限制至少包含一個元素。</param>
+        /// <param name="limit">子陣列中最大值與最小值的差值上限。</param>
+        /// <returns>符合限制的最長非空連續子陣列長度；空陣列時回傳 0。</returns>
+        public static int LongestSubarrayBruteForce(int[] nums, int limit)
+        {
+            int best = 0;
+
+            for (int left = 0; left < nums.Length; left++)
+            {
+                int currentMin = nums[left];
+                int currentMax = nums[left];
+
+                for (int right = left; right < nums.Length; right++)
+                {
+                    currentMin = Math.Min(currentMin, nums[right]);
+                    currentMax = Math.Max(currentMax, nums[right]);
+
+                    if ((long)currentMax - currentMin > limit)
+                    {
+                        break;
+                    }
+
+                    best = Math.Max(best, right - left + 1);
+                }
+            }
+
+            return best;
         }
     }
 }
