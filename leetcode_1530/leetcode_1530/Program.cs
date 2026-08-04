@@ -21,6 +21,12 @@
         /// https://leetcode.com/problems/number-of-good-leaf-nodes-pairs/description/?envType=daily-question&envId=2024-07-18
         /// 1530. 好叶子节点对的数量
         /// https://leetcode.cn/problems/number-of-good-leaf-nodes-pairs/description/
+        /// <para>English:</para>
+        /// You are given the root of a binary tree and an integer distance. A pair of two different leaf nodes of a binary tree is said to be good if the length of the shortest path between them is less than or equal to distance.
+        /// Return the number of good leaf node pairs in the tree.
+        /// <para>繁體中文：</para>
+        /// 給定一棵二元樹的根節點 root，以及一個整數 distance。若一對由兩個不同葉節點組成的節點，其間最短路徑的長度小於或等於 distance，則稱這一對為「好葉節點對」。
+        /// 回傳樹中好葉節點對的數量。
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
@@ -34,7 +40,6 @@
             int distance = 3;
 
             Console.WriteLine(CountPairs(root, distance));
-            Console.ReadKey();
         }
 
         // 計算 有幾對
