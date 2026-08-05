@@ -33,7 +33,139 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new();
+        (string Name, int N, int K, int[][] Invocations, int[] Expected)[] testCases =
+        [
+            (
+                "Example 1 - external callers block removal",
+                4,
+                1,
+                new int[][]
+                {
+                    new[] { 1, 2 },
+                    new[] { 0, 1 },
+                    new[] { 3, 2 }
+                },
+                new[] { 0, 1, 2, 3 }
+            ),
+            (
+                "Example 2 - suspicious group can be removed",
+                5,
+                0,
+                new int[][]
+                {
+                    new[] { 1, 2 },
+                    new[] { 0, 2 },
+                    new[] { 0, 1 },
+                    new[] { 3, 4 }
+                },
+                new[] { 3, 4 }
+            ),
+            (
+                "Example 3 - every method is suspicious",
+                3,
+                2,
+                new int[][]
+                {
+                    new[] { 1, 2 },
+                    new[] { 0, 1 },
+                    new[] { 2, 0 }
+                },
+                Array.Empty<int>()
+            ),
+            (
+                "Boundary - no invocations",
+                5,
+                2,
+                Array.Empty<int[]>(),
+                new[] { 0, 1, 3, 4 }
+            ),
+            (
+                "Boundary - suspicious cycle has an external caller",
+                4,
+                2,
+                new int[][]
+                {
+                    new[] { 2, 3 },
+                    new[] { 3, 2 },
+                    new[] { 0, 2 }
+                },
+                new[] { 0, 1, 2, 3 }
+            )
+        ];
+
+        int passed = 0;
+        foreach ((string name, int n, int k, int[][] invocations, int[] expected) in testCases)
+        {
+            passed += RunTestCase(solution, name, n, k, invocations, expected);
+        }
+
+        Console.WriteLine($"Summary: {passed}/{testCases.Length * 2} passed.");
+    }
+
+    /// <summary>
+    /// 執行一組固定圖案例，分別呼叫 DFS 與 BFS 兩種解法，並以排序後的節點集合比較結果。
+    /// 輸入必須符合題目限制：方法數量介於 1 到 100000，k 是合法方法編號，且 invocation
+    /// 的端點都落在方法範圍內。此 runner 會列印預期結果、兩種實際結果與 PASS/FAIL，並回傳
+    /// 通過的解法數量。
+    /// </summary>
+    /// <param name="solution">包含兩種解法的 <see cref="Program"/> 實例。</param>
+    /// <param name="name">顯示在主控台上的案例名稱。</param>
+    /// <param name="n">專案中的方法總數。</param>
+    /// <param name="k">已知有 bug 的起始方法編號。</param>
+    /// <param name="invocations">有向呼叫邊，每條邊表示來源方法呼叫目標方法。</param>
+    /// <param name="expected">此案例預期留下的方法編號；順序不影響比較。</param>
+    /// <returns>兩種解法中通過驗證的數量，範圍為 0 到 2。</returns>
+    private static int RunTestCase(
+        Program solution,
+        string name,
+        int n,
+        int k,
+        int[][] invocations,
+        int[] expected)
+    {
+        IList<int> dfsResult = solution.RemainingMethods(n, k, CloneInvocations(invocations));
+        IList<int> bfsResult = solution.RemainingMethods2(n, k, CloneInvocations(invocations));
+        bool dfsPassed = MethodsMatch(dfsResult, expected);
+        bool bfsPassed = MethodsMatch(bfsResult, expected);
+
+        Console.WriteLine($"{name}: Expected = {FormatMethods(expected)}");
+        Console.WriteLine($"  RemainingMethods:  Actual = {FormatMethods(dfsResult)} ({(dfsPassed ? "PASS" : "FAIL")})");
+        Console.WriteLine($"  RemainingMethods2: Actual = {FormatMethods(bfsResult)} ({(bfsPassed ? "PASS" : "FAIL")})");
+        Console.WriteLine();
+
+        return (dfsPassed ? 1 : 0) + (bfsPassed ? 1 : 0);
+    }
+
+    /// <summary>
+    /// 比較兩組方法編號集合。題目允許答案以任意順序回傳，因此比較前會先排序。
+    /// </summary>
+    /// <param name="actual">解法實際回傳的方法編號。</param>
+    /// <param name="expected">案例預期的方法編號。</param>
+    /// <returns>兩組集合內容相同時回傳 <see langword="true"/>，否則回傳 <see langword="false"/>。</returns>
+    private static bool MethodsMatch(IEnumerable<int> actual, IEnumerable<int> expected)
+    {
+        return actual.OrderBy(method => method).SequenceEqual(expected.OrderBy(method => method));
+    }
+
+    /// <summary>
+    /// 複製 invocation 的每條邊，讓兩種解法在 runner 中使用彼此獨立的輸入資料。
+    /// </summary>
+    /// <param name="invocations">原始有向呼叫邊。</param>
+    /// <returns>內容相同但內層陣列獨立的新 invocation 陣列。</returns>
+    private static int[][] CloneInvocations(int[][] invocations)
+    {
+        return invocations.Select(edge => edge.ToArray()).ToArray();
+    }
+
+    /// <summary>
+    /// 將方法編號集合格式化成升冪的主控台文字，方便閱讀與 README transcript 對照。
+    /// </summary>
+    /// <param name="methods">要格式化的方法編號集合。</param>
+    /// <returns>例如 <c>[0, 1, 2]</c> 的文字結果。</returns>
+    private static string FormatMethods(IEnumerable<int> methods)
+    {
+        return $"[{string.Join(", ", methods.OrderBy(method => method))}]";
     }
 
     /// <summary>
@@ -47,11 +179,15 @@ class Program
     /// 2. 遍历 invocations，如果存在从「非可疑方法」到「可疑方法」的边，则删除后无法编译，返回数组 [0,1,2,⋯,n−1]。
     /// 3. 否则可以正常删除，把非可疑方法加入答案。
     /// 注意：图中可能有环，为避免 DFS 无限递归下去，只需 DFS 没有访问过（没有被标记）的节点。
+    ///
+    /// 本方法先建立有向鄰接表，再從 k 遞迴找出所有可疑方法，最後掃描呼叫邊判斷是否有
+    /// 非可疑方法呼叫可疑方法。輸入必須符合題目限制：1 <= n <= 100000、0 <= k < n，
+    /// 且每條邊的端點都落在 [0, n - 1]。若可疑方法能被安全移除，回傳其餘方法；否則回傳全部方法。
     /// </summary>
-    /// <param name="n"></param>
-    /// <param name="k"></param>
-    /// <param name="invocations"></param>
-    /// <returns></returns>
+    /// <param name="n">專案中的方法數量。</param>
+    /// <param name="k">已知有 bug 的起始方法編號。</param>
+    /// <param name="invocations">有向呼叫邊陣列，<c>[a, b]</c> 表示方法 a 呼叫方法 b。</param>
+    /// <returns>可移除可疑方法時回傳剩餘方法；若存在外部呼叫則回傳所有方法。</returns>
     public IList<int> RemainingMethods(int n, int k, int[][] invocations)
     {
         var graph = new List<int>[n];
@@ -98,22 +234,18 @@ class Program
     }
 
     /// <summary>
-    /// DFS 遍历图，标记所有可疑方法
+    /// 從指定節點沿著有向邊遞迴探索，標記所有可直接或間接到達的可疑方法。
+    /// graph 必須以方法編號為索引，isSuspicious 用來記錄已訪問節點，避免圖中的環造成重複走訪或無限遞迴。
     /// </summary>
-    /// <param name="node"></param>
-    /// <param name="graph"></param>
-    /// <param name="isSuspicious"></param> <summary>
-    /// 
-    /// </summary>
-    /// <param name="node"></param>
-    /// <param name="graph"></param>
-    /// <param name="isSuspicious"></param>
+    /// <param name="node">目前要探索的方法編號。</param>
+    /// <param name="graph">以來源方法編號索引的有向鄰接表。</param>
+    /// <param name="isSuspicious">長度為 n 的訪問標記陣列，會直接更新可疑方法狀態。</param>
     private void DFS(int node, List<int>[] graph, bool[] isSuspicious)
     {
         isSuspicious[node] = true;
         foreach(int neighbor in graph[node])
         {
-            // 避免重複走訪及無限遞迴
+            // 只遞迴尚未標記的節點，讓 DFS 能安全處理重疊路徑與有向環。
             if(!isSuspicious[neighbor])
             {
                 DFS(neighbor, graph, isSuspicious);
@@ -137,12 +269,17 @@ class Program
     /// 最后按题意，分为两种情况处理：
     /// 如果没有其他任何节点能达到这些「可疑方法」，那么就返回移除这些节点后剩余的节点。
     /// 否则就返回全部节点。
-    /// 
+    ///
+    /// 本方法使用 BFS 找出可疑集合，同時將可疑來源所使用的邊從入度中扣除；BFS 結束後，
+    /// 可疑節點仍保有的入度只代表來自非可疑方法的外部呼叫。輸入必須符合題目限制：
+    /// 1 <= n <= 100000、0 <= k < n，且 invocation 端點皆在合法方法範圍內；成功時回傳非可疑方法，
+    /// 失敗時回傳全部方法。
+    ///
     /// </summary>
-    /// <param name="n"></param>
-    /// <param name="k"></param>
-    /// <param name="invocations"></param>
-    /// <returns></returns>
+    /// <param name="n">專案中的方法數量。</param>
+    /// <param name="k">已知有 bug 的起始方法編號。</param>
+    /// <param name="invocations">有向呼叫邊陣列，<c>[a, b]</c> 表示方法 a 呼叫方法 b。</param>
+    /// <returns>可移除可疑方法時回傳剩餘方法；若存在外部呼叫則回傳所有方法。</returns>
     public IList<int> RemainingMethods2(int n, int k, int[][] invocations)
     {
         List<int>[] edges = new List<int>[n];
@@ -151,6 +288,7 @@ class Program
         }
         int[] inDegree = new int[n];
 
+        // 先記錄完整入度；BFS 處理可疑來源時會扣除可疑區域內的邊，留下外部呼叫數量。
         foreach (var inv in invocations) {
             edges[inv[0]].Add(inv[1]);
             inDegree[inv[1]]++;
@@ -166,6 +304,7 @@ class Program
             foreach (int v in edges[u]) {
                 inDegree[v]--;
 
+                // 每個節點只入隊一次；即使圖中有環，也只會標記一次並終止。
                 if (!suspicious[v]) {
                     queue.Enqueue(v);
                     suspicious[v] = true;
@@ -176,6 +315,7 @@ class Program
         bool canRemoveAll = true;
         List<int> remaining = new List<int>();
 
+        // 可疑節點仍有入度，表示有未刪除的方法呼叫它，整個可疑集合不能移除。
         for (int i = 0; i < n; i++) {
             if (suspicious[i] && inDegree[i] > 0) {
                 canRemoveAll = false;
