@@ -8,90 +8,201 @@
         /// 1791. 找出星型图的中心节点
         /// https://leetcode.cn/problems/find-center-of-star-graph/description/
         /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        /// <remarks>
+        /// 執行五組固定案例，比較三種尋找中心點的解法，並驗證所有解法都不會修改輸入陣列。
+        /// </remarks>
+        /// <param name="args">命令列參數；本範例不使用。</param>
+        private static void Main(string[] args)
         {
-            int[][] input = new int[][]
+            int passedChecks = 0;
+            int totalChecks = 0;
+
+            AddResult(RunCase(
+                "官方範例一",
+                new[] { new[] { 1, 2 }, new[] { 2, 3 }, new[] { 4, 2 } },
+                2));
+            AddResult(RunCase(
+                "官方範例二",
+                new[] { new[] { 1, 2 }, new[] { 5, 1 }, new[] { 1, 3 }, new[] { 1, 4 } },
+                1));
+            AddResult(RunCase(
+                "最小星型圖：中心在第一欄",
+                new[] { new[] { 2, 1 }, new[] { 2, 3 } },
+                2));
+            AddResult(RunCase(
+                "最小星型圖：中心在第二欄",
+                new[] { new[] { 1, 3 }, new[] { 2, 3 } },
+                3));
+            AddResult(RunCase(
+                "邊順序與中心位置交錯",
+                new[]
+                {
+                    new[] { 6, 3 },
+                    new[] { 1, 3 },
+                    new[] { 3, 5 },
+                    new[] { 2, 3 },
+                    new[] { 3, 4 }
+                },
+                3));
+
+            Console.WriteLine($"Summary: {passedChecks}/{totalChecks} checks passed.");
+            Environment.ExitCode = passedChecks == totalChecks ? 0 : 1;
+
+            void AddResult((int Passed, int Total) result)
             {
-                 new int[]{ 1, 2 },
-                 new int[]{ 2, 3 },
-                 new int[]{ 4, 2 }
-            };
-
-            Console.WriteLine(FindCenter2(input));
-            Console.ReadKey();
-
+                passedChecks += result.Passed;
+                totalChecks += result.Total;
+            }
         }
 
+        /// <summary>
+        /// 執行一組合法星型圖測試資料，依序驗證三種主要解法的答案與輸入保持不變契約。
+        /// </summary>
+        /// <param name="name">顯示於主控台的案例名稱。</param>
+        /// <param name="edges">描述合法星型圖的邊集合，每條邊包含兩個不同節點。</param>
+        /// <param name="expected">預期的中心節點編號。</param>
+        /// <returns>本案例通過的檢查數與總檢查數。</returns>
+        private static (int Passed, int Total) RunCase(string name, int[][] edges, int expected)
+        {
+            (string Name, Func<int[][], int> Solver)[] solutions =
+            {
+                (nameof(FindCenter), FindCenter),
+                (nameof(FindCenter2), FindCenter2),
+                (nameof(FindCenter3), FindCenter3)
+            };
+            int passedChecks = 0;
 
+            Console.WriteLine($"Case: {name}");
+            Console.WriteLine($"Edges: {FormatEdges(edges)}");
+            Console.WriteLine($"Expected: {expected}");
+
+            foreach ((string solutionName, Func<int[][], int> solver) in solutions)
+            {
+                int[][] solutionInput = CloneEdges(edges);
+                int actual = solver(solutionInput);
+                bool resultPassed = actual == expected;
+                bool inputPreserved = EdgesEqual(solutionInput, edges);
+                bool solutionPassed = resultPassed && inputPreserved;
+
+                passedChecks += resultPassed ? 1 : 0;
+                passedChecks += inputPreserved ? 1 : 0;
+                Console.WriteLine(
+                    $"{solutionName,-11} Actual: {actual} | Input preserved: {inputPreserved} | "
+                    + (solutionPassed ? "PASS" : "FAIL"));
+            }
+
+            Console.WriteLine();
+            return (passedChecks, solutions.Length * 2);
+        }
 
         /// <summary>
-        /// 中心點就是在每一條邊上都會出現的數字
-        /// 假設有3條邊, 輸入的陣列中 找出一個出現3次的數字 就是中心點
-        /// 
-        /// 1.利用Dic來統計陣列中的每一個數字
-        /// 2.找出 出現的次數與 edges陣列 長度一致的 就是中心點
-        /// 
-        /// 這方法比較慢, 因為全部跑過一輪
+        /// 深層複製星型圖的邊集合，讓每種解法取得互不影響的合法輸入資料。
         /// </summary>
-        /// <param name="edges"></param>
-        /// <returns></returns>
+        /// <param name="edges">要複製的邊集合。</param>
+        /// <returns>外層與每條內層邊陣列皆為新實例的副本。</returns>
+        private static int[][] CloneEdges(int[][] edges)
+        {
+            return edges.Select(edge => (int[])edge.Clone()).ToArray();
+        }
+
+        /// <summary>
+        /// 比較兩份邊集合的維度、順序與節點值是否完全相同。
+        /// </summary>
+        /// <param name="left">第一份邊集合。</param>
+        /// <param name="right">第二份邊集合。</param>
+        /// <returns>兩份邊集合內容完全相同時為 <see langword="true"/>，否則為 <see langword="false"/>。</returns>
+        private static bool EdgesEqual(int[][] left, int[][] right)
+        {
+            return left.Length == right.Length
+                && left.Zip(right, (leftEdge, rightEdge) => leftEdge.SequenceEqual(rightEdge)).All(equal => equal);
+        }
+
+        /// <summary>
+        /// 將邊集合格式化為容易閱讀且可重複比對的巢狀方括號表示法。
+        /// </summary>
+        /// <param name="edges">要顯示的邊集合。</param>
+        /// <returns>例如 <c>[[1, 2], [2, 3], [4, 2]]</c> 的字串。</returns>
+        private static string FormatEdges(int[][] edges)
+        {
+            return $"[{string.Join(", ", edges.Select(edge => $"[{string.Join(", ", edge)}]"))}]";
+        }
+
+        /// <summary>
+        /// 以字典統計每個節點出現在邊集合中的次數，找出合法星型圖的中心節點。輸入必須描述
+        /// 一個至少三個節點的合法星型圖，每條邊必須包含兩個不同節點；方法不修改輸入，並回傳
+        /// 唯一出現在全部 <paramref name="edges"/> 中的節點編號。
+        /// </summary>
+        /// <remarks>
+        /// 中心點與其餘每個節點相連，因此出現次數必定等於邊數。時間複雜度為 O(n)，字典所需的
+        /// 額外空間複雜度為 O(n)。
+        /// </remarks>
+        /// <param name="edges">合法星型圖的邊集合；每條邊由兩個節點編號組成。</param>
+        /// <returns>星型圖的中心節點編號。</returns>
         public static int FindCenter(int[][] edges)
         {
-            Dictionary<int, int> dic = new Dictionary<int, int>();
+            Dictionary<int, int> nodeOccurrences = new();
 
-            // 兩組foreach統計 輸入陣列裡面每個數值
-            foreach (var edge in edges) 
+            foreach (int[] edge in edges)
             {
-                foreach (var node in edge)
+                foreach (int node in edge)
                 {
-                    if(!dic.ContainsKey(node))
-                    {
-                        dic.Add(node, 1);
-                    }
-                    else
-                    {
-                        dic[node]++;
-                    }
+                    nodeOccurrences[node] = nodeOccurrences.GetValueOrDefault(node) + 1;
                 }
             }
 
-            // 找出dic裡面累計的次數與edges數量一致者
-            foreach (var edge in dic)
+            // 中心節點是唯一出現在每一條邊的節點，因此其累計次數會等於總邊數。
+            foreach (KeyValuePair<int, int> occurrence in nodeOccurrences)
             {
-                if(edge.Value == edges.Length)
+                if (occurrence.Value == edges.Length)
                 {
-                    return edge.Key;
+                    return occurrence.Key;
                 }
             }
 
+            // 題目保證輸入是合法星型圖；此回傳值只作為契約遭破壞時的防禦性結果。
             return -1;
         }
 
-
         /// <summary>
-        /// https://leetcode.cn/problems/find-center-of-star-graph/solutions/1264727/zhao-chu-xing-xing-tu-de-zhong-xin-jie-d-1xzm/
-        /// https://leetcode.cn/problems/find-center-of-star-graph/solutions/1273588/gong-shui-san-xie-jian-dan-mo-ni-ti-by-a-qoix/
-        /// https://leetcode.cn/problems/find-center-of-star-graph/solutions/1273639/fu-xue-ming-zhu-xue-hui-ti-mu-bei-hou-de-5b52/
-        /// https://leetcode.cn/problems/find-center-of-star-graph/solutions/915242/c-ha-xi-ji-shu-by-bloodborne-6g4g/
-        /// 
-        /// 
-        /// 優化解法, 不需要全部的邊都走過一次
-        /// 只需要統計兩條邊即可
-        /// 兩條邊都出現同樣的數字, 就是中心點
-        /// 
-        /// 假設有以下兩條邊
-        /// (a, b) 與 (c, d)
-        /// 用a去跟第二組對比
-        /// 假如 a = c or a = d 那 中心點就是a
-        /// 否則就是 b
+        /// 比較前兩條邊的端點，直接找出合法星型圖的中心節點。輸入必須描述至少三個節點的
+        /// 合法星型圖，因此至少存在兩條邊；方法不修改輸入，並回傳兩條邊唯一共有的節點編號。
         /// </summary>
-        /// <param name="edges"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// 星型圖任意兩條邊都共享中心節點，只需固定次數的比較。時間與額外空間複雜度皆為 O(1)。
+        /// </remarks>
+        /// <param name="edges">合法星型圖的邊集合；至少包含兩條邊。</param>
+        /// <returns>前兩條邊共有的中心節點編號。</returns>
         public static int FindCenter2(int[][] edges)
         {
+            // 第一條邊的第一個端點若也出現在第二條邊，它就是中心；否則另一端點必為中心。
             return edges[0][0] == edges[1][0] || edges[0][0] == edges[1][1] ? edges[0][0] : edges[0][1];
+        }
 
+        /// <summary>
+        /// 以第一條邊的兩個端點作為候選，逐邊驗證並找出合法星型圖的中心節點。輸入必須描述
+        /// 一個至少三個節點的合法星型圖，每條邊必須包含兩個不同節點；方法不修改輸入，並回傳
+        /// 唯一存在於每一條邊的節點編號。
+        /// </summary>
+        /// <remarks>
+        /// 若第一個候選沒有出現在某條邊，依合法星型圖契約，第一條邊的另一端點必定是中心。
+        /// 時間複雜度為 O(n)，額外空間複雜度為 O(1)。
+        /// </remarks>
+        /// <param name="edges">合法星型圖的邊集合；每條邊由兩個節點編號組成。</param>
+        /// <returns>通過全部邊驗證的中心節點編號。</returns>
+        public static int FindCenter3(int[][] edges)
+        {
+            int firstCandidate = edges[0][0];
+
+            foreach (int[] edge in edges)
+            {
+                if (edge[0] != firstCandidate && edge[1] != firstCandidate)
+                {
+                    // 第一個候選遭任一條邊排除後，另一個候選依題目保證必定出現在所有邊中。
+                    return edges[0][1];
+                }
+            }
+
+            return firstCandidate;
         }
     }
 }
