@@ -2,11 +2,21 @@
 {
     internal class Program
     {
+        /// <summary>
+        /// 表示單向鏈結串列節點；每個節點保存一個整數值與可為空的下一節點參考。
+        /// </summary>
         public class ListNode
         {
             public int val;
-            public ListNode next;
-            public ListNode(int val = 0, ListNode next = null)
+            public ListNode? next;
+
+            /// <summary>
+            /// 建立單向鏈結串列節點。
+            /// 輸入包含節點值及可選的下一節點；建立後可透過 <see cref="next"/> 串接後續節點。
+            /// </summary>
+            /// <param name="val">節點保存的整數值。</param>
+            /// <param name="next">下一個節點；串列尾端為 <see langword="null"/>。</param>
+            public ListNode(int val = 0, ListNode? next = null)
             {
                 this.val = val;
                 this.next = next;
@@ -85,8 +95,9 @@
 
             for (int i = 1; i < values.Length; i++)
             {
-                current.next = new ListNode(values[i]);
-                current = current.next;
+                ListNode next = new ListNode(values[i]);
+                current.next = next;
+                current = next;
             }
 
             return head;
@@ -124,77 +135,111 @@
         }
 
         /// <summary>
-        /// https://leetcode.cn/problems/find-the-minimum-and-maximum-number-of-nodes-between-critical-points/solutions/1077097/zhao-chu-lin-jie-dian-zhi-jian-de-zui-xi-b08v/
-        /// https://leetcode.cn/problems/find-the-minimum-and-maximum-number-of-nodes-between-critical-points/solutions/1075991/go-mo-ni-bian-li-lian-biao-bian-li-lin-j-rx9s/
-        /// https://leetcode.cn/problems/find-the-minimum-and-maximum-number-of-nodes-between-critical-points/solutions/2612349/2058-zhao-chu-lin-jie-dian-zhi-jian-de-z-i2az/
-        /// 
+        /// 以一次串流走訪找出臨界點之間的最小與最大距離。
+        /// 走訪時只保留第一個、上一個與目前臨界點索引：相鄰臨界點求最小距離，
+        /// 第一個與目前臨界點求最大距離，因此額外空間為 O(1)。
         /// </summary>
-        /// <param name="head"></param>
-        /// <returns></returns>
+        /// <param name="head">至少包含兩個節點，且節點值符合題目限制的非空鏈結串列頭節點。</param>
+        /// <returns>長度為 2 的陣列 [最小距離, 最大距離]；臨界點少於兩個時回傳 [-1, -1]。</returns>
         public static int[] NodesBetweenCriticalPoints(ListNode head)
         {
-            // 儲存 最小/最大距離
-            int minDis = int.MaxValue;
-            int maxDis = 0;
-
-            // 暫存, 分別為, 第一/當前/下一個 臨界點的index位置
-            int firstindex = -1;
-            int previndex = -1;
-            int currindex = -1;
+            int minDistance = int.MaxValue;
+            int maxDistance = -1;
+            int firstCriticalIndex = -1;
+            int previousCriticalIndex = -1;
 
             int index = 1;
-            // 第一個node不會是臨界點(最後一個node也不會是臨界點)
-            // , 所以curr要從index = 1 開始往下找
-            ListNode prev = head, curr = head.next;
+            ListNode previous = head;
+            ListNode? current = head.next;
 
-            // curr不要是結尾 (頭尾不會有極大/極小值)
-            while(curr.next != null)
+            // 頭尾節點缺少一側鄰居，不可能是臨界點，因此只檢查完整的三節點視窗。
+            while (current?.next is not null)
             {
-                ListNode next = curr.next;
+                ListNode next = current.next;
 
-                // 局部極大/極小點位置
-                if((curr.val > prev.val && curr.val > next.val) || (curr.val < prev.val && curr.val < next.val))
+                if (IsCriticalPoint(previous, current, next))
                 {
-                    if(firstindex < 0)
+                    if (firstCriticalIndex < 0)
                     {
-                        // 第一個臨界點位置給予 first
-                        firstindex = index;
+                        firstCriticalIndex = index;
                     }
 
-                    // 視窗滑動 概念, 往前塞
-                    previndex = currindex; ;
-                    currindex = index;
-
-                    // >= 0, 代表之前已經有寫入臨界點位置, 
-                    // 有兩個點即可計算 最大/最小 距離
-                    if (previndex >= 0)
+                    if (previousCriticalIndex >= 0)
                     {
-                        // 最小距離代表兩個點之間相鄰, 當前位置 - 前一個位置
-                        minDis = Math.Min(minDis, currindex - previndex);
-                        // 最大距離代表最遠(頭尾), 當前位置 - 第一個位置
-                        maxDis = Math.Max(maxDis, currindex - firstindex);
+                        // 最小距離只可能出現在索引排序後的相鄰臨界點之間。
+                        minDistance = Math.Min(minDistance, index - previousCriticalIndex);
+                        // 目前走訪位置最遠的配對必定是第一個與目前臨界點。
+                        maxDistance = index - firstCriticalIndex;
                     }
 
+                    previousCriticalIndex = index;
                 }
 
-                // 往右繼續走遍歷node
-                prev = curr;
-                curr = next;
+                previous = current;
+                current = next;
                 index++;
             }
 
-
-            if (minDis <= maxDis)
-            {
-                // 有找到
-                return new int[] { minDis, maxDis };
-            }
-            else
-            {
-                // 找不到
-                return new int[] { -1, -1 };
-            }
+            return maxDistance < 0 ? [-1, -1] : [minDistance, maxDistance];
         }
 
+        /// <summary>
+        /// 先收集所有臨界點索引，再計算臨界點之間的最小與最大距離。
+        /// 相鄰索引差的最小值即為最小距離，最後與第一個索引差即為最大距離；
+        /// 額外空間為 O(k)，其中 k 是臨界點數量。
+        /// </summary>
+        /// <param name="head">至少包含兩個節點，且節點值符合題目限制的非空鏈結串列頭節點。</param>
+        /// <returns>長度為 2 的陣列 [最小距離, 最大距離]；臨界點少於兩個時回傳 [-1, -1]。</returns>
+        public static int[] NodesBetweenCriticalPoints2(ListNode head)
+        {
+            List<int> criticalIndices = [];
+            int index = 1;
+            ListNode previous = head;
+            ListNode? current = head.next;
+
+            while (current?.next is not null)
+            {
+                ListNode next = current.next;
+
+                if (IsCriticalPoint(previous, current, next))
+                {
+                    criticalIndices.Add(index);
+                }
+
+                previous = current;
+                current = next;
+                index++;
+            }
+
+            if (criticalIndices.Count < 2)
+            {
+                return [-1, -1];
+            }
+
+            int minDistance = int.MaxValue;
+
+            for (int i = 1; i < criticalIndices.Count; i++)
+            {
+                // 已按走訪順序收集索引，只需比較相鄰差即可取得全域最小值。
+                minDistance = Math.Min(minDistance, criticalIndices[i] - criticalIndices[i - 1]);
+            }
+
+            int maxDistance = criticalIndices[^1] - criticalIndices[0];
+            return [minDistance, maxDistance];
+        }
+
+        /// <summary>
+        /// 判斷三節點視窗的中間節點是否嚴格大於或嚴格小於左右鄰居。
+        /// 三個輸入節點必須依串列順序相鄰且皆非空；回傳中間節點是否為臨界點。
+        /// </summary>
+        /// <param name="previous">目前節點的前一個節點。</param>
+        /// <param name="current">要判斷的目前節點。</param>
+        /// <param name="next">目前節點的下一個節點。</param>
+        /// <returns>目前節點為嚴格局部極大值或極小值時回傳 <see langword="true"/>。</returns>
+        private static bool IsCriticalPoint(ListNode previous, ListNode current, ListNode next)
+        {
+            return (current.val > previous.val && current.val > next.val)
+                || (current.val < previous.val && current.val < next.val);
+        }
     }
 }
