@@ -23,59 +23,136 @@ namespace leetcode_1768
         /// <param name="args"></param>
         static void Main(string[] args)
         {
-            string w1 = "abc";
-            string w2 = "pqr";
+            (string Name, string Word1, string Word2, string Expected)[] testCases =
+            [
+                ("Equal lengths", "abc", "pqr", "apbqcr"),
+                ("Second word is longer", "ab", "pqrs", "apbqrs"),
+                ("First word is longer", "abcd", "pq", "apbqcd"),
+                ("Single-character words", "a", "z", "az"),
+                ("Empty first word", string.Empty, "xyz", "xyz"),
+                ("Empty second word", "xyz", string.Empty, "xyz")
+            ];
 
-            Console.WriteLine("res: " + MergeAlternately(w1, w2));
+            (string Name, Func<string, string, string> Execute)[] solutions =
+            [
+                (nameof(MergeAlternately), MergeAlternately),
+                (nameof(MergeAlternately2), MergeAlternately2)
+            ];
 
+            int passedChecks = 0;
+            int totalChecks = testCases.Length * solutions.Length;
+
+            foreach ((string caseName, string word1, string word2, string expected) in testCases)
+            {
+                foreach ((string solutionName, Func<string, string, string> execute) in solutions)
+                {
+                    if (RunCase(caseName, solutionName, execute, word1, word2, expected))
+                    {
+                        passedChecks++;
+                    }
+                }
+            }
+
+            Console.WriteLine($"Summary: {passedChecks}/{totalChecks} checks passed.");
+            Environment.ExitCode = passedChecks == totalChecks ? 0 : 1;
         }
 
+        /// <summary>
+        /// 執行單一解法與測試案例，將實際結果和預期結果進行字串比對，並輸出可重複驗證的
+        /// Expected、Actual 與 PASS/FAIL 資訊。輸入字串與預期結果皆須為非 <see langword="null"/>；
+        /// 回傳值表示該解法在本案例是否得到正確結果。
+        /// </summary>
+        /// <param name="caseName">用於辨識輸入情境的測試案例名稱。</param>
+        /// <param name="solutionName">目前受測解法的名稱。</param>
+        /// <param name="solution">接收兩個非 <see langword="null"/> 字串並回傳合併結果的解法。</param>
+        /// <param name="word1">第一個待交替合併的字串。</param>
+        /// <param name="word2">第二個待交替合併的字串。</param>
+        /// <param name="expected">此案例預期產生的合併結果。</param>
+        /// <returns>實際結果與預期結果相同時回傳 <see langword="true"/>，否則回傳 <see langword="false"/>。</returns>
+        private static bool RunCase(
+            string caseName,
+            string solutionName,
+            Func<string, string, string> solution,
+            string word1,
+            string word2,
+            string expected)
+        {
+            string actual = solution(word1, word2);
+            bool passed = actual == expected;
+
+            Console.WriteLine($"Case: {caseName} | Solution: {solutionName}");
+            Console.WriteLine($"Input: word1=\"{word1}\", word2=\"{word2}\"");
+            Console.WriteLine($"Expected: {expected}");
+            Console.WriteLine($"Actual: {actual}");
+            Console.WriteLine($"Result: {(passed ? "PASS" : "FAIL")}");
+            Console.WriteLine();
+
+            return passed;
+        }
 
         /// <summary>
-        /// 利用 StringBuilder sb 來整合成新字串
-        /// 
-        /// 1.先計算出兩個輸入字串都有交集的共通長度
-        /// 2.取出 n 之後先交叉寫入 sb
-        /// 3.計算各字串超出共通長度部分
-        /// 4. 承上3, 寫入 sb
-        /// 
+        /// 將兩個非 <see langword="null"/> 字串由第一個字串開始交替合併。此解法先處理兩者的
+        /// 共同長度，再將較長字串尚未使用的尾端一次附加至結果；輸入字串不會被修改。
         /// </summary>
-        /// <param name="word1"></param>
-        /// <param name="word2"></param>
-        /// <returns></returns>
+        /// <param name="word1">第一個待合併的非 <see langword="null"/> 字串。</param>
+        /// <param name="word2">第二個待合併的非 <see langword="null"/> 字串。</param>
+        /// <returns>從 <paramref name="word1"/> 開始交替排列，並包含較長字串剩餘字元的新字串。</returns>
         public static string MergeAlternately(string word1, string word2)
         {
             int n1 = word1.Length;
             int n2 = word2.Length;
+            int commonLength = Math.Min(n1, n2);
+            StringBuilder result = new StringBuilder(n1 + n2);
 
-            // 取兩者最大共同長度, 出來跑迴圈
-            int n = Math.Min(n1, n2);
-
-            // 1.先交叉寫入兩者共同長度部分文字
-            StringBuilder sb = new StringBuilder();
-            for(int i = 0; i < n; i++)
+            // 在共同長度內，每一輪固定先放 word1，再放 word2，維持題目要求的交替順序。
+            for (int i = 0; i < commonLength; i++)
             {
-                sb.Append(word1[i]);
-                sb.Append(word2[i]);
+                result.Append(word1[i]);
+                result.Append(word2[i]);
             }
 
-            // 2. 再來處理超出共同長度部分
-            // 計算出超長部分長度 diff, 在寫入 sb 裡面
-            if(n1 > n)
+            // 共同區段結束後，只會有其中一個字串仍有字元，直接附加其完整尾端。
+            if (n1 > commonLength)
             {
-                int diff = n1 - n;
-                // 擷取長度: n 到 diff
-                sb.Append(word1.Substring(n, diff));
+                result.Append(word1, commonLength, n1 - commonLength);
             }
 
-            if(n2 > n)
+            if (n2 > commonLength)
             {
-                int diff = n2 - n;
-                // 擷取長度: n 到 diff
-                sb.Append(word2.Substring(n, diff));
+                result.Append(word2, commonLength, n2 - commonLength);
             }
 
-            return sb.ToString();
+            return result.ToString();
+        }
+
+        /// <summary>
+        /// 將兩個非 <see langword="null"/> 字串由第一個字串開始交替合併。此解法以單一迴圈
+        /// 同步推進兩個索引，每輪只追加仍在各自字串範圍內的字元，因此自然涵蓋長度不同的輸入；
+        /// 輸入字串不會被修改。
+        /// </summary>
+        /// <param name="word1">第一個待合併的非 <see langword="null"/> 字串。</param>
+        /// <param name="word2">第二個待合併的非 <see langword="null"/> 字串。</param>
+        /// <returns>從 <paramref name="word1"/> 開始交替排列，並包含較長字串剩餘字元的新字串。</returns>
+        public static string MergeAlternately2(string word1, string word2)
+        {
+            StringBuilder result = new StringBuilder(word1.Length + word2.Length);
+            int maxLength = Math.Max(word1.Length, word2.Length);
+
+            // 以相同索引檢查兩個字串；較短字串用盡後，另一個字串會在後續輪次繼續追加。
+            for (int i = 0; i < maxLength; i++)
+            {
+                if (i < word1.Length)
+                {
+                    result.Append(word1[i]);
+                }
+
+                if (i < word2.Length)
+                {
+                    result.Append(word2[i]);
+                }
+            }
+
+            return result.ToString();
         }
     }
 }
