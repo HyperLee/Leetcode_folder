@@ -8,21 +8,118 @@
         /// 1636. 按照频率将数组升序排序
         /// https://leetcode.cn/problems/sort-array-by-increasing-frequency/description/
         /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        /// <remarks>
+        /// 建立涵蓋官方範例、邊界值與同頻排序規則的固定案例，分別執行兩種解法，並驗證
+        /// 實際輸出與預期結果一致且呼叫後輸入陣列保持不變。所有檢查皆通過時輸出摘要；
+        /// 任一檢查失敗時將程序結束碼設為 1。
+        /// </remarks>
+        private static void Main()
         {
-            int[] input = { 1, 5, 0, 5 };
-            
-            var res = FrequencySort(input);
+            (string Name, int[] Input, int[] Expected)[] cases =
+            [
+                ("Existing sample", [1, 5, 0, 5], [1, 0, 5, 5]),
+                ("Official example 1", [1, 1, 2, 2, 2, 3], [3, 1, 1, 2, 2, 2]),
+                ("Official example 2", [2, 3, 1, 3, 2], [1, 3, 3, 2, 2]),
+                ("Official example 3", [-1, 1, -6, 4, 5, -6, 1, 4, 1], [5, -1, 4, 4, -6, -6, 1, 1, 1]),
+                ("Single lower bound", [-100], [-100]),
+                ("Repeated boundaries", [-100, 100, -100, 100, 0], [0, 100, 100, -100, -100]),
+                ("All distinct tie-break", [4, -2, 7, 0], [7, 4, 0, -2]),
+                ("All equal", [7, 7, 7], [7, 7, 7])
+            ];
+            (string Name, Func<int[], int[]> Sort)[] solutions =
+            [
+                ("FrequencySort - dictionary and comparison sort", FrequencySort),
+                ("FrequencySort2 - frequency buckets", FrequencySort2)
+            ];
+            List<CaseResult> results = [];
 
-            Console.WriteLine("ans: ");
-            foreach (int i in res)
+            foreach ((string caseName, int[] input, int[] expected) in cases)
             {
-                Console.Write(i + ", ");
+                foreach ((string solutionName, Func<int[], int[]> sort) in solutions)
+                {
+                    results.Add(RunCase(caseName, solutionName, input, expected, sort));
+                }
             }
 
-            Console.ReadKey();
+            foreach (CaseResult result in results)
+            {
+                Console.WriteLine($"Case: {result.CaseName}");
+                Console.WriteLine($"Solution: {result.SolutionName}");
+                Console.WriteLine($"Input: {result.Input}");
+                Console.WriteLine($"Expected: {result.Expected}");
+                Console.WriteLine($"Actual: {result.Actual}");
+                Console.WriteLine($"Input preserved: {(result.InputPreserved ? "PASS" : "FAIL")}");
+                Console.WriteLine($"Result: {(result.Passed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+            }
+
+            int passedCount = results.Count(result => result.Passed);
+            Console.WriteLine($"Summary: {passedCount}/{results.Count} checks passed.");
+
+            if (passedCount != results.Count)
+            {
+                Environment.ExitCode = 1;
+            }
         }
+
+        /// <summary>
+        /// 以獨立輸入副本執行指定排序解法，比對預期輸出，並確認解法未修改收到的陣列；
+        /// 輸入案例符合題目限制，回傳值包含格式化資料與整體通過狀態，不直接輸出至主控台。
+        /// </summary>
+        /// <param name="caseName">測試案例名稱。</param>
+        /// <param name="solutionName">受測解法名稱。</param>
+        /// <param name="input">符合題目限制的原始輸入。</param>
+        /// <param name="expected">依排序規則得到的預期陣列。</param>
+        /// <param name="sort">接收整數陣列並回傳排序結果的解法。</param>
+        /// <returns>包含輸出比對、輸入保持狀態與顯示文字的案例結果。</returns>
+        private static CaseResult RunCase(
+            string caseName,
+            string solutionName,
+            int[] input,
+            int[] expected,
+            Func<int[], int[]> sort)
+        {
+            int[] workingInput = [.. input];
+            int[] originalInput = [.. workingInput];
+            int[] actual = sort(workingInput);
+            bool inputPreserved = originalInput.SequenceEqual(workingInput);
+            bool passed = expected.SequenceEqual(actual) && inputPreserved;
+
+            return new CaseResult(
+                caseName,
+                solutionName,
+                FormatArray(input),
+                FormatArray(expected),
+                FormatArray(actual),
+                inputPreserved,
+                passed);
+        }
+
+        /// <summary>
+        /// 將整數序列格式化為不含額外空白的中括號表示法，供固定測試輸出與 README transcript 使用。
+        /// </summary>
+        /// <param name="values">要格式化的整數序列。</param>
+        /// <returns>例如 <c>[1,3,3,2,2]</c> 的字串。</returns>
+        private static string FormatArray(IEnumerable<int> values) => $"[{string.Join(',', values)}]";
+
+        /// <summary>
+        /// 保存單一案例與單一解法的顯示資料，以及輸入保持和整體驗證結果。
+        /// </summary>
+        /// <param name="CaseName">測試案例名稱。</param>
+        /// <param name="SolutionName">受測解法名稱。</param>
+        /// <param name="Input">格式化後的輸入。</param>
+        /// <param name="Expected">格式化後的預期輸出。</param>
+        /// <param name="Actual">格式化後的實際輸出。</param>
+        /// <param name="InputPreserved">解法是否保留輸入內容。</param>
+        /// <param name="Passed">輸出正確且輸入保持不變時為 <c>true</c>。</param>
+        private sealed record CaseResult(
+            string CaseName,
+            string SolutionName,
+            string Input,
+            string Expected,
+            string Actual,
+            bool InputPreserved,
+            bool Passed);
 
 
         /// <summary>
@@ -50,57 +147,100 @@
         /// https://www.hicsharp.com/a/7620ddb5eb644e448b06e0b8bbb97f41
         /// https://hackmd.io/@jiesen/r1awIjwlF
         /// </summary>
-        /// <param name="nums"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// 先以 Dictionary 統計各數值的頻率，再對輸入內容的 List 副本使用自訂比較器：
+        /// 頻率不同時由小到大排序，頻率相同時依數值由大到小排序。輸入需符合題目保證的
+        /// <c>1 &lt;= nums.Length &lt;= 100</c> 與 <c>-100 &lt;= nums[i] &lt;= 100</c>，方法不修改輸入。
+        /// </remarks>
+        /// <param name="nums">符合題目限制、不可為 null 的整數陣列。</param>
+        /// <returns>依頻率升序、同頻數值降序排列的新陣列。</returns>
         public static int[] FrequencySort(int[] nums)
         {
-            // key: array input,  value: frequency
-            // 統計nums頻率
-            Dictionary<int, int> dic = new Dictionary<int, int>();
-            // nums依順序加入list
-            List<int> list = new List<int>();
-            
-            // 兩個同時執行, 就不用分開寫兩個foreach
+            Dictionary<int, int> frequencies = [];
             foreach (int num in nums)
             {
-                if(!dic.ContainsKey(num))
+                if (frequencies.TryGetValue(num, out int frequency))
                 {
-                    // 不存在就新增頻率
-                    dic.Add(num, 1);
+                    frequencies[num] = frequency + 1;
                 }
                 else
                 {
-                    // 存在就增加頻率次數
-                    dic[num]++;
+                    frequencies.Add(num, 1);
                 }
-
-                list.Add(num);
             }
 
-            // *依照題目要求來排序
-            // cnt1,2 是頻率
-            // a, b   是比較數字
-            list.Sort((a, b) => {
-                int cnt1 = dic[a], cnt2 = dic[b];
-                //return cnt1 != cnt2 ? cnt1 - cnt2 : b - a;
-                if (cnt1 != cnt2)
-                {
-                    // 頻率; 遞增
-                    return cnt1.CompareTo(cnt2);
-                }
-                else
-                {
-                    // 數字; 遞減
+            List<int> sortedNumbers = [.. nums];
+            sortedNumbers.Sort((first, second) =>
+            {
+                int firstFrequency = frequencies[first];
+                int secondFrequency = frequencies[second];
 
-                    // a在前面, 開頭要取負號
-                    // return -a.CompareTo(b);
-
-                    // b在前面, 這樣就不用取負號
-                    return b.CompareTo(a);
+                if (firstFrequency != secondFrequency)
+                {
+                    return firstFrequency.CompareTo(secondFrequency);
                 }
+
+                // 同頻時必須讓較大的數值排在前面。
+                return second.CompareTo(first);
             });
 
-            return list.ToArray();
+            return sortedNumbers.ToArray();
+        }
+
+        /// <summary>
+        /// 利用題目固定值域統計每個數值的出現次數，再將不同數值放入對應的頻率桶；依頻率
+        /// 由小到大展開桶內容，並以值域的反向掃描保證同頻數值由大到小。輸入需符合
+        /// <c>1 &lt;= nums.Length &lt;= 100</c> 與 <c>-100 &lt;= nums[i] &lt;= 100</c>，方法不修改輸入。
+        /// </summary>
+        /// <param name="nums">符合題目限制、不可為 null 的整數陣列。</param>
+        /// <returns>依頻率升序、同頻數值降序排列的新陣列。</returns>
+        public static int[] FrequencySort2(int[] nums)
+        {
+            const int minimumValue = -100;
+            const int maximumValue = 100;
+            const int valueOffset = 100;
+            const int valueRange = 201;
+            int[] frequencies = new int[valueRange];
+
+            foreach (int num in nums)
+            {
+                frequencies[num + valueOffset]++;
+            }
+
+            List<int>?[] valuesByFrequency = new List<int>?[nums.Length + 1];
+            for (int value = maximumValue; value >= minimumValue; value--)
+            {
+                int frequency = frequencies[value + valueOffset];
+                if (frequency == 0)
+                {
+                    continue;
+                }
+
+                // 反向掃描值域，使每個頻率桶中的不同數值自然保持降序。
+                valuesByFrequency[frequency] ??= [];
+                valuesByFrequency[frequency]!.Add(value);
+            }
+
+            int[] sortedNumbers = new int[nums.Length];
+            int writeIndex = 0;
+            for (int frequency = 1; frequency < valuesByFrequency.Length; frequency++)
+            {
+                if (valuesByFrequency[frequency] is not List<int> values)
+                {
+                    continue;
+                }
+
+                foreach (int value in values)
+                {
+                    // 頻率桶由小到大處理，每個不同數值依其頻率重複寫入結果。
+                    for (int count = 0; count < frequency; count++)
+                    {
+                        sortedNumbers[writeIndex++] = value;
+                    }
+                }
+            }
+
+            return sortedNumbers;
         }
     }
 }
