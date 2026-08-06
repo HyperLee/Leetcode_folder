@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Metrics;
-using System.Runtime.InteropServices.Marshalling;
 
 namespace leetcode_2461
 {
@@ -20,51 +18,101 @@ namespace leetcode_2461
         /// 子陣列是陣列中連續且非空的一段元素序列。
         /// </summary>
         /// <param name="args"></param>
-        static void Main(string[] args)
+        /// <remarks>
+        /// 以固定案例比較兩種解法；所有驗證通過時回傳 0，否則回傳 1。
+        /// </remarks>
+        static int Main(string[] args)
         {
-            int[] input = { 1, 5, 4, 2, 9, 9, 9 };
-            int k = 3;
-            Console.WriteLine(MaximumSubarraySum(input, k));
-            Console.ReadKey();
+            (string Name, int[] Nums, int K, long Expected)[] testCases =
+            {
+                ("官方案例", new[] { 1, 5, 4, 2, 9, 9, 9 }, 3, 15L),
+                ("全部重複", new[] { 4, 4, 4 }, 3, 0L),
+                ("重複後仍有合法窗口", new[] { 1, 2, 1, 3, 4 }, 3, 8L),
+                ("k 等於 1", new[] { 5, 5, 5 }, 1, 5L),
+                ("整個陣列皆不重複", new[] { 1, 2, 3, 4 }, 4, 10L),
+                ("交錯重複", new[] { 1, 1, 2, 2, 3 }, 2, 5L),
+                ("長整數總和", Enumerable.Range(1, 100000).ToArray(), 100000, 5_000_050_000L)
+            };
+
+            int totalChecks = 0;
+            int passedChecks = 0;
+
+            foreach ((string Name, int[] Nums, int K, long Expected) testCase in testCases)
+            {
+                bool casePassed = RunCase(testCase.Name, testCase.Nums, testCase.K, testCase.Expected,
+                    out long actualByFrequencyWindow,
+                    out long actualByLastSeenIndex);
+
+                bool frequencyWindowPassed = actualByFrequencyWindow == testCase.Expected;
+                bool lastSeenIndexPassed = actualByLastSeenIndex == testCase.Expected;
+
+                Console.WriteLine($"案例：{testCase.Name}（n = {testCase.Nums.Length}, k = {testCase.K}）");
+                Console.WriteLine($"  Expected: {testCase.Expected}");
+                Console.WriteLine($"  MaximumSubarraySum Actual: {actualByFrequencyWindow} -> {(frequencyWindowPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine($"  MaximumSubarraySum2 Actual: {actualByLastSeenIndex} -> {(lastSeenIndexPassed ? "PASS" : "FAIL")}");
+                Console.WriteLine($"  案例結果: {(casePassed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+
+                totalChecks += 2;
+                passedChecks += (frequencyWindowPassed ? 1 : 0) + (lastSeenIndexPassed ? 1 : 0);
+            }
+
+            Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項驗證通過");
+            return passedChecks == totalChecks ? 0 : 1;
         }
 
 
         /// <summary>
-        /// ref:
+        /// 使用兩份獨立輸入資料執行兩種解法，回傳各自的計算結果供 Main 比較預期值。
+        /// </summary>
+        /// <param name="name">測試案例名稱，供除錯與文件辨識使用。</param>
+        /// <param name="nums">符合題目限制的整數陣列。</param>
+        /// <param name="k">候選子陣列的固定長度。</param>
+        /// <param name="expected">此案例預期的最大合法子陣列總和。</param>
+        /// <param name="actualByFrequencyWindow">頻率表滑動視窗解法的實際結果。</param>
+        /// <param name="actualByLastSeenIndex">最後出現位置解法的實際結果。</param>
+        /// <returns>兩種解法都得到預期結果時回傳 true，否則回傳 false。</returns>
+        private static bool RunCase(
+            string name,
+            int[] nums,
+            int k,
+            long expected,
+            out long actualByFrequencyWindow,
+            out long actualByLastSeenIndex)
+        {
+            actualByFrequencyWindow = MaximumSubarraySum((int[])nums.Clone(), k);
+            actualByLastSeenIndex = MaximumSubarraySum2((int[])nums.Clone(), k);
+            return actualByFrequencyWindow == expected && actualByLastSeenIndex == expected;
+        }
+
+
+        /// <summary>
+        /// 使用固定長度滑動視窗與頻率 Dictionary，找出長度為 k 且元素互不相同的子陣列最大總和。
+        /// 先維護前 k 個元素，再於窗口右移時同步更新總和與每個值的出現次數；
+        /// 當不同元素數量等於 k，即代表目前窗口符合條件。輸入須符合
+        /// 1 <= k <= nums.Length，若沒有合法窗口則回傳 0。
+        /// </summary>
+        /// <remarks>
+        /// 此解法的核心是不重新計算每個窗口：移動一次只移除左端元素並加入右端元素，
+        /// 因此每個元素只被處理常數次。參考資料：
         /// https://leetcode.cn/problems/maximum-sum-of-distinct-subarrays-with-length-k/solutions/2757534/2461-chang-du-wei-k-zi-shu-zu-zhong-de-z-ge3d/
         /// https://leetcode.cn/problems/maximum-sum-of-distinct-subarrays-with-length-k/solutions/1951940/hua-dong-chuang-kou-by-endlesscheng-m0gm/
-        /// 
-        /// 滑動視窗 + Hash
-        /// 找出 subarray + 不重複數字
-        /// 
-        /// 
-        /// 發現 Dictionary.TryAdd 忽然可以用了
-        /// 以前都沒辦法編譯
-        /// 這邊有示範改寫方法
-        /// 
-        /// </summary>
-        /// <param name="nums"></param>
-        /// <param name="k"></param>
-        /// <returns></returns>
+        /// </remarks>
+        /// <param name="nums">待搜尋的正整數陣列。</param>
+        /// <param name="k">候選子陣列的固定長度。</param>
+        /// <returns>所有合法長度 k 子陣列中的最大總和；沒有合法子陣列時回傳 0。</returns>
         public static long MaximumSubarraySum(int[] nums, int k)
         {
-            // 将最大子数组和初始化为 0
             long maxSum = 0;
-            long sum = 0;
-            // hash table
-            IDictionary<int, int> counts = new Dictionary<int, int>();
+            long windowSum = 0;
+            Dictionary<int, int> counts = new Dictionary<int, int>();
             int n = nums.Length;
-            // 初始化(先找第一輪), 先塞前 k 個 element.  範圍: [0, k - 1]
+
+            // 先建立第一個固定窗口，總和與頻率表會成為後續窗口的更新基礎。
             for (int i = 0; i < k; i++)
             {
                 int num = nums[i];
-                sum += num;
-
-                #region TryAdd用法
-                // 預設是 0, 有值就 + 1
-                //counts.TryAdd(num, 0);
-                //counts[num]++;
-                #endregion
+                windowSum += num;
 
                 if (counts.ContainsKey(num))
                 {
@@ -76,48 +124,85 @@ namespace leetcode_2461
                 }
             }
 
-            // 如果 element 剛好 k 個, 使用該 sum 當成最大和 maxSum
+            // 固定窗口長度是 k；不同元素數量也為 k 時，代表窗口內沒有重複值。
             if (counts.Count == k)
             {
-                maxSum = sum;
+                maxSum = windowSum;
             }
 
-            // 对于 k ≤ i < n 的每个下标 i，执行如下操作。
             for (int i = k; i < n; i++)
             {
-                // 滑動視窗(移除左邊界, 新增右邊界)
-                // 1. 将子数组元素和减少 nums[i - k] 并增加 nums[i]。
-                int prev = nums[i - k];
-                int curr = nums[i];
-                sum = sum - prev + curr;
-                // 2. 在哈希表中将 nums[i - k] 的出现次数减少 1，将 nums[i] 的出现次数增加 1，并将出现次数变成 0 的元素从哈希表中移除。
-                counts[prev]--;
-                
-                if (counts[prev] == 0)
+                int outgoing = nums[i - k];
+                int incoming = nums[i];
+
+                // 窗口右移一格只改變兩個元素，因此總和可以 O(1) 更新。
+                windowSum = windowSum - outgoing + incoming;
+
+                // 移除左端元素；頻率降為 0 時，才從表中刪除該值。
+                counts[outgoing]--;
+                if (counts[outgoing] == 0)
                 {
-                    // prev 數量為 0, 就移出
-                    counts.Remove(prev);
+                    counts.Remove(outgoing);
                 }
 
-                #region TryAdd用法
-                // 預設是 0, 有值就 + 1
-                //counts.TryAdd(curr, 0);
-                //counts[curr]++;
-                #endregion
-
-                if (counts.ContainsKey(curr))
+                if (counts.ContainsKey(incoming))
                 {
-                    counts[curr]++;
+                    counts[incoming]++;
                 }
                 else
                 {
-                    counts.Add(curr, 1);
+                    counts.Add(incoming, 1);
                 }
 
-                // 如果哈希表中的不同元素个数等于 k，则使用子数组元素和更新最大子数组和。
+                // 只有 k 個元素都不同時，才用目前窗口總和更新答案。
                 if (counts.Count == k)
                 {
-                    maxSum = Math.Max(maxSum, sum);
+                    maxSum = Math.Max(maxSum, windowSum);
+                }
+            }
+
+            return maxSum;
+        }
+
+
+        /// <summary>
+        /// 使用每個數字的最後出現位置與前綴和，找出長度為 k 且元素互不相同的子陣列最大總和。
+        /// 當重複值仍位於目前窗口時，直接將左界移到該值最後一次出現位置之後；
+        /// 當窗口長度符合 k 時，再以前綴和 O(1) 取得窗口總和。輸入須符合
+        /// 1 <= k <= nums.Length，若沒有合法窗口則回傳 0。
+        /// </summary>
+        /// <param name="nums">待搜尋的正整數陣列。</param>
+        /// <param name="k">候選子陣列的固定長度。</param>
+        /// <returns>所有合法長度 k 子陣列中的最大總和；沒有合法子陣列時回傳 0。</returns>
+        public static long MaximumSubarraySum2(int[] nums, int k)
+        {
+            long[] prefixSums = new long[nums.Length + 1];
+            Dictionary<int, int> lastSeenIndex = new Dictionary<int, int>();
+            int left = 0;
+            long maxSum = 0;
+
+            for (int right = 0; right < nums.Length; right++)
+            {
+                prefixSums[right + 1] = prefixSums[right] + nums[right];
+
+                // 重複值若仍在窗口內，左界必須跨過它，才能恢復「全部相異」的不變量。
+                if (lastSeenIndex.TryGetValue(nums[right], out int previousIndex) && previousIndex >= left)
+                {
+                    left = previousIndex + 1;
+                }
+
+                lastSeenIndex[nums[right]] = right;
+
+                // 沒有重複值時，仍要把窗口限制在固定長度 k。
+                if (right - left + 1 > k)
+                {
+                    left = right - k + 1;
+                }
+
+                if (right - left + 1 == k)
+                {
+                    long currentSum = prefixSums[right + 1] - prefixSums[left];
+                    maxSum = Math.Max(maxSum, currentSum);
                 }
             }
 
