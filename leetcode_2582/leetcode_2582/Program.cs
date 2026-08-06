@@ -8,43 +8,175 @@
         /// 2582. 递枕头
         /// https://leetcode.cn/problems/pass-the-pillow/description/
         /// </summary>
-        /// <param name="args"></param>
-        static void Main(string[] args)
+        /// <remarks>
+        /// 以固定案例執行三種解法，逐一比較預期值與實際值；全部案例通過時回傳 0，否則回傳非零結束碼。
+        /// </remarks>
+        /// <param name="args">命令列參數；本程式使用固定案例，不讀取外部輸入。</param>
+        /// <returns>所有驗證通過時回傳 0，任一驗證失敗時回傳 1。</returns>
+        static int Main(string[] args)
         {
-            int n = 4;
-            int time = 5;
-
-            Console.WriteLine(PassThePillow(n, time));
-            Console.ReadKey();
+            return RunSamples();
         }
+
+        /// <summary>
+        /// 建立符合題目限制的固定案例，執行三種解法並統計驗證結果。
+        /// </summary>
+        /// <returns>全部驗證通過時回傳 0，否則回傳 1。</returns>
+        private static int RunSamples()
+        {
+            SampleCase[] samples =
+            {
+                new("官方範例一", 4, 5, 2),
+                new("官方範例二", 3, 2, 3),
+                new("最少人數第一秒", 2, 1, 2),
+                new("最少人數完整多輪", 2, 1000, 1),
+                new("抵達右端點", 5, 4, 5),
+                new("折返後第一秒", 5, 5, 4),
+                new("完整週期回到起點", 4, 6, 1),
+                new("最大人數抵達右端點", 1000, 999, 1000),
+                new("限制上限折返", 1000, 1000, 999)
+            };
+
+            int passedChecks = 0;
+            foreach (SampleCase sample in samples)
+            {
+                passedChecks += RunCase(sample);
+            }
+
+            int totalChecks = samples.Length * 3;
+            Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項驗證通過");
+            return passedChecks == totalChecks ? 0 : 1;
+        }
+
+        /// <summary>
+        /// 執行單一案例，輸出三種解法的實際結果並計算通過數量。
+        /// </summary>
+        /// <param name="sample">包含人數、傳遞秒數與預期持有人編號的測試案例。</param>
+        /// <returns>本案例通過的解法驗證數量，範圍為 0 到 3。</returns>
+        private static int RunCase(SampleCase sample)
+        {
+            Console.WriteLine($"案例：{sample.Name}");
+            Console.WriteLine($"n = {sample.N}, time = {sample.Time}");
+            Console.WriteLine($"預期 = {sample.Expected}");
+
+            (string Name, int Actual)[] results =
+            {
+                ("PassThePillow", PassThePillow(sample.N, sample.Time)),
+                ("PassThePillow2", PassThePillow2(sample.N, sample.Time)),
+                ("PassThePillow3", PassThePillow3(sample.N, sample.Time))
+            };
+
+            int passedChecks = 0;
+            foreach ((string name, int actual) in results)
+            {
+                bool passed = actual == sample.Expected;
+                if (passed)
+                {
+                    passedChecks++;
+                }
+
+                Console.WriteLine($"{name,-16} 實際 = {actual} => {(passed ? "PASS" : "FAIL")}");
+            }
+
+            Console.WriteLine();
+            return passedChecks;
+        }
+
+        /// <summary>
+        /// 描述單一固定案例的輸入與預期輸出。
+        /// </summary>
+        /// <param name="Name">測試案例名稱。</param>
+        /// <param name="N">排成直線的人數。</param>
+        /// <param name="Time">枕頭傳遞的秒數。</param>
+        /// <param name="Expected">傳遞結束後持有枕頭的人員編號。</param>
+        private sealed record SampleCase(string Name, int N, int Time, int Expected);
 
 
         /// <summary>
-        /// ref:
+        /// 利用傳遞路徑的固定往返週期，以 O(1) 時間找出最後持有枕頭的人員編號。
+        /// 題目輸入為至少 2 人與至少 1 秒的有效整數；每經過完整週期後，位置會回到 1 號。
+        /// </summary>
+        /// <param name="n">排成直線的人數，限制為 2 到 1000。</param>
+        /// <param name="time">枕頭傳遞的秒數，限制為 1 到 1000。</param>
+        /// <returns>經過指定秒數後持有枕頭的人員編號，範圍為 1 到 n。</returns>
+        /// <remarks>
+        /// 完整往返一次需要從 1 走到 n，再從 n 走回 2，共 2 * (n - 1) 秒。
+        /// 先將 time 取週期餘數，再判斷目前位於去程或回程即可。
+        /// 參考：
         /// https://leetcode.cn/problems/pass-the-pillow/solutions/2451117/di-zhen-tou-by-leetcode-solution-kl5e/
         /// https://leetcode.cn/problems/pass-the-pillow/solutions/2148332/o1-gong-shi-by-endlesscheng-z4xz/
         /// https://leetcode.cn/problems/pass-the-pillow/solutions/2606914/2582-di-zhen-tou-by-stormsunshine-t5fl/
-        /// 
-        /// 純數學推理問題
-        /// 解法公式 推理
-        ///  看ref 比較好懂
-        /// </summary>
-        /// <param name="n"></param>
-        /// <param name="time"></param>
-        /// <returns></returns>
+        /// 時間複雜度為 O(1)，額外空間複雜度為 O(1)。
+        /// </remarks>
         public static int PassThePillow(int n, int time)
         {
-            // 傳遞方式: 頭 -> 尾 -> 頭
-            // 來回一圈所需時間是 2 * n
-            // 但是編號是從1開始, 所以要修改為
-            // (n - 1) * 2
-            time %= (n - 1) * 2;
+            int cycleLength = 2 * (n - 1);
+            int position = time % cycleLength;
 
-            var temp0 = time;
-            var temp1 = time + 1;
-            var temp2 = n - (time - (n - 1));
+            // 去程的餘數 0 到 n - 1 對應人員 1 到 n；其餘位置則沿回程遞減。
+            return position < n
+                ? position + 1
+                : n - (position - (n - 1));
+        }
 
-            return time < n ? time + 1 : n - (time - (n - 1));
+        /// <summary>
+        /// 從 1 號開始逐秒模擬枕頭傳遞與方向反轉，找出指定時間後的持有人。
+        /// 題目輸入為至少 2 人與至少 1 秒的有效整數，輸出為 1 到 n 之間的人員編號。
+        /// </summary>
+        /// <param name="n">排成直線的人數，限制為 2 到 1000。</param>
+        /// <param name="time">枕頭傳遞的秒數，限制為 1 到 1000。</param>
+        /// <returns>經過指定秒數後持有枕頭的人員編號。</returns>
+        /// <remarks>
+        /// 每次傳遞先依目前方向移動一人；抵達 1 號或 n 號後，下一秒必須改變方向。
+        /// 時間複雜度為 O(time)，額外空間複雜度為 O(1)。
+        /// </remarks>
+        public static int PassThePillow2(int n, int time)
+        {
+            int currentPerson = 1;
+            int direction = 1;
+
+            for (int second = 0; second < time; second++)
+            {
+                currentPerson += direction;
+
+                // 端點沒有下一位可傳遞，因此下一秒要往相反方向移動。
+                if (currentPerson == 1 || currentPerson == n)
+                {
+                    direction *= -1;
+                }
+            }
+
+            return currentPerson;
+        }
+
+        /// <summary>
+        /// 建立一輪完整往返路徑，再以週期索引找出指定時間後的持有人。
+        /// 題目輸入為至少 2 人與至少 1 秒的有效整數，輸出為 1 到 n 之間的人員編號。
+        /// </summary>
+        /// <param name="n">排成直線的人數，限制為 2 到 1000。</param>
+        /// <param name="time">枕頭傳遞的秒數，限制為 1 到 1000。</param>
+        /// <returns>經過指定秒數後持有枕頭的人員編號。</returns>
+        /// <remarks>
+        /// 一輪路徑為 [1, 2, ..., n, n - 1, ..., 2]，長度為 2 * (n - 1)。
+        /// 這個版本將週期具體化成陣列，適合展示週期觀察，但需要 O(n) 時間與 O(n) 額外空間。
+        /// </remarks>
+        public static int PassThePillow3(int n, int time)
+        {
+            int cycleLength = 2 * (n - 1);
+            int[] cycle = new int[cycleLength];
+
+            for (int index = 0; index < n; index++)
+            {
+                cycle[index] = index + 1;
+            }
+
+            for (int index = n; index < cycleLength; index++)
+            {
+                // 回程不重複放入 n，依序填入 n - 1 到 2。
+                cycle[index] = cycleLength - index + 1;
+            }
+
+            return cycle[time % cycleLength];
         }
     }
 }
