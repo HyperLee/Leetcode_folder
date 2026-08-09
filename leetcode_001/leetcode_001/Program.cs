@@ -3,19 +3,65 @@
 class Program
 {
     /// <summary>
-    /// LeetCode 1. Two Sum
-    /// 題目描述：
-    /// 給定一個整數陣列 nums 和一個整數目標值 target，請你在該陣列中找出和為目標值 target 的那兩個整數，並回傳它們的陣列索引。
-    /// 你可以假設每種輸入只會對應一個答案。但是，陣列中同一個元素在答案裡不能重複出現。
-    /// 你可以按任意順序回傳答案。
-    /// 
-    /// 範例：
+    /// 1. Two Sum
+    /// https://leetcode.com/problems/two-sum/description/
+    /// <para>
+    /// You are given an array of integers nums and an integer target. Return indices of the two numbers such that they add up to target.
+    ///
+    /// You may assume that each input has exactly one solution, and you may not use the same element twice.
+    /// You can return the answer in any order.
+    ///
+    /// Example 1:
+    /// Input: nums = [2,7,11,15], target = 9
+    /// Output: [0,1]
+    /// Explanation: Because nums[0] + nums[1] == 9, we return [0, 1].
+    ///
+    /// Example 2:
+    /// Input: nums = [3,2,4], target = 6
+    /// Output: [1,2]
+    ///
+    /// Example 3:
+    /// Input: nums = [3,3], target = 6
+    /// Output: [0,1]
+    ///
+    /// Constraints:
+    /// - 2 &lt;= nums.length &lt;= 10^4
+    /// - -10^9 &lt;= nums[i] &lt;= 10^9
+    /// - -10^9 &lt;= target &lt;= 10^9
+    /// - Only one valid answer exists.
+    ///
+    /// Follow-up: Can you come up with an algorithm that has less than O(n^2) time complexity?
+    /// </para>
+    /// <para>
+    /// 1. 兩數之和
+    /// https://leetcode.cn/problems/two-sum/description/
+    ///
+    /// 給定一個整數陣列 nums 和一個整數 target，請回傳兩個數字的索引，使它們的總和等於 target。
+    ///
+    /// 你可以假設每組輸入恰好只有一個解，且同一個元素不可重複使用。
+    /// 答案可以任意順序回傳。
+    ///
+    /// 範例 1：
     /// 輸入：nums = [2,7,11,15], target = 9
     /// 輸出：[0,1]
-    /// 解釋：因為 nums[0] + nums[1] = 2 + 7 = 9，所以回傳 [0, 1]
-    /// 
-    /// https://leetcode.com/problems/two-sum/
-    /// https://leetcode.cn/problems/two-sum/description/
+    /// 解釋：因為 nums[0] + nums[1] == 9，所以回傳 [0, 1]。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [3,2,4], target = 6
+    /// 輸出：[1,2]
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [3,3], target = 6
+    /// 輸出：[0,1]
+    ///
+    /// 限制條件：
+    /// - 2 &lt;= nums.length &lt;= 10^4
+    /// - -10^9 &lt;= nums[i] &lt;= 10^9
+    /// - -10^9 &lt;= target &lt;= 10^9
+    /// - 僅存在一個有效答案。
+    ///
+    /// 進階：你能設計出時間複雜度低於 O(n^2) 的演算法嗎？
+    /// </para>
     /// </summary>
     static void Main(string[] args)
     {
