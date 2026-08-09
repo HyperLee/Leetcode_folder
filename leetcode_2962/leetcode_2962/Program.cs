@@ -18,167 +18,147 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        // 測試資料 1
-        int[] input1 = { 1, 3, 2, 3, 3 };
-        int k1 = 2;
-        Console.WriteLine("Test Case 1 - CountSubarrays: " + CountSubarrays(input1, k1));
-        Console.WriteLine("Test Case 1 - CountSubarrays2: " + CountSubarrays2(input1, k1));
+        int passedChecks = 0;
+        int totalChecks = 0;
 
-        // 測試資料 2
-        int[] input2 = { 1, 1, 1, 1 };
-        int k2 = 3;
-        Console.WriteLine("Test Case 2 - CountSubarrays: " + CountSubarrays(input2, k2));
-        Console.WriteLine("Test Case 2 - CountSubarrays2: " + CountSubarrays2(input2, k2));
+        RunCase("官方範例：最大值出現至少兩次", [1, 3, 2, 3, 3], 2, 6, ref passedChecks, ref totalChecks);
+        RunCase("官方範例：最大值出現次數不足", [1, 4, 2, 1], 3, 0, ref passedChecks, ref totalChecks);
+        RunCase("全部元素相同", [1, 1, 1, 1], 3, 3, ref passedChecks, ref totalChecks);
+        RunCase("k 等於一", [1, 2, 3, 4, 5], 1, 5, ref passedChecks, ref totalChecks);
+        RunCase("最大值恰好出現 k 次", [10, 10, 10, 10, 10, 10], 6, 1, ref passedChecks, ref totalChecks);
+        RunCase("混合陣列但最大值不足 k 次", [1, 2, 3, 2, 1], 2, 0, ref passedChecks, ref totalChecks);
 
-        // 測試資料 3
-        int[] input3 = { 5, 5, 5, 5, 5 };
-        int k3 = 1;
-        Console.WriteLine("Test Case 3 - CountSubarrays: " + CountSubarrays(input3, k3));
-        Console.WriteLine("Test Case 3 - CountSubarrays2: " + CountSubarrays2(input3, k3));
+        Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項測試通過");
+        Environment.ExitCode = passedChecks == totalChecks ? 0 : 1;
+    }
 
-        // 測試資料 4
-        int[] input4 = { 1, 2, 3, 4, 5 };
-        int k4 = 1;
-        Console.WriteLine("Test Case 4 - CountSubarrays: " + CountSubarrays(input4, k4));
-        Console.WriteLine("Test Case 4 - CountSubarrays2: " + CountSubarrays2(input4, k4));
+    /// <summary>
+    /// 執行一組測試資料，分別呼叫兩個滑動視窗解法，並比對手動推導的期望結果。
+    /// 輸入必須符合題目限制：陣列非空、元素皆為正整數，且 <paramref name="k"/> 為正整數。
+    /// 執行結果會輸出至主控台，並透過參考參數累計通過與總檢查數。
+    /// </summary>
+    /// <param name="name">用來辨識測試目的的案例名稱。</param>
+    /// <param name="nums">本次測試使用的非空正整數陣列。</param>
+    /// <param name="k">全域最大元素至少需要出現的次數。</param>
+    /// <param name="expected">手動推導的預期子陣列數量。</param>
+    /// <param name="passedChecks">目前累計通過的檢查數，方法會直接更新此值。</param>
+    /// <param name="totalChecks">目前累計執行的檢查數，方法會直接更新此值。</param>
+    private static void RunCase(
+        string name,
+        int[] nums,
+        int k,
+        long expected,
+        ref int passedChecks,
+        ref int totalChecks)
+    {
+        long actual1 = CountSubarrays(nums, k);
+        long actual2 = CountSubarrays2(nums, k);
+        bool passed1 = actual1 == expected;
+        bool passed2 = actual2 == expected;
 
-        // 測試資料 5
-        int[] input5 = { 10, 10, 10, 10, 10, 10 };
-        int k5 = 6;
-        Console.WriteLine("Test Case 5 - CountSubarrays: " + CountSubarrays(input5, k5));
-        Console.WriteLine("Test Case 5 - CountSubarrays2: " + CountSubarrays2(input5, k5));
+        totalChecks += 2;
+        passedChecks += passed1 ? 1 : 0;
+        passedChecks += passed2 ? 1 : 0;
 
-        // 測試資料 6
-        int[] input6 = { 1, 2, 3, 2, 1 };
-        int k6 = 2;
-        Console.WriteLine("Test Case 6 - CountSubarrays: " + CountSubarrays(input6, k6));
-        Console.WriteLine("Test Case 6 - CountSubarrays2: " + CountSubarrays2(input6, k6));
+        Console.WriteLine($"案例：{name}");
+        Console.WriteLine($"nums = [{string.Join(", ", nums)}], k = {k}");
+        Console.WriteLine($"CountSubarrays  | Expected: {expected} | Actual: {actual1} | {(passed1 ? "PASS" : "FAIL")}");
+        Console.WriteLine($"CountSubarrays2 | Expected: {expected} | Actual: {actual2} | {(passed2 ? "PASS" : "FAIL")}");
+        Console.WriteLine();
     }
 
 
     /// <summary>
-    /// https://leetcode.cn/problems/count-subarrays-where-max-element-appears-at-least-k-times/solutions/2561054/2962-tong-ji-zui-da-yuan-su-chu-xian-zhi-t910/
-    /// https://leetcode.cn/problems/count-subarrays-where-max-element-appears-at-least-k-times/solutions/2560940/hua-dong-chuang-kou-fu-ti-dan-pythonjava-xvwg/
-    /// 
-    /// 
-    /// 滑動視窗概念題型
-    /// [start, end] 整體視窗往右滑動
-    /// 
-    /// end 先往右, 如果 end 元素為 maxnum 就累加其次數
-    /// 當 次數達到 k 時候
-    /// 此時需要考慮把 最左邊 start 的元素移除
-    /// 這樣才能納入新的子陣列組合
-    /// 每次剔除組合 就可以加入新的組合
-    /// 故結果只要統計 start 次數 即可知道有多少種組合
-    /// 
-    /// 請注意 題目 function 回傳是 long 不是 int
-    /// 
-    /// 時間複雜度: O(n)，其中 n 是陣列長度
-    /// 空間複雜度: O(1)，只使用了有限的變數
+    /// 計算全域最大元素至少出現 <paramref name="k"/> 次的連續子陣列數量。
+    /// 先以一次走訪找出全域最大值，再用 <c>[start, end]</c> 滑動視窗追蹤其出現次數；
+    /// 每當視窗已含有 <paramref name="k"/> 個最大值，就持續右移左邊界，藉由最後的
+    /// <c>start</c> 一次計入所有以目前右邊界結尾的有效子陣列。
+    /// 輸入必須符合題目限制：<paramref name="nums"/> 非空且元素皆為正整數，
+    /// <paramref name="k"/> 為正整數；回傳值為符合條件的子陣列總數。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="k"></param>
-    /// <returns></returns>
+    /// <param name="nums">長度介於 1 到 100,000 的正整數陣列。</param>
+    /// <param name="k">全域最大元素至少需要出現的次數，介於 1 到 100,000。</param>
+    /// <returns>全域最大元素至少出現 <paramref name="k"/> 次的連續子陣列數量。</returns>
+    /// <remarks>時間複雜度為 O(n)，額外空間複雜度為 O(1)。</remarks>
     public static long CountSubarrays(int[] nums, int k)
     {
-        int maxnum = 0;
-        foreach (int i in nums) 
+        int maxNum = 0;
+        foreach (int number in nums)
         {
-            // 找出 nums 中最大的 element
-            maxnum = Math.Max(maxnum, i);
+            maxNum = Math.Max(maxNum, number);
         }
 
-        long res = 0;
-        int start = 0, end = 0;
-        int length = nums.Length;
-        // 統計 element 出現次數
-        int maxcount = 0;
+        long result = 0;
+        int start = 0;
+        int end = 0;
+        int maxCount = 0;
 
-        while(end < length)
+        while (end < nums.Length)
         {
-            if (nums[end] == maxnum) 
+            if (nums[end] == maxNum)
             {
-                // element 數值為 最大元素,
-                // 累加 出現次數
-                maxcount++;
+                maxCount++;
             }
 
-            while(maxcount == k)
+            // 將左邊界移到第一個無效起點；被越過的每個起點都能形成有效子陣列。
+            while (maxCount == k)
             {
-                // 當最大元素 出現次數達到 k
-                // 要讓視窗 start 往右滑動
-                // 如果 start 符合 maxnum 就要扣除 次數累加
-                if (nums[start] == maxnum) 
+                if (nums[start] == maxNum)
                 {
-                    maxcount--;
+                    maxCount--;
                 }
+
                 start++;
             }
 
-            res += start;
+            // 起點 0 到 start - 1 皆含至少 k 個最大值，因此本輪新增 start 個答案。
+            result += start;
             end++;
         }
 
-        return res;
+        return result;
     }
 
-
     /// <summary>
-    /// 此解法是解決「最大元素出現至少 k 次的子陣列計數」問題的優化版本
-    /// 其實這兩方法差異不大(forach 換成 for)，但是這個方法更簡化了邏輯可讀性比較好
-    /// 
-    /// 解題思路：
-    /// 1. 使用優化的滑動視窗技術，透過一次遍歷解決問題
-    /// 2. 使用 LINQ 的 Max() 方法直接找出陣列中的最大值
-    /// 3. 維護一個滑動視窗，追蹤視窗內最大元素的出現次數
-    /// 4. 當最大元素出現次數恰好等於 k 時，縮小視窗左邊界，直到條件不再滿足
-    /// 5. 利用 start 位置來計算符合條件的子陣列數量
-    /// 
-    /// 解法特點：
-    /// - 簡化邏輯：使用 for 迴圈控制視窗右邊界，程式碼結構更清晰
-    /// - 精準條件判斷：使用 maxcount == k 作為條件，避免不必要的視窗調整
-    /// - 直接計數：每次處理完視窗後，直接累加 start 值得到結果
-    /// 
-    /// 時間複雜度: O(n)，其中 n 是陣列長度，每個元素最多被處理兩次
-    /// 空間複雜度: O(1)，只使用了有限的變數
-    /// 
-    /// 請注意 題目 function 回傳是 long 不是 int
+    /// 計算全域最大元素至少出現 <paramref name="k"/> 次的連續子陣列數量。
+    /// 此版本以 LINQ <see cref="Enumerable.Max(IEnumerable{int})"/> 取得全域最大值，
+    /// 並用 <c>for</c> 迴圈推進右邊界；當視窗剛好含有 <paramref name="k"/> 個最大值時，
+    /// 持續收縮左側直到視窗失效，接著以左邊界位置累計所有有效起點。
+    /// 輸入必須符合題目限制：<paramref name="nums"/> 非空且元素皆為正整數，
+    /// <paramref name="k"/> 為正整數；回傳值為符合條件的子陣列總數。
     /// </summary>
-    /// <param name="nums">輸入整數陣列</param>
-    /// <param name="k">最大元素需要出現的最小次數</param>
-    /// <returns>符合條件的子陣列數量</returns>
+    /// <param name="nums">長度介於 1 到 100,000 的正整數陣列。</param>
+    /// <param name="k">全域最大元素至少需要出現的次數，介於 1 到 100,000。</param>
+    /// <returns>全域最大元素至少出現 <paramref name="k"/> 次的連續子陣列數量。</returns>
+    /// <remarks>時間複雜度為 O(n)，額外空間複雜度為 O(1)。</remarks>
     public static long CountSubarrays2(int[] nums, int k)
     {
-        int maxnum = nums.Max(); // 找出陣列中的最大值
-        long res = 0;
-        int start = 0, maxcount = 0;
+        int maxNum = nums.Max();
+        long result = 0;
+        int start = 0;
+        int maxCount = 0;
 
         for (int end = 0; end < nums.Length; end++)
         {
-            // 當遇到最大值時，增加其計數
-            if (nums[end] == maxnum) 
+            if (nums[end] == maxNum)
             {
-                maxcount++;
+                maxCount++;
             }
 
-            // 當最大值出現次數恰好等於 k 時
-            // 移動左邊界以維護視窗條件
-            while (maxcount == k) 
+            // 收縮至只剩 k - 1 個最大值，讓 start 左側的所有起點都代表有效子陣列。
+            while (maxCount == k)
             {
-                // 如果移除的元素是最大值，則減少計數
-                if (nums[start] == maxnum) 
+                if (nums[start] == maxNum)
                 {
-                    maxcount--;
+                    maxCount--;
                 }
+
                 start++;
             }
 
-            // 累加以 start 為起點的所有可能子陣列數量
-            // 這代表從 start 到 end 的所有子陣列中，最大值出現次數都小於 k
-            res += start; 
+            result += start;
         }
 
-        return res;
+        return result;
     }
-
 }
