@@ -15,48 +15,130 @@ namespace leetcode_3163
         ///  從 word 中移除一個最長的前綴，該前綴由單個字符 c 重複最多 9 次構成。
         ///  將該前綴的長度接在字符 c 之後，然後附加到 comp 中。
         /// </summary>
-        /// <param name="args"></param>
+        /// <remarks>
+        /// 執行固定案例，對照兩種字串壓縮解法的預期與實際結果。
+        /// </remarks>
+        /// <param name="args">命令列參數；此範例不使用。</param>
         static void Main(string[] args)
         {
-            string word = "aaaaaaaaaaaaaabb";
-            Console.WriteLine(CompressedString(word));
-            Console.ReadKey();
+            (string Name, string Word, string Expected)[] testCases =
+            [
+                ("官方範例：每個字元皆不同", "abcde", "1a1b1c1d1e"),
+                ("官方範例：連續字元超過 9 個", "aaaaaaaaaaaaaabb", "9a5a2b"),
+                ("最小合法輸入", "x", "1x"),
+                ("連續字元剛好 9 個", "aaaaaaaaa", "9a"),
+                ("連續字元超過上限一個", "aaaaaaaaaa", "9a1a"),
+                ("相同字元分段重現", "aaabbaa", "3a2b2a")
+            ];
+
+            int solution1PassedCount = 0;
+            int solution2PassedCount = 0;
+            int total = testCases.Length * 2;
+
+            Console.WriteLine("LeetCode 3163 - String Compression III");
+            Console.WriteLine();
+
+            for (int i = 0; i < testCases.Length; i++)
+            {
+                (string name, string word, string expected) = testCases[i];
+                string actual1 = CompressedString(word);
+                string actual2 = CompressedString2(word);
+                bool solution1Passed = actual1 == expected;
+                bool solution2Passed = actual2 == expected;
+
+                solution1PassedCount += solution1Passed ? 1 : 0;
+                solution2PassedCount += solution2Passed ? 1 : 0;
+
+                Console.WriteLine($"案例 {i + 1}：{name}");
+                Console.WriteLine($"輸入：\"{word}\"");
+                Console.WriteLine($"Expected：\"{expected}\"");
+                Console.WriteLine($"解法一 Actual：\"{actual1}\" => {(solution1Passed ? "PASS" : "FAIL")}");
+                Console.WriteLine($"解法二 Actual：\"{actual2}\" => {(solution2Passed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+            }
+
+            int passed = solution1PassedCount + solution2PassedCount;
+
+            Console.WriteLine($"解法一：{solution1PassedCount}/{testCases.Length} 案例通過");
+            Console.WriteLine($"解法二：{solution2PassedCount}/{testCases.Length} 案例通過");
+            Console.WriteLine($"總結：{passed}/{total} 項驗證通過");
+
+            if (passed != total)
+            {
+                Environment.ExitCode = 1;
+            }
         }
 
 
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/string-compression-iii/solutions/2790666/mo-ni-pythonjavacgo-by-endlesscheng-3hk7/
-        /// https://leetcode.cn/problems/string-compression-iii/solutions/2790748/3163-ya-suo-zi-fu-chuan-iii-by-stormsuns-rtpi/
-        /// 
-        /// 簡單說就是統計連續相同 char 長度最長為 9, 超過就歸零重新累計
-        /// 
-        /// 輸出樣式: 數字在前, 字母在後
-        /// 
-        /// 使用 char 計算長度與比對前後字母是否相同
+        /// 將字串壓縮為「連續數量＋字元」的格式。
+        /// 逐字累計目前區段長度，當長度到達 9、抵達字串結尾或下一個字元不同時，
+        /// 立即輸出目前區段。輸入須符合題目限制：長度介於 1 到 200000，且只包含小寫英文字母。
         /// </summary>
-        /// <param name="word"></param>
-        /// <returns></returns>
+        /// <param name="word">要壓縮的非空小寫英文字串。</param>
+        /// <returns>每個區段以一位數長度接續原字元組成的壓縮字串。</returns>
         public static string CompressedString(string word)
         {
-            StringBuilder sb = new StringBuilder();
+            StringBuilder compressed = new StringBuilder();
             int count = 0;
             int length = word.Length;
-            for(int i = 0; i < length; i++)
+
+            for (int i = 0; i < length; i++)
             {
                 char c = word[i];
                 count++;
-                // char 長度 9, i 達到字串長度尾端, 下一個 char 不相同
-                if(count == 9 || i == length - 1 || c != word[i + 1])
+
+                // 每段最多只能包含 9 個字元；字串結尾或下一字元不同時也必須結束目前區段。
+                if (count == 9 || i == length - 1 || c != word[i + 1])
                 {
-                    sb.Append(count);
-                    sb.Append(c);
-                    // 重新計算
+                    compressed.Append(count);
+                    compressed.Append(c);
+
+                    // 區段輸出後歸零，讓下一個字元重新開始計數。
                     count = 0;
                 }
             }
 
-            return sb.ToString();
+            return compressed.ToString();
+        }
+
+        /// <summary>
+        /// 將字串壓縮為「連續數量＋字元」的格式。
+        /// 使用雙指標找出每一段完整的連續相同字元，再將段長拆成每批最多 9 個後依序輸出。
+        /// 輸入須符合題目限制：長度介於 1 到 200000，且只包含小寫英文字母。
+        /// </summary>
+        /// <param name="word">要壓縮的非空小寫英文字串。</param>
+        /// <returns>每個區段以一位數長度接續原字元組成的壓縮字串。</returns>
+        public static string CompressedString2(string word)
+        {
+            StringBuilder compressed = new StringBuilder();
+            int left = 0;
+
+            while (left < word.Length)
+            {
+                int right = left + 1;
+
+                // right 前進到不同字元或字串結尾，取得完整連續區段 [left, right)。
+                while (right < word.Length && word[right] == word[left])
+                {
+                    right++;
+                }
+
+                int remaining = right - left;
+
+                // 一個完整區段可能超過 9 個字元，因此需拆成多個合法批次。
+                while (remaining > 0)
+                {
+                    int chunkLength = Math.Min(9, remaining);
+                    compressed.Append(chunkLength);
+                    compressed.Append(word[left]);
+                    remaining -= chunkLength;
+                }
+
+                left = right;
+            }
+
+            return compressed.ToString();
         }
     }
 }
