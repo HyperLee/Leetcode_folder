@@ -10,16 +10,110 @@
         /// https://leetcode.cn/problems/minimum-number-of-pushes-to-type-word-ii/description/
         /// 
         /// </summary>
-        /// <param name="args"></param>
+        /// <remarks>
+        /// 執行固定案例，比較三種最少按鍵次數解法；若任一結果不符預期，程序會以非零結束碼結束。
+        /// </remarks>
+        /// <param name="args">命令列參數；本範例不使用此參數。</param>
         static void Main(string[] args)
         {
-            string word = "abcde";
-            Console.WriteLine(MinimumPushes(word));
-            Console.ReadKey();
+            int failedChecks = RunSamples();
+            Environment.ExitCode = failedChecks == 0 ? 0 : 1;
+        }
+
+        /// <summary>
+        /// 執行七組符合題目限制的固定案例，逐一驗證三種解法並回傳失敗項目數。
+        /// 測試涵蓋官方範例、最小長度、按鍵成本分層，以及最大輸入長度。
+        /// </summary>
+        /// <returns>三種解法合計未通過的驗證數；全部正確時為 0。</returns>
+        private static int RunSamples()
+        {
+            (string Name, string Word, int Expected)[] cases =
+            [
+                ("官方案例 1", "abcde", 5),
+                ("官方案例 2", "xyzxyzxyzxyz", 12),
+                ("官方案例 3", "aabbccddeeffgghhiiiiii", 24),
+                ("最小長度", "a", 1),
+                ("跨入第二按鍵層", "abcdefghi", 10),
+                ("26 個不同字母", "abcdefghijklmnopqrstuvwxyz", 56),
+                ("最大長度重複字母", new string('a', 100_000), 100_000)
+            ];
+
+            int passedChecks = 0;
+            int totalChecks = cases.Length * 3;
+
+            Console.WriteLine("LeetCode 3016 - Minimum Number of Pushes to Type Word II");
+            Console.WriteLine("三種解法對照驗證");
+            Console.WriteLine();
+
+            for (int i = 0; i < cases.Length; i++)
+            {
+                (string name, string word, int expected) = cases[i];
+                passedChecks += RunCase(i + 1, name, word, expected);
+            }
+
+            Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項測試通過");
+            return totalChecks - passedChecks;
+        }
+
+        /// <summary>
+        /// 將單一測試案例交給三種解法，輸出預期值、實際值與驗證結果。
+        /// 輸入字串須符合題目限制；回傳值可供總結所有解法的通過數。
+        /// </summary>
+        /// <param name="caseNumber">從 1 開始的案例編號。</param>
+        /// <param name="caseName">案例用途的簡短名稱。</param>
+        /// <param name="word">由小寫英文字母組成、長度介於 1 到 100000 的字串。</param>
+        /// <param name="expected">此案例的最少按鍵次數。</param>
+        /// <returns>此案例通過的解法數，範圍為 0 到 3。</returns>
+        private static int RunCase(int caseNumber, string caseName, string word, int expected)
+        {
+            (string Name, Func<string, int> Solver)[] solutions =
+            [
+                (nameof(MinimumPushes), MinimumPushes),
+                (nameof(MinimumPushesByFrequencyBuckets), MinimumPushesByFrequencyBuckets),
+                (nameof(MinimumPushesByRepeatedSelection), MinimumPushesByRepeatedSelection)
+            ];
+
+            int passedChecks = 0;
+
+            Console.WriteLine($"案例 {caseNumber}：{caseName}");
+            Console.WriteLine($"輸入：word = \"{FormatWord(word)}\" (length = {word.Length})");
+
+            foreach ((string name, Func<string, int> solver) in solutions)
+            {
+                int actual = solver(word);
+                bool passed = actual == expected;
+                passedChecks += passed ? 1 : 0;
+                Console.WriteLine($"{name}: Expected = {expected}, Actual = {actual} => {(passed ? "PASS" : "FAIL")}");
+            }
+
+            Console.WriteLine();
+            return passedChecks;
+        }
+
+        /// <summary>
+        /// 將測試字串整理成適合主控台顯示的形式；短字串完整保留，長字串僅顯示前後各十二字元。
+        /// 輸入必須是符合題目限制的非空字串，輸出只用於顯示，不會改變原字串。
+        /// </summary>
+        /// <param name="word">要顯示的測試字串。</param>
+        /// <returns>長度不超過 24 時回傳原字串，否則回傳含省略號的縮寫。</returns>
+        private static string FormatWord(string word)
+        {
+            const int visibleCharacterCount = 12;
+
+            if (word.Length <= visibleCharacterCount * 2)
+            {
+                return word;
+            }
+
+            return $"{word[..visibleCharacterCount]}...{word[^visibleCharacterCount..]}";
         }
 
 
         /// <summary>
+        /// 計算重新映射按鍵後輸入 <paramref name="word"/> 所需的最少按鍵次數。
+        /// 解法先統計 26 個小寫字母的出現頻率並排序，再讓最高頻的字母依序使用成本最低的按鍵位置。
+        /// 輸入須為長度 1 到 100000、只含小寫英文字母的字串；輸出為最少按鍵次數且不改變輸入。
+        ///
         /// ref:
         /// https://leetcode.cn/problems/minimum-number-of-pushes-to-type-word-ii/solutions/2613399/tan-xin-jian-ji-xie-fa-pythonjavacgo-by-5l4je/
         /// https://leetcode.cn/problems/minimum-number-of-pushes-to-type-word-ii/solutions/2613661/3016-shu-ru-dan-ci-xu-yao-de-zui-shao-an-n2z2/
@@ -43,32 +137,113 @@
         /// 
         /// 出現的頻率(次數) * 按鍵次數 => 題目所求
         /// </summary>
-        /// <param name="word"></param>
-        /// <returns></returns>
+        /// <param name="word">由小寫英文字母組成、長度介於 1 到 100000 的字串。</param>
+        /// <returns>在最佳按鍵映射下輸入整個字串所需的最少按鍵次數。</returns>
         public static int MinimumPushes(string word)
         {
-            // 26 = 小寫英文字母數量
-            int[] cnt = new int[26];
+            int[] frequencies = new int[26];
             foreach (char c in word)
             {
-                // 統計每個字母出現次數
-                cnt[c - 'a']++;
+                frequencies[c - 'a']++;
             }
 
-            // 遞增 排序
-            Array.Sort(cnt);
+            Array.Sort(frequencies);
 
-            int res = 0;
-            // 從 26 個字母計算最少按鍵次數
-            for(int i = 0; i < 26; i++)
+            int minimumPushes = 0;
+            for (int rank = 0; rank < frequencies.Length; rank++)
             {
-                // 出現頻率要從高的開始取, 所以是後面開始取
-                // 出現頻率 * 按鍵次數
-                res += cnt[25 - i] * (i / 8 + 1);
+                // 每八個字母進入下一個按鍵成本層：第 1～8 名按一次，第 9～16 名按兩次，依此類推。
+                int pushCost = (rank / 8) + 1;
+                minimumPushes += frequencies[frequencies.Length - 1 - rank] * pushCost;
             }
 
-            return res;
+            return minimumPushes;
+        }
 
+        /// <summary>
+        /// 使用頻率桶計算重新映射按鍵後輸入 <paramref name="word"/> 的最少按鍵次數。
+        /// 解法記錄每一種出現次數對應多少個字母，再由高頻桶往低頻桶配置成本由低到高的按鍵位置。
+        /// 輸入須為長度 1 到 100000、只含小寫英文字母的字串；輸出為最少按鍵次數且不改變輸入。
+        /// </summary>
+        /// <param name="word">由小寫英文字母組成、長度介於 1 到 100000 的字串。</param>
+        /// <returns>在最佳按鍵映射下輸入整個字串所需的最少按鍵次數。</returns>
+        public static int MinimumPushesByFrequencyBuckets(string word)
+        {
+            int[] frequencies = new int[26];
+            foreach (char c in word)
+            {
+                frequencies[c - 'a']++;
+            }
+
+            int[] frequencyBuckets = new int[word.Length + 1];
+            foreach (int frequency in frequencies)
+            {
+                if (frequency > 0)
+                {
+                    frequencyBuckets[frequency]++;
+                }
+            }
+
+            int rank = 0;
+            int minimumPushes = 0;
+
+            // 從最高頻率往下展開桶，效果等同依頻率遞減排序，但不需要比較元素。
+            for (int frequency = frequencyBuckets.Length - 1; frequency >= 1; frequency--)
+            {
+                for (int letterCount = 0; letterCount < frequencyBuckets[frequency]; letterCount++)
+                {
+                    int pushCost = (rank / 8) + 1;
+                    minimumPushes += frequency * pushCost;
+                    rank++;
+                }
+            }
+
+            return minimumPushes;
+        }
+
+        /// <summary>
+        /// 使用重複選取最高頻字母的方式，計算重新映射按鍵後輸入 <paramref name="word"/> 的最少按鍵次數。
+        /// 每一輪直接掃描 26 個頻率並挑出尚未配置的最大值，依排名配置按鍵成本，作為不使用排序的直觀基準。
+        /// 輸入須為長度 1 到 100000、只含小寫英文字母的字串；輸出為最少按鍵次數且不改變輸入。
+        /// </summary>
+        /// <param name="word">由小寫英文字母組成、長度介於 1 到 100000 的字串。</param>
+        /// <returns>在最佳按鍵映射下輸入整個字串所需的最少按鍵次數。</returns>
+        public static int MinimumPushesByRepeatedSelection(string word)
+        {
+            int[] frequencies = new int[26];
+            foreach (char c in word)
+            {
+                frequencies[c - 'a']++;
+            }
+
+            int minimumPushes = 0;
+
+            for (int rank = 0; rank < frequencies.Length; rank++)
+            {
+                int highestFrequency = 0;
+                int selectedIndex = -1;
+
+                // 每輪挑出一個最高頻字母；將它清零後，下一輪自然會選到下一名。
+                for (int i = 0; i < frequencies.Length; i++)
+                {
+                    if (frequencies[i] > highestFrequency)
+                    {
+                        highestFrequency = frequencies[i];
+                        selectedIndex = i;
+                    }
+                }
+
+                if (selectedIndex == -1)
+                {
+                    break;
+                }
+
+                int pushCost = (rank / 8) + 1;
+                minimumPushes += highestFrequency * pushCost;
+                frequencies[selectedIndex] = 0;
+            }
+
+            return minimumPushes;
         }
 
     }
