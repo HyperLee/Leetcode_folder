@@ -3,10 +3,55 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1700. Number of Students Unable to Eat Lunch
-        /// https://leetcode.com/problems/number-of-students-unable-to-eat-lunch/description/?envType=daily-question&envId=2024-04-08
-        /// 1700. 无法吃午餐的学生数量
+        /// https://leetcode.com/problems/number-of-students-unable-to-eat-lunch/description/
+        ///
+        /// The cafeteria offers circular and square sandwiches, represented by 0 and 1. Students form a queue, each preferring
+        /// one type. There are equally many sandwiches, placed in a stack. If the front student prefers the top sandwich, they
+        /// take it and leave; otherwise they move to the queue's end. Continue until no queued student wants the top sandwich.
+        /// Given students and sandwiches, where index 0 is the queue front and stack top, return how many students cannot eat.
+        ///
+        /// Example 1:
+        /// Input: students = [1,1,0,0], sandwiches = [0,1,0,1]
+        /// Output: 0
+        /// Explanation: The queue changes [1,1,0,0] -&gt; [1,0,0,1] -&gt; [0,0,1,1]. A student takes 0, leaving
+        /// students = [0,1,1], sandwiches = [1,0,1]. After further rotations and matches, both arrays become empty, so all eat.
+        ///
+        /// Example 2:
+        /// Input: students = [1,1,1,0,0,1], sandwiches = [1,0,0,0,1,1]
+        /// Output: 3
+        ///
+        /// Constraints:
+        /// - 1 &lt;= students.length, sandwiches.length &lt;= 100
+        /// - students.length == sandwiches.length
+        /// - sandwiches[i] is 0 or 1.
+        /// - students[i] is 0 or 1.
+        /// </para>
+        /// <para>
+        /// 1700. 無法吃午餐的學生數量
         /// https://leetcode.cn/problems/number-of-students-unable-to-eat-lunch/description/
+        ///
+        /// 餐廳提供以 0、1 表示的圓形與方形三明治。學生排成佇列，每人偏好一種類型；三明治數量與學生相同，
+        /// 並疊成堆疊。若隊首學生偏好頂端三明治，就取走並離開；否則移到隊尾。持續到佇列中無人想要頂端
+        /// 三明治。給定 students 與 sandwiches，索引 0 分別是隊首與堆疊頂端，回傳無法用餐的學生數量。
+        ///
+        /// 範例 1：
+        /// 輸入：students = [1,1,0,0]，sandwiches = [0,1,0,1]
+        /// 輸出：0
+        /// 解釋：佇列依序變成 [1,1,0,0] -&gt; [1,0,0,1] -&gt; [0,0,1,1]。一名學生取走 0 後，
+        /// students = [0,1,1]、sandwiches = [1,0,1]。繼續輪轉與配對後兩個陣列皆為空，所有學生都能用餐。
+        ///
+        /// 範例 2：
+        /// 輸入：students = [1,1,1,0,0,1]，sandwiches = [1,0,0,0,1,1]
+        /// 輸出：3
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= students.length, sandwiches.length &lt;= 100
+        /// - students.length == sandwiches.length
+        /// - sandwiches[i] 為 0 或 1。
+        /// - students[i] 為 0 或 1。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 執行六組固定案例，比較計數法與佇列模擬法，並驗證兩種解法皆不修改輸入陣列。

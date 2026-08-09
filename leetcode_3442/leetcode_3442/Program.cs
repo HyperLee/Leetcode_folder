@@ -4,19 +4,54 @@ class Program
 {
     /// <summary>
     /// 3442. Maximum Difference Between Even and Odd Frequency I
-    /// https://leetcode.com/problems/maximum-difference-between-even-and-odd-frequency-i/description/?envType=daily-question&envId=2025-06-10
-    /// 3442. 奇偶频次间的最大差值 I
-    /// https://leetcode.cn/problems/maximum-difference-between-even-and-odd-frequency-i/description/?envType=daily-question&envId=2025-06-10
-    /// 題目描述:
-    /// 給定一個只包含小寫英文字母的字串 s。
-    /// 請找出滿足以下條件的最大差值 diff = freq(a1) - freq(a2)：
-    /// a1 在字串中出現的頻次為奇數。
-    /// a2 在字串中出現的頻次為偶數。
-    /// 返回這個最大差值。
-    /// 
-    /// 題目要求出 奇數 - 偶數 = 最大值
-    /// 要求出最大所以 奇數要盡可能的找出最大值，偶數要盡可能的找出最小值。
-    /// 
+    /// https://leetcode.com/problems/maximum-difference-between-even-and-odd-frequency-i/description/
+    /// <para>
+    /// You are given a string s consisting of lowercase English letters.
+    ///
+    /// Find the maximum difference diff = freq(a1) - freq(a2), where a1 has an odd frequency and a2 has an even frequency in s.
+    ///
+    /// Return this maximum difference.
+    ///
+    /// Example 1:
+    /// Input: s = "aaaaabbc"
+    /// Output: 3
+    /// Explanation: 'a' has odd frequency 5 and 'b' has even frequency 2. The maximum difference is 5 - 2 = 3.
+    ///
+    /// Example 2:
+    /// Input: s = "abcabcab"
+    /// Output: 1
+    /// Explanation: 'a' has odd frequency 3 and 'c' has even frequency 2. The maximum difference is 3 - 2 = 1.
+    ///
+    /// Constraints:
+    /// - 3 &lt;= s.length &lt;= 100
+    /// - s consists only of lowercase English letters.
+    /// - s contains at least one odd-frequency character and one even-frequency character.
+    /// </para>
+    /// <para>
+    /// 3442. 奇數與偶數頻率間的最大差值 I
+    /// https://leetcode.cn/problems/maximum-difference-between-even-and-odd-frequency-i/description/
+    ///
+    /// 給定只由小寫英文字母組成的字串 s。
+    ///
+    /// 找出最大差值 diff = freq(a1) - freq(a2)，其中 a1 在 s 中的頻率為奇數，a2 的頻率為偶數。
+    ///
+    /// 回傳此最大差值。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "aaaaabbc"
+    /// 輸出：3
+    /// 解釋：'a' 的奇數頻率為 5，'b' 的偶數頻率為 2。最大差值為 5 - 2 = 3。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "abcabcab"
+    /// 輸出：1
+    /// 解釋：'a' 的奇數頻率為 3，'c' 的偶數頻率為 2。最大差值為 3 - 2 = 1。
+    ///
+    /// 限制條件：
+    /// - 3 &lt;= s.length &lt;= 100
+    /// - s 只由小寫英文字母組成。
+    /// - s 至少包含一個奇數頻率字元與一個偶數頻率字元。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

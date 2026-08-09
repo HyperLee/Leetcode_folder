@@ -3,15 +3,65 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1458. Max Dot Product of Two Subsequences
-    /// https://leetcode.com/problems/max-dot-product-of-two-subsequences/description/?envType=daily-question&envId=2026-01-08
-    /// 1458. 兩個子序列的最大點積（簡體中文）
-    /// https://leetcode.cn/problems/max-dot-product-of-two-subsequences/description/?envType=daily-question&envId=2026-01-08
+    /// https://leetcode.com/problems/max-dot-product-of-two-subsequences/description/
     ///
-    /// 繁體中文題目描述：
-    /// 給定兩個整數陣列 `nums1` 與 `nums2`，請回傳兩個子序列（長度相同且非空）之間的最大點積（dot product）。
-    /// 子序列是由原陣列刪除某些元素（可以不刪除）後得到的新陣列，保留原元素的相對順序。
-    /// 例如，`[2,3,5]` 是 `[1,2,3,4,5]` 的子序列，但 `[1,5,3]` 不是子序列。
+    /// Given two arrays nums1 and nums2. Return the maximum dot product between non-empty subsequences of nums1 and nums2
+    /// with the same length.
+    ///
+    /// A subsequence of an array is a new array formed from the original array by deleting some (possibly none) of the
+    /// elements without disturbing the relative positions of the remaining elements. For example, [2,3,5] is a subsequence
+    /// of [1,2,3,4,5], while [1,5,3] is not.
+    ///
+    /// Example 1:
+    /// Input: nums1 = [2,1,-2,5], nums2 = [3,0,-6]
+    /// Output: 18
+    /// Explanation: Take [2,-2] from nums1 and [3,-6] from nums2. Their dot product is
+    /// (2*3 + (-2)*(-6)) = 18.
+    ///
+    /// Example 2:
+    /// Input: nums1 = [3,-2], nums2 = [2,-6,7]
+    /// Output: 21
+    /// Explanation: Take [3] from nums1 and [7] from nums2. Their dot product is (3*7) = 21.
+    ///
+    /// Example 3:
+    /// Input: nums1 = [-1,-1], nums2 = [1,1]
+    /// Output: -1
+    /// Explanation: Take [-1] from nums1 and [1] from nums2. Their dot product is -1.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums1.length, nums2.length &lt;= 500
+    /// - -1000 &lt;= nums1[i], nums2[i] &lt;= 1000
+    /// </para>
+    /// <para>
+    /// 1458. 兩個子序列的最大點積
+    /// https://leetcode.cn/problems/max-dot-product-of-two-subsequences/description/
+    ///
+    /// 給定兩個陣列 nums1 與 nums2。回傳 nums1 與 nums2 中長度相同的非空子序列之間的最大點積。
+    ///
+    /// 陣列的子序列是從原陣列刪除若干元素（也可以不刪除）後形成的新陣列，且不改變其餘元素的相對位置。
+    /// 例如，[2,3,5] 是 [1,2,3,4,5] 的子序列，而 [1,5,3] 不是。
+    ///
+    /// 範例 1：
+    /// 輸入：nums1 = [2,1,-2,5]，nums2 = [3,0,-6]
+    /// 輸出：18
+    /// 解釋：從 nums1 取 [2,-2]，從 nums2 取 [3,-6]；點積為 (2*3 + (-2)*(-6)) = 18。
+    ///
+    /// 範例 2：
+    /// 輸入：nums1 = [3,-2]，nums2 = [2,-6,7]
+    /// 輸出：21
+    /// 解釋：從 nums1 取 [3]，從 nums2 取 [7]；點積為 (3*7) = 21。
+    ///
+    /// 範例 3：
+    /// 輸入：nums1 = [-1,-1]，nums2 = [1,1]
+    /// 輸出：-1
+    /// 解釋：從 nums1 取 [-1]，從 nums2 取 [1]；點積為 -1。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums1.length, nums2.length &lt;= 500
+    /// - -1000 &lt;= nums1[i], nums2[i] &lt;= 1000
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

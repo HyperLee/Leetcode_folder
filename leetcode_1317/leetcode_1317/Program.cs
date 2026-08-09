@@ -3,17 +3,63 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1317. Convert Integer to the Sum of Two No-Zero Integers
-    /// https://leetcode.com/problems/convert-integer-to-the-sum-of-two-no-zero-integers/description/?envType=daily-question&envId=2025-09-08
-    /// 1317. 将整数转换为两个无零整数的和
-    /// https://leetcode.cn/problems/convert-integer-to-the-sum-of-two-no-zero-integers/description/?envType=daily-question&envId=2025-09-08
-    /// 
-    /// 題目描述（繁體中文）：
-    /// 無零整數 (No-Zero integer) 是指其十進位表示中不包含任何數字 0 的正整數。
-    /// 給定一個整數 n，回傳一個包含兩個整數 [a, b] 的陣列，其中：
-    /// - a 與 b 均為無零整數。
+    /// https://leetcode.com/problems/convert-integer-to-the-sum-of-two-no-zero-integers/description/
+    ///
+    /// A No-Zero integer is a positive integer that does not contain any 0 in its decimal representation.
+    ///
+    /// Given an integer n, return a list of two integers [a, b] where:
+    /// - a and b are No-Zero integers.
     /// - a + b = n
-    /// 題目的測資保證至少存在一組有效解。若存在多種有效解，回傳任一組即可。
+    ///
+    /// The test cases are generated so that there is at least one valid solution. If there are many valid solutions,
+    /// you can return any of them.
+    ///
+    /// Example 1:
+    /// Input: n = 2
+    /// Output: [1,1]
+    /// Explanation: Let a = 1 and b = 1.
+    /// Both a and b are no-zero integers, and a + b = 2 = n.
+    ///
+    /// Example 2:
+    /// Input: n = 11
+    /// Output: [2,9]
+    /// Explanation: Let a = 2 and b = 9.
+    /// Both a and b are no-zero integers, and a + b = 11 = n.
+    /// Note that there are other valid answers as [8, 3] that can be accepted.
+    ///
+    /// Constraints:
+    /// - 2 &lt;= n &lt;= 10^4
+    /// </para>
+    /// <para>
+    /// 1317. 將整數轉換為兩個無零整數之和
+    /// https://leetcode.cn/problems/convert-integer-to-the-sum-of-two-no-zero-integers/description/
+    ///
+    /// 無零整數是指十進位表示中不包含任何 0 的正整數。
+    ///
+    /// 給定一個整數 n，回傳由兩個整數組成的清單 [a, b]，其中：
+    /// - a 與 b 都是無零整數。
+    /// - a + b = n
+    ///
+    /// 測試案例保證至少存在一組有效解。如果存在多組有效解，可回傳其中任意一組。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 2
+    /// 輸出：[1,1]
+    /// 解釋：令 a = 1 且 b = 1。
+    /// a 與 b 都是無零整數，而且 a + b = 2 = n。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 11
+    /// 輸出：[2,9]
+    /// 解釋：令 a = 2 且 b = 9。
+    /// a 與 b 都是無零整數，而且 a + b = 11 = n。
+    /// 請注意，其他有效答案如 [8, 3] 也會被接受。
+    ///
+    /// 限制條件：
+    /// - 2 &lt;= n &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

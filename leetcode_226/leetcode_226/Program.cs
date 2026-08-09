@@ -27,23 +27,55 @@
 
     internal class Program
     {
-        /// <summary> 
+        /// <summary>
+        /// <para>
         /// 226. Invert Binary Tree
-        /// https://leetcode.com/problems/invert-binary-tree/description/?envType=study-plan-v2&envId=top-interview-150
-        /// 
-        /// 226. 翻转二叉树
+        /// https://leetcode.com/problems/invert-binary-tree/description/
+        ///
+        /// Given the root of a binary tree, invert the tree and return its root.
+        ///
+        /// Images: https://assets.leetcode.com/uploads/2021/03/14/invert1-tree.jpg and https://assets.leetcode.com/uploads/2021/03/14/invert2-tree.jpg
+        ///
+        /// Example 1:
+        /// Input: root = [4,2,7,1,3,6,9]
+        /// Output: [4,7,2,9,6,3,1]
+        ///
+        /// Example 2:
+        /// Input: root = [2,1,3]
+        /// Output: [2,3,1]
+        ///
+        /// Example 3:
+        /// Input: root = []
+        /// Output: []
+        ///
+        /// Constraints:
+        /// - The number of nodes is in [0,100].
+        /// - -100 &lt;= Node.val &lt;= 100
+        /// </para>
+        /// <para>
+        /// 226. 反轉二元樹
         /// https://leetcode.cn/problems/invert-binary-tree/description/
-        /// 
-        /// 翻轉二元樹 root 不變 左右子樹翻轉
-        /// 
-        /// InvertTree 是 翻轉後的 答案
-        /// 但是 tree 輸出顯示 要依靠
-        /// 前中後序遍歷才能輸出樹狀結構
-        /// 本題分別使用三種遍歷 展示輸出答案
-        /// 
-        /// 前中後序, 所謂的前中後是指根節點位置在哪裡
-        /// 前序就是 前面
-        /// 依此類蓷
+        ///
+        /// 給定二元樹的根節點，反轉整棵樹並回傳其根節點。
+        ///
+        /// 圖片：https://assets.leetcode.com/uploads/2021/03/14/invert1-tree.jpg 與 https://assets.leetcode.com/uploads/2021/03/14/invert2-tree.jpg
+        ///
+        /// 範例 1：
+        /// 輸入：root = [4,2,7,1,3,6,9]
+        /// 輸出：[4,7,2,9,6,3,1]
+        ///
+        /// 範例 2：
+        /// 輸入：root = [2,1,3]
+        /// 輸出：[2,3,1]
+        ///
+        /// 範例 3：
+        /// 輸入：root = []
+        /// 輸出：[]
+        ///
+        /// 限制條件：
+        /// - 節點數量在 [0,100] 範圍內。
+        /// - -100 &lt;= Node.val &lt;= 100
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

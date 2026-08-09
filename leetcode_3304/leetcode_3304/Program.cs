@@ -4,18 +4,58 @@ class Program
 {
     /// <summary>
     /// 3304. Find the K-th Character in String Game I
-    /// https://leetcode.com/problems/find-the-k-th-character-in-string-game-i/description/?envType=daily-question&envId=2025-07-03
-    /// 3304. 找出第 K 個字符 I
-    /// https://leetcode.cn/problems/find-the-k-th-character-in-string-game-i/description/?envType=daily-question&envId=2025-07-03
-    /// 
-    /// 題目描述（繁體中文翻譯）：
-    /// Alice 和 Bob 正在玩一個遊戲。最初，Alice 有一個字串 word = "a"。
-    /// 你給定一個正整數 k。
-    /// 現在 Bob 會要求 Alice 永遠執行以下操作：
-    /// 將 word 中的每個字元變為英文字母表中的下一個字元，然後將其附加到原始 word 之後。
-    /// 例如，對 "c" 執行操作會生成 "cd"，對 "zb" 執行操作會生成 "zbac"。
-    /// 返回經過足夠多次操作後，word 至少有 k 個字元時的第 k 個字元。
-    /// 注意：字元 'z' 變為 'a'。
+    /// https://leetcode.com/problems/find-the-k-th-character-in-string-game-i/description/
+    /// <para>
+    /// Alice and Bob are playing a game. Initially, Alice has word = "a".
+    ///
+    /// You are given a positive integer k.
+    ///
+    /// Bob asks Alice to perform this operation forever:
+    /// - Generate a new string by changing every character in word to its next character in the English alphabet, and append it to the original word.
+    ///
+    /// For example, applying the operation to "c" produces "cd", and applying it to "zb" produces "zbac".
+    ///
+    /// Return the k-th character in word after enough operations have made word contain at least k characters.
+    ///
+    /// Example 1:
+    /// Input: k = 5
+    /// Output: "b"
+    /// Explanation: Initially word = "a". The first operation appends "b", producing "ab". The second appends "bc", producing "abbc". The third appends "bccd", producing "abbcbccd".
+    ///
+    /// Example 2:
+    /// Input: k = 10
+    /// Output: "c"
+    ///
+    /// Constraints:
+    /// - 1 &lt;= k &lt;= 500
+    /// </para>
+    /// <para>
+    /// 3304. 字串遊戲 I 中的第 K 個字元
+    /// https://leetcode.cn/problems/find-the-k-th-character-in-string-game-i/description/
+    ///
+    /// Alice 與 Bob 正在玩遊戲。起初 Alice 擁有 word = "a"。
+    ///
+    /// 給定一個正整數 k。
+    ///
+    /// Bob 會要求 Alice 永遠執行下列操作：
+    /// - 將 word 中的每個字元變成英文字母表中的下一個字元以產生新字串，並將新字串附加到原始 word。
+    ///
+    /// 例如，對 "c" 執行操作會得到 "cd"；對 "zb" 執行操作會得到 "zbac"。
+    ///
+    /// 執行足夠次操作使 word 至少包含 k 個字元後，回傳 word 的第 k 個字元。
+    ///
+    /// 範例 1：
+    /// 輸入：k = 5
+    /// 輸出："b"
+    /// 解釋：起初 word = "a"。第一次附加 "b"，得到 "ab"；第二次附加 "bc"，得到 "abbc"；第三次附加 "bccd"，得到 "abbcbccd"。
+    ///
+    /// 範例 2：
+    /// 輸入：k = 10
+    /// 輸出："c"
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= k &lt;= 500
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// 

@@ -3,15 +3,51 @@
 class Program
 {
     /// <summary>
-    /// 題目描述：
-    /// 給定一個有符號 32 位元整數 x，請將 x 的數字反轉後回傳。
-    /// 如果反轉後的數值超出 32 位元有符號整數範圍 [-2^31, 2^31 - 1]，則回傳 0。
-    /// 假設執行環境不允許你儲存 64 位元整數（有符號或無符號）。
-    /// 
     /// 7. Reverse Integer
     /// https://leetcode.com/problems/reverse-integer/description/
+    /// <para>
+    /// Given a signed 32-bit integer x, return x with its digits reversed. If reversing x causes the value to go outside the signed 32-bit integer range [-2^31, 2^31 - 1], then return 0.
+    ///
+    /// Assume the environment does not allow you to store 64-bit integers (signed or unsigned).
+    ///
+    /// Example 1:
+    /// Input: x = 123
+    /// Output: 321
+    ///
+    /// Example 2:
+    /// Input: x = -123
+    /// Output: -321
+    ///
+    /// Example 3:
+    /// Input: x = 120
+    /// Output: 21
+    ///
+    /// Constraints:
+    /// - -2^31 &lt;= x &lt;= 2^31 - 1
+    /// </para>
+    /// <para>
     /// 7. 整數反轉
     /// https://leetcode.cn/problems/reverse-integer/description/
+    ///
+    /// 給定一個有符號 32 位元整數 x，請將 x 的數字反轉後回傳。如果反轉 x 會使數值超出有符號 32 位元整數範圍 [-2^31, 2^31 - 1]，則回傳 0。
+    ///
+    /// 假設執行環境不允許儲存 64 位元整數（有符號或無符號）。
+    ///
+    /// 範例 1：
+    /// 輸入：x = 123
+    /// 輸出：321
+    ///
+    /// 範例 2：
+    /// 輸入：x = -123
+    /// 輸出：-321
+    ///
+    /// 範例 3：
+    /// 輸入：x = 120
+    /// 輸出：21
+    ///
+    /// 限制條件：
+    /// - -2^31 &lt;= x &lt;= 2^31 - 1
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

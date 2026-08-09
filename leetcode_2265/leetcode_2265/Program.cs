@@ -3,13 +3,50 @@ namespace leetcode_2265;
 internal class Program
 {
     /// <summary>
-    /// LeetCode 2265 - Count Nodes Equal to Average of Subtree.
-    /// LeetCode 2265 - 統計值等於子樹平均值的節點數。
-    /// English: https://leetcode.com/problems/count-nodes-equal-to-average-of-subtree/
-    /// 中文：https://leetcode.cn/problems/count-nodes-equal-to-average-of-subtree/
-    /// English: For every node in a binary tree, count it when its value equals the integer average
-    /// of all values in its own subtree.
-    /// 中文：對二元樹的每個節點，若其值等於自身子樹所有節點值的整數平均，便將它計入答案。
+    /// <para>
+    /// 2265. Count Nodes Equal to Average of Subtree
+    /// https://leetcode.com/problems/count-nodes-equal-to-average-of-subtree/description/
+    ///
+    /// Given a binary tree root, return the number of nodes whose value equals the average of all values in their subtree. The average of n elements is their sum divided by n, rounded down. A node's subtree contains that node and all descendants.
+    ///
+    /// Images: https://assets.leetcode.com/uploads/2022/03/15/image-20220315203925-1.png and https://assets.leetcode.com/uploads/2022/03/26/image-20220326133920-1.png
+    ///
+    /// Example 1:
+    /// Input: root = [4,8,5,0,1,null,6]
+    /// Output: 5
+    /// Explanation: Node 4 has average (4 + 8 + 5 + 0 + 1 + 6) / 6 = 24 / 6 = 4; node 5 has (5 + 6) / 2 = 11 / 2 = 5; nodes 0, 1, 6 have averages 0 / 1 = 0, 1 / 1 = 1, 6 / 1 = 6.
+    ///
+    /// Example 2:
+    /// Input: root = [1]
+    /// Output: 1
+    /// Explanation: Node 1 has subtree average 1 / 1 = 1.
+    ///
+    /// Constraints:
+    /// - The number of nodes is in [1,1000].
+    /// - 0 &lt;= Node.val &lt;= 1000
+    /// </para>
+    /// <para>
+    /// 2265. 統計值等於子樹平均值的節點數
+    /// https://leetcode.cn/problems/count-nodes-equal-to-average-of-subtree/description/
+    ///
+    /// 給定二元樹 root，回傳節點值等於其子樹所有值平均數的節點數量。n 個元素的平均值是總和除以 n 並向下取整。節點的子樹包含該節點與所有後代。
+    ///
+    /// 圖片：https://assets.leetcode.com/uploads/2022/03/15/image-20220315203925-1.png 與 https://assets.leetcode.com/uploads/2022/03/26/image-20220326133920-1.png
+    ///
+    /// 範例 1：
+    /// 輸入：root = [4,8,5,0,1,null,6]
+    /// 輸出：5
+    /// 說明：節點 4 的平均為 (4 + 8 + 5 + 0 + 1 + 6) / 6 = 24 / 6 = 4；節點 5 為 (5 + 6) / 2 = 11 / 2 = 5；節點 0、1、6 的平均分別為 0 / 1 = 0、1 / 1 = 1、6 / 1 = 6。
+    ///
+    /// 範例 2：
+    /// 輸入：root = [1]
+    /// 輸出：1
+    /// 說明：節點 1 的子樹平均為 1 / 1 = 1。
+    ///
+    /// 限制條件：
+    /// - 節點數量在 [1,1000] 範圍內。
+    /// - 0 &lt;= Node.val &lt;= 1000
+    /// </para>
     /// </summary>
     private static void Main()
     {

@@ -5,11 +5,73 @@ namespace leetcode_153;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 153. Find Minimum in Rotated Sorted Array
-    /// https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/?envType=problem-list-v2&envId=oizxjoit
-    /// 153. 寻找旋转排序数组中的最小值
+    /// https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/description/
+    ///
+    /// Suppose an array of length n sorted in ascending order is rotated between 1 and n times. For example,
+    /// nums = [0,1,2,4,5,6,7] might become:
+    /// - [4,5,6,7,0,1,2] if rotated 4 times.
+    /// - [0,1,2,4,5,6,7] if rotated 7 times.
+    /// Rotating [a[0],a[1],a[2],...,a[n-1]] once produces [a[n-1],a[0],a[1],a[2],...,a[n-2]].
+    /// Given the sorted rotated array nums of unique elements, return its minimum element.
+    /// You must write an algorithm that runs in O(log n) time.
+    ///
+    /// Example 1:
+    /// Input: nums = [3,4,5,1,2]
+    /// Output: 1
+    /// Explanation: The original array was [1,2,3,4,5] rotated 3 times.
+    ///
+    /// Example 2:
+    /// Input: nums = [4,5,6,7,0,1,2]
+    /// Output: 0
+    /// Explanation: The original array was [0,1,2,4,5,6,7] rotated 4 times.
+    ///
+    /// Example 3:
+    /// Input: nums = [11,13,15,17]
+    /// Output: 11
+    /// Explanation: The original array was [11,13,15,17] rotated 4 times.
+    ///
+    /// Constraints:
+    /// - n == nums.length
+    /// - 1 &lt;= n &lt;= 5000
+    /// - -5000 &lt;= nums[i] &lt;= 5000
+    /// - All integers in nums are unique.
+    /// - nums is sorted and rotated between 1 and n times.
+    /// </para>
+    /// <para>
+    /// 153. 尋找旋轉排序陣列中的最小值
     /// https://leetcode.cn/problems/find-minimum-in-rotated-sorted-array/description/
-    /// 
+    ///
+    /// 假設一個長度為 n、按遞增順序排序的陣列被旋轉 1 到 n 次。例如 nums = [0,1,2,4,5,6,7] 可能變成：
+    /// - 若旋轉 4 次，得到 [4,5,6,7,0,1,2]。
+    /// - 若旋轉 7 次，得到 [0,1,2,4,5,6,7]。
+    /// 將 [a[0],a[1],a[2],...,a[n-1]] 旋轉一次會得到 [a[n-1],a[0],a[1],a[2],...,a[n-2]]。
+    /// 給定由相異元素組成的旋轉排序陣列 nums，回傳其中的最小元素。
+    /// 你必須撰寫時間複雜度為 O(log n) 的演算法。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [3,4,5,1,2]
+    /// 輸出：1
+    /// 解釋：原始陣列為 [1,2,3,4,5]，旋轉了 3 次。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [4,5,6,7,0,1,2]
+    /// 輸出：0
+    /// 解釋：原始陣列為 [0,1,2,4,5,6,7]，旋轉了 4 次。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [11,13,15,17]
+    /// 輸出：11
+    /// 解釋：原始陣列為 [11,13,15,17]，旋轉了 4 次。
+    ///
+    /// 限制條件：
+    /// - n == nums.length
+    /// - 1 &lt;= n &lt;= 5000
+    /// - -5000 &lt;= nums[i] &lt;= 5000
+    /// - nums 中所有整數都相異。
+    /// - nums 已排序，並旋轉了 1 到 n 次。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

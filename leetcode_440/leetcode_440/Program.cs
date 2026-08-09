@@ -4,12 +4,40 @@ class Program
 {
     /// <summary>
     /// 440. K-th Smallest in Lexicographical Order
-    /// https://leetcode.com/problems/k-th-smallest-in-lexicographical-order/description/?envType=daily-question&envId=2025-06-09
-    /// 440. 字典序的第K小数字
-    /// https://leetcode.cn/problems/k-th-smallest-in-lexicographical-order/description/?envType=daily-question&envId=2025-06-09
-    /// 
-    /// 給定兩個整數 n 和 k，返回範圍 [1, n] 中字典序第 k 小的整數。
-    /// 
+    /// https://leetcode.com/problems/k-th-smallest-in-lexicographical-order/description/
+    /// <para>
+    /// Given two integers n and k, return the k-th lexicographically smallest integer in the range [1, n].
+    ///
+    /// Example 1:
+    /// Input: n = 13, k = 2
+    /// Output: 10
+    /// Explanation: The lexicographical order is [1, 10, 11, 12, 13, 2, 3, 4, 5, 6, 7, 8, 9], so the second smallest number is 10.
+    ///
+    /// Example 2:
+    /// Input: n = 1, k = 1
+    /// Output: 1
+    ///
+    /// Constraints:
+    /// - 1 &lt;= k &lt;= n &lt;= 10^9
+    /// </para>
+    /// <para>
+    /// 440. 字典序的第 K 小數字
+    /// https://leetcode.cn/problems/k-th-smallest-in-lexicographical-order/description/
+    ///
+    /// 給定兩個整數 n 與 k，回傳範圍 [1, n] 中字典序第 k 小的整數。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 13, k = 2
+    /// 輸出：10
+    /// 解釋：字典序為 [1, 10, 11, 12, 13, 2, 3, 4, 5, 6, 7, 8, 9]，因此第二小的數字是 10。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 1, k = 1
+    /// 輸出：1
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= k &lt;= n &lt;= 10^9
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

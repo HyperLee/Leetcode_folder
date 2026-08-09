@@ -5,15 +5,82 @@ namespace leetcode_1277;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1277. Count Square Submatrices with All Ones
-    /// https://leetcode.com/problems/count-square-submatrices-with-all-ones/description/?envType=daily-question&envId=2025-08-20
+    /// https://leetcode.com/problems/count-square-submatrices-with-all-ones/description/
     ///
-    /// Problem (English): Given an m * n matrix of ones and zeros, return how many square submatrices have all ones.
-    /// 題目（中文翻譯）：給定一個 m * n 的矩陣，由 0 和 1 組成，請返回其中全為 1 的正方形子矩陣數量。
+    /// Given an m * n matrix of ones and zeros, return how many square submatrices have all ones.
     ///
-    /// 解法：使用動態規劃，對於每個值為 1 的位置 (i,j)，記錄以 (i,j) 為右下角的最大正方形邊長 dp[i,j]，
-    /// dp[i,j] = 1 + min(dp[i-1,j], dp[i,j-1], dp[i-1,j-1])（邊界為第一列或第一行時為 1），累加所有 dp 值即為答案。
+    /// Example 1:
+    /// Input: matrix =
+    /// [
+    /// [0,1,1,1],
+    /// [1,1,1,1],
+    /// [0,1,1,1]
+    /// ]
+    /// Output: 15
+    /// Explanation:
+    /// There are 10 squares of side 1.
+    /// There are 4 squares of side 2.
+    /// There is 1 square of side 3.
+    /// Total number of squares = 10 + 4 + 1 = 15.
     ///
+    /// Example 2:
+    /// Input: matrix =
+    /// [
+    /// [1,0,1],
+    /// [1,1,0],
+    /// [1,1,0]
+    /// ]
+    /// Output: 7
+    /// Explanation:
+    /// There are 6 squares of side 1.
+    /// There is 1 square of side 2.
+    /// Total number of squares = 6 + 1 = 7.
+    ///
+    /// Constraints:
+    /// 1 &lt;= arr.length &lt;= 300
+    /// 1 &lt;= arr[0].length &lt;= 300
+    /// 0 &lt;= arr[i][j] &lt;= 1
+    /// </para>
+    /// <para>
+    /// 1277. 計算全為 1 的正方形子矩陣
+    /// https://leetcode.cn/problems/count-square-submatrices-with-all-ones/description/
+    ///
+    /// 給定一個由 1 與 0 組成的 m * n 矩陣，請回傳其中全為 1 的正方形子矩陣數量。
+    ///
+    /// 範例 1：
+    /// 輸入：matrix =
+    /// [
+    /// [0,1,1,1],
+    /// [1,1,1,1],
+    /// [0,1,1,1]
+    /// ]
+    /// 輸出：15
+    /// 解釋：
+    /// 邊長為 1 的正方形有 10 個。
+    /// 邊長為 2 的正方形有 4 個。
+    /// 邊長為 3 的正方形有 1 個。
+    /// 正方形總數 = 10 + 4 + 1 = 15。
+    ///
+    /// 範例 2：
+    /// 輸入：matrix =
+    /// [
+    /// [1,0,1],
+    /// [1,1,0],
+    /// [1,1,0]
+    /// ]
+    /// 輸出：7
+    /// 解釋：
+    /// 邊長為 1 的正方形有 6 個。
+    /// 邊長為 2 的正方形有 1 個。
+    /// 正方形總數 = 6 + 1 = 7。
+    ///
+    /// 限制條件：
+    /// 1 &lt;= arr.length &lt;= 300
+    /// 1 &lt;= arr[0].length &lt;= 300
+    /// 0 &lt;= arr[i][j] &lt;= 1
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

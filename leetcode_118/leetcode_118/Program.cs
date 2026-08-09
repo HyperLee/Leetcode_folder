@@ -3,14 +3,44 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 118. Pascal's Triangle
-    /// https://leetcode.com/problems/pascals-triangle/description/?envType=daily-question&envId=2025-08-01
-    /// 118. 杨辉三角
-    /// https://leetcode.cn/problems/pascals-triangle/description/?envType=daily-question&envId=2025-08-01
-    /// 
-    /// 給定一個整數 numRows，返回楊輝三角的前 numRows 行。
-    /// 
-    /// 在楊輝三角中，每個數字都是其正上方兩個數字之和，如下所示：
+    /// https://leetcode.com/problems/pascals-triangle/description/
+    ///
+    /// Given an integer numRows, return the first numRows of Pascal's triangle.
+    /// In Pascal's triangle, each number is the sum of the two numbers directly above it as shown:
+    /// Illustration: https://upload.wikimedia.org/wikipedia/commons/0/0d/PascalTriangleAnimated2.gif
+    ///
+    /// Example 1:
+    /// Input: numRows = 5
+    /// Output: [[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]
+    ///
+    /// Example 2:
+    /// Input: numRows = 1
+    /// Output: [[1]]
+    ///
+    /// Constraints:
+    /// 1 &lt;= numRows &lt;= 30
+    /// </para>
+    /// <para>
+    /// 118. 帕斯卡三角形
+    /// https://leetcode.cn/problems/pascals-triangle/description/
+    ///
+    /// 給定整數 numRows，請回傳帕斯卡三角形的前 numRows 列。
+    /// 在帕斯卡三角形中，每個數字都是其正上方兩個數字的總和，如圖所示：
+    /// 示意圖：https://upload.wikimedia.org/wikipedia/commons/0/0d/PascalTriangleAnimated2.gif
+    ///
+    /// 範例 1：
+    /// 輸入：numRows = 5
+    /// 輸出：[[1],[1,1],[1,2,1],[1,3,3,1],[1,4,6,4,1]]
+    ///
+    /// 範例 2：
+    /// 輸入：numRows = 1
+    /// 輸出：[[1]]
+    ///
+    /// 限制條件：
+    /// 1 &lt;= numRows &lt;= 30
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

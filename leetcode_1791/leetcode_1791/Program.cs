@@ -3,10 +3,60 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1791. Find Center of Star Graph
-        /// https://leetcode.com/problems/find-center-of-star-graph/description/?envType=daily-question&envId=2024-06-27
-        /// 1791. 找出星型图的中心节点
+        /// https://leetcode.com/problems/find-center-of-star-graph/description/
+        ///
+        /// There is an undirected star graph with n nodes labeled from 1 to n. A star graph has one center node and exactly n - 1 edges connecting the center to every other node.
+        ///
+        /// You are given a 2D integer array edges, where edges[i] = [u_i, v_i] represents an edge between u_i and v_i. Return the center of the star graph.
+        ///
+        /// Image: https://assets.leetcode.com/uploads/2021/02/24/star_graph.png
+        ///
+        /// Example 1:
+        /// Input: edges = [[1,2],[2,3],[4,2]]
+        /// Output: 2
+        /// Explanation: Node 2 is connected to every other node, so it is the center.
+        ///
+        /// Example 2:
+        /// Input: edges = [[1,2],[5,1],[1,3],[1,4]]
+        /// Output: 1
+        ///
+        /// Constraints:
+        /// - 3 &lt;= n &lt;= 10^5
+        /// - edges.length == n - 1
+        /// - edges[i].length == 2
+        /// - 1 &lt;= u_i, v_i &lt;= n
+        /// - u_i != v_i
+        /// - edges represents a valid star graph.
+        /// </para>
+        /// <para>
+        /// 1791. 找出星型圖的中心節點
         /// https://leetcode.cn/problems/find-center-of-star-graph/description/
+        ///
+        /// 有一個由 n 個節點組成的無向星型圖，節點編號為 1 到 n。星型圖只有一個中心節點，並且恰有 n - 1 條邊將中心連接到其餘每個節點。
+        ///
+        /// 給定二維整數陣列 edges，其中 edges[i] = [u_i, v_i] 表示 u_i 與 v_i 之間有一條邊。回傳此星型圖的中心節點。
+        ///
+        /// 圖片：https://assets.leetcode.com/uploads/2021/02/24/star_graph.png
+        ///
+        /// 範例 1：
+        /// 輸入：edges = [[1,2],[2,3],[4,2]]
+        /// 輸出：2
+        /// 說明：節點 2 與其他每個節點相連，因此它是中心。
+        ///
+        /// 範例 2：
+        /// 輸入：edges = [[1,2],[5,1],[1,3],[1,4]]
+        /// 輸出：1
+        ///
+        /// 限制條件：
+        /// - 3 &lt;= n &lt;= 10^5
+        /// - edges.length == n - 1
+        /// - edges[i].length == 2
+        /// - 1 &lt;= u_i, v_i &lt;= n
+        /// - u_i != v_i
+        /// - edges 表示一個有效的星型圖。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 執行五組固定案例，比較三種尋找中心點的解法，並驗證所有解法都不會修改輸入陣列。

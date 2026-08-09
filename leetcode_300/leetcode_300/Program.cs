@@ -4,27 +4,54 @@ class Program
 {
     /// <summary>
     /// 300. Longest Increasing Subsequence
-    /// https://leetcode.com/problems/longest-increasing-subsequence/description/?envType=problem-list-v2&envId=oizxjoit
-    /// 300. 最长递增子序列
-    /// https://leetcode.cn/problems/longest-increasing-subsequence/solutions/147667/zui-chang-shang-sheng-zi-xu-lie-by-leetcode-soluti/
-    /// 
-    /// 題目描述：
-    /// 給定一個無序的整數陣列，找到其中最長上升子序列的長度。
-    /// 
-    /// 解題提示：
-    /// 1. 可以使用動態規劃 (DP) 解法，時間複雜度 O(n²)
-    /// 2. 最佳解法為結合動態規劃和二分搜尋，時間複雜度 O(n log n)
-    /// 3. 子序列不必連續，但必須保持原始順序
-    /// 
-    /// 滑動視窗方法不適合解決這個問題，因為：
-    /// - 滑動視窗方法通常用於處理連續子序列的問題，而這個問題要求的是「最長上升子序列」，不一定是連續的。
-    /// - 滑動視窗方法無法有效地處理非連續的元素，因為它只能在固定的範圍內移動，無法跳過某些元素。
-    /// 
-    /// 純粹的二分法也不適合直接解決這個問題，因為：
-    /// - 二分搜尋法通常用於查找已排序的數組中的元素，而這個問題需要在無序的整數陣列中找到最長上升子序列。
-    /// - 雖然可以使用二分搜尋法來優化動態規劃的解法，但這需要結合其他技術（如維護一個「目前為止的最長遞增子序列」）來實現。
-    ///   本題中的輸入陣列是無序的
-    ///   我們需要「建構」遞增子序列，而不只是在固定陣列中搜尋
+    /// https://leetcode.com/problems/longest-increasing-subsequence/description/
+    /// <para>
+    /// Given an integer array nums, return the length of the longest strictly increasing subsequence.
+    ///
+    /// Example 1:
+    /// Input: nums = [10,9,2,5,3,7,101,18]
+    /// Output: 4
+    /// Explanation: The longest increasing subsequence is [2,3,7,101], so its length is 4.
+    ///
+    /// Example 2:
+    /// Input: nums = [0,1,0,3,2,3]
+    /// Output: 4
+    ///
+    /// Example 3:
+    /// Input: nums = [7,7,7,7,7,7,7]
+    /// Output: 1
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 2500
+    /// - -10^4 &lt;= nums[i] &lt;= 10^4
+    ///
+    /// Follow-up: Can you devise an algorithm with O(n log(n)) time complexity?
+    /// </para>
+    /// <para>
+    /// 300. 最長遞增子序列
+    /// https://leetcode.cn/problems/longest-increasing-subsequence/description/
+    ///
+    /// 給定一個整數陣列 nums，回傳最長嚴格遞增子序列的長度。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [10,9,2,5,3,7,101,18]
+    /// 輸出：4
+    /// 解釋：最長遞增子序列為 [2,3,7,101]，因此其長度為 4。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [0,1,0,3,2,3]
+    /// 輸出：4
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [7,7,7,7,7,7,7]
+    /// 輸出：1
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 2500
+    /// - -10^4 &lt;= nums[i] &lt;= 10^4
+    ///
+    /// 進階：你能設計時間複雜度為 O(n log(n)) 的演算法嗎？
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

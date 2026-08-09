@@ -7,11 +7,54 @@ internal static class Program
 
     /// <summary>
     /// 412. Fizz Buzz
-    /// https://leetcode.com/problems/fizz-buzz/
+    /// https://leetcode.com/problems/fizz-buzz/description/
+    /// <para>
+    /// Given an integer n, return a string array answer (1-indexed) where:
+    /// - answer[i] == "FizzBuzz" if i is divisible by 3 and 5.
+    /// - answer[i] == "Fizz" if i is divisible by 3.
+    /// - answer[i] == "Buzz" if i is divisible by 5.
+    /// - answer[i] == i (as a string) if none of the above conditions are true.
+    ///
+    /// Example 1:
+    /// Input: n = 3
+    /// Output: ["1","2","Fizz"]
+    ///
+    /// Example 2:
+    /// Input: n = 5
+    /// Output: ["1","2","Fizz","4","Buzz"]
+    ///
+    /// Example 3:
+    /// Input: n = 15
+    /// Output: ["1","2","Fizz","4","Buzz","Fizz","7","8","Fizz","Buzz","11","Fizz","13","14","FizzBuzz"]
+    ///
+    /// Constraints:
+    /// - 1 &lt;= n &lt;= 10^4
+    /// </para>
+    /// <para>
     /// 412. Fizz Buzz
-    /// https://leetcode.cn/problems/fizz-buzz/
-    /// Given an integer n, return the strings for 1 through n, replacing multiples of 3, 5, or both with Fizz, Buzz, or FizzBuzz.
-    /// 給定整數 n，回傳 1 到 n 的字串，並將 3、5 或兩者的倍數分別替換為 Fizz、Buzz 或 FizzBuzz。
+    /// https://leetcode.cn/problems/fizz-buzz/description/
+    ///
+    /// 給定整數 n，回傳以 1 為起始索引的字串陣列 answer，其中：
+    /// - 若 i 同時可被 3 與 5 整除，answer[i] == "FizzBuzz"。
+    /// - 若 i 可被 3 整除，answer[i] == "Fizz"。
+    /// - 若 i 可被 5 整除，answer[i] == "Buzz"。
+    /// - 若以上條件皆不成立，answer[i] == i（字串形式）。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 3
+    /// 輸出：["1","2","Fizz"]
+    ///
+    /// 範例 2：
+    /// 輸入：n = 5
+    /// 輸出：["1","2","Fizz","4","Buzz"]
+    ///
+    /// 範例 3：
+    /// 輸入：n = 15
+    /// 輸出：["1","2","Fizz","4","Buzz","Fizz","7","8","Fizz","Buzz","11","Fizz","13","14","FizzBuzz"]
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= n &lt;= 10^4
+    /// </para>
     /// </summary>
     private static void Main()
     {

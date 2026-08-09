@@ -3,7 +3,81 @@
 class Program
 {
     /// <summary>
-    /// 主程式進入點，包含測試資料與兩種解法的驗證。
+    /// 3372. Maximize the Number of Target Nodes After Connecting Trees I
+    /// https://leetcode.com/problems/maximize-the-number-of-target-nodes-after-connecting-trees-i/description/
+    /// <para>
+    /// There are two undirected trees with n and m nodes, labeled distinctly in [0, n - 1] and [0, m - 1].
+    ///
+    /// You are given edges1 of length n - 1 and edges2 of length m - 1. edges1[i] = [ai, bi] and edges2[i] = [ui, vi] represent edges in their respective trees. You are also given k.
+    ///
+    /// Node u is target to node v if the path from u to v has at most k edges. A node is always target to itself.
+    ///
+    /// Return an array answer of length n, where answer[i] is the maximum possible number of nodes target to node i in the first tree after connecting one first-tree node to one second-tree node.
+    ///
+    /// Queries are independent: remove the added edge before the next query.
+    ///
+    /// Example 1:
+    /// Image: https://assets.leetcode.com/uploads/2024/09/24/3982-1.png
+    /// Input: edges1 = [[0,1],[0,2],[2,3],[2,4]], edges2 = [[0,1],[0,2],[0,3],[2,7],[1,4],[4,5],[4,6]], k = 2
+    /// Output: [9,7,9,8,8]
+    /// Explanation: For i = 0 connect first-tree node 0 to second-tree node 0; for i = 1 connect node 1 to node 0; for i = 2 connect node 2 to node 4; for i = 3 connect node 3 to node 4; for i = 4 connect node 4 to node 4.
+    ///
+    /// Example 2:
+    /// Image: https://assets.leetcode.com/uploads/2024/09/24/3928-2.png
+    /// Input: edges1 = [[0,1],[0,2],[0,3],[0,4]], edges2 = [[0,1],[1,2],[2,3]], k = 1
+    /// Output: [6,3,3,3,3]
+    /// Explanation: For every i, connect first-tree node i to any second-tree node.
+    ///
+    /// Constraints:
+    /// - 2 &lt;= n, m &lt;= 1000
+    /// - edges1.length == n - 1
+    /// - edges2.length == m - 1
+    /// - edges1[i].length == edges2[i].length == 2
+    /// - edges1[i] = [ai, bi]
+    /// - 0 &lt;= ai, bi &lt; n
+    /// - edges2[i] = [ui, vi]
+    /// - 0 &lt;= ui, vi &lt; m
+    /// - edges1 and edges2 represent valid trees.
+    /// - 0 &lt;= k &lt;= 1000
+    /// </para>
+    /// <para>
+    /// 3372. 連接兩棵樹後最大化目標節點數量 I
+    /// https://leetcode.cn/problems/maximize-the-number-of-target-nodes-after-connecting-trees-i/description/
+    ///
+    /// 有兩棵無向樹，分別含 n 與 m 個節點，標號範圍各為 [0, n - 1] 與 [0, m - 1]。
+    ///
+    /// 給定長度為 n - 1 的 edges1 與長度為 m - 1 的 edges2。edges1[i] = [ai, bi]、edges2[i] = [ui, vi] 分別表示兩棵樹中的邊。另給定 k。
+    ///
+    /// 若 u 到 v 的路徑至多包含 k 條邊，則節點 u 是節點 v 的目標。節點永遠是自己的目標。
+    ///
+    /// 回傳長度為 n 的陣列 answer，其中 answer[i] 是將第一棵樹的一個節點連到第二棵樹的一個節點後，第一棵樹節點 i 可擁有的最大目標節點數量。
+    ///
+    /// 每個查詢彼此獨立；進行下一個查詢前會移除新增的邊。
+    ///
+    /// 範例 1：
+    /// 圖片：https://assets.leetcode.com/uploads/2024/09/24/3982-1.png
+    /// 輸入：edges1 = [[0,1],[0,2],[2,3],[2,4]], edges2 = [[0,1],[0,2],[0,3],[2,7],[1,4],[4,5],[4,6]], k = 2
+    /// 輸出：[9,7,9,8,8]
+    /// 解釋：對 i = 0，將第一棵樹節點 0 連到第二棵樹節點 0；對 i = 1，將節點 1 連到節點 0；對 i = 2，將節點 2 連到節點 4；對 i = 3，將節點 3 連到節點 4；對 i = 4，將節點 4 連到節點 4。
+    ///
+    /// 範例 2：
+    /// 圖片：https://assets.leetcode.com/uploads/2024/09/24/3928-2.png
+    /// 輸入：edges1 = [[0,1],[0,2],[0,3],[0,4]], edges2 = [[0,1],[1,2],[2,3]], k = 1
+    /// 輸出：[6,3,3,3,3]
+    /// 解釋：對每個 i，將第一棵樹節點 i 連到第二棵樹任一節點。
+    ///
+    /// 限制條件：
+    /// - 2 &lt;= n, m &lt;= 1000
+    /// - edges1.length == n - 1
+    /// - edges2.length == m - 1
+    /// - edges1[i].length == edges2[i].length == 2
+    /// - edges1[i] = [ai, bi]
+    /// - 0 &lt;= ai, bi &lt; n
+    /// - edges2[i] = [ui, vi]
+    /// - 0 &lt;= ui, vi &lt; m
+    /// - edges1 與 edges2 表示有效的樹。
+    /// - 0 &lt;= k &lt;= 1000
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

@@ -3,14 +3,52 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1576. Replace All ?'s to Avoid Consecutive Repeating Characters
     /// https://leetcode.com/problems/replace-all-s-to-avoid-consecutive-repeating-characters/description/
-    /// 1576. 替换所有的问号
+    ///
+    /// Given a string s containing only lowercase English letters and '?', convert all '?' characters into lowercase letters
+    /// so the final string has no consecutive repeating characters. You cannot modify non-'?' characters.
+    /// It is guaranteed that the given string has no consecutive repeating characters except for '?'.
+    /// Return the final string after all conversions (possibly zero). If multiple solutions exist, return any of them. An
+    /// answer is always possible under the given constraints.
+    ///
+    /// Example 1:
+    /// Input: s = "?zs"
+    /// Output: "azs"
+    /// Explanation: There are 25 solutions, from "azs" through "yzs". Only "z" is invalid because it would produce "zzs".
+    ///
+    /// Example 2:
+    /// Input: s = "ubv?w"
+    /// Output: "ubvaw"
+    /// Explanation: There are 24 solutions. Only "v" and "w" are invalid because they produce "ubvvw" and "ubvww".
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 100
+    /// - s consists of lowercase English letters and '?'.
+    /// </para>
+    /// <para>
+    /// 1576. 替換所有問號以避免連續重複字元
     /// https://leetcode.cn/problems/replace-all-s-to-avoid-consecutive-repeating-characters/description/
     ///
-    /// 繁體中文說明：
-    /// 給定一個字串 s，字元僅包含小寫英文字母與 '?'，請將所有 '?' 替換為小寫字母，並確保最終字串中不會出現任何連續重複的字元。你不得修改原本不是 '?' 的字元。
-    /// 已保證原始字串（除了 '?'）中不包含連續重複字元。請傳回替換完成後的最終字串；若有多種解，回傳任一個。可證明在此條件下必定存在解答。
+    /// 給定只包含小寫英文字母與 '?' 的字串 s，將所有 '?' 轉換成小寫字母，使最終字串不含連續重複字元。
+    /// 不可修改非 '?' 字元。題目保證給定字串除了 '?' 以外，不存在連續重複字元。
+    /// 回傳完成所有轉換（也可能不需轉換）後的字串。若有多個解答，回傳任一個；在給定限制下必定有解。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "?zs"
+    /// 輸出："azs"
+    /// 解釋：共有 25 種解答，從 "azs" 到 "yzs" 都有效；只有 "z" 無效，因為會形成 "zzs"。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "ubv?w"
+    /// 輸出："ubvaw"
+    /// 解釋：共有 24 種解答；只有 "v" 與 "w" 無效，因為會形成 "ubvvw" 與 "ubvww"。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 100
+    /// - s 只包含小寫英文字母與 '?'。
+    /// </para>
     /// </summary>
     /// <param name="args">命令列引數</param>
     static void Main(string[] args)

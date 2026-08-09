@@ -3,10 +3,83 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1051. Height Checker
-        /// https://leetcode.com/problems/height-checker/description/?envType=daily-question&envId=2024-06-10
-        /// 1051. 高度检查器
+        /// https://leetcode.com/problems/height-checker/description/
+        ///
+        /// A school is trying to take an annual photo of all the students. The students are asked to stand in
+        /// a single file line in non-decreasing order by height. Let this ordering be represented by the integer
+        /// array expected where expected[i] is the expected height of the i-th student in line.
+        /// You are given an integer array heights representing the current order that the students are standing
+        /// in. Each heights[i] is the height of the i-th student in line (0-indexed).
+        /// Return the number of indices where heights[i] != expected[i].
+        ///
+        /// Example 1:
+        /// Input: heights = [1,1,4,2,1,3]
+        /// Output: 3
+        /// Explanation:
+        /// heights:  [1,1,[4],2,[1],[3]]
+        /// expected: [1,1,[1],2,[3],[4]]
+        /// Indices 2, 4, and 5 do not match.
+        ///
+        /// Example 2:
+        /// Input: heights = [5,1,2,3,4]
+        /// Output: 5
+        /// Explanation:
+        /// heights:  [[5],[1],[2],[3],[4]]
+        /// expected: [[1],[2],[3],[4],[5]]
+        /// All indices do not match.
+        ///
+        /// Example 3:
+        /// Input: heights = [1,2,3,4,5]
+        /// Output: 0
+        /// Explanation:
+        /// heights:  [1,2,3,4,5]
+        /// expected: [1,2,3,4,5]
+        /// All indices match.
+        ///
+        /// Constraints:
+        /// 1 &lt;= heights.length &lt;= 100
+        /// 1 &lt;= heights[i] &lt;= 100
+        /// </para>
+        /// <para>
+        /// 1051. 高度檢查器
         /// https://leetcode.cn/problems/height-checker/description/
+        ///
+        /// 一所學校正準備為所有學生拍攝年度合照。學生被要求依身高非遞減順序排成單列。
+        /// 使用整數陣列 expected 表示這個順序，其中 expected[i] 是隊伍中第 i 位學生的預期身高。
+        /// 給定整數陣列 heights，表示學生目前站立的順序。每個 heights[i] 是隊伍中第 i 位學生的
+        /// 身高（索引從 0 開始）。
+        /// 請回傳 heights[i] != expected[i] 的索引數量。
+        ///
+        /// 範例 1：
+        /// 輸入：heights = [1,1,4,2,1,3]
+        /// 輸出：3
+        /// 解釋：
+        /// heights:  [1,1,[4],2,[1],[3]]
+        /// expected: [1,1,[1],2,[3],[4]]
+        /// 索引 2、4 與 5 不相符。
+        ///
+        /// 範例 2：
+        /// 輸入：heights = [5,1,2,3,4]
+        /// 輸出：5
+        /// 解釋：
+        /// heights:  [[5],[1],[2],[3],[4]]
+        /// expected: [[1],[2],[3],[4],[5]]
+        /// 所有索引都不相符。
+        ///
+        /// 範例 3：
+        /// 輸入：heights = [1,2,3,4,5]
+        /// 輸出：0
+        /// 解釋：
+        /// heights:  [1,2,3,4,5]
+        /// expected: [1,2,3,4,5]
+        /// 所有索引都相符。
+        ///
+        /// 限制條件：
+        /// 1 &lt;= heights.length &lt;= 100
+        /// 1 &lt;= heights[i] &lt;= 100
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

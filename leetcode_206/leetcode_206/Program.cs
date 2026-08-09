@@ -20,18 +20,58 @@
         }
 
         /// <summary>
+        /// <para>
         /// 206. Reverse Linked List
-        /// https://leetcode.com/problems/reverse-linked-list/
-        /// 
-        /// 206. 反转链表
+        /// https://leetcode.com/problems/reverse-linked-list/description/
+        ///
+        /// Given the head of a singly linked list, reverse the list and return the reversed list.
+        ///
+        /// Images: https://assets.leetcode.com/uploads/2021/02/19/rev1ex1.jpg and https://assets.leetcode.com/uploads/2021/02/19/rev1ex2.jpg
+        ///
+        /// Example 1:
+        /// Input: head = [1,2,3,4,5]
+        /// Output: [5,4,3,2,1]
+        ///
+        /// Example 2:
+        /// Input: head = [1,2]
+        /// Output: [2,1]
+        ///
+        /// Example 3:
+        /// Input: head = []
+        /// Output: []
+        ///
+        /// Constraints:
+        /// - The number of nodes is in [0,5000].
+        /// - -5000 &lt;= Node.val &lt;= 5000
+        ///
+        /// Follow-up: A linked list can be reversed iteratively or recursively. Can you implement both?
+        /// </para>
+        /// <para>
+        /// 206. 反轉鏈結串列
         /// https://leetcode.cn/problems/reverse-linked-list/description/
-        /// 
-        /// 偏好方法一解法, 要多想幾次
-        /// 會比較好理解
-        /// 先暫存 下個交換目標
-        /// next 指向新的 ListNode
-        /// 將 node 轉換至新的 ListNode
-        /// 輪到當初暫存來當新的 head
+        ///
+        /// 給定單向鏈結串列的頭節點，反轉串列並回傳反轉後的串列。
+        ///
+        /// 圖片：https://assets.leetcode.com/uploads/2021/02/19/rev1ex1.jpg 與 https://assets.leetcode.com/uploads/2021/02/19/rev1ex2.jpg
+        ///
+        /// 範例 1：
+        /// 輸入：head = [1,2,3,4,5]
+        /// 輸出：[5,4,3,2,1]
+        ///
+        /// 範例 2：
+        /// 輸入：head = [1,2]
+        /// 輸出：[2,1]
+        ///
+        /// 範例 3：
+        /// 輸入：head = []
+        /// 輸出：[]
+        ///
+        /// 限制條件：
+        /// - 節點數量在 [0,5000] 範圍內。
+        /// - -5000 &lt;= Node.val &lt;= 5000
+        ///
+        /// 進階：鏈結串列可以使用迭代或遞迴反轉，你能同時實作兩種方式嗎？
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 主程式會以五組固定案例分別驗證兩種迭代解法，並列出預期值、實際值與 PASS/FAIL。

@@ -4,24 +4,60 @@ class Program
 {
     /// <summary>
     /// 3186. Maximum Total Damage With Spell Casting
-    /// https://leetcode.com/problems/maximum-total-damage-with-spell-casting/description/?envType=daily-question&envId=2025-10-11
-    /// https://leetcode.cn/problems/maximum-total-damage-with-spell-casting/description/?envType=daily-question&envId=2025-10-11
-    ///
-    /// Problem (English):
+    /// https://leetcode.com/problems/maximum-total-damage-with-spell-casting/description/
+    /// <para>
     /// A magician has various spells.
-    /// You are given an array power, where each element represents the damage of a spell. Multiple spells can have the same damage value.
-    /// It is a known fact that if a magician decides to cast a spell with a damage of power[i],
-    /// they cannot cast any spell with a damage of power[i] - 2, power[i] - 1, power[i] + 1, or power[i] + 2.
+    ///
+    /// You are given an array power, where each element is the damage of a spell. Multiple spells may have the same damage value.
+    ///
+    /// If the magician casts a spell with damage power[i], they cannot cast any spell with damage power[i] - 2, power[i] - 1, power[i] + 1, or power[i] + 2.
+    ///
     /// Each spell can be cast only once.
-    /// Return the maximum possible total damage that a magician can cast.
     ///
-    /// 題目描述 (中文):
+    /// Return the maximum possible total damage the magician can cast.
+    ///
+    /// Example 1:
+    /// Input: power = [1,1,3,4]
+    /// Output: 6
+    /// Explanation: The maximum damage 6 is obtained by casting spells 0, 1, and 3, whose damages are 1, 1, and 4.
+    ///
+    /// Example 2:
+    /// Input: power = [7,1,6,6]
+    /// Output: 13
+    /// Explanation: The maximum damage 13 is obtained by casting spells 1, 2, and 3, whose damages are 1, 6, and 6.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= power.length &lt;= 10^5
+    /// - 1 &lt;= power[i] &lt;= 10^9
+    /// </para>
+    /// <para>
+    /// 3186. 施放法術的最大總傷害
+    /// https://leetcode.cn/problems/maximum-total-damage-with-spell-casting/description/
+    ///
     /// 一位魔法師擁有多種法術。
-    /// 給定陣列 power，陣列中每個元素代表一個法術的傷害值。可能有多個法術具有相同的傷害值。
-    /// 若魔法師選擇施放傷害為 power[i] 的法術，則他不能施放任何傷害為 power[i] - 2、power[i] - 1、power[i] + 1 或 power[i] + 2 的法術。
-    /// 每個法術只能施放一次。
-    /// 請回傳魔法師能施放的最大總傷害。
     ///
+    /// 給定陣列 power，其中每個元素代表一個法術的傷害值。多個法術可以具有相同傷害值。
+    ///
+    /// 若魔法師施放傷害為 power[i] 的法術，就不能施放傷害為 power[i] - 2、power[i] - 1、power[i] + 1 或 power[i] + 2 的任何法術。
+    ///
+    /// 每個法術只能施放一次。
+    ///
+    /// 回傳魔法師可以造成的最大總傷害。
+    ///
+    /// 範例 1：
+    /// 輸入：power = [1,1,3,4]
+    /// 輸出：6
+    /// 解釋：施放索引 0、1、3 的法術，其傷害分別為 1、1、4，可得到最大傷害 6。
+    ///
+    /// 範例 2：
+    /// 輸入：power = [7,1,6,6]
+    /// 輸出：13
+    /// 解釋：施放索引 1、2、3 的法術，其傷害分別為 1、6、6，可得到最大傷害 13。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= power.length &lt;= 10^5
+    /// - 1 &lt;= power[i] &lt;= 10^9
+    /// </para>
     /// </summary>
     /// <param name="args">命令列引數（執行時不需輸入名稱）</param>
     static void Main(string[] args)

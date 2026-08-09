@@ -5,21 +5,53 @@ class Program
     /// <summary>
     /// 2571. Minimum Operations to Reduce an Integer to 0
     /// https://leetcode.com/problems/minimum-operations-to-reduce-an-integer-to-0/description/
+    /// <para>
+    /// You are given a positive integer n. You can perform the following operation any number of times:
     ///
-    /// Problem (English):
-    /// You are given a positive integer n. You can do the following operation any number of times:
-    ///     Add or subtract a power of 2 from n.
+    /// - Add or subtract a power of 2 from n.
+    ///
     /// Return the minimum number of operations to make n equal to 0.
-    /// A number x is power of 2 if x == 2^i where i >= 0.
     ///
-    /// 題目（繁體中文）:
-    /// 給定一個正整數 n，你可以任意次數執行以下操作：
-    ///     對 n 加上或減去一個 2 的冪次方（power of 2）。
-    /// 回傳將 n 變為 0 所需的最少操作次數。
-    /// 若 x 為 2 的冪次方，則 x == 2^i（i >= 0）。
+    /// A number x is a power of 2 if x == 2^i, where i &gt;= 0.
     ///
-    /// 參考：
+    /// Example 1:
+    /// Input: n = 39
+    /// Output: 3
+    /// Explanation: Add 2^0 = 1 to n, so n = 40. Subtract 2^3 = 8, so n = 32. Subtract 2^5 = 32, so n = 0. It can be shown that 3 is the minimum number of operations needed.
+    ///
+    /// Example 2:
+    /// Input: n = 54
+    /// Output: 3
+    /// Explanation: Add 2^1 = 2 to n, so n = 56. Add 2^3 = 8, so n = 64. Subtract 2^6 = 64, so n = 0. Therefore, the minimum number of operations is 3.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= n &lt;= 10^5
+    /// </para>
+    /// <para>
+    /// 2571. 將整數減為 0 的最少操作數
     /// https://leetcode.cn/problems/minimum-operations-to-reduce-an-integer-to-0/description/
+    ///
+    /// 給定一個正整數 n。你可以任意次執行下列操作：
+    ///
+    /// - 對 n 加上或減去一個 2 的冪次方。
+    ///
+    /// 回傳使 n 等於 0 的最少操作次數。
+    ///
+    /// 若 x == 2^i 且 i &gt;= 0，則 x 是 2 的冪次方。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 39
+    /// 輸出：3
+    /// 解釋：將 2^0 = 1 加到 n，得到 n = 40；減去 2^3 = 8，得到 n = 32；再減去 2^5 = 32，得到 n = 0。可以證明所需的最少操作次數為 3。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 54
+    /// 輸出：3
+    /// 解釋：將 2^1 = 2 加到 n，得到 n = 56；加上 2^3 = 8，得到 n = 64；再減去 2^6 = 64，得到 n = 0。因此最少操作次數為 3。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= n &lt;= 10^5
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

@@ -5,8 +5,53 @@ class Program
     /// <summary>
     /// 295. Find Median from Data Stream
     /// https://leetcode.com/problems/find-median-from-data-stream/description/
-    /// 295. 数据流的中位数
+    /// <para>
+    /// The median is the middle value in an ordered integer list. If the list has an even size, there is no single middle value, and the median is the mean of the two middle values. For arr = [2,3,4], the median is 3. For arr = [2,3], the median is (2 + 3) / 2 = 2.5.
+    ///
+    /// Implement the MedianFinder class:
+    /// - MedianFinder() initializes the MedianFinder object.
+    /// - void addNum(int num) adds integer num from the data stream to the data structure.
+    /// - double findMedian() returns the median of all elements so far. Answers within 10^-5 of the actual answer are accepted.
+    ///
+    /// Example 1:
+    /// Input: ["MedianFinder","addNum","addNum","findMedian","addNum","findMedian"], [[],[1],[2],[],[3],[]]
+    /// Output: [null,null,null,1.5,null,2.0]
+    /// Explanation: Create MedianFinder. Add 1 and 2; findMedian() returns 1.5, namely (1 + 2) / 2. Add 3; findMedian() returns 2.0.
+    ///
+    /// Constraints:
+    /// - -10^5 &lt;= num &lt;= 10^5
+    /// - There is at least one element in the data structure before findMedian is called.
+    /// - At most 5 * 10^4 calls are made to addNum and findMedian.
+    ///
+    /// Follow-up:
+    /// - If all stream integers are in [0, 100], how would you optimize the solution?
+    /// - If 99% of all stream integers are in [0, 100], how would you optimize the solution?
+    /// </para>
+    /// <para>
+    /// 295. 資料流的中位數
     /// https://leetcode.cn/problems/find-median-from-data-stream/description/
+    ///
+    /// 中位數是已排序整數串列的中間值。若串列長度為偶數，便沒有單一中間值，中位數是中間兩數的平均值。對 arr = [2,3,4]，中位數是 3；對 arr = [2,3]，中位數是 (2 + 3) / 2 = 2.5。
+    ///
+    /// 實作 MedianFinder 類別：
+    /// - MedianFinder() 初始化 MedianFinder 物件。
+    /// - void addNum(int num) 將資料流中的整數 num 加入資料結構。
+    /// - double findMedian() 回傳目前所有元素的中位數。與實際答案相差不超過 10^-5 的答案均會被接受。
+    ///
+    /// 範例 1：
+    /// 輸入：["MedianFinder","addNum","addNum","findMedian","addNum","findMedian"], [[],[1],[2],[],[3],[]]
+    /// 輸出：[null,null,null,1.5,null,2.0]
+    /// 解釋：建立 MedianFinder，加入 1 與 2；findMedian() 回傳 1.5，也就是 (1 + 2) / 2。加入 3 後，findMedian() 回傳 2.0。
+    ///
+    /// 限制條件：
+    /// - -10^5 &lt;= num &lt;= 10^5
+    /// - 呼叫 findMedian 前，資料結構中至少有一個元素。
+    /// - addNum 與 findMedian 最多共被呼叫 5 * 10^4 次。
+    ///
+    /// 進階：
+    /// - 若資料流中的所有整數都在 [0, 100] 範圍內，你會如何最佳化解法？
+    /// - 若資料流中 99% 的整數都在 [0, 100] 範圍內，你會如何最佳化解法？
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

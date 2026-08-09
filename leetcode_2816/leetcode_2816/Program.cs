@@ -26,9 +26,54 @@ namespace leetcode_2816
 
         /// <summary>
         /// 2816. Double a Number Represented as a Linked List
-        /// https://leetcode.com/problems/double-a-number-represented-as-a-linked-list/?envType=daily-question&envId=2024-05-07
-        /// 2816. 翻倍以链表形式表示的数字
+        /// https://leetcode.com/problems/double-a-number-represented-as-a-linked-list/description/
+        /// <para>
+        /// You are given the head of a non-empty linked list representing a non-negative integer without leading zeroes.
+        ///
+        /// Return the head of the linked list after doubling it.
+        ///
+        /// Example 1:
+        /// Image: https://assets.leetcode.com/uploads/2023/05/28/example.png
+        /// Input: head = [1,8,9]
+        /// Output: [3,7,8]
+        /// Explanation: The figure above corresponds to the given linked list, which represents the number 189. Hence, the returned linked list represents 189 * 2 = 378.
+        ///
+        /// Example 2:
+        /// Image: https://assets.leetcode.com/uploads/2023/05/28/example2.png
+        /// Input: head = [9,9,9]
+        /// Output: [1,9,9,8]
+        /// Explanation: The figure above corresponds to the given linked list, which represents the number 999. Hence, the returned linked list represents 999 * 2 = 1998.
+        ///
+        /// Constraints:
+        /// - The number of nodes in the list is in the range [1, 10^4].
+        /// - 0 &lt;= Node.val &lt;= 9
+        /// - The input is generated such that the list represents a number without leading zeros, except the number 0 itself.
+        /// </para>
+        /// <para>
+        /// 2816. 將鏈結串列表示的數字加倍
         /// https://leetcode.cn/problems/double-a-number-represented-as-a-linked-list/description/
+        ///
+        /// 給定一個非空鏈結串列的 head；此串列表示一個沒有前導零的非負整數。
+        ///
+        /// 回傳將該數字加倍後的鏈結串列 head。
+        ///
+        /// 範例 1：
+        /// 圖片：https://assets.leetcode.com/uploads/2023/05/28/example.png
+        /// 輸入：head = [1,8,9]
+        /// 輸出：[3,7,8]
+        /// 解釋：上圖對應給定的鏈結串列，它表示數字 189。因此，回傳的鏈結串列表示 189 * 2 = 378。
+        ///
+        /// 範例 2：
+        /// 圖片：https://assets.leetcode.com/uploads/2023/05/28/example2.png
+        /// 輸入：head = [9,9,9]
+        /// 輸出：[1,9,9,8]
+        /// 解釋：上圖對應給定的鏈結串列，它表示數字 999。因此，回傳的鏈結串列表示 999 * 2 = 1998。
+        ///
+        /// 限制條件：
+        /// - 串列的節點數量介於 [1, 10^4]。
+        /// - 0 &lt;= Node.val &lt;= 9
+        /// - 輸入保證串列表示的數字沒有前導零，但數字 0 本身除外。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 以六組固定案例依序驗證三種解法。每次呼叫都重建鏈結串列，避免原地修改影響其他解法；

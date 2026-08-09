@@ -4,14 +4,48 @@ class Program
 {
     /// <summary>
     /// 283. Move Zeroes
-    /// https://leetcode.com/problems/move-zeroes/description/?envType=study-plan-v2&envId=leetcode-75
+    /// https://leetcode.com/problems/move-zeroes/description/
+    /// <para>
+    /// Given an integer array nums, move all 0s to the end while maintaining the relative order of the non-zero elements.
+    ///
+    /// Note that you must do this in-place without making a copy of the array.
+    ///
+    /// Example 1:
+    /// Input: nums = [0,1,0,3,12]
+    /// Output: [1,3,12,0,0]
+    ///
+    /// Example 2:
+    /// Input: nums = [0]
+    /// Output: [0]
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 10^4
+    /// - -2^31 &lt;= nums[i] &lt;= 2^31 - 1
+    ///
+    /// Follow-up: Could you minimize the total number of operations performed?
+    /// </para>
+    /// <para>
     /// 283. 移動零
     /// https://leetcode.cn/problems/move-zeroes/description/
-    /// 
-    /// 繁體中文題目描述：
-    /// 給定一個整數陣列 nums，請將所有的 0 移動到陣列的末尾，同時保持非零元素的相對順序。
-    /// 注意：你必須在原地完成操作，不能複製該陣列的副本。
-    /// 
+    ///
+    /// 給定一個整數陣列 nums，將所有 0 移到陣列末端，同時保持非零元素的相對順序。
+    ///
+    /// 注意：你必須原地完成此操作，不得複製陣列。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [0,1,0,3,12]
+    /// 輸出：[1,3,12,0,0]
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [0]
+    /// 輸出：[0]
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 10^4
+    /// - -2^31 &lt;= nums[i] &lt;= 2^31 - 1
+    ///
+    /// 進階：你能將執行的操作總數降到最少嗎？
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

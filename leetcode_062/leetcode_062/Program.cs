@@ -5,17 +5,53 @@ class Program
     /// <summary>
     /// 62. Unique Paths
     /// https://leetcode.com/problems/unique-paths/description/
+    /// <para>
+    /// A robot is on an m x n grid. The robot is initially located at the top-left corner, grid[0][0], and tries to move to the bottom-right corner, grid[m - 1][n - 1]. The robot can move only down or right at any point.
+    ///
+    /// Given the two integers m and n, return the number of possible unique paths the robot can take to reach the bottom-right corner.
+    ///
+    /// The test cases are generated so that the answer is less than or equal to 2 * 10^9.
+    ///
+    /// Example 1:
+    /// Input: m = 3, n = 7
+    /// Output: 28
+    ///
+    /// Example 2:
+    /// Input: m = 3, n = 2
+    /// Output: 3
+    /// Explanation: From the top-left corner, there are three ways to reach the bottom-right corner:
+    /// 1. Right -&gt; Down -&gt; Down
+    /// 2. Down -&gt; Down -&gt; Right
+    /// 3. Down -&gt; Right -&gt; Down
+    ///
+    /// Constraints:
+    /// - 1 &lt;= m, n &lt;= 100
+    /// </para>
+    /// <para>
     /// 62. 不同路徑
     /// https://leetcode.cn/problems/unique-paths/description/
-    /// 解題思路:
-    /// 1. 使用動態規劃(Dynamic Programming)的方式，通過記憶化搜索(Memoization)來解決
-    /// 2. 從終點(m-1,n-1)開始，向上和向左搜尋可能的路徑
-    /// 3. 基本情況:
-    ///    - 當i或j小於0時，表示超出邊界，回傳0
-    ///    - 當i或j等於0時，表示在邊緣，只有一種路徑，回傳1
-    /// 4. 使用memo二維陣列來儲存已計算過的結果，避免重複計算
-    /// 時間複雜度: O(m*n)
-    /// 空間複雜度: O(m*n)
+    ///
+    /// 一個機器人位於 m x n 網格上。機器人最初位於左上角 grid[0][0]，並嘗試移動到右下角 grid[m - 1][n - 1]。機器人在任何時刻只能向下或向右移動。
+    ///
+    /// 給定兩個整數 m 和 n，請回傳機器人到達右下角時可能採取的不同路徑數量。
+    ///
+    /// 測試案例會保證答案小於或等於 2 * 10^9。
+    ///
+    /// 範例 1：
+    /// 輸入：m = 3, n = 7
+    /// 輸出：28
+    ///
+    /// 範例 2：
+    /// 輸入：m = 3, n = 2
+    /// 輸出：3
+    /// 解釋：從左上角到右下角共有三種走法：
+    /// 1. 向右 -&gt; 向下 -&gt; 向下
+    /// 2. 向下 -&gt; 向下 -&gt; 向右
+    /// 3. 向下 -&gt; 向右 -&gt; 向下
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= m, n &lt;= 100
+    /// </para>
     /// </summary>
     /// <param name="args"></param> 
     static void Main(string[] args)

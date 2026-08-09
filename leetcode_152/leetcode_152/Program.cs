@@ -3,45 +3,52 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 152. Maximum Product Subarray
-    /// https://leetcode.com/problems/maximum-product-subarray/description/?envType=problem-list-v2&envId=oizxjoit
-    /// 152. 乘积最大子数组
+    /// https://leetcode.com/problems/maximum-product-subarray/description/
+    ///
+    /// Given an integer array nums, find a subarray that has the largest product, and return the product.
+    /// The test cases are generated so that the answer fits in a 32-bit integer.
+    /// Note that the product of an array with a single element is the value of that element.
+    ///
+    /// Example 1:
+    /// Input: nums = [2,3,-2,4]
+    /// Output: 6
+    /// Explanation: [2,3] has the largest product 6.
+    ///
+    /// Example 2:
+    /// Input: nums = [-2,0,-1]
+    /// Output: 0
+    /// Explanation: The result cannot be 2 because [-2,-1] is not a subarray.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 2 * 10^4
+    /// - -10 &lt;= nums[i] &lt;= 10
+    /// - The product of any subarray of nums is guaranteed to fit in a 32-bit integer.
+    /// </para>
+    /// <para>
+    /// 152. 乘積最大子陣列
     /// https://leetcode.cn/problems/maximum-product-subarray/description/
-    /// 
-    /// 解題概念出發點：
-    /// 1. 連續子陣列乘積最大值問題的特殊性：
-    ///    - 與一般最大子陣列和的問題不同，乘積可能因為負數而改變最大最小關係
-    ///    - 兩個負數相乘會變成正數，可能產生更大的結果
-    ///    - 零會重置所有計算
-    /// 
-    /// 2. 解決方案選擇理由：
-    ///    - 使用動態規劃而非暴力法，可以優化時間複雜度
-    ///    - 同時追蹤最大值和最小值，因為負數會使兩者互換
-    ///    - 使用滾動變數代替陣列，優化空間複雜度
-    /// 
-    /// 3. 兩種解法比較：
-    ///    動態規劃解法 (MaxProduct)：
-    ///    優點：
-    ///    - 思路直觀，易於理解和實現
-    ///    - 程式碼結構清晰
-    ///    缺點：
-    ///    - 需要額外的變數來追蹤最大和最小值
-    ///    - 需要額外的邏輯來處理負數情況
-    ///    
-    ///    雙指針解法 (MaxProductTwoPointers)：
-    ///    優點：
-    ///    - 程式碼更簡潔
-    ///    - 不需要額外的空間來存儲最大最小值
-    ///    - 自然處理負數情況，無需特別判斷
-    ///    缺點：
-    ///    - 思路較不直觀
-    ///    - 在處理複雜測試案例時可能較難除錯
-    /// 
-    /// 負數 * 大  = 小(負越多越小)
-    /// 負數 * 小  = 大(負越小越大)
-    /// 正數 * 大  = 大
-    /// 正數 * 小  = 小
-    /// 
+    ///
+    /// 給定整數陣列 nums，找出乘積最大的子陣列，並回傳該乘積。
+    /// 測試案例保證答案可用 32 位元整數表示。
+    /// 請注意，只有一個元素的陣列，其乘積就是該元素的值。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [2,3,-2,4]
+    /// 輸出：6
+    /// 解釋：[2,3] 的乘積最大，為 6。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [-2,0,-1]
+    /// 輸出：0
+    /// 解釋：結果不能是 2，因為 [-2,-1] 並不是子陣列。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 2 * 10^4
+    /// - -10 &lt;= nums[i] &lt;= 10
+    /// - nums 的任何子陣列乘積都保證可用 32 位元整數表示。
+    /// </para>
     /// </summary>
     static void Main(string[] args)
     {

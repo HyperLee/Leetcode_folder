@@ -4,13 +4,58 @@ class Program
 {
     /// <summary>
     /// 3381. Maximum Subarray Sum With Length Divisible by K
-    /// https://leetcode.com/problems/maximum-subarray-sum-with-length-divisible-by-k/description/?envType=daily-question&envId=2025-11-27
-    /// 3381. 长度可被 K 整除的子数组的最大元素和
-    /// https://leetcode.cn/problems/maximum-subarray-sum-with-length-divisible-by-k/description/?envType=daily-question&envId=2025-11-27
-    /// 3381. 長度可被 K 整除的子陣列的最大元素和（繁體中文）
-    /// 
-    /// 繁體中文：給定整數陣列 `nums` 與整數 `k`，請回傳 `nums` 中長度能被 `k` 整除的子陣列的最大總和。
-    /// 
+    /// https://leetcode.com/problems/maximum-subarray-sum-with-length-divisible-by-k/description/
+    /// <para>
+    /// You are given an integer array nums and an integer k.
+    ///
+    /// Return the maximum sum of a nums subarray whose length is divisible by k.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,2], k = 1
+    /// Output: 3
+    /// Explanation: Subarray [1,2] has sum 3 and length 2, which is divisible by 1.
+    ///
+    /// Example 2:
+    /// Input: nums = [-1,-2,-3,-4,-5], k = 4
+    /// Output: -10
+    /// Explanation: The maximum-sum subarray is [-1,-2,-3,-4]. Its length 4 is divisible by 4.
+    ///
+    /// Example 3:
+    /// Input: nums = [-5,1,2,-3,4], k = 2
+    /// Output: 4
+    /// Explanation: The maximum-sum subarray is [1,2,-3,4]. Its length 4 is divisible by 2.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= k &lt;= nums.length &lt;= 2 * 10^5
+    /// - -10^9 &lt;= nums[i] &lt;= 10^9
+    /// </para>
+    /// <para>
+    /// 3381. 長度可被 K 整除的最大子陣列總和
+    /// https://leetcode.cn/problems/maximum-subarray-sum-with-length-divisible-by-k/description/
+    ///
+    /// 給定整數陣列 nums 與整數 k。
+    ///
+    /// 回傳 nums 中長度可被 k 整除之子陣列的最大總和。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,2], k = 1
+    /// 輸出：3
+    /// 解釋：子陣列 [1,2] 的總和為 3、長度為 2，可被 1 整除。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [-1,-2,-3,-4,-5], k = 4
+    /// 輸出：-10
+    /// 解釋：最大總和子陣列為 [-1,-2,-3,-4]，其長度 4 可被 4 整除。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [-5,1,2,-3,4], k = 2
+    /// 輸出：4
+    /// 解釋：最大總和子陣列為 [1,2,-3,4]，其長度 4 可被 2 整除。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= k &lt;= nums.length &lt;= 2 * 10^5
+    /// - -10^9 &lt;= nums[i] &lt;= 10^9
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

@@ -3,16 +3,70 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1323. Maximum 69 Number
-    /// https://leetcode.com/problems/maximum-69-number/description/?envType=daily-question&envId=2025-08-16
-    /// 1323. 6 和 9 组成的最大数字
-    /// https://leetcode.cn/problems/maximum-69-number/description/?envType=daily-question&envId=2025-08-16
+    /// https://leetcode.com/problems/maximum-69-number/description/
     ///
-    /// 題目中文說明：給定一個只包含數字 6 和 9 的正整數 num，最多可以將一個數字由 6 變為 9 或由 9 變為 6，
-    /// 返回可取得的最大數字。
+    /// You are given a positive integer num consisting only of digits 6 and 9.
     ///
-    /// 範例：輸入 9669，將第一個 6 變為 9 得到 9969，為最大可能值，回傳 9969。
+    /// Return the maximum number you can get by changing at most one digit (6 becomes 9, and 9 becomes 6).
     ///
+    /// Example 1:
+    /// Input: num = 9669
+    /// Output: 9969
+    /// Explanation:
+    /// Changing the first digit results in 6669.
+    /// Changing the second digit results in 9969.
+    /// Changing the third digit results in 9699.
+    /// Changing the fourth digit results in 9666.
+    /// The maximum number is 9969.
+    ///
+    /// Example 2:
+    /// Input: num = 9996
+    /// Output: 9999
+    /// Explanation: Changing the last digit 6 to 9 results in the maximum number.
+    ///
+    /// Example 3:
+    /// Input: num = 9999
+    /// Output: 9999
+    /// Explanation: It is better not to apply any change.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= num &lt;= 10^4
+    /// - num consists of only 6 and 9 digits.
+    /// </para>
+    /// <para>
+    /// 1323. 最大的 69 數字
+    /// https://leetcode.cn/problems/maximum-69-number/description/
+    ///
+    /// 給定一個只由數字 6 和 9 組成的正整數 num。
+    ///
+    /// 最多變更一個數字（6 變成 9，9 變成 6），回傳所能得到的最大數字。
+    ///
+    /// 範例 1：
+    /// 輸入：num = 9669
+    /// 輸出：9969
+    /// 解釋：
+    /// 變更第一個數字會得到 6669。
+    /// 變更第二個數字會得到 9969。
+    /// 變更第三個數字會得到 9699。
+    /// 變更第四個數字會得到 9666。
+    /// 最大數字是 9969。
+    ///
+    /// 範例 2：
+    /// 輸入：num = 9996
+    /// 輸出：9999
+    /// 解釋：將最後一個數字從 6 改成 9，會得到最大數字。
+    ///
+    /// 範例 3：
+    /// 輸入：num = 9999
+    /// 輸出：9999
+    /// 解釋：不進行任何變更會比較好。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= num &lt;= 10^4
+    /// - num 僅由數字 6 和 9 組成。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

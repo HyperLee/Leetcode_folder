@@ -3,10 +3,56 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 2486. Append Characters to String to Make Subsequence
-        /// https://leetcode.com/problems/append-characters-to-string-to-make-subsequence/?envType=daily-question&envId=2024-06-03
-        /// 2486. 追加字符以获得子序列
+        /// https://leetcode.com/problems/append-characters-to-string-to-make-subsequence/description/
+        ///
+        /// You are given lowercase strings s and t. Return the minimum number of characters that must be appended to the end of s so that t becomes a subsequence of s. A subsequence can be formed by deleting zero or more characters without changing the order of those retained.
+        ///
+        /// Example 1:
+        /// Input: s = "coaching", t = "coding"
+        /// Output: 4
+        /// Explanation: Append "ding" so s becomes "coachingding" and t is its subsequence. Appending any 3 characters can never make t a subsequence.
+        ///
+        /// Example 2:
+        /// Input: s = "abcde", t = "a"
+        /// Output: 0
+        /// Explanation: t is already a subsequence of s.
+        ///
+        /// Example 3:
+        /// Input: s = "z", t = "abcde"
+        /// Output: 5
+        /// Explanation: Append "abcde" so s becomes "zabcde" and t is its subsequence. Appending any 4 characters can never make t a subsequence.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= s.length, t.length &lt;= 10^5
+        /// - s and t consist only of lowercase English letters.
+        /// </para>
+        /// <para>
+        /// 2486. 追加字元使字串成為子序列
         /// https://leetcode.cn/problems/append-characters-to-string-to-make-subsequence/description/
+        ///
+        /// 給定小寫字串 s 與 t。回傳必須附加到 s 尾端的最少字元數，使 t 成為 s 的子序列。子序列可藉由刪除零個或多個字元形成，但不能改變保留字元的順序。
+        ///
+        /// 範例 1：
+        /// 輸入：s = "coaching", t = "coding"
+        /// 輸出：4
+        /// 說明：附加 "ding"，使 s 變成 "coachingding"，且 t 是其子序列。附加任意 3 個字元都無法使 t 成為子序列。
+        ///
+        /// 範例 2：
+        /// 輸入：s = "abcde", t = "a"
+        /// 輸出：0
+        /// 說明：t 已經是 s 的子序列。
+        ///
+        /// 範例 3：
+        /// 輸入：s = "z", t = "abcde"
+        /// 輸出：5
+        /// 說明：附加 "abcde"，使 s 變成 "zabcde"，且 t 是其子序列。附加任意 4 個字元都無法使 t 成為子序列。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= s.length, t.length &lt;= 10^5
+        /// - s 與 t 僅由小寫英文字母組成。
+        /// </para>
         /// </summary>
         /// <summary>
         /// 執行六組固定案例，分別驗證線性雙指標與位置索引二分搜尋兩種解法。

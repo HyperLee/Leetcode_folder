@@ -5,13 +5,48 @@ namespace leetcode_1663;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1663. Smallest String With A Given Numeric Value
     /// https://leetcode.com/problems/smallest-string-with-a-given-numeric-value/description/
+    ///
+    /// A lowercase character's numeric value is its 1-indexed alphabet position: a = 1, b = 2, c = 3, and so on. A string's
+    /// value is the sum of its characters' values; for example, "abe" has value 1 + 2 + 5 = 8.
+    /// Given integers n and k, return the lexicographically smallest string with length n and numeric value k.
+    ///
+    /// Example 1:
+    /// Input: n = 3, k = 27
+    /// Output: "aay"
+    /// Explanation: Its value is 1 + 1 + 25 = 27, and it is the smallest such string of length 3.
+    ///
+    /// Example 2:
+    /// Input: n = 5, k = 73
+    /// Output: "aaszz"
+    ///
+    /// Constraints:
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - n &lt;= k &lt;= 26 * n
+    /// </para>
+    /// <para>
     /// 1663. 具有給定數值的最小字串
     /// https://leetcode.cn/problems/smallest-string-with-a-given-numeric-value/description/
-    /// 1663. 具有給定數值的最小字串
-    /// 給定兩個整數 n 和 k，回傳長度等於 n 且字母數值總和等於 k 的字串；在所有滿足條件的字串中，回傳字典序（lexicographically）最小的那一個。
-    /// 小寫字母的數值定義為其在字母表中的位置（a = 1, b = 2, c = 3, …），字串的數值為其所有字母數值的總和。例如字串 "abe" 的數值為 1 + 2 + 5 = 8。
+    ///
+    /// 小寫字母的數值是它在字母表中從 1 開始的位置：a = 1、b = 2、c = 3，依此類推。字串的數值為所有
+    /// 字元數值總和；例如 "abe" 的數值是 1 + 2 + 5 = 8。
+    /// 給定整數 n 與 k，回傳長度為 n、數值為 k 的字典序最小字串。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 3，k = 27
+    /// 輸出："aay"
+    /// 解釋：其數值為 1 + 1 + 25 = 27，且是長度 3 的此類字串中字典序最小者。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 5，k = 73
+    /// 輸出："aaszz"
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - n &lt;= k &lt;= 26 * n
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

@@ -14,14 +14,46 @@ class Program
     }
 
     /// <summary>
+    /// <para>
     /// 83. Remove Duplicates from Sorted List
-    /// https://leetcode.com/problems/remove-duplicates-from-sorted-list/description/
-    /// 83. 删除排序链表中的重复元素
-    /// https://leetcode.cn/problems/remove-duplicates-from-sorted-list/description/
-    /// 
-    /// Given the head of a sorted linked list, delete all duplicates such that each element appears only once. 
+    /// https://leetcode.com/problems/remove-duplicates-from-sorted-list/
+    ///
+    /// Given the head of a sorted linked list, delete all duplicates such that each element appears only once.
     /// Return the linked list sorted as well.
-    /// 
+    ///
+    /// Example 1:
+    /// Input: head = [1,1,2]
+    /// Output: [1,2]
+    ///
+    /// Example 2:
+    /// Input: head = [1,1,2,3,3]
+    /// Output: [1,2,3]
+    ///
+    /// Constraints:
+    /// The number of nodes in the list is in the range [0, 300].
+    /// -100 &lt;= Node.val &lt;= 100
+    /// The list is guaranteed to be sorted in ascending order.
+    /// </para>
+    /// <para>
+    /// 83. 刪除排序鏈結串列中的重複元素
+    /// https://leetcode.cn/problems/remove-duplicates-from-sorted-list/
+    ///
+    /// 給定已排序鏈結串列的頭節點 head，請刪除所有重複元素，讓每個元素只出現一次。
+    /// 回傳的鏈結串列也必須保持排序。
+    ///
+    /// 範例 1：
+    /// 輸入：head = [1,1,2]
+    /// 輸出：[1,2]
+    ///
+    /// 範例 2：
+    /// 輸入：head = [1,1,2,3,3]
+    /// 輸出：[1,2,3]
+    ///
+    /// 限制條件：
+    /// 鏈結串列中的節點數量介於 [0, 300]。
+    /// -100 &lt;= Node.val &lt;= 100
+    /// 此鏈結串列保證已依遞增順序排序。
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

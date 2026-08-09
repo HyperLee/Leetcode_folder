@@ -4,22 +4,62 @@ class Program
 {
     /// <summary>
     /// 3651. Minimum Cost Path with Teleportations
-    /// https://leetcode.com/problems/minimum-cost-path-with-teleportations/description/?envType=daily-question&envId=2026-01-28
-    /// https://leetcode.cn/problems/minimum-cost-path-with-teleportations/description/?envType=daily-question&envId=2026-01-28
-    ///
-    /// English:
+    /// https://leetcode.com/problems/minimum-cost-path-with-teleportations/description/
+    /// <para>
     /// You are given an m x n 2D integer array grid and an integer k. You start at the top-left cell (0, 0) and your goal is to reach the bottom-right cell (m - 1, n - 1).
+    ///
     /// There are two types of moves available:
     /// - Normal move: You can move right or down from your current cell (i, j), i.e. to (i, j + 1) or (i + 1, j). The cost is the value of the destination cell.
-    /// - Teleportation: You can teleport from any cell (i, j) to any cell (x, y) such that grid[x][y] <= grid[i][j]; the cost of this move is 0. You may teleport at most k times.
+    /// - Teleportation: You can teleport from any cell (i, j) to any cell (x, y) such that grid[x][y] &lt;= grid[i][j]; the cost is 0. You may teleport at most k times.
+    ///
     /// Return the minimum total cost to reach cell (m - 1, n - 1) from (0, 0).
     ///
-    /// 繁體中文:
-    /// 給定一個 m x n 的整數陣列 grid 和一個整數 k。你從左上角格子 (0, 0) 出發，目標是抵達右下角格子 (m - 1, n - 1)。
-    /// 可用的移動類型有兩種：
-    /// - 一般移動：從格子 (i, j) 向右或向下移動到 (i, j + 1) 或 (i + 1, j)，花費為目的格子的值。
-    /// - 傳送：可以從任意格子 (i, j) 傳送到任何滿足 grid[x][y] <= grid[i][j] 的格子 (x, y)，此移動花費為 0。最多可傳送 k 次。
-    /// 回傳從 (0, 0) 到達 (m - 1, n - 1) 的最小總花費。
+    /// Example 1:
+    /// Input: grid = [[1,3,3],[2,5,4],[4,3,5]], k = 2
+    /// Output: 7
+    /// Explanation: Initially at (0, 0), the cost is 0. Move down to (1, 0): 0 + 2 = 2. Move right to (1, 1): 2 + 5 = 7. Teleport to (2, 2): 7 + 0 = 7. The minimum cost is 7.
+    ///
+    /// Example 2:
+    /// Input: grid = [[1,2],[2,3],[3,4]], k = 1
+    /// Output: 9
+    /// Explanation: Initially at (0, 0), the cost is 0. Move down to (1, 0): 0 + 2 = 2. Move right to (1, 1): 2 + 3 = 5. Move down to (2, 1): 5 + 4 = 9. The minimum cost is 9.
+    ///
+    /// Constraints:
+    /// - 2 &lt;= m, n &lt;= 80
+    /// - m == grid.length
+    /// - n == grid[i].length
+    /// - 0 &lt;= grid[i][j] &lt;= 10^4
+    /// - 0 &lt;= k &lt;= 10
+    /// </para>
+    /// <para>
+    /// 3651. 含傳送的最小成本路徑
+    /// https://leetcode.cn/problems/minimum-cost-path-with-teleportations/description/
+    ///
+    /// 給定一個 m x n 二維整數陣列 grid 與整數 k。你從左上角格子 (0, 0) 出發，目標是抵達右下角格子 (m - 1, n - 1)。
+    ///
+    /// 可使用兩種移動方式：
+    /// - 一般移動：可從目前格子 (i, j) 向右或向下移至 (i, j + 1) 或 (i + 1, j)，成本為目的格子的值。
+    /// - 傳送：可從任意格子 (i, j) 傳送至滿足 grid[x][y] &lt;= grid[i][j] 的任意格子 (x, y)，成本為 0。最多可傳送 k 次。
+    ///
+    /// 回傳從 (0, 0) 抵達 (m - 1, n - 1) 的最小總成本。
+    ///
+    /// 範例 1：
+    /// 輸入：grid = [[1,3,3],[2,5,4],[4,3,5]], k = 2
+    /// 輸出：7
+    /// 解釋：起初位於 (0, 0)，成本為 0。向下移至 (1, 0)：0 + 2 = 2。向右移至 (1, 1)：2 + 5 = 7。傳送至 (2, 2)：7 + 0 = 7。最小成本為 7。
+    ///
+    /// 範例 2：
+    /// 輸入：grid = [[1,2],[2,3],[3,4]], k = 1
+    /// 輸出：9
+    /// 解釋：起初位於 (0, 0)，成本為 0。向下移至 (1, 0)：0 + 2 = 2。向右移至 (1, 1)：2 + 3 = 5。向下移至 (2, 1)：5 + 4 = 9。最小成本為 9。
+    ///
+    /// 限制條件：
+    /// - 2 &lt;= m, n &lt;= 80
+    /// - m == grid.length
+    /// - n == grid[i].length
+    /// - 0 &lt;= grid[i][j] &lt;= 10^4
+    /// - 0 &lt;= k &lt;= 10
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

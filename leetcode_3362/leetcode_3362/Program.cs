@@ -4,21 +4,72 @@ class Program
 {
     /// <summary>
     /// 3362. Zero Array Transformation III
-    /// https://leetcode.com/problems/zero-array-transformation-iii/description/?envType=daily-question&envId=2025-05-22
-    /// 3362. 零數組變換 III
-    /// https://leetcode.cn/problems/zero-array-transformation-iii/description/?envType=daily-question&envId=2025-05-22
-    /// 
-    /// 題目說明：
-    /// 給定一個長度為 n 的整數陣列 nums 和一個二維陣列 queries，其中 queries[i] = [li, ri]。
-    /// 
-    /// 每個 queries[i] 代表對 nums 執行以下操作：
-    ///     將 nums 中索引範圍 [li, ri] 內的每個值最多減少 1。
-    ///     對於每個索引，減少的數值可以獨立選擇。
-    /// 
-    /// 零陣列是指所有元素均為 0 的陣列。
-    /// 
-    /// 返回可以從 queries 中移除的最大元素數量，使得使用剩餘的查詢仍然可以將 nums 轉換為零陣列。
-    /// 如果無法將 nums 轉換為零陣列，則返回 -1。
+    /// https://leetcode.com/problems/zero-array-transformation-iii/description/
+    /// <para>
+    /// You are given an integer array nums of length n and a 2D array queries, where queries[i] = [li, ri].
+    ///
+    /// Each query allows every value in [li, ri] to be decremented by at most 1, with the decrement chosen independently for each index.
+    ///
+    /// A Zero Array has every element equal to 0.
+    ///
+    /// Return the maximum number of queries that can be removed while the remaining queries can still convert nums into a Zero Array. If conversion is impossible, return -1.
+    ///
+    /// Example 1:
+    /// Input: nums = [2,0,2], queries = [[0,2],[0,2],[1,1]]
+    /// Output: 1
+    /// Explanation: Remove queries[2]. With queries[0], decrement nums[0] and nums[2] by 1 and nums[1] by 0. Do the same with queries[1].
+    ///
+    /// Example 2:
+    /// Input: nums = [1,1,1,1], queries = [[1,3],[0,2],[1,3],[1,2]]
+    /// Output: 2
+    /// Explanation: Remove queries[2] and queries[3].
+    ///
+    /// Example 3:
+    /// Input: nums = [1,2,3,4], queries = [[0,3]]
+    /// Output: -1
+    /// Explanation: nums cannot become a Zero Array even with all queries.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 0 &lt;= nums[i] &lt;= 10^5
+    /// - 1 &lt;= queries.length &lt;= 10^5
+    /// - queries[i].length == 2
+    /// - 0 &lt;= li &lt;= ri &lt; nums.length
+    /// </para>
+    /// <para>
+    /// 3362. 零陣列轉換 III
+    /// https://leetcode.cn/problems/zero-array-transformation-iii/description/
+    ///
+    /// 給定長度為 n 的整數陣列 nums 與 2D 陣列 queries，其中 queries[i] = [li, ri]。
+    ///
+    /// 每個查詢允許將 [li, ri] 內每個值最多減少 1，且各索引的減少量可以獨立選擇。
+    ///
+    /// 零陣列是所有元素都等於 0 的陣列。
+    ///
+    /// 回傳最多可移除的查詢數量，使剩餘查詢仍能將 nums 轉換成零陣列。若無法轉換，回傳 -1。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [2,0,2], queries = [[0,2],[0,2],[1,1]]
+    /// 輸出：1
+    /// 解釋：移除 queries[2]。使用 queries[0] 時將 nums[0] 與 nums[2] 減少 1，nums[1] 減少 0；對 queries[1] 執行相同操作。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [1,1,1,1], queries = [[1,3],[0,2],[1,3],[1,2]]
+    /// 輸出：2
+    /// 解釋：可以移除 queries[2] 與 queries[3]。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [1,2,3,4], queries = [[0,3]]
+    /// 輸出：-1
+    /// 解釋：即使用完所有查詢，也無法將 nums 轉換成零陣列。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 0 &lt;= nums[i] &lt;= 10^5
+    /// - 1 &lt;= queries.length &lt;= 10^5
+    /// - queries[i].length == 2
+    /// - 0 &lt;= li &lt;= ri &lt; nums.length
+    /// </para>
     /// </summary>    
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

@@ -30,7 +30,57 @@ class Program
     }
 
     /// <summary>
-    /// 執行題目範例與額外測試資料，並列印兩種解法的輸出結果。
+    /// 2. Add Two Numbers
+    /// https://leetcode.com/problems/add-two-numbers/description/
+    /// <para>
+    /// You are given two non-empty linked lists representing two non-negative integers. The digits are stored in reverse order, and each of their nodes contains a single digit. Add the two numbers and return the sum as a linked list.
+    ///
+    /// You may assume the two numbers do not contain any leading zero, except the number 0 itself.
+    ///
+    /// Example 1:
+    /// Input: l1 = [2,4,3], l2 = [5,6,4]
+    /// Output: [7,0,8]
+    /// Explanation: 342 + 465 = 807.
+    ///
+    /// Example 2:
+    /// Input: l1 = [0], l2 = [0]
+    /// Output: [0]
+    ///
+    /// Example 3:
+    /// Input: l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
+    /// Output: [8,9,9,9,0,0,0,1]
+    ///
+    /// Constraints:
+    /// - The number of nodes in each linked list is in the range [1, 100].
+    /// - 0 &lt;= Node.val &lt;= 9
+    /// - It is guaranteed that each list represents a number without leading zeros.
+    /// </para>
+    /// <para>
+    /// 2. 兩數相加
+    /// https://leetcode.cn/problems/add-two-numbers/description/
+    ///
+    /// 給定兩個非空 linked list，分別表示兩個非負整數。數字以反向順序儲存，每個節點只包含一位數字。請將兩數相加，並以 linked list 回傳其總和。
+    ///
+    /// 除了數字 0 本身之外，可以假設這兩個數字都不含前導零。
+    ///
+    /// 範例 1：
+    /// 輸入：l1 = [2,4,3], l2 = [5,6,4]
+    /// 輸出：[7,0,8]
+    /// 解釋：342 + 465 = 807。
+    ///
+    /// 範例 2：
+    /// 輸入：l1 = [0], l2 = [0]
+    /// 輸出：[0]
+    ///
+    /// 範例 3：
+    /// 輸入：l1 = [9,9,9,9,9,9,9], l2 = [9,9,9,9]
+    /// 輸出：[8,9,9,9,0,0,0,1]
+    ///
+    /// 限制條件：
+    /// - 每個 linked list 的節點數量皆介於 [1, 100]。
+    /// - 0 &lt;= Node.val &lt;= 9
+    /// - 保證每個 linked list 都表示一個沒有前導零的數字。
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數。</param>
     private static void Main(string[] args)

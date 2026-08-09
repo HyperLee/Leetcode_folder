@@ -4,12 +4,46 @@ class Program
 {
     /// <summary>
     /// 48. Rotate Image
-    /// https://leetcode.com/problems/rotate-image/description/?envType=problem-list-v2&envId=oizxjoit
+    /// https://leetcode.com/problems/rotate-image/description/
+    /// <para>
+    /// You are given an n x n 2D matrix representing an image. Rotate the image by 90 degrees clockwise.
+    ///
+    /// You must rotate the image in-place, which means modifying the input 2D matrix directly. Do not allocate another 2D matrix to perform the rotation.
+    ///
+    /// Example 1:
+    /// Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+    /// Output: [[7,4,1],[8,5,2],[9,6,3]]
+    ///
+    /// Example 2:
+    /// Input: matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]
+    /// Output: [[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]
+    ///
+    /// Constraints:
+    /// - n == matrix.length == matrix[i].length
+    /// - 1 &lt;= n &lt;= 20
+    /// - -1000 &lt;= matrix[i][j] &lt;= 1000
+    /// </para>
+    /// <para>
     /// 48. 旋轉影像
     /// https://leetcode.cn/problems/rotate-image/description/
-    /// 給定一個 n x n 的二維矩陣 matrix 代表一個圖像，將圖像順時針旋轉 90 度。
-    /// 你必須在原地旋轉圖像，這意味著你需要直接修改輸入的二維矩陣。請不要使用額外的矩陣來旋轉圖像。
-    /// 
+    ///
+    /// 給定一個表示影像的 n x n 二維矩陣 matrix，請將影像順時針旋轉 90 度。
+    ///
+    /// 你必須原地旋轉影像，也就是直接修改輸入的二維矩陣。不得配置另一個二維矩陣來完成旋轉。
+    ///
+    /// 範例 1：
+    /// 輸入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+    /// 輸出：[[7,4,1],[8,5,2],[9,6,3]]
+    ///
+    /// 範例 2：
+    /// 輸入：matrix = [[5,1,9,11],[2,4,8,10],[13,3,6,7],[15,14,12,16]]
+    /// 輸出：[[15,13,2,5],[14,3,4,1],[12,6,8,9],[16,7,10,11]]
+    ///
+    /// 限制條件：
+    /// - n == matrix.length == matrix[i].length
+    /// - 1 &lt;= n &lt;= 20
+    /// - -1000 &lt;= matrix[i][j] &lt;= 1000
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

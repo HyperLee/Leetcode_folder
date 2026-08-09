@@ -6,10 +6,48 @@
 
         /// <summary>
         /// 278. First Bad Version
+        /// https://leetcode.com/problems/first-bad-version/description/
+        /// <para>
+        /// You are a product manager and currently leading a team to develop a new product. Unfortunately, the latest version of your product fails the quality check. Since each version is developed based on the previous version, all versions after a bad version are also bad.
+        ///
+        /// Suppose you have n versions [1, 2, ..., n] and you want to find the first bad one, which causes all following versions to be bad.
+        ///
+        /// You are given an API bool isBadVersion(version), which returns whether version is bad. Implement a function to find the first bad version. You should minimize the number of calls to the API.
+        ///
+        /// Example 1:
+        /// Input: n = 5, bad = 4
+        /// Output: 4
+        /// Explanation: isBadVersion(3) returns false, isBadVersion(5) returns true, and isBadVersion(4) returns true. Therefore, 4 is the first bad version.
+        ///
+        /// Example 2:
+        /// Input: n = 1, bad = 1
+        /// Output: 1
+        ///
+        /// Constraints:
+        /// - 1 &lt;= bad &lt;= n &lt;= 2^31 - 1
+        /// </para>
+        /// <para>
+        /// 278. 第一個錯誤版本
         /// https://leetcode.cn/problems/first-bad-version/description/
-        /// 
-        /// 278. 第一个错误的版本
-        /// https://leetcode.cn/problems/first-bad-version/description/
+        ///
+        /// 你是一位產品經理，目前正帶領團隊開發新產品。不幸的是，產品的最新版本未通過品質檢查。由於每個版本都是基於前一個版本開發，因此錯誤版本之後的所有版本也都是錯誤的。
+        ///
+        /// 假設共有 n 個版本 [1, 2, ..., n]，你想找出第一個錯誤版本；它會導致後續所有版本都出錯。
+        ///
+        /// 題目提供 API bool isBadVersion(version)，用來回傳 version 是否為錯誤版本。請實作函式找出第一個錯誤版本，並盡量減少呼叫此 API 的次數。
+        ///
+        /// 範例 1：
+        /// 輸入：n = 5, bad = 4
+        /// 輸出：4
+        /// 解釋：isBadVersion(3) 回傳 false，isBadVersion(5) 回傳 true，isBadVersion(4) 回傳 true。因此 4 是第一個錯誤版本。
+        ///
+        /// 範例 2：
+        /// 輸入：n = 1, bad = 1
+        /// 輸出：1
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= bad &lt;= n &lt;= 2^31 - 1
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 主程式會執行固定測資，驗證二分搜尋能在第一版、最後一版、中間版本與整數上限等情境找到第一個錯誤版本。

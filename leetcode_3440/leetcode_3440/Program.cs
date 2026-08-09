@@ -18,6 +18,81 @@
 /// </summary>
 class Program
 {
+    /// <summary>
+    /// 3440. Reschedule Meetings for Maximum Free Time II
+    /// https://leetcode.com/problems/reschedule-meetings-for-maximum-free-time-ii/description/
+    /// <para>
+    /// You are given eventTime, the duration of an event, and arrays startTime and endTime of length n. They describe n non-overlapping meetings during [0, eventTime], with meeting i occupying [startTime[i], endTime[i]].
+    ///
+    /// You may reschedule at most one meeting by moving its start time while preserving its duration and keeping meetings non-overlapping, to maximize the longest continuous free-time interval.
+    ///
+    /// Return the maximum possible free time. Meetings must remain inside the event and non-overlapping. In this version, their relative order may change after rescheduling one meeting.
+    ///
+    /// Example 1:
+    /// Input: eventTime = 5, startTime = [1,3], endTime = [2,5]
+    /// Output: 2
+    /// Explanation: Move [1,2] to [2,3], leaving [0,2] free.
+    ///
+    /// Example 2:
+    /// Input: eventTime = 10, startTime = [0,7,9], endTime = [1,8,10]
+    /// Output: 7
+    /// Explanation: Move [0,1] to [8,9], leaving [0,7] free.
+    ///
+    /// Example 3:
+    /// Input: eventTime = 10, startTime = [0,3,7,9], endTime = [1,4,8,10]
+    /// Output: 6
+    /// Explanation: Move [3,4] to [8,9], leaving [1,7] free.
+    ///
+    /// Example 4:
+    /// Input: eventTime = 5, startTime = [0,1,2,3,4], endTime = [1,2,3,4,5]
+    /// Output: 0
+    /// Explanation: No event time is free.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= eventTime &lt;= 10^9
+    /// - n == startTime.length == endTime.length
+    /// - 2 &lt;= n &lt;= 10^5
+    /// - 0 &lt;= startTime[i] &lt; endTime[i] &lt;= eventTime
+    /// - endTime[i] &lt;= startTime[i + 1] for i in [0, n - 2]
+    /// </para>
+    /// <para>
+    /// 3440. 重新安排會議以取得最大空閒時間 II
+    /// https://leetcode.cn/problems/reschedule-meetings-for-maximum-free-time-ii/description/
+    ///
+    /// 給定活動持續時間 eventTime，以及長度為 n 的陣列 startTime 與 endTime。它們描述 [0, eventTime] 內 n 場互不重疊的會議，第 i 場位於 [startTime[i], endTime[i]]。
+    ///
+    /// 你最多可以重新安排一場會議：移動其開始時間但維持相同持續時間，且所有會議仍不重疊，以最大化最長連續空閒時段。
+    ///
+    /// 回傳可能的最大空閒時間。會議不得移到活動外，且必須保持不重疊。在本版本中，重新安排一場會議後，會議相對順序可以改變。
+    ///
+    /// 範例 1：
+    /// 輸入：eventTime = 5, startTime = [1,3], endTime = [2,5]
+    /// 輸出：2
+    /// 解釋：將 [1,2] 移到 [2,3]，使 [0,2] 沒有會議。
+    ///
+    /// 範例 2：
+    /// 輸入：eventTime = 10, startTime = [0,7,9], endTime = [1,8,10]
+    /// 輸出：7
+    /// 解釋：將 [0,1] 移到 [8,9]，使 [0,7] 沒有會議。
+    ///
+    /// 範例 3：
+    /// 輸入：eventTime = 10, startTime = [0,3,7,9], endTime = [1,4,8,10]
+    /// 輸出：6
+    /// 解釋：將 [3,4] 移到 [8,9]，使 [1,7] 沒有會議。
+    ///
+    /// 範例 4：
+    /// 輸入：eventTime = 5, startTime = [0,1,2,3,4], endTime = [1,2,3,4,5]
+    /// 輸出：0
+    /// 解釋：活動期間沒有未被會議占用的時間。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= eventTime &lt;= 10^9
+    /// - n == startTime.length == endTime.length
+    /// - 2 &lt;= n &lt;= 10^5
+    /// - 0 &lt;= startTime[i] &lt; endTime[i] &lt;= eventTime
+    /// - 對 [0, n - 2] 中的 i，endTime[i] &lt;= startTime[i + 1]
+    /// </para>
+    /// </summary>
     static void Main(string[] args)
     {
         // 測試資料範例

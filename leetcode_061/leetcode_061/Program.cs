@@ -16,10 +16,41 @@ class Program
     /// <summary>
     /// 61. Rotate List
     /// https://leetcode.com/problems/rotate-list/description/
-    /// 61. 旋转链表
-    /// https://leetcode.cn/problems/rotate-list/description/
-    /// 
+    /// <para>
     /// Given the head of a linked list, rotate the list to the right by k places.
+    ///
+    /// Example 1:
+    /// Input: head = [1,2,3,4,5], k = 2
+    /// Output: [4,5,1,2,3]
+    ///
+    /// Example 2:
+    /// Input: head = [0,1,2], k = 4
+    /// Output: [2,0,1]
+    ///
+    /// Constraints:
+    /// - The number of nodes in the list is in the range [0, 500].
+    /// - -100 &lt;= Node.val &lt;= 100
+    /// - 0 &lt;= k &lt;= 2 * 10^9
+    /// </para>
+    /// <para>
+    /// 61. 旋轉鏈結串列
+    /// https://leetcode.cn/problems/rotate-list/description/
+    ///
+    /// 給定一個 linked list 的頭節點，請將串列向右旋轉 k 個位置。
+    ///
+    /// 範例 1：
+    /// 輸入：head = [1,2,3,4,5], k = 2
+    /// 輸出：[4,5,1,2,3]
+    ///
+    /// 範例 2：
+    /// 輸入：head = [0,1,2], k = 4
+    /// 輸出：[2,0,1]
+    ///
+    /// 限制條件：
+    /// - 串列的節點數量介於 [0, 500]。
+    /// - -100 &lt;= Node.val &lt;= 100
+    /// - 0 &lt;= k &lt;= 2 * 10^9
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

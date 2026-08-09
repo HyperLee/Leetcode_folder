@@ -28,10 +28,52 @@
         }
 
         /// <summary>
+        /// <para>
         /// 1110. Delete Nodes And Return Forest
-        /// https://leetcode.com/problems/delete-nodes-and-return-forest/description/?envType=daily-question&envId=2024-07-17
-        /// 1110. 删点成林
+        /// https://leetcode.com/problems/delete-nodes-and-return-forest/description/
+        ///
+        /// Given the root of a binary tree, each node in the tree has a distinct value.
+        /// After deleting all nodes with a value in to_delete, we are left with a forest (a disjoint union of trees).
+        /// Return the roots of the trees in the remaining forest. You may return the result in any order.
+        ///
+        /// Example 1:
+        /// Input: root = [1,2,3,4,5,6,7], to_delete = [3,5]
+        /// Output: [[1,2,null,4],[6],[7]]
+        /// Illustration: https://assets.leetcode.com/uploads/2019/07/01/screen-shot-2019-07-01-at-53836-pm.png
+        ///
+        /// Example 2:
+        /// Input: root = [1,2,4,null,3], to_delete = [3]
+        /// Output: [[1,2,4]]
+        ///
+        /// Constraints:
+        /// The number of nodes in the given tree is at most 1000.
+        /// Each node has a distinct value between 1 and 1000.
+        /// to_delete.length &lt;= 1000
+        /// to_delete contains distinct values between 1 and 1000.
+        /// </para>
+        /// <para>
+        /// 1110. 刪除節點並回傳森林
         /// https://leetcode.cn/problems/delete-nodes-and-return-forest/description/
+        ///
+        /// 給定一棵二元樹的根節點 root，樹中的每個節點都有互不相同的值。
+        /// 刪除所有值位於 to_delete 中的節點後，會留下一座森林（彼此不相交的樹之集合）。
+        /// 請回傳剩餘森林中各棵樹的根節點。你可以用任意順序回傳結果。
+        ///
+        /// 範例 1：
+        /// 輸入：root = [1,2,3,4,5,6,7], to_delete = [3,5]
+        /// 輸出：[[1,2,null,4],[6],[7]]
+        /// 示意圖：https://assets.leetcode.com/uploads/2019/07/01/screen-shot-2019-07-01-at-53836-pm.png
+        ///
+        /// 範例 2：
+        /// 輸入：root = [1,2,4,null,3], to_delete = [3]
+        /// 輸出：[[1,2,4]]
+        ///
+        /// 限制條件：
+        /// 給定樹中的節點數量至多為 1000。
+        /// 每個節點都有介於 1 與 1000 之間且互不相同的值。
+        /// to_delete.length &lt;= 1000
+        /// to_delete 包含介於 1 與 1000 之間且互不相同的值。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         /// <remarks>

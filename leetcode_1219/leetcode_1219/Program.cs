@@ -3,10 +3,85 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1219. Path with Maximum Gold
-        /// https://leetcode.com/problems/path-with-maximum-gold/description/?envType=daily-question&envId=2024-05-14
-        /// 1219. 黄金矿工
+        /// https://leetcode.com/problems/path-with-maximum-gold/description/
+        ///
+        /// In a gold mine grid of size m x n, each cell in this mine has an integer representing the amount of
+        /// gold in that cell, 0 if it is empty.
+        /// Return the maximum amount of gold you can collect under the conditions:
+        /// - Every time you are located in a cell you will collect all the gold in that cell.
+        /// - From your position, you can walk one step to the left, right, up, or down.
+        /// - You can't visit the same cell more than once.
+        /// - Never visit a cell with 0 gold.
+        /// - You can start and stop collecting gold from any position in the grid that has some gold.
+        ///
+        /// Example 1:
+        /// Input: grid = [[0,6,0],[5,8,7],[0,9,0]]
+        /// Output: 24
+        /// Explanation:
+        /// [[0,6,0],
+        /// [5,8,7],
+        /// [0,9,0]]
+        /// Path to get the maximum gold, 9 -&gt; 8 -&gt; 7.
+        ///
+        /// Example 2:
+        /// Input: grid = [[1,0,7],[2,0,6],[3,4,5],[0,3,0],[9,0,20]]
+        /// Output: 28
+        /// Explanation:
+        /// [[1,0,7],
+        /// [2,0,6],
+        /// [3,4,5],
+        /// [0,3,0],
+        /// [9,0,20]]
+        /// Path to get the maximum gold, 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; 6 -&gt; 7.
+        ///
+        /// Constraints:
+        /// m == grid.length
+        /// n == grid[i].length
+        /// 1 &lt;= m, n &lt;= 15
+        /// 0 &lt;= grid[i][j] &lt;= 100
+        /// There are at most 25 cells containing gold.
+        /// </para>
+        /// <para>
+        /// 1219. 黃金礦工
         /// https://leetcode.cn/problems/path-with-maximum-gold/description/
+        ///
+        /// 在大小為 m x n 的金礦網格中，每個儲存格都有一個整數表示該格的黃金數量；若為空則是 0。
+        /// 請在下列條件下，回傳可收集的最大黃金數量：
+        /// - 每當位於某個儲存格時，會收集該格的所有黃金。
+        /// - 從目前位置可以向左、向右、向上或向下走一步。
+        /// - 不可重複拜訪同一個儲存格。
+        /// - 絕不可拜訪黃金數量為 0 的儲存格。
+        /// - 可以從網格中任意一個含有黃金的位置開始或停止收集黃金。
+        ///
+        /// 範例 1：
+        /// 輸入：grid = [[0,6,0],[5,8,7],[0,9,0]]
+        /// 輸出：24
+        /// 解釋：
+        /// [[0,6,0],
+        /// [5,8,7],
+        /// [0,9,0]]
+        /// 取得最多黃金的路徑為 9 -&gt; 8 -&gt; 7。
+        ///
+        /// 範例 2：
+        /// 輸入：grid = [[1,0,7],[2,0,6],[3,4,5],[0,3,0],[9,0,20]]
+        /// 輸出：28
+        /// 解釋：
+        /// [[1,0,7],
+        /// [2,0,6],
+        /// [3,4,5],
+        /// [0,3,0],
+        /// [9,0,20]]
+        /// 取得最多黃金的路徑為 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 5 -&gt; 6 -&gt; 7。
+        ///
+        /// 限制條件：
+        /// m == grid.length
+        /// n == grid[i].length
+        /// 1 &lt;= m, n &lt;= 15
+        /// 0 &lt;= grid[i][j] &lt;= 100
+        /// 含有黃金的儲存格至多有 25 個。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 程式主要進入點；執行七組固定案例與三種解法，並以 process exit code 表示驗證結果。

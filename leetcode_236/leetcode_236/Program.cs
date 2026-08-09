@@ -34,10 +34,64 @@
             int Expected);
 
         /// <summary>
+        /// <para>
         /// 236. Lowest Common Ancestor of a Binary Tree
         /// https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/description/
-        /// 236. 二叉树的最近公共祖先
+        ///
+        /// Given a binary tree, find the lowest common ancestor (LCA) of two specified nodes. The LCA of nodes p and q is the lowest node in tree T that has both p and q as descendants, and a node may be a descendant of itself.
+        ///
+        /// Image: https://assets.leetcode.com/uploads/2018/12/14/binarytree.png
+        ///
+        /// Example 1:
+        /// Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+        /// Output: 3
+        /// Explanation: The LCA of nodes 5 and 1 is 3.
+        ///
+        /// Example 2:
+        /// Input: root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
+        /// Output: 5
+        /// Explanation: The LCA of nodes 5 and 4 is 5 because a node may be a descendant of itself.
+        ///
+        /// Example 3:
+        /// Input: root = [1,2], p = 1, q = 2
+        /// Output: 1
+        ///
+        /// Constraints:
+        /// - The number of nodes is in [2,10^5].
+        /// - -10^9 &lt;= Node.val &lt;= 10^9
+        /// - Every Node.val is unique.
+        /// - p != q
+        /// - p and q exist in the tree.
+        /// </para>
+        /// <para>
+        /// 236. 二元樹的最近共同祖先
         /// https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/description/
+        ///
+        /// 給定一棵二元樹，找出兩個指定節點的最近共同祖先（LCA）。節點 p 與 q 的 LCA，是樹 T 中同時以 p、q 為後代的最低節點，且節點可以是自己的後代。
+        ///
+        /// 圖片：https://assets.leetcode.com/uploads/2018/12/14/binarytree.png
+        ///
+        /// 範例 1：
+        /// 輸入：root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 1
+        /// 輸出：3
+        /// 說明：節點 5 與 1 的 LCA 是 3。
+        ///
+        /// 範例 2：
+        /// 輸入：root = [3,5,1,6,2,0,8,null,null,7,4], p = 5, q = 4
+        /// 輸出：5
+        /// 說明：節點 5 與 4 的 LCA 是 5，因為節點可以是自己的後代。
+        ///
+        /// 範例 3：
+        /// 輸入：root = [1,2], p = 1, q = 2
+        /// 輸出：1
+        ///
+        /// 限制條件：
+        /// - 節點數量在 [2,10^5] 範圍內。
+        /// - -10^9 &lt;= Node.val &lt;= 10^9
+        /// - 所有 Node.val 皆唯一。
+        /// - p != q
+        /// - p 與 q 都存在於樹中。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

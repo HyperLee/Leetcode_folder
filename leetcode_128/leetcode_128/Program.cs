@@ -3,15 +3,54 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 128. Longest Consecutive Sequence
-    /// https://leetcode.com/problems/longest-consecutive-sequence/description/?envType=problem-list-v2&envId=oizxjoit
-    /// 128. 最长连续序列
+    /// https://leetcode.com/problems/longest-consecutive-sequence/description/
+    ///
+    /// Given an unsorted array of integers nums, return the length of the longest consecutive elements sequence.
+    /// You must write an algorithm that runs in O(n) time.
+    ///
+    /// Example 1:
+    /// Input: nums = [100,4,200,1,3,2]
+    /// Output: 4
+    /// Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.
+    ///
+    /// Example 2:
+    /// Input: nums = [0,3,7,2,5,8,4,6,0,1]
+    /// Output: 9
+    ///
+    /// Example 3:
+    /// Input: nums = [1,0,1,2]
+    /// Output: 3
+    ///
+    /// Constraints:
+    /// 0 &lt;= nums.length &lt;= 10^5
+    /// -10^9 &lt;= nums[i] &lt;= 10^9
+    /// </para>
+    /// <para>
+    /// 128. 最長連續序列
     /// https://leetcode.cn/problems/longest-consecutive-sequence/description/
-    /// 
-    /// 題目說明：
-    /// 給定一個未排序的整數數組，找出其中最長的連續序列的長度。
-    /// 要求時間複雜度為 O(n)。
-    /// 測試案例涵蓋基本情況、空陣列、重複數字、不連續數字及包含負數的情況。
+    ///
+    /// 給定未排序的整數陣列 nums，請回傳最長連續元素序列的長度。
+    /// 你必須撰寫一個以 O(n) 時間執行的演算法。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [100,4,200,1,3,2]
+    /// 輸出：4
+    /// 解釋：最長連續元素序列為 [1, 2, 3, 4]，因此其長度為 4。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [0,3,7,2,5,8,4,6,0,1]
+    /// 輸出：9
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [1,0,1,2]
+    /// 輸出：3
+    ///
+    /// 限制條件：
+    /// 0 &lt;= nums.length &lt;= 10^5
+    /// -10^9 &lt;= nums[i] &lt;= 10^9
+    /// </para>
     /// </summary>
     static void Main(string[] args)
     {

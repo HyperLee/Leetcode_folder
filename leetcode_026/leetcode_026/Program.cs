@@ -5,24 +5,75 @@ internal class Program
     /// <summary>
     /// 26. Remove Duplicates from Sorted Array
     /// https://leetcode.com/problems/remove-duplicates-from-sorted-array/description/
+    /// <para>
+    /// Given an integer array nums sorted in non-decreasing order, remove the duplicates in-place so that each unique element appears only once. The relative order of the elements must remain the same.
     ///
-    /// English:
-    /// Given an integer array nums sorted in non-decreasing order, 
-    /// remove the duplicates in-place such that each unique element appears only once. 
-    /// The relative order of the elements should be kept the same.
+    /// Let k be the number of unique elements in nums. After removing the duplicates, return k.
     ///
-    /// Consider the number of unique elements in nums to be k. 
-    /// After removing duplicates, return the number of unique elements k.
+    /// The first k elements of nums must contain the unique numbers in sorted order. The remaining elements beyond index k - 1 can be ignored.
     ///
-    /// The first k elements of nums should contain the unique numbers in sorted order. 
-    /// The remaining elements beyond index k - 1 can be ignored.
+    /// Custom Judge:
+    /// The judge tests the solution with the following code:
+    /// int[] nums = [...]; // Input array
+    /// int[] expectedNums = [...]; // Expected answer with the correct length
+    /// int k = removeDuplicates(nums); // Calls your implementation
+    /// assert k == expectedNums.length;
+    /// for (int i = 0; i &lt; k; i++) {
+    ///     assert nums[i] == expectedNums[i];
+    /// }
+    /// If all assertions pass, the solution is accepted.
     ///
-    /// 繁體中文:
-    /// 給定一個依非遞減順序排序的整數陣列 nums，請原地移除重複元素，使每個唯一元素只出現一次，並且保留原本的相對順序。
+    /// Example 1:
+    /// Input: nums = [1,1,2]
+    /// Output: 2, nums = [1,2,_]
+    /// Explanation: The function should return k = 2, with the first two elements of nums being 1 and 2 respectively. It does not matter what remains beyond the returned k, represented by underscores.
     ///
-    /// 將 nums 中唯一元素的數量視為 k。移除重複元素後，請回傳唯一元素的數量 k。
+    /// Example 2:
+    /// Input: nums = [0,0,1,1,1,2,2,3,3,4]
+    /// Output: 5, nums = [0,1,2,3,4,_,_,_,_,_]
+    /// Explanation: The function should return k = 5, with the first five elements of nums being 0, 1, 2, 3, and 4 respectively. It does not matter what remains beyond the returned k, represented by underscores.
     ///
-    /// nums 的前 k 個元素必須依排序後的順序保留所有不重複的數字。超過索引 k - 1 的其餘元素可以忽略。
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 3 * 10^4
+    /// - -100 &lt;= nums[i] &lt;= 100
+    /// - nums is sorted in non-decreasing order.
+    /// </para>
+    /// <para>
+    /// 26. 移除排序陣列中的重複項目
+    /// https://leetcode.cn/problems/remove-duplicates-from-sorted-array/description/
+    ///
+    /// 給定一個以非遞減順序排序的整數陣列 nums，請原地移除重複項目，使每個唯一元素只出現一次。元素的相對順序必須保持不變。
+    ///
+    /// 令 k 為 nums 中唯一元素的數量。移除重複項目後，請回傳 k。
+    ///
+    /// nums 的前 k 個元素必須依排序順序包含所有唯一數字。索引 k - 1 之後的其餘元素可以忽略。
+    ///
+    /// 自訂評測：
+    /// 評測程式會使用下列程式碼測試解答：
+    /// int[] nums = [...]; // 輸入陣列
+    /// int[] expectedNums = [...]; // 長度正確的預期答案
+    /// int k = removeDuplicates(nums); // 呼叫你的實作
+    /// assert k == expectedNums.length;
+    /// for (int i = 0; i &lt; k; i++) {
+    ///     assert nums[i] == expectedNums[i];
+    /// }
+    /// 若所有斷言都通過，解答即被接受。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,1,2]
+    /// 輸出：2, nums = [1,2,_]
+    /// 解釋：函式應回傳 k = 2，且 nums 的前兩個元素分別為 1 和 2。回傳的 k 之後留下什麼內容並不重要，因此以底線表示。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [0,0,1,1,1,2,2,3,3,4]
+    /// 輸出：5, nums = [0,1,2,3,4,_,_,_,_,_]
+    /// 解釋：函式應回傳 k = 5，且 nums 的前五個元素分別為 0、1、2、3 和 4。回傳的 k 之後留下什麼內容並不重要，因此以底線表示。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 3 * 10^4
+    /// - -100 &lt;= nums[i] &lt;= 100
+    /// - nums 以非遞減順序排序。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     private static void Main(string[] args)

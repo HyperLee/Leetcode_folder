@@ -7,13 +7,54 @@ class Program
     private static readonly object _lockObject = new object();
 
     /// <summary>
+    /// <para>
     /// 2048. Next Greater Numerically Balanced Number
-    /// https://leetcode.com/problems/next-greater-numerically-balanced-number/description/?envType=daily-question&envId=2025-10-24
-    /// 2048. 下一个更大的数值平衡数
-    /// https://leetcode.cn/problems/next-greater-numerically-balanced-number/description/?envType=daily-question&envId=2025-10-24
-    /// 
-    /// 一個整數 x 是數值平衡的，如果對於 x 中的每個數字 d，x 中恰好有 d 個該數字的出現。
-    /// 給定一個整數 n，返回嚴格大於 n 的最小的數值平衡數。
+    /// https://leetcode.com/problems/next-greater-numerically-balanced-number/description/
+    ///
+    /// An integer x is numerically balanced if every digit d occurring in x occurs exactly d times. Given n, return the smallest numerically balanced number strictly greater than n.
+    ///
+    /// Example 1:
+    /// Input: n = 1
+    /// Output: 22
+    /// Explanation: Digit 2 occurs 2 times, and 22 is the smallest balanced number greater than 1.
+    ///
+    /// Example 2:
+    /// Input: n = 1000
+    /// Output: 1333
+    /// Explanation: In 1333, digit 1 occurs 1 time and digit 3 occurs 3 times. It is the smallest balanced number greater than 1000. 1022 is invalid because digit 0 occurs more than 0 times.
+    ///
+    /// Example 3:
+    /// Input: n = 3000
+    /// Output: 3133
+    /// Explanation: In 3133, digit 1 occurs 1 time and digit 3 occurs 3 times. It is the smallest balanced number greater than 3000.
+    ///
+    /// Constraints:
+    /// - 0 &lt;= n &lt;= 10^6
+    /// </para>
+    /// <para>
+    /// 2048. 下一個更大的數值平衡數
+    /// https://leetcode.cn/problems/next-greater-numerically-balanced-number/description/
+    ///
+    /// 若整數 x 中出現的每個數字 d 都恰好出現 d 次，則 x 是數值平衡數。給定 n，回傳嚴格大於 n 的最小數值平衡數。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 1
+    /// 輸出：22
+    /// 說明：數字 2 出現 2 次，且 22 是大於 1 的最小平衡數。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 1000
+    /// 輸出：1333
+    /// 說明：1333 中數字 1 出現 1 次、數字 3 出現 3 次，是大於 1000 的最小平衡數。1022 不合法，因為數字 0 出現超過 0 次。
+    ///
+    /// 範例 3：
+    /// 輸入：n = 3000
+    /// 輸出：3133
+    /// 說明：3133 中數字 1 出現 1 次、數字 3 出現 3 次，是大於 3000 的最小平衡數。
+    ///
+    /// 限制條件：
+    /// - 0 &lt;= n &lt;= 10^6
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

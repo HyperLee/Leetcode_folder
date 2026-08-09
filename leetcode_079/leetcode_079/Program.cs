@@ -3,17 +3,64 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 79. Word Search
-    /// https://leetcode.com/problems/word-search/description/
-    /// 79. 单词搜索
-    /// https://leetcode.cn/problems/word-search/description/
-    /// 
-    /// 給定一個 m x n 的二維字符網格 board 和一個字符串 word 。
-    /// 如果 word 存在於網格中，返回 true ；否則，返回 false 。
-    /// 
-    /// 單詞必須按照字母順序，通過相鄰的單元格內的字母構成，
-    /// 其中"相鄰"單元格是那些水平相鄰或垂直相鄰的單元格。
-    /// 同一個單元格內的字母不允許被重複使用。
+    /// https://leetcode.com/problems/word-search/
+    ///
+    /// Given an m x n grid of characters board and a string word, return true if word exists in the grid.
+    /// The word can be constructed from letters of sequentially adjacent cells, where adjacent cells are
+    /// horizontally or vertically neighboring. The same letter cell may not be used more than once.
+    ///
+    /// Example 1:
+    /// Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+    /// Output: true
+    ///
+    /// Example 2:
+    /// Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"
+    /// Output: true
+    ///
+    /// Example 3:
+    /// Input: board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
+    /// Output: false
+    ///
+    /// Constraints:
+    /// m == board.length
+    /// n == board[i].length
+    /// 1 &lt;= m, n &lt;= 6
+    /// 1 &lt;= word.length &lt;= 15
+    /// board and word consist of only lowercase and uppercase English letters.
+    ///
+    /// Follow up: Could you use search pruning to make your solution faster with a larger board?
+    /// </para>
+    /// <para>
+    /// 79. 單字搜尋
+    /// https://leetcode.cn/problems/word-search/
+    ///
+    /// 給定一個 m x n 的字元網格 board 與字串 word，若 word 存在於網格中則回傳 true。
+    /// 單字可由依序相鄰儲存格中的字母組成；相鄰儲存格是水平或垂直相鄰。
+    /// 同一個字母儲存格不可重複使用。
+    ///
+    /// 範例 1：
+    /// 輸入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCCED"
+    /// 輸出：true
+    ///
+    /// 範例 2：
+    /// 輸入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "SEE"
+    /// 輸出：true
+    ///
+    /// 範例 3：
+    /// 輸入：board = [["A","B","C","E"],["S","F","C","S"],["A","D","E","E"]], word = "ABCB"
+    /// 輸出：false
+    ///
+    /// 限制條件：
+    /// m == board.length
+    /// n == board[i].length
+    /// 1 &lt;= m, n &lt;= 6
+    /// 1 &lt;= word.length &lt;= 15
+    /// board 與 word 只包含大小寫英文字母。
+    ///
+    /// 進階：你能使用搜尋剪枝，讓解法在更大的網格上執行得更快嗎？
+    /// </para>
     /// </summary>
     /// <param name="args"></param> 
     static void Main(string[] args)

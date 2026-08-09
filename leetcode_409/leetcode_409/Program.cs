@@ -5,15 +5,47 @@
         /// <summary>
         /// 409. Longest Palindrome
         /// https://leetcode.com/problems/longest-palindrome/description/
-        /// 
-        /// 409. 最长回文串
-        /// https://leetcode.cn/problems/longest-palindrome/description/
-        /// 
-        /// 題目描述:
-        /// 給定一個由小寫或大寫字母組成的字串 s，返回可以使用這些字母"構成"的最長迴文（palindrome）的長度。
-        /// 字母是區分大小寫的，例如，「Aa」不被視為一個迴文。
-        /// ==> 注意是使用題目提供的字串來組成, 不是找出最長字串
+        /// <para>
+        /// Given a string s which consists of lowercase or uppercase letters, return the length of the longest palindrome that can be built with those letters.
         ///
+        /// Letters are case sensitive; for example, "Aa" is not considered a palindrome.
+        ///
+        /// Example 1:
+        /// Input: s = "abccccdd"
+        /// Output: 7
+        /// Explanation: One longest palindrome that can be built is "dccaccd", whose length is 7.
+        ///
+        /// Example 2:
+        /// Input: s = "a"
+        /// Output: 1
+        /// Explanation: The longest palindrome that can be built is "a", whose length is 1.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= s.length &lt;= 2000
+        /// - s consists only of lowercase and/or uppercase English letters.
+        /// </para>
+        /// <para>
+        /// 409. 最長迴文串
+        /// https://leetcode.cn/problems/longest-palindrome/description/
+        ///
+        /// 給定由小寫或大寫字母組成的字串 s，回傳能以這些字母構成之最長迴文串的長度。
+        ///
+        /// 字母區分大小寫；例如，"Aa" 不被視為迴文串。
+        ///
+        /// 範例 1：
+        /// 輸入：s = "abccccdd"
+        /// 輸出：7
+        /// 解釋：可以構成的其中一個最長迴文串是 "dccaccd"，其長度為 7。
+        ///
+        /// 範例 2：
+        /// 輸入：s = "a"
+        /// 輸出：1
+        /// 解釋：可以構成的最長迴文串是 "a"，其長度為 1。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= s.length &lt;= 2000
+        /// - s 只由小寫和／或大寫英文字母組成。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

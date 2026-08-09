@@ -23,10 +23,54 @@
         }
 
         /// <summary>
+        /// <para>
         /// 2181. Merge Nodes in Between Zeros
-        /// https://leetcode.com/problems/merge-nodes-in-between-zeros/description/?envType=daily-question&envId=2024-07-04
-        /// 2181. 合并零之间的节点
+        /// https://leetcode.com/problems/merge-nodes-in-between-zeros/description/
+        ///
+        /// You are given the head of a linked list containing integers separated by 0's. The first and last nodes have Node.val == 0. For every two consecutive 0's, merge all nodes between them into one node whose value is their sum. The modified list must contain no 0's. Return its head.
+        ///
+        /// Images: https://assets.leetcode.com/uploads/2022/02/02/ex1-1.png and https://assets.leetcode.com/uploads/2022/02/02/ex2-1.png
+        ///
+        /// Example 1:
+        /// Input: head = [0,3,1,0,4,5,2,0]
+        /// Output: [4,11]
+        /// Explanation: The first group sums to 3 + 1 = 4, and the second to 4 + 5 + 2 = 11.
+        ///
+        /// Example 2:
+        /// Input: head = [0,1,0,3,0,2,2,0]
+        /// Output: [1,3,4]
+        /// Explanation: The three group sums are 1 = 1, 3 = 3, and 2 + 2 = 4.
+        ///
+        /// Constraints:
+        /// - The number of nodes is in [3,2 * 10^5].
+        /// - 0 &lt;= Node.val &lt;= 1000
+        /// - No two consecutive nodes have Node.val == 0.
+        /// - The first and last nodes have Node.val == 0.
+        /// </para>
+        /// <para>
+        /// 2181. 合併零之間的節點
         /// https://leetcode.cn/problems/merge-nodes-in-between-zeros/description/
+        ///
+        /// 給定一個鏈結串列的頭節點，其中整數由 0 分隔；第一個與最後一個節點皆滿足 Node.val == 0。對每兩個連續的 0，將其間所有節點合併為一個節點，值為這些節點的總和。修改後的串列不得包含 0。回傳其頭節點。
+        ///
+        /// 圖片：https://assets.leetcode.com/uploads/2022/02/02/ex1-1.png 與 https://assets.leetcode.com/uploads/2022/02/02/ex2-1.png
+        ///
+        /// 範例 1：
+        /// 輸入：head = [0,3,1,0,4,5,2,0]
+        /// 輸出：[4,11]
+        /// 說明：第一組總和為 3 + 1 = 4，第二組為 4 + 5 + 2 = 11。
+        ///
+        /// 範例 2：
+        /// 輸入：head = [0,1,0,3,0,2,2,0]
+        /// 輸出：[1,3,4]
+        /// 說明：三組總和分別為 1 = 1、3 = 3、2 + 2 = 4。
+        ///
+        /// 限制條件：
+        /// - 節點數量在 [3,2 * 10^5] 範圍內。
+        /// - 0 &lt;= Node.val &lt;= 1000
+        /// - 不存在兩個 Node.val == 0 的連續節點。
+        /// - 第一個與最後一個節點皆滿足 Node.val == 0。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 以固定案例同時驗證原地合併與建立新串列兩種解法，並輸出預期值、實際值與比對結果。

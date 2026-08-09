@@ -4,14 +4,68 @@ class Program
 {
     /// <summary>
     /// 2966. Divide Array Into Arrays With Max Difference
-    /// https://leetcode.com/problems/divide-array-into-arrays-with-max-difference/description/?envType=daily-question&envId=2025-06-18
-    /// 2966. 划分数组并满足最大差限制
-    /// https://leetcode.cn/problems/divide-array-into-arrays-with-max-difference/description/?envType=daily-question&envId=2025-06-18
-    /// 
-    /// 題目描述:
-    /// 給定一個整數陣列 nums（長度為 n，且 n 為 3 的倍數）與正整數 k。
-    /// 請將 nums 分成 n/3 個長度為 3 的子陣列，且每個子陣列內任兩元素的差值皆小於等於 k。
-    /// 若無法分割則回傳空陣列，若有多種答案可回傳任一種。
+    /// https://leetcode.com/problems/divide-array-into-arrays-with-max-difference/description/
+    /// <para>
+    /// You are given an integer array nums of size n, where n is a multiple of 3, and a positive integer k.
+    ///
+    /// Divide nums into n / 3 arrays of size 3 so that the difference between any two elements in one array is at most k.
+    ///
+    /// Return a 2D array containing the arrays. If the conditions cannot be satisfied, return an empty array. If there are multiple answers, return any of them.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,3,4,8,7,9,3,5,1], k = 2
+    /// Output: [[1,1,3],[3,4,5],[7,8,9]]
+    /// Explanation: The difference between any two elements in each array is at most 2.
+    ///
+    /// Example 2:
+    /// Input: nums = [2,4,2,2,5,2], k = 2
+    /// Output: []
+    /// Explanation: Possible divisions include [[2,2,2],[2,4,5]] and [[2,2,4],[2,2,5]], with their permutations. Because there are four 2s, some group contains 2 and 5 regardless of the division. Since 5 - 2 = 3 &gt; k, no valid division exists.
+    ///
+    /// Example 3:
+    /// Input: nums = [4,2,9,8,2,12,7,12,10,5,8,5,5,7,9,2,5,11], k = 14
+    /// Output: [[2,2,2],[4,5,5],[5,5,7],[7,8,8],[9,9,10],[11,12,12]]
+    /// Explanation: The difference between any two elements in each array is at most 14.
+    ///
+    /// Constraints:
+    /// - n == nums.length
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - n is a multiple of 3.
+    /// - 1 &lt;= nums[i] &lt;= 10^5
+    /// - 1 &lt;= k &lt;= 10^5
+    /// </para>
+    /// <para>
+    /// 2966. 將陣列分組並限制最大差值
+    /// https://leetcode.cn/problems/divide-array-into-arrays-with-max-difference/description/
+    ///
+    /// 給定一個長度為 n 的整數陣列 nums，其中 n 是 3 的倍數，另給定正整數 k。
+    ///
+    /// 將 nums 分成 n / 3 個長度為 3 的陣列，使每個陣列中任意兩元素之差不超過 k。
+    ///
+    /// 回傳包含這些陣列的 2D 陣列。若無法滿足條件，回傳空陣列；若有多個答案，可回傳任一答案。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,3,4,8,7,9,3,5,1], k = 2
+    /// 輸出：[[1,1,3],[3,4,5],[7,8,9]]
+    /// 解釋：每個陣列中任意兩元素之差都不超過 2。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [2,4,2,2,5,2], k = 2
+    /// 輸出：[]
+    /// 解釋：可能的分法包括 [[2,2,2],[2,4,5]] 與 [[2,2,4],[2,2,5]]，以及它們的排列。因為共有四個 2，無論如何分組，都會有一組同時包含 2 和 5。由於 5 - 2 = 3 &gt; k，因此不存在有效分法。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [4,2,9,8,2,12,7,12,10,5,8,5,5,7,9,2,5,11], k = 14
+    /// 輸出：[[2,2,2],[4,5,5],[5,5,7],[7,8,8],[9,9,10],[11,12,12]]
+    /// 解釋：每個陣列中任意兩元素之差都不超過 14。
+    ///
+    /// 限制條件：
+    /// - n == nums.length
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - n 是 3 的倍數。
+    /// - 1 &lt;= nums[i] &lt;= 10^5
+    /// - 1 &lt;= k &lt;= 10^5
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main (string [] args)

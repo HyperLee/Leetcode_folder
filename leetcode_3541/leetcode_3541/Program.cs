@@ -6,16 +6,52 @@ class Program
 {
     /// <summary>
     /// 3541. Find Most Frequent Vowel and Consonant
-    /// https://leetcode.com/problems/find-most-frequent-vowel-and-consonant/description/?envType=daily-question&envId=2025-09-13
-    /// 3541. 找到頻率最高的元音和輔音
-    /// 題目描述：
-    /// 給定一個只包含小寫英文字母（'a' 到 'z'）的字串 s。
-    /// 任務：
-    ///  - 找出出現頻率最高的元音（a, e, i, o, u）。
-    ///  - 找出出現頻率最高的輔音（除元音外的其他字母）。
-    /// 回傳兩者頻率的總和。
-    /// 注意：若元音或輔音不存在，視其頻率為 0；若有多個頻率相同的字母，可任意選一個。
-    /// 字母 x 的頻率是它在字串中出現的次數。
+    /// https://leetcode.com/problems/find-most-frequent-vowel-and-consonant/description/
+    /// <para>
+    /// You are given a lowercase English string s.
+    ///
+    /// Find the maximum frequency among vowels ('a', 'e', 'i', 'o', 'u') and the maximum frequency among consonants, then return their sum.
+    ///
+    /// If multiple vowels or consonants tie, choose any. If there are no vowels or no consonants, use frequency 0. A letter's frequency is its number of occurrences.
+    ///
+    /// Example 1:
+    /// Input: s = "successes"
+    /// Output: 6
+    /// Explanation: Vowels 'u' and 'e' have frequencies 1 and 2, so the vowel maximum is 2. Consonants 's' and 'c' have frequencies 4 and 2, so the consonant maximum is 4. The result is 2 + 4 = 6.
+    ///
+    /// Example 2:
+    /// Input: s = "aeiaeia"
+    /// Output: 3
+    /// Explanation: Vowels 'a', 'e', and 'i' have frequencies 3, 2, and 2, so the vowel maximum is 3. There are no consonants, so their maximum is 0. The result is 3 + 0 = 3.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 100
+    /// - s consists only of lowercase English letters.
+    /// </para>
+    /// <para>
+    /// 3541. 找出最高頻率的母音與子音
+    /// https://leetcode.cn/problems/find-most-frequent-vowel-and-consonant/description/
+    ///
+    /// 給定只含小寫英文字母的字串 s。
+    ///
+    /// 找出母音（'a'、'e'、'i'、'o'、'u'）中的最大頻率，以及子音中的最大頻率，並回傳兩者總和。
+    ///
+    /// 若多個母音或子音並列，可任選其一。若不存在母音或子音，將其頻率視為 0。字母的頻率是它的出現次數。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "successes"
+    /// 輸出：6
+    /// 解釋：母音 'u' 與 'e' 的頻率為 1、2，因此母音最大頻率為 2。子音 's' 與 'c' 的頻率為 4、2，因此子音最大頻率為 4。結果為 2 + 4 = 6。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "aeiaeia"
+    /// 輸出：3
+    /// 解釋：母音 'a'、'e'、'i' 的頻率為 3、2、2，因此母音最大頻率為 3。沒有子音，所以其最大頻率為 0。結果為 3 + 0 = 3。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 100
+    /// - s 只由小寫英文字母組成。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

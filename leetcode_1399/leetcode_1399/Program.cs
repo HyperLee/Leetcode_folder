@@ -5,15 +5,58 @@ class Program
     private const int MaximumDigitSum = 36;
 
     /// <summary>
+    /// <para>
     /// 1399. Count Largest Group
-    /// https://leetcode.com/problems/count-largest-group/description/?envType=daily-question&envId=2025-04-23
-    /// 1399. 统计最大组的数目
-    /// https://leetcode.cn/problems/count-largest-group/description/?envType=daily-question&envId=Invalid%20Date
-    /// 
-    /// 給你一個整數 n。
-    /// 對於從 1 到 n 的每一個整數，根據 各位數字的總和 來將它們分組。
-    /// 請你回傳 具有最多數字的群組 的數量。
-    /// 
+    /// https://leetcode.com/problems/count-largest-group/description/
+    ///
+    /// You are given an integer n.
+    ///
+    /// We need to group the numbers from 1 to n according to the sum of their digits. For example, the numbers 14 and 5 belong
+    /// to the same group, whereas 13 and 3 belong to different groups.
+    ///
+    /// Return the number of groups that have the largest size, i.e. the maximum number of elements.
+    ///
+    /// Example 1:
+    /// Input: n = 13
+    /// Output: 4
+    /// Explanation: There are 9 groups in total, grouped according to the digit sums of numbers from 1 to 13:
+    /// [1,10], [2,11], [3,12], [4,13], [5], [6], [7], [8], [9].
+    /// There are 4 groups with the largest size.
+    ///
+    /// Example 2:
+    /// Input: n = 2
+    /// Output: 2
+    /// Explanation: There are 2 groups [1], [2] of size 1.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= n &lt;= 10^4
+    /// </para>
+    /// <para>
+    /// 1399. 統計最大群組的數量
+    /// https://leetcode.cn/problems/count-largest-group/description/
+    ///
+    /// 給定一個整數 n。
+    ///
+    /// 必須依照各位數字的總和，將從 1 到 n 的數字分組。例如，數字 14 與 5 屬於同一群組，
+    /// 而 13 與 3 屬於不同群組。
+    ///
+    /// 回傳大小最大的群組數量，也就是具有最多元素的群組數量。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 13
+    /// 輸出：4
+    /// 解釋：總共有 9 個群組，從 1 到 13 的數字依各位數字總和分組如下：
+    /// [1,10]、[2,11]、[3,12]、[4,13]、[5]、[6]、[7]、[8]、[9]。
+    /// 有 4 個大小最大的群組。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 2
+    /// 輸出：2
+    /// 解釋：有 2 個群組 [1]、[2]，大小均為 1。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= n &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <remarks>
     /// 程式進入點會將邊界與代表性輸入分別交給三種解法，

@@ -3,28 +3,68 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1920. Build Array from Permutation
-    /// https://leetcode.com/problems/build-array-from-permutation/description/?envType=daily-question&envId=2025-05-06
-    /// 
-    /// 1920. 基于排列构建数组
-    /// https://leetcode.cn/problems/build-array-from-permutation/description/?envType=daily-question&envId=2025-05-06
-    /// 
-    /// 題目說明：
-    /// 給定一個 0 索引的整數陣列 nums，長度為 n。
-    /// 要求建立一個和 nums 相同長度的陣列 ans，使得 ans [i] = nums [nums [i]]。
-    /// 題目保證 nums 是一個排列，即 0 <= nums [i] < n。
-    /// 
-    /// 重點理解：
-    /// 1. 排列的定義：陣列中包含所有從 0 到 n-1 的整數，每個數字恰好出現一次。
-    /// 2. 因為 nums 是一個排列，所以 nums [i] 一定是一個有效的索引，不會超出範圍。
-    /// 3. ans [i] = nums [nums [i]] 意味著要進行兩次索引查找：
-    ///    - 第一次找到 nums [i] 的值
-    ///    - 第二次用這個值作為索引，找到 nums [nums [i]]
-    /// 
-    /// 解法出發點：
-    /// 直接使用 for 迴圈，對每個索引 i，計算 nums [nums [i]] 並填入結果陣列中。
-    /// 因為題目保證 nums 是一個排列，所以所有索引都是合法的，不會出現越界錯誤。
-    /// 時間複雜度為 O (n)，空間複雜度為 O (n)。
+    /// https://leetcode.com/problems/build-array-from-permutation/description/
+    ///
+    /// Given a zero-based permutation nums, build an array ans of the same length where ans[i] = nums[nums[i]] for every 0 &lt;= i &lt; nums.length, and return ans.
+    ///
+    /// A zero-based permutation is an array containing distinct integers from 0 to nums.length - 1 inclusive.
+    ///
+    /// Example 1:
+    /// Input: nums = [0,2,1,5,3,4]
+    /// Output: [0,1,2,4,5,3]
+    /// Explanation:
+    /// ans = [nums[nums[0]],nums[nums[1]],nums[nums[2]],nums[nums[3]],nums[nums[4]],nums[nums[5]]]
+    /// = [nums[0],nums[2],nums[1],nums[5],nums[3],nums[4]]
+    /// = [0,1,2,4,5,3]
+    ///
+    /// Example 2:
+    /// Input: nums = [5,0,1,2,3,4]
+    /// Output: [4,5,0,1,2,3]
+    /// Explanation:
+    /// ans = [nums[nums[0]],nums[nums[1]],nums[nums[2]],nums[nums[3]],nums[nums[4]],nums[nums[5]]]
+    /// = [nums[5],nums[0],nums[1],nums[2],nums[3],nums[4]]
+    /// = [4,5,0,1,2,3]
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 1000
+    /// - 0 &lt;= nums[i] &lt; nums.length
+    /// - nums contains distinct elements.
+    ///
+    /// Follow-up: Can you solve it without extra space, using O(1) memory?
+    /// </para>
+    /// <para>
+    /// 1920. 基於排列建立陣列
+    /// https://leetcode.cn/problems/build-array-from-permutation/description/
+    ///
+    /// 給定一個從零開始的排列 nums，建立同樣長度的陣列 ans，使每個 0 &lt;= i &lt; nums.length 都滿足 ans[i] = nums[nums[i]]，並回傳 ans。
+    ///
+    /// 從零開始的排列，是由 0 到 nums.length - 1（含）之間所有相異整數組成的陣列。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [0,2,1,5,3,4]
+    /// 輸出：[0,1,2,4,5,3]
+    /// 說明：
+    /// ans = [nums[nums[0]],nums[nums[1]],nums[nums[2]],nums[nums[3]],nums[nums[4]],nums[nums[5]]]
+    /// = [nums[0],nums[2],nums[1],nums[5],nums[3],nums[4]]
+    /// = [0,1,2,4,5,3]
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [5,0,1,2,3,4]
+    /// 輸出：[4,5,0,1,2,3]
+    /// 說明：
+    /// ans = [nums[nums[0]],nums[nums[1]],nums[nums[2]],nums[nums[3]],nums[nums[4]],nums[nums[5]]]
+    /// = [nums[5],nums[0],nums[1],nums[2],nums[3],nums[4]]
+    /// = [4,5,0,1,2,3]
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 1000
+    /// - 0 &lt;= nums[i] &lt; nums.length
+    /// - nums 中的元素皆不相同。
+    ///
+    /// 進階：能否不使用額外空間，以 O(1) 記憶體完成？
+    /// </para>
     /// </summary>
     /// <param name="args">命令列引數（在此程式中未使用）</param>
     static void Main(string[] args)

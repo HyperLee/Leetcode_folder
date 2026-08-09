@@ -4,14 +4,68 @@ class Program
 {
     /// <summary>
     /// 3075. Maximize Happiness of Selected Children
-    /// https://leetcode.com/problems/maximize-happiness-of-selected-children/description/?envType=daily-question&envId=2025-12-25
-    /// 3075. 幸福值最大化的选择方案
-    /// https://leetcode.cn/problems/maximize-happiness-of-selected-children/description/?envType=daily-question&envId=2025-12-25
-    /// 
-    /// 給定一個長度為 n 的整數陣列 `happiness` 與正整數 `k`。
-    /// 有 n 位小孩排成一列，第 i 位小孩的快樂值為 `happiness[i]`。
-    /// 你要在 k 回合內選出 k 位小孩；每當選擇一位小孩時，尚未被選中的每位小孩的快樂值會減少 1（但不會低於 0）。
-    /// 回傳能取得的被選中小孩快樂值總和的最大值。
+    /// https://leetcode.com/problems/maximize-happiness-of-selected-children/description/
+    /// <para>
+    /// You are given an array happiness of length n and a positive integer k.
+    ///
+    /// There are n children standing in a queue, where the i-th child has happiness value happiness[i]. You want to select k children from these n children in k turns.
+    ///
+    /// In each turn, when you select a child, the happiness value of every child not selected so far decreases by 1. A happiness value cannot become negative and is decremented only when it is positive.
+    ///
+    /// Return the maximum sum of the happiness values of the selected children that you can achieve by selecting k children.
+    ///
+    /// Example 1:
+    /// Input: happiness = [1,2,3], k = 2
+    /// Output: 4
+    /// Explanation: Pick the child with happiness 3, leaving values [0,1]. Then pick the child with happiness 1, leaving [0]. Happiness cannot fall below 0. The selected sum is 3 + 1 = 4.
+    ///
+    /// Example 2:
+    /// Input: happiness = [1,1,1,1], k = 2
+    /// Output: 1
+    /// Explanation: Pick any child with happiness 1, leaving [0,0,0]. Then pick a child with happiness 0, leaving [0,0]. The selected sum is 1 + 0 = 1.
+    ///
+    /// Example 3:
+    /// Input: happiness = [2,3,4,5], k = 1
+    /// Output: 5
+    /// Explanation: Pick the child with happiness 5, leaving [1,2,3]. The selected sum is 5.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= n == happiness.length &lt;= 2 * 10^5
+    /// - 1 &lt;= happiness[i] &lt;= 10^8
+    /// - 1 &lt;= k &lt;= n
+    /// </para>
+    /// <para>
+    /// 3075. 使選取孩子的快樂值最大化
+    /// https://leetcode.cn/problems/maximize-happiness-of-selected-children/description/
+    ///
+    /// 給定一個長度為 n 的陣列 happiness 和正整數 k。
+    ///
+    /// 有 n 個孩子站成一列，第 i 個孩子的快樂值為 happiness[i]。你要在 k 個回合中，從這 n 個孩子裡選出 k 個孩子。
+    ///
+    /// 每一回合選取一個孩子時，所有尚未被選取孩子的快樂值都會減少 1。快樂值不能變成負數，而且只有在為正數時才會減少。
+    ///
+    /// 回傳選取 k 個孩子後，所能得到的被選孩子快樂值總和最大值。
+    ///
+    /// 範例 1：
+    /// 輸入：happiness = [1,2,3], k = 2
+    /// 輸出：4
+    /// 解釋：先選取快樂值為 3 的孩子，剩餘快樂值變為 [0,1]；再選取快樂值為 1 的孩子，剩下 [0]。快樂值不能低於 0。所選快樂值總和為 3 + 1 = 4。
+    ///
+    /// 範例 2：
+    /// 輸入：happiness = [1,1,1,1], k = 2
+    /// 輸出：1
+    /// 解釋：先選任意一個快樂值為 1 的孩子，剩餘值變為 [0,0,0]；再選一個快樂值為 0 的孩子，剩下 [0,0]。所選快樂值總和為 1 + 0 = 1。
+    ///
+    /// 範例 3：
+    /// 輸入：happiness = [2,3,4,5], k = 1
+    /// 輸出：5
+    /// 解釋：選取快樂值為 5 的孩子，剩餘值變為 [1,2,3]。所選快樂值總和為 5。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= n == happiness.length &lt;= 2 * 10^5
+    /// - 1 &lt;= happiness[i] &lt;= 10^8
+    /// - 1 &lt;= k &lt;= n
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

@@ -5,8 +5,43 @@
         /// <summary>
         /// 54. Spiral Matrix
         /// https://leetcode.com/problems/spiral-matrix/description/
-        /// 54. 螺旋矩阵
-        /// https://leetcode.cn/problems/spiral-matrix/description/ 
+        /// <para>
+        /// Given an m x n matrix, return all elements of the matrix in spiral order.
+        ///
+        /// Example 1:
+        /// Input: matrix = [[1,2,3],[4,5,6],[7,8,9]]
+        /// Output: [1,2,3,6,9,8,7,4,5]
+        ///
+        /// Example 2:
+        /// Input: matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+        /// Output: [1,2,3,4,8,12,11,10,9,5,6,7]
+        ///
+        /// Constraints:
+        /// - m == matrix.length
+        /// - n == matrix[i].length
+        /// - 1 &lt;= m, n &lt;= 10
+        /// - -100 &lt;= matrix[i][j] &lt;= 100
+        /// </para>
+        /// <para>
+        /// 54. 螺旋矩陣
+        /// https://leetcode.cn/problems/spiral-matrix/description/
+        ///
+        /// 給定一個 m x n 矩陣 matrix，請以螺旋順序回傳矩陣中的所有元素。
+        ///
+        /// 範例 1：
+        /// 輸入：matrix = [[1,2,3],[4,5,6],[7,8,9]]
+        /// 輸出：[1,2,3,6,9,8,7,4,5]
+        ///
+        /// 範例 2：
+        /// 輸入：matrix = [[1,2,3,4],[5,6,7,8],[9,10,11,12]]
+        /// 輸出：[1,2,3,4,8,12,11,10,9,5,6,7]
+        ///
+        /// 限制條件：
+        /// - m == matrix.length
+        /// - n == matrix[i].length
+        /// - 1 &lt;= m, n &lt;= 10
+        /// - -100 &lt;= matrix[i][j] &lt;= 100
+        /// </para>
         /// </summary>
         /// <param name="args"></param> <summary>
         static void Main(string[] args)

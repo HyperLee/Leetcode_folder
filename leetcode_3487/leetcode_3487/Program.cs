@@ -4,17 +4,62 @@ class Program
 {
     /// <summary>
     /// 3487. Maximum Unique Subarray Sum After Deletion
-    /// https://leetcode.com/problems/maximum-unique-subarray-sum-after-deletion/description/?envType=daily-question&envId=2025-07-25
-    /// 3487. 刪除後的最大子陣列元素和
-    /// https://leetcode.cn/problems/maximum-unique-subarray-sum-after-deletion/description/?envType=daily-question&envId=2025-07-25
-    /// 
-    /// 題目描述：
-    /// 給你一個整數陣列 nums。
-    /// 你可以從 nums 中刪除任意數量的元素（不能刪成空陣列）。
-    /// 刪除後，選擇 nums 的一個子陣列，要求：
-    ///   1. 子陣列所有元素都唯一。
-    ///   2. 子陣列元素和最大。
-    /// 返回這樣的子陣列的最大元素和。
+    /// https://leetcode.com/problems/maximum-unique-subarray-sum-after-deletion/description/
+    /// <para>
+    /// You are given an integer array nums.
+    ///
+    /// You may delete any number of elements without making nums empty. After deletion, select a subarray whose elements are all unique and whose sum is maximized.
+    ///
+    /// Return the maximum sum of such a subarray.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,2,3,4,5]
+    /// Output: 15
+    /// Explanation: Select the whole array without deleting anything.
+    ///
+    /// Example 2:
+    /// Input: nums = [1,1,0,1,1]
+    /// Output: 1
+    /// Explanation: Delete nums[0] == 1, nums[1] == 1, nums[2] == 0, and nums[3] == 1. Select the remaining [1].
+    ///
+    /// Example 3:
+    /// Input: nums = [1,2,-1,-2,1,0,-1]
+    /// Output: 3
+    /// Explanation: Delete nums[2] == -1 and nums[3] == -2, then select [2,1] from [1,2,1,0,-1].
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 100
+    /// - -100 &lt;= nums[i] &lt;= 100
+    /// </para>
+    /// <para>
+    /// 3487. 刪除後的最大唯一子陣列總和
+    /// https://leetcode.cn/problems/maximum-unique-subarray-sum-after-deletion/description/
+    ///
+    /// 給定整數陣列 nums。
+    ///
+    /// 你可以刪除任意數量的元素，但不能讓 nums 變空。刪除後，選擇一個所有元素都唯一且總和最大的子陣列。
+    ///
+    /// 回傳此類子陣列的最大總和。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,2,3,4,5]
+    /// 輸出：15
+    /// 解釋：不刪除任何元素，選擇整個陣列。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [1,1,0,1,1]
+    /// 輸出：1
+    /// 解釋：刪除 nums[0] == 1、nums[1] == 1、nums[2] == 0、nums[3] == 1，並選擇剩餘的 [1]。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [1,2,-1,-2,1,0,-1]
+    /// 輸出：3
+    /// 解釋：刪除 nums[2] == -1 與 nums[3] == -2，再從 [1,2,1,0,-1] 選擇 [2,1]。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 100
+    /// - -100 &lt;= nums[i] &lt;= 100
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

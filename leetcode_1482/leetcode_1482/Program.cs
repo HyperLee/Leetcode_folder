@@ -3,10 +3,79 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1482. Minimum Number of Days to Make m Bouquets
-        /// https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/description/?envType=daily-question&envId=2024-06-19
-        /// 1482. 制作 m 束花所需的最少天数
+        /// https://leetcode.com/problems/minimum-number-of-days-to-make-m-bouquets/description/
+        ///
+        /// You are given an integer array bloomDay, an integer m and an integer k.
+        /// You want to make m bouquets. To make a bouquet, you need to use k adjacent flowers from the garden.
+        /// The garden consists of n flowers. The i-th flower blooms on bloomDay[i] and can then be used in exactly one bouquet.
+        /// Return the minimum number of days you need to wait to make m bouquets. If it is impossible, return -1.
+        ///
+        /// Example 1:
+        /// Input: bloomDay = [1,10,3,10,2], m = 3, k = 1
+        /// Output: 3
+        /// Explanation: x means bloomed and _ means not bloomed. We need 3 bouquets of 1 flower.
+        /// After day 1: [x, _, _, _, _] // one bouquet.
+        /// After day 2: [x, _, _, _, x] // two bouquets.
+        /// After day 3: [x, _, x, _, x] // 3 bouquets, so the answer is 3.
+        ///
+        /// Example 2:
+        /// Input: bloomDay = [1,10,3,10,2], m = 3, k = 2
+        /// Output: -1
+        /// Explanation: We need 3 bouquets of 2 flowers, or 6 flowers, but only have 5; therefore it is impossible.
+        ///
+        /// Example 3:
+        /// Input: bloomDay = [7,7,7,7,12,7,7], m = 2, k = 3
+        /// Output: 12
+        /// Explanation: We need 2 bouquets of 3 flowers.
+        /// After day 7: [x, x, x, x, _, x, x]. We can make one bouquet from the first three bloomed flowers, but the last
+        /// three bloomed flowers are not adjacent.
+        /// After day 12: [x, x, x, x, x, x, x]. We can make two bouquets in different ways.
+        ///
+        /// Constraints:
+        /// - bloomDay.length == n
+        /// - 1 &lt;= n &lt;= 10^5
+        /// - 1 &lt;= bloomDay[i] &lt;= 10^9
+        /// - 1 &lt;= m &lt;= 10^6
+        /// - 1 &lt;= k &lt;= n
+        /// </para>
+        /// <para>
+        /// 1482. 製作 m 束花所需的最少天數
         /// https://leetcode.cn/problems/minimum-number-of-days-to-make-m-bouquets/description/
+        ///
+        /// 給定整數陣列 bloomDay，以及整數 m 與 k。
+        /// 你想製作 m 束花；每束花需要使用花園中相鄰的 k 朵花。
+        /// 花園共有 n 朵花，第 i 朵花會在 bloomDay[i] 當天開花，之後恰好可用於一束花。
+        /// 回傳能製作 m 束花所需等待的最少天數；若不可能完成，回傳 -1。
+        ///
+        /// 範例 1：
+        /// 輸入：bloomDay = [1,10,3,10,2]，m = 3，k = 1
+        /// 輸出：3
+        /// 解釋：x 表示已開花，_ 表示尚未開花。我們需要 3 束各含 1 朵花的花束。
+        /// 第 1 天後：[x, _, _, _, _] // 可製作一束。
+        /// 第 2 天後：[x, _, _, _, x] // 可製作兩束。
+        /// 第 3 天後：[x, _, x, _, x] // 可製作 3 束，因此答案為 3。
+        ///
+        /// 範例 2：
+        /// 輸入：bloomDay = [1,10,3,10,2]，m = 3，k = 2
+        /// 輸出：-1
+        /// 解釋：需要 3 束各含 2 朵花的花束，也就是 6 朵花，但只有 5 朵，因此不可能完成。
+        ///
+        /// 範例 3：
+        /// 輸入：bloomDay = [7,7,7,7,12,7,7]，m = 2，k = 3
+        /// 輸出：12
+        /// 解釋：需要 2 束各含 3 朵花的花束。
+        /// 第 7 天後：[x, x, x, x, _, x, x]。可用前三朵已開的花製作一束，但最後三朵已開的花並不相鄰。
+        /// 第 12 天後：[x, x, x, x, x, x, x]。可以用不同方式製作兩束花。
+        ///
+        /// 限制條件：
+        /// - bloomDay.length == n
+        /// - 1 &lt;= n &lt;= 10^5
+        /// - 1 &lt;= bloomDay[i] &lt;= 10^9
+        /// - 1 &lt;= m &lt;= 10^6
+        /// - 1 &lt;= k &lt;= n
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 以固定案例比較答案範圍二分搜尋與排序候選日兩種解法，並驗證兩者都不會修改輸入陣列。

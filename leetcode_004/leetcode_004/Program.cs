@@ -6,16 +6,56 @@ class Program
 {
     /// <summary>
     /// 4. Median of Two Sorted Arrays
-    /// https://leetcode.com/problems/median-of-two-sorted-arrays/
-    /// 
-    /// 4. 寻找两个正序数组的中位数
+    /// https://leetcode.com/problems/median-of-two-sorted-arrays/description/
+    /// <para>
+    /// Given two sorted arrays nums1 and nums2 of sizes m and n respectively, return the median of the two sorted arrays.
+    ///
+    /// The overall run time complexity should be O(log (m+n)).
+    ///
+    /// Example 1:
+    /// Input: nums1 = [1,3], nums2 = [2]
+    /// Output: 2.00000
+    /// Explanation: merged array = [1,2,3] and median is 2.
+    ///
+    /// Example 2:
+    /// Input: nums1 = [1,2], nums2 = [3,4]
+    /// Output: 2.50000
+    /// Explanation: merged array = [1,2,3,4] and median is (2 + 3) / 2 = 2.5.
+    ///
+    /// Constraints:
+    /// - nums1.length == m
+    /// - nums2.length == n
+    /// - 0 &lt;= m &lt;= 1000
+    /// - 0 &lt;= n &lt;= 1000
+    /// - 1 &lt;= m + n &lt;= 2000
+    /// - -10^6 &lt;= nums1[i], nums2[i] &lt;= 10^6
+    /// </para>
+    /// <para>
+    /// 4. 尋找兩個排序陣列的中位數
     /// https://leetcode.cn/problems/median-of-two-sorted-arrays/description/
-    /// 
-    /// 將題目提供個兩個陣列, 求出中位數 數值是多少
-    /// 不是陣列 index, 是求出平均數值
-    /// 
-    /// 對於有限的數集，可以通過把所有觀察值高低排序後找出正中間的一個作爲中位數。
-    /// 如果觀察值有偶數個，則中位數不唯一，通常取最中間的兩個數值的平均數作爲中位數。
+    ///
+    /// 給定兩個大小分別為 m 和 n 的排序陣列 nums1 與 nums2，請回傳這兩個排序陣列的中位數。
+    ///
+    /// 整體執行時間複雜度應為 O(log (m+n))。
+    ///
+    /// 範例 1：
+    /// 輸入：nums1 = [1,3], nums2 = [2]
+    /// 輸出：2.00000
+    /// 解釋：合併後的陣列為 [1,2,3]，中位數是 2。
+    ///
+    /// 範例 2：
+    /// 輸入：nums1 = [1,2], nums2 = [3,4]
+    /// 輸出：2.50000
+    /// 解釋：合併後的陣列為 [1,2,3,4]，中位數是 (2 + 3) / 2 = 2.5。
+    ///
+    /// 限制條件：
+    /// - nums1.length == m
+    /// - nums2.length == n
+    /// - 0 &lt;= m &lt;= 1000
+    /// - 0 &lt;= n &lt;= 1000
+    /// - 1 &lt;= m + n &lt;= 2000
+    /// - -10^6 &lt;= nums1[i], nums2[i] &lt;= 10^6
+    /// </para>
     /// </summary>
     /// <remarks>
     /// 使用六組固定案例分別驗證合併排序與二分搜尋解法，並輸出每次檢查及總結。

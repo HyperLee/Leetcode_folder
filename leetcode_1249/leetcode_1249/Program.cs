@@ -5,17 +5,66 @@ namespace leetcode_1249;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1249. Minimum Remove to Make Valid Parentheses
     /// https://leetcode.com/problems/minimum-remove-to-make-valid-parentheses/description/
-    /// 1249. 移除无效的括号
+    ///
+    /// Given a string s of '(', ')' and lowercase English characters.
+    /// Your task is to remove the minimum number of parentheses ('(' or ')', in any positions) so that the
+    /// resulting parentheses string is valid and return any valid string.
+    /// Formally, a parentheses string is valid if and only if:
+    /// - It is the empty string, contains only lowercase characters, or
+    /// - It can be written as AB (A concatenated with B), where A and B are valid strings, or
+    /// - It can be written as (A), where A is a valid string.
+    ///
+    /// Example 1:
+    /// Input: s = "lee(t(c)o)de)"
+    /// Output: "lee(t(c)o)de"
+    /// Explanation: "lee(t(co)de)" and "lee(t(c)ode)" would also be accepted.
+    ///
+    /// Example 2:
+    /// Input: s = "a)b(c)d"
+    /// Output: "ab(c)d"
+    ///
+    /// Example 3:
+    /// Input: s = "))(("
+    /// Output: ""
+    /// Explanation: An empty string is also valid.
+    ///
+    /// Constraints:
+    /// 1 &lt;= s.length &lt;= 10^5
+    /// s[i] is either '(', ')', or a lowercase English letter.
+    /// </para>
+    /// <para>
+    /// 1249. 移除無效的括號
     /// https://leetcode.cn/problems/minimum-remove-to-make-valid-parentheses/description/
-    /// 繁體中文翻譯：
-    /// 給定一個由 '('、')' 以及小寫英文字母組成的字串 s。
-    /// 任務是最少移除若干括號（'(' 或 ')'，可位於任意位置），使得結果的括號字串為有效，並回傳任一個有效的字串。
-    /// 形式上，有效的括號字串定義如下：
-    /// - 空字串，或只包含小寫字母；或
-    /// - 可以寫成 AB（A 與 B 為有效字串），或
-    /// - 可以寫成 (A)，其中 A 為有效字串。
+    ///
+    /// 給定由 '('、')' 與小寫英文字元組成的字串 s。
+    /// 你的任務是移除最少數量的括號（'(' 或 ')'，可位於任意位置），使得到的括號字串有效，
+    /// 並回傳任意一個有效字串。
+    /// 形式上，括號字串有效若且唯若：
+    /// - 它是空字串、只包含小寫字元，或
+    /// - 它可以寫成 AB（A 與 B 串接），其中 A 與 B 都是有效字串，或
+    /// - 它可以寫成 (A)，其中 A 是有效字串。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "lee(t(c)o)de)"
+    /// 輸出："lee(t(c)o)de"
+    /// 解釋："lee(t(co)de)" 與 "lee(t(c)ode)" 也都會被接受。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "a)b(c)d"
+    /// 輸出："ab(c)d"
+    ///
+    /// 範例 3：
+    /// 輸入：s = "))(("
+    /// 輸出：""
+    /// 解釋：空字串也是有效字串。
+    ///
+    /// 限制條件：
+    /// 1 &lt;= s.length &lt;= 10^5
+    /// s[i] 只能是 '('、')' 或小寫英文字母。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

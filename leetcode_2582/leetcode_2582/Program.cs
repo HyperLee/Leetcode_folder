@@ -4,9 +4,56 @@
     {
         /// <summary>
         /// 2582. Pass the Pillow
-        /// https://leetcode.com/problems/pass-the-pillow/description/?envType=daily-question&envId=2024-07-06
-        /// 2582. 递枕头
+        /// https://leetcode.com/problems/pass-the-pillow/description/
+        /// <para>
+        /// There are n people standing in a line labeled from 1 to n. The first person in the line is holding a pillow initially. Every second, the person holding the pillow passes it to the next person standing in the line. Once the pillow reaches the end of the line, the direction changes, and people continue passing the pillow in the opposite direction.
+        ///
+        /// For example, once the pillow reaches the n-th person, they pass it to the (n - 1)-th person, then to the (n - 2)-th person, and so on.
+        ///
+        /// Given the two positive integers n and time, return the index of the person holding the pillow after time seconds.
+        ///
+        /// Example 1:
+        /// Input: n = 4, time = 5
+        /// Output: 2
+        /// Explanation: People pass the pillow as follows: 1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 3 -&gt; 2. After five seconds, the 2nd person is holding the pillow.
+        ///
+        /// Example 2:
+        /// Input: n = 3, time = 2
+        /// Output: 3
+        /// Explanation: People pass the pillow as follows: 1 -&gt; 2 -&gt; 3. After two seconds, the 3rd person is holding the pillow.
+        ///
+        /// Constraints:
+        /// - 2 &lt;= n &lt;= 1000
+        /// - 1 &lt;= time &lt;= 1000
+        ///
+        /// Note: This question is the same as 3178: Find the Child Who Has the Ball After K Seconds.
+        /// </para>
+        /// <para>
+        /// 2582. 傳遞枕頭
         /// https://leetcode.cn/problems/pass-the-pillow/description/
+        ///
+        /// 有 n 個人站成一列，編號從 1 到 n。起初隊伍中的第一個人拿著枕頭。每一秒，拿著枕頭的人會把枕頭傳給隊伍中的下一個人。當枕頭到達隊伍末端時，傳遞方向會反轉，大家繼續朝相反方向傳遞枕頭。
+        ///
+        /// 例如，枕頭到達第 n 個人後，他會把枕頭傳給第 n - 1 個人，接著傳給第 n - 2 個人，依此類推。
+        ///
+        /// 給定兩個正整數 n 和 time，回傳 time 秒後拿著枕頭之人的編號。
+        ///
+        /// 範例 1：
+        /// 輸入：n = 4, time = 5
+        /// 輸出：2
+        /// 解釋：枕頭的傳遞順序為：1 -&gt; 2 -&gt; 3 -&gt; 4 -&gt; 3 -&gt; 2。五秒後，第 2 個人拿著枕頭。
+        ///
+        /// 範例 2：
+        /// 輸入：n = 3, time = 2
+        /// 輸出：3
+        /// 解釋：枕頭的傳遞順序為：1 -&gt; 2 -&gt; 3。兩秒後，第 3 個人拿著枕頭。
+        ///
+        /// 限制條件：
+        /// - 2 &lt;= n &lt;= 1000
+        /// - 1 &lt;= time &lt;= 1000
+        ///
+        /// 注意：本題與 3178「K 秒後拿著球的孩子」相同。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 以固定案例執行三種解法，逐一比較預期值與實際值；全部案例通過時回傳 0，否則回傳非零結束碼。

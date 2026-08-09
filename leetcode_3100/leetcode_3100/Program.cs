@@ -4,17 +4,64 @@ class Program
 {
     /// <summary>
     /// 3100. Water Bottles II
-    /// https://leetcode.com/problems/water-bottles-ii/description/?envType=daily-question&envId=2025-10-02
-    /// 3100. 换水问题 II
-    /// https://leetcode.cn/problems/water-bottles-ii/description/?envType=daily-question&envId=2025-10-02
-    /// 
-    /// 給你兩個整數 numBottles 和 numExchange。
-    /// numBottles 表示你最初擁有的滿水瓶數量。
-    /// 在一次操作中，你可以執行以下操作之一：
-    ///     喝任意數量的滿水瓶，將它們變成空瓶。
-    ///     用 numExchange 個空瓶交換一個滿水瓶。然後，將 numExchange 增加一。
-    /// 注意，你不能在同一個 numExchange 值下交換多批空瓶。例如，如果 numBottles == 3 且 numExchange == 1，你不能用 3 個空瓶交換 3 個滿瓶。
-    /// 返回你可以喝的最大水瓶數量。
+    /// https://leetcode.com/problems/water-bottles-ii/description/
+    /// <para>
+    /// You are given two integers numBottles and numExchange.
+    ///
+    /// numBottles is the number of full water bottles you initially have. In one operation, you may do one of the following:
+    /// - Drink any number of full bottles, turning them into empty bottles.
+    /// - Exchange numExchange empty bottles for one full bottle, then increase numExchange by one.
+    ///
+    /// You cannot exchange multiple batches of empty bottles for the same numExchange value. For example, if numBottles == 3 and numExchange == 1, you cannot exchange 3 empty bottles for 3 full bottles.
+    ///
+    /// Return the maximum number of water bottles you can drink.
+    ///
+    /// Example 1:
+    /// Image: https://assets.leetcode.com/uploads/2024/01/28/exampleone1.png
+    /// Input: numBottles = 13, numExchange = 6
+    /// Output: 15
+    /// Explanation: The table above shows the full bottles, empty bottles, current numExchange value, and number of bottles drunk.
+    ///
+    /// Example 2:
+    /// Image: https://assets.leetcode.com/uploads/2024/01/28/example231.png
+    /// Input: numBottles = 10, numExchange = 3
+    /// Output: 13
+    /// Explanation: The table above shows the full bottles, empty bottles, current numExchange value, and number of bottles drunk.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= numBottles &lt;= 100
+    /// - 1 &lt;= numExchange &lt;= 100
+    /// </para>
+    /// <para>
+    /// 3100. 換水問題 II
+    /// https://leetcode.cn/problems/water-bottles-ii/description/
+    ///
+    /// 給定兩個整數 numBottles 和 numExchange。
+    ///
+    /// numBottles 表示你起初擁有的滿水瓶數量。一次操作中，你可以執行下列其中一項：
+    /// - 喝掉任意數量的滿水瓶，使它們變成空瓶。
+    /// - 用 numExchange 個空瓶換一個滿水瓶，接著將 numExchange 增加一。
+    ///
+    /// 你不能在 numExchange 為相同值時交換多批空瓶。例如，若 numBottles == 3 且 numExchange == 1，不能用 3 個空瓶換 3 個滿水瓶。
+    ///
+    /// 回傳你最多可以喝掉的水瓶數量。
+    ///
+    /// 範例 1：
+    /// 圖片：https://assets.leetcode.com/uploads/2024/01/28/exampleone1.png
+    /// 輸入：numBottles = 13, numExchange = 6
+    /// 輸出：15
+    /// 解釋：上表顯示滿水瓶、空水瓶、目前的 numExchange 值，以及已喝水瓶數量。
+    ///
+    /// 範例 2：
+    /// 圖片：https://assets.leetcode.com/uploads/2024/01/28/example231.png
+    /// 輸入：numBottles = 10, numExchange = 3
+    /// 輸出：13
+    /// 解釋：上表顯示滿水瓶、空水瓶、目前的 numExchange 值，以及已喝水瓶數量。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= numBottles &lt;= 100
+    /// - 1 &lt;= numExchange &lt;= 100
+    /// </para>
     /// </summary>
     /// <remarks>
     /// 使用固定案例比較逐次模擬與整數二分搜尋兩種解法；全部驗證通過時回傳 0，否則回傳 1。

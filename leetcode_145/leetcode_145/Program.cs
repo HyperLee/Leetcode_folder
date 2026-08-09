@@ -16,13 +16,66 @@ class Program
     }
 
     /// <summary>
+    /// <para>
     /// 145. Binary Tree Postorder Traversal
     /// https://leetcode.com/problems/binary-tree-postorder-traversal/description/
-    /// 145. 二叉树的后序遍历
-    /// https://leetcode.cn/problems/binary-tree-postorder-traversal/description/
-    /// 
+    ///
     /// Given the root of a binary tree, return the postorder traversal of its nodes' values.
-    /// 
+    ///
+    /// Example 1:
+    /// Image: https://assets.leetcode.com/uploads/2024/08/29/screenshot-2024-08-29-202743.png
+    /// Input: root = [1,null,2,3]
+    /// Output: [3,2,1]
+    ///
+    /// Example 2:
+    /// Image: https://assets.leetcode.com/uploads/2024/08/29/tree_2.png
+    /// Input: root = [1,2,3,4,5,null,8,null,null,6,7,9]
+    /// Output: [4,6,7,5,2,9,8,3,1]
+    ///
+    /// Example 3:
+    /// Input: root = []
+    /// Output: []
+    ///
+    /// Example 4:
+    /// Input: root = [1]
+    /// Output: [1]
+    ///
+    /// Constraints:
+    /// - The number of the nodes in the tree is in the range [0, 100].
+    /// - -100 &lt;= Node.val &lt;= 100
+    ///
+    /// Follow up: Recursive solution is trivial, could you do it iteratively?
+    /// </para>
+    /// <para>
+    /// 145. 二元樹的後序遍歷
+    /// https://leetcode.cn/problems/binary-tree-postorder-traversal/description/
+    ///
+    /// 給定二元樹的根節點 root，回傳其節點值的後序遍歷結果。
+    ///
+    /// 範例 1：
+    /// 圖片：https://assets.leetcode.com/uploads/2024/08/29/screenshot-2024-08-29-202743.png
+    /// 輸入：root = [1,null,2,3]
+    /// 輸出：[3,2,1]
+    ///
+    /// 範例 2：
+    /// 圖片：https://assets.leetcode.com/uploads/2024/08/29/tree_2.png
+    /// 輸入：root = [1,2,3,4,5,null,8,null,null,6,7,9]
+    /// 輸出：[4,6,7,5,2,9,8,3,1]
+    ///
+    /// 範例 3：
+    /// 輸入：root = []
+    /// 輸出：[]
+    ///
+    /// 範例 4：
+    /// 輸入：root = [1]
+    /// 輸出：[1]
+    ///
+    /// 限制條件：
+    /// - 樹中的節點數量介於 [0, 100]。
+    /// - -100 &lt;= Node.val &lt;= 100
+    ///
+    /// 進階問題：遞迴解法很直觀，你可以用迭代方式完成嗎？
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// 

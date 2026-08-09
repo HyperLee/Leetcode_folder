@@ -4,9 +4,56 @@
     {
         /// <summary>
         /// 442. Find All Duplicates in an Array
-        /// https://leetcode.com/problems/find-all-duplicates-in-an-array/description/?envType=daily-question&envId=2024-03-25
-        /// 442. 数组中重复的数据
+        /// https://leetcode.com/problems/find-all-duplicates-in-an-array/description/
+        /// <para>
+        /// Given an integer array nums of length n where every integer is in [1, n] and each integer appears at most twice, return an array of all integers that appear twice.
+        ///
+        /// You must write an algorithm that runs in O(n) time and uses only constant auxiliary space, excluding the space needed to store the output.
+        ///
+        /// Example 1:
+        /// Input: nums = [4,3,2,7,8,2,3,1]
+        /// Output: [2,3]
+        ///
+        /// Example 2:
+        /// Input: nums = [1,1,2]
+        /// Output: [1]
+        ///
+        /// Example 3:
+        /// Input: nums = [1]
+        /// Output: []
+        ///
+        /// Constraints:
+        /// - n == nums.length
+        /// - 1 &lt;= n &lt;= 10^5
+        /// - 1 &lt;= nums[i] &lt;= n
+        /// - Each element in nums appears once or twice.
+        /// </para>
+        /// <para>
+        /// 442. 陣列中重複的資料
         /// https://leetcode.cn/problems/find-all-duplicates-in-an-array/description/
+        ///
+        /// 給定長度為 n 的整數陣列 nums，其中每個整數都在 [1, n] 範圍內，且每個整數最多出現兩次；回傳所有出現兩次之整數所組成的陣列。
+        ///
+        /// 你必須撰寫時間複雜度為 O(n)、且只使用常數輔助空間的演算法；儲存輸出所需的空間不計。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [4,3,2,7,8,2,3,1]
+        /// 輸出：[2,3]
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [1,1,2]
+        /// 輸出：[1]
+        ///
+        /// 範例 3：
+        /// 輸入：nums = [1]
+        /// 輸出：[]
+        ///
+        /// 限制條件：
+        /// - n == nums.length
+        /// - 1 &lt;= n &lt;= 10^5
+        /// - 1 &lt;= nums[i] &lt;= n
+        /// - nums 中的每個元素出現一次或兩次。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

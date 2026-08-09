@@ -4,19 +4,52 @@ class Program
 {   
     /// <summary>
     /// 2918. Minimum Equal Sum of Two Arrays After Replacing Zeros
-    /// https://leetcode.com/problems/minimum-equal-sum-of-two-arrays-after-replacing-zeros/description/?envType=daily-question&envId=2025-05-10
-    /// 2918. 数组的最小相等和
+    /// https://leetcode.com/problems/minimum-equal-sum-of-two-arrays-after-replacing-zeros/description/
+    /// <para>
+    /// You are given two arrays nums1 and nums2 consisting of positive integers.
+    ///
+    /// You must replace all 0s in both arrays with strictly positive integers so that the sums of both arrays become equal.
+    ///
+    /// Return the minimum equal sum you can obtain, or -1 if it is impossible.
+    ///
+    /// Example 1:
+    /// Input: nums1 = [3,2,0,1,0], nums2 = [6,5,0]
+    /// Output: 12
+    /// Explanation: Replace the two 0s in nums1 with 2 and 4, giving nums1 = [3,2,2,1,4]. Replace the 0 in nums2 with 1, giving nums2 = [6,5,1]. Both arrays have sum 12, and this is the minimum obtainable sum.
+    ///
+    /// Example 2:
+    /// Input: nums1 = [2,0,2,0], nums2 = [1,4]
+    /// Output: -1
+    /// Explanation: It is impossible to make the sums of both arrays equal.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums1.length, nums2.length &lt;= 10^5
+    /// - 0 &lt;= nums1[i], nums2[i] &lt;= 10^6
+    /// </para>
+    /// <para>
+    /// 2918. 替換零後兩個陣列的最小相等總和
     /// https://leetcode.cn/problems/minimum-equal-sum-of-two-arrays-after-replacing-zeros/description/
-    /// 
-    /// 題目概述:
-    /// 給定兩個整數陣列 nums1 和 nums2，我們需要將兩個陣列中所有的 0 替換為任意正整數，
-    /// 使得兩個陣列的和相等，並找出可能的最小相等和。如果無法達成，則回傳 -1。
-    /// 
-    /// 解題概念:
-    /// 1. 因為 0 只能替換為正整數，所以我們需要將每個 0 至少替換為 1
-    /// 2. 計算出兩個陣列的初始和（將 0 替換為 1 後）
-    /// 3. 若某個陣列無 0 且和較小，就無法達成相等和
-    /// 4. 若有解，最小相等和即為兩陣列替換後和值的較大者
+    ///
+    /// 給定兩個由正整數組成的陣列 nums1 和 nums2。
+    ///
+    /// 你必須將兩個陣列中的所有 0 替換為嚴格大於 0 的整數，使兩個陣列的元素總和相等。
+    ///
+    /// 回傳可以得到的最小相等總和；若無法做到，則回傳 -1。
+    ///
+    /// 範例 1：
+    /// 輸入：nums1 = [3,2,0,1,0], nums2 = [6,5,0]
+    /// 輸出：12
+    /// 解釋：將 nums1 中兩個 0 替換為 2 和 4，得到 nums1 = [3,2,2,1,4]。將 nums2 中的 0 替換為 1，得到 nums2 = [6,5,1]。兩個陣列的總和皆為 12，且這是可以得到的最小總和。
+    ///
+    /// 範例 2：
+    /// 輸入：nums1 = [2,0,2,0], nums2 = [1,4]
+    /// 輸出：-1
+    /// 解釋：無法使兩個陣列的總和相等。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums1.length, nums2.length &lt;= 10^5
+    /// - 0 &lt;= nums1[i], nums2[i] &lt;= 10^6
+    /// </para>
     /// </summary>
     /// <param name="args"></param>    
     static void Main(string[] args)

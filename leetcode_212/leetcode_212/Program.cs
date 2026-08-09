@@ -3,25 +3,58 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 212. Word Search II
-    /// https://leetcode.com/problems/word-search-ii/description/?envType=problem-list-v2&envId=oizxjoit
-    /// 212. 单词搜索 II
+    /// https://leetcode.com/problems/word-search-ii/description/
+    ///
+    /// Given an m x n board of characters and a list of strings words, return all words that can be found on the board. Each word must be formed from sequentially adjacent cells; adjacent cells share a horizontal or vertical side. A cell may not be used more than once in one word.
+    ///
+    /// Images: https://assets.leetcode.com/uploads/2020/11/07/search1.jpg and https://assets.leetcode.com/uploads/2020/11/07/search2.jpg
+    ///
+    /// Example 1:
+    /// Input: board = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], words = ["oath","pea","eat","rain"]
+    /// Output: ["eat","oath"]
+    ///
+    /// Example 2:
+    /// Input: board = [["a","b"],["c","d"]], words = ["abcb"]
+    /// Output: []
+    ///
+    /// Constraints:
+    /// - m == board.length
+    /// - n == board[i].length
+    /// - 1 &lt;= m, n &lt;= 12
+    /// - board[i][j] is a lowercase English letter.
+    /// - 1 &lt;= words.length &lt;= 3 * 10^4
+    /// - 1 &lt;= words[i].length &lt;= 10
+    /// - words[i] consists of lowercase English letters.
+    /// - All strings in words are unique.
+    /// </para>
+    /// <para>
+    /// 212. 單字搜尋 II
     /// https://leetcode.cn/problems/word-search-ii/description/
-    /// 
-    /// 題目描述：
-    /// 給定一個 m x n 的字母網格 board 和一個字典中的單詞列表 words，找出所有同時在字典和網格中出現的單詞。
-    /// 單詞必須按照字母順序通過相鄰的單元格構成，其中「相鄰」單元格是那些水平或垂直相鄰的單元格。
-    /// 同一單元格內的字母在一個單詞中不允許被重複使用。
-    /// 
-    /// 解題概念與想法：
-    /// 1. 使用字典樹（Trie）來儲存單詞列表，方便快速查詢。字典樹能夠更有效率地檢查前綴匹配，相比於逐一檢查每個單詞。
-    /// 2. 遍歷網格中的每個單元格，作為深度優先搜尋（DFS）的起點。透過 DFS 我們能夠探索所有可能的路徑。
-    /// 3. 在 DFS 過程中，同時在 Trie 中檢查當前路徑是否構成字典中的單詞，如果是則將其加入結果集合。
-    /// 4. 使用臨時標記（將訪問過的字元改為特殊字元如 '#'）來避免在同一路徑中重複訪問單元格。
-    /// 5. 搜尋完成後，回溯並恢復原始網格狀態，確保每個起點都有公平的搜尋機會。
-    /// 
-    /// 時間複雜度：O(M * N * 4^L)，其中 M 和 N 是網格的維度，L 是單詞的最大長度，4 代表四個方向。
-    /// 空間複雜度：O(K)，其中 K 是所有單詞中字元的總數（用於建立 Trie）。
+    ///
+    /// 給定 m x n 的字元網格 board 與字串清單 words，回傳所有能在網格中找到的單字。每個單字必須由依序相鄰的格子組成；相鄰格子在水平或垂直方向共用一條邊。同一個格子在一個單字中不能重複使用。
+    ///
+    /// 圖片：https://assets.leetcode.com/uploads/2020/11/07/search1.jpg 與 https://assets.leetcode.com/uploads/2020/11/07/search2.jpg
+    ///
+    /// 範例 1：
+    /// 輸入：board = [["o","a","a","n"],["e","t","a","e"],["i","h","k","r"],["i","f","l","v"]], words = ["oath","pea","eat","rain"]
+    /// 輸出：["eat","oath"]
+    ///
+    /// 範例 2：
+    /// 輸入：board = [["a","b"],["c","d"]], words = ["abcb"]
+    /// 輸出：[]
+    ///
+    /// 限制條件：
+    /// - m == board.length
+    /// - n == board[i].length
+    /// - 1 &lt;= m, n &lt;= 12
+    /// - board[i][j] 是小寫英文字母。
+    /// - 1 &lt;= words.length &lt;= 3 * 10^4
+    /// - 1 &lt;= words[i].length &lt;= 10
+    /// - words[i] 僅由小寫英文字母組成。
+    /// - words 中所有字串皆不重複。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

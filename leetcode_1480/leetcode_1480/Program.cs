@@ -3,13 +3,56 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1480. Running Sum of 1d Array
-    /// https://leetcode.com/problems/running-sum-of-1d-array/
-    /// 1480. 一維數組的動態和
-    /// https://leetcode.cn/problems/running-sum-of-1d-array/description/
-    /// 
-    /// Given an array nums. We define a running sum of an array as runningSum[i] = sum(nums[0]…nums[i]).
+    /// https://leetcode.com/problems/running-sum-of-1d-array/description/
+    ///
+    /// Given an array nums. We define a running sum of an array as runningSum[i] = sum(nums[0]...nums[i]).
     /// Return the running sum of nums.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,2,3,4]
+    /// Output: [1,3,6,10]
+    /// Explanation: Running sum is [1, 1+2, 1+2+3, 1+2+3+4].
+    ///
+    /// Example 2:
+    /// Input: nums = [1,1,1,1,1]
+    /// Output: [1,2,3,4,5]
+    /// Explanation: Running sum is [1, 1+1, 1+1+1, 1+1+1+1, 1+1+1+1+1].
+    ///
+    /// Example 3:
+    /// Input: nums = [3,1,2,10,1]
+    /// Output: [3,4,6,16,17]
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 1000
+    /// - -10^6 &lt;= nums[i] &lt;= 10^6
+    /// </para>
+    /// <para>
+    /// 1480. 一維陣列的累加和
+    /// https://leetcode.cn/problems/running-sum-of-1d-array/description/
+    ///
+    /// 給定陣列 nums。將陣列的累加和定義為 runningSum[i] = sum(nums[0]...nums[i])。
+    /// 回傳 nums 的累加和。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,2,3,4]
+    /// 輸出：[1,3,6,10]
+    /// 解釋：累加和為 [1, 1+2, 1+2+3, 1+2+3+4]。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [1,1,1,1,1]
+    /// 輸出：[1,2,3,4,5]
+    /// 解釋：累加和為 [1, 1+1, 1+1+1, 1+1+1+1, 1+1+1+1+1]。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [3,1,2,10,1]
+    /// 輸出：[3,4,6,16,17]
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 1000
+    /// - -10^6 &lt;= nums[i] &lt;= 10^6
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

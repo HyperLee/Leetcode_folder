@@ -3,14 +3,69 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1652. Defuse the Bomb
-        /// https://leetcode.com/problems/defuse-the-bomb/?envType=daily-question&envId=2024-11-18
-        /// 
-        /// 1652. 拆炸弹
+        /// https://leetcode.com/problems/defuse-the-bomb/description/
+        ///
+        /// You have a bomb to defuse. Your informer provides a circular array code of length n and a key k. Replace every
+        /// number simultaneously:
+        /// - If k &gt; 0, replace the i-th number with the sum of the next k numbers.
+        /// - If k &lt; 0, replace it with the sum of the previous -k numbers.
+        /// - If k == 0, replace it with 0.
+        /// Since code is circular, code[n-1] is followed by code[0], and code[0] is preceded by code[n-1]. Return the decrypted code.
+        ///
+        /// Example 1:
+        /// Input: code = [5,7,1,4], k = 3
+        /// Output: [12,10,16,13]
+        /// Explanation: Replace each number by the next 3: [7+1+4, 1+4+5, 4+5+7, 5+7+1].
+        ///
+        /// Example 2:
+        /// Input: code = [1,2,3,4], k = 0
+        /// Output: [0,0,0,0]
+        /// Explanation: When k is 0, every number is replaced by 0.
+        ///
+        /// Example 3:
+        /// Input: code = [2,4,9,3], k = -2
+        /// Output: [12,5,6,13]
+        /// Explanation: Using previous numbers gives [3+9, 2+3, 4+2, 9+4].
+        ///
+        /// Constraints:
+        /// - n == code.length
+        /// - 1 &lt;= n &lt;= 100
+        /// - 1 &lt;= code[i] &lt;= 100
+        /// - -(n - 1) &lt;= k &lt;= n - 1
+        /// </para>
+        /// <para>
+        /// 1652. 拆除炸彈
         /// https://leetcode.cn/problems/defuse-the-bomb/description/
-        /// 
-        /// 方法2: 基礎解法, 將輸入的 code 變成兩倍長度來處理  時間複雜度: O(n)  空間複雜度: O(n), n: code長度
-        /// 方法1: 進階方法, 用 mod n 去計算 時間複雜度: O(n)  空間複雜度: O(1), n: code長度
+        ///
+        /// 你有一枚炸彈需要拆除。線人提供長度為 n 的循環陣列 code 與密鑰 k。所有數字同時替換：
+        /// - 若 k &gt; 0，以接下來 k 個數字的總和替換第 i 個數字。
+        /// - 若 k &lt; 0，以前面 -k 個數字的總和替換。
+        /// - 若 k == 0，以 0 替換。
+        /// code 為循環陣列，因此 code[n-1] 的下一個是 code[0]，code[0] 的前一個是 code[n-1]。回傳解密結果。
+        ///
+        /// 範例 1：
+        /// 輸入：code = [5,7,1,4]，k = 3
+        /// 輸出：[12,10,16,13]
+        /// 解釋：以接下來 3 個數字替換：[7+1+4, 1+4+5, 4+5+7, 5+7+1]。
+        ///
+        /// 範例 2：
+        /// 輸入：code = [1,2,3,4]，k = 0
+        /// 輸出：[0,0,0,0]
+        /// 解釋：k 為 0 時，每個數字都替換為 0。
+        ///
+        /// 範例 3：
+        /// 輸入：code = [2,4,9,3]，k = -2
+        /// 輸出：[12,5,6,13]
+        /// 解釋：使用前面的數字得到 [3+9, 2+3, 4+2, 9+4]。
+        ///
+        /// 限制條件：
+        /// - n == code.length
+        /// - 1 &lt;= n &lt;= 100
+        /// - 1 &lt;= code[i] &lt;= 100
+        /// - -(n - 1) &lt;= k &lt;= n - 1
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 主要進入點會執行六組固定案例，比較取模滑動視窗、雙倍陣列滑動視窗與暴力模擬三種解法，

@@ -3,18 +3,66 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1432. Max Difference You Can Get From Changing an Integer
-    /// https://leetcode.com/problems/max-difference-you-can-get-from-changing-an-integer/description/?envType=daily-question&envId=2025-06-15
+    /// https://leetcode.com/problems/max-difference-you-can-get-from-changing-an-integer/description/
+    ///
+    /// You are given an integer num. You will apply the following steps to num two separate times:
+    /// - Pick a digit x (0 &lt;= x &lt;= 9).
+    /// - Pick another digit y (0 &lt;= y &lt;= 9). Note y can be equal to x.
+    /// - Replace all the occurrences of x in the decimal representation of num by y.
+    ///
+    /// Let a and b be the two results from applying the operation to num independently.
+    /// Return the max difference between a and b.
+    /// Note that neither a nor b may have any leading zeros, and must not be 0.
+    ///
+    /// Example 1:
+    /// Input: num = 555
+    /// Output: 888
+    /// Explanation: The first time pick x = 5 and y = 9 and store the new integer in a.
+    /// The second time pick x = 5 and y = 1 and store the new integer in b.
+    /// We have now a = 999 and b = 111 and max difference = 888.
+    ///
+    /// Example 2:
+    /// Input: num = 9
+    /// Output: 8
+    /// Explanation: The first time pick x = 9 and y = 9 and store the new integer in a.
+    /// The second time pick x = 9 and y = 1 and store the new integer in b.
+    /// We have now a = 9 and b = 1 and max difference = 8.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= num &lt;= 10^8
+    /// </para>
+    /// <para>
     /// 1432. 改變一個整數能得到的最大差值
-    /// https://leetcode.cn/problems/max-difference-you-can-get-from-changing-an-integer/description/?envType=daily-question&envId=2025-06-15
-    /// 題目描述:
-    /// 給定一個整數 num，對 num 進行兩次如下操作：
-    /// 1. 選擇一個數字 x (0 <= x <= 9)。
-    /// 2. 選擇另一個數字 y (0 <= y <= 9)，y 可以等於 x。
-    /// 3. 將 num 中所有出現的 x 替換為 y。
-    /// 兩次操作分別得到 a 和 b，返回 a 和 b 的最大差值。
-    /// 注意：a 和 b 不能有前導零，且不能為 0。
-    /// 
+    /// https://leetcode.cn/problems/max-difference-you-can-get-from-changing-an-integer/description/
+    ///
+    /// 給定一個整數 num。你將對 num 分別執行兩次下列步驟：
+    /// - 選擇一個數字 x（0 &lt;= x &lt;= 9）。
+    /// - 選擇另一個數字 y（0 &lt;= y &lt;= 9）。請注意，y 可以等於 x。
+    /// - 將 num 的十進位表示中所有出現的 x 替換為 y。
+    ///
+    /// 令 a 與 b 分別為獨立對 num 執行此操作後得到的兩個結果。
+    /// 回傳 a 與 b 之間的最大差值。
+    /// 請注意，a 與 b 都不得有前導零，也不得為 0。
+    ///
+    /// 範例 1：
+    /// 輸入：num = 555
+    /// 輸出：888
+    /// 解釋：第一次選擇 x = 5、y = 9，並將新整數存入 a。
+    /// 第二次選擇 x = 5、y = 1，並將新整數存入 b。
+    /// 此時 a = 999、b = 111，最大差值 = 888。
+    ///
+    /// 範例 2：
+    /// 輸入：num = 9
+    /// 輸出：8
+    /// 解釋：第一次選擇 x = 9、y = 9，並將新整數存入 a。
+    /// 第二次選擇 x = 9、y = 1，並將新整數存入 b。
+    /// 此時 a = 9、b = 1，最大差值 = 8。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= num &lt;= 10^8
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main (string [] args)

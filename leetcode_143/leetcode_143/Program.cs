@@ -23,10 +23,58 @@
         }
 
         /// <summary>
+        /// <para>
         /// 143. Reorder List
-        /// https://leetcode.com/problems/reorder-list/description/?envType=daily-question&envId=2024-03-23
-        /// 143. 重排链表
+        /// https://leetcode.com/problems/reorder-list/description/
+        ///
+        /// You are given the head of a singly linked-list. The list can be represented as:
+        /// L0 -&gt; L1 -&gt; ... -&gt; Ln - 1 -&gt; Ln
+        ///
+        /// Reorder the list to be on the following form:
+        /// L0 -&gt; Ln -&gt; L1 -&gt; Ln - 1 -&gt; L2 -&gt; Ln - 2 -&gt; ...
+        ///
+        /// You may not modify the values in the list's nodes. Only nodes themselves may be changed.
+        ///
+        /// Example 1:
+        /// Image: https://assets.leetcode.com/uploads/2021/03/04/reorder1linked-list.jpg
+        /// Input: head = [1,2,3,4]
+        /// Output: [1,4,2,3]
+        ///
+        /// Example 2:
+        /// Image: https://assets.leetcode.com/uploads/2021/03/09/reorder2-linked-list.jpg
+        /// Input: head = [1,2,3,4,5]
+        /// Output: [1,5,2,4,3]
+        ///
+        /// Constraints:
+        /// - The number of nodes in the list is in the range [1, 5 * 10^4].
+        /// - 1 &lt;= Node.val &lt;= 1000
+        /// </para>
+        /// <para>
+        /// 143. 重排鏈結串列
         /// https://leetcode.cn/problems/reorder-list/description/
+        ///
+        /// 給定一個單向鏈結串列的頭節點 head。此串列可表示為：
+        /// L0 -&gt; L1 -&gt; ... -&gt; Ln - 1 -&gt; Ln
+        ///
+        /// 請將串列重新排列成下列形式：
+        /// L0 -&gt; Ln -&gt; L1 -&gt; Ln - 1 -&gt; L2 -&gt; Ln - 2 -&gt; ...
+        ///
+        /// 不可修改串列節點內的值，只能改變節點本身的連接方式。
+        ///
+        /// 範例 1：
+        /// 圖片：https://assets.leetcode.com/uploads/2021/03/04/reorder1linked-list.jpg
+        /// 輸入：head = [1,2,3,4]
+        /// 輸出：[1,4,2,3]
+        ///
+        /// 範例 2：
+        /// 圖片：https://assets.leetcode.com/uploads/2021/03/09/reorder2-linked-list.jpg
+        /// 輸入：head = [1,2,3,4,5]
+        /// 輸出：[1,5,2,4,3]
+        ///
+        /// 限制條件：
+        /// - 串列中的節點數量介於 [1, 5 * 10^4]。
+        /// - 1 &lt;= Node.val &lt;= 1000
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

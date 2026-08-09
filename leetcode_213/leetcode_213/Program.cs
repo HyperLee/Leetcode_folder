@@ -3,22 +3,54 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 213. House Robber II
-    /// https://leetcode.com/problems/house-robber-ii/description/?envType=problem-list-v2&envId=oizxjoit
+    /// https://leetcode.com/problems/house-robber-ii/description/
+    ///
+    /// You are a robber planning to rob houses arranged in a circle, so the first and last houses are adjacent. Adjacent houses share a security system that alerts police if both are robbed on the same night. Given nums, the money in each house, return the maximum amount you can rob without alerting police.
+    ///
+    /// Example 1:
+    /// Input: nums = [2,3,2]
+    /// Output: 3
+    /// Explanation: Houses 1 and 3 both contain 2 but are adjacent, so they cannot both be robbed.
+    ///
+    /// Example 2:
+    /// Input: nums = [1,2,3,1]
+    /// Output: 4
+    /// Explanation: Rob house 1 containing 1 and house 3 containing 3. Total: 1 + 3 = 4.
+    ///
+    /// Example 3:
+    /// Input: nums = [1,2,3]
+    /// Output: 3
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 100
+    /// - 0 &lt;= nums[i] &lt;= 1000
+    /// </para>
+    /// <para>
     /// 213. 打家劫舍 II
     /// https://leetcode.cn/problems/house-robber-ii/description/
-    /// 
-    /// 題目描述：
-    /// 你是一個專業的小偷，計劃沿著一條環形街道搶劫住戶。每間房屋都存放著特定金額的錢。
-    /// 相鄰的房屋裝有相互連通的防盜系統，如果同時搶劫相鄰的兩間房屋會自動報警。
-    /// 由於街道是環形的，第一間房屋和最後一間房屋被認為是相鄰的。
-    /// 
-    /// 解題思路：
-    /// 1. 環形街道的特點是第一間和最後一間房屋相鄰，不能同時搶劫
-    /// 2. 將問題拆分為兩個子問題：
-    ///    - 搶劫第1間到倒數第2間房屋(不包含最後一間; 也可以理解為搶劫第一間)）
-    ///    - 搶劫第2間到最後一間房屋（(不包含第一間; 也可以理解為搶劫不搶第一間)）
-    /// 3. 對每個子問題使用動態規劃求解，最後取兩個子問題結果的最大值
+    ///
+    /// 你是一名計畫偷竊沿街房屋的竊賊。房屋排成環形，因此第一間與最後一間相鄰。相鄰房屋共用防盜系統，若同一晚兩間都被闖入就會報警。給定 nums，表示每間房屋的金額，回傳不觸發警報時能偷得的最高金額。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [2,3,2]
+    /// 輸出：3
+    /// 說明：房屋 1 與 3 都有 2，但兩者相鄰，因此不能同時偷竊。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [1,2,3,1]
+    /// 輸出：4
+    /// 說明：偷竊含 1 的房屋 1 與含 3 的房屋 3；總計 1 + 3 = 4。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [1,2,3]
+    /// 輸出：3
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 100
+    /// - 0 &lt;= nums[i] &lt;= 1000
+    /// </para>
     /// </summary>
     /// <remarks>
     /// 主要進入點會忽略命令列參數，並以固定案例執行滾動動態規劃與遞迴記憶化兩種解法。

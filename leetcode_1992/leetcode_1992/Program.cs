@@ -3,16 +3,70 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1992. Find All Groups of Farmland
-        /// https://leetcode.com/problems/find-all-groups-of-farmland/description/?envType=daily-question&envId=2024-04-20
-        /// 1992. 找到所有的农场组
+        /// https://leetcode.com/problems/find-all-groups-of-farmland/description/
+        ///
+        /// You are given a 0-indexed m x n binary matrix land, where 0 represents forest and 1 represents farmland. Farmland forms rectangular groups consisting entirely of farmland. No two groups are adjacent: farmland in different groups is not four-directionally adjacent.
+        ///
+        /// The top-left coordinate is (0,0) and the bottom-right is (m-1,n-1). A group with top-left (r1,c1) and bottom-right (r2,c2) is represented by [r1,c1,r2,c2]. Return a 2D array describing every group. Return an empty array if none exist; any order is accepted.
+        ///
+        /// Images: https://assets.leetcode.com/uploads/2021/07/27/screenshot-2021-07-27-at-12-23-15-copy-of-diagram-drawio-diagrams-net.png, https://assets.leetcode.com/uploads/2021/07/27/screenshot-2021-07-27-at-12-30-26-copy-of-diagram-drawio-diagrams-net.png, and https://assets.leetcode.com/uploads/2021/07/27/screenshot-2021-07-27-at-12-32-24-copy-of-diagram-drawio-diagrams-net.png
+        ///
+        /// Example 1:
+        /// Input: land = [[1,0,0],[0,1,1],[0,1,1]]
+        /// Output: [[0,0,0,0],[1,1,2,2]]
+        /// Explanation: The first group spans land[0][0] to land[0][0], and the second spans land[1][1] to land[2][2].
+        ///
+        /// Example 2:
+        /// Input: land = [[1,1],[1,1]]
+        /// Output: [[0,0,1,1]]
+        /// Explanation: The group spans land[0][0] to land[1][1].
+        ///
+        /// Example 3:
+        /// Input: land = [[0]]
+        /// Output: []
+        /// Explanation: There are no farmland groups.
+        ///
+        /// Constraints:
+        /// - m == land.length
+        /// - n == land[i].length
+        /// - 1 &lt;= m, n &lt;= 300
+        /// - land contains only 0 and 1.
+        /// - Farmland groups are rectangular.
+        /// </para>
+        /// <para>
+        /// 1992. 找到所有農田群組
         /// https://leetcode.cn/problems/find-all-groups-of-farmland/description/
-        /// 
-        /// https://learn.microsoft.com/zh-tw/dotnet/csharp/programming-guide/arrays/jagged-arrays
-        /// 不規則陣列
-        /// 宣告
-        /// 取長度
-        /// 以及輸出 方式
+        ///
+        /// 給定從 0 開始索引的 m x n 二元矩陣 land，其中 0 表示森林、1 表示農田。農田會形成完全由農田組成的矩形群組。任兩個群組都不相鄰，也就是不同群組的農田在四個方向上不會相鄰。
+        ///
+        /// 左上角座標為 (0,0)，右下角為 (m-1,n-1)。左上角為 (r1,c1)、右下角為 (r2,c2) 的群組以 [r1,c1,r2,c2] 表示。回傳描述所有群組的二維陣列；若沒有群組則回傳空陣列，答案順序不限。
+        ///
+        /// 圖片：https://assets.leetcode.com/uploads/2021/07/27/screenshot-2021-07-27-at-12-23-15-copy-of-diagram-drawio-diagrams-net.png、https://assets.leetcode.com/uploads/2021/07/27/screenshot-2021-07-27-at-12-30-26-copy-of-diagram-drawio-diagrams-net.png、https://assets.leetcode.com/uploads/2021/07/27/screenshot-2021-07-27-at-12-32-24-copy-of-diagram-drawio-diagrams-net.png
+        ///
+        /// 範例 1：
+        /// 輸入：land = [[1,0,0],[0,1,1],[0,1,1]]
+        /// 輸出：[[0,0,0,0],[1,1,2,2]]
+        /// 說明：第一個群組從 land[0][0] 到 land[0][0]，第二個從 land[1][1] 到 land[2][2]。
+        ///
+        /// 範例 2：
+        /// 輸入：land = [[1,1],[1,1]]
+        /// 輸出：[[0,0,1,1]]
+        /// 說明：此群組從 land[0][0] 到 land[1][1]。
+        ///
+        /// 範例 3：
+        /// 輸入：land = [[0]]
+        /// 輸出：[]
+        /// 說明：沒有任何農田群組。
+        ///
+        /// 限制條件：
+        /// - m == land.length
+        /// - n == land[i].length
+        /// - 1 &lt;= m, n &lt;= 300
+        /// - land 僅包含 0 與 1。
+        /// - 農田群組皆為矩形。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 建立六組可重複執行的測試資料，比較左上角掃描法與 DFS 解法的結果。

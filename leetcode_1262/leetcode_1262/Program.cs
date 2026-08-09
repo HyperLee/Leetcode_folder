@@ -5,11 +5,57 @@ namespace leetcode_1262;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1262. Greatest Sum Divisible by Three
-    /// https://leetcode.com/problems/greatest-sum-divisible-by-three/description/?envType=daily-question&envId=2025-11-23
-    /// 1262. 可被三整除的最大和
-    /// https://leetcode.cn/problems/greatest-sum-divisible-by-three/description/?envType=daily-question&envId=2025-11-23
-    /// 
+    /// https://leetcode.com/problems/greatest-sum-divisible-by-three/description/
+    ///
+    /// Given an integer array nums, return the maximum possible sum of elements of the array such that it is
+    /// divisible by three.
+    ///
+    /// Example 1:
+    /// Input: nums = [3,6,5,1,8]
+    /// Output: 18
+    /// Explanation: Pick numbers 3, 6, 1 and 8; their sum is 18 (maximum sum divisible by 3).
+    ///
+    /// Example 2:
+    /// Input: nums = [4]
+    /// Output: 0
+    /// Explanation: Since 4 is not divisible by 3, do not pick any number.
+    ///
+    /// Example 3:
+    /// Input: nums = [1,2,3,4,4]
+    /// Output: 12
+    /// Explanation: Pick numbers 1, 3, 4 and 4; their sum is 12 (maximum sum divisible by 3).
+    ///
+    /// Constraints:
+    /// 1 &lt;= nums.length &lt;= 4 * 10^4
+    /// 1 &lt;= nums[i] &lt;= 10^4
+    /// </para>
+    /// <para>
+    /// 1262. 可被三整除的最大總和
+    /// https://leetcode.cn/problems/greatest-sum-divisible-by-three/description/
+    ///
+    /// 給定整數陣列 nums，請回傳陣列元素可形成且能被三整除的最大可能總和。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [3,6,5,1,8]
+    /// 輸出：18
+    /// 解釋：選擇數字 3、6、1 與 8，其總和為 18（可被 3 整除的最大總和）。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [4]
+    /// 輸出：0
+    /// 解釋：由於 4 無法被 3 整除，因此不選擇任何數字。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [1,2,3,4,4]
+    /// 輸出：12
+    /// 解釋：選擇數字 1、3、4 與 4，其總和為 12（可被 3 整除的最大總和）。
+    ///
+    /// 限制條件：
+    /// 1 &lt;= nums.length &lt;= 4 * 10^4
+    /// 1 &lt;= nums[i] &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

@@ -6,14 +6,54 @@ namespace leetcode_3163
     {
         /// <summary>
         /// 3163. String Compression III
-        /// https://leetcode.com/problems/string-compression-iii/description/?envType=daily-question&envId=2024-11-04
-        /// 
-        /// 3163. 压缩字符串 III
+        /// https://leetcode.com/problems/string-compression-iii/description/
+        /// <para>
+        /// Given a string word, compress it using this algorithm:
+        /// - Begin with an empty string comp. While word is not empty:
+        ///   - Remove a maximum-length prefix of word consisting of one character c repeated at most 9 times.
+        ///   - Append the prefix length followed by c to comp.
+        ///
+        /// Return comp.
+        ///
+        /// Example 1:
+        /// Input: word = "abcde"
+        /// Output: "1a1b1c1d1e"
+        /// Explanation: Initially comp = "". Perform the operation 5 times, choosing "a", "b", "c", "d", and "e" as the prefixes. For each prefix, append "1" followed by the character to comp.
+        ///
+        /// Example 2:
+        /// Input: word = "aaaaaaaaaaaaaabb"
+        /// Output: "9a5a2b"
+        /// Explanation: Initially comp = "". Perform the operation 3 times, choosing "aaaaaaaaa", "aaaaa", and "bb". Append "9a", then "5a", then "2b" to comp.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= word.length &lt;= 2 * 10^5
+        /// - word consists only of lowercase English letters.
+        /// </para>
+        /// <para>
+        /// 3163. 字串壓縮 III
         /// https://leetcode.cn/problems/string-compression-iii/description/
-        /// 
-        /// 從一個空字串 comp 開始。當 word 不為空時，執行以下操作：
-        ///  從 word 中移除一個最長的前綴，該前綴由單個字符 c 重複最多 9 次構成。
-        ///  將該前綴的長度接在字符 c 之後，然後附加到 comp 中。
+        ///
+        /// 給定字串 word，使用下列演算法壓縮它：
+        /// - 從空字串 comp 開始。當 word 不為空時：
+        ///   - 從 word 移除一個最長前綴，此前綴由單一字元 c 重複至多 9 次構成。
+        ///   - 將此前綴的長度以及 c 依序附加到 comp。
+        ///
+        /// 回傳 comp。
+        ///
+        /// 範例 1：
+        /// 輸入：word = "abcde"
+        /// 輸出："1a1b1c1d1e"
+        /// 解釋：起初 comp = ""。執行操作 5 次，依序選擇 "a"、"b"、"c"、"d"、"e" 作為前綴。每次都把 "1" 和該字元附加到 comp。
+        ///
+        /// 範例 2：
+        /// 輸入：word = "aaaaaaaaaaaaaabb"
+        /// 輸出："9a5a2b"
+        /// 解釋：起初 comp = ""。執行操作 3 次，依序選擇 "aaaaaaaaa"、"aaaaa"、"bb"，並將 "9a"、"5a"、"2b" 附加到 comp。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= word.length &lt;= 2 * 10^5
+        /// - word 只由小寫英文字母組成。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 執行固定案例，對照兩種字串壓縮解法的預期與實際結果。

@@ -6,20 +6,46 @@ namespace leetcode_2211;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2211. Count Collisions on a Road
-    /// https://leetcode.com/problems/count-collisions-on-a-road/description/?envType=daily-question&envId=2025-12-04
-    /// 2211. 统计道路上的碰撞次数
-    /// https://leetcode.cn/problems/count-collisions-on-a-road/description/?envType=daily-question&envId=2025-12-04
-    /// 
-    /// 2211. 道路上的碰撞次數（繁體中文翻譯）
-    /// 有 n 輛車位在一條無限長的道路上。車輛由左至右編號為 0 到 n - 1，且每輛車位於一個唯一的位置。
-    /// 你會得到一個長度為 n 的字串 directions，其中 directions[i] 可能是 'L'、'R' 或 'S'。
-    /// 分別代表第 i 輛車向左移動、向右移動或停在原地；所有移動車輛的速度相同。
-    /// 碰撞次數的計算規則如下：
-    /// - 兩輛相向移動的車相撞時，碰撞次數增加 2。
-    /// - 移動的車與靜止的車相撞時，碰撞次數增加 1。
-    /// 發生碰撞後，參與碰撞的車將停在碰撞點並不再移動；除此之外，車輛不會改變狀態或方向。
-    /// 回傳道路上會發生的總碰撞次數。
+    /// https://leetcode.com/problems/count-collisions-on-a-road/description/
+    ///
+    /// There are n cars at unique points on an infinite road, numbered 0 through n - 1 from left to right. directions[i] is 'L', 'R', or 'S' when car i moves left, moves right, or stays. All moving cars have equal speed. Opposite-moving cars add 2 collisions; a moving car hitting a stationary car adds 1. Cars involved in a collision become stationary. Return the total collisions.
+    ///
+    /// Example 1:
+    /// Input: directions = "RLRSLL"
+    /// Output: 5
+    /// Explanation: Cars 0 and 1 collide, changing the count from 0 + 2 = 2. Cars 2 and 3 change it to 2 + 1 = 3. Cars 3 and 4 change it to 3 + 1 = 4. Car 5 later hits stationary car 4, changing it to 4 + 1 = 5.
+    ///
+    /// Example 2:
+    /// Input: directions = "LLRR"
+    /// Output: 0
+    /// Explanation: No cars collide, so the total is 0.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= directions.length &lt;= 10^5
+    /// - directions[i] is 'L', 'R', or 'S'.
+    /// </para>
+    /// <para>
+    /// 2211. 統計道路上的碰撞次數
+    /// https://leetcode.cn/problems/count-collisions-on-a-road/description/
+    ///
+    /// 無限長道路上有 n 輛位於不同位置的車，從左到右編號 0 到 n - 1。directions[i] 為 'L'、'R'、'S'，表示車 i 向左、向右或靜止；所有移動車輛速度相同。相向車輛碰撞增加 2 次，移動車撞上靜止車增加 1 次。碰撞後相關車輛會靜止。回傳碰撞總次數。
+    ///
+    /// 範例 1：
+    /// 輸入：directions = "RLRSLL"
+    /// 輸出：5
+    /// 說明：車 0 與 1 碰撞，使次數從 0 + 2 = 2；車 2 與 3 使其成為 2 + 1 = 3；車 3 與 4 使其成為 3 + 1 = 4；車 5 之後撞上靜止的車 4，使其成為 4 + 1 = 5。
+    ///
+    /// 範例 2：
+    /// 輸入：directions = "LLRR"
+    /// 輸出：0
+    /// 說明：沒有車輛碰撞，因此總數為 0。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= directions.length &lt;= 10^5
+    /// - directions[i] 為 'L'、'R' 或 'S'。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

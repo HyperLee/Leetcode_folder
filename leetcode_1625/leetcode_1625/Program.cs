@@ -3,20 +3,73 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1625. Lexicographically Smallest String After Applying Operations
-    /// https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/description/?envType=daily-question&envId=2025-10-19
+    /// https://leetcode.com/problems/lexicographically-smallest-string-after-applying-operations/description/
+    ///
+    /// You are given an even-length string s consisting of digits 0 through 9, and integers a and b. Apply either operation
+    /// any number of times in any order:
+    /// - Add a to all odd indices (0-indexed); digits past 9 cycle to 0. For s = "3456", a = 5 gives "3951".
+    /// - Rotate s right by b positions. For s = "3456", b = 1 gives "6345".
+    /// Return the lexicographically smallest obtainable string. For equal-length strings, a string is smaller if at the first
+    /// differing position its digit comes earlier; for example, "0158" is smaller than "0190" because '5' precedes '9'.
+    ///
+    /// Example 1:
+    /// Input: s = "5525", a = 9, b = 2
+    /// Output: "2050"
+    /// Explanation: Start "5525"; Rotate "2555"; Add "2454"; Add "2353"; Rotate "5323"; Add "5222"; Add "5121";
+    /// Rotate "2151"; Add "2050". No smaller string is obtainable.
+    ///
+    /// Example 2:
+    /// Input: s = "74", a = 5, b = 1
+    /// Output: "24"
+    /// Explanation: Start "74"; Rotate "47"; Add "42"; Rotate "24". No smaller string is obtainable.
+    ///
+    /// Example 3:
+    /// Input: s = "0011", a = 4, b = 2
+    /// Output: "0011"
+    /// Explanation: No sequence of operations produces a lexicographically smaller string.
+    ///
+    /// Constraints:
+    /// - 2 &lt;= s.length &lt;= 100
+    /// - s.length is even.
+    /// - s consists only of digits 0 through 9.
+    /// - 1 &lt;= a &lt;= 9
+    /// - 1 &lt;= b &lt;= s.length - 1
+    /// </para>
+    /// <para>
     /// 1625. 執行操作後字典序最小的字串
-    /// https://leetcode.cn/problems/lexicographically-smallest-string-after-applying-operations/description/?envType=daily-question&envId=2025-10-19
-    /// 
-    /// 給定一個由 0 到 9 的數字組成的偶數長度的字串 s，以及兩個整數 a 和 b。
-    /// 您可以對 s 應用以下兩個操作中的任意一個任意次數，並以任意順序：
-    /// 將 a 加到 s 的所有奇數索引（索引從 0 開始）上。超過 9 的數字循環回到 0。
-    /// 例如，如果 s = "3456" 且 a = 5，s 變為 "3951"。
-    /// 將 s 向右旋轉 b 個位置。例如，如果 s = "3456" 且 b = 1，s 變為 "6345"。
-    /// 返回通過對 s 應用上述操作任意次數所能獲得的字典序最小的字串。
-    /// 一個字串 a 在字典序上小於字串 b（長度相同）如果在 a 和 b 第一次不同的位置，
-    /// 字串 a 在該位置的字母在字母表中比字串 b 對應的字母出現得更早。
-    /// 例如，"0158" 在字典序上小於 "0190"，因為它們在第三個字母處第一次不同，且 '5' 在 '9' 之前。
+    /// https://leetcode.cn/problems/lexicographically-smallest-string-after-applying-operations/description/
+    ///
+    /// 給定由數字 0 到 9 組成的偶數長度字串 s，以及整數 a 與 b。可以任意順序、任意次數執行：
+    /// - 將 a 加到所有奇數索引（從 0 開始）的數字；超過 9 會循環回 0。例如 s = "3456"、a = 5 得到 "3951"。
+    /// - 將 s 向右旋轉 b 個位置。例如 s = "3456"、b = 1 得到 "6345"。
+    /// 回傳可得到的字典序最小字串。對長度相同的字串，在第一個不同位置上數字較前者較小；例如 "0158"
+    /// 小於 "0190"，因為 '5' 位於 '9' 之前。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "5525"，a = 9，b = 2
+    /// 輸出："2050"
+    /// 解釋：起始 "5525"；旋轉 "2555"；加法 "2454"；加法 "2353"；旋轉 "5323"；加法 "5222"；
+    /// 加法 "5121"；旋轉 "2151"；加法 "2050"。無法得到更小的字串。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "74"，a = 5，b = 1
+    /// 輸出："24"
+    /// 解釋：起始 "74"；旋轉 "47"；加法 "42"；旋轉 "24"。無法得到更小的字串。
+    ///
+    /// 範例 3：
+    /// 輸入：s = "0011"，a = 4，b = 2
+    /// 輸出："0011"
+    /// 解釋：不存在能產生字典序更小字串的操作序列。
+    ///
+    /// 限制條件：
+    /// - 2 &lt;= s.length &lt;= 100
+    /// - s.length 為偶數。
+    /// - s 只包含數字 0 到 9。
+    /// - 1 &lt;= a &lt;= 9
+    /// - 1 &lt;= b &lt;= s.length - 1
+    /// </para>
     /// </summary>
     static void Main(string[] args)
     {

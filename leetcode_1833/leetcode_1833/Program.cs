@@ -3,19 +3,64 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1833. Maximum Ice Cream Bars
     /// https://leetcode.com/problems/maximum-ice-cream-bars/description/
-    /// 1833. 雪糕的最大數量（繁體中文）
+    ///
+    /// On a sweltering summer day, a boy wants to buy ice cream bars. A store has n bars, and costs[i] is the price of the i-th bar. The boy has coins coins and wants to buy as many bars as possible. He may buy them in any order.
+    ///
+    /// Return the maximum number of ice cream bars he can buy. You must solve the problem using counting sort.
+    ///
+    /// Example 1:
+    /// Input: costs = [1,3,2,4,1], coins = 7
+    /// Output: 4
+    /// Explanation: Buy bars at indices 0, 1, 2, and 4 for 1 + 3 + 2 + 1 = 7 coins.
+    ///
+    /// Example 2:
+    /// Input: costs = [10,6,8,7,7,8], coins = 5
+    /// Output: 0
+    /// Explanation: He cannot afford any bar.
+    ///
+    /// Example 3:
+    /// Input: costs = [1,6,3,1,2,5], coins = 20
+    /// Output: 6
+    /// Explanation: All bars cost 1 + 6 + 3 + 1 + 2 + 5 = 18 coins.
+    ///
+    /// Constraints:
+    /// - costs.length == n
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - 1 &lt;= costs[i] &lt;= 10^5
+    /// - 1 &lt;= coins &lt;= 10^8
+    /// </para>
+    /// <para>
+    /// 1833. 雪糕的最大數量
     /// https://leetcode.cn/problems/maximum-ice-cream-bars/description/
-    /// 
-    /// 題目描述：
-    /// 在炎熱的夏日，一位男孩想買一些雪糕棒。
-    /// 店裡有 n 支雪糕棒。給定一個長度為 n 的陣列 costs，其中 costs[i] 是第 i 支雪糕棒的價格（以硬幣計）。
-    /// 男孩起始有 coins 枚硬幣可以花，他想盡可能多買雪糕棒。
-    /// 注意：男孩可以按任意順序購買雪糕棒。
-    /// 回傳男孩使用 coins 枚硬幣最多能買到的雪糕棒數量。
-    /// 
-    /// 要求：請用計數排序（counting sort）來解題。
+    ///
+    /// 炎熱的夏日裡，一名男孩想購買雪糕。商店有 n 支雪糕，costs[i] 是第 i 支的價格。男孩有 coins 枚硬幣，希望盡可能購買更多雪糕，且可以按任意順序購買。
+    ///
+    /// 回傳他最多能購買的雪糕數量。你必須使用計數排序解決此題。
+    ///
+    /// 範例 1：
+    /// 輸入：costs = [1,3,2,4,1], coins = 7
+    /// 輸出：4
+    /// 說明：購買索引 0、1、2、4 的雪糕，共花費 1 + 3 + 2 + 1 = 7 枚硬幣。
+    ///
+    /// 範例 2：
+    /// 輸入：costs = [10,6,8,7,7,8], coins = 5
+    /// 輸出：0
+    /// 說明：他買不起任何一支雪糕。
+    ///
+    /// 範例 3：
+    /// 輸入：costs = [1,6,3,1,2,5], coins = 20
+    /// 輸出：6
+    /// 說明：全部雪糕共需 1 + 6 + 3 + 1 + 2 + 5 = 18 枚硬幣。
+    ///
+    /// 限制條件：
+    /// - costs.length == n
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - 1 &lt;= costs[i] &lt;= 10^5
+    /// - 1 &lt;= coins &lt;= 10^8
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

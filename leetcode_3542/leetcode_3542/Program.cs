@@ -7,15 +7,62 @@ class Program
 {
     /// <summary>
     /// 3542. Minimum Operations to Convert All Elements to Zero
-    /// https://leetcode.com/problems/minimum-operations-to-convert-all-elements-to-zero/description/?envType=daily-question&envId=2025-11-10
-    /// 3542. 将所有元素变为 0 的最少操作次数
-    /// https://leetcode.cn/problems/minimum-operations-to-convert-all-elements-to-zero/description/?envType=daily-question&envId=2025-11-10
-    /// 
-    /// 給定一個大小為 n 的陣列 nums，由非負整數組成。你的任務是對陣列應用一些（可能為零）操作，使所有元素變為 0。
-    /// 
-    /// 在一次操作中，你可以選擇一個子陣列 [i, j]（其中 0 <= i <= j < n），並將該子陣列中最小非負整數的所有出現設為 0。
-    /// 
-    /// 返回使陣列中所有元素變為 0 所需的最少操作數。
+    /// https://leetcode.com/problems/minimum-operations-to-convert-all-elements-to-zero/description/
+    /// <para>
+    /// You are given an array nums of size n, consisting of non-negative integers. Your task is to apply some (possibly zero) operations on the array so that all elements become 0.
+    ///
+    /// In one operation, you can select a subarray [i, j] (where 0 &lt;= i &lt;= j &lt; n) and set all occurrences of the minimum non-negative integer in that subarray to 0.
+    ///
+    /// Return the minimum number of operations required to make all elements in the array 0.
+    ///
+    /// Example 1:
+    /// Input: nums = [0,2]
+    /// Output: 1
+    /// Explanation: Select [1,1], which is [2]. Its minimum non-negative integer is 2; setting every 2 to 0 produces [0,0]. Thus the minimum number of operations is 1.
+    ///
+    /// Example 2:
+    /// Input: nums = [3,1,2,1]
+    /// Output: 3
+    /// Explanation: Select [1,3] = [1,2,1] and set every 1 to 0, producing [3,0,2,0]. Select [2,2] = [2] and set every 2 to 0, producing [3,0,0,0]. Select [0,0] = [3] and set every 3 to 0, producing [0,0,0,0]. Thus the minimum number of operations is 3.
+    ///
+    /// Example 3:
+    /// Input: nums = [1,2,1,2,1,2]
+    /// Output: 4
+    /// Explanation: Select [0,5] = [1,2,1,2,1,2] and set every 1 to 0, producing [0,2,0,2,0,2]. Then select [1,1], [3,3], and [5,5] in turn; each is [2], and the arrays become [0,0,0,2,0,2], [0,0,0,0,0,2], and [0,0,0,0,0,0]. Thus the minimum number of operations is 4.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= n == nums.length &lt;= 10^5
+    /// - 0 &lt;= nums[i] &lt;= 10^5
+    /// </para>
+    /// <para>
+    /// 3542. 將所有元素變為 0 的最少操作次數
+    /// https://leetcode.cn/problems/minimum-operations-to-convert-all-elements-to-zero/description/
+    ///
+    /// 給定大小為 n、由非負整數組成的陣列 nums。你需要對陣列執行若干次（也可能為零次）操作，使所有元素都變成 0。
+    ///
+    /// 一次操作中，可以選擇子陣列 [i, j]（其中 0 &lt;= i &lt;= j &lt; n），並將該子陣列中最小非負整數的所有出現位置設為 0。
+    ///
+    /// 回傳使陣列中所有元素變成 0 所需的最少操作次數。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [0,2]
+    /// 輸出：1
+    /// 解釋：選擇 [1,1]，即 [2]。其最小非負整數為 2；將所有 2 設為 0 後得到 [0,0]。因此最少操作次數為 1。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [3,1,2,1]
+    /// 輸出：3
+    /// 解釋：選擇 [1,3] = [1,2,1]，將所有 1 設為 0，得到 [3,0,2,0]。選擇 [2,2] = [2]，將所有 2 設為 0，得到 [3,0,0,0]。選擇 [0,0] = [3]，將所有 3 設為 0，得到 [0,0,0,0]。因此最少操作次數為 3。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [1,2,1,2,1,2]
+    /// 輸出：4
+    /// 解釋：選擇 [0,5] = [1,2,1,2,1,2]，將所有 1 設為 0，得到 [0,2,0,2,0,2]。接著依序選擇 [1,1]、[3,3] 與 [5,5]；它們各自都是 [2]，陣列依序變成 [0,0,0,2,0,2]、[0,0,0,0,0,2] 與 [0,0,0,0,0,0]。因此最少操作次數為 4。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= n == nums.length &lt;= 10^5
+    /// - 0 &lt;= nums[i] &lt;= 10^5
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

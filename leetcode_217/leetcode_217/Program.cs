@@ -3,12 +3,54 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 217. Contains Duplicate
-        /// https://leetcode.com/problems/contains-duplicate/
-        /// 217. 存在重复元素
-        /// https://leetcode.cn/problems/contains-duplicate/
-        /// 
-        /// 給你一個整數陣列nums。如果任一值在數組中出現至少兩次，則返回true；如果數組中每個元素互不相同，則返回false。
+        /// https://leetcode.com/problems/contains-duplicate/description/
+        ///
+        /// Given an integer array nums, return true if any value appears at least twice; return false if every element is distinct.
+        ///
+        /// Example 1:
+        /// Input: nums = [1,2,3,1]
+        /// Output: true
+        /// Explanation: Value 1 occurs at indices 0 and 3.
+        ///
+        /// Example 2:
+        /// Input: nums = [1,2,3,4]
+        /// Output: false
+        /// Explanation: Every element is distinct.
+        ///
+        /// Example 3:
+        /// Input: nums = [1,1,1,3,3,4,3,2,4,2]
+        /// Output: true
+        ///
+        /// Constraints:
+        /// - 1 &lt;= nums.length &lt;= 10^5
+        /// - -10^9 &lt;= nums[i] &lt;= 10^9
+        /// </para>
+        /// <para>
+        /// 217. 存在重複元素
+        /// https://leetcode.cn/problems/contains-duplicate/description/
+        ///
+        /// 給定整數陣列 nums，若任何值至少出現兩次則回傳 true；若所有元素皆不相同則回傳 false。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [1,2,3,1]
+        /// 輸出：true
+        /// 說明：數值 1 出現在索引 0 與 3。
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [1,2,3,4]
+        /// 輸出：false
+        /// 說明：所有元素皆不相同。
+        ///
+        /// 範例 3：
+        /// 輸入：nums = [1,1,1,3,3,4,3,2,4,2]
+        /// 輸出：true
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= nums.length &lt;= 10^5
+        /// - -10^9 &lt;= nums[i] &lt;= 10^9
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

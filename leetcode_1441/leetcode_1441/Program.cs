@@ -3,38 +3,108 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1441. Build an Array With Stack Operations
-    /// English:
+    /// https://leetcode.com/problems/build-an-array-with-stack-operations/description/
+    ///
     /// You are given an integer array target and an integer n.
     /// You have an empty stack with the two following operations:
-    /// <list type="bullet">
-    /// Push: pushes an integer to the top of the stack.
-    /// Pop: removes the integer on the top of the stack.
-    /// 
+    /// - "Push": pushes an integer to the top of the stack.
+    /// - "Pop": removes the integer on the top of the stack.
+    ///
     /// You also have a stream of the integers in the range [1, n].
-    /// Use the two stack operations to make the numbers in the stack (from the bottom to the top) equal to target. You should follow these rules:
-    /// 
-    /// If the stream of the integers is not empty, pick the next integer from the stream and push it to the top of the stack.
-    /// If the stack is not empty, pop the integer at the top of the stack.
-    /// If, at any moment, the elements in the stack (from the bottom to the top) are equal to target, do not read new integers from the stream and do not do more operations on the stack.
-    /// 
-    /// Return the stack operations needed to build target following the mentioned rules. If there are multiple valid answers, return any of them.
-    /// 繁體中文：
+    /// Use the two stack operations to make the numbers in the stack (from the bottom to the top) equal to target. You should
+    /// follow the following rules:
+    /// - If the stream of the integers is not empty, pick the next integer from the stream and push it to the top of the stack.
+    /// - If the stack is not empty, pop the integer at the top of the stack.
+    /// - If, at any moment, the elements in the stack (from the bottom to the top) are equal to target, do not read new
+    ///   integers from the stream and do not do more operations on the stack.
+    ///
+    /// Return the stack operations needed to build target following the mentioned rules. If there are multiple valid answers,
+    /// return any of them.
+    ///
+    /// Example 1:
+    /// Input: target = [1,3], n = 3
+    /// Output: ["Push","Push","Pop","Push"]
+    /// Explanation: Initially the stack s is empty. The last element is the top of the stack.
+    /// Read 1 from the stream and push it to the stack. s = [1].
+    /// Read 2 from the stream and push it to the stack. s = [1,2].
+    /// Pop the integer on the top of the stack. s = [1].
+    /// Read 3 from the stream and push it to the stack. s = [1,3].
+    ///
+    /// Example 2:
+    /// Input: target = [1,2,3], n = 3
+    /// Output: ["Push","Push","Push"]
+    /// Explanation: Initially the stack s is empty. The last element is the top of the stack.
+    /// Read 1 from the stream and push it to the stack. s = [1].
+    /// Read 2 from the stream and push it to the stack. s = [1,2].
+    /// Read 3 from the stream and push it to the stack. s = [1,2,3].
+    ///
+    /// Example 3:
+    /// Input: target = [1,2], n = 4
+    /// Output: ["Push","Push"]
+    /// Explanation: Initially the stack s is empty. The last element is the top of the stack.
+    /// Read 1 from the stream and push it to the stack. s = [1].
+    /// Read 2 from the stream and push it to the stack. s = [1,2].
+    /// Since the stack (from the bottom to the top) is equal to target, we stop the stack operations.
+    /// The answers that read integer 3 from the stream are not accepted.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= target.length &lt;= 100
+    /// - 1 &lt;= n &lt;= 100
+    /// - 1 &lt;= target[i] &lt;= n
+    /// - target is strictly increasing.
+    /// </para>
+    /// <para>
+    /// 1441. 使用堆疊操作建立陣列
+    /// https://leetcode.cn/problems/build-an-array-with-stack-operations/description/
+    ///
     /// 給定一個整數陣列 target 和一個整數 n。
     /// 你有一個空堆疊，並支援以下兩種操作：
-    /// <list type="bullet">
-    /// 「Push」：將一個整數推入堆疊頂端。
-    /// 「Pop」：移除堆疊頂端的整數。
-    /// 
+    /// - 「Push」：將一個整數推入堆疊頂端。
+    /// - 「Pop」：移除堆疊頂端的整數。
+    ///
     /// 你還有一個由 [1, n] 範圍內整數組成的資料流。
-    /// 請使用這兩種堆疊操作，讓堆疊中的數字（由底部到頂部）與 target 完全相同。如果有多組有效答案，回傳任一組即可。
-    /// 請遵守以下規則：
-    /// 
-    /// 當資料流不為空時，從資料流取出下一個整數，並將它推入堆疊頂端。
-    /// 當堆疊不為空時，移除堆疊頂端的整數。
-    /// 只要堆疊中的元素（由底部到頂部）在任何時刻等於 target，就不要再從資料流讀取新整數，也不要再對堆疊進行任何操作。
-    /// 
-    /// 請依照上述規則，回傳建立 target 所需的堆疊操作。
+    /// 請使用這兩種堆疊操作，讓堆疊中的數字（由底部到頂部）與 target 完全相同。你應遵守下列規則：
+    /// - 當資料流不為空時，從資料流取出下一個整數，並將它推入堆疊頂端。
+    /// - 當堆疊不為空時，移除堆疊頂端的整數。
+    /// - 只要堆疊中的元素（由底部到頂部）在任何時刻等於 target，就不要再從資料流讀取新整數，也不要再對
+    ///   堆疊進行任何操作。
+    ///
+    /// 請依照上述規則，回傳建立 target 所需的堆疊操作。如果有多組有效答案，回傳任一組即可。
+    ///
+    /// 範例 1：
+    /// 輸入：target = [1,3]，n = 3
+    /// 輸出：["Push","Push","Pop","Push"]
+    /// 解釋：起初堆疊 s 為空，最後一個元素是堆疊頂端。
+    /// 從資料流讀取 1 並推入堆疊，s = [1]。
+    /// 從資料流讀取 2 並推入堆疊，s = [1,2]。
+    /// 移除堆疊頂端的整數，s = [1]。
+    /// 從資料流讀取 3 並推入堆疊，s = [1,3]。
+    ///
+    /// 範例 2：
+    /// 輸入：target = [1,2,3]，n = 3
+    /// 輸出：["Push","Push","Push"]
+    /// 解釋：起初堆疊 s 為空，最後一個元素是堆疊頂端。
+    /// 從資料流讀取 1 並推入堆疊，s = [1]。
+    /// 從資料流讀取 2 並推入堆疊，s = [1,2]。
+    /// 從資料流讀取 3 並推入堆疊，s = [1,2,3]。
+    ///
+    /// 範例 3：
+    /// 輸入：target = [1,2]，n = 4
+    /// 輸出：["Push","Push"]
+    /// 解釋：起初堆疊 s 為空，最後一個元素是堆疊頂端。
+    /// 從資料流讀取 1 並推入堆疊，s = [1]。
+    /// 從資料流讀取 2 並推入堆疊，s = [1,2]。
+    /// 因為堆疊（由底部到頂部）已等於 target，所以停止堆疊操作。
+    /// 讀取資料流中整數 3 的答案不被接受。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= target.length &lt;= 100
+    /// - 1 &lt;= n &lt;= 100
+    /// - 1 &lt;= target[i] &lt;= n
+    /// - target 嚴格遞增。
+    /// </para>
     /// </summary>
     /// <remarks>
     /// 執行三組固定範例，並用相同輸入驗證三種解法的操作序列。

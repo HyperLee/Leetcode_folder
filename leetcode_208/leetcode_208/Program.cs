@@ -3,12 +3,54 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 208. Implement Trie (Prefix Tree)
         /// https://leetcode.com/problems/implement-trie-prefix-tree/description/
-        /// 
-        /// 208. 实现 Trie (前缀树)
+        ///
+        /// A trie, pronounced "try", or prefix tree efficiently stores and retrieves keys in a string dataset, with applications such as autocomplete and spellchecking.
+        ///
+        /// Implement Trie:
+        /// - Trie() initializes the object.
+        /// - void insert(String word) inserts word.
+        /// - boolean search(String word) returns whether word was inserted.
+        /// - boolean startsWith(String prefix) returns whether an inserted word starts with prefix.
+        ///
+        /// Example 1:
+        /// Input:
+        /// ["Trie","insert","search","search","startsWith","insert","search"]
+        /// [[],["apple"],["apple"],["app"],["app"],["app"],["app"]]
+        /// Output: [null,null,true,false,true,null,true]
+        /// Explanation: Insert "apple"; search("apple") is true, search("app") is false, startsWith("app") is true; insert "app", then search("app") is true.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= word.length, prefix.length &lt;= 2000
+        /// - word and prefix contain only lowercase English letters.
+        /// - At most 3 * 10^4 total calls are made to insert, search, and startsWith.
+        /// </para>
+        /// <para>
+        /// 208. 實作 Trie（前綴樹）
         /// https://leetcode.cn/problems/implement-trie-prefix-tree/description/
-        /// 
+        ///
+        /// Trie（讀音同 "try"）或前綴樹，是能高效儲存與擷取字串資料集中鍵值的樹狀資料結構，可用於自動完成與拼字檢查等功能。
+        ///
+        /// 實作 Trie：
+        /// - Trie() 初始化物件。
+        /// - void insert(String word) 插入 word。
+        /// - boolean search(String word) 回傳 word 是否曾被插入。
+        /// - boolean startsWith(String prefix) 回傳是否有已插入的單字以 prefix 開頭。
+        ///
+        /// 範例 1：
+        /// 輸入：
+        /// ["Trie","insert","search","search","startsWith","insert","search"]
+        /// [[],["apple"],["apple"],["app"],["app"],["app"],["app"]]
+        /// 輸出：[null,null,true,false,true,null,true]
+        /// 說明：插入 "apple"；search("apple") 為 true、search("app") 為 false、startsWith("app") 為 true；插入 "app" 後，search("app") 為 true。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= word.length, prefix.length &lt;= 2000
+        /// - word 與 prefix 僅含小寫英文字母。
+        /// - insert、search、startsWith 的總呼叫次數最多為 3 * 10^4。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

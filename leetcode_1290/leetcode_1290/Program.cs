@@ -3,12 +3,60 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1290. Convert Binary Number in a Linked List to Integer
-    /// https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer/description/?envType=daily-question&envId=2025-07-14
-    /// 
-    /// 1290. 二進位鍊錶轉整數
-    /// https://leetcode.cn/problems/convert-binary-number-in-a-linked-list-to-integer/description/?envType=daily-question&envId=2025-07-14
-    /// 
+    /// https://leetcode.com/problems/convert-binary-number-in-a-linked-list-to-integer/description/
+    ///
+    /// Given head which is a reference node to a singly-linked list. The value of each node in the linked list is either 0 or 1.
+    /// The linked list holds the binary representation of a number.
+    ///
+    /// Return the decimal value of the number in the linked list.
+    ///
+    /// The most significant bit is at the head of the linked list.
+    ///
+    /// Official illustration: https://assets.leetcode.com/uploads/2019/12/05/graph-1.png
+    ///
+    /// Example 1:
+    /// Input: head = [1,0,1]
+    /// Output: 5
+    /// Explanation: (101) in base 2 = (5) in base 10
+    ///
+    /// Example 2:
+    /// Input: head = [0]
+    /// Output: 0
+    ///
+    /// Constraints:
+    /// - The Linked List is not empty.
+    /// - Number of nodes will not exceed 30.
+    /// - Each node's value is either 0 or 1.
+    /// </para>
+    /// <para>
+    /// 1290. 將二進位鏈結串列轉換為整數
+    /// https://leetcode.cn/problems/convert-binary-number-in-a-linked-list-to-integer/description/
+    ///
+    /// 給定 head，它是單向鏈結串列的參考節點。鏈結串列中每個節點的值不是 0 就是 1。
+    /// 此鏈結串列保存一個數字的二進位表示。
+    ///
+    /// 回傳鏈結串列中該數字的十進位值。
+    ///
+    /// 最高有效位元位於鏈結串列的開頭。
+    ///
+    /// 官方示意圖：https://assets.leetcode.com/uploads/2019/12/05/graph-1.png
+    ///
+    /// 範例 1：
+    /// 輸入：head = [1,0,1]
+    /// 輸出：5
+    /// 解釋：以 2 為底的 (101) = 以 10 為底的 (5)
+    ///
+    /// 範例 2：
+    /// 輸入：head = [0]
+    /// 輸出：0
+    ///
+    /// 限制條件：
+    /// - 鏈結串列不為空。
+    /// - 節點數量不會超過 30。
+    /// - 每個節點的值不是 0 就是 1。
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// 

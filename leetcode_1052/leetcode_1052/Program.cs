@@ -3,10 +3,66 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1052. Grumpy Bookstore Owner
-        /// https://leetcode.com/problems/grumpy-bookstore-owner/description/?envType=daily-question&envId=2024-06-21
-        /// 1052. 爱生气的书店老板
+        /// https://leetcode.com/problems/grumpy-bookstore-owner/description/
+        ///
+        /// There is a bookstore owner that has a store open for n minutes. You are given an integer array
+        /// customers of length n where customers[i] is the number of customers that enter the store at the
+        /// start of the i-th minute and all those customers leave after the end of that minute.
+        /// During certain minutes, the bookstore owner is grumpy. You are given a binary array grumpy where
+        /// grumpy[i] is 1 if the bookstore owner is grumpy during the i-th minute, and is 0 otherwise.
+        /// When the bookstore owner is grumpy, the customers entering during that minute are not satisfied.
+        /// Otherwise, they are satisfied.
+        /// The bookstore owner knows a secret technique to remain not grumpy for minutes consecutive minutes,
+        /// but this technique can only be used once.
+        /// Return the maximum number of customers that can be satisfied throughout the day.
+        ///
+        /// Example 1:
+        /// Input: customers = [1,0,1,2,1,1,7,5], grumpy = [0,1,0,1,0,1,0,1], minutes = 3
+        /// Output: 16
+        /// Explanation: The bookstore owner keeps themselves not grumpy for the last 3 minutes.
+        /// The maximum number of customers that can be satisfied = 1 + 1 + 1 + 1 + 7 + 5 = 16.
+        ///
+        /// Example 2:
+        /// Input: customers = [1], grumpy = [0], minutes = 1
+        /// Output: 1
+        ///
+        /// Constraints:
+        /// n == customers.length == grumpy.length
+        /// 1 &lt;= minutes &lt;= n &lt;= 2 * 10^4
+        /// 0 &lt;= customers[i] &lt;= 1000
+        /// grumpy[i] is either 0 or 1.
+        /// </para>
+        /// <para>
+        /// 1052. 愛生氣的書店老闆
         /// https://leetcode.cn/problems/grumpy-bookstore-owner/description/
+        ///
+        /// 有一位書店老闆，他的商店營業 n 分鐘。給定長度為 n 的整數陣列 customers，
+        /// 其中 customers[i] 是在第 i 分鐘開始時進入商店的顧客人數，且這些顧客都會在該分鐘
+        /// 結束後離開。
+        /// 在某些分鐘，書店老闆會生氣。給定二元陣列 grumpy，若書店老闆在第 i 分鐘生氣，
+        /// grumpy[i] 為 1，否則為 0。
+        /// 當書店老闆生氣時，該分鐘進入的顧客不會滿意；否則，他們會感到滿意。
+        /// 書店老闆知道一項祕密技巧，可以連續 minutes 分鐘保持不生氣，但這項技巧只能使用一次。
+        /// 請回傳一整天中能感到滿意的最大顧客人數。
+        ///
+        /// 範例 1：
+        /// 輸入：customers = [1,0,1,2,1,1,7,5], grumpy = [0,1,0,1,0,1,0,1], minutes = 3
+        /// 輸出：16
+        /// 解釋：書店老闆在最後連續 3 分鐘保持不生氣。
+        /// 能感到滿意的最大顧客人數 = 1 + 1 + 1 + 1 + 7 + 5 = 16。
+        ///
+        /// 範例 2：
+        /// 輸入：customers = [1], grumpy = [0], minutes = 1
+        /// 輸出：1
+        ///
+        /// 限制條件：
+        /// n == customers.length == grumpy.length
+        /// 1 &lt;= minutes &lt;= n &lt;= 2 * 10^4
+        /// 0 &lt;= customers[i] &lt;= 1000
+        /// grumpy[i] 只能是 0 或 1。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

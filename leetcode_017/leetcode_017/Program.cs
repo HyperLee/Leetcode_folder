@@ -12,27 +12,45 @@ class Program
     /// <summary>
     /// 17. Letter Combinations of a Phone Number
     /// https://leetcode.com/problems/letter-combinations-of-a-phone-number/description/
-    /// 17. 电话号码的字母组合
-    /// https://leetcode.cn/problems/letter-combinations-of-a-phone-number/
+    /// <para>
+    /// Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.
     ///
-    /// 列舉 回朔 題目
-    /// 類似 題目 046
+    /// A mapping of digits to letters, just like on telephone buttons, is given below. Note that 1 does not map to any letters.
+    /// 2: abc; 3: def; 4: ghi; 5: jkl; 6: mno; 7: pqrs; 8: tuv; 9: wxyz.
     ///
-    /// 電話號碼字母組合的特性
-    /// 1. 順序性
-    ///     輸入是 "23"，其中：
-    ///     2 對應 "abc"
-    ///     3 對應 "def"
-    ///     組合必須按照輸入數字的順序來生成
-    /// 2. 示例說明
-    ///     輸入 "23" 時：
-    ///     第一個位置只能是 2 對應的字母 (a,b,c)
-    ///     第二個位置只能是 3 對應的字母 (d,e,f)
-    /// 所以合法的組合是：
-    /// ad, ae, af
-    /// bd, be, bf
-    /// cd, ce, cf
+    /// Example 1:
+    /// Input: digits = "23"
+    /// Output: ["ad","ae","af","bd","be","bf","cd","ce","cf"]
     ///
+    /// Example 2:
+    /// Input: digits = "2"
+    /// Output: ["a","b","c"]
+    ///
+    /// Constraints:
+    /// - 1 &lt;= digits.length &lt;= 4
+    /// - digits[i] is a digit in the range ['2', '9'].
+    /// </para>
+    /// <para>
+    /// 17. 電話號碼的字母組合
+    /// https://leetcode.cn/problems/letter-combinations-of-a-phone-number/description/
+    ///
+    /// 給定一個只包含 2 到 9（含）的數字字串，請回傳該號碼可能表示的所有字母組合。答案可以任意順序回傳。
+    ///
+    /// 數字到字母的對應方式與電話按鍵相同，如下所示。注意，1 不對應任何字母。
+    /// 2：abc；3：def；4：ghi；5：jkl；6：mno；7：pqrs；8：tuv；9：wxyz。
+    ///
+    /// 範例 1：
+    /// 輸入：digits = "23"
+    /// 輸出：["ad","ae","af","bd","be","bf","cd","ce","cf"]
+    ///
+    /// 範例 2：
+    /// 輸入：digits = "2"
+    /// 輸出：["a","b","c"]
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= digits.length &lt;= 4
+    /// - digits[i] 是範圍 ['2', '9'] 內的一個數字。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

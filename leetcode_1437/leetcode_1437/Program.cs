@@ -3,12 +3,53 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1437. Check If All 1's Are at Least Length K Places Away
-    /// https://leetcode.com/problems/check-if-all-1s-are-at-least-length-k-places-away/description/?envType=daily-question&envId=2025-11-17
-    /// 1437. 是否所有 1 都至少相隔 k 個元素
-    /// https://leetcode.cn/problems/check-if-all-1s-are-at-least-length-k-places-away/description/?envType=daily-question&envId=2025-11-17
-    /// 題目描述(繁體中文): 給定一個二進位陣列 nums 和整數 k，若所有值為 1 的元素彼此間至少相隔 k 個元素，回傳 true；否則回傳 false。
-    /// 
+    /// https://leetcode.com/problems/check-if-all-1s-are-at-least-length-k-places-away/description/
+    ///
+    /// Given a binary array nums and an integer k, return true if all 1's are at least k places away from each other;
+    /// otherwise, return false.
+    ///
+    /// Example 1:
+    /// Image: https://assets.leetcode.com/uploads/2020/04/15/sample_1_1791.png
+    /// Input: nums = [1,0,0,0,1,0,0,1], k = 2
+    /// Output: true
+    /// Explanation: Each of the 1s are at least 2 places away from each other.
+    ///
+    /// Example 2:
+    /// Image: https://assets.leetcode.com/uploads/2020/04/15/sample_2_1791.png
+    /// Input: nums = [1,0,0,1,0,1], k = 2
+    /// Output: false
+    /// Explanation: The second 1 and third 1 are only one apart from each other.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 0 &lt;= k &lt;= nums.length
+    /// - nums[i] is 0 or 1
+    /// </para>
+    /// <para>
+    /// 1437. 檢查所有 1 是否至少相隔長度 K
+    /// https://leetcode.cn/problems/check-if-all-1s-are-at-least-length-k-places-away/description/
+    ///
+    /// 給定一個二進位陣列 nums 與整數 k；如果所有的 1 彼此都至少相隔 k 個位置，回傳 true；否則回傳 false。
+    ///
+    /// 範例 1：
+    /// 圖片：https://assets.leetcode.com/uploads/2020/04/15/sample_1_1791.png
+    /// 輸入：nums = [1,0,0,0,1,0,0,1]，k = 2
+    /// 輸出：true
+    /// 解釋：每個 1 彼此都至少相隔 2 個位置。
+    ///
+    /// 範例 2：
+    /// 圖片：https://assets.leetcode.com/uploads/2020/04/15/sample_2_1791.png
+    /// 輸入：nums = [1,0,0,1,0,1]，k = 2
+    /// 輸出：false
+    /// 解釋：第二個 1 與第三個 1 之間僅相隔一個位置。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 0 &lt;= k &lt;= nums.length
+    /// - nums[i] 為 0 或 1
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// 

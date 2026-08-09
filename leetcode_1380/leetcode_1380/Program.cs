@@ -3,10 +3,66 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1380. Lucky Numbers in a Matrix
-        /// https://leetcode.com/problems/lucky-numbers-in-a-matrix/description/?envType=daily-question&envId=2024-07-19
-        /// 1380. 矩阵中的幸运数
+        /// https://leetcode.com/problems/lucky-numbers-in-a-matrix/description/
+        ///
+        /// Given an m x n matrix of distinct numbers, return all lucky numbers in the matrix in any order.
+        ///
+        /// A lucky number is an element of the matrix such that it is the minimum element in its row and maximum in its column.
+        ///
+        /// Example 1:
+        /// Input: matrix = [[3,7,8],[9,11,13],[15,16,17]]
+        /// Output: [15]
+        /// Explanation: 15 is the only lucky number since it is the minimum in its row and the maximum in its column.
+        ///
+        /// Example 2:
+        /// Input: matrix = [[1,10,4,2],[9,3,8,7],[15,16,17,12]]
+        /// Output: [12]
+        /// Explanation: 12 is the only lucky number since it is the minimum in its row and the maximum in its column.
+        ///
+        /// Example 3:
+        /// Input: matrix = [[7,8],[1,2]]
+        /// Output: [7]
+        /// Explanation: 7 is the only lucky number since it is the minimum in its row and the maximum in its column.
+        ///
+        /// Constraints:
+        /// - m == mat.length
+        /// - n == mat[i].length
+        /// - 1 &lt;= n, m &lt;= 50
+        /// - 1 &lt;= matrix[i][j] &lt;= 10^5
+        /// - All elements in the matrix are distinct.
+        /// </para>
+        /// <para>
+        /// 1380. 矩陣中的幸運數
         /// https://leetcode.cn/problems/lucky-numbers-in-a-matrix/description/
+        ///
+        /// 給定一個由相異數字組成的 m x n 矩陣，以任意順序回傳矩陣中的所有幸運數。
+        ///
+        /// 幸運數是矩陣中的一個元素，它是所在列的最小元素，同時也是所在欄的最大元素。
+        ///
+        /// 範例 1：
+        /// 輸入：matrix = [[3,7,8],[9,11,13],[15,16,17]]
+        /// 輸出：[15]
+        /// 解釋：15 是唯一的幸運數，因為它是所在列的最小值，也是所在欄的最大值。
+        ///
+        /// 範例 2：
+        /// 輸入：matrix = [[1,10,4,2],[9,3,8,7],[15,16,17,12]]
+        /// 輸出：[12]
+        /// 解釋：12 是唯一的幸運數，因為它是所在列的最小值，也是所在欄的最大值。
+        ///
+        /// 範例 3：
+        /// 輸入：matrix = [[7,8],[1,2]]
+        /// 輸出：[7]
+        /// 解釋：7 是唯一的幸運數，因為它是所在列的最小值，也是所在欄的最大值。
+        ///
+        /// 限制條件：
+        /// - m == mat.length
+        /// - n == mat[i].length
+        /// - 1 &lt;= n, m &lt;= 50
+        /// - 1 &lt;= matrix[i][j] &lt;= 10^5
+        /// - 矩陣中的所有元素均不相同。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         private static void Main(string[] args)

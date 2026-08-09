@@ -4,11 +4,60 @@ class Program
 {
     /// <summary>
     /// 2799. Count Complete Subarrays in an Array
-    /// https://leetcode.com/problems/count-complete-subarrays-in-an-array/description/?envType=daily-question&envId=2025-04-24
-    /// 2799. 统计完全子数组的数目
-    /// https://leetcode.cn/problems/count-complete-subarrays-in-an-array/description/?envType=daily-question&envId=2025-04-24
-    /// 
-    /// Array, Sliding Window, Hash Table
+    /// https://leetcode.com/problems/count-complete-subarrays-in-an-array/description/
+    /// <para>
+    /// You are given an array nums consisting of positive integers.
+    ///
+    /// We call a subarray of an array complete if the following condition is satisfied:
+    ///
+    /// - The number of distinct elements in the subarray is equal to the number of distinct elements in the whole array.
+    ///
+    /// Return the number of complete subarrays.
+    ///
+    /// A subarray is a contiguous non-empty part of an array.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,3,1,2,2]
+    /// Output: 4
+    /// Explanation: The complete subarrays are [1,3,1,2], [1,3,1,2,2], [3,1,2], and [3,1,2,2].
+    ///
+    /// Example 2:
+    /// Input: nums = [5,5,5,5]
+    /// Output: 10
+    /// Explanation: The array consists only of integer 5, so every subarray is complete. There are 10 subarrays that can be chosen.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 1000
+    /// - 1 &lt;= nums[i] &lt;= 2000
+    /// </para>
+    /// <para>
+    /// 2799. 計算陣列中的完整子陣列
+    /// https://leetcode.cn/problems/count-complete-subarrays-in-an-array/description/
+    ///
+    /// 給定一個由正整數組成的陣列 nums。
+    ///
+    /// 若陣列的一個子陣列符合下列條件，就稱它為完整子陣列：
+    ///
+    /// - 子陣列中相異元素的數量，等於整個陣列中相異元素的數量。
+    ///
+    /// 回傳完整子陣列的數量。
+    ///
+    /// 子陣列是陣列中連續且非空的一部分。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,3,1,2,2]
+    /// 輸出：4
+    /// 解釋：完整子陣列為 [1,3,1,2]、[1,3,1,2,2]、[3,1,2] 和 [3,1,2,2]。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [5,5,5,5]
+    /// 輸出：10
+    /// 解釋：陣列中只有整數 5，因此任意子陣列都是完整的。共有 10 個可選擇的子陣列。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 1000
+    /// - 1 &lt;= nums[i] &lt;= 2000
+    /// </para>
     /// </summary>
     /// <remarks>
     /// 以五組固定案例執行兩種滑動視窗解法，逐項比較預期值與實際值；若有任一項失敗，

@@ -5,23 +5,56 @@ namespace leetcode_2434;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2434. Using a Robot to Print the Lexicographically Smallest String
-    /// https://leetcode.com/problems/using-a-robot-to-print-the-lexicographically-smallest-string/description/?envType=daily-question&envId=2025-06-06
-    /// 2434. 使用机器人打印字典序最小的字符串
-    /// https://leetcode.cn/problems/using-a-robot-to-print-the-lexicographically-smallest-string/description/?envType=daily-question&envId=2025-06-06
-    /// 
+    /// https://leetcode.com/problems/using-a-robot-to-print-the-lexicographically-smallest-string/description/
+    ///
+    /// You are given string s and a robot currently holding empty string t. Until both strings are empty, repeatedly choose one operation: remove the first character of s and append it to t, or remove the last character of t and have the robot write it on paper. Return the lexicographically smallest string that can be written.
+    ///
+    /// Example 1:
+    /// Input: s = "zza"
+    /// Output: "azz"
+    /// Explanation: Let p be the written string. Initially p = "", s = "zza", t = "". Apply the first operation three times to get p = "", s = "", t = "zza". Apply the second operation three times to get p = "azz", s = "", t = "".
+    ///
+    /// Example 2:
+    /// Input: s = "bac"
+    /// Output: "abc"
+    /// Explanation: Let p be the written string. Apply the first operation twice to get p = "", s = "c", t = "ba". Apply the second operation twice to get p = "ab", s = "c", t = "". Apply the first operation once and then the second once to get p = "abc", s = "", t = "".
+    ///
+    /// Example 3:
+    /// Input: s = "bdda"
+    /// Output: "addb"
+    /// Explanation: Let p be the written string. Initially p = "", s = "bdda", t = "". Apply the first operation four times to get p = "", s = "", t = "bdda". Apply the second operation four times to get p = "addb", s = "", t = "".
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s consists only of lowercase English letters.
+    /// </para>
+    /// <para>
     /// 2434. 使用機器人列印字典序最小的字串
-    /// 給定一個字串 s 和一個目前為空字串 t 的機器人。重複執行下列操作直到 s 和 t 都為空：
-    /// 1. 從 s 移除第一個字元並交給機器人，機器人會將此字元加到 t 的末尾。
-    /// 2. 從 t 移除最後一個字元並寫到紙上。
-    /// 請回傳可以寫在紙上的字典序最小的字串。
-    /// 
-    /// 解題說明：
-    /// 1. 預先統計每個字元剩餘出現次數，方便後續判斷目前 s 剩下的最小字元。
-    /// 2. 用一個堆疊模擬機器人手上的字串 t，每次從 s 取一個字元 push 進堆疊。
-    /// 3. 每次 push 後，檢查堆疊頂端字元是否小於等於目前 s 剩下的最小字元，若是則 pop 並寫到紙上（加到結果字串）。
-    /// 4. 反覆執行直到 s 和堆疊都處理完。
-    /// 這樣能保證每次寫到紙上的字元都是當下能取得的最小字元，最終得到字典序最小的結果。
+    /// https://leetcode.cn/problems/using-a-robot-to-print-the-lexicographically-smallest-string/description/
+    ///
+    /// 給定字串 s 與目前持有空字串 t 的機器人。在兩個字串都變空之前，反覆選擇一項操作：移除 s 的第一個字元並附加到 t，或移除 t 的最後一個字元並讓機器人寫到紙上。回傳紙上可寫出的字典序最小字串。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "zza"
+    /// 輸出："azz"
+    /// 說明：令 p 為已寫出的字串。起初 p = ""、s = "zza"、t = ""。執行第一項操作三次後得到 p = ""、s = ""、t = "zza"；再執行第二項操作三次，得到 p = "azz"、s = ""、t = ""。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "bac"
+    /// 輸出："abc"
+    /// 說明：令 p 為已寫出的字串。執行第一項操作兩次，得到 p = ""、s = "c"、t = "ba"；執行第二項操作兩次，得到 p = "ab"、s = "c"、t = ""；再各執行第一、第二項操作一次，得到 p = "abc"、s = ""、t = ""。
+    ///
+    /// 範例 3：
+    /// 輸入：s = "bdda"
+    /// 輸出："addb"
+    /// 說明：令 p 為已寫出的字串。起初 p = ""、s = "bdda"、t = ""。執行第一項操作四次後得到 p = ""、s = ""、t = "bdda"；再執行第二項操作四次，得到 p = "addb"、s = ""、t = ""。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s 僅由小寫英文字母組成。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

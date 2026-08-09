@@ -3,19 +3,56 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 211. Design Add and Search Words Data Structure
-    /// https://leetcode.com/problems/design-add-and-search-words-data-structure/description/?envType=problem-list-v2&envId=oizxjoit
-    /// 211. 添加与搜索单词 - 数据结构设计
+    /// https://leetcode.com/problems/design-add-and-search-words-data-structure/description/
+    ///
+    /// Design a data structure supporting word insertion and checking whether a string matches any previously added string.
+    ///
+    /// Implement WordDictionary:
+    /// - WordDictionary() initializes the object.
+    /// - void addWord(word) adds word for later matching.
+    /// - bool search(word) returns whether any stored string matches word. A '.' in word matches any letter.
+    ///
+    /// Example 1:
+    /// Input:
+    /// ["WordDictionary","addWord","addWord","addWord","search","search","search","search"]
+    /// [[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]
+    /// Output: [null,null,null,null,false,true,true,true]
+    /// Explanation: Add "bad", "dad", and "mad". Searches for "pad", "bad", ".ad", and "b.." return false, true, true, and true.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= word.length &lt;= 25
+    /// - addWord receives lowercase English letters only.
+    /// - search receives '.' or lowercase English letters.
+    /// - A search word contains at most 2 dots.
+    /// - At most 10^4 calls are made to addWord and search.
+    /// </para>
+    /// <para>
+    /// 211. 新增與搜尋單字的資料結構設計
     /// https://leetcode.cn/problems/design-add-and-search-words-data-structure/description/
-    /// 
-    /// 題目概述：
-    /// 設計一個資料結構支援兩種操作：添加單字和搜尋單字，搜尋時可使用萬用字元 '.' 代表任一字元。
-    /// 
-    /// 解題出發點：
-    /// 1. 使用字典樹(Trie)資料結構來有效儲存並快速查詢單字
-    /// 2. 字典樹可共享相同字首的路徑，節省記憶體空間
-    /// 3. 針對萬用字元 '.' 處理，使用深度優先搜尋(DFS)來檢查所有可能匹配
-    /// 4. 時間複雜度：添加單字為 O(m)，搜尋單字為 O(m) 到 O(26^m)，其中 m 為單字長度
+    ///
+    /// 設計一個支援新增單字，以及判斷字串是否符合任何先前加入字串的資料結構。
+    ///
+    /// 實作 WordDictionary：
+    /// - WordDictionary() 初始化物件。
+    /// - void addWord(word) 新增 word，供之後比對。
+    /// - bool search(word) 回傳是否有儲存的字串符合 word；word 中的 '.' 可匹配任意字母。
+    ///
+    /// 範例 1：
+    /// 輸入：
+    /// ["WordDictionary","addWord","addWord","addWord","search","search","search","search"]
+    /// [[],["bad"],["dad"],["mad"],["pad"],["bad"],[".ad"],["b.."]]
+    /// 輸出：[null,null,null,null,false,true,true,true]
+    /// 說明：加入 "bad"、"dad"、"mad"；搜尋 "pad"、"bad"、".ad"、"b.." 依序回傳 false、true、true、true。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= word.length &lt;= 25
+    /// - addWord 的 word 僅含小寫英文字母。
+    /// - search 的 word 僅含 '.' 或小寫英文字母。
+    /// - 搜尋字串最多包含 2 個點。
+    /// - addWord 與 search 最多合計呼叫 10^4 次。
+    /// </para>
     /// </summary>
     static void Main(string[] args)
     {

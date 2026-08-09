@@ -3,26 +3,76 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 146. LRU Cache
     /// https://leetcode.com/problems/lru-cache/description/
-    /// 146. LRU 缓存
+    ///
+    /// Design a data structure that follows the constraints of a Least Recently Used (LRU) cache.
+    /// Implement the LRUCache class:
+    /// - LRUCache(int capacity): Initialize the LRU cache with positive size capacity.
+    /// - int get(int key): Return the value of the key if it exists; otherwise, return -1.
+    /// - void put(int key, int value): Update the value if the key exists. Otherwise, add the key-value pair. If this makes
+    ///   the number of keys exceed capacity, evict the least recently used key.
+    /// The functions get and put must each run in O(1) average time complexity.
+    ///
+    /// Example 1:
+    /// Input:
+    /// ["LRUCache","put","put","get","put","get","put","get","get","get"]
+    /// [[2],[1,1],[2,2],[1],[3,3],[2],[4,4],[1],[3],[4]]
+    /// Output: [null,null,null,1,null,-1,null,-1,3,4]
+    /// Explanation:
+    /// LRUCache lRUCache = new LRUCache(2);
+    /// lRUCache.put(1, 1); // cache is {1=1}
+    /// lRUCache.put(2, 2); // cache is {1=1, 2=2}
+    /// lRUCache.get(1); // return 1
+    /// lRUCache.put(3, 3); // key 2 was least recently used; evict it, cache is {1=1, 3=3}
+    /// lRUCache.get(2); // return -1 (not found)
+    /// lRUCache.put(4, 4); // key 1 was least recently used; evict it, cache is {4=4, 3=3}
+    /// lRUCache.get(1); // return -1 (not found)
+    /// lRUCache.get(3); // return 3
+    /// lRUCache.get(4); // return 4
+    ///
+    /// Constraints:
+    /// - 1 &lt;= capacity &lt;= 3000
+    /// - 0 &lt;= key &lt;= 10^4
+    /// - 0 &lt;= value &lt;= 10^5
+    /// - At most 2 * 10^5 calls will be made to get and put.
+    /// </para>
+    /// <para>
+    /// 146. LRU 快取
     /// https://leetcode.cn/problems/lru-cache/description/
-    /// 
-    /// 快取檔案置換機制 相關知識
-    /// https://en.wikipedia.org/wiki/Cache_replacement_policies#LRU
-    /// https://zh.wikipedia.org/zh-tw/%E5%BF%AB%E5%8F%96%E6%96%87%E4%BB%B6%E7%BD%AE%E6%8F%9B%E6%A9%9F%E5%88%B6
-    /// https://ithelp.ithome.com.tw/articles/10244749
-    /// 
-    /// 題目說明：
-    /// 實作一個 LRU (Least Recently Used) 快取機制，支援 get 和 put 兩種操作，要求時間複雜度皆為 O(1)。
-    /// 
-    /// - get(key)：如果 key 存在於快取中，則返回其值，否則返回 -1。
-    ///   並且每次 get 操作都會將該 key 對應的資料移動到最近使用的位置。
-    /// - put(key, value)：如果 key 已存在，更新其值，否則插入新資料。
-    ///   當快取容量超過上限時，會移除最久未使用的資料。
-    /// 
-    /// 你必須設計一個資料結構，使這兩個操作的時間複雜度皆為 O(1)。
-    /// 
+    ///
+    /// 設計一個符合最近最少使用（LRU）快取限制的資料結構。
+    /// 實作 LRUCache 類別：
+    /// - LRUCache(int capacity)：以正整數容量 capacity 初始化 LRU 快取。
+    /// - int get(int key)：若 key 存在則回傳其值，否則回傳 -1。
+    /// - void put(int key, int value)：若 key 存在則更新其值，否則加入鍵值對。若此操作使鍵的數量超過
+    ///   capacity，則淘汰最近最少使用的 key。
+    /// get 與 put 函式的平均時間複雜度都必須為 O(1)。
+    ///
+    /// 範例 1：
+    /// 輸入：
+    /// ["LRUCache","put","put","get","put","get","put","get","get","get"]
+    /// [[2],[1,1],[2,2],[1],[3,3],[2],[4,4],[1],[3],[4]]
+    /// 輸出：[null,null,null,1,null,-1,null,-1,3,4]
+    /// 解釋：
+    /// LRUCache lRUCache = new LRUCache(2);
+    /// lRUCache.put(1, 1); // 快取為 {1=1}
+    /// lRUCache.put(2, 2); // 快取為 {1=1, 2=2}
+    /// lRUCache.get(1); // 回傳 1
+    /// lRUCache.put(3, 3); // key 2 最近最少使用，將其淘汰；快取為 {1=1, 3=3}
+    /// lRUCache.get(2); // 回傳 -1（找不到）
+    /// lRUCache.put(4, 4); // key 1 最近最少使用，將其淘汰；快取為 {4=4, 3=3}
+    /// lRUCache.get(1); // 回傳 -1（找不到）
+    /// lRUCache.get(3); // 回傳 3
+    /// lRUCache.get(4); // 回傳 4
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= capacity &lt;= 3000
+    /// - 0 &lt;= key &lt;= 10^4
+    /// - 0 &lt;= value &lt;= 10^5
+    /// - get 與 put 的呼叫次數合計最多為 2 * 10^5。
+    /// </para>
     /// </summary>
     static void Main(string[] args)
     {

@@ -112,21 +112,56 @@ class Program
 
     /// <summary>
     /// 3510. Minimum Pair Removal to Sort Array II
-    /// https://leetcode.com/problems/minimum-pair-removal-to-sort-array-ii
+    /// https://leetcode.com/problems/minimum-pair-removal-to-sort-array-ii/description/
+    /// <para>
+    /// Given an array nums, perform this operation any number of times:
+    /// - Select the adjacent pair with the minimum sum. If tied, choose the leftmost pair.
+    /// - Replace the pair with its sum.
     ///
-    /// English:
-    /// Given an array nums, you can perform the following operation any number of times:
-    /// - Select the adjacent pair with the minimum sum in nums. If multiple such pairs exist, choose the leftmost one.
-    /// - Replace the pair with their sum.
-    /// Return the minimum number of operations needed to make the array non-decreasing.
-    /// An array is non-decreasing if each element is greater than or equal to its previous element.
+    /// Return the minimum number of operations needed to make nums non-decreasing.
     ///
-    /// 繁體中文：
-    /// 給定一個陣列 nums，你可以重複執行以下操作任意次數：
-    /// - 在 nums 中選擇相鄰且和最小的一對；若存在多個，選取最左邊的那一對。
-    /// - 用它們的和替換該對（將兩個元素合併為一個元素）。
-    /// 回傳使陣列變為非遞減所需的最少操作次數。
-    /// 若陣列為非遞減，則對於每個元素都滿足 a[i] >= a[i-1]。
+    /// An array is non-decreasing when every element is at least its previous element, if one exists.
+    ///
+    /// Example 1:
+    /// Input: nums = [5,2,3,1]
+    /// Output: 2
+    /// Explanation: Pair (3,1) has minimum sum 4, producing [5,2,4]. Then pair (2,4) has minimum sum 6, producing [5,6]. The array is non-decreasing after two operations.
+    ///
+    /// Example 2:
+    /// Input: nums = [1,2,2]
+    /// Output: 0
+    /// Explanation: nums is already sorted.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - -10^9 &lt;= nums[i] &lt;= 10^9
+    /// </para>
+    /// <para>
+    /// 3510. 使陣列有序的最少相鄰數對移除次數 II
+    /// https://leetcode.cn/problems/minimum-pair-removal-to-sort-array-ii/description/
+    ///
+    /// 給定陣列 nums，可任意次執行下列操作：
+    /// - 選擇總和最小的相鄰數對；若並列，選最左邊的數對。
+    /// - 以該數對的總和取代它們。
+    ///
+    /// 回傳使 nums 成為非遞減陣列所需的最少操作次數。
+    ///
+    /// 若每個元素都大於或等於其前一個元素（若存在），則陣列為非遞減。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [5,2,3,1]
+    /// 輸出：2
+    /// 解釋：數對 (3,1) 的最小總和為 4，得到 [5,2,4]；接著數對 (2,4) 的最小總和為 6，得到 [5,6]。兩次操作後陣列成為非遞減。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [1,2,2]
+    /// 輸出：0
+    /// 解釋：nums 已經排序。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - -10^9 &lt;= nums[i] &lt;= 10^9
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

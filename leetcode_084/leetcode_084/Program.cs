@@ -93,24 +93,47 @@ public class Solution
 class Program
 {
     /// <summary>
+    /// <para>
     /// 84. Largest Rectangle in Histogram
-    /// https://leetcode.com/problems/largest-rectangle-in-histogram/description/
-    /// 84. 柱状图中最大的矩形
-    /// https://leetcode.cn/problems/largest-rectangle-in-histogram/description/ 
-    /// 
-    /// LeetCode 84. 柱狀圖中最大的矩形
-    /// 題目描述：
-    /// 給定 n 個非負整數，用來表示柱狀圖中各個柱子的高度。
-    /// 每個柱子的寬度為 1，請計算在該柱狀圖中能夠勾勒出的矩形的最大面積。
-    /// 解題思路：
-    /// 1. 使用單調棧（Monotonic Stack）解法
-    /// 2. 為什麼選擇單調棧？
-    ///    - 時間複雜度為 O(n)，比暴力解法 O(n^2) 更優
-    ///    - 能有效找出每個柱子左右兩側第一個較矮的柱子
-    ///    - 空間複雜度為 O(n)，用於存儲左右邊界
+    /// https://leetcode.com/problems/largest-rectangle-in-histogram/
     ///
-    /// 此進入點會使用固定測試資料執行兩種單調棧解法，
-    /// 並輸出每項檢查的預期值、實際值及通過狀態。
+    /// Given an array of integers heights representing the histogram's bar height where the width of each bar
+    /// is 1, return the area of the largest rectangle in the histogram.
+    ///
+    /// Example 1:
+    /// Input: heights = [2,1,5,6,2,3]
+    /// Output: 10
+    /// Explanation: The above is a histogram where width of each bar is 1. The largest rectangle is shown
+    /// in the red area, which has an area = 10 units.
+    ///
+    /// Example 2:
+    /// Input: heights = [2,4]
+    /// Output: 4
+    ///
+    /// Constraints:
+    /// 1 &lt;= heights.length &lt;= 10^5
+    /// 0 &lt;= heights[i] &lt;= 10^4
+    /// </para>
+    /// <para>
+    /// 84. 直方圖中最大的矩形
+    /// https://leetcode.cn/problems/largest-rectangle-in-histogram/
+    ///
+    /// 給定整數陣列 heights 表示直方圖的柱高，其中每根柱子的寬度都是 1，
+    /// 請回傳直方圖中最大矩形的面積。
+    ///
+    /// 範例 1：
+    /// 輸入：heights = [2,1,5,6,2,3]
+    /// 輸出：10
+    /// 解釋：上圖是一個每根柱子寬度為 1 的直方圖。紅色區域所示的最大矩形面積為 10。
+    ///
+    /// 範例 2：
+    /// 輸入：heights = [2,4]
+    /// 輸出：4
+    ///
+    /// 限制條件：
+    /// 1 &lt;= heights.length &lt;= 10^5
+    /// 0 &lt;= heights[i] &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數；本範例不使用此參數。</param>
     static void Main(string[] args)

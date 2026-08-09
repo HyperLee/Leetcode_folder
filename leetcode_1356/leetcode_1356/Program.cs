@@ -3,24 +3,60 @@
 class Program
 {
     /// <summary>
-    /// <summary>
+    /// <para>
     /// 1356. Sort Integers by The Number of 1 Bits
-    /// Problem description:
-    /// You are given an integer array arr. Sort the integers in the array
-    /// in ascending order by the number of 1's in their binary representation
-    /// and in case of two or more integers have the same number of 1's you
-    /// have to sort them in ascending order.
-    /// <para/>
+    /// https://leetcode.com/problems/sort-integers-by-the-number-of-1-bits/description/
+    ///
+    /// You are given an integer array arr. Sort the integers in the array in ascending order by the number of 1's in their
+    /// binary representation and in case of two or more integers having the same number of 1's, sort them in ascending order.
+    ///
     /// Return the array after sorting it.
     ///
-    /// 題目說明（繁體中文）:
-    /// 給定一個整數陣列 arr。請根據每個整數二進位表示中 1 的數量，以遞增順序對陣列進行排序，
-    /// 若兩個或多個整數具有相同的 1 的數量，則按數值大小升序排序。
+    /// Example 1:
+    /// Input: arr = [0,1,2,3,4,5,6,7,8]
+    /// Output: [0,1,2,4,8,3,5,6,7]
+    /// Explanation: [0] is the only integer with 0 bits.
+    /// [1,2,4,8] all have 1 bit.
+    /// [3,5,6] have 2 bits.
+    /// [7] has 3 bits.
+    /// The sorted array by bits is [0,1,2,4,8,3,5,6,7].
     ///
-    /// 傳回排序後的陣列。
+    /// Example 2:
+    /// Input: arr = [1024,512,256,128,64,32,16,8,4,2,1]
+    /// Output: [1,2,4,8,16,32,64,128,256,512,1024]
+    /// Explanation: All integers have 1 bit in the binary representation; you should just sort them in ascending order.
     ///
-    /// 參考連結：https://leetcode.com/problems/sort-integers-by-the-number-of-1-bits/
-    /// 及中文版：https://leetcode.cn/problems/sort-integers-by-the-number-of-1-bits/
+    /// Constraints:
+    /// - 1 &lt;= arr.length &lt;= 500
+    /// - 0 &lt;= arr[i] &lt;= 10^4
+    /// </para>
+    /// <para>
+    /// 1356. 依照二進位中 1 的數量排序整數
+    /// https://leetcode.cn/problems/sort-integers-by-the-number-of-1-bits/description/
+    ///
+    /// 給定一個整數陣列 arr。依照每個整數的二進位表示中 1 的數量，以遞增順序排列陣列中的整數；
+    /// 如果兩個或多個整數具有相同數量的 1，則依其數值以遞增順序排列。
+    ///
+    /// 回傳排序後的陣列。
+    ///
+    /// 範例 1：
+    /// 輸入：arr = [0,1,2,3,4,5,6,7,8]
+    /// 輸出：[0,1,2,4,8,3,5,6,7]
+    /// 解釋：[0] 是唯一設定位元數為 0 的整數。
+    /// [1,2,4,8] 的設定位元數都是 1。
+    /// [3,5,6] 的設定位元數為 2。
+    /// [7] 的設定位元數為 3。
+    /// 依位元排序後的陣列是 [0,1,2,4,8,3,5,6,7]。
+    ///
+    /// 範例 2：
+    /// 輸入：arr = [1024,512,256,128,64,32,16,8,4,2,1]
+    /// 輸出：[1,2,4,8,16,32,64,128,256,512,1024]
+    /// 解釋：所有整數的二進位表示之設定位元數都是 1，因此只需依數值以遞增順序排序。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= arr.length &lt;= 500
+    /// - 0 &lt;= arr[i] &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

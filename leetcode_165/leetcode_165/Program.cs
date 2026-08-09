@@ -3,20 +3,64 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 165. Compare Version Numbers
-    /// https://leetcode.com/problems/compare-version-numbers/description/?envType=daily-question&envId=2025-09-23
-    /// 165. 比較版本號 (中文題目描述)
-    /// 給定兩個版本字串 `version1` 與 `version2`，比較它們的大小。
-    /// 版本字串由以點號 '.' 分隔的多個修訂（revision）組成。每個修訂的值取其整數轉換，忽略前置的零。
-    /// 從左到右比較每個修訂的數值；若其中一個版本的修訂數較少，則將缺失的修訂視為 0。
-    /// 回傳：
-    ///   - 若 version1 < version2，回傳 -1
-    ///   - 若 version1 > version2，回傳 1
-    ///   - 否則回傳 0
+    /// https://leetcode.com/problems/compare-version-numbers/description/
     ///
-    /// 原題連結（中文）：
-    /// https://leetcode.cn/problems/compare-version-numbers/description/?envType=daily-question&envId=2025-09-23
+    /// Given version strings version1 and version2, compare them. A version consists of revisions separated by '.', whose
+    /// values are their integer conversions ignoring leading zeros. Compare revision values left to right, treating missing
+    /// revisions as 0. Return -1 if version1 &lt; version2, 1 if version1 &gt; version2, otherwise 0.
     ///
+    /// Example 1:
+    /// Input: version1 = "1.2", version2 = "1.10"
+    /// Output: -1
+    /// Explanation: The second revisions are 2 and 10, and 2 &lt; 10.
+    ///
+    /// Example 2:
+    /// Input: version1 = "1.01", version2 = "1.001"
+    /// Output: 0
+    /// Explanation: Ignoring leading zeros, "01" and "001" both represent 1.
+    ///
+    /// Example 3:
+    /// Input: version1 = "1.0", version2 = "1.0.0.0"
+    /// Output: 0
+    /// Explanation: Missing revisions in version1 are treated as 0.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= version1.length, version2.length &lt;= 500
+    /// - version1 and version2 contain only digits and '.'.
+    /// - version1 and version2 are valid version numbers.
+    /// - Every revision can be stored in a 32-bit integer.
+    /// </para>
+    /// <para>
+    /// 165. 比較版本號
+    /// https://leetcode.cn/problems/compare-version-numbers/description/
+    ///
+    /// 給定版本字串 version1 與 version2，請比較兩者。版本由以 '.' 分隔的修訂組成，修訂值是忽略前導零
+    /// 後轉換的整數。由左至右比較修訂值，缺少的修訂視為 0。若 version1 &lt; version2 回傳 -1；若
+    /// version1 &gt; version2 回傳 1；否則回傳 0。
+    ///
+    /// 範例 1：
+    /// 輸入：version1 = "1.2"，version2 = "1.10"
+    /// 輸出：-1
+    /// 解釋：第二個修訂值為 2 與 10，且 2 &lt; 10。
+    ///
+    /// 範例 2：
+    /// 輸入：version1 = "1.01"，version2 = "1.001"
+    /// 輸出：0
+    /// 解釋：忽略前導零後，"01" 與 "001" 都代表 1。
+    ///
+    /// 範例 3：
+    /// 輸入：version1 = "1.0"，version2 = "1.0.0.0"
+    /// 輸出：0
+    /// 解釋：version1 缺少的修訂均視為 0。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= version1.length, version2.length &lt;= 500
+    /// - version1 與 version2 只包含數字及 '.'。
+    /// - version1 與 version2 都是有效版本號。
+    /// - 每個修訂都可用 32 位元整數儲存。
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

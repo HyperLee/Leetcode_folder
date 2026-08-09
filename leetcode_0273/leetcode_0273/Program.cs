@@ -6,19 +6,46 @@ namespace leetcode_0273
     {
         /// <summary>
         /// 273. Integer to English Words
-        /// https://leetcode.com/problems/integer-to-english-words/description/?envType=daily-question&envId=2024-08-07
-        /// 
-        /// 273. 整数转换英文表示
+        /// https://leetcode.com/problems/integer-to-english-words/description/
+        /// <para>
+        /// Convert a non-negative integer num to its English words representation.
+        ///
+        /// Example 1:
+        /// Input: num = 123
+        /// Output: "One Hundred Twenty Three"
+        ///
+        /// Example 2:
+        /// Input: num = 12345
+        /// Output: "Twelve Thousand Three Hundred Forty Five"
+        ///
+        /// Example 3:
+        /// Input: num = 1234567
+        /// Output: "One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+        ///
+        /// Constraints:
+        /// - 0 &lt;= num &lt;= 2^31 - 1
+        /// </para>
+        /// <para>
+        /// 273. 整數轉換英文表示
         /// https://leetcode.cn/problems/integer-to-english-words/description/
-        /// 
-        /// 要解這一題, 需要知道 英文數字表達方式
-        /// 如過不理解, 會錯誤
-        /// 要先枚舉, 會用到的表達文字
-        /// 都先宣告放到陣列裡面
-        /// 之後取出來
-        /// 
-        /// 數字轉英文 線上轉換網站, 可以參考
-        /// https://tw.piliapp.com/converter/english-numbers/
+        ///
+        /// 將一個非負整數 num 轉換成英文單字表示。
+        ///
+        /// 範例 1：
+        /// 輸入：num = 123
+        /// 輸出："One Hundred Twenty Three"
+        ///
+        /// 範例 2：
+        /// 輸入：num = 12345
+        /// 輸出："Twelve Thousand Three Hundred Forty Five"
+        ///
+        /// 範例 3：
+        /// 輸入：num = 1234567
+        /// 輸出："One Million Two Hundred Thirty Four Thousand Five Hundred Sixty Seven"
+        ///
+        /// 限制條件：
+        /// - 0 &lt;= num &lt;= 2^31 - 1
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

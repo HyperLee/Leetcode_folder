@@ -4,20 +4,52 @@ class Program
 {
     /// <summary>
     /// 3005. Count Elements With Maximum Frequency
-    /// https://leetcode.com/problems/count-elements-with-maximum-frequency/description/?envType=daily-question&envId=2025-09-22
-    /// 3005. 最大頻率元素計數
-    /// https://leetcode.cn/problems/count-elements-with-maximum-frequency/description/?envType=daily-question&envId=2025-09-22
+    /// https://leetcode.com/problems/count-elements-with-maximum-frequency/description/
+    /// <para>
+    /// You are given an array nums consisting of positive integers.
     ///
-    /// 題目描述：
+    /// Return the total frequencies of elements in nums whose frequencies equal the maximum frequency.
+    ///
+    /// The frequency of an element is the number of times it occurs in the array.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,2,2,3,1,4]
+    /// Output: 4
+    /// Explanation: Elements 1 and 2 each have frequency 2, the maximum frequency. Therefore, the number of array elements with maximum frequency is 4.
+    ///
+    /// Example 2:
+    /// Input: nums = [1,2,3,4,5]
+    /// Output: 5
+    /// Explanation: Every element has frequency 1, which is the maximum. Therefore, the number of array elements with maximum frequency is 5.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 100
+    /// - 1 &lt;= nums[i] &lt;= 100
+    /// </para>
+    /// <para>
+    /// 3005. 計算最大頻率元素
+    /// https://leetcode.cn/problems/count-elements-with-maximum-frequency/description/
+    ///
     /// 給定一個由正整數組成的陣列 nums。
-    /// 回傳陣列中所有出現次數等於最大頻率的元素的總出現次數。
+    ///
+    /// 回傳 nums 中所有頻率等於最大頻率之元素的頻率總和。
+    ///
     /// 元素的頻率是該元素在陣列中出現的次數。
     ///
-    /// 解題核心概念：
-    /// - 頻率統計：使用 Dictionary 記錄每個元素的出現次數
-    /// - 最大頻率追蹤：在統計過程中即時更新最大頻率值
-    /// - 結果計算：累加所有最大頻率元素的出現次數
+    /// 範例 1：
+    /// 輸入：nums = [1,2,2,3,1,4]
+    /// 輸出：4
+    /// 解釋：元素 1 和 2 的頻率皆為 2，這是最大頻率。因此，陣列中具有最大頻率的元素總數為 4。
     ///
+    /// 範例 2：
+    /// 輸入：nums = [1,2,3,4,5]
+    /// 輸出：5
+    /// 解釋：所有元素的頻率皆為 1，這是最大頻率。因此，陣列中具有最大頻率的元素總數為 5。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 100
+    /// - 1 &lt;= nums[i] &lt;= 100
+    /// </para>
     /// </summary>
     /// <param name="args">命令行參數</param>
     static void Main(string[] args)

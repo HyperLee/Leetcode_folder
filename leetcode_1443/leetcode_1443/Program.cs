@@ -5,17 +5,82 @@ namespace leetcode_1443;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1443. Minimum Time to Collect All Apples in a Tree
     /// https://leetcode.com/problems/minimum-time-to-collect-all-apples-in-a-tree/description/
+    ///
+    /// Given an undirected tree consisting of n vertices numbered from 0 to n - 1, which has some apples in their vertices.
+    /// You spend 1 second to walk over one edge of the tree. Return the minimum time in seconds you have to spend to collect
+    /// all apples in the tree, starting at vertex 0 and coming back to this vertex.
+    ///
+    /// The edges of the undirected tree are given in the array edges, where edges[i] = [ai, bi] means that there exists an
+    /// edge connecting the vertices ai and bi. Additionally, there is a boolean array hasApple, where hasApple[i] = true
+    /// means that vertex i has an apple; otherwise, it does not have any apple.
+    ///
+    /// Example 1:
+    /// Image: https://assets.leetcode.com/uploads/2020/04/23/min_time_collect_apple_1.png
+    /// Input: n = 7, edges = [[0,1],[0,2],[1,4],[1,5],[2,3],[2,6]],
+    /// hasApple = [false,false,true,false,true,true,false]
+    /// Output: 8
+    /// Explanation: The figure above represents the given tree where red vertices have an apple. One optimal path to collect
+    /// all apples is shown by the green arrows.
+    ///
+    /// Example 2:
+    /// Image: https://assets.leetcode.com/uploads/2020/04/23/min_time_collect_apple_2.png
+    /// Input: n = 7, edges = [[0,1],[0,2],[1,4],[1,5],[2,3],[2,6]],
+    /// hasApple = [false,false,true,false,false,true,false]
+    /// Output: 6
+    /// Explanation: The figure above represents the given tree where red vertices have an apple. One optimal path to collect
+    /// all apples is shown by the green arrows.
+    ///
+    /// Example 3:
+    /// Input: n = 7, edges = [[0,1],[0,2],[1,4],[1,5],[2,3],[2,6]],
+    /// hasApple = [false,false,false,false,false,false,false]
+    /// Output: 0
+    ///
+    /// Constraints:
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - edges.length == n - 1
+    /// - edges[i].length == 2
+    /// - 0 &lt;= ai &lt; bi &lt;= n - 1
+    /// - hasApple.length == n
+    /// </para>
+    /// <para>
     /// 1443. 收集樹上所有蘋果的最少時間
     /// https://leetcode.cn/problems/minimum-time-to-collect-all-apples-in-a-tree/description/
     ///
-    /// 題目（繁體中文）：
-    /// 給定一棵由 n 個節點（編號 0 到 n-1）組成的無向樹，部分節點上有蘋果。
-    /// 每走過一條邊需花費 1 秒。從節點 0 出發並最終回到節點 0，
-    /// 求收集樹上所有蘋果所需的最短時間（秒）。
-    /// 樹的邊由 edges 陣列給出，edges[i] = [ai, bi] 表示 ai 與 bi 之間存在邊。
-    /// hasApple 為布林陣列，hasApple[i] = true 表示節點 i 有蘋果，否則沒有。
+    /// 給定一棵由 n 個頂點組成的無向樹，頂點編號從 0 到 n - 1，其中部分頂點有蘋果。走過樹的一條邊需花費
+    /// 1 秒。請回傳從頂點 0 出發、收集樹上所有蘋果後再回到頂點 0 所需的最少秒數。
+    ///
+    /// 無向樹的邊由陣列 edges 給出，其中 edges[i] = [ai, bi] 表示頂點 ai 與 bi 之間有一條邊。此外還有
+    /// 布林陣列 hasApple；hasApple[i] = true 表示頂點 i 有蘋果，否則該頂點沒有蘋果。
+    ///
+    /// 範例 1：
+    /// 圖片：https://assets.leetcode.com/uploads/2020/04/23/min_time_collect_apple_1.png
+    /// 輸入：n = 7，edges = [[0,1],[0,2],[1,4],[1,5],[2,3],[2,6]]，
+    /// hasApple = [false,false,true,false,true,true,false]
+    /// 輸出：8
+    /// 解釋：上圖表示給定的樹，紅色頂點有蘋果；綠色箭頭顯示收集所有蘋果的一條最佳路徑。
+    ///
+    /// 範例 2：
+    /// 圖片：https://assets.leetcode.com/uploads/2020/04/23/min_time_collect_apple_2.png
+    /// 輸入：n = 7，edges = [[0,1],[0,2],[1,4],[1,5],[2,3],[2,6]]，
+    /// hasApple = [false,false,true,false,false,true,false]
+    /// 輸出：6
+    /// 解釋：上圖表示給定的樹，紅色頂點有蘋果；綠色箭頭顯示收集所有蘋果的一條最佳路徑。
+    ///
+    /// 範例 3：
+    /// 輸入：n = 7，edges = [[0,1],[0,2],[1,4],[1,5],[2,3],[2,6]]，
+    /// hasApple = [false,false,false,false,false,false,false]
+    /// 輸出：0
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - edges.length == n - 1
+    /// - edges[i].length == 2
+    /// - 0 &lt;= ai &lt; bi &lt;= n - 1
+    /// - hasApple.length == n
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

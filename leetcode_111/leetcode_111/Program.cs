@@ -40,22 +40,49 @@ public class Program
     }
 
     /// <summary>
+    /// <para>
     /// 111. Minimum Depth of Binary Tree
     /// https://leetcode.com/problems/minimum-depth-of-binary-tree/description/
     ///
-    /// English:
     /// Given a binary tree, find its minimum depth.
-    ///
-    /// The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
-    ///
+    /// The minimum depth is the number of nodes along the shortest path from the root node down to the nearest
+    /// leaf node.
     /// Note: A leaf is a node with no children.
     ///
-    /// 繁體中文:
-    /// 給定一棵二元樹，找出它的最小深度。
+    /// Example 1:
+    /// Input: root = [3,9,20,null,null,15,7]
+    /// Output: 2
+    /// Illustration: https://assets.leetcode.com/uploads/2020/10/12/ex_depth.jpg
     ///
-    /// 最小深度是從根節點往下到最近的葉節點，最短路徑上所經過的節點數。
+    /// Example 2:
+    /// Input: root = [2,null,3,null,4,null,5,null,6]
+    /// Output: 5
     ///
-    /// 注意：葉節點是指沒有子節點的節點。
+    /// Constraints:
+    /// The number of nodes in the tree is in the range [0, 10^5].
+    /// -1000 &lt;= Node.val &lt;= 1000
+    /// </para>
+    /// <para>
+    /// 111. 二元樹的最小深度
+    /// https://leetcode.cn/problems/minimum-depth-of-binary-tree/description/
+    ///
+    /// 給定一棵二元樹，請找出它的最小深度。
+    /// 最小深度是從根節點往下到最近葉節點的最短路徑上，所經過的節點數量。
+    /// 注意：葉節點是沒有子節點的節點。
+    ///
+    /// 範例 1：
+    /// 輸入：root = [3,9,20,null,null,15,7]
+    /// 輸出：2
+    /// 示意圖：https://assets.leetcode.com/uploads/2020/10/12/ex_depth.jpg
+    ///
+    /// 範例 2：
+    /// 輸入：root = [2,null,3,null,4,null,5,null,6]
+    /// 輸出：5
+    ///
+    /// 限制條件：
+    /// 樹中的節點數量介於 [0, 10^5]。
+    /// -1000 &lt;= Node.val &lt;= 1000
+    /// </para>
     /// </summary>
     /// <param name="args">Command-line arguments.</param>
     static void Main(string[] args)

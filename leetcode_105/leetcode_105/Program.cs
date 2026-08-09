@@ -25,14 +25,54 @@ class Program
     }
 
     /// <summary>
+    /// <para>
     /// 105. Construct Binary Tree from Preorder and Inorder Traversal
     /// https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/
-    /// 105. 从前序与中序遍历序列构造二叉树
+    ///
+    /// Given two integer arrays preorder and inorder where preorder is the preorder traversal of a binary tree
+    /// and inorder is the inorder traversal of the same tree, construct and return the binary tree.
+    ///
+    /// Example 1:
+    /// Input: preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+    /// Output: [3,9,20,null,null,15,7]
+    ///
+    /// Example 2:
+    /// Input: preorder = [-1], inorder = [-1]
+    /// Output: [-1]
+    ///
+    /// Constraints:
+    /// 1 &lt;= preorder.length &lt;= 3000
+    /// inorder.length == preorder.length
+    /// -3000 &lt;= preorder[i], inorder[i] &lt;= 3000
+    /// preorder and inorder consist of unique values.
+    /// Each value of inorder also appears in preorder.
+    /// preorder is guaranteed to be the preorder traversal of the tree.
+    /// inorder is guaranteed to be the inorder traversal of the tree.
+    /// </para>
+    /// <para>
+    /// 105. 從前序與中序走訪序列建構二元樹
     /// https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/description/
-    /// 
-    /// 題目描述：
-    /// 根據前序和中序遍歷序列構造二叉樹。
-    /// 
+    ///
+    /// 給定兩個整數陣列 preorder 與 inorder，其中 preorder 是一棵二元樹的前序走訪結果，
+    /// inorder 是同一棵樹的中序走訪結果，請建構並回傳這棵二元樹。
+    ///
+    /// 範例 1：
+    /// 輸入：preorder = [3,9,20,15,7], inorder = [9,3,15,20,7]
+    /// 輸出：[3,9,20,null,null,15,7]
+    ///
+    /// 範例 2：
+    /// 輸入：preorder = [-1], inorder = [-1]
+    /// 輸出：[-1]
+    ///
+    /// 限制條件：
+    /// 1 &lt;= preorder.length &lt;= 3000
+    /// inorder.length == preorder.length
+    /// -3000 &lt;= preorder[i], inorder[i] &lt;= 3000
+    /// preorder 與 inorder 均由互不相同的值組成。
+    /// inorder 中的每個值也都會出現在 preorder 中。
+    /// preorder 保證是該樹的前序走訪結果。
+    /// inorder 保證是該樹的中序走訪結果。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

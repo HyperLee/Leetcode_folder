@@ -3,17 +3,58 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 2053. Kth Distinct String in an Array
-        /// https://leetcode.com/problems/kth-distinct-string-in-an-array/description/?envType=daily-question&envId=2024-08-05
-        /// 
-        /// 2053. 数组中第 K 个独一无二的字符串
+        /// https://leetcode.com/problems/kth-distinct-string-in-an-array/description/
+        ///
+        /// A distinct string appears exactly once in an array. Given string array arr and integer k, return the k-th distinct string in its original order. If fewer than k distinct strings exist, return "".
+        ///
+        /// Example 1:
+        /// Input: arr = ["d","b","c","b","c","a"], k = 2
+        /// Output: "a"
+        /// Explanation: The distinct strings are "d" and "a". "d" is 1st and "a" is 2nd, so k == 2 returns "a".
+        ///
+        /// Example 2:
+        /// Input: arr = ["aaa","aa","a"], k = 1
+        /// Output: "aaa"
+        /// Explanation: Every string is distinct, so the 1st string is returned.
+        ///
+        /// Example 3:
+        /// Input: arr = ["a","b","a"], k = 3
+        /// Output: ""
+        /// Explanation: Only "b" is distinct. Fewer than 3 distinct strings exist, so return "".
+        ///
+        /// Constraints:
+        /// - 1 &lt;= k &lt;= arr.length &lt;= 1000
+        /// - 1 &lt;= arr[i].length &lt;= 5
+        /// - arr[i] consists of lowercase English letters.
+        /// </para>
+        /// <para>
+        /// 2053. 陣列中第 K 個獨一無二的字串
         /// https://leetcode.cn/problems/kth-distinct-string-in-an-array/description/
-        /// 
-        /// 題目中 獨一無二就是 在 陣列中只出現一次的 char
-        /// 回傳第 k 個 獨一無二的 char
-        /// 輸入順序不能異動
-        /// 要是找不到 第 k 個
-        /// 就回傳 空
+        ///
+        /// 獨一無二的字串是在陣列中恰好出現一次的字串。給定字串陣列 arr 與整數 k，依原始出現順序回傳第 k 個獨一無二的字串。若不足 k 個，回傳 ""。
+        ///
+        /// 範例 1：
+        /// 輸入：arr = ["d","b","c","b","c","a"], k = 2
+        /// 輸出："a"
+        /// 說明：獨一無二的字串是 "d" 與 "a"；"d" 是第 1 個、"a" 是第 2 個，因此 k == 2 時回傳 "a"。
+        ///
+        /// 範例 2：
+        /// 輸入：arr = ["aaa","aa","a"], k = 1
+        /// 輸出："aaa"
+        /// 說明：所有字串都獨一無二，因此回傳第 1 個字串。
+        ///
+        /// 範例 3：
+        /// 輸入：arr = ["a","b","a"], k = 3
+        /// 輸出：""
+        /// 說明：只有 "b" 獨一無二；不足 3 個，因此回傳 ""。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= k &lt;= arr.length &lt;= 1000
+        /// - 1 &lt;= arr[i].length &lt;= 5
+        /// - arr[i] 僅由小寫英文字母組成。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

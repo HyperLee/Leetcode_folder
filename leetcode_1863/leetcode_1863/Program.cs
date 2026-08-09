@@ -3,10 +3,60 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1863. Sum of All Subset XOR Totals
-        /// https://leetcode.com/problems/sum-of-all-subset-xor-totals/description/?envType=daily-question&envId=2024-05-20
-        /// 1863. 找出所有子集的异或总和再求和
+        /// https://leetcode.com/problems/sum-of-all-subset-xor-totals/description/
+        ///
+        /// The XOR total of an array is the bitwise XOR of all its elements, or 0 if the array is empty. For example, the XOR total of [2,5,6] is 2 XOR 5 XOR 6 = 1.
+        ///
+        /// Given an array nums, return the sum of all XOR totals for every subset of nums. Subsets containing the same elements must be counted multiple times when they arise from different selections. An array a is a subset of b if a can be obtained from b by deleting some, possibly zero, elements.
+        ///
+        /// Example 1:
+        /// Input: nums = [1,3]
+        /// Output: 6
+        /// Explanation: The 4 subsets are empty, [1], [3], and [1,3], with XOR totals 0, 1, 3, and 1 XOR 3 = 2. Their sum is 0 + 1 + 3 + 2 = 6.
+        ///
+        /// Example 2:
+        /// Input: nums = [5,1,6]
+        /// Output: 28
+        /// Explanation: The 8 subset XOR totals are 0, 5, 1, 6, 5 XOR 1 = 4, 5 XOR 6 = 3, 1 XOR 6 = 7, and 5 XOR 1 XOR 6 = 2. Their sum is 0 + 5 + 1 + 6 + 4 + 3 + 7 + 2 = 28.
+        ///
+        /// Example 3:
+        /// Input: nums = [3,4,5,6,7,8]
+        /// Output: 480
+        /// Explanation: The sum of all XOR totals for every subset is 480.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= nums.length &lt;= 12
+        /// - 1 &lt;= nums[i] &lt;= 20
+        /// </para>
+        /// <para>
+        /// 1863. 所有子集 XOR 總和的總和
         /// https://leetcode.cn/problems/sum-of-all-subset-xor-totals/description/
+        ///
+        /// 陣列的 XOR 總和定義為所有元素的位元 XOR；若陣列為空，則為 0。例如，[2,5,6] 的 XOR 總和是 2 XOR 5 XOR 6 = 1。
+        ///
+        /// 給定陣列 nums，回傳 nums 每個子集之 XOR 總和的總和。若由不同選取方式得到含有相同元素的子集，仍須重複計算。若可以從陣列 b 刪除若干個（也可以是零個）元素而得到陣列 a，則 a 是 b 的子集。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [1,3]
+        /// 輸出：6
+        /// 說明：4 個子集為空集合、[1]、[3]、[1,3]，XOR 總和分別為 0、1、3、1 XOR 3 = 2；總和為 0 + 1 + 3 + 2 = 6。
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [5,1,6]
+        /// 輸出：28
+        /// 說明：8 個子集的 XOR 總和為 0、5、1、6、5 XOR 1 = 4、5 XOR 6 = 3、1 XOR 6 = 7、5 XOR 1 XOR 6 = 2；總和為 0 + 5 + 1 + 6 + 4 + 3 + 7 + 2 = 28。
+        ///
+        /// 範例 3：
+        /// 輸入：nums = [3,4,5,6,7,8]
+        /// 輸出：480
+        /// 說明：所有子集的 XOR 總和加總為 480。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= nums.length &lt;= 12
+        /// - 1 &lt;= nums[i] &lt;= 20
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 執行固定案例，比較位元遮罩枚舉與數學最佳化兩種解法，並以程序結束碼表示測試結果。

@@ -22,11 +22,64 @@
         }
 
         /// <summary>
+        /// <para>
         /// 235. Lowest Common Ancestor of a Binary Search Tree
         /// https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/description/
-        /// 
-        /// 235. 二叉搜索树的最近公共祖先
+        ///
+        /// Given a binary search tree, find the lowest common ancestor (LCA) of nodes p and q. The LCA is the lowest node in tree T that has both p and q as descendants, allowing a node to be a descendant of itself.
+        ///
+        /// Image: https://assets.leetcode.com/uploads/2018/12/14/binarysearchtree_improved.png
+        ///
+        /// Example 1:
+        /// Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+        /// Output: 6
+        /// Explanation: The LCA of nodes 2 and 8 is 6.
+        ///
+        /// Example 2:
+        /// Input: root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
+        /// Output: 2
+        /// Explanation: The LCA of nodes 2 and 4 is 2 because a node may be its own descendant.
+        ///
+        /// Example 3:
+        /// Input: root = [2,1], p = 2, q = 1
+        /// Output: 2
+        ///
+        /// Constraints:
+        /// - The number of nodes is in [2,10^5].
+        /// - -10^9 &lt;= Node.val &lt;= 10^9
+        /// - Every Node.val is unique.
+        /// - p != q
+        /// - p and q exist in the BST.
+        /// </para>
+        /// <para>
+        /// 235. 二元搜尋樹的最近共同祖先
         /// https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-search-tree/description/
+        ///
+        /// 給定二元搜尋樹，找出節點 p 與 q 的最近共同祖先（LCA）。LCA 是樹 T 中同時以 p、q 為後代的最低節點，且允許節點是自己的後代。
+        ///
+        /// 圖片：https://assets.leetcode.com/uploads/2018/12/14/binarysearchtree_improved.png
+        ///
+        /// 範例 1：
+        /// 輸入：root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 8
+        /// 輸出：6
+        /// 說明：節點 2 與 8 的 LCA 是 6。
+        ///
+        /// 範例 2：
+        /// 輸入：root = [6,2,8,0,4,7,9,null,null,3,5], p = 2, q = 4
+        /// 輸出：2
+        /// 說明：節點 2 與 4 的 LCA 是 2，因為節點可以是自己的後代。
+        ///
+        /// 範例 3：
+        /// 輸入：root = [2,1], p = 2, q = 1
+        /// 輸出：2
+        ///
+        /// 限制條件：
+        /// - 節點數量在 [2,10^5] 範圍內。
+        /// - -10^9 &lt;= Node.val &lt;= 10^9
+        /// - 所有 Node.val 皆唯一。
+        /// - p != q
+        /// - p 與 q 都存在於 BST 中。
+        /// </para>
         /// </summary>
         /// <param name="args">命令列參數；本範例不使用。</param>
         private static void Main(string[] args)

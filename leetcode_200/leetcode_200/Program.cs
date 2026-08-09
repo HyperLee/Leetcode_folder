@@ -3,16 +3,46 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 200. Number of Islands
         /// https://leetcode.com/problems/number-of-islands/description/
-        /// 200. 岛屿数量
+        ///
+        /// Given an m x n 2D binary grid representing a map of '1' (land) and '0' (water), return the number of islands. An island is surrounded by water and formed by horizontally or vertically adjacent land. Assume all four edges of the grid are surrounded by water.
+        ///
+        /// Example 1:
+        /// Input: grid = [["1","1","1","1","0"],["1","1","0","1","0"],["1","1","0","0","0"],["0","0","0","0","0"]]
+        /// Output: 1
+        ///
+        /// Example 2:
+        /// Input: grid = [["1","1","0","0","0"],["1","1","0","0","0"],["0","0","1","0","0"],["0","0","0","1","1"]]
+        /// Output: 3
+        ///
+        /// Constraints:
+        /// - m == grid.length
+        /// - n == grid[i].length
+        /// - 1 &lt;= m, n &lt;= 300
+        /// - grid[i][j] is '0' or '1'.
+        /// </para>
+        /// <para>
+        /// 200. 島嶼數量
         /// https://leetcode.cn/problems/number-of-islands/description/
-        /// 
-        /// Grid 題目類型大部分都可以採用 DFS 深度優先搜索解題
-        /// 但並不是全部, 有些題目可能需要 BFS 廣度優先搜索
-        /// 
-        /// 網格題目中，深度優先搜索（DFS）確實是一種常見且有效的解法，特別是在處理連通分量、島嶼數量、迷宮問題等情況下。
-        /// 然而，並不是所有網格題目都適合僅用DFS來解決。有些情況下，廣度優先搜索（BFS）可能更合適，特別是當需要找到最短路徑或最小步數時。
+        ///
+        /// 給定 m x n 的二維二元網格 grid，表示由 '1'（陸地）與 '0'（水）構成的地圖，回傳島嶼數量。島嶼被水包圍，由水平或垂直相鄰的陸地連接而成；可以假設網格四周都被水包圍。
+        ///
+        /// 範例 1：
+        /// 輸入：grid = [["1","1","1","1","0"],["1","1","0","1","0"],["1","1","0","0","0"],["0","0","0","0","0"]]
+        /// 輸出：1
+        ///
+        /// 範例 2：
+        /// 輸入：grid = [["1","1","0","0","0"],["1","1","0","0","0"],["0","0","1","0","0"],["0","0","0","1","1"]]
+        /// 輸出：3
+        ///
+        /// 限制條件：
+        /// - m == grid.length
+        /// - n == grid[i].length
+        /// - 1 &lt;= m, n &lt;= 300
+        /// - grid[i][j] 為 '0' 或 '1'。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

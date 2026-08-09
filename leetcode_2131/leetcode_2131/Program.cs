@@ -7,18 +7,58 @@ namespace leetcode_2131;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2131. Longest Palindrome by Concatenating Two Letter Words
-    /// https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/description/?envType=daily-question&envId=2025-05-25
-    /// 2131. 连接两字母单词得到的最长回文串
-    /// https://leetcode.cn/problems/longest-palindrome-by-concatenating-two-letter-words/description/?envType=daily-question&envId=2025-05-25
-    /// 
-    /// 給定一個字串陣列 words。words 中的每個元素由兩個小寫英文字母組成。
-    /// 
-    /// 通過從 words 中選擇一些元素並以任意順序將它們連接起來，建立最長的回文字串。每個元素最多只能選擇一次。
-    /// 
-    /// 返回你能建立的最長回文字串的長度。如果不可能建立任何回文字串，則返回 0。
-    /// 
-    /// 回文字串是指正向和反向讀取都相同的字串。
+    /// https://leetcode.com/problems/longest-palindrome-by-concatenating-two-letter-words/description/
+    ///
+    /// You are given words, where every element contains two lowercase English letters. Select elements at most once and concatenate them in any order to create the longest possible palindrome. Return its length, or 0 if none can be created. A palindrome reads the same forward and backward.
+    ///
+    /// Example 1:
+    /// Input: words = ["lc","cl","gg"]
+    /// Output: 6
+    /// Explanation: "lc" + "gg" + "cl" = "lcggcl" has length 6. "clgglc" is another longest answer.
+    ///
+    /// Example 2:
+    /// Input: words = ["ab","ty","yt","lc","cl","ab"]
+    /// Output: 8
+    /// Explanation: "ty" + "lc" + "cl" + "yt" = "tylcclyt" has length 8. "lcyttycl" is another longest answer.
+    ///
+    /// Example 3:
+    /// Input: words = ["cc","ll","xx"]
+    /// Output: 2
+    /// Explanation: "cc" has length 2; "ll" and "xx" are also valid longest answers.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= words.length &lt;= 10^5
+    /// - words[i].length == 2
+    /// - words[i] consists of lowercase English letters.
+    /// </para>
+    /// <para>
+    /// 2131. 連接兩字母單字得到的最長回文串
+    /// https://leetcode.cn/problems/longest-palindrome-by-concatenating-two-letter-words/description/
+    ///
+    /// 給定 words，其中每個元素由兩個小寫英文字母組成。每個元素最多選一次，並按任意順序串接以建立儘可能長的回文串。回傳其長度；若無法建立則回傳 0。回文串正向與反向讀取相同。
+    ///
+    /// 範例 1：
+    /// 輸入：words = ["lc","cl","gg"]
+    /// 輸出：6
+    /// 說明："lc" + "gg" + "cl" = "lcggcl"，長度為 6；"clgglc" 也是最長答案。
+    ///
+    /// 範例 2：
+    /// 輸入：words = ["ab","ty","yt","lc","cl","ab"]
+    /// 輸出：8
+    /// 說明："ty" + "lc" + "cl" + "yt" = "tylcclyt"，長度為 8；"lcyttycl" 也是最長答案。
+    ///
+    /// 範例 3：
+    /// 輸入：words = ["cc","ll","xx"]
+    /// 輸出：2
+    /// 說明："cc" 長度為 2；"ll" 與 "xx" 也是有效的最長答案。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= words.length &lt;= 10^5
+    /// - words[i].length == 2
+    /// - words[i] 僅由小寫英文字母組成。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     /// <summary>

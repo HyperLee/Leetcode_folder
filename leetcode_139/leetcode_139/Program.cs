@@ -3,12 +3,68 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 139. Word Break
-        /// https://leetcode.com/problems/word-break/
-        /// 139. 单词拆分
-        /// https://leetcode.cn/problems/word-break/
-        /// 
-        /// 給定一個字串 s 和一個字典 wordDict，如果 s 能夠被分割成由一個或多個字典中的單字所組成、以空格分隔的序列，則返回 true。
+        /// https://leetcode.com/problems/word-break/description/
+        ///
+        /// Given a string s and a dictionary of strings wordDict, return true if s can be segmented into a space-separated
+        /// sequence of one or more dictionary words.
+        ///
+        /// Note that the same word in the dictionary may be reused multiple times in the segmentation.
+        ///
+        /// Example 1:
+        /// Input: s = "leetcode", wordDict = ["leet","code"]
+        /// Output: true
+        /// Explanation: Return true because "leetcode" can be segmented as "leet code".
+        ///
+        /// Example 2:
+        /// Input: s = "applepenapple", wordDict = ["apple","pen"]
+        /// Output: true
+        /// Explanation: Return true because "applepenapple" can be segmented as "apple pen apple".
+        /// Note that you are allowed to reuse a dictionary word.
+        ///
+        /// Example 3:
+        /// Input: s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
+        /// Output: false
+        ///
+        /// Constraints:
+        /// - 1 &lt;= s.length &lt;= 300
+        /// - 1 &lt;= wordDict.length &lt;= 1000
+        /// - 1 &lt;= wordDict[i].length &lt;= 20
+        /// - s and wordDict[i] consist of only lowercase English letters.
+        /// - All the strings of wordDict are unique.
+        /// </para>
+        /// <para>
+        /// 139. 單字拆分
+        /// https://leetcode.cn/problems/word-break/description/
+        ///
+        /// 給定一個字串 s 與一個字串字典 wordDict，如果 s 可以被拆分成由一個或多個字典單字組成、
+        /// 並以空格分隔的序列，則回傳 true。
+        ///
+        /// 請注意，在拆分過程中可以重複使用字典中的同一個單字多次。
+        ///
+        /// 範例 1：
+        /// 輸入：s = "leetcode", wordDict = ["leet","code"]
+        /// 輸出：true
+        /// 解釋：回傳 true，因為 "leetcode" 可以拆分為 "leet code"。
+        ///
+        /// 範例 2：
+        /// 輸入：s = "applepenapple", wordDict = ["apple","pen"]
+        /// 輸出：true
+        /// 解釋：回傳 true，因為 "applepenapple" 可以拆分為 "apple pen apple"。
+        /// 請注意，可以重複使用字典中的單字。
+        ///
+        /// 範例 3：
+        /// 輸入：s = "catsandog", wordDict = ["cats","dog","sand","and","cat"]
+        /// 輸出：false
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= s.length &lt;= 300
+        /// - 1 &lt;= wordDict.length &lt;= 1000
+        /// - 1 &lt;= wordDict[i].length &lt;= 20
+        /// - s 與 wordDict[i] 僅由小寫英文字母組成。
+        /// - wordDict 中的所有字串均不相同。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

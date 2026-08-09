@@ -5,13 +5,56 @@ namespace leetcode_2390;
 internal class Program
 {
     /// <summary>
-    /// LeetCode 2390 - Removing Stars From a String.
-    /// LeetCode 2390 - 從字串中移除星號。
-    /// English: https://leetcode.com/problems/removing-stars-from-a-string/
-    /// 中文：https://leetcode.cn/problems/removing-stars-from-a-string/
-    /// English: Repeatedly remove each star together with the closest non-star character to its left,
-    /// then return the unique string that remains after all valid operations.
-    /// 中文：依序移除每個星號及其左側最近的非星號字元，並回傳所有合法操作完成後唯一剩餘的字串。
+    /// <para>
+    /// 2390. Removing Stars From a String
+    /// https://leetcode.com/problems/removing-stars-from-a-string/description/
+    ///
+    /// You are given string s containing stars '*'. In one operation, choose a star, then remove that star and the closest non-star character to its left. Return the string after every star has been removed.
+    ///
+    /// Notes:
+    /// - The input guarantees that every operation is possible.
+    /// - The resulting string is guaranteed to be unique.
+    ///
+    /// Example 1:
+    /// Input: s = "leet**cod*e"
+    /// Output: "lecoe"
+    /// Explanation: Process stars from left to right. The first removes 't', producing "lee*cod*e". The second removes 'e', producing "lecod*e". The third removes 'd', producing "lecoe". No stars remain.
+    ///
+    /// Example 2:
+    /// Input: s = "erase*****"
+    /// Output: ""
+    /// Explanation: The entire string is removed, so return an empty string.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s consists of lowercase English letters and stars '*'.
+    /// - The described operation can always be performed on s.
+    /// </para>
+    /// <para>
+    /// 2390. 從字串中移除星號
+    /// https://leetcode.cn/problems/removing-stars-from-a-string/description/
+    ///
+    /// 給定包含星號 '*' 的字串 s。一次操作可選擇一個星號，並移除該星號及其左側最近的非星號字元。回傳移除所有星號後的字串。
+    ///
+    /// 注意事項：
+    /// - 輸入保證每次操作都能執行。
+    /// - 題目保證最終字串唯一。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "leet**cod*e"
+    /// 輸出："lecoe"
+    /// 說明：由左至右處理星號。第一個移除 't'，得到 "lee*cod*e"；第二個移除 'e'，得到 "lecod*e"；第三個移除 'd'，得到 "lecoe"。此時已無星號。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "erase*****"
+    /// 輸出：""
+    /// 說明：整個字串都被移除，因此回傳空字串。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s 僅由小寫英文字母與星號 '*' 組成。
+    /// - 保證可以對 s 執行上述操作。
+    /// </para>
     /// </summary>
     private static void Main()
     {

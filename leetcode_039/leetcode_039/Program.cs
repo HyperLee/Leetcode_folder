@@ -5,18 +5,67 @@
         /// <summary>
         /// 39. Combination Sum
         /// https://leetcode.com/problems/combination-sum/description/
-        /// 39. 组合总和
+        /// <para>
+        /// Given an array of distinct integers candidates and a target integer target, return a list of all unique combinations of candidates where the chosen numbers sum to target. You may return the combinations in any order.
+        ///
+        /// The same number may be chosen from candidates an unlimited number of times. Two combinations are unique if the frequency of at least one chosen number is different.
+        ///
+        /// The test cases are generated so that the number of unique combinations that sum to target is less than 150 for the given input.
+        ///
+        /// Example 1:
+        /// Input: candidates = [2,3,6,7], target = 7
+        /// Output: [[2,2,3],[7]]
+        /// Explanation:
+        /// 2 and 3 are candidates, and 2 + 2 + 3 = 7. The number 2 can be used multiple times.
+        /// 7 is a candidate, and 7 = 7.
+        /// These are the only two combinations.
+        ///
+        /// Example 2:
+        /// Input: candidates = [2,3,5], target = 8
+        /// Output: [[2,2,2,2],[2,3,3],[3,5]]
+        ///
+        /// Example 3:
+        /// Input: candidates = [2], target = 1
+        /// Output: []
+        ///
+        /// Constraints:
+        /// - 1 &lt;= candidates.length &lt;= 30
+        /// - 2 &lt;= candidates[i] &lt;= 40
+        /// - All elements of candidates are distinct.
+        /// - 1 &lt;= target &lt;= 40
+        /// </para>
+        /// <para>
+        /// 39. 組合總和
         /// https://leetcode.cn/problems/combination-sum/description/
-        /// 
-        /// 給定一個無重複的正整數數組 candidates 和一個整數 target，找出 candidates 中所有可以使數字和為 target 的組合。每個數字可以在組合中使用多次。
-        /// 
-        /// Q:
-        /// 一組無重複的正整數 candidates
-        /// 一個目標數 target
-        /// 無限次使用 candidates 中的數字
-        /// 找出所有和等於 target 的不重複組合（順序不同視為相同組合）
-        /// 
-        /// result裡面好幾組陣列, 所以要用 foreach 取出來
+        ///
+        /// 給定一個由不同整數組成的陣列 candidates 和一個目標整數 target，請回傳 candidates 中所選數字總和等於 target 的所有唯一組合。組合可以任意順序回傳。
+        ///
+        /// candidates 中的同一個數字可以選取無限次。若兩個組合中至少有一個所選數字的出現次數不同，則視為不同組合。
+        ///
+        /// 測試案例會保證，對給定輸入而言，總和為 target 的唯一組合數量少於 150。
+        ///
+        /// 範例 1：
+        /// 輸入：candidates = [2,3,6,7], target = 7
+        /// 輸出：[[2,2,3],[7]]
+        /// 解釋：
+        /// 2 和 3 都是 candidates 中的數字，且 2 + 2 + 3 = 7。數字 2 可以重複使用。
+        /// 7 是 candidates 中的數字，且 7 = 7。
+        /// 這是僅有的兩種組合。
+        ///
+        /// 範例 2：
+        /// 輸入：candidates = [2,3,5], target = 8
+        /// 輸出：[[2,2,2,2],[2,3,3],[3,5]]
+        ///
+        /// 範例 3：
+        /// 輸入：candidates = [2], target = 1
+        /// 輸出：[]
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= candidates.length &lt;= 30
+        /// - 2 &lt;= candidates[i] &lt;= 40
+        /// - candidates 的所有元素都不相同。
+        /// - 1 &lt;= target &lt;= 40
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

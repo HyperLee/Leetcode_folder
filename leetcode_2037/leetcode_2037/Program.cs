@@ -3,10 +3,62 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 2037. Minimum Number of Moves to Seat Everyone
-        /// https://leetcode.com/problems/minimum-number-of-moves-to-seat-everyone/description/?envType=daily-question&envId=2024-06-13
-        /// 2037. 使每位学生都有座位的最少移动次数
+        /// https://leetcode.com/problems/minimum-number-of-moves-to-seat-everyone/description/
+        ///
+        /// There are n available seats and n students standing in a room. seats[i] is the position of the i-th seat, and students[j] is the position of the j-th student.
+        ///
+        /// In one move, increase or decrease a student's position by 1, moving from x to x + 1 or x - 1. Return the minimum moves needed to seat every student so that no two students occupy the same seat. Multiple seats or students may initially share a position.
+        ///
+        /// Example 1:
+        /// Input: seats = [3,1,5], students = [2,7,4]
+        /// Output: 4
+        /// Explanation: Move the students 2 to 1 using 1 move, 7 to 5 using 2 moves, and 4 to 3 using 1 move. Total: 1 + 2 + 1 = 4.
+        ///
+        /// Example 2:
+        /// Input: seats = [4,1,5,9], students = [1,3,2,6]
+        /// Output: 7
+        /// Explanation: The first student uses 0 moves; move 3 to 4 using 1, 2 to 5 using 3, and 6 to 9 using 3. Total: 0 + 1 + 3 + 3 = 7.
+        ///
+        /// Example 3:
+        /// Input: seats = [2,2,6,6], students = [1,3,2,6]
+        /// Output: 4
+        /// Explanation: There are two seats at 2 and two at 6. Move 1 to 2 using 1 move and 3 to 6 using 3; the other students use 0 moves. Total: 1 + 3 + 0 + 0 = 4.
+        ///
+        /// Constraints:
+        /// - n == seats.length == students.length
+        /// - 1 &lt;= n &lt;= 100
+        /// - 1 &lt;= seats[i], students[j] &lt;= 100
+        /// </para>
+        /// <para>
+        /// 2037. 使每位學生都有座位的最少移動次數
         /// https://leetcode.cn/problems/minimum-number-of-moves-to-seat-everyone/description/
+        ///
+        /// 房間中有 n 個可用座位與 n 位站著的學生。seats[i] 是第 i 個座位的位置，students[j] 是第 j 位學生的位置。
+        ///
+        /// 一次移動可將一位學生的位置增加或減少 1，也就是從 x 移至 x + 1 或 x - 1。回傳讓每位學生都有座位且任兩位學生不坐同一座位所需的最少移動次數。起初可能有多個座位或學生位於同一位置。
+        ///
+        /// 範例 1：
+        /// 輸入：seats = [3,1,5], students = [2,7,4]
+        /// 輸出：4
+        /// 說明：將學生從 2 移到 1 使用 1 次、7 移到 5 使用 2 次、4 移到 3 使用 1 次；總計 1 + 2 + 1 = 4。
+        ///
+        /// 範例 2：
+        /// 輸入：seats = [4,1,5,9], students = [1,3,2,6]
+        /// 輸出：7
+        /// 說明：第一位學生使用 0 次；將 3 移到 4 使用 1 次、2 移到 5 使用 3 次、6 移到 9 使用 3 次；總計 0 + 1 + 3 + 3 = 7。
+        ///
+        /// 範例 3：
+        /// 輸入：seats = [2,2,6,6], students = [1,3,2,6]
+        /// 輸出：4
+        /// 說明：位置 2 與 6 各有兩個座位。將 1 移到 2 使用 1 次、3 移到 6 使用 3 次，其他學生使用 0 次；總計 1 + 3 + 0 + 0 = 4。
+        ///
+        /// 限制條件：
+        /// - n == seats.length == students.length
+        /// - 1 &lt;= n &lt;= 100
+        /// - 1 &lt;= seats[i], students[j] &lt;= 100
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 主要進入點會執行六組固定案例，比較排序貪婪與計數雙指標兩種解法，

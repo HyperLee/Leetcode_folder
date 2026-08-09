@@ -3,19 +3,56 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2483. Minimum Penalty for a Shop
-    /// https://leetcode.com/problems/minimum-penalty-for-a-shop/description/?envType=daily-question&envId=2025-12-26
-    /// 2483. 商店的最少代價（簡體中文）
-    /// https://leetcode.cn/problems/minimum-penalty-for-a-shop/description/?envType=daily-question&envId=2025-12-26
-    /// 
-    /// 繁體中文翻譯：
-    /// 給定一個由 'N' 和 'Y' 組成的 0 索引字串 `customers`（每小時是否有顧客到來），
-    /// 若第 i 個字元為 'Y' 則表示第 i 小時有顧客，'N' 則表示沒有顧客。
-    /// 若商店在第 j 小時關門（0 <= j <= n），罰分計算如下：
-    /// - 商店開門但該小時沒有顧客：罰分 +1
-    /// - 商店關門但該小時有顧客：罰分 +1
-    /// 回傳能使罰分最小的最早關店時間 j。
-    /// 注意：若在第 j 小時關門，表示第 j 小時商店已關閉。
+    /// https://leetcode.com/problems/minimum-penalty-for-a-shop/description/
+    ///
+    /// You are given a 0-indexed customer log string customers containing only 'N' and 'Y'. Character 'Y' at index i means customers arrive during hour i, while 'N' means none arrive. If the shop closes at hour j, where 0 &lt;= j &lt;= n, add 1 penalty for each open hour without customers and for each closed hour with customers. Return the earliest closing hour that produces the minimum penalty. Closing at hour j means the shop is closed during hour j.
+    ///
+    /// Example 1:
+    /// Input: customers = "YYNY"
+    /// Output: 2
+    /// Explanation: Closing at hour 0 gives 1 + 1 + 0 + 1 = 3 penalty; hour 1 gives 0 + 1 + 0 + 1 = 2; hour 2 gives 0 + 0 + 0 + 1 = 1; hour 3 gives 0 + 0 + 1 + 1 = 2; hour 4 gives 0 + 0 + 1 + 0 = 1. Hours 2 and 4 are minimal, and 2 is earlier.
+    ///
+    /// Example 2:
+    /// Input: customers = "NNNNN"
+    /// Output: 0
+    /// Explanation: Closing at hour 0 is best because no customers arrive.
+    ///
+    /// Example 3:
+    /// Input: customers = "YYYY"
+    /// Output: 4
+    /// Explanation: Closing at hour 4 is best because customers arrive every hour.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= customers.length &lt;= 10^5
+    /// - customers contains only 'Y' and 'N'.
+    /// </para>
+    /// <para>
+    /// 2483. 商店的最少罰分
+    /// https://leetcode.cn/problems/minimum-penalty-for-a-shop/description/
+    ///
+    /// 給定只包含 'N'、'Y' 的 0 索引顧客紀錄字串 customers。索引 i 的字元為 'Y' 表示第 i 小時有顧客到來，'N' 表示無顧客。若商店在第 j 小時關門，其中 0 &lt;= j &lt;= n，則每個開門但無顧客的小時增加 1 分罰分，每個關門但有顧客的小時也增加 1 分。回傳產生最小罰分的最早關門時間。第 j 小時關門表示商店在第 j 小時已關閉。
+    ///
+    /// 範例 1：
+    /// 輸入：customers = "YYNY"
+    /// 輸出：2
+    /// 說明：第 0 小時關門的罰分為 1 + 1 + 0 + 1 = 3；第 1 小時為 0 + 1 + 0 + 1 = 2；第 2 小時為 0 + 0 + 0 + 1 = 1；第 3 小時為 0 + 0 + 1 + 1 = 2；第 4 小時為 0 + 0 + 1 + 0 = 1。第 2、4 小時的罰分最小，而 2 較早。
+    ///
+    /// 範例 2：
+    /// 輸入：customers = "NNNNN"
+    /// 輸出：0
+    /// 說明：因為沒有顧客到來，所以在第 0 小時關門最佳。
+    ///
+    /// 範例 3：
+    /// 輸入：customers = "YYYY"
+    /// 輸出：4
+    /// 說明：因為每小時都有顧客到來，所以在第 4 小時關門最佳。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= customers.length &lt;= 10^5
+    /// - customers 僅包含 'Y' 與 'N'。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

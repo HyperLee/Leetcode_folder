@@ -6,9 +6,56 @@ namespace leetcode_402
     {
         /// <summary>
         /// 402. Remove K Digits
-        /// https://leetcode.com/problems/remove-k-digits/description/?envType=daily-question&envId=2024-04-11
-        /// 402. 移掉 K 位数字
+        /// https://leetcode.com/problems/remove-k-digits/description/
+        /// <para>
+        /// Given string num representing a non-negative integer num, and an integer k, return the smallest possible integer after removing k digits from num.
+        ///
+        /// Example 1:
+        /// Input: num = "1432219", k = 3
+        /// Output: "1219"
+        /// Explanation: Remove the three digits 4, 3, and 2 to form the new number 1219, which is the smallest.
+        ///
+        /// Example 2:
+        /// Input: num = "10200", k = 1
+        /// Output: "200"
+        /// Explanation: Remove the leading 1 and the number is 200. The output must not contain leading zeroes.
+        ///
+        /// Example 3:
+        /// Input: num = "10", k = 2
+        /// Output: "0"
+        /// Explanation: Remove all the digits from the number; it is left with nothing, which is 0.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= k &lt;= num.length &lt;= 10^5
+        /// - num consists only of digits.
+        /// - num does not have any leading zeros except for the zero itself.
+        /// </para>
+        /// <para>
+        /// 402. 移掉 K 位數字
         /// https://leetcode.cn/problems/remove-k-digits/description/
+        ///
+        /// 給定表示非負整數 num 的字串 num，以及整數 k，回傳從 num 移除 k 個數字後所能得到的最小整數。
+        ///
+        /// 範例 1：
+        /// 輸入：num = "1432219", k = 3
+        /// 輸出："1219"
+        /// 解釋：移除三個數字 4、3 與 2，形成新數字 1219，這是能得到的最小值。
+        ///
+        /// 範例 2：
+        /// 輸入：num = "10200", k = 1
+        /// 輸出："200"
+        /// 解釋：移除開頭的 1 後得到 200。輸出不得含有前導零。
+        ///
+        /// 範例 3：
+        /// 輸入：num = "10", k = 2
+        /// 輸出："0"
+        /// 解釋：移除所有數字後不剩任何內容，因此結果為 0。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= k &lt;= num.length &lt;= 10^5
+        /// - num 只由數字組成。
+        /// - 除了零本身之外，num 不含任何前導零。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

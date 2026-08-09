@@ -4,9 +4,48 @@
     {
         /// <summary>
         /// 3110. Score of a String
-        /// https://leetcode.com/problems/score-of-a-string/description/?envType=daily-question&envId=2024-06-01
-        /// 3110. 字符串的分数
+        /// https://leetcode.com/problems/score-of-a-string/description/
+        /// <para>
+        /// You are given a string s. The score of a string is the sum of the absolute differences between the ASCII values of adjacent characters.
+        ///
+        /// Return the score of s.
+        ///
+        /// Example 1:
+        /// Input: s = "hello"
+        /// Output: 13
+        /// Explanation: The ASCII values are 'h' = 104, 'e' = 101, 'l' = 108, and 'o' = 111. The score is |104 - 101| + |101 - 108| + |108 - 108| + |108 - 111| = 3 + 7 + 0 + 3 = 13.
+        ///
+        /// Example 2:
+        /// Input: s = "zaz"
+        /// Output: 50
+        /// Explanation: The ASCII values are 'z' = 122 and 'a' = 97. The score is |122 - 97| + |97 - 122| = 25 + 25 = 50.
+        ///
+        /// Constraints:
+        /// - 2 &lt;= s.length &lt;= 100
+        /// - s consists only of lowercase English letters.
+        /// </para>
+        /// <para>
+        /// 3110. 字串的分數
         /// https://leetcode.cn/problems/score-of-a-string/description/
+        ///
+        /// 給定一個字串 s。字串的分數定義為所有相鄰字元 ASCII 值之絕對差的總和。
+        ///
+        /// 回傳 s 的分數。
+        ///
+        /// 範例 1：
+        /// 輸入：s = "hello"
+        /// 輸出：13
+        /// 解釋：ASCII 值分別為 'h' = 104、'e' = 101、'l' = 108、'o' = 111。分數為 |104 - 101| + |101 - 108| + |108 - 108| + |108 - 111| = 3 + 7 + 0 + 3 = 13。
+        ///
+        /// 範例 2：
+        /// 輸入：s = "zaz"
+        /// 輸出：50
+        /// 解釋：ASCII 值分別為 'z' = 122 與 'a' = 97。分數為 |122 - 97| + |97 - 122| = 25 + 25 = 50。
+        ///
+        /// 限制條件：
+        /// - 2 &lt;= s.length &lt;= 100
+        /// - s 只由小寫英文字母組成。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 以固定案例執行三種線性掃描解法，逐一比較預期值與實際值；全部案例通過時回傳 0，否則回傳 1。

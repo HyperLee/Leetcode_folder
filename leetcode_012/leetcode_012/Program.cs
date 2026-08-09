@@ -7,15 +7,91 @@ class Program
     /// <summary>
     /// 12. Integer to Roman
     /// https://leetcode.com/problems/integer-to-roman/description/
-    /// 
-    /// 繁體中文：12. 整數轉羅馬數字
-    /// 題目描述：
-    /// 七個不同的符號代表羅馬數字，對應數值如下：
-    /// I - 1, V - 5, X - 10, L - 50, C - 100, D - 500, M - 1000
-    /// 羅馬數字由高位到低位依序附加各位的羅馬表示，轉換規則如下：
-    /// - 若數值不以 4 或 9 開頭，選擇可被減去的最大符號，附加該符號並減去其值，對餘數重複轉換（I、X、C、M 最多連續三次；V、L、D 不可重複）。
-    /// - 若數值以 4 或 9 開頭，使用減法記法：4 -> IV、9 -> IX、40 -> XL、90 -> XC、400 -> CD、900 -> CM。
-    /// 給定一個整數，將其轉換為相對應的羅馬數字。
+    /// <para>
+    /// Seven different symbols represent Roman numerals with the following values:
+    /// Symbol: I, V, X, L, C, D, M
+    /// Value: 1, 5, 10, 50, 100, 500, 1000
+    ///
+    /// Roman numerals are formed by appending the conversions of decimal place values from highest to lowest. Converting a decimal place value into a Roman numeral has the following rules:
+    /// - If the value does not start with 4 or 9, select the symbol of the maximal value that can be subtracted from the input, append that symbol to the result, subtract its value, and convert the remainder to a Roman numeral.
+    /// - If the value starts with 4 or 9, use the subtractive form representing one symbol subtracted from the following symbol. For example, 4 is one (I) less than five (V), written IV, and 9 is one (I) less than ten (X), written IX. Only these subtractive forms are used: 4 (IV), 9 (IX), 40 (XL), 90 (XC), 400 (CD), and 900 (CM).
+    /// - Only powers of 10 (I, X, C, M) can be appended consecutively at most three times to represent multiples of 10. You cannot append 5 (V), 50 (L), or 500 (D) multiple times. If a symbol would need to be appended four times, use the subtractive form.
+    ///
+    /// Given an integer, convert it to a Roman numeral.
+    ///
+    /// Example 1:
+    /// Input: num = 3749
+    /// Output: "MMMDCCXLIX"
+    /// Explanation:
+    /// 3000 = MMM as 1000 (M) + 1000 (M) + 1000 (M)
+    /// 700 = DCC as 500 (D) + 100 (C) + 100 (C)
+    /// 40 = XL as 10 (X) less than 50 (L)
+    /// 9 = IX as 1 (I) less than 10 (X)
+    /// Note: 49 is not 1 (I) less than 50 (L) because the conversion is based on decimal places.
+    ///
+    /// Example 2:
+    /// Input: num = 58
+    /// Output: "LVIII"
+    /// Explanation:
+    /// 50 = L
+    /// 8 = VIII
+    ///
+    /// Example 3:
+    /// Input: num = 1994
+    /// Output: "MCMXCIV"
+    /// Explanation:
+    /// 1000 = M
+    /// 900 = CM
+    /// 90 = XC
+    /// 4 = IV
+    ///
+    /// Constraints:
+    /// - 1 &lt;= num &lt;= 3999
+    /// </para>
+    /// <para>
+    /// 12. 整數轉羅馬數字
+    /// https://leetcode.cn/problems/integer-to-roman/description/
+    ///
+    /// 七個不同的符號代表羅馬數字，其值如下：
+    /// 符號：I、V、X、L、C、D、M
+    /// 數值：1、5、10、50、100、500、1000
+    ///
+    /// 羅馬數字是由最高位到最低位，依序附加各十進位位值的轉換結果而成。將一個十進位位值轉換成羅馬數字時遵循下列規則：
+    /// - 若數值不是以 4 或 9 開頭，選擇可從輸入值中減去的最大數值符號，將該符號附加到結果，減去它的值，再將餘數轉換成羅馬數字。
+    /// - 若數值以 4 或 9 開頭，使用減法形式，表示從後一個符號中減去前一個符號。例如，4 比 5 (V) 少 1 (I)，寫作 IV；9 比 10 (X) 少 1 (I)，寫作 IX。只使用下列減法形式：4 (IV)、9 (IX)、40 (XL)、90 (XC)、400 (CD) 和 900 (CM)。
+    /// - 只有 10 的次方所對應的符號（I、X、C、M）可以連續附加，且至多三次，以表示 10 的倍數。5 (V)、50 (L) 或 500 (D) 不可重複附加。若需要將一個符號附加四次，應改用減法形式。
+    ///
+    /// 給定一個整數，請將它轉換成羅馬數字。
+    ///
+    /// 範例 1：
+    /// 輸入：num = 3749
+    /// 輸出："MMMDCCXLIX"
+    /// 解釋：
+    /// 3000 = MMM，因為 1000 (M) + 1000 (M) + 1000 (M)
+    /// 700 = DCC，因為 500 (D) + 100 (C) + 100 (C)
+    /// 40 = XL，因為比 50 (L) 少 10 (X)
+    /// 9 = IX，因為比 10 (X) 少 1 (I)
+    /// 注意：49 不會表示為比 50 (L) 少 1 (I)，因為轉換是以十進位位值為基礎。
+    ///
+    /// 範例 2：
+    /// 輸入：num = 58
+    /// 輸出："LVIII"
+    /// 解釋：
+    /// 50 = L
+    /// 8 = VIII
+    ///
+    /// 範例 3：
+    /// 輸入：num = 1994
+    /// 輸出："MCMXCIV"
+    /// 解釋：
+    /// 1000 = M
+    /// 900 = CM
+    /// 90 = XC
+    /// 4 = IV
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= num &lt;= 3999
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

@@ -3,14 +3,58 @@ namespace leetcode_1802;
 internal static class Program
 {
     /// <summary>
-    /// LeetCode 1802: Maximum Value at a Given Index in a Bounded Array /
-    /// 有界陣列中指定索引處的最大值。
-    /// https://leetcode.com/problems/maximum-value-at-a-given-index-in-a-bounded-array/
-    /// https://leetcode.cn/problems/maximum-value-at-a-given-index-in-a-bounded-array/
-    /// Given a positive integer array of length n whose adjacent values differ by at most
-    /// one and whose sum is at most maxSum, maximize the value at index. 給定長度為 n 的
-    /// 正整數陣列，相鄰元素差的絕對值不得超過一且總和不得超過 maxSum，求指定 index
-    /// 可取得的最大值。
+    /// <para>
+    /// 1802. Maximum Value at a Given Index in a Bounded Array
+    /// https://leetcode.com/problems/maximum-value-at-a-given-index-in-a-bounded-array/description/
+    ///
+    /// You are given three positive integers n, index, and maxSum. Construct a 0-indexed array nums satisfying:
+    /// - nums.length == n
+    /// - nums[i] is positive for 0 &lt;= i &lt; n
+    /// - abs(nums[i] - nums[i+1]) &lt;= 1 for 0 &lt;= i &lt; n - 1
+    /// - The sum of nums does not exceed maxSum.
+    /// - nums[index] is maximized.
+    ///
+    /// Return nums[index] of the constructed array. Note: abs(x) equals x when x &gt;= 0 and -x otherwise.
+    ///
+    /// Example 1:
+    /// Input: n = 4, index = 2, maxSum = 6
+    /// Output: 2
+    /// Explanation: nums = [1,2,[2],1] satisfies every condition. No valid array has nums[2] == 3.
+    ///
+    /// Example 2:
+    /// Input: n = 6, index = 1, maxSum = 10
+    /// Output: 3
+    ///
+    /// Constraints:
+    /// - 1 &lt;= n &lt;= maxSum &lt;= 10^9
+    /// - 0 &lt;= index &lt; n
+    /// </para>
+    /// <para>
+    /// 1802. 有界陣列中指定索引處的最大值
+    /// https://leetcode.cn/problems/maximum-value-at-a-given-index-in-a-bounded-array/description/
+    ///
+    /// 給定三個正整數 n、index、maxSum。請建立一個從 0 開始索引的陣列 nums，並滿足：
+    /// - nums.length == n
+    /// - 對 0 &lt;= i &lt; n，nums[i] 為正整數
+    /// - 對 0 &lt;= i &lt; n - 1，abs(nums[i] - nums[i+1]) &lt;= 1
+    /// - nums 的元素總和不超過 maxSum。
+    /// - nums[index] 儘可能大。
+    ///
+    /// 回傳所建立陣列的 nums[index]。注意：當 x &gt;= 0 時 abs(x) 等於 x，否則等於 -x。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 4, index = 2, maxSum = 6
+    /// 輸出：2
+    /// 說明：nums = [1,2,[2],1] 滿足所有條件，且不存在 nums[2] == 3 的有效陣列。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 6, index = 1, maxSum = 10
+    /// 輸出：3
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= n &lt;= maxSum &lt;= 10^9
+    /// - 0 &lt;= index &lt; n
+    /// </para>
     /// </summary>
     private static void Main()
     {

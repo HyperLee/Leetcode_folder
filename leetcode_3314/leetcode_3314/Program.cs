@@ -4,18 +4,54 @@ class Program
 {
     /// <summary>
     /// 3314. Construct the Minimum Bitwise Array I
-    /// https://leetcode.com/problems/construct-the-minimum-bitwise-array-i/description/?envType=daily-question&envId=2026-01-20
-    /// 3314. 构造最小位运算数组 I
-    /// https://leetcode.cn/problems/construct-the-minimum-bitwise-array-i/description/?envType=daily-question&envId=2026-01-20
-    /// 
+    /// https://leetcode.com/problems/construct-the-minimum-bitwise-array-i/description/
+    /// <para>
     /// You are given an array nums consisting of n prime integers.
-    /// You need to construct an array ans of length n, such that, for each index i, 
-    /// the bitwise OR of ans[i] and ans[i] + 1 is equal to nums[i], 
-    /// i.e. ans[i] OR (ans[i] + 1) == nums[i].
-    /// Additionally, you must minimize each value of ans[i] in the resulting array.
-    /// If it is not possible to find such a value for ans[i] that satisfies the condition, then set ans[i] = -1.
-    /// 
-    /// 
+    ///
+    /// Construct an array ans of length n such that for every index i, ans[i] OR (ans[i] + 1) == nums[i].
+    ///
+    /// Minimize every ans[i]. If no value satisfies the condition for an index, set ans[i] = -1.
+    ///
+    /// Example 1:
+    /// Input: nums = [2,3,5,7]
+    /// Output: [-1,1,4,3]
+    /// Explanation: For i = 0, no value satisfies ans[0] OR (ans[0] + 1) = 2, so ans[0] = -1. For i = 1, the smallest value is 1 because 1 OR (1 + 1) = 3. For i = 2, the smallest value is 4 because 4 OR (4 + 1) = 5. For i = 3, the smallest value is 3 because 3 OR (3 + 1) = 7.
+    ///
+    /// Example 2:
+    /// Input: nums = [11,13,31]
+    /// Output: [9,12,15]
+    /// Explanation: For i = 0, the smallest value is 9 because 9 OR (9 + 1) = 11. For i = 1, it is 12 because 12 OR (12 + 1) = 13. For i = 2, it is 15 because 15 OR (15 + 1) = 31.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 100
+    /// - 2 &lt;= nums[i] &lt;= 1000
+    /// - nums[i] is prime.
+    /// </para>
+    /// <para>
+    /// 3314. 建構最小位元運算陣列 I
+    /// https://leetcode.cn/problems/construct-the-minimum-bitwise-array-i/description/
+    ///
+    /// 給定一個由 n 個質數組成的陣列 nums。
+    ///
+    /// 建構長度為 n 的陣列 ans，使每個索引 i 都滿足 ans[i] OR (ans[i] + 1) == nums[i]。
+    ///
+    /// 必須最小化每個 ans[i]。若某索引不存在符合條件的值，則令 ans[i] = -1。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [2,3,5,7]
+    /// 輸出：[-1,1,4,3]
+    /// 解釋：對 i = 0，沒有值滿足 ans[0] OR (ans[0] + 1) = 2，因此 ans[0] = -1。對 i = 1，最小值為 1，因為 1 OR (1 + 1) = 3。對 i = 2，最小值為 4，因為 4 OR (4 + 1) = 5。對 i = 3，最小值為 3，因為 3 OR (3 + 1) = 7。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [11,13,31]
+    /// 輸出：[9,12,15]
+    /// 解釋：對 i = 0，最小值為 9，因為 9 OR (9 + 1) = 11。對 i = 1，最小值為 12，因為 12 OR (12 + 1) = 13。對 i = 2，最小值為 15，因為 15 OR (15 + 1) = 31。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 100
+    /// - 2 &lt;= nums[i] &lt;= 1000
+    /// - nums[i] 是質數。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

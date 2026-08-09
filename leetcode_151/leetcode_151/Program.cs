@@ -8,12 +8,68 @@ namespace leetcode_151;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 151. Reverse Words in a String
-    /// https://leetcode.com/problems/reverse-words-in-a-string/description/?envType=study-plan-v2&envId=leetcode-75
-    /// 151. 反轉字串中的單詞
+    /// https://leetcode.com/problems/reverse-words-in-a-string/description/
+    ///
+    /// Given an input string s, reverse the order of the words.
+    /// A word is defined as a sequence of non-space characters. The words in s are separated by at least one space.
+    /// Return a string of the words in reverse order concatenated by a single space.
+    /// Note that s may contain leading or trailing spaces or multiple spaces between two words. The returned string should
+    /// have only one space separating words and no extra spaces.
+    ///
+    /// Example 1:
+    /// Input: s = "the sky is blue"
+    /// Output: "blue is sky the"
+    ///
+    /// Example 2:
+    /// Input: s = " hello world "
+    /// Output: "world hello"
+    /// Explanation: Your reversed string should not contain leading or trailing spaces.
+    ///
+    /// Example 3:
+    /// Input: s = "a good example"
+    /// Output: "example good a"
+    /// Explanation: Reduce multiple spaces between two words to a single space in the reversed string.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 10^4
+    /// - s contains English letters (upper-case and lower-case), digits, and spaces ' '.
+    /// - There is at least one word in s.
+    ///
+    /// Follow-up: If the string data type is mutable in your language, can you solve it in-place with O(1) extra space?
+    /// </para>
+    /// <para>
+    /// 151. 反轉字串中的單字
     /// https://leetcode.cn/problems/reverse-words-in-a-string/description/
-    /// 
-    /// 
+    ///
+    /// 給定輸入字串 s，反轉其中單字的順序。
+    /// 單字定義為一串連續的非空格字元；s 中的單字至少由一個空格分隔。
+    /// 回傳將單字順序反轉後，以單一空格連接而成的字串。
+    /// 請注意，s 可能含有前導空格、尾隨空格，或兩個單字之間有多個空格。回傳字串只應以單一空格分隔
+    /// 單字，且不得包含額外空格。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "the sky is blue"
+    /// 輸出："blue is sky the"
+    ///
+    /// 範例 2：
+    /// 輸入：s = " hello world "
+    /// 輸出："world hello"
+    /// 解釋：反轉後的字串不應包含前導或尾隨空格。
+    ///
+    /// 範例 3：
+    /// 輸入：s = "a good example"
+    /// 輸出："example good a"
+    /// 解釋：反轉後的字串必須將兩個單字之間的多個空格縮減為單一空格。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 10^4
+    /// - s 包含英文字母（大寫與小寫）、數字及空格 ' '。
+    /// - s 中至少有一個單字。
+    ///
+    /// 進階問題：若你的語言中字串資料型別可變，能否以 O(1) 額外空間原地完成？
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     /// <summary>

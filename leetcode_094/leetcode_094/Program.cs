@@ -31,12 +31,66 @@ class Program
     }
 
     /// <summary>
+    /// <para>
     /// 94. Binary Tree Inorder Traversal
     /// https://leetcode.com/problems/binary-tree-inorder-traversal/description/
-    /// 94. 二叉树的中序遍历
-    /// https://leetcode.cn/problems/binary-tree-inorder-traversal/description/
-    /// 
+    ///
     /// Given the root of a binary tree, return the inorder traversal of its nodes' values.
+    ///
+    /// Example 1:
+    /// Input: root = [1,null,2,3]
+    /// Output: [1,3,2]
+    /// Explanation image: https://assets.leetcode.com/uploads/2024/08/29/screenshot-2024-08-29-202743.png
+    ///
+    /// Example 2:
+    /// Input: root = [1,2,3,4,5,null,8,null,null,6,7,9]
+    /// Output: [4,2,6,5,7,1,3,9,8]
+    /// Explanation image: https://assets.leetcode.com/uploads/2024/08/29/tree_2.png
+    ///
+    /// Example 3:
+    /// Input: root = []
+    /// Output: []
+    ///
+    /// Example 4:
+    /// Input: root = [1]
+    /// Output: [1]
+    ///
+    /// Constraints:
+    /// The number of nodes in the tree is in the range [0, 100].
+    /// -100 &lt;= Node.val &lt;= 100
+    ///
+    /// Follow up: Recursive solution is trivial, could you do it iteratively?
+    /// </para>
+    /// <para>
+    /// 94. 二元樹的中序走訪
+    /// https://leetcode.cn/problems/binary-tree-inorder-traversal/description/
+    ///
+    /// 給定二元樹的根節點 root，請回傳其節點值的中序走訪結果。
+    ///
+    /// 範例 1：
+    /// 輸入：root = [1,null,2,3]
+    /// 輸出：[1,3,2]
+    /// 解釋圖片：https://assets.leetcode.com/uploads/2024/08/29/screenshot-2024-08-29-202743.png
+    ///
+    /// 範例 2：
+    /// 輸入：root = [1,2,3,4,5,null,8,null,null,6,7,9]
+    /// 輸出：[4,2,6,5,7,1,3,9,8]
+    /// 解釋圖片：https://assets.leetcode.com/uploads/2024/08/29/tree_2.png
+    ///
+    /// 範例 3：
+    /// 輸入：root = []
+    /// 輸出：[]
+    ///
+    /// 範例 4：
+    /// 輸入：root = [1]
+    /// 輸出：[1]
+    ///
+    /// 限制條件：
+    /// 樹中的節點數量介於 [0, 100]。
+    /// -100 &lt;= Node.val &lt;= 100
+    ///
+    /// 進階：遞迴解法很直觀，你能以迭代方式完成嗎？
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

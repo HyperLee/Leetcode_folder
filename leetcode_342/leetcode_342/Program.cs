@@ -4,10 +4,54 @@ class Program
 {
     /// <summary>
     /// 342. Power of Four
-    /// https://leetcode.com/problems/power-of-four/description/?envType=daily-question&envId=2025-08-15
-    /// 342. 4的幂
-    /// https://leetcode.cn/problems/power-of-four/description/?envType=daily-question&envId=2025-08-15
-    /// 
+    /// https://leetcode.com/problems/power-of-four/description/
+    /// <para>
+    /// Given an integer n, return true if it is a power of four; otherwise, return false.
+    ///
+    /// An integer n is a power of four if there is an integer x such that n == 4^x.
+    ///
+    /// Example 1:
+    /// Input: n = 16
+    /// Output: true
+    ///
+    /// Example 2:
+    /// Input: n = 5
+    /// Output: false
+    ///
+    /// Example 3:
+    /// Input: n = 1
+    /// Output: true
+    ///
+    /// Constraints:
+    /// - -2^31 &lt;= n &lt;= 2^31 - 1
+    ///
+    /// Follow-up: Could you solve it without loops or recursion?
+    /// </para>
+    /// <para>
+    /// 342. 4 的冪
+    /// https://leetcode.cn/problems/power-of-four/description/
+    ///
+    /// 給定整數 n，若它是 4 的冪則回傳 true，否則回傳 false。
+    ///
+    /// 若存在整數 x，使 n == 4^x，則整數 n 是 4 的冪。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 16
+    /// 輸出：true
+    ///
+    /// 範例 2：
+    /// 輸入：n = 5
+    /// 輸出：false
+    ///
+    /// 範例 3：
+    /// 輸入：n = 1
+    /// 輸出：true
+    ///
+    /// 限制條件：
+    /// - -2^31 &lt;= n &lt;= 2^31 - 1
+    ///
+    /// 進階：你能不用迴圈或遞迴解題嗎？
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

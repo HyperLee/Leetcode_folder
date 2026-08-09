@@ -3,12 +3,53 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1518. Water Bottles
-    /// https://leetcode.com/problems/water-bottles/description/?envType=daily-question&envId=2025-10-01
-    /// 1518. 换水问题
-    /// https://leetcode.cn/problems/water-bottles/description/?envType=daily-question&envId=2025-10-01
-    /// 
-    /// 有 numBottles 瓶水，最初都是滿的。你可以用 numExchange 個空瓶從市場換一瓶滿的水。喝一瓶滿的水會變成空瓶。給定兩個整數 numBottles 和 numExchange，返回你可以喝的最大水瓶數。
+    /// https://leetcode.com/problems/water-bottles/description/
+    ///
+    /// There are numBottles water bottles that are initially full. You can exchange numExchange empty water bottles at the
+    /// market for one full water bottle. Drinking a full water bottle turns it into an empty bottle.
+    /// Given integers numBottles and numExchange, return the maximum number of water bottles you can drink.
+    ///
+    /// Example 1:
+    /// Image: https://assets.leetcode.com/uploads/2020/07/01/sample_1_1875.png
+    /// Input: numBottles = 9, numExchange = 3
+    /// Output: 13
+    /// Explanation: Exchange 3 empty bottles for 1 full bottle. The number you can drink is 9 + 3 + 1 = 13.
+    ///
+    /// Example 2:
+    /// Image: https://assets.leetcode.com/uploads/2020/07/01/sample_2_1875.png
+    /// Input: numBottles = 15, numExchange = 4
+    /// Output: 19
+    /// Explanation: Exchange 4 empty bottles for 1 full bottle. The number you can drink is 15 + 3 + 1 = 19.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= numBottles &lt;= 100
+    /// - 2 &lt;= numExchange &lt;= 100
+    /// </para>
+    /// <para>
+    /// 1518. 換水問題
+    /// https://leetcode.cn/problems/water-bottles/description/
+    ///
+    /// 起初有 numBottles 瓶裝滿水的水瓶。你可以在市場用 numExchange 個空水瓶換取一瓶裝滿水的水瓶。
+    /// 喝完一瓶水後，該水瓶會變成空瓶。給定整數 numBottles 與 numExchange，回傳最多可以喝幾瓶水。
+    ///
+    /// 範例 1：
+    /// 圖片：https://assets.leetcode.com/uploads/2020/07/01/sample_1_1875.png
+    /// 輸入：numBottles = 9，numExchange = 3
+    /// 輸出：13
+    /// 解釋：可用 3 個空瓶換 1 瓶滿水；最多可喝 9 + 3 + 1 = 13 瓶。
+    ///
+    /// 範例 2：
+    /// 圖片：https://assets.leetcode.com/uploads/2020/07/01/sample_2_1875.png
+    /// 輸入：numBottles = 15，numExchange = 4
+    /// 輸出：19
+    /// 解釋：可用 4 個空瓶換 1 瓶滿水；最多可喝 15 + 3 + 1 = 19 瓶。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= numBottles &lt;= 100
+    /// - 2 &lt;= numExchange &lt;= 100
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

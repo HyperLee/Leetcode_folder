@@ -3,10 +3,48 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 2540. Minimum Common Value
-        /// https://leetcode.com/problems/minimum-common-value/description/?envType=daily-question&envId=2024-03-09
-        /// 2540. 最小公共值
-        /// https://leetcode.cn/problems/minimum-common-value/
+        /// https://leetcode.com/problems/minimum-common-value/description/
+        ///
+        /// Given two integer arrays nums1 and nums2 sorted in non-decreasing order, return the smallest integer common to both. Return -1 if there is no common integer. An integer is common when it occurs at least once in each array.
+        ///
+        /// Example 1:
+        /// Input: nums1 = [1,2,3], nums2 = [2,4]
+        /// Output: 2
+        /// Explanation: 2 is the smallest element common to both arrays.
+        ///
+        /// Example 2:
+        /// Input: nums1 = [1,2,3,6], nums2 = [2,3,4,5]
+        /// Output: 2
+        /// Explanation: The common elements are 2 and 3, and 2 is smaller.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= nums1.length, nums2.length &lt;= 10^5
+        /// - 1 &lt;= nums1[i], nums2[j] &lt;= 10^9
+        /// - nums1 and nums2 are sorted in non-decreasing order.
+        /// </para>
+        /// <para>
+        /// 2540. 最小共同值
+        /// https://leetcode.cn/problems/minimum-common-value/description/
+        ///
+        /// 給定兩個以非遞減順序排列的整數陣列 nums1 與 nums2，回傳兩者共有的最小整數；若沒有共同整數則回傳 -1。一個整數若在兩個陣列中都至少出現一次，就稱為共同值。
+        ///
+        /// 範例 1：
+        /// 輸入：nums1 = [1,2,3], nums2 = [2,4]
+        /// 輸出：2
+        /// 說明：2 是兩個陣列共有的最小元素。
+        ///
+        /// 範例 2：
+        /// 輸入：nums1 = [1,2,3,6], nums2 = [2,3,4,5]
+        /// 輸出：2
+        /// 說明：共同元素為 2 與 3，其中 2 較小。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= nums1.length, nums2.length &lt;= 10^5
+        /// - 1 &lt;= nums1[i], nums2[j] &lt;= 10^9
+        /// - nums1 與 nums2 皆按非遞減順序排列。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 以固定案例執行三種解法，逐一比較預期值與實際值；全部案例通過時回傳 0，否則回傳非零結束碼。

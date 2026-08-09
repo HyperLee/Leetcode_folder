@@ -3,14 +3,59 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1338. Reduce Array Size to The Half
     /// https://leetcode.com/problems/reduce-array-size-to-the-half/description/
-    /// 1338. 數組大小減半
+    ///
+    /// You are given an integer array arr. You can choose a set of integers and remove all the occurrences of these integers
+    /// in the array.
+    ///
+    /// Return the minimum size of the set so that at least half of the integers of the array are removed.
+    ///
+    /// Example 1:
+    /// Input: arr = [3,3,3,3,5,5,5,2,2,7]
+    /// Output: 2
+    /// Explanation: Choosing {3,7} will make the new array [5,5,5,2,2] which has size 5 (i.e. equal to half of the size
+    /// of the old array).
+    /// Possible sets of size 2 are {3,5}, {3,2}, {5,2}.
+    /// Choosing set {2,7} is not possible as it will make the new array [3,3,3,3,5,5,5] which has a size greater than half
+    /// of the size of the old array.
+    ///
+    /// Example 2:
+    /// Input: arr = [7,7,7,7,7,7]
+    /// Output: 1
+    /// Explanation: The only possible set you can choose is {7}. This will make the new array empty.
+    ///
+    /// Constraints:
+    /// - 2 &lt;= arr.length &lt;= 10^5
+    /// - arr.length is even.
+    /// - 1 &lt;= arr[i] &lt;= 10^5
+    /// </para>
+    /// <para>
+    /// 1338. 將陣列大小減半
     /// https://leetcode.cn/problems/reduce-array-size-to-the-half/description/
-    /// 
-    /// 題目描述：給定一個整數陣列 `arr`。你可以選擇一個整數集合，並從陣列中移除該集合中所有整數的所有出現。
-    /// 返回該集合的最小大小，使得陣列中至少一半的整數被移除。
-    /// 
+    ///
+    /// 給定一個整數陣列 arr。你可以選擇一個整數集合，並從陣列中移除這些整數出現的所有項目。
+    ///
+    /// 回傳該集合的最小大小，使陣列中至少一半的整數被移除。
+    ///
+    /// 範例 1：
+    /// 輸入：arr = [3,3,3,3,5,5,5,2,2,7]
+    /// 輸出：2
+    /// 解釋：選擇 {3,7} 會使新陣列變成 [5,5,5,2,2]，其大小為 5（即舊陣列大小的一半）。
+    /// 大小為 2 的可行集合包括 {3,5}、{3,2}、{5,2}。
+    /// 不能選擇集合 {2,7}，因為這會使新陣列變成 [3,3,3,3,5,5,5]，其大小超過舊陣列大小的一半。
+    ///
+    /// 範例 2：
+    /// 輸入：arr = [7,7,7,7,7,7]
+    /// 輸出：1
+    /// 解釋：唯一可以選擇的集合是 {7}，這會使新陣列變成空陣列。
+    ///
+    /// 限制條件：
+    /// - 2 &lt;= arr.length &lt;= 10^5
+    /// - arr.length 是偶數。
+    /// - 1 &lt;= arr[i] &lt;= 10^5
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

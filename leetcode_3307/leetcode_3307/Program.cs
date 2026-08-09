@@ -4,18 +4,68 @@ class Program
 {
     /// <summary>
     /// 3307. Find the K-th Character in String Game II
-    /// https://leetcode.com/problems/find-the-k-th-character-in-string-game-ii/description/?envType=daily-question&envId=2025-07-04
-    /// 3307. 找出第 K 個字符 II
-    /// https://leetcode.cn/problems/find-the-k-th-character-in-string-game-ii/description/?envType=daily-question&envId=2025-07-04
-    /// 
-    /// 題目描述（繁體中文）：
-    /// Alice 和 Bob 正在玩一個遊戲。最初，Alice 有一個字串 word = "a"。
-    /// 你會得到一個正整數 k，還有一個整數陣列 operations，其中 operations[i] 代表第 i 次操作的型別。
-    /// 現在 Bob 會要求 Alice 依序執行所有操作：
-    ///   - 如果 operations[i] == 0，則將 word 複製一份並接在原本字串後面。
-    ///   - 如果 operations[i] == 1，則將 word 中每個字元變成英文字母的下一個字元，然後將這個新字串接在原本字串後面。例如對 "c" 執行會得到 "cd"，對 "zb" 執行會得到 "zbac"。
-    /// 請回傳執行所有操作後，word 的第 k 個字元。
-    /// 注意：字元 'z' 變換後會變成 'a'。
+    /// https://leetcode.com/problems/find-the-k-th-character-in-string-game-ii/description/
+    /// <para>
+    /// Alice and Bob are playing a game. Initially, Alice has word = "a".
+    ///
+    /// You are given a positive integer k and an integer array operations, where operations[i] is the type of the i-th operation.
+    ///
+    /// Bob asks Alice to perform all operations in order:
+    /// - If operations[i] == 0, append a copy of word to itself.
+    /// - If operations[i] == 1, change every character in word to its next English letter to generate a new string, and append it to the original word. For example, "c" produces "cd", and "zb" produces "zbac".
+    ///
+    /// Return the k-th character in word after all operations.
+    ///
+    /// The character 'z' changes to 'a' in the second operation type.
+    ///
+    /// Example 1:
+    /// Input: k = 5, operations = [0,0,0]
+    /// Output: "a"
+    /// Explanation: Starting with "a", append "a" to obtain "aa"; append "aa" to obtain "aaaa"; append "aaaa" to obtain "aaaaaaaa".
+    ///
+    /// Example 2:
+    /// Input: k = 10, operations = [0,1,0,1]
+    /// Output: "b"
+    /// Explanation: Starting with "a", the four operations produce "aa", "aabb", "aabbaabb", and "aabbaabbbbccbbcc" respectively.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= k &lt;= 10^14
+    /// - 1 &lt;= operations.length &lt;= 100
+    /// - operations[i] is 0 or 1.
+    /// - The input guarantees that word has at least k characters after all operations.
+    /// </para>
+    /// <para>
+    /// 3307. 字串遊戲 II 中的第 K 個字元
+    /// https://leetcode.cn/problems/find-the-k-th-character-in-string-game-ii/description/
+    ///
+    /// Alice 與 Bob 正在玩遊戲。起初 Alice 擁有 word = "a"。
+    ///
+    /// 給定正整數 k 與整數陣列 operations，其中 operations[i] 表示第 i 個操作的類型。
+    ///
+    /// Bob 要求 Alice 依序執行所有操作：
+    /// - 若 operations[i] == 0，將 word 的副本附加到 word 本身。
+    /// - 若 operations[i] == 1，將 word 的每個字元變成下一個英文字母以產生新字串，再附加到原始 word。例如，"c" 會產生 "cd"，"zb" 會產生 "zbac"。
+    ///
+    /// 回傳執行所有操作後 word 的第 k 個字元。
+    ///
+    /// 在第二種操作中，字元 'z' 會變成 'a'。
+    ///
+    /// 範例 1：
+    /// 輸入：k = 5, operations = [0,0,0]
+    /// 輸出："a"
+    /// 解釋：從 "a" 開始，依序附加 "a" 得到 "aa"、附加 "aa" 得到 "aaaa"、附加 "aaaa" 得到 "aaaaaaaa"。
+    ///
+    /// 範例 2：
+    /// 輸入：k = 10, operations = [0,1,0,1]
+    /// 輸出："b"
+    /// 解釋：從 "a" 開始，四次操作依序得到 "aa"、"aabb"、"aabbaabb" 與 "aabbaabbbbccbbcc"。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= k &lt;= 10^14
+    /// - 1 &lt;= operations.length &lt;= 100
+    /// - operations[i] 是 0 或 1。
+    /// - 輸入保證執行所有操作後 word 至少有 k 個字元。
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// 

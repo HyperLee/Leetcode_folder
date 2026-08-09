@@ -3,16 +3,54 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2138. Divide a String Into Groups of Size k
-    /// https://leetcode.com/problems/divide-a-string-into-groups-of-size-k/description/?envType=daily-question&envId=2025-06-22
-    /// 2138. 将字符串拆分为若干长度为 k 的组
-    /// https://leetcode.cn/problems/divide-a-string-into-groups-of-size-k/description/?envType=daily-question&envId=2025-06-22
-    /// 
-    /// 給定一個字串 s，可以用以下方式將其分組為每組長度為 k ：
-    /// 第一組包含字串的前 k 個字元，第二組包含接下來的 k 個字元，依此類推。每個元素只能屬於一個組。
-    /// 對於最後一組，如果剩下的字元不足 k 個，則使用填充字元 fill 來補足。
-    /// 分組後，將最後一組的填充字元移除並將所有組串接起來，應該能還原為原始字串 s。
-    /// 給定字串 s、每組長度 k 及填充字元 fill，請回傳一個字串陣列，表示分組後的每一組內容。
+    /// https://leetcode.com/problems/divide-a-string-into-groups-of-size-k/description/
+    ///
+    /// Partition string s into groups of size k. The first group contains the first k characters, the second contains the next k, and so on; every character belongs to exactly one group. If fewer than k characters remain, append fill until the last group is complete. Removing this padding and concatenating the groups must reproduce s.
+    ///
+    /// Given s, k, and fill, return the array of groups.
+    ///
+    /// Example 1:
+    /// Input: s = "abcdefghi", k = 3, fill = "x"
+    /// Output: ["abc","def","ghi"]
+    /// Explanation: The three groups each use 3 source characters, so no fill is needed.
+    ///
+    /// Example 2:
+    /// Input: s = "abcdefghij", k = 3, fill = "x"
+    /// Output: ["abc","def","ghi","jxx"]
+    /// Explanation: The first three groups are complete. The 4th contains 'j', so append 'x' twice.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 100
+    /// - s contains lowercase English letters only.
+    /// - 1 &lt;= k &lt;= 100
+    /// - fill is a lowercase English letter.
+    /// </para>
+    /// <para>
+    /// 2138. 將字串拆分為若干長度為 K 的組
+    /// https://leetcode.cn/problems/divide-a-string-into-groups-of-size-k/description/
+    ///
+    /// 將字串 s 劃分成大小為 k 的群組。第一組包含前 k 個字元，第二組包含接下來的 k 個，依此類推；每個字元恰好屬於一組。若最後不足 k 個字元，就附加 fill 直到完整。移除這些填充字元並依序串接所有群組後，必須還原 s。
+    ///
+    /// 給定 s、k、fill，回傳群組陣列。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "abcdefghi", k = 3, fill = "x"
+    /// 輸出：["abc","def","ghi"]
+    /// 說明：三個群組都各使用 3 個原始字元，因此不需填充。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "abcdefghij", k = 3, fill = "x"
+    /// 輸出：["abc","def","ghi","jxx"]
+    /// 說明：前三組已完整；第 4 組只有 'j'，因此附加兩次 'x'。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 100
+    /// - s 僅包含小寫英文字母。
+    /// - 1 &lt;= k &lt;= 100
+    /// - fill 是小寫英文字母。
+    /// </para>
     /// </summary>
     /// <param name="args"></param> 
     static void Main(string[] args)

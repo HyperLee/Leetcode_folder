@@ -6,16 +6,58 @@ namespace leetcode_1680;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1680. Concatenation of Consecutive Binary Numbers
-    /// https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/description/?envType=daily-question&amp;envId=2026-02-28
-    /// 1680. 连接连续二进制数字
-    /// https://leetcode.cn/problems/concatenation-of-consecutive-binary-numbers/description/?envType=daily-question&amp;envId=2026-02-28
+    /// https://leetcode.com/problems/concatenation-of-consecutive-binary-numbers/description/
     ///
-    /// Problem description:
-    /// Given an integer n, return the decimal value of the binary string
-    /// formed by concatenating the binary representations of 1 to n in order,
-    /// modulo 10^9 + 7.
+    /// Given an integer n, return the decimal value of the binary string formed by concatenating the binary representations
+    /// of 1 through n in order, modulo 10^9 + 7.
     ///
+    /// Example 1:
+    /// Input: n = 1
+    /// Output: 1
+    /// Explanation: "1" in binary corresponds to decimal 1.
+    ///
+    /// Example 2:
+    /// Input: n = 3
+    /// Output: 27
+    /// Explanation: 1, 2, and 3 are "1", "10", and "11" in binary. Concatenating gives "11011", decimal 27.
+    ///
+    /// Example 3:
+    /// Input: n = 12
+    /// Output: 505379714
+    /// Explanation: Concatenation gives "1101110010111011110001001101010111100", whose decimal value is 118505380540.
+    /// After modulo 10^9 + 7, the result is 505379714.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= n &lt;= 10^5
+    /// </para>
+    /// <para>
+    /// 1680. 連接連續二進位數字
+    /// https://leetcode.cn/problems/concatenation-of-consecutive-binary-numbers/description/
+    ///
+    /// 給定整數 n，依序連接 1 到 n 的二進位表示，形成一個二進位字串；回傳其十進位值對 10^9 + 7
+    /// 取模後的結果。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 1
+    /// 輸出：1
+    /// 解釋：二進位的 "1" 對應十進位 1。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 3
+    /// 輸出：27
+    /// 解釋：1、2、3 的二進位表示分別為 "1"、"10"、"11"；連接後為 "11011"，十進位值為 27。
+    ///
+    /// 範例 3：
+    /// 輸入：n = 12
+    /// 輸出：505379714
+    /// 解釋：連接結果為 "1101110010111011110001001101010111100"，十進位值是 118505380540。
+    /// 對 10^9 + 7 取模後，結果為 505379714。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= n &lt;= 10^5
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

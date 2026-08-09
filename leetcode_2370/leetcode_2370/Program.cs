@@ -3,10 +3,48 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 2370. Longest Ideal Subsequence
-        /// https://leetcode.com/problems/longest-ideal-subsequence/description/?envType=daily-question&envId=2024-04-25
-        /// 2370. 最长理想子序列
+        /// https://leetcode.com/problems/longest-ideal-subsequence/description/
+        ///
+        /// You are given lowercase string s and integer k. A string t is ideal when it is a subsequence of s and the absolute difference between the alphabet positions of every pair of adjacent letters in t is at most k. Return the length of the longest ideal string. A subsequence deletes zero or more characters without changing the order of those retained. Alphabet order is not cyclic: the difference between 'a' and 'z' is 25, not 1.
+        ///
+        /// Example 1:
+        /// Input: s = "acfgbd", k = 2
+        /// Output: 4
+        /// Explanation: "acbd" is a longest ideal string and has length 4. "acfgbd" is not ideal because 'c' and 'f' differ by 3 alphabet positions.
+        ///
+        /// Example 2:
+        /// Input: s = "abcd", k = 3
+        /// Output: 4
+        /// Explanation: "abcd" is a longest ideal string and has length 4.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= s.length &lt;= 10^5
+        /// - 0 &lt;= k &lt;= 25
+        /// - s consists of lowercase English letters.
+        /// </para>
+        /// <para>
+        /// 2370. 最長理想子序列
         /// https://leetcode.cn/problems/longest-ideal-subsequence/description/
+        ///
+        /// 給定小寫字串 s 與整數 k。若字串 t 是 s 的子序列，且 t 中每一對相鄰字母在字母表位置上的絕對差至多為 k，則 t 是理想字串。回傳最長理想字串的長度。子序列可刪除零個或多個字元，但不能改變保留字元的順序。字母順序不循環：'a' 與 'z' 的位置差為 25，而不是 1。
+        ///
+        /// 範例 1：
+        /// 輸入：s = "acfgbd", k = 2
+        /// 輸出：4
+        /// 說明："acbd" 是一個最長理想字串，長度為 4。"acfgbd" 並不理想，因為 'c' 與 'f' 的字母位置相差 3。
+        ///
+        /// 範例 2：
+        /// 輸入：s = "abcd", k = 3
+        /// 輸出：4
+        /// 說明："abcd" 是一個最長理想字串，長度為 4。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= s.length &lt;= 10^5
+        /// - 0 &lt;= k &lt;= 25
+        /// - s 僅由小寫英文字母組成。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         private static void Main(string[] args)

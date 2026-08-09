@@ -23,7 +23,54 @@
 class Program
 {
     /// <summary>
-    /// 程式進入點，包含測試案例的執行。
+    /// <para>
+    /// 1292. Maximum Side Length of a Square with Sum Less than or Equal to Threshold
+    /// https://leetcode.com/problems/maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold/description/
+    ///
+    /// Given an m x n matrix mat and an integer threshold, return the maximum side-length of a square with a sum less than
+    /// or equal to threshold or return 0 if there is no such square.
+    ///
+    /// Example 1:
+    /// Input: mat = [[1,1,3,2,4,3,2],[1,1,3,2,4,3,2],[1,1,3,2,4,3,2]], threshold = 4
+    /// Output: 2
+    /// Explanation: The maximum side length of square with sum less than or equal to 4 is 2 as shown.
+    /// Official illustration: https://assets.leetcode.com/uploads/2019/12/05/e1.png
+    ///
+    /// Example 2:
+    /// Input: mat = [[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2]], threshold = 1
+    /// Output: 0
+    ///
+    /// Constraints:
+    /// - m == mat.length
+    /// - n == mat[i].length
+    /// - 1 &lt;= m, n &lt;= 300
+    /// - 0 &lt;= mat[i][j] &lt;= 10^4
+    /// - 0 &lt;= threshold &lt;= 10^5
+    /// </para>
+    /// <para>
+    /// 1292. 元素和小於或等於閾值的正方形最大邊長
+    /// https://leetcode.cn/problems/maximum-side-length-of-a-square-with-sum-less-than-or-equal-to-threshold/description/
+    ///
+    /// 給定一個 m x n 矩陣 mat 與一個整數 threshold，回傳元素和小於或等於 threshold 的正方形最大邊長；
+    /// 若不存在這樣的正方形，則回傳 0。
+    ///
+    /// 範例 1：
+    /// 輸入：mat = [[1,1,3,2,4,3,2],[1,1,3,2,4,3,2],[1,1,3,2,4,3,2]], threshold = 4
+    /// 輸出：2
+    /// 解釋：如圖所示，元素和小於或等於 4 的正方形，其最大邊長為 2。
+    /// 官方示意圖：https://assets.leetcode.com/uploads/2019/12/05/e1.png
+    ///
+    /// 範例 2：
+    /// 輸入：mat = [[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2],[2,2,2,2,2]], threshold = 1
+    /// 輸出：0
+    ///
+    /// 限制條件：
+    /// - m == mat.length
+    /// - n == mat[i].length
+    /// - 1 &lt;= m, n &lt;= 300
+    /// - 0 &lt;= mat[i][j] &lt;= 10^4
+    /// - 0 &lt;= threshold &lt;= 10^5
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

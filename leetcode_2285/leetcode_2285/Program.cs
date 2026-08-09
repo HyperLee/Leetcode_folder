@@ -3,10 +3,58 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 2285. Maximum Total Importance of Roads
-        /// https://leetcode.com/problems/maximum-total-importance-of-roads/description/?envType=daily-question&envId=2024-06-28
-        /// 2285. 道路的最大总重要性
+        /// https://leetcode.com/problems/maximum-total-importance-of-roads/description/
+        ///
+        /// You are given integer n, the number of cities numbered 0 through n - 1, and roads where roads[i] = [a_i,b_i] is a bidirectional road. Assign every city a distinct integer value from 1 through n. A road's importance is the sum of its endpoint values. Return the maximum possible total importance after an optimal assignment.
+        ///
+        /// Images: https://assets.leetcode.com/uploads/2022/04/07/ex1drawio.png and https://assets.leetcode.com/uploads/2022/04/07/ex2drawio.png
+        ///
+        /// Example 1:
+        /// Input: n = 5, roads = [[0,1],[1,2],[2,3],[0,2],[1,3],[2,4]]
+        /// Output: 43
+        /// Explanation: Assign values [2,4,5,3,1]. The road importances are 2 + 4 = 6, 4 + 5 = 9, 5 + 3 = 8, 2 + 5 = 7, 4 + 3 = 7, and 5 + 1 = 6. Their total is 6 + 9 + 8 + 7 + 7 + 6 = 43, and no greater total is possible.
+        ///
+        /// Example 2:
+        /// Input: n = 5, roads = [[0,3],[2,4],[1,3]]
+        /// Output: 20
+        /// Explanation: Assign values [4,3,2,5,1]. The road importances are 4 + 5 = 9, 2 + 1 = 3, and 3 + 5 = 8. Their total is 9 + 3 + 8 = 20, and no greater total is possible.
+        ///
+        /// Constraints:
+        /// - 2 &lt;= n &lt;= 5 * 10^4
+        /// - 1 &lt;= roads.length &lt;= 5 * 10^4
+        /// - roads[i].length == 2
+        /// - 0 &lt;= a_i, b_i &lt;= n - 1
+        /// - a_i != b_i
+        /// - There are no duplicate roads.
+        /// </para>
+        /// <para>
+        /// 2285. 道路的最大總重要性
         /// https://leetcode.cn/problems/maximum-total-importance-of-roads/description/
+        ///
+        /// 給定整數 n，表示編號 0 到 n - 1 的城市數量，以及 roads，其中 roads[i] = [a_i,b_i] 表示一條雙向道路。為每個城市指派 1 到 n 中互不相同的整數值；道路的重要性是兩端城市值之和。回傳最佳指派後可能得到的最大總重要性。
+        ///
+        /// 圖片：https://assets.leetcode.com/uploads/2022/04/07/ex1drawio.png 與 https://assets.leetcode.com/uploads/2022/04/07/ex2drawio.png
+        ///
+        /// 範例 1：
+        /// 輸入：n = 5, roads = [[0,1],[1,2],[2,3],[0,2],[1,3],[2,4]]
+        /// 輸出：43
+        /// 說明：指派值 [2,4,5,3,1]。各道路重要性為 2 + 4 = 6、4 + 5 = 9、5 + 3 = 8、2 + 5 = 7、4 + 3 = 7、5 + 1 = 6；總和為 6 + 9 + 8 + 7 + 7 + 6 = 43，且無法得到更大的總和。
+        ///
+        /// 範例 2：
+        /// 輸入：n = 5, roads = [[0,3],[2,4],[1,3]]
+        /// 輸出：20
+        /// 說明：指派值 [4,3,2,5,1]。各道路重要性為 4 + 5 = 9、2 + 1 = 3、3 + 5 = 8；總和為 9 + 3 + 8 = 20，且無法得到更大的總和。
+        ///
+        /// 限制條件：
+        /// - 2 &lt;= n &lt;= 5 * 10^4
+        /// - 1 &lt;= roads.length &lt;= 5 * 10^4
+        /// - roads[i].length == 2
+        /// - 0 &lt;= a_i, b_i &lt;= n - 1
+        /// - a_i != b_i
+        /// - 不存在重複道路。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 主要進入點會執行六組固定案例，比較排序城市度數與度數頻率桶兩種貪心解法，

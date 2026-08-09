@@ -3,10 +3,56 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1442. Count Triplets That Can Form Two Arrays of Equal XOR
-        /// https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/description/?envType=daily-question&envId=2024-05-30
-        /// 1442. 形成两个异或相等数组的三元组数目
+        /// https://leetcode.com/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/description/
+        ///
+        /// Given an array of integers arr.
+        /// We want to select three indices i, j and k where (0 &lt;= i &lt; j &lt;= k &lt; arr.length).
+        /// Let's define a and b as follows:
+        /// - a = arr[i] ^ arr[i + 1] ^ ... ^ arr[j - 1]
+        /// - b = arr[j] ^ arr[j + 1] ^ ... ^ arr[k]
+        /// Note that ^ denotes the bitwise-xor operation.
+        /// Return the number of triplets (i, j and k) where a == b.
+        ///
+        /// Example 1:
+        /// Input: arr = [2,3,1,6,7]
+        /// Output: 4
+        /// Explanation: The triplets are (0,1,2), (0,2,2), (2,3,4) and (2,4,4).
+        ///
+        /// Example 2:
+        /// Input: arr = [1,1,1,1,1]
+        /// Output: 10
+        ///
+        /// Constraints:
+        /// - 1 &lt;= arr.length &lt;= 300
+        /// - 1 &lt;= arr[i] &lt;= 10^8
+        /// </para>
+        /// <para>
+        /// 1442. 形成兩個互斥或相等陣列的三元組數目
         /// https://leetcode.cn/problems/count-triplets-that-can-form-two-arrays-of-equal-xor/description/
+        ///
+        /// 給定一個整數陣列 arr。
+        /// 要選擇三個索引 i、j 與 k，且 (0 &lt;= i &lt; j &lt;= k &lt; arr.length)。
+        /// 將 a 與 b 定義如下：
+        /// - a = arr[i] ^ arr[i + 1] ^ ... ^ arr[j - 1]
+        /// - b = arr[j] ^ arr[j + 1] ^ ... ^ arr[k]
+        /// 請注意，^ 表示位元互斥或運算。
+        /// 回傳符合 a == b 的三元組（i、j 與 k）數量。
+        ///
+        /// 範例 1：
+        /// 輸入：arr = [2,3,1,6,7]
+        /// 輸出：4
+        /// 解釋：這些三元組為 (0,1,2)、(0,2,2)、(2,3,4) 與 (2,4,4)。
+        ///
+        /// 範例 2：
+        /// 輸入：arr = [1,1,1,1,1]
+        /// 輸出：10
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= arr.length &lt;= 300
+        /// - 1 &lt;= arr[i] &lt;= 10^8
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 以固定案例執行 CountTriplets，輸出每筆資料的 Expected、Actual 與 PASS/FAIL，

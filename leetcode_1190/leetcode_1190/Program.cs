@@ -5,10 +5,60 @@ namespace leetcode_1190
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1190. Reverse Substrings Between Each Pair of Parentheses
-        /// https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/description/?envType=daily-question&envId=2024-07-11
-        /// 1190. 反转每对括号间的子串
+        /// https://leetcode.com/problems/reverse-substrings-between-each-pair-of-parentheses/description/
+        ///
+        /// You are given a string s that consists of lower case English letters and brackets.
+        /// Reverse the strings in each pair of matching parentheses, starting from the innermost one.
+        /// Your result should not contain any brackets.
+        ///
+        /// Example 1:
+        /// Input: s = "(abcd)"
+        /// Output: "dcba"
+        ///
+        /// Example 2:
+        /// Input: s = "(u(love)i)"
+        /// Output: "iloveu"
+        /// Explanation: The substring "love" is reversed first, then the whole string is reversed.
+        ///
+        /// Example 3:
+        /// Input: s = "(ed(et(oc))el)"
+        /// Output: "leetcode"
+        /// Explanation: First, we reverse the substring "oc", then "etco", and finally, the whole string.
+        ///
+        /// Constraints:
+        /// 1 &lt;= s.length &lt;= 2000
+        /// s only contains lower case English characters and parentheses.
+        /// It is guaranteed that all parentheses are balanced.
+        /// </para>
+        /// <para>
+        /// 1190. 反轉每對括號之間的子字串
         /// https://leetcode.cn/problems/reverse-substrings-between-each-pair-of-parentheses/description/
+        ///
+        /// 給定一個由小寫英文字母與括號組成的字串 s。
+        /// 請從最內層開始，反轉每一對相符括號內的字串。
+        /// 結果不得包含任何括號。
+        ///
+        /// 範例 1：
+        /// 輸入：s = "(abcd)"
+        /// 輸出："dcba"
+        ///
+        /// 範例 2：
+        /// 輸入：s = "(u(love)i)"
+        /// 輸出："iloveu"
+        /// 解釋：先反轉子字串 "love"，再反轉整個字串。
+        ///
+        /// 範例 3：
+        /// 輸入：s = "(ed(et(oc))el)"
+        /// 輸出："leetcode"
+        /// 解釋：先反轉子字串 "oc"，接著反轉 "etco"，最後反轉整個字串。
+        ///
+        /// 限制條件：
+        /// 1 &lt;= s.length &lt;= 2000
+        /// s 只包含小寫英文字元與括號。
+        /// 保證所有括號都保持平衡。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         /// <remarks>

@@ -5,12 +5,43 @@ class Program
     /// <summary>
     /// 42. Trapping Rain Water
     /// https://leetcode.com/problems/trapping-rain-water/description/
+    /// <para>
+    /// Given n non-negative integers representing an elevation map where the width of each bar is 1, compute how much water it can trap after raining.
+    ///
+    /// Example 1:
+    /// Input: height = [0,1,0,2,1,0,1,3,2,1,2,1]
+    /// Output: 6
+    /// Explanation: The elevation map shown in the official diagram is represented by [0,1,0,2,1,0,1,3,2,1,2,1]. In this case, 6 units of rainwater are trapped.
+    ///
+    /// Example 2:
+    /// Input: height = [4,2,0,3,2,5]
+    /// Output: 9
+    ///
+    /// Constraints:
+    /// - n == height.length
+    /// - 1 &lt;= n &lt;= 2 * 10^4
+    /// - 0 &lt;= height[i] &lt;= 10^5
+    /// </para>
+    /// <para>
     /// 42. 接雨水
     /// https://leetcode.cn/problems/trapping-rain-water/description/
-    /// 
-    /// 題目描述:
-    /// 給定一個非負整數數組 height，其中每個元素代表一個寬度為 1 的柱子的高度。
-    /// 計算在這些柱子所形成的容器中，能夠接住多少雨水。
+    ///
+    /// 給定 n 個非負整數，表示每根柱子寬度皆為 1 的高度圖，請計算下雨後能接住多少水。
+    ///
+    /// 範例 1：
+    /// 輸入：height = [0,1,0,2,1,0,1,3,2,1,2,1]
+    /// 輸出：6
+    /// 解釋：官方圖示中的高度圖由陣列 [0,1,0,2,1,0,1,3,2,1,2,1] 表示。在此情況下，可以接住 6 單位的雨水。
+    ///
+    /// 範例 2：
+    /// 輸入：height = [4,2,0,3,2,5]
+    /// 輸出：9
+    ///
+    /// 限制條件：
+    /// - n == height.length
+    /// - 1 &lt;= n &lt;= 2 * 10^4
+    /// - 0 &lt;= height[i] &lt;= 10^5
+    /// </para>
     /// </summary>
     /// <remarks>
     /// 使用固定案例依序驗證雙指標、動態規劃與單調棧三種解法，

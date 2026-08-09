@@ -4,17 +4,60 @@ class Program
 {
     /// <summary>
     /// 2561. Rearranging Fruits
-    /// https://leetcode.com/problems/rearranging-fruits/description/?envType=daily-question&envId=2025-08-02
-    /// 2561. 重排水果
-    /// https://leetcode.cn/problems/rearranging-fruits/description/?envType=daily-question&envId=2025-08-02
-    /// 
-    /// 題目描述：
-    /// 你有兩個水果籃，每個籃子裡有 n 個水果。給定兩個 0-indexed 整數陣列 basket1 和 basket2，分別代表每個籃子中水果的成本。
-    /// 你想讓兩個籃子完全相同。為此，你可以進行任意次以下操作：
-    /// 選擇兩個索引 i 和 j，將 basket1 的第 i 個水果與 basket2 的第 j 個水果交換。
-    /// 交換的成本為 min(basket1[i], basket2[j])。
-    /// 當兩個籃子排序後完全相同時，視為兩個籃子相等。
-    /// 請返回使兩個籃子相等的最小成本，如果無法做到則返回 -1。
+    /// https://leetcode.com/problems/rearranging-fruits/description/
+    /// <para>
+    /// You have two fruit baskets containing n fruits each. You are given two 0-indexed integer arrays basket1 and basket2 representing the cost of fruit in each basket. You want to make both baskets equal. To do so, you can use the following operation as many times as you want:
+    ///
+    /// - Choose two indices i and j, and swap the i-th fruit of basket1 with the j-th fruit of basket2.
+    /// - The cost of the swap is min(basket1[i], basket2[j]).
+    ///
+    /// Two baskets are considered equal if sorting them according to the fruit cost makes them exactly the same baskets.
+    ///
+    /// Return the minimum cost to make both baskets equal, or -1 if it is impossible.
+    ///
+    /// Example 1:
+    /// Input: basket1 = [4,2,2,2], basket2 = [1,4,1,2]
+    /// Output: 1
+    /// Explanation: Swap index 1 of basket1 with index 0 of basket2, which has cost 1. Now basket1 = [4,1,2,2] and basket2 = [2,4,1,2]. Rearranging both arrays makes them equal.
+    ///
+    /// Example 2:
+    /// Input: basket1 = [2,3,4,1], basket2 = [3,2,5,1]
+    /// Output: -1
+    /// Explanation: It can be shown that it is impossible to make both baskets equal.
+    ///
+    /// Constraints:
+    /// - basket1.length == basket2.length
+    /// - 1 &lt;= basket1.length &lt;= 10^5
+    /// - 1 &lt;= basket1[i], basket2[i] &lt;= 10^9
+    /// </para>
+    /// <para>
+    /// 2561. 重新排列水果
+    /// https://leetcode.cn/problems/rearranging-fruits/description/
+    ///
+    /// 你有兩個水果籃，每個籃子各裝有 n 個水果。給定兩個 0-indexed 整數陣列 basket1 和 basket2，分別表示每個籃子中水果的成本。你想讓兩個籃子相等。為此，你可以任意次執行下列操作：
+    ///
+    /// - 選擇兩個索引 i 和 j，交換 basket1 的第 i 個水果與 basket2 的第 j 個水果。
+    /// - 交換成本為 min(basket1[i], basket2[j])。
+    ///
+    /// 若依水果成本排序後，兩個籃子的內容完全相同，就視為兩個籃子相等。
+    ///
+    /// 回傳使兩個籃子相等的最小成本；若無法做到，則回傳 -1。
+    ///
+    /// 範例 1：
+    /// 輸入：basket1 = [4,2,2,2], basket2 = [1,4,1,2]
+    /// 輸出：1
+    /// 解釋：交換 basket1 中索引 1 的水果與 basket2 中索引 0 的水果，成本為 1。此時 basket1 = [4,1,2,2]，basket2 = [2,4,1,2]。重新排列兩個陣列後，它們會相等。
+    ///
+    /// 範例 2：
+    /// 輸入：basket1 = [2,3,4,1], basket2 = [3,2,5,1]
+    /// 輸出：-1
+    /// 解釋：可以證明無法使兩個籃子相等。
+    ///
+    /// 限制條件：
+    /// - basket1.length == basket2.length
+    /// - 1 &lt;= basket1.length &lt;= 10^5
+    /// - 1 &lt;= basket1[i], basket2[i] &lt;= 10^9
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// 

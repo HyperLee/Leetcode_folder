@@ -4,14 +4,46 @@ class Program
 {
     /// <summary>
     /// 279. Perfect Squares
-    /// https://leetcode.com/problems/perfect-squares/
+    /// https://leetcode.com/problems/perfect-squares/description/
+    /// <para>
+    /// Given an integer n, return the least number of perfect square numbers that sum to n.
     ///
-    /// 題目描述（繁體中文）：這是題目描述
-    /// 給定一個整數 n，回傳組成 n 所需的最少完全平方數數量。
-    /// 完全平方數是某個整數的平方，例如 1、4、9、16；3 和 11 則不是。
+    /// A perfect square is an integer that is the square of an integer; in other words, it is the product of an integer with itself. For example, 1, 4, 9, and 16 are perfect squares, while 3 and 11 are not.
     ///
+    /// Example 1:
+    /// Input: n = 12
+    /// Output: 3
+    /// Explanation: 12 = 4 + 4 + 4.
+    ///
+    /// Example 2:
+    /// Input: n = 13
+    /// Output: 2
+    /// Explanation: 13 = 4 + 9.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= n &lt;= 10^4
+    /// </para>
+    /// <para>
     /// 279. 完全平方數
     /// https://leetcode.cn/problems/perfect-squares/description/
+    ///
+    /// 給定一個整數 n，回傳總和為 n 的完全平方數的最少數量。
+    ///
+    /// 完全平方數是某個整數的平方；換句話說，它是某個整數與自身相乘的乘積。例如，1、4、9 和 16 是完全平方數，而 3 和 11 不是。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 12
+    /// 輸出：3
+    /// 解釋：12 = 4 + 4 + 4。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 13
+    /// 輸出：2
+    /// 解釋：13 = 4 + 9。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= n &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

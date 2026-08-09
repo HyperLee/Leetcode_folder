@@ -3,16 +3,46 @@
 class Program
 {
     /// <summary>
-    /// EN: Given a 0-indexed integer array `nums`, where `nums[i]` represents the score of the i-th student, and an integer `k`.
-    /// Pick any `k` scores so that the difference between the highest and the lowest of the `k` scores is minimized.
-    /// Return the minimum possible difference.
-    /// 
-    /// 繁體中文: 給定一個以 0 為起點的整數陣列 `nums`，`nums[i]` 表示第 i 位學生的分數，並給定整數 `k`。
-    /// 從陣列中選出任意 `k` 位學生的分數，使這 k 個分數的最大值與最小值之差最小化。
-    /// 回傳可能的最小差值。
-    /// 
-    /// LeetCode: 1984. Minimum Difference Between Highest and Lowest of K Scores
-    /// https://leetcode.com/problems/minimum-difference-between-highest-and-lowest-of-k-scores/
+    /// <para>
+    /// 1984. Minimum Difference Between Highest and Lowest of K Scores
+    /// https://leetcode.com/problems/minimum-difference-between-highest-and-lowest-of-k-scores/description/
+    ///
+    /// You are given a 0-indexed integer array nums, where nums[i] is the score of the i-th student, and an integer k. Choose any k students so that the difference between the highest and lowest selected scores is minimized. Return the minimum possible difference.
+    ///
+    /// Example 1:
+    /// Input: nums = [90], k = 1
+    /// Output: 0
+    /// Explanation: The only choice is [90], whose difference is 90 - 90 = 0. The minimum is 0.
+    ///
+    /// Example 2:
+    /// Input: nums = [9,4,1,7], k = 2
+    /// Output: 2
+    /// Explanation: The six possible pairs have differences 9 - 4 = 5, 9 - 1 = 8, 9 - 7 = 2, 4 - 1 = 3, 7 - 4 = 3, and 7 - 1 = 6. The minimum is 2.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= k &lt;= nums.length &lt;= 1000
+    /// - 0 &lt;= nums[i] &lt;= 10^5
+    /// </para>
+    /// <para>
+    /// 1984. 學生分數的最小差值
+    /// https://leetcode.cn/problems/minimum-difference-between-highest-and-lowest-of-k-scores/description/
+    ///
+    /// 給定從 0 開始索引的整數陣列 nums，其中 nums[i] 是第 i 位學生的分數，另給定整數 k。任選 k 位學生，使所選分數最高與最低之差最小。回傳可能的最小差值。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [90], k = 1
+    /// 輸出：0
+    /// 說明：唯一選擇是 [90]，差值為 90 - 90 = 0，最小值為 0。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [9,4,1,7], k = 2
+    /// 輸出：2
+    /// 說明：六種配對的差值為 9 - 4 = 5、9 - 1 = 8、9 - 7 = 2、4 - 1 = 3、7 - 4 = 3、7 - 1 = 6，最小值為 2。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= k &lt;= nums.length &lt;= 1000
+    /// - 0 &lt;= nums[i] &lt;= 10^5
+    /// </para>
     /// </summary>
     /// <param name="args">Command-line arguments</param>
     static void Main(string[] args)

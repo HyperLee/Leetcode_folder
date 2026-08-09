@@ -4,26 +4,74 @@ class Program
 {
     /// <summary>
     /// 2976. Minimum Cost to Convert String I
-    /// https://leetcode.com/problems/minimum-cost-to-convert-string-i/description/?envType=daily-question&envId=2026-01-29
-    /// https://leetcode.cn/problems/minimum-cost-to-convert-string-i/description/?envType=daily-question&envId=2026-01-29
+    /// https://leetcode.com/problems/minimum-cost-to-convert-string-i/description/
+    /// <para>
+    /// You are given two 0-indexed strings source and target, both of length n and consisting of lowercase English letters. You are also given two 0-indexed character arrays original and changed, and an integer array cost, where cost[i] is the cost of changing original[i] to changed[i].
     ///
-    /// English:
-    /// You are given two 0-indexed strings source and target, both of length n and consisting of lowercase English letters. You are also given two 0-indexed character arrays original and changed, and an integer array cost, where cost[i] represents the cost of changing the character original[i] to the character changed[i].
+    /// You start with source. In one operation, you may pick a character x and change it to y at cost z if there is an index j such that cost[j] == z, original[j] == x, and changed[j] == y.
     ///
-    /// You start with the string source. In one operation, you can pick a character x from the string and change it to the character y at a cost of z if there exists any index j such that cost[j] == z, original[j] == x, and changed[j] == y.
+    /// Return the minimum cost to convert source to target using any number of operations. If it is impossible, return -1.
     ///
-    /// Return the minimum cost to convert the string source to the string target using any number of operations. If it is impossible to convert source to target, return -1.
+    /// Note that there may be indices i and j such that original[j] == original[i] and changed[j] == changed[i].
     ///
-    /// Note that there may exist indices i, j such that original[j] == original[i] and changed[j] == changed[i].
+    /// Example 1:
+    /// Input: source = "abcd", target = "acbe", original = ["a","b","c","c","e","d"], changed = ["b","c","b","e","b","e"], cost = [2,5,5,1,2,20]
+    /// Output: 28
+    /// Explanation: Change index 1 from 'b' to 'c' for 5. Change index 2 from 'c' to 'e' for 1, then from 'e' to 'b' for 2. Change index 3 from 'd' to 'e' for 20. The total is 5 + 1 + 2 + 20 = 28, which is minimal.
     ///
-    /// 中文（繁體）:
-    /// 給定兩個 0 為起始索引的字串 source 與 target，長度皆為 n，且只包含小寫英文字母。另有兩個 0 為起始索引字元陣列 original 與 changed，以及整數陣列 cost，其中 cost[i] 表示將字元 original[i] 變為 changed[i] 的成本。
+    /// Example 2:
+    /// Input: source = "aaaa", target = "bbbb", original = ["a","c"], changed = ["c","b"], cost = [1,2]
+    /// Output: 12
+    /// Explanation: Changing 'a' to 'c' costs 1, then changing 'c' to 'b' costs 2, for 1 + 2 = 3 per character. Converting all four occurrences costs 3 * 4 = 12.
     ///
-    /// 從字串 source 出發。在一次操作中，你可以選取字串中的字元 x，將其改為字元 y，成本為 z，當且僅當存在某個索引 j 使得 cost[j] == z、original[j] == x、且 changed[j] == y。
+    /// Example 3:
+    /// Input: source = "abcd", target = "abce", original = ["a"], changed = ["e"], cost = [10000]
+    /// Output: -1
+    /// Explanation: Conversion is impossible because the value at index 3 cannot be changed from 'd' to 'e'.
     ///
-    /// 回傳將 source 轉換成 target 的最小總成本；若無法轉換則回傳 -1。
+    /// Constraints:
+    /// - 1 &lt;= source.length == target.length &lt;= 10^5
+    /// - source and target consist of lowercase English letters.
+    /// - 1 &lt;= cost.length == original.length == changed.length &lt;= 2000
+    /// - original[i] and changed[i] are lowercase English letters.
+    /// - 1 &lt;= cost[i] &lt;= 10^6
+    /// - original[i] != changed[i]
+    /// </para>
+    /// <para>
+    /// 2976. 轉換字串的最小成本 I
+    /// https://leetcode.cn/problems/minimum-cost-to-convert-string-i/description/
     ///
-    /// 注意：可能存在不同索引 i, j 但 original[j] == original[i] 且 changed[j] == changed[i] 的情況。
+    /// 給定兩個 0-indexed 字串 source 與 target，兩者長度皆為 n，且只含小寫英文字母。另給定兩個 0-indexed 字元陣列 original、changed 與整數陣列 cost，其中 cost[i] 是將 original[i] 改為 changed[i] 的成本。
+    ///
+    /// 你從 source 開始。一次操作中，若存在索引 j，使 cost[j] == z、original[j] == x 且 changed[j] == y，便可選擇字元 x 並以成本 z 將它改為 y。
+    ///
+    /// 回傳使用任意次操作將 source 轉換為 target 的最小成本；若無法轉換，回傳 -1。
+    ///
+    /// 注意，可能存在索引 i 和 j，使 original[j] == original[i] 且 changed[j] == changed[i]。
+    ///
+    /// 範例 1：
+    /// 輸入：source = "abcd", target = "acbe", original = ["a","b","c","c","e","d"], changed = ["b","c","b","e","b","e"], cost = [2,5,5,1,2,20]
+    /// 輸出：28
+    /// 解釋：將索引 1 的 'b' 以成本 5 改為 'c'；將索引 2 的 'c' 以成本 1 改為 'e'，再以成本 2 將 'e' 改為 'b'；將索引 3 的 'd' 以成本 20 改為 'e'。總成本為 5 + 1 + 2 + 20 = 28，且這是最小值。
+    ///
+    /// 範例 2：
+    /// 輸入：source = "aaaa", target = "bbbb", original = ["a","c"], changed = ["c","b"], cost = [1,2]
+    /// 輸出：12
+    /// 解釋：將 'a' 改為 'c' 的成本為 1，再將 'c' 改為 'b' 的成本為 2，每個字元共需 1 + 2 = 3。轉換全部四個字元需 3 * 4 = 12。
+    ///
+    /// 範例 3：
+    /// 輸入：source = "abcd", target = "abce", original = ["a"], changed = ["e"], cost = [10000]
+    /// 輸出：-1
+    /// 解釋：無法轉換，因為索引 3 的值不能從 'd' 改為 'e'。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= source.length == target.length &lt;= 10^5
+    /// - source 與 target 只含小寫英文字母。
+    /// - 1 &lt;= cost.length == original.length == changed.length &lt;= 2000
+    /// - original[i] 與 changed[i] 是小寫英文字母。
+    /// - 1 &lt;= cost[i] &lt;= 10^6
+    /// - original[i] != changed[i]
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

@@ -3,10 +3,55 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 121. Best Time to Buy and Sell Stock
-        /// https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
-        /// 121. 买卖股票的最佳时机
-        /// https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/
+        /// https://leetcode.com/problems/best-time-to-buy-and-sell-stock/description/
+        ///
+        /// You are given an array prices where prices[i] is the price of a given stock on the i-th day.
+        /// You want to maximize your profit by choosing a single day to buy one stock and choosing a different
+        /// day in the future to sell that stock.
+        /// Return the maximum profit you can achieve from this transaction. If you cannot achieve any profit,
+        /// return 0.
+        ///
+        /// Example 1:
+        /// Input: prices = [7,1,5,3,6,4]
+        /// Output: 5
+        /// Explanation: Buy on day 2 (price = 1) and sell on day 5 (price = 6), profit = 6 - 1 = 5.
+        /// Note that buying on day 2 and selling on day 1 is not allowed because you must buy before you sell.
+        ///
+        /// Example 2:
+        /// Input: prices = [7,6,4,3,1]
+        /// Output: 0
+        /// Explanation: In this case, no transactions are done and the max profit = 0.
+        ///
+        /// Constraints:
+        /// 1 &lt;= prices.length &lt;= 10^5
+        /// 0 &lt;= prices[i] &lt;= 10^4
+        /// </para>
+        /// <para>
+        /// 121. 買賣股票的最佳時機
+        /// https://leetcode.cn/problems/best-time-to-buy-and-sell-stock/description/
+        ///
+        /// 給定陣列 prices，其中 prices[i] 是某支股票在第 i 天的價格。
+        /// 你想藉由選擇某一天買入一股股票，並選擇未來不同的一天賣出該股票，讓利潤最大化。
+        /// 請回傳這筆交易可獲得的最大利潤。若無法獲得任何利潤，則回傳 0。
+        ///
+        /// 範例 1：
+        /// 輸入：prices = [7,1,5,3,6,4]
+        /// 輸出：5
+        /// 解釋：在第 2 天買入（價格 = 1），並在第 5 天賣出（價格 = 6），
+        /// 利潤 = 6 - 1 = 5。
+        /// 請注意，不允許在第 2 天買入並在第 1 天賣出，因為必須先買入才能賣出。
+        ///
+        /// 範例 2：
+        /// 輸入：prices = [7,6,4,3,1]
+        /// 輸出：0
+        /// 解釋：在此情況下不進行任何交易，最大利潤 = 0。
+        ///
+        /// 限制條件：
+        /// 1 &lt;= prices.length &lt;= 10^5
+        /// 0 &lt;= prices[i] &lt;= 10^4
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

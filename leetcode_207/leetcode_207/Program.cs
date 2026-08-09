@@ -3,33 +3,52 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 207. Course Schedule
-        /// https://leetcode.com/problems/course-schedule/
-        /// 207. 课程表
-        /// https://leetcode.cn/problems/course-schedule/
-        /// 
-        /// 拓扑排序 基本概念介紹
-        /// 
-        /// 拓扑排序（Topological Sorting）是一種針對 有向無環圖（DAG, Directed Acyclic Graph）的排序方法，用於將圖中的所有節點排列成線性順序，並且滿足以下條件：
-        /// 1. 如果在圖中有一條從節點 A 指向節點 B 的有向邊 (A → B)，那麼在排序中節點 A 必須排在節點 B 之前。
-        /// 2. 拓扑排序僅適用於無環圖，因為有環的圖無法確定先後順序。
-        /// 
-        /// 典型應用場景
-        /// 課程安排：解決依賴關係的問題，例如某些課程需要先完成其他課程。
-        /// 任務調度：確定任務執行順序，保證依賴的任務先執行。
-        /// 構建順序：如軟體編譯順序，其中某些模組需要依賴其他模組。
-        /// 
-        /// 常用的拓扑排序算法
-        /// 1. Kahn 算法
-        /// 2. DFS（深度優先搜索）算法
-        /// 核心思想：基於 逆後序遍歷。
-        /// 遍歷每個節點，對於尚未訪問的節點執行深度優先搜索。
-        /// 在遞歸返回時，將該節點加入結果棧中。
-        /// 最終將棧中的節點順序輸出，得到拓扑排序。 時間複雜度：O(V + E)。
-        /// 
-        /// 注意
-        /// 如果圖中存在環，則拓扑排序無法完成，需要先檢測環的存在。
-        /// Kahn 算法和 DFS 的結果可能不唯一，但均為合法的拓扑排序。
+        /// https://leetcode.com/problems/course-schedule/description/
+        ///
+        /// There are numCourses courses labeled 0 through numCourses - 1. prerequisites[i] = [a_i,b_i] means course b_i must be completed before course a_i. For example, [0,1] means course 1 is required before course 0. Return true if all courses can be finished; otherwise return false.
+        ///
+        /// Example 1:
+        /// Input: numCourses = 2, prerequisites = [[1,0]]
+        /// Output: true
+        /// Explanation: Complete course 0 before course 1, so all courses can be finished.
+        ///
+        /// Example 2:
+        /// Input: numCourses = 2, prerequisites = [[1,0],[0,1]]
+        /// Output: false
+        /// Explanation: Course 1 requires 0 and course 0 requires 1, so completion is impossible.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= numCourses &lt;= 2000
+        /// - 0 &lt;= prerequisites.length &lt;= 5000
+        /// - prerequisites[i].length == 2
+        /// - 0 &lt;= a_i, b_i &lt; numCourses
+        /// - All prerequisite pairs are unique.
+        /// </para>
+        /// <para>
+        /// 207. 課程表
+        /// https://leetcode.cn/problems/course-schedule/description/
+        ///
+        /// 共有 numCourses 門課程，編號從 0 到 numCourses - 1。prerequisites[i] = [a_i,b_i] 表示修讀 a_i 前必須先完成 b_i。例如，[0,1] 表示修讀課程 0 前必須先完成課程 1。若能完成所有課程回傳 true，否則回傳 false。
+        ///
+        /// 範例 1：
+        /// 輸入：numCourses = 2, prerequisites = [[1,0]]
+        /// 輸出：true
+        /// 說明：先完成課程 0 再修讀課程 1，因此能完成所有課程。
+        ///
+        /// 範例 2：
+        /// 輸入：numCourses = 2, prerequisites = [[1,0],[0,1]]
+        /// 輸出：false
+        /// 說明：課程 1 需要先完成 0，而課程 0 又需要先完成 1，因此不可能完成。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= numCourses &lt;= 2000
+        /// - 0 &lt;= prerequisites.length &lt;= 5000
+        /// - prerequisites[i].length == 2
+        /// - 0 &lt;= a_i, b_i &lt; numCourses
+        /// - 所有先修課程配對皆不重複。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

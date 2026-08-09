@@ -5,10 +5,45 @@ class Program
     /// <summary>
     /// 47. Permutations II
     /// https://leetcode.com/problems/permutations-ii/description/
-    /// 47. 全排列 II（簡體中文）
+    /// <para>
+    /// Given a collection of numbers, nums, that might contain duplicates, return all possible unique permutations in any order.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,1,2]
+    /// Output:
+    /// [[1,1,2],
+    /// [1,2,1],
+    /// [2,1,1]]
+    ///
+    /// Example 2:
+    /// Input: nums = [1,2,3]
+    /// Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 8
+    /// - -10 &lt;= nums[i] &lt;= 10
+    /// </para>
+    /// <para>
+    /// 47. 全排列 II
     /// https://leetcode.cn/problems/permutations-ii/description/
-    /// 繁體中文：
-    /// 給定一組可能包含重複數字的整數陣列 `nums`，請回傳所有可能的不重複排列，回傳順序不限。
+    ///
+    /// 給定一組可能包含重複數字的 nums，請以任意順序回傳所有可能的不重複排列。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,1,2]
+    /// 輸出：
+    /// [[1,1,2],
+    /// [1,2,1],
+    /// [2,1,1]]
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [1,2,3]
+    /// 輸出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 8
+    /// - -10 &lt;= nums[i] &lt;= 10
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

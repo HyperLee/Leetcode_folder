@@ -3,13 +3,52 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 2373. Largest Local Values in a Matrix
-        /// https://leetcode.com/problems/largest-local-values-in-a-matrix/description/?envType=daily-question&envId=2024-05-12
-        /// 2373. 矩阵中的局部最大值
+        /// https://leetcode.com/problems/largest-local-values-in-a-matrix/description/
+        ///
+        /// You are given an n x n integer matrix grid. Generate matrix maxLocal of size (n - 2) x (n - 2), where maxLocal[i][j] is the largest value in the contiguous 3 x 3 area of grid centered at row i + 1 and column j + 1. In other words, find the largest value in every contiguous 3 x 3 submatrix. Return maxLocal.
+        ///
+        /// Images: https://assets.leetcode.com/uploads/2022/06/21/ex1.png and https://assets.leetcode.com/uploads/2022/07/02/ex2new2.png
+        ///
+        /// Example 1:
+        /// Input: grid = [[9,9,8,1],[5,6,2,6],[8,2,6,4],[6,2,2,2]]
+        /// Output: [[9,9],[8,6]]
+        /// Explanation: Every output value is the largest value in its corresponding contiguous 3 x 3 submatrix of grid.
+        ///
+        /// Example 2:
+        /// Input: grid = [[1,1,1,1,1],[1,1,1,1,1],[1,1,2,1,1],[1,1,1,1,1],[1,1,1,1,1]]
+        /// Output: [[2,2,2],[2,2,2],[2,2,2]]
+        /// Explanation: The value 2 occurs in every contiguous 3 x 3 submatrix of grid.
+        ///
+        /// Constraints:
+        /// - n == grid.length == grid[i].length
+        /// - 3 &lt;= n &lt;= 100
+        /// - 1 &lt;= grid[i][j] &lt;= 100
+        /// </para>
+        /// <para>
+        /// 2373. 矩陣中的局部最大值
         /// https://leetcode.cn/problems/largest-local-values-in-a-matrix/description/
-        /// 
-        /// https://learn.microsoft.com/zh-tw/dotnet/csharp/programming-guide/arrays/jagged-arrays
-        /// 不規則陣列
+        ///
+        /// 給定 n x n 整數矩陣 grid。產生大小為 (n - 2) x (n - 2) 的矩陣 maxLocal，其中 maxLocal[i][j] 是 grid 中以第 i + 1 列、第 j + 1 欄為中心之連續 3 x 3 區域內的最大值。換言之，找出每個連續 3 x 3 子矩陣的最大值。回傳 maxLocal。
+        ///
+        /// 圖片：https://assets.leetcode.com/uploads/2022/06/21/ex1.png 與 https://assets.leetcode.com/uploads/2022/07/02/ex2new2.png
+        ///
+        /// 範例 1：
+        /// 輸入：grid = [[9,9,8,1],[5,6,2,6],[8,2,6,4],[6,2,2,2]]
+        /// 輸出：[[9,9],[8,6]]
+        /// 說明：輸出中的每個值，都是 grid 對應連續 3 x 3 子矩陣中的最大值。
+        ///
+        /// 範例 2：
+        /// 輸入：grid = [[1,1,1,1,1],[1,1,1,1,1],[1,1,2,1,1],[1,1,1,1,1],[1,1,1,1,1]]
+        /// 輸出：[[2,2,2],[2,2,2],[2,2,2]]
+        /// 說明：數值 2 位於 grid 的每一個連續 3 x 3 子矩陣中。
+        ///
+        /// 限制條件：
+        /// - n == grid.length == grid[i].length
+        /// - 3 &lt;= n &lt;= 100
+        /// - 1 &lt;= grid[i][j] &lt;= 100
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 執行五組固定案例，比較兩種解法的結果，並確認兩者都不會修改輸入矩陣。

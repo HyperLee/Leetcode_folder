@@ -4,16 +4,54 @@ class Program
 {
     /// <summary>
     /// 2962. Count Subarrays Where Max Element Appears at Least K Times
-    /// https://leetcode.com/problems/count-subarrays-where-max-element-appears-at-least-k-times/description/?envType=daily-question&envId=2024-03-29
-    /// 2962. 统计最大元素出现至少 K 次的子数组
+    /// https://leetcode.com/problems/count-subarrays-where-max-element-appears-at-least-k-times/description/
+    /// <para>
+    /// You are given an integer array nums and a positive integer k.
+    ///
+    /// Return the number of subarrays where the maximum element of nums appears at least k times in that subarray.
+    ///
+    /// A subarray is a contiguous sequence of elements within an array.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,3,2,3,3], k = 2
+    /// Output: 6
+    /// Explanation: The subarrays containing 3 at least 2 times are [1,3,2,3], [1,3,2,3,3], [3,2,3], [3,2,3,3], [2,3,3], and [3,3].
+    ///
+    /// Example 2:
+    /// Input: nums = [1,4,2,1], k = 3
+    /// Output: 0
+    /// Explanation: No subarray contains 4 at least 3 times.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 1 &lt;= nums[i] &lt;= 10^6
+    /// - 1 &lt;= k &lt;= 10^5
+    /// </para>
+    /// <para>
+    /// 2962. 最大元素至少出現 K 次的子陣列計數
     /// https://leetcode.cn/problems/count-subarrays-where-max-element-appears-at-least-k-times/description/
-    /// 
-    /// 題目描述：
-    /// 給定一個整數數組 nums 和一個整數 k，請找出子數組的數量，這些子數組的最大元素至少出現 k 次。
-    /// 解題出發點建議：
-    /// 1. 使用滑動視窗技術來處理子數組的範圍。
-    /// 2. 需要統計最大元素的出現次數，並根據條件調整視窗的起點。
-    /// 3. 注意結果的數據類型為 long，避免溢出。
+    ///
+    /// 給定一個整數陣列 nums 和正整數 k。
+    ///
+    /// 回傳符合下列條件的子陣列數量：nums 的最大元素在該子陣列中至少出現 k 次。
+    ///
+    /// 子陣列是陣列中一段連續的元素序列。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,3,2,3,3], k = 2
+    /// 輸出：6
+    /// 解釋：包含元素 3 至少 2 次的子陣列為 [1,3,2,3]、[1,3,2,3,3]、[3,2,3]、[3,2,3,3]、[2,3,3] 和 [3,3]。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [1,4,2,1], k = 3
+    /// 輸出：0
+    /// 解釋：沒有任何子陣列包含元素 4 至少 3 次。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 1 &lt;= nums[i] &lt;= 10^6
+    /// - 1 &lt;= k &lt;= 10^5
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

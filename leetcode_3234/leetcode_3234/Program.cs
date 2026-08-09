@@ -4,15 +4,52 @@ class Program
 {
     /// <summary>
     /// 3234. Count the Number of Substrings With Dominant Ones
-    /// https://leetcode.com/problems/count-the-number-of-substrings-with-dominant-ones/description/?envType=daily-question&envId=2025-11-15
-    /// 3234. 统计 1 显著的字符串的数量
-    /// https://leetcode.cn/problems/count-the-number-of-substrings-with-dominant-ones/description/?envType=daily-question&envId=2025-11-15
+    /// https://leetcode.com/problems/count-the-number-of-substrings-with-dominant-ones/description/
+    /// <para>
+    /// You are given a binary string s.
     ///
-    /// 题目描述：给定一个二进位字串 s，返回具有“1 顯著”的子字串數量。
-    /// 子字串若滿足 '1' 的數量 >= ('0' 的數量)^2，則稱其為“1 顯著”的子字串。
+    /// Return the number of substrings with dominant ones.
     ///
-    /// 例如：s = "001101"，請統計所有子字串中符合上述條件的個數。
+    /// A string has dominant ones if its number of ones is at least the square of its number of zeros.
     ///
+    /// Example 1:
+    /// Input: s = "00011"
+    /// Output: 5
+    /// Explanation: The dominant substrings are s[3..3] = "1" with 0 zeros and 1 one; s[4..4] = "1" with 0 zeros and 1 one; s[2..3] = "01" with 1 zero and 1 one; s[3..4] = "11" with 0 zeros and 2 ones; and s[2..4] = "011" with 1 zero and 2 ones.
+    ///
+    /// Example 2:
+    /// Input: s = "101101"
+    /// Output: 16
+    /// Explanation: There are 21 substrings total. The 5 non-dominant substrings are s[1..1] = "0" with 1 zero and 0 ones; s[4..4] = "0" with 1 zero and 0 ones; s[1..4] = "0110" with 2 zeros and 2 ones; s[0..4] = "10110" with 2 zeros and 3 ones; and s[1..5] = "01101" with 2 zeros and 3 ones. Therefore, 16 substrings have dominant ones.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 4 * 10^4
+    /// - s consists only of '0' and '1'.
+    /// </para>
+    /// <para>
+    /// 3234. 計算 1 佔優勢的子字串數量
+    /// https://leetcode.cn/problems/count-the-number-of-substrings-with-dominant-ones/description/
+    ///
+    /// 給定一個二進位字串 s。
+    ///
+    /// 回傳 1 佔優勢的子字串數量。
+    ///
+    /// 若字串中的 1 數量至少等於 0 數量的平方，則稱該字串的 1 佔優勢。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "00011"
+    /// 輸出：5
+    /// 解釋：符合條件的子字串為 s[3..3] = "1"，含 0 個零與 1 個一；s[4..4] = "1"，含 0 個零與 1 個一；s[2..3] = "01"，含 1 個零與 1 個一；s[3..4] = "11"，含 0 個零與 2 個一；s[2..4] = "011"，含 1 個零與 2 個一。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "101101"
+    /// 輸出：16
+    /// 解釋：總共有 21 個子字串。5 個不符合條件的子字串為 s[1..1] = "0"，含 1 個零與 0 個一；s[4..4] = "0"，含 1 個零與 0 個一；s[1..4] = "0110"，含 2 個零與 2 個一；s[0..4] = "10110"，含 2 個零與 3 個一；s[1..5] = "01101"，含 2 個零與 3 個一。因此有 16 個一佔優勢的子字串。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 4 * 10^4
+    /// - s 只由 '0' 與 '1' 組成。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

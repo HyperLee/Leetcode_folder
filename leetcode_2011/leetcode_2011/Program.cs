@@ -3,17 +3,62 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2011. Final Value of Variable After Performing Operations
-    /// https://leetcode.com/problems/final-value-of-variable-after-performing-operations/description/?envType=daily-question&envId=2025-10-20
-    /// 2011. 執行操作後的變數值
-    /// https://leetcode.cn/problems/final-value-of-variable-after-performing-operations/description/?envType=daily-question&envId=2025-10-20
+    /// https://leetcode.com/problems/final-value-of-variable-after-performing-operations/description/
     ///
-    /// 題目描述 (中文):
-    /// 有一種程式語言只有四種操作和一個變數 X：
-    /// ++X 與 X++ 將變數 X 的值增加 1；
-    /// --X 與 X-- 將變數 X 的值減少 1。
-    /// 起始時 X 的值為 0。
-    /// 給定一個字串陣列 operations，包含一系列操作；執行所有操作後，回傳 X 的最終值。
+    /// A programming language has only four operations and one variable X:
+    /// - ++X and X++ increment X by 1.
+    /// - --X and X-- decrement X by 1.
+    /// Initially X is 0. Given an array operations, return the final value of X after performing every operation.
+    ///
+    /// Example 1:
+    /// Input: operations = ["--X","X++","X++"]
+    /// Output: 1
+    /// Explanation: Starting from 0, the values become -1, 0, and 1.
+    ///
+    /// Example 2:
+    /// Input: operations = ["++X","++X","X++"]
+    /// Output: 3
+    /// Explanation: Starting from 0, the values become 1, 2, and 3.
+    ///
+    /// Example 3:
+    /// Input: operations = ["X++","++X","--X","X--"]
+    /// Output: 0
+    /// Explanation: Starting from 0, the values become 1, 2, 1, and 0.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= operations.length &lt;= 100
+    /// - operations[i] is "++X", "X++", "--X", or "X--".
+    /// </para>
+    /// <para>
+    /// 2011. 執行操作後變數的最終值
+    /// https://leetcode.cn/problems/final-value-of-variable-after-performing-operations/description/
+    ///
+    /// 一種程式語言只有四種操作與一個變數 X：
+    /// - ++X 與 X++ 會將 X 增加 1。
+    /// - --X 與 X-- 會將 X 減少 1。
+    /// X 的初始值為 0。給定操作陣列 operations，執行所有操作後回傳 X 的最終值。
+    ///
+    /// 範例 1：
+    /// 輸入：operations = ["--X","X++","X++"]
+    /// 輸出：1
+    /// 說明：從 0 開始，數值依序變為 -1、0、1。
+    ///
+    /// 範例 2：
+    /// 輸入：operations = ["++X","++X","X++"]
+    /// 輸出：3
+    /// 說明：從 0 開始，數值依序變為 1、2、3。
+    ///
+    /// 範例 3：
+    /// 輸入：operations = ["X++","++X","--X","X--"]
+    /// 輸出：0
+    /// 說明：從 0 開始，數值依序變為 1、2、1、0。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= operations.length &lt;= 100
+    /// - operations[i] 為 "++X"、"X++"、"--X" 或 "X--"。
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數（未使用）</param>
     static void Main(string[] args)

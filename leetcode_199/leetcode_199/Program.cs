@@ -29,11 +29,62 @@
 
 
         /// <summary>
+        /// <para>
         /// 199. Binary Tree Right Side View
         /// https://leetcode.com/problems/binary-tree-right-side-view/description/
-        /// 
-        /// 199. 二叉树的右视图
+        ///
+        /// Given the root of a binary tree, imagine standing on its right side. Return the values of the nodes you can see, ordered from top to bottom.
+        ///
+        /// Images: https://assets.leetcode.com/uploads/2024/11/24/tmpd5jn43fs-1.png and https://assets.leetcode.com/uploads/2024/11/24/tmpkpe40xeh-1.png
+        ///
+        /// Example 1:
+        /// Input: root = [1,2,3,null,5,null,4]
+        /// Output: [1,3,4]
+        ///
+        /// Example 2:
+        /// Input: root = [1,2,3,4,null,null,null,5]
+        /// Output: [1,3,4,5]
+        ///
+        /// Example 3:
+        /// Input: root = [1,null,3]
+        /// Output: [1,3]
+        ///
+        /// Example 4:
+        /// Input: root = []
+        /// Output: []
+        ///
+        /// Constraints:
+        /// - The number of nodes is in the range [0,100].
+        /// - -100 &lt;= Node.val &lt;= 100
+        /// </para>
+        /// <para>
+        /// 199. 二元樹的右視圖
         /// https://leetcode.cn/problems/binary-tree-right-side-view/description/
+        ///
+        /// 給定二元樹的根節點，想像你站在樹的右側。請按從上到下的順序回傳你能看見的節點值。
+        ///
+        /// 圖片：https://assets.leetcode.com/uploads/2024/11/24/tmpd5jn43fs-1.png 與 https://assets.leetcode.com/uploads/2024/11/24/tmpkpe40xeh-1.png
+        ///
+        /// 範例 1：
+        /// 輸入：root = [1,2,3,null,5,null,4]
+        /// 輸出：[1,3,4]
+        ///
+        /// 範例 2：
+        /// 輸入：root = [1,2,3,4,null,null,null,5]
+        /// 輸出：[1,3,4,5]
+        ///
+        /// 範例 3：
+        /// 輸入：root = [1,null,3]
+        /// 輸出：[1,3]
+        ///
+        /// 範例 4：
+        /// 輸入：root = []
+        /// 輸出：[]
+        ///
+        /// 限制條件：
+        /// - 節點數量在 [0,100] 範圍內。
+        /// - -100 &lt;= Node.val &lt;= 100
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

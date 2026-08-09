@@ -4,9 +4,42 @@
     {
         /// <summary>
         /// 349. Intersection of Two Arrays
-        /// https://leetcode.com/problems/intersection-of-two-arrays/description/?envType=daily-question&envId=2024-03-10
-        /// 349. 两个数组的交集
+        /// https://leetcode.com/problems/intersection-of-two-arrays/description/
+        /// <para>
+        /// Given integer arrays nums1 and nums2, return an array of their intersection. Every result element must be unique, and the result may be returned in any order.
+        ///
+        /// Example 1:
+        /// Input: nums1 = [1,2,2,1], nums2 = [2,2]
+        /// Output: [2]
+        ///
+        /// Example 2:
+        /// Input: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+        /// Output: [9,4]
+        /// Explanation: [4,9] is also accepted.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= nums1.length, nums2.length &lt;= 1000
+        /// - 0 &lt;= nums1[i], nums2[i] &lt;= 1000
+        /// </para>
+        /// <para>
+        /// 349. 兩個陣列的交集
         /// https://leetcode.cn/problems/intersection-of-two-arrays/description/
+        ///
+        /// 給定整數陣列 nums1 與 nums2，回傳兩者的交集陣列。結果中的每個元素必須唯一，且可用任意順序回傳。
+        ///
+        /// 範例 1：
+        /// 輸入：nums1 = [1,2,2,1], nums2 = [2,2]
+        /// 輸出：[2]
+        ///
+        /// 範例 2：
+        /// 輸入：nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+        /// 輸出：[9,4]
+        /// 解釋：[4,9] 也會被接受。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= nums1.length, nums2.length &lt;= 1000
+        /// - 0 &lt;= nums1[i], nums2[i] &lt;= 1000
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

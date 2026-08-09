@@ -4,17 +4,61 @@ class Program
 {
     /// <summary>
     /// 3714. Longest Balanced Substring II
+    /// https://leetcode.com/problems/longest-balanced-substring-ii/description/
     /// <para>
-    /// English:
-    /// You are given a string <c>s</c> consisting only of the characters 'a', 'b', and 'c'.
-    /// A substring of <c>s</c> is called balanced if all distinct characters in the substring appear the same number of times.
-    /// Return the length of the longest balanced substring of <c>s</c>.
+    /// You are given a string s consisting only of the characters 'a', 'b', and 'c'.
+    ///
+    /// A substring of s is called balanced if all distinct characters in the substring appear the same number of times.
+    ///
+    /// Return the length of the longest balanced substring of s.
+    ///
+    /// Example 1:
+    /// Input: s = "abbac"
+    /// Output: 4
+    /// Explanation: The longest balanced substring is "abba" because both distinct characters 'a' and 'b' each appear exactly 2 times.
+    ///
+    /// Example 2:
+    /// Input: s = "aabcc"
+    /// Output: 3
+    /// Explanation: The longest balanced substring is "abc" because all distinct characters 'a', 'b', and 'c' each appear exactly 1 time.
+    ///
+    /// Example 3:
+    /// Input: s = "aba"
+    /// Output: 2
+    /// Explanation: One of the longest balanced substrings is "ab" because both distinct characters 'a' and 'b' each appear exactly 1 time. Another longest balanced substring is "ba".
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s contains only the characters 'a', 'b', and 'c'.
     /// </para>
     /// <para>
-    /// 繁體中文：
-    /// 給定一個僅包含字元 'a'、'b' 和 'c' 的字串 <c>s</c>。
-    /// 若子字串中所有出現的不同字元出現次數相同，則稱該子字串為「平衡」。
-    /// 回傳 <c>s</c> 中最長的平衡子字串的長度。
+    /// 3714. 最長平衡子字串 II
+    /// https://leetcode.cn/problems/longest-balanced-substring-ii/description/
+    ///
+    /// 給定一個只由字元 'a'、'b' 與 'c' 組成的字串 s。
+    ///
+    /// 若 s 的某個子字串中，所有不同字元的出現次數都相同，則稱該子字串為平衡子字串。
+    ///
+    /// 回傳 s 中最長平衡子字串的長度。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "abbac"
+    /// 輸出：4
+    /// 解釋：最長平衡子字串是 "abba"，因為其中兩個不同字元 'a' 與 'b' 都恰好出現 2 次。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "aabcc"
+    /// 輸出：3
+    /// 解釋：最長平衡子字串是 "abc"，因為其中所有不同字元 'a'、'b' 與 'c' 都恰好出現 1 次。
+    ///
+    /// 範例 3：
+    /// 輸入：s = "aba"
+    /// 輸出：2
+    /// 解釋：其中一個最長平衡子字串是 "ab"，因為兩個不同字元 'a' 與 'b' 都恰好出現 1 次；另一個最長平衡子字串是 "ba"。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s 只包含字元 'a'、'b' 與 'c'。
     /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>

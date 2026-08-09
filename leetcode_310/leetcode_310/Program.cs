@@ -4,9 +4,66 @@
     {
         /// <summary>
         /// 310. Minimum Height Trees
-        /// https://leetcode.com/problems/minimum-height-trees/description/?envType=daily-question&envId=2024-04-23
-        /// 310. 最小高度树
+        /// https://leetcode.com/problems/minimum-height-trees/description/
+        /// <para>
+        /// A tree is an undirected graph in which any two vertices are connected by exactly one path. In other words, any connected graph without simple cycles is a tree.
+        ///
+        /// Given a tree of n nodes labeled from 0 to n - 1 and an array of n - 1 edges, where edges[i] = [ai, bi] represents an undirected edge between ai and bi, you may choose any node as the root. When x is chosen as the root, the resulting tree has height h. Among all possible rooted trees, those with minimum height min(h) are called minimum height trees (MHTs).
+        ///
+        /// Return a list of all MHT root labels in any order.
+        ///
+        /// The height of a rooted tree is the number of edges on the longest downward path from the root to a leaf.
+        ///
+        /// Example 1:
+        /// Image: https://assets.leetcode.com/uploads/2020/09/01/e1.jpg
+        /// Input: n = 4, edges = [[1,0],[1,2],[1,3]]
+        /// Output: [1]
+        /// Explanation: The tree has height 1 when rooted at node 1, which is the only MHT.
+        ///
+        /// Example 2:
+        /// Image: https://assets.leetcode.com/uploads/2020/09/01/e2.jpg
+        /// Input: n = 6, edges = [[3,0],[3,1],[3,2],[3,4],[5,4]]
+        /// Output: [3,4]
+        ///
+        /// Constraints:
+        /// - 1 &lt;= n &lt;= 2 * 10^4
+        /// - edges.length == n - 1
+        /// - 0 &lt;= ai, bi &lt; n
+        /// - ai != bi
+        /// - All pairs (ai, bi) are distinct.
+        /// - The input is guaranteed to be a tree with no repeated edges.
+        /// </para>
+        /// <para>
+        /// 310. 最小高度樹
         /// https://leetcode.cn/problems/minimum-height-trees/description/
+        ///
+        /// 樹是一種無向圖，其中任意兩個頂點之間恰好只有一條路徑。換句話說，任何沒有簡單環的連通圖都是樹。
+        ///
+        /// 給定一棵含 n 個節點、標號從 0 到 n - 1 的樹，以及含 n - 1 條邊的陣列 edges，其中 edges[i] = [ai, bi] 表示 ai 與 bi 之間有一條無向邊。你可以選擇任意節點作為根。當選擇 x 作為根時，所得樹的高度為 h。在所有可能的有根樹中，高度最小 min(h) 的樹稱為最小高度樹（MHT）。
+        ///
+        /// 以任意順序回傳所有 MHT 的根節點標號。
+        ///
+        /// 有根樹的高度是從根到葉節點的最長向下路徑所包含的邊數。
+        ///
+        /// 範例 1：
+        /// 圖片：https://assets.leetcode.com/uploads/2020/09/01/e1.jpg
+        /// 輸入：n = 4, edges = [[1,0],[1,2],[1,3]]
+        /// 輸出：[1]
+        /// 解釋：以節點 1 為根時樹高為 1，且它是唯一的 MHT。
+        ///
+        /// 範例 2：
+        /// 圖片：https://assets.leetcode.com/uploads/2020/09/01/e2.jpg
+        /// 輸入：n = 6, edges = [[3,0],[3,1],[3,2],[3,4],[5,4]]
+        /// 輸出：[3,4]
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= n &lt;= 2 * 10^4
+        /// - edges.length == n - 1
+        /// - 0 &lt;= ai, bi &lt; n
+        /// - ai != bi
+        /// - 所有 (ai, bi) 配對都不相同。
+        /// - 輸入保證是一棵沒有重複邊的樹。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

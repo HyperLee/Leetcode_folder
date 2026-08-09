@@ -26,25 +26,75 @@ class Program
     /// <summary>
     /// 23. Merge k Sorted Lists
     /// https://leetcode.com/problems/merge-k-sorted-lists/description/
-    /// 23. 合并 K 个升序链表
-    /// https://leetcode.cn/problems/merge-k-sorts-lists/description/
-    /// 
-    /// 題目描述：
-    /// 給你一個鏈表數組，每個鏈表都已經按升序排列
-    /// 請你將所有鏈表合併到一個升序鏈表中，返回合併後的鏈表
-    /// 
-    /// 解題思路：
-    /// 1. 使用分治法（Divide and Conquer）將問題分解為更小的子問題
-    /// 2. 將 K 個鏈表分成兩半，分別處理各自的子問題
-    /// 3. 使用二分法不斷將鏈表數組對半分割
-    /// 4. 當分割到只剩一個或零個鏈表時，開始向上合併
-    /// 5. 合併過程使用遞迴方式處理兩個已排序的鏈表
-    /// 
-    /// 時間複雜度：O(N log k)，其中 k 是鏈表數量，N 是所有節點總數
-    /// 空間複雜度：O(log k)，因為遞迴調用的深度為 log k
-    /// 
-    /// 最一開始解題方法參考:21. Merge Two Sorted Lists 遞迴解法
-    /// 是可以解題, 但是效率太差. 改用分治法後, 效率提升很多
+    /// <para>
+    /// You are given an array of k linked lists, lists, where each linked list is sorted in ascending order.
+    ///
+    /// Merge all the linked lists into one sorted linked list and return it.
+    ///
+    /// Example 1:
+    /// Input: lists = [[1,4,5],[1,3,4],[2,6]]
+    /// Output: [1,1,2,3,4,4,5,6]
+    /// Explanation: The linked lists are:
+    /// [
+    /// 1-&gt;4-&gt;5,
+    /// 1-&gt;3-&gt;4,
+    /// 2-&gt;6
+    /// ]
+    /// Merging them into one sorted linked list produces:
+    /// 1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6
+    ///
+    /// Example 2:
+    /// Input: lists = []
+    /// Output: []
+    ///
+    /// Example 3:
+    /// Input: lists = [[]]
+    /// Output: []
+    ///
+    /// Constraints:
+    /// - k == lists.length
+    /// - 0 &lt;= k &lt;= 10^4
+    /// - 0 &lt;= lists[i].length &lt;= 500
+    /// - -10^4 &lt;= lists[i][j] &lt;= 10^4
+    /// - lists[i] is sorted in ascending order.
+    /// - The sum of lists[i].length does not exceed 10^4.
+    /// </para>
+    /// <para>
+    /// 23. 合併 K 個排序鏈結串列
+    /// https://leetcode.cn/problems/merge-k-sorted-lists/description/
+    ///
+    /// 給定一個包含 k 個 linked list 的陣列 lists，其中每個 linked list 都以遞增順序排序。
+    ///
+    /// 請將所有 linked list 合併成一個排序 linked list 並回傳它。
+    ///
+    /// 範例 1：
+    /// 輸入：lists = [[1,4,5],[1,3,4],[2,6]]
+    /// 輸出：[1,1,2,3,4,4,5,6]
+    /// 解釋：這些 linked list 為：
+    /// [
+    /// 1-&gt;4-&gt;5,
+    /// 1-&gt;3-&gt;4,
+    /// 2-&gt;6
+    /// ]
+    /// 將它們合併成一個排序 linked list 後得到：
+    /// 1-&gt;1-&gt;2-&gt;3-&gt;4-&gt;4-&gt;5-&gt;6
+    ///
+    /// 範例 2：
+    /// 輸入：lists = []
+    /// 輸出：[]
+    ///
+    /// 範例 3：
+    /// 輸入：lists = [[]]
+    /// 輸出：[]
+    ///
+    /// 限制條件：
+    /// - k == lists.length
+    /// - 0 &lt;= k &lt;= 10^4
+    /// - 0 &lt;= lists[i].length &lt;= 500
+    /// - -10^4 &lt;= lists[i][j] &lt;= 10^4
+    /// - lists[i] 以遞增順序排序。
+    /// - lists[i].length 的總和不超過 10^4。
+    /// </para>
     /// </summary>
     static void Main(string[] args)
     {

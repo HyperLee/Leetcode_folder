@@ -3,10 +3,56 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1636. Sort Array by Increasing Frequency
-        /// https://leetcode.com/problems/sort-array-by-increasing-frequency/description/?envType=daily-question&envId=2024-07-23
-        /// 1636. 按照频率将数组升序排序
+        /// https://leetcode.com/problems/sort-array-by-increasing-frequency/description/
+        ///
+        /// Given an integer array nums, sort it in increasing order by value frequency. If multiple values have the same
+        /// frequency, sort those values in decreasing order. Return the sorted array.
+        ///
+        /// Example 1:
+        /// Input: nums = [1,1,2,2,2,3]
+        /// Output: [3,1,1,2,2,2]
+        /// Explanation: '3' has frequency 1, '1' has frequency 2, and '2' has frequency 3.
+        ///
+        /// Example 2:
+        /// Input: nums = [2,3,1,3,2]
+        /// Output: [1,3,3,2,2]
+        /// Explanation: '2' and '3' both have frequency 2, so they are sorted in decreasing order.
+        ///
+        /// Example 3:
+        /// Input: nums = [-1,1,-6,4,5,-6,1,4,1]
+        /// Output: [5,-1,4,4,-6,-6,1,1,1]
+        ///
+        /// Constraints:
+        /// - 1 &lt;= nums.length &lt;= 100
+        /// - -100 &lt;= nums[i] &lt;= 100
+        /// </para>
+        /// <para>
+        /// 1636. 按照頻率將陣列升序排序
         /// https://leetcode.cn/problems/sort-array-by-increasing-frequency/description/
+        ///
+        /// 給定整數陣列 nums，按照數值出現頻率遞增排序；若多個數值頻率相同，則按數值遞減排序。
+        /// 回傳排序後的陣列。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [1,1,2,2,2,3]
+        /// 輸出：[3,1,1,2,2,2]
+        /// 解釋：'3' 的頻率為 1，'1' 的頻率為 2，'2' 的頻率為 3。
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [2,3,1,3,2]
+        /// 輸出：[1,3,3,2,2]
+        /// 解釋：'2' 與 '3' 的頻率同為 2，因此按數值遞減排序。
+        ///
+        /// 範例 3：
+        /// 輸入：nums = [-1,1,-6,4,5,-6,1,4,1]
+        /// 輸出：[5,-1,4,4,-6,-6,1,1,1]
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= nums.length &lt;= 100
+        /// - -100 &lt;= nums[i] &lt;= 100
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 建立涵蓋官方範例、邊界值與同頻排序規則的固定案例，分別執行兩種解法，並驗證

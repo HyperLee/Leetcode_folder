@@ -29,18 +29,61 @@
 
 
         /// <summary>
+        /// <para>
         /// 1038. Binary Search Tree to Greater Sum Tree
-        /// https://leetcode.com/problems/binary-search-tree-to-greater-sum-tree/description/?envType=daily-question&envId=2024-06-25
-        /// 1038. 从二叉搜索树到更大和树
+        /// https://leetcode.com/problems/binary-search-tree-to-greater-sum-tree/description/
+        ///
+        /// Given the root of a Binary Search Tree (BST), convert it to a Greater Tree such that every key of
+        /// the original BST is changed to the original key plus the sum of all keys greater than the original
+        /// key in BST.
+        /// As a reminder, a binary search tree is a tree that satisfies these constraints:
+        /// - The left subtree of a node contains only nodes with keys less than the node's key.
+        /// - The right subtree of a node contains only nodes with keys greater than the node's key.
+        /// - Both the left and right subtrees must also be binary search trees.
+        ///
+        /// Example 1:
+        /// Input: root = [4,1,6,0,2,5,7,null,null,null,3,null,null,null,8]
+        /// Output: [30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]
+        ///
+        /// Example 2:
+        /// Input: root = [0,null,1]
+        /// Output: [1,null,1]
+        ///
+        /// Constraints:
+        /// The number of nodes in the tree is in the range [1, 100].
+        /// 0 &lt;= Node.val &lt;= 100
+        /// All the values in the tree are unique.
+        ///
+        /// Note: This question is the same as 538:
+        /// https://leetcode.com/problems/convert-bst-to-greater-tree/
+        /// </para>
+        /// <para>
+        /// 1038. 從二元搜尋樹到較大總和樹
         /// https://leetcode.cn/problems/binary-search-tree-to-greater-sum-tree/description/
-        /// 
-        /// 樹的走訪
-        /// https://zh.wikipedia.org/zh-tw/%E6%A0%91%E7%9A%84%E9%81%8D%E5%8E%86
-        /// 
-        /// 前序走訪: 前序走訪（Pre-Order Traversal）是依序以根節點、左節點、右節點為順序走訪的方式。
-        /// 中序走訪: 中序走訪（In-Order Traversal）是依序以左節點、根節點、右節點為順序走訪的方式。 
-        /// 後序走訪: 後序走訪（Post-Order Traversal）是依序以左節點、右節點、根節點為順序走訪的方式。
-        /// 
+        ///
+        /// 給定二元搜尋樹（BST）的根節點 root，請將它轉換為較大總和樹，使原 BST 中的每個鍵值
+        /// 都改為原鍵值加上 BST 中所有大於該原鍵值之鍵值的總和。
+        /// 提醒你，二元搜尋樹必須滿足下列條件：
+        /// - 節點的左子樹只包含鍵值小於該節點鍵值的節點。
+        /// - 節點的右子樹只包含鍵值大於該節點鍵值的節點。
+        /// - 左、右子樹也都必須是二元搜尋樹。
+        ///
+        /// 範例 1：
+        /// 輸入：root = [4,1,6,0,2,5,7,null,null,null,3,null,null,null,8]
+        /// 輸出：[30,36,21,36,35,26,15,null,null,null,33,null,null,null,8]
+        ///
+        /// 範例 2：
+        /// 輸入：root = [0,null,1]
+        /// 輸出：[1,null,1]
+        ///
+        /// 限制條件：
+        /// 樹中的節點數量介於 [1, 100]。
+        /// 0 &lt;= Node.val &lt;= 100
+        /// 樹中的所有值都互不相同。
+        ///
+        /// 注意：本題與第 538 題相同：
+        /// https://leetcode.com/problems/convert-bst-to-greater-tree/
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

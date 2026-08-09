@@ -32,44 +32,114 @@ class Program
     }
 
     /// <summary>
+    /// <para>
     /// 133. Clone Graph
-    /// https://leetcode.com/problems/clone-graph/description/?envType=problem-list-v2&envId=oizxjoit
-    /// 133. 克隆图
-    /// https://leetcode.cn/problems/clone-graph/description/ 
-    /// 
-    /// wiki 說明 Deep copy
-    /// https://zh.wikipedia.org/zh-tw/%E5%85%8B%E9%9A%86_(%E7%BC%96%E7%A8%8B)
-    /// https://en.wikipedia.org/wiki/Object_copying
-    /// 克隆图是指在計算機科學中，將一個圖的結構和數據複製到另一個圖中。
-    /// 克隆圖的目的是為了在不改變原始圖的情況下，對其進行操作或分析。
-    /// 
-	/// 題目說明
-	/// 這是一道關於圖(Graph)的深度拷貝題目。要求我們對一個無向連通圖進行
-	/// 深度拷貝（Deep Copy），即創建一個與原圖結構和值都相同，但是記憶體
-	/// 位址不同的新圖。
-    ///    
-    /// 解題思路:
-    /// 1. 使用 DFS (深度優先搜尋) 遍歷整個圖
-    /// 2. 使用 Dictionary 儲存已建立的新節點，避免重複建立和無限循環
-    /// 3. 遞迴處理每個節點的鄰居節點
-    /// 4. 時間複雜度 O(N+E)，N為節點數，E為邊數
-    /// 5. 空間複雜度 O(N)，用於儲存已訪問節點的 Dictionary
-	/// 什麼是深度拷貝？
-	/// 深度拷貝意味著我們完全複製了一個物件及其所有子物件，創建了全新的記憶體位址，而不是單純複製參考。
-	/// 為什麼要驗證記憶體位址？
-	/// 1.淺拷貝（Shallow Copy）：
-	/// 	只複製參考（reference）
-	/// 	原始物件和複製物件指向相同的記憶體位址
-	/// 修改其中一個會影響另一個
-	/// 2.深度拷貝（Deep Copy）：
-	/// 	複製整個物件結構
-	/// 	創建全新的記憶體位址
-	/// 	原始物件和複製物件完全獨立
-	/// 驗證方式解析
-	/// (node1 != clonedNode)
-	/// 使用 != 運算符比較兩個物件的參考
-	/// 如果結果為 true：表示是深度拷貝（不同記憶體位址）
-	/// 如果結果為 false：表示是淺拷貝（相同記憶體位址）
+    /// https://leetcode.com/problems/clone-graph/description/
+    ///
+    /// Given a reference of a node in a connected undirected graph.
+    ///
+    /// Return a deep copy (clone) of the graph.
+    ///
+    /// Each node in the graph contains a value (int) and a list (List&lt;Node&gt;) of its neighbors.
+    ///
+    /// class Node {
+    /// public int val;
+    /// public List&lt;Node&gt; neighbors;
+    /// }
+    ///
+    /// Test case format:
+    ///
+    /// For simplicity, each node's value is the same as the node's index (1-indexed). For example, the first node with val == 1,
+    /// the second node with val == 2, and so on. The graph is represented in the test case using an adjacency list.
+    ///
+    /// An adjacency list is a collection of unordered lists used to represent a finite graph. Each list describes the set of
+    /// neighbors of a node in the graph.
+    ///
+    /// The given node will always be the first node with val = 1. You must return the copy of the given node as a reference
+    /// to the cloned graph.
+    ///
+    /// Example 1:
+    /// Official illustration: https://assets.leetcode.com/uploads/2019/11/04/133_clone_graph_question.png
+    /// Input: adjList = [[2,4],[1,3],[2,4],[1,3]]
+    /// Output: [[2,4],[1,3],[2,4],[1,3]]
+    /// Explanation: There are 4 nodes in the graph.
+    /// 1st node (val = 1)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
+    /// 2nd node (val = 2)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
+    /// 3rd node (val = 3)'s neighbors are 2nd node (val = 2) and 4th node (val = 4).
+    /// 4th node (val = 4)'s neighbors are 1st node (val = 1) and 3rd node (val = 3).
+    ///
+    /// Example 2:
+    /// Official illustration: https://assets.leetcode.com/uploads/2020/01/07/graph.png
+    /// Input: adjList = [[]]
+    /// Output: [[]]
+    /// Explanation: Note that the input contains one empty list. The graph consists of only one node with val = 1 and it does
+    /// not have any neighbors.
+    ///
+    /// Example 3:
+    /// Input: adjList = []
+    /// Output: []
+    /// Explanation: This is an empty graph; it does not have any nodes.
+    ///
+    /// Constraints:
+    /// - The number of nodes in the graph is in the range [0, 100].
+    /// - 1 &lt;= Node.val &lt;= 100
+    /// - Node.val is unique for each node.
+    /// - There are no repeated edges and no self-loops in the graph.
+    /// - The Graph is connected and all nodes can be visited starting from the given node.
+    /// </para>
+    /// <para>
+    /// 133. 複製圖
+    /// https://leetcode.cn/problems/clone-graph/description/
+    ///
+    /// 給定一個連通無向圖中某個節點的參考。
+    ///
+    /// 回傳該圖的深層複本（複製品）。
+    ///
+    /// 圖中的每個節點都包含一個值（int）以及其鄰居清單（List&lt;Node&gt;）。
+    ///
+    /// class Node {
+    /// public int val;
+    /// public List&lt;Node&gt; neighbors;
+    /// }
+    ///
+    /// 測試案例格式：
+    ///
+    /// 為了簡化起見，每個節點的值都與該節點的索引相同（索引從 1 開始）。例如，第一個節點的 val == 1，
+    /// 第二個節點的 val == 2，依此類推。測試案例使用鄰接串列表示圖。
+    ///
+    /// 鄰接串列是一組用來表示有限圖的無序清單。每個清單描述圖中某個節點的鄰居集合。
+    ///
+    /// 給定節點一律是 val = 1 的第一個節點。你必須回傳給定節點的複本，作為已複製圖的參考。
+    ///
+    /// 範例 1：
+    /// 官方示意圖：https://assets.leetcode.com/uploads/2019/11/04/133_clone_graph_question.png
+    /// 輸入：adjList = [[2,4],[1,3],[2,4],[1,3]]
+    /// 輸出：[[2,4],[1,3],[2,4],[1,3]]
+    /// 解釋：圖中有 4 個節點。
+    /// 第 1 個節點（val = 1）的鄰居是第 2 個節點（val = 2）與第 4 個節點（val = 4）。
+    /// 第 2 個節點（val = 2）的鄰居是第 1 個節點（val = 1）與第 3 個節點（val = 3）。
+    /// 第 3 個節點（val = 3）的鄰居是第 2 個節點（val = 2）與第 4 個節點（val = 4）。
+    /// 第 4 個節點（val = 4）的鄰居是第 1 個節點（val = 1）與第 3 個節點（val = 3）。
+    ///
+    /// 範例 2：
+    /// 官方示意圖：https://assets.leetcode.com/uploads/2020/01/07/graph.png
+    /// 輸入：adjList = [[]]
+    /// 輸出：[[]]
+    /// 解釋：請注意，輸入包含一個空清單。圖中只有一個 val = 1 的節點，而且它沒有任何鄰居。
+    ///
+    /// 範例 3：
+    /// 輸入：adjList = []
+    /// 輸出：[]
+    /// 解釋：這是一個空圖，沒有任何節點。
+    ///
+    /// 限制條件：
+    /// - 圖中的節點數量在 [0, 100] 範圍內。
+    /// - 1 &lt;= Node.val &lt;= 100
+    /// - 每個節點的 Node.val 均不相同。
+    /// - 圖中沒有重複邊，也沒有自迴圈。
+    /// - 圖是連通的，而且從給定節點出發可以造訪所有節點。
+    /// </para>
+    /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)
     {

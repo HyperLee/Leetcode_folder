@@ -4,17 +4,60 @@ class Program
 {
     /// <summary>
     /// 3227. Vowels Game in a String
-    /// https://leetcode.com/problems/vowels-game-in-a-string/description/?envType=daily-question&envId=2025-09-12
-    /// 3227. 字符串元音遊戲
-    /// https://leetcode.cn/problems/vowels-game-in-a-string/description/?envType=daily-question&envId=2025-09-12
+    /// https://leetcode.com/problems/vowels-game-in-a-string/description/
+    /// <para>
+    /// Alice and Bob are playing a game on a string s. They take turns, with Alice playing first:
+    /// - On Alice's turn, she must remove any non-empty substring from s that contains an odd number of vowels.
+    /// - On Bob's turn, he must remove any non-empty substring from s that contains an even number of vowels.
     ///
-    /// 中文題目翻譯：
-    /// Alice 與 Bob 在一個字串 s 上玩遊戲，兩人輪流操作，Alice 先手。
-    /// - 在 Alice 的回合，她必須從 s 中刪除任意非空的子字串，該子字串必須包含奇數個母音。
-    /// - 在 Bob 的回合，他必須從 s 中刪除任意非空的子字串，該子字串必須包含偶數個母音。
-    /// 若在某個回合玩家無法進行操作，該玩家即輸掉遊戲。我們假設雙方皆採最佳策略。
-    /// 請回傳當 Alice 與 Bob 最佳對弈時，Alice 是否會贏（true 表示 Alice 獲勝，false 表示 Alice 失敗）。
-    /// 英文母音為：a, e, i, o, u。
+    /// The first player unable to make a move loses. Both players play optimally.
+    ///
+    /// Return true if Alice wins, and false otherwise.
+    ///
+    /// The English vowels are a, e, i, o, and u.
+    ///
+    /// Example 1:
+    /// Input: s = "leetcoder"
+    /// Output: true
+    /// Explanation: Alice first deletes [leetco] from [leetco]der, which contains 3 vowels, leaving "der". Bob deletes [d], which contains 0 vowels, leaving "er". Alice deletes [er], which contains 1 vowel. The string is empty on Bob's turn, so Alice wins.
+    ///
+    /// Example 2:
+    /// Input: s = "bbcd"
+    /// Output: false
+    /// Explanation: Alice has no valid move on her first turn, so she loses.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s consists only of lowercase English letters.
+    /// </para>
+    /// <para>
+    /// 3227. 字串中的母音遊戲
+    /// https://leetcode.cn/problems/vowels-game-in-a-string/description/
+    ///
+    /// Alice 與 Bob 在字串 s 上玩遊戲。兩人輪流操作，由 Alice 先手：
+    /// - Alice 的回合必須從 s 移除任意一個含奇數個母音的非空子字串。
+    /// - Bob 的回合必須從 s 移除任意一個含偶數個母音的非空子字串。
+    ///
+    /// 第一個無法操作的玩家輸掉遊戲。兩人都採用最佳策略。
+    ///
+    /// 若 Alice 獲勝則回傳 true，否則回傳 false。
+    ///
+    /// 英文母音為 a、e、i、o、u。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "leetcoder"
+    /// 輸出：true
+    /// 解釋：Alice 先從 [leetco]der 刪除含 3 個母音的 [leetco]，留下 "der"。Bob 刪除含 0 個母音的 [d]，留下 "er"。Alice 刪除含 1 個母音的 [er]。輪到 Bob 時字串已空，因此 Alice 獲勝。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "bbcd"
+    /// 輸出：false
+    /// 解釋：Alice 第一回合沒有合法操作，因此輸掉遊戲。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s 只由小寫英文字母組成。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

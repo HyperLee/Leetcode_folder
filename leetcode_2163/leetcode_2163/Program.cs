@@ -3,17 +3,48 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2163. Minimum Difference in Sums After Removal of Elements
-    /// https://leetcode.com/problems/minimum-difference-in-sums-after-removal-of-elements/description/?envType=daily-question&envId=2025-07-18
+    /// https://leetcode.com/problems/minimum-difference-in-sums-after-removal-of-elements/description/
+    ///
+    /// You are given a 0-indexed array nums with 3 * n elements. Remove any subsequence of exactly n elements. Split the remaining 2 * n elements into two equal parts: the first n elements have sum sumFirst and the next n have sum sumSecond. Their difference is sumFirst - sumSecond. Return the minimum possible difference.
+    ///
+    /// Example 1:
+    /// Input: nums = [3,1,2]
+    /// Output: -1
+    /// Explanation: Here n = 1. Removing nums[0] = 3 gives [1,2] and 1 - 2 = -1; removing nums[1] = 1 gives 3 - 2 = 1; removing nums[2] = 2 gives 3 - 1 = 2. min(-1,1,2) = -1.
+    ///
+    /// Example 2:
+    /// Input: nums = [7,9,5,8,1,3]
+    /// Output: 1
+    /// Explanation: Here n = 2. Removing 5 and 8 gives [7,9,1,3] with (7+9) - (1+3) = 12. Removing 9 and 1 gives [7,5,8,3] with (7+5) - (8+3) = 1, and no smaller difference is possible.
+    ///
+    /// Constraints:
+    /// - nums.length == 3 * n
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - 1 &lt;= nums[i] &lt;= 10^5
+    /// </para>
+    /// <para>
     /// 2163. 刪除元素後和的最小差值
-    /// https://leetcode.cn/problems/minimum-difference-in-sums-after-removal-of-elements/description/?envType=daily-question&envId=2025-07-18
-    /// 
-    /// 題目描述：
-    /// 給你一個下標從 0 開始、長度為 3 * n 的整數陣列 nums。
-    /// 你可以移除 nums 中恰好 n 個元素，剩下的 2 * n 個元素會被分成兩個部分：
-    /// 前 n 個元素屬於第一部分，和為 sumfirst；接下來 n 個元素屬於第二部分，和為 sumsecond。
-    /// 差值為 sumfirst - sumsecond。
-    /// 請返回移除 n 個元素後，兩部分和的最小差值。
+    /// https://leetcode.cn/problems/minimum-difference-in-sums-after-removal-of-elements/description/
+    ///
+    /// 給定含有 3 * n 個元素、從 0 開始索引的陣列 nums。刪除任意一個恰含 n 個元素的子序列，再將剩餘 2 * n 個元素分成相等兩部分：前 n 個元素的總和是 sumFirst，後 n 個是 sumSecond，差值為 sumFirst - sumSecond。回傳可能的最小差值。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [3,1,2]
+    /// 輸出：-1
+    /// 說明：此時 n = 1。刪除 nums[0] = 3 得到 [1,2]，1 - 2 = -1；刪除 nums[1] = 1 得到 3 - 2 = 1；刪除 nums[2] = 2 得到 3 - 1 = 2。min(-1,1,2) = -1。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [7,9,5,8,1,3]
+    /// 輸出：1
+    /// 說明：此時 n = 2。刪除 5 與 8 得到 [7,9,1,3]，差值為 (7+9) - (1+3) = 12。刪除 9 與 1 得到 [7,5,8,3]，差值為 (7+5) - (8+3) = 1，且不可能得到更小的差值。
+    ///
+    /// 限制條件：
+    /// - nums.length == 3 * n
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - 1 &lt;= nums[i] &lt;= 10^5
+    /// </para>
     /// </summary>
     static void Main(string[] args)
     {

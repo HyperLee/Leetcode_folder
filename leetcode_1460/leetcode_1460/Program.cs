@@ -3,11 +3,65 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1460. Make Two Arrays Equal by Reversing Subarrays
-        /// https://leetcode.com/problems/make-two-arrays-equal-by-reversing-subarrays/description/?envType=daily-question&envId=2024-08-03
-        /// 
-        /// 1460. 通过翻转子数组使两个数组相等
+        /// https://leetcode.com/problems/make-two-arrays-equal-by-reversing-subarrays/description/
+        ///
+        /// You are given two integer arrays of equal length target and arr. In one step, you can select any non-empty subarray
+        /// of arr and reverse it. You are allowed to make any number of steps.
+        /// Return true if you can make arr equal to target, or false otherwise.
+        ///
+        /// Example 1:
+        /// Input: target = [1,2,3,4], arr = [2,4,1,3]
+        /// Output: true
+        /// Explanation: Reverse [2,4,1] to get [1,4,2,3]; reverse [4,2] to get [1,2,4,3]; then reverse [4,3]
+        /// to get [1,2,3,4]. There are multiple ways to convert arr to target.
+        ///
+        /// Example 2:
+        /// Input: target = [7], arr = [7]
+        /// Output: true
+        /// Explanation: arr is equal to target without any reverses.
+        ///
+        /// Example 3:
+        /// Input: target = [3,7,9], arr = [3,7,11]
+        /// Output: false
+        /// Explanation: arr does not have value 9 and can never be converted to target.
+        ///
+        /// Constraints:
+        /// - target.length == arr.length
+        /// - 1 &lt;= target.length &lt;= 1000
+        /// - 1 &lt;= target[i] &lt;= 1000
+        /// - 1 &lt;= arr[i] &lt;= 1000
+        /// </para>
+        /// <para>
+        /// 1460. 透過反轉子陣列使兩個陣列相等
         /// https://leetcode.cn/problems/make-two-arrays-equal-by-reversing-subarrays/description/
+        ///
+        /// 給定兩個長度相同的整數陣列 target 與 arr。每一步可以選擇 arr 的任意非空子陣列並將其反轉，且可
+        /// 執行任意次數。若能使 arr 等於 target，回傳 true；否則回傳 false。
+        ///
+        /// 範例 1：
+        /// 輸入：target = [1,2,3,4]，arr = [2,4,1,3]
+        /// 輸出：true
+        /// 解釋：反轉 [2,4,1] 得到 [1,4,2,3]；反轉 [4,2] 得到 [1,2,4,3]；再反轉 [4,3] 得到
+        /// [1,2,3,4]。將 arr 轉換為 target 的方式不只一種。
+        ///
+        /// 範例 2：
+        /// 輸入：target = [7]，arr = [7]
+        /// 輸出：true
+        /// 解釋：不需進行任何反轉，arr 已等於 target。
+        ///
+        /// 範例 3：
+        /// 輸入：target = [3,7,9]，arr = [3,7,11]
+        /// 輸出：false
+        /// 解釋：arr 沒有數值 9，因此永遠無法轉換為 target。
+        ///
+        /// 限制條件：
+        /// - target.length == arr.length
+        /// - 1 &lt;= target.length &lt;= 1000
+        /// - 1 &lt;= target[i] &lt;= 1000
+        /// - 1 &lt;= arr[i] &lt;= 1000
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 程式進入點會以固定案例驗證排序法與計數法，並輸出每個案例的預期與實際結果。

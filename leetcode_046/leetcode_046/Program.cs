@@ -4,18 +4,50 @@
     {
         /// <summary>
         /// 46. Permutations
-        /// https://leetcode.com/problems/permutations/
+        /// https://leetcode.com/problems/permutations/description/
+        /// <para>
+        /// Given an array nums of distinct integers, return all possible permutations. You may return the answer in any order.
+        ///
+        /// Example 1:
+        /// Input: nums = [1,2,3]
+        /// Output: [[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+        ///
+        /// Example 2:
+        /// Input: nums = [0,1]
+        /// Output: [[0,1],[1,0]]
+        ///
+        /// Example 3:
+        /// Input: nums = [1]
+        /// Output: [[1]]
+        ///
+        /// Constraints:
+        /// - 1 &lt;= nums.length &lt;= 6
+        /// - -10 &lt;= nums[i] &lt;= 10
+        /// - All integers in nums are unique.
+        /// </para>
+        /// <para>
         /// 46. 全排列
-        /// https://leetcode.cn/problems/permutations/
-        /// 
-        /// 给定一个不含重复数字的数组 nums ，返回其 所有可能的全排列 。你可以 按任意顺序 返回答案。
-        /// 
-        /// 本題目是求出"所有可能的排列"，因此需要使用回溯法。
-        /// 
-        /// 39. Combination Sum 是求出不重複的題型(順序不同視為相同組合), 有必要對輸入的陣列先進行排序 
-        /// 46. Permutations是求出"所有可能的排列"(全部列舉出來), 不需要排序
-        /// 所以兩題有差異
-        /// 
+        /// https://leetcode.cn/problems/permutations/description/
+        ///
+        /// 給定一個由不同整數組成的陣列 nums，請回傳所有可能的排列。答案可以任意順序回傳。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [1,2,3]
+        /// 輸出：[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [0,1]
+        /// 輸出：[[0,1],[1,0]]
+        ///
+        /// 範例 3：
+        /// 輸入：nums = [1]
+        /// 輸出：[[1]]
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= nums.length &lt;= 6
+        /// - -10 &lt;= nums[i] &lt;= 10
+        /// - nums 中的所有整數都不相同。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 主要進入點不使用命令列參數，會執行三組固定案例，驗證兩種回溯解法並輸出 PASS/FAIL 摘要。

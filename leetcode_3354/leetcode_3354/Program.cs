@@ -4,26 +4,64 @@ class Program
 {
     /// <summary>
     /// 3354. Make Array Elements Equal to Zero
-    /// https://leetcode.com/problems/make-array-elements-equal-to-zero/description/?envType=daily-question&envId=2025-10-28
-    /// 3354. 使数组元素等于零
-    /// https://leetcode.cn/problems/make-array-elements-equal-to-zero/description/?envType=daily-question&envId=2025-10-28
-    /// 
-    /// 題目描述：
+    /// https://leetcode.com/problems/make-array-elements-equal-to-zero/description/
+    /// <para>
+    /// You are given an integer array nums.
+    ///
+    /// Select a starting position curr such that nums[curr] == 0 and choose a movement direction, left or right. Then repeat:
+    /// - If curr is outside [0, n - 1], the process ends.
+    /// - If nums[curr] == 0, move one step in the current direction.
+    /// - If nums[curr] &gt; 0, decrement nums[curr] by 1, reverse direction, and take one step in the new direction.
+    ///
+    /// An initial curr and direction selection is valid if every nums element is 0 when the process ends.
+    ///
+    /// Return the number of possible valid selections.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,0,2,0,3]
+    /// Output: 2
+    /// Explanation: The only valid selections both start at curr = 3, once moving left and once moving right. Moving left produces [1,0,2,0,3] -&gt; [1,0,2,0,3] -&gt; [1,0,1,0,3] -&gt; [1,0,1,0,3] -&gt; [1,0,1,0,2] -&gt; [1,0,1,0,2] -&gt; [1,0,0,0,2] -&gt; [1,0,0,0,2] -&gt; [1,0,0,0,1] -&gt; [1,0,0,0,1] -&gt; [1,0,0,0,1] -&gt; [1,0,0,0,1] -&gt; [0,0,0,0,1] -&gt; [0,0,0,0,1] -&gt; [0,0,0,0,1] -&gt; [0,0,0,0,1] -&gt; [0,0,0,0,0]. Moving right likewise eventually produces [0,0,0,0,0].
+    ///
+    /// Example 2:
+    /// Input: nums = [2,3,4,0,4,1,0]
+    /// Output: 0
+    /// Explanation: There are no valid selections.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 100
+    /// - 0 &lt;= nums[i] &lt;= 100
+    /// - At least one index i satisfies nums[i] == 0.
+    /// </para>
+    /// <para>
+    /// 3354. 使陣列元素等於零
+    /// https://leetcode.cn/problems/make-array-elements-equal-to-zero/description/
+    ///
     /// 給定一個整數陣列 nums。
-    /// 
-    /// 首先選擇一個起始位置 curr，使得 nums[curr] == 0，並選擇一個移動方向（向左或向右）。
-    /// 
-    /// 之後，重複執行以下過程：
-    /// - 如果 curr 超出範圍 [0, n - 1]，此過程結束。
-    /// - 如果 nums[curr] == 0，則按照當前方向移動，如果向右移動則 curr 加 1，如果向左移動則 curr 減 1。
-    /// - 否則如果 nums[curr] > 0：
-    ///   - 將 nums[curr] 減 1。
-    ///   - 反轉移動方向（左變右，右變左）。
-    ///   - 朝新方向移動一步。
-    /// 
-    /// 如果在過程結束時，nums 中的每個元素都變為 0，則初始位置 curr 和移動方向的選擇被視為有效。
-    /// 
-    /// 返回可能的有效選擇數量。
+    ///
+    /// 選擇一個滿足 nums[curr] == 0 的起始位置 curr，並選擇向左或向右的移動方向。接著重複：
+    /// - 若 curr 超出 [0, n - 1]，流程結束。
+    /// - 若 nums[curr] == 0，沿目前方向移動一步。
+    /// - 若 nums[curr] &gt; 0，將 nums[curr] 減少 1、反轉方向，並沿新方向移動一步。
+    ///
+    /// 若流程結束時 nums 的每個元素都為 0，則起始 curr 與方向的選擇有效。
+    ///
+    /// 回傳可能的有效選擇數量。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,0,2,0,3]
+    /// 輸出：2
+    /// 解釋：僅有的有效選擇都從 curr = 3 開始，分別向左與向右。向左會產生 [1,0,2,0,3] -&gt; [1,0,2,0,3] -&gt; [1,0,1,0,3] -&gt; [1,0,1,0,3] -&gt; [1,0,1,0,2] -&gt; [1,0,1,0,2] -&gt; [1,0,0,0,2] -&gt; [1,0,0,0,2] -&gt; [1,0,0,0,1] -&gt; [1,0,0,0,1] -&gt; [1,0,0,0,1] -&gt; [1,0,0,0,1] -&gt; [0,0,0,0,1] -&gt; [0,0,0,0,1] -&gt; [0,0,0,0,1] -&gt; [0,0,0,0,1] -&gt; [0,0,0,0,0]。向右同樣最終會得到 [0,0,0,0,0]。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [2,3,4,0,4,1,0]
+    /// 輸出：0
+    /// 解釋：不存在有效選擇。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 100
+    /// - 0 &lt;= nums[i] &lt;= 100
+    /// - 至少有一個索引 i 滿足 nums[i] == 0。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

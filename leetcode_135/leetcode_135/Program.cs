@@ -3,23 +3,62 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 135. Candy
     /// https://leetcode.com/problems/candy/description/
-    /// 135. 分发糖果
-    /// https://leetcode.cn/problems/candy/description/?envType=daily-question&envId=2025-06-02
-    /// 
-    /// 有 n 個小孩站成一排。給你一個整數陣列 ratings 表示每個小孩的評分。
-    /// 你需要給這些小孩分發糖果，需遵守下列規則：
-    /// 1. 每個小孩至少分到 1 顆糖果。
-    /// 2. 評分較高的小孩必須比他相鄰的小孩分到更多糖果。
-    /// 請返回你需要準備的最少糖果數量，才能分發給這些小孩。
-    /// 
-    /// 解題提示：
-    /// 1. 可以用兩次遍歷（從左到右、從右到左）來確保每個小孩都滿足規則。
-    /// 2. 先從左到右，若 ratings[i] > ratings[i-1]，則 candies[i] = candies[i-1] + 1。
-    /// 3. 再從右到左，若 ratings[i] > ratings[i+1]，則 candies[i] = Math.Max(candies[i], candies[i+1] + 1)。
-    /// 4. 最後將 candies 陣列總和即為答案。
-    /// 
+    ///
+    /// There are n children standing in a line. Each child is assigned a rating value given in the integer array ratings.
+    ///
+    /// You are giving candies to these children subject to the following requirements:
+    /// - Each child must have at least one candy.
+    /// - Children with a higher rating get more candies than their neighbors.
+    ///
+    /// Return the minimum number of candies you need to have to distribute the candies to the children.
+    ///
+    /// Example 1:
+    /// Input: ratings = [1,0,2]
+    /// Output: 5
+    /// Explanation: You can allocate to the first, second and third child with 2, 1, 2 candies respectively.
+    ///
+    /// Example 2:
+    /// Input: ratings = [1,2,2]
+    /// Output: 4
+    /// Explanation: You can allocate to the first, second and third child with 1, 2, 1 candies respectively.
+    /// The third child gets 1 candy because it satisfies the above two conditions.
+    ///
+    /// Constraints:
+    /// - n == ratings.length
+    /// - 1 &lt;= n &lt;= 2 * 10^4
+    /// - 0 &lt;= ratings[i] &lt;= 2 * 10^4
+    /// </para>
+    /// <para>
+    /// 135. 分發糖果
+    /// https://leetcode.cn/problems/candy/description/
+    ///
+    /// 有 n 個孩子站成一排。每個孩子都有一個由整數陣列 ratings 給定的評分值。
+    ///
+    /// 你要依照下列要求將糖果分給這些孩子：
+    /// - 每個孩子至少必須有一顆糖果。
+    /// - 評分較高的孩子會比相鄰孩子獲得更多糖果。
+    ///
+    /// 回傳分發給這些孩子所需準備的最少糖果數量。
+    ///
+    /// 範例 1：
+    /// 輸入：ratings = [1,0,2]
+    /// 輸出：5
+    /// 解釋：可以依序分給第一、第二與第三個孩子 2、1、2 顆糖果。
+    ///
+    /// 範例 2：
+    /// 輸入：ratings = [1,2,2]
+    /// 輸出：4
+    /// 解釋：可以依序分給第一、第二與第三個孩子 1、2、1 顆糖果。
+    /// 第三個孩子獲得 1 顆糖果，因為這符合上述兩項條件。
+    ///
+    /// 限制條件：
+    /// - n == ratings.length
+    /// - 1 &lt;= n &lt;= 2 * 10^4
+    /// - 0 &lt;= ratings[i] &lt;= 2 * 10^4
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

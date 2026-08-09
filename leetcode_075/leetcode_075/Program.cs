@@ -3,14 +3,54 @@ namespace leetcode_075;
 internal class Program
 {
     /// <summary>
+    /// <para>
     /// 75. Sort Colors
     /// https://leetcode.com/problems/sort-colors/
+    ///
+    /// Given an array nums with n objects colored red, white, or blue, sort them in-place so that objects
+    /// of the same color are adjacent, with the colors in the order red, white, and blue.
+    /// We will use the integers 0, 1, and 2 to represent the color red, white, and blue, respectively.
+    /// You must solve this problem without using the library's sort function.
+    ///
+    /// Example 1:
+    /// Input: nums = [2,0,2,1,1,0]
+    /// Output: [0,0,1,1,2,2]
+    ///
+    /// Example 2:
+    /// Input: nums = [2,0,1]
+    /// Output: [0,1,2]
+    ///
+    /// Constraints:
+    /// n == nums.length
+    /// 1 &lt;= n &lt;= 300
+    /// nums[i] is either 0, 1, or 2.
+    ///
+    /// Follow up: Could you come up with a one-pass algorithm using only constant extra space?
+    /// </para>
+    /// <para>
     /// 75. 顏色分類
     /// https://leetcode.cn/problems/sort-colors/
     ///
-    /// 給定一個只包含 0、1、2 的整數陣列，請直接修改原陣列，
-    /// 使相同數值彼此相鄰，並依照 0、1、2 的順序排列。
-    /// 不可使用內建排序函式。
+    /// 給定一個包含 n 個物件的陣列 nums，物件的顏色分別為紅色、白色或藍色，請原地排序，
+    /// 使相同顏色的物件彼此相鄰，且顏色依紅、白、藍的順序排列。
+    /// 我們分別使用整數 0、1、2 表示紅色、白色與藍色。
+    /// 你必須在不使用函式庫排序函式的情況下解決此問題。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [2,0,2,1,1,0]
+    /// 輸出：[0,0,1,1,2,2]
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [2,0,1]
+    /// 輸出：[0,1,2]
+    ///
+    /// 限制條件：
+    /// n == nums.length
+    /// 1 &lt;= n &lt;= 300
+    /// nums[i] 只能是 0、1 或 2。
+    ///
+    /// 進階：你能設計一個僅使用常數額外空間的一趟掃描演算法嗎？
+    /// </para>
     /// </summary>
     /// <remarks>
     /// 主要進入點會以八組固定資料驗證唯一保留的荷蘭國旗解法，

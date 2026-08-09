@@ -3,25 +3,88 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 150. Evaluate Reverse Polish Notation
-        /// https://leetcode.com/problems/evaluate-reverse-polish-notation/description/?envType=daily-question&envId=2024-01-30
-        /// 150. 逆波兰表达式求值
+        /// https://leetcode.com/problems/evaluate-reverse-polish-notation/description/
+        ///
+        /// You are given an array of strings tokens that represents an arithmetic expression in Reverse Polish Notation.
+        /// Evaluate the expression and return an integer representing its value.
+        ///
+        /// Note that:
+        /// - The valid operators are '+', '-', '*', and '/'.
+        /// - Each operand may be an integer or another expression.
+        /// - Division between two integers always truncates toward zero.
+        /// - There will not be any division by zero.
+        /// - The input represents a valid arithmetic expression in Reverse Polish Notation.
+        /// - The answer and all intermediate calculations can be represented in a 32-bit integer.
+        ///
+        /// Example 1:
+        /// Input: tokens = ["2","1","+","3","*"]
+        /// Output: 9
+        /// Explanation: ((2 + 1) * 3) = 9
+        ///
+        /// Example 2:
+        /// Input: tokens = ["4","13","5","/","+"]
+        /// Output: 6
+        /// Explanation: (4 + (13 / 5)) = 6
+        ///
+        /// Example 3:
+        /// Input: tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
+        /// Output: 22
+        /// Explanation:
+        /// ((10 * (6 / ((9 + 3) * -11))) + 17) + 5
+        /// = ((10 * (6 / (12 * -11))) + 17) + 5
+        /// = ((10 * (6 / -132)) + 17) + 5
+        /// = ((10 * 0) + 17) + 5
+        /// = (0 + 17) + 5
+        /// = 17 + 5
+        /// = 22
+        ///
+        /// Constraints:
+        /// - 1 &lt;= tokens.length &lt;= 10^4
+        /// - tokens[i] is an operator "+", "-", "*", or "/", or an integer in the range [-200, 200].
+        /// </para>
+        /// <para>
+        /// 150. 逆波蘭表示式求值
         /// https://leetcode.cn/problems/evaluate-reverse-polish-notation/description/
-        /// 
-        /// 本題目重點 要先看懂 表示法
-        /// 才知道如何計算
-        /// 
-        /// 把題目給的字串按順序輸入
-        /// 數字直接 push, 符號也是 push 然後把 最上方兩個數字抓出來
-        /// 做運算
-        /// 大致上是這樣
-        /// 詳細看wiki說明
-        /// 
-        /// 主要是 stack 用法
-        /// 
-        /// 逆波蘭表示法
-        /// https://zh.wikipedia.org/zh-tw/%E9%80%86%E6%B3%A2%E5%85%B0%E8%A1%A8%E7%A4%BA%E6%B3%95
-        /// https://en.wikipedia.org/wiki/Reverse_Polish_notation
+        ///
+        /// 給定字串陣列 tokens，表示一個以逆波蘭表示法寫成的算術表示式。
+        /// 計算此表示式，並回傳代表其值的整數。
+        ///
+        /// 請注意：
+        /// - 有效運算子為 '+'、'-'、'*' 與 '/'。
+        /// - 每個運算元可以是整數或另一個表示式。
+        /// - 兩個整數相除一律向零截斷。
+        /// - 不會出現除以零。
+        /// - 輸入代表一個有效的逆波蘭表示法算術表示式。
+        /// - 答案與所有中間計算都可用 32 位元整數表示。
+        ///
+        /// 範例 1：
+        /// 輸入：tokens = ["2","1","+","3","*"]
+        /// 輸出：9
+        /// 解釋：((2 + 1) * 3) = 9
+        ///
+        /// 範例 2：
+        /// 輸入：tokens = ["4","13","5","/","+"]
+        /// 輸出：6
+        /// 解釋：(4 + (13 / 5)) = 6
+        ///
+        /// 範例 3：
+        /// 輸入：tokens = ["10","6","9","3","+","-11","*","/","*","17","+","5","+"]
+        /// 輸出：22
+        /// 解釋：
+        /// ((10 * (6 / ((9 + 3) * -11))) + 17) + 5
+        /// = ((10 * (6 / (12 * -11))) + 17) + 5
+        /// = ((10 * (6 / -132)) + 17) + 5
+        /// = ((10 * 0) + 17) + 5
+        /// = (0 + 17) + 5
+        /// = 17 + 5
+        /// = 22
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= tokens.length &lt;= 10^4
+        /// - tokens[i] 是運算子 "+"、"-"、"*"、"/" 之一，或介於 [-200, 200] 的整數。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

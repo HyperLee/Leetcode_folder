@@ -3,21 +3,50 @@
     internal class Program
     {
         /// <summary>
-        /// 題目描述：
-        /// 使用兩個堆疊（Stack）來實作一個佇列（Queue），需支援 push(x)、pop()、peek()、empty() 四種操作。
-        /// 你只能使用標準的堆疊操作（push、pop、peek、empty）。
-        /// 
-        /// 解題概念與出發點：
-        /// 1. 使用兩個堆疊 inStack 與 outStack。
-        /// 2. push 時將元素推入 inStack。
-        /// 3. pop/peek 時，若 outStack 為空，將 inStack 所有元素依序彈出並推入 outStack，這樣 outStack 的頂端即為佇列開頭。
-        /// 4. empty 則判斷兩個堆疊皆為空。
-        /// 這樣可確保所有操作皆符合佇列（先進先出）特性。
-        /// 
+        /// <para>
         /// 232. Implement Queue using Stacks
         /// https://leetcode.com/problems/implement-queue-using-stacks/description/
-        /// 232. 用栈实现队列
+        ///
+        /// Implement a first-in-first-out queue using only two stacks. MyQueue must support push, pop, peek, and empty: push adds x to the back; pop removes and returns the front; peek returns the front; empty reports whether the queue is empty.
+        ///
+        /// Notes:
+        /// - Use only standard stack operations: push to top, peek or pop from top, size, and empty checks.
+        /// - If stacks are unavailable, a list or deque may simulate them, but only standard stack operations may be used.
+        ///
+        /// Example 1:
+        /// Input: ["MyQueue","push","push","peek","pop","empty"], [[],[1],[2],[],[],[]]
+        /// Output: [null,null,null,1,1,false]
+        /// Explanation: Create MyQueue; push 1, then 2, making [1,2] with the leftmost item at the front. peek returns 1, pop returns 1 and leaves [2], and empty returns false.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= x &lt;= 9
+        /// - At most 100 calls are made to push, pop, peek, and empty.
+        /// - Every pop and peek call is valid.
+        ///
+        /// Follow-up: Can every operation have amortized O(1) time, so n operations take O(n) overall even if one operation is slower?
+        /// </para>
+        /// <para>
+        /// 232. 用堆疊實作佇列
         /// https://leetcode.cn/problems/implement-queue-using-stacks/description/
+        ///
+        /// 只使用兩個堆疊實作先進先出佇列。MyQueue 必須支援 push、pop、peek、empty：push 將 x 加到尾端；pop 移除並回傳前端元素；peek 回傳前端元素；empty 判斷佇列是否為空。
+        ///
+        /// 注意事項：
+        /// - 只能使用堆疊的標準操作：推入頂端、查看或彈出頂端、取得大小及判斷是否為空。
+        /// - 若語言沒有原生堆疊，可用串列或雙端佇列模擬，但只能使用標準堆疊操作。
+        ///
+        /// 範例 1：
+        /// 輸入：["MyQueue","push","push","peek","pop","empty"], [[],[1],[2],[],[],[]]
+        /// 輸出：[null,null,null,1,1,false]
+        /// 說明：建立 MyQueue；依序 push 1、2，得到 [1,2]，最左側為前端。peek 回傳 1，pop 回傳 1 並留下 [2]，empty 回傳 false。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= x &lt;= 9
+        /// - push、pop、peek、empty 最多合計呼叫 100 次。
+        /// - 所有 pop 與 peek 呼叫都有效。
+        ///
+        /// 延伸問題：能否使每個操作的均攤時間為 O(1)，讓 n 個操作整體花費 O(n)，即使其中一次操作較慢？
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

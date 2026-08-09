@@ -24,10 +24,64 @@
         }
 
         /// <summary>
+        /// <para>
         /// 2058. Find the Minimum and Maximum Number of Nodes Between Critical Points
-        /// https://leetcode.com/problems/find-the-minimum-and-maximum-number-of-nodes-between-critical-points/description/?envType=daily-question&envId=2024-07-05
-        /// 2058. 找出临界点之间的最小和最大距离
+        /// https://leetcode.com/problems/find-the-minimum-and-maximum-number-of-nodes-between-critical-points/description/
+        ///
+        /// A critical point in a linked list is a local maximum or local minimum. A node is a local maximum if its value is strictly greater than both neighbors, and a local minimum if strictly smaller than both. A node must have both a previous and next node to qualify.
+        ///
+        /// Return [minDistance,maxDistance], the minimum and maximum distances between two distinct critical points. If fewer than two critical points exist, return [-1,-1].
+        ///
+        /// Images: https://assets.leetcode.com/uploads/2021/10/13/a1.png, https://assets.leetcode.com/uploads/2021/10/13/a2.png, and https://assets.leetcode.com/uploads/2021/10/14/a5.png
+        ///
+        /// Example 1:
+        /// Input: head = [3,1]
+        /// Output: [-1,-1]
+        /// Explanation: There are no critical points.
+        ///
+        /// Example 2:
+        /// Input: head = [5,3,1,2,5,1,2]
+        /// Output: [1,3]
+        /// Explanation: Nodes 3, 5, and 6 are critical. The minimum distance is 6 - 5 = 1 and the maximum is 6 - 3 = 3.
+        ///
+        /// Example 3:
+        /// Input: head = [1,3,2,2,3,2,2,2,7]
+        /// Output: [3,3]
+        /// Explanation: Nodes 2 and 5 are local maxima, so both distances are 5 - 2 = 3. The last node is not critical because it has no next node.
+        ///
+        /// Constraints:
+        /// - The number of nodes is in [2,10^5].
+        /// - 1 &lt;= Node.val &lt;= 10^5
+        /// </para>
+        /// <para>
+        /// 2058. 找出臨界點之間的最小和最大距離
         /// https://leetcode.cn/problems/find-the-minimum-and-maximum-number-of-nodes-between-critical-points/description/
+        ///
+        /// 鏈結串列中的臨界點是局部極大值或局部極小值。若節點值嚴格大於前後兩個節點，則為局部極大值；若嚴格小於兩者，則為局部極小值。節點必須同時有前一個與下一個節點才可能是臨界點。
+        ///
+        /// 回傳 [minDistance,maxDistance]，分別為任兩個不同臨界點之間的最小與最大距離。若臨界點不足兩個，回傳 [-1,-1]。
+        ///
+        /// 圖片：https://assets.leetcode.com/uploads/2021/10/13/a1.png、https://assets.leetcode.com/uploads/2021/10/13/a2.png、https://assets.leetcode.com/uploads/2021/10/14/a5.png
+        ///
+        /// 範例 1：
+        /// 輸入：head = [3,1]
+        /// 輸出：[-1,-1]
+        /// 說明：沒有臨界點。
+        ///
+        /// 範例 2：
+        /// 輸入：head = [5,3,1,2,5,1,2]
+        /// 輸出：[1,3]
+        /// 說明：第 3、5、6 個節點是臨界點；最小距離為 6 - 5 = 1，最大距離為 6 - 3 = 3。
+        ///
+        /// 範例 3：
+        /// 輸入：head = [1,3,2,2,3,2,2,2,7]
+        /// 輸出：[3,3]
+        /// 說明：第 2 與第 5 個節點是局部極大值，因此兩種距離都是 5 - 2 = 3。最後一個節點沒有下一個節點，所以不是臨界點。
+        ///
+        /// 限制條件：
+        /// - 節點數量在 [2,10^5] 範圍內。
+        /// - 1 &lt;= Node.val &lt;= 10^5
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

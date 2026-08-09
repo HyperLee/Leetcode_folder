@@ -4,9 +4,58 @@
     {
         /// <summary>
         /// 53. Maximum Subarray
-        /// https://leetcode.com/problems/maximum-subarray/
-        /// 53. 最大子数组和
-        /// https://leetcode.cn/problems/maximum-subarray/?envType=daily-question&envId=Invalid%20Date
+        /// https://leetcode.com/problems/maximum-subarray/description/
+        /// <para>
+        /// Given an integer array nums, find the subarray with the largest sum and return its sum.
+        ///
+        /// Example 1:
+        /// Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+        /// Output: 6
+        /// Explanation: The subarray [4,-1,2,1] has the largest sum, 6.
+        ///
+        /// Example 2:
+        /// Input: nums = [1]
+        /// Output: 1
+        /// Explanation: The subarray [1] has the largest sum, 1.
+        ///
+        /// Example 3:
+        /// Input: nums = [5,4,-1,7,8]
+        /// Output: 23
+        /// Explanation: The subarray [5,4,-1,7,8] has the largest sum, 23.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= nums.length &lt;= 10^5
+        /// - -10^4 &lt;= nums[i] &lt;= 10^4
+        ///
+        /// Follow-up: If you have found the O(n) solution, try coding another solution using the divide-and-conquer approach, which is more subtle.
+        /// </para>
+        /// <para>
+        /// 53. 最大子陣列和
+        /// https://leetcode.cn/problems/maximum-subarray/description/
+        ///
+        /// 給定一個整數陣列 nums，請找出總和最大的子陣列，並回傳其總和。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [-2,1,-3,4,-1,2,1,-5,4]
+        /// 輸出：6
+        /// 解釋：子陣列 [4,-1,2,1] 擁有最大的總和 6。
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [1]
+        /// 輸出：1
+        /// 解釋：子陣列 [1] 擁有最大的總和 1。
+        ///
+        /// 範例 3：
+        /// 輸入：nums = [5,4,-1,7,8]
+        /// 輸出：23
+        /// 解釋：子陣列 [5,4,-1,7,8] 擁有最大的總和 23。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= nums.length &lt;= 10^5
+        /// - -10^4 &lt;= nums[i] &lt;= 10^4
+        ///
+        /// 進階：如果你已經找到 O(n) 解法，請嘗試使用更巧妙的分治法撰寫另一種解法。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 使用固定測試案例執行暴力枚舉、Kadane 與分治法，並比對各解法的實際結果。

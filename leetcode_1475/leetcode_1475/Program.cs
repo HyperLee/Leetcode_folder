@@ -3,11 +3,74 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1475. Final Prices With a Special Discount in a Shop
-        /// https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/description/?envType=daily-question&envId=2024-12-18
-        /// 
-        /// 1475. 商品折扣后的最终价格
+        /// https://leetcode.com/problems/final-prices-with-a-special-discount-in-a-shop/description/
+        ///
+        /// You are given an integer array prices where prices[i] is the price of the i-th item in a shop.
+        ///
+        /// There is a special discount for items in the shop. If you buy the i-th item, then you will receive a discount
+        /// equivalent to prices[j], where j is the minimum index such that j &gt; i and prices[j] &lt;= prices[i]. Otherwise,
+        /// you will not receive any discount at all.
+        ///
+        /// Return an integer array answer where answer[i] is the final price you will pay for the i-th item of the shop,
+        /// considering the special discount.
+        ///
+        /// Example 1:
+        /// Input: prices = [8,4,6,2,3]
+        /// Output: [4,2,4,2,3]
+        /// Explanation:
+        /// For item 0 with prices[0]=8, prices[1]=4 is the discount, so the final price is 8 - 4 = 4.
+        /// For item 1 with prices[1]=4, prices[3]=2 is the discount, so the final price is 4 - 2 = 2.
+        /// For item 2 with prices[2]=6, prices[3]=2 is the discount, so the final price is 6 - 2 = 4.
+        /// Items 3 and 4 do not receive any discount.
+        ///
+        /// Example 2:
+        /// Input: prices = [1,2,3,4,5]
+        /// Output: [1,2,3,4,5]
+        /// Explanation: In this case, no item receives any discount.
+        ///
+        /// Example 3:
+        /// Input: prices = [10,1,1,6]
+        /// Output: [9,0,1,6]
+        ///
+        /// Constraints:
+        /// - 1 &lt;= prices.length &lt;= 500
+        /// - 1 &lt;= prices[i] &lt;= 1000
+        /// </para>
+        /// <para>
+        /// 1475. 商品折扣後的最終價格
         /// https://leetcode.cn/problems/final-prices-with-a-special-discount-in-a-shop/description/
+        ///
+        /// 給定整數陣列 prices，其中 prices[i] 是商店內第 i 件商品的價格。
+        ///
+        /// 商店提供特殊折扣。購買第 i 件商品時，可以獲得等同於 prices[j] 的折扣，其中 j 是符合 j &gt; i 且
+        /// prices[j] &lt;= prices[i] 的最小索引；若不存在這樣的索引，則不會獲得任何折扣。
+        ///
+        /// 回傳整數陣列 answer，其中 answer[i] 是套用特殊折扣後，第 i 件商品實際支付的最終價格。
+        ///
+        /// 範例 1：
+        /// 輸入：prices = [8,4,6,2,3]
+        /// 輸出：[4,2,4,2,3]
+        /// 解釋：
+        /// 商品 0 的 prices[0]=8，以 prices[1]=4 折抵，最終價格為 8 - 4 = 4。
+        /// 商品 1 的 prices[1]=4，以 prices[3]=2 折抵，最終價格為 4 - 2 = 2。
+        /// 商品 2 的 prices[2]=6，以 prices[3]=2 折抵，最終價格為 6 - 2 = 4。
+        /// 商品 3 與商品 4 不會獲得任何折扣。
+        ///
+        /// 範例 2：
+        /// 輸入：prices = [1,2,3,4,5]
+        /// 輸出：[1,2,3,4,5]
+        /// 解釋：此時所有商品都不會獲得任何折扣。
+        ///
+        /// 範例 3：
+        /// 輸入：prices = [10,1,1,6]
+        /// 輸出：[9,0,1,6]
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= prices.length &lt;= 500
+        /// - 1 &lt;= prices[i] &lt;= 1000
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 以固定案例比較暴力模擬與單調堆疊解法，並驗證兩種方法都不會修改輸入陣列。

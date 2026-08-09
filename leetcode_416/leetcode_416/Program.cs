@@ -3,8 +3,43 @@
     /// <summary>
     /// 416. Partition Equal Subset Sum
     /// https://leetcode.com/problems/partition-equal-subset-sum/description/
+    /// <para>
+    /// Given an integer array nums, return true if you can partition the array into two subsets such that the sum of the elements in both subsets is equal, or false otherwise.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,5,11,5]
+    /// Output: true
+    /// Explanation: The array can be partitioned as [1, 5, 5] and [11].
+    ///
+    /// Example 2:
+    /// Input: nums = [1,2,3,5]
+    /// Output: false
+    /// Explanation: The array cannot be partitioned into equal-sum subsets.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 200
+    /// - 1 &lt;= nums[i] &lt;= 100
+    /// </para>
+    /// <para>
     /// 416. 分割等和子集
-    /// https://leetcode.cn/problems/partition-equal-subset-sum/description//// 
+    /// https://leetcode.cn/problems/partition-equal-subset-sum/description/
+    ///
+    /// 給定整數陣列 nums，若能將陣列分成兩個子集，使兩個子集中元素總和相等則回傳 true，否則回傳 false。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,5,11,5]
+    /// 輸出：true
+    /// 解釋：陣列可以分成 [1, 5, 5] 與 [11]。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [1,2,3,5]
+    /// 輸出：false
+    /// 解釋：陣列無法分成總和相等的子集。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 200
+    /// - 1 &lt;= nums[i] &lt;= 100
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

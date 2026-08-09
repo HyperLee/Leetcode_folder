@@ -3,10 +3,80 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
-        /// https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/description/?envType=daily-question&envId=2024-06-23
-        /// 1438. 绝对差不超过限制的最长连续子数组
+        /// https://leetcode.com/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/description/
+        ///
+        /// Given an array of integers nums and an integer limit, return the size of the longest non-empty subarray such that
+        /// the absolute difference between any two elements of this subarray is less than or equal to limit.
+        ///
+        /// Example 1:
+        /// Input: nums = [8,2,4,7], limit = 4
+        /// Output: 2
+        /// Explanation: All subarrays are:
+        /// [8] with maximum absolute diff |8-8| = 0 &lt;= 4.
+        /// [8,2] with maximum absolute diff |8-2| = 6 &gt; 4.
+        /// [8,2,4] with maximum absolute diff |8-2| = 6 &gt; 4.
+        /// [8,2,4,7] with maximum absolute diff |8-2| = 6 &gt; 4.
+        /// [2] with maximum absolute diff |2-2| = 0 &lt;= 4.
+        /// [2,4] with maximum absolute diff |2-4| = 2 &lt;= 4.
+        /// [2,4,7] with maximum absolute diff |2-7| = 5 &gt; 4.
+        /// [4] with maximum absolute diff |4-4| = 0 &lt;= 4.
+        /// [4,7] with maximum absolute diff |4-7| = 3 &lt;= 4.
+        /// [7] with maximum absolute diff |7-7| = 0 &lt;= 4.
+        /// Therefore, the size of the longest subarray is 2.
+        ///
+        /// Example 2:
+        /// Input: nums = [10,1,2,4,7,2], limit = 5
+        /// Output: 4
+        /// Explanation: The subarray [2,4,7,2] is the longest since the maximum absolute diff is |2-7| = 5 &lt;= 5.
+        ///
+        /// Example 3:
+        /// Input: nums = [4,2,2,2,4,4,2,2], limit = 0
+        /// Output: 3
+        ///
+        /// Constraints:
+        /// - 1 &lt;= nums.length &lt;= 10^5
+        /// - 1 &lt;= nums[i] &lt;= 10^9
+        /// - 0 &lt;= limit &lt;= 10^9
+        /// </para>
+        /// <para>
+        /// 1438. 絕對差不超過限制的最長連續子陣列
         /// https://leetcode.cn/problems/longest-continuous-subarray-with-absolute-diff-less-than-or-equal-to-limit/description/
+        ///
+        /// 給定整數陣列 nums 與整數 limit，回傳最長非空子陣列的長度，使該子陣列中任意兩個元素的絕對差
+        /// 小於或等於 limit。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [8,2,4,7]，limit = 4
+        /// 輸出：2
+        /// 解釋：所有子陣列如下：
+        /// [8] 的最大絕對差 |8-8| = 0 &lt;= 4。
+        /// [8,2] 的最大絕對差 |8-2| = 6 &gt; 4。
+        /// [8,2,4] 的最大絕對差 |8-2| = 6 &gt; 4。
+        /// [8,2,4,7] 的最大絕對差 |8-2| = 6 &gt; 4。
+        /// [2] 的最大絕對差 |2-2| = 0 &lt;= 4。
+        /// [2,4] 的最大絕對差 |2-4| = 2 &lt;= 4。
+        /// [2,4,7] 的最大絕對差 |2-7| = 5 &gt; 4。
+        /// [4] 的最大絕對差 |4-4| = 0 &lt;= 4。
+        /// [4,7] 的最大絕對差 |4-7| = 3 &lt;= 4。
+        /// [7] 的最大絕對差 |7-7| = 0 &lt;= 4。
+        /// 因此，最長子陣列的長度為 2。
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [10,1,2,4,7,2]，limit = 5
+        /// 輸出：4
+        /// 解釋：子陣列 [2,4,7,2] 最長，因為最大絕對差為 |2-7| = 5 &lt;= 5。
+        ///
+        /// 範例 3：
+        /// 輸入：nums = [4,2,2,2,4,4,2,2]，limit = 0
+        /// 輸出：3
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= nums.length &lt;= 10^5
+        /// - 1 &lt;= nums[i] &lt;= 10^9
+        /// - 0 &lt;= limit &lt;= 10^9
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 執行固定的題目範例與回歸案例，逐一比較三種解法的結果，並以程序結束碼表示是否全部通過。

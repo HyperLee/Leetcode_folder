@@ -19,9 +19,10 @@ class Program
     };
 
     /// <summary>
-    /// English:
     /// 50. Pow(x, n)
-    /// Implement pow(x, n), which calculates x raised to the power n (i.e., x^n).
+    /// https://leetcode.com/problems/powx-n/description/
+    /// <para>
+    /// Implement pow(x, n), which calculates x raised to the power n, that is, x^n.
     ///
     /// Example 1:
     /// Input: x = 2.00000, n = 10
@@ -37,35 +38,38 @@ class Program
     /// Explanation: 2^-2 = 1 / 2^2 = 1 / 4 = 0.25
     ///
     /// Constraints:
-    /// -100.0 &lt; x &lt; 100.0
-    /// -2^31 &lt;= n &lt;= 2^31 - 1
-    /// n is an integer.
-    /// Either x is not zero or n &gt; 0.
-    /// -10^4 &lt;= x^n &lt;= 10^4
-    ///
-    /// 繁體中文:
+    /// - -100.0 &lt; x &lt; 100.0
+    /// - -2^31 &lt;= n &lt;= 2^31 - 1
+    /// - n is an integer.
+    /// - Either x is not zero or n &gt; 0.
+    /// - -10^4 &lt;= x^n &lt;= 10^4
+    /// </para>
+    /// <para>
     /// 50. Pow(x, n)
-    /// 實作 pow(x, n)，計算 x 的 n 次方（也就是 x^n）。
+    /// https://leetcode.cn/problems/powx-n/description/
     ///
-    /// 範例 1:
-    /// 輸入: x = 2.00000, n = 10
-    /// 輸出: 1024.00000
+    /// 實作 pow(x, n)，計算 x 的 n 次方，也就是 x^n。
     ///
-    /// 範例 2:
-    /// 輸入: x = 2.10000, n = 3
-    /// 輸出: 9.26100
+    /// 範例 1：
+    /// 輸入：x = 2.00000, n = 10
+    /// 輸出：1024.00000
     ///
-    /// 範例 3:
-    /// 輸入: x = 2.00000, n = -2
-    /// 輸出: 0.25000
-    /// 說明: 2^-2 = 1 / 2^2 = 1 / 4 = 0.25
+    /// 範例 2：
+    /// 輸入：x = 2.10000, n = 3
+    /// 輸出：9.26100
     ///
-    /// 限制條件:
-    /// -100.0 < x < 100.0
-    /// -2^31 <= n <= 2^31 - 1
-    /// n 是整數。
-    /// x 不為零，或 n &gt; 0。
-    /// -10^4 <= x^n <= 10^4
+    /// 範例 3：
+    /// 輸入：x = 2.00000, n = -2
+    /// 輸出：0.25000
+    /// 解釋：2^-2 = 1 / 2^2 = 1 / 4 = 0.25
+    ///
+    /// 限制條件：
+    /// - -100.0 &lt; x &lt; 100.0
+    /// - -2^31 &lt;= n &lt;= 2^31 - 1
+    /// - n 是整數。
+    /// - x 不為零，或 n &gt; 0。
+    /// - -10^4 &lt;= x^n &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數；此示範專案未使用。</param>
     /// <returns>全部測試通過時回傳 0，否則回傳 1。</returns>

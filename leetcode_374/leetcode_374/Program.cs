@@ -12,19 +12,70 @@ class Program
 
     /// <summary>
     /// 374. Guess Number Higher or Lower
-    /// https://leetcode.com/problems/guess-number-higher-or-lower/
-    /// 374. 猜数字大小
+    /// https://leetcode.com/problems/guess-number-higher-or-lower/description/
+    /// <para>
+    /// We are playing the Guess Game. The game is as follows:
+    ///
+    /// I pick a number from 1 to n. You have to guess which number I picked; it stays the same throughout the game.
+    ///
+    /// Every time you guess wrong, I will tell you whether the number I picked is higher or lower than your guess.
+    ///
+    /// You call a pre-defined API int guess(int num), which returns:
+    /// - -1: Your guess is higher than the number I picked (num &gt; pick).
+    /// - 1: Your guess is lower than the number I picked (num &lt; pick).
+    /// - 0: Your guess is equal to the number I picked (num == pick).
+    ///
+    /// Return the number that I picked.
+    ///
+    /// Example 1:
+    /// Input: n = 10, pick = 6
+    /// Output: 6
+    ///
+    /// Example 2:
+    /// Input: n = 1, pick = 1
+    /// Output: 1
+    ///
+    /// Example 3:
+    /// Input: n = 2, pick = 1
+    /// Output: 1
+    ///
+    /// Constraints:
+    /// - 1 &lt;= n &lt;= 2^31 - 1
+    /// - 1 &lt;= pick &lt;= n
+    /// </para>
+    /// <para>
+    /// 374. 猜數字大小
     /// https://leetcode.cn/problems/guess-number-higher-or-lower/description/
-    /// 
-    /// 繁體中文翻譯：
-    /// 我們正在玩一個猜數字遊戲：我從 1 到 n 選一個數字（選定不變），
-    /// 你要猜出我選的數字。每次你猜錯，我會告訴你猜的數字是太大還是太小。
-    /// 使用預先定義的 API `int guess(int num)`，其回傳值為：
-    /// -1：你猜的數字比答案大（num > pick）。
-    /// 1：你猜的數字比答案小（num < pick）。
-    /// 0：你猜的數字等於答案（num == pick）。
-    /// 回傳我選的數字（pick）。
-    /// 
+    ///
+    /// 我們正在玩猜數字遊戲，規則如下：
+    ///
+    /// 我從 1 到 n 中選一個數字。你必須猜出我選的是哪個數字；整場遊戲中答案保持不變。
+    ///
+    /// 每次猜錯時，我會告訴你所選數字比你的猜測更大或更小。
+    ///
+    /// 你可以呼叫預先定義的 API int guess(int num)，它會回傳：
+    /// - -1：你的猜測比我選的數字大（num &gt; pick）。
+    /// - 1：你的猜測比我選的數字小（num &lt; pick）。
+    /// - 0：你的猜測等於我選的數字（num == pick）。
+    ///
+    /// 回傳我選的數字。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 10, pick = 6
+    /// 輸出：6
+    ///
+    /// 範例 2：
+    /// 輸入：n = 1, pick = 1
+    /// 輸出：1
+    ///
+    /// 範例 3：
+    /// 輸入：n = 2, pick = 1
+    /// 輸出：1
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= n &lt;= 2^31 - 1
+    /// - 1 &lt;= pick &lt;= n
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

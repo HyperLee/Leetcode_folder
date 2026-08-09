@@ -7,8 +7,59 @@ namespace leetcode_2917
         /// <summary>
         /// 2917. Find the K-or of an Array
         /// https://leetcode.com/problems/find-the-k-or-of-an-array/description/
-        /// 2917. 找出数组中的 K-or 值
-        /// https://leetcode.cn/problems/find-the-k-or-of-an-array/description/?envType=daily-question&envId=Invalid%20Date
+        /// <para>
+        /// You are given an integer array nums and an integer k. The K-or operation extends the standard bitwise OR: a bit position in the result is set to 1 if at least k numbers in nums have a 1 in that position.
+        ///
+        /// Return the K-or of nums.
+        ///
+        /// Example 1:
+        /// Input: nums = [7,12,9,8,9,15], k = 4
+        /// Output: 9
+        /// Explanation: In binary, the rows are 7 = 0111, 12 = 1100, 9 = 1001, 8 = 1000, 9 = 1001, and 15 = 1111. Bit 0 equals 1 in 7, 9, 9, and 15. Bit 3 equals 1 in 12, 9, 8, 9, and 15. Only bits 0 and 3 qualify, so the result is (1001)2 = 9.
+        ///
+        /// Example 2:
+        /// Input: nums = [2,12,1,11,4,5], k = 6
+        /// Output: 0
+        /// Explanation: No bit appears as 1 in all six array numbers, as required when k = 6. Thus, the result is 0.
+        ///
+        /// Example 3:
+        /// Input: nums = [10,8,5,9,11,6,8], k = 1
+        /// Output: 15
+        /// Explanation: Since k == 1, the 1-or is the bitwise OR of every element. Thus, 10 OR 8 OR 5 OR 9 OR 11 OR 6 OR 8 = 15.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= nums.length &lt;= 50
+        /// - 0 &lt;= nums[i] &lt; 2^31
+        /// - 1 &lt;= k &lt;= nums.length
+        /// </para>
+        /// <para>
+        /// 2917. 找出陣列的 K-or 值
+        /// https://leetcode.cn/problems/find-the-k-or-of-an-array/description/
+        ///
+        /// 給定一個整數陣列 nums 和整數 k。K-or 操作是標準位元 OR 的延伸：若 nums 中至少有 k 個數字在某個位元位置為 1，結果的該位元就設為 1。
+        ///
+        /// 回傳 nums 的 K-or。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [7,12,9,8,9,15], k = 4
+        /// 輸出：9
+        /// 解釋：以二進位表示，各數依序為 7 = 0111、12 = 1100、9 = 1001、8 = 1000、9 = 1001、15 = 1111。位元 0 在 7、9、9、15 中為 1；位元 3 在 12、9、8、9、15 中為 1。只有位元 0 與 3 符合，因此結果為 (1001)2 = 9。
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [2,12,1,11,4,5], k = 6
+        /// 輸出：0
+        /// 解釋：當 k = 6 時，沒有任何位元在全部六個陣列數字中都為 1，因此結果為 0。
+        ///
+        /// 範例 3：
+        /// 輸入：nums = [10,8,5,9,11,6,8], k = 1
+        /// 輸出：15
+        /// 解釋：由於 k == 1，1-or 等同所有元素的位元 OR。因此 10 OR 8 OR 5 OR 9 OR 11 OR 6 OR 8 = 15。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= nums.length &lt;= 50
+        /// - 0 &lt;= nums[i] &lt; 2^31
+        /// - 1 &lt;= k &lt;= nums.length
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

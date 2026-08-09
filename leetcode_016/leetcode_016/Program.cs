@@ -5,13 +5,51 @@ class Program
     /// <summary>
     /// 16. 3Sum Closest
     /// https://leetcode.com/problems/3sum-closest/description/
+    /// <para>
+    /// Given an integer array nums of length n and an integer target, find three integers at distinct indices in nums such that the sum is closest to target.
+    ///
+    /// Return the sum of the three integers.
+    /// You may assume that each input has exactly one solution.
+    ///
+    /// Example 1:
+    /// Input: nums = [-1,2,1,-4], target = 1
+    /// Output: 2
+    /// Explanation: The sum closest to the target is 2. (-1 + 2 + 1 = 2).
+    ///
+    /// Example 2:
+    /// Input: nums = [0,0,0], target = 1
+    /// Output: 0
+    /// Explanation: The sum closest to the target is 0. (0 + 0 + 0 = 0).
+    ///
+    /// Constraints:
+    /// - 3 &lt;= nums.length &lt;= 500
+    /// - -1000 &lt;= nums[i] &lt;= 1000
+    /// - -10^4 &lt;= target &lt;= 10^4
+    /// </para>
+    /// <para>
     /// 16. 最接近的三數之和
     /// https://leetcode.cn/problems/3sum-closest/description/
-    /// 
-    /// 題目描述：
-    /// 給定一個長度為 n 的整數陣列 nums 和一個整數 target，請你從 nums 中找出三個整數，使得它們的和最接近 target。
-    /// 返回這三個整數的和。
-    /// 你可以假設每組輸入只會對應一個答案。
+    ///
+    /// 給定一個長度為 n 的整數陣列 nums 和一個整數 target，請在 nums 中找出位於三個不同索引的整數，使它們的總和最接近 target。
+    ///
+    /// 回傳這三個整數的總和。
+    /// 你可以假設每組輸入恰好只有一個解。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [-1,2,1,-4], target = 1
+    /// 輸出：2
+    /// 解釋：最接近 target 的總和是 2。(-1 + 2 + 1 = 2)。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [0,0,0], target = 1
+    /// 輸出：0
+    /// 解釋：最接近 target 的總和是 0。(0 + 0 + 0 = 0)。
+    ///
+    /// 限制條件：
+    /// - 3 &lt;= nums.length &lt;= 500
+    /// - -1000 &lt;= nums[i] &lt;= 1000
+    /// - -10^4 &lt;= target &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

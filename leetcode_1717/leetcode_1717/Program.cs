@@ -3,16 +3,64 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1717. Maximum Score From Removing Substrings
-    /// https://leetcode.com/problems/maximum-score-from-removing-substrings/description/?envType=daily-question&envId=2025-07-23
-    /// 1717. 删除子字符串的最大得分
-    /// https://leetcode.cn/problems/maximum-score-from-removing-substrings/description/?envType=daily-question&envId=2025-07-23
-    /// 
-    /// 這是題目描述：
-    /// 給你一個字串 s 和兩個整數 x 和 y。你可以執行以下兩種操作任意次數：
-    /// 1. 移除子字串 "ab" 並獲得 x 分。例如，從 "cabxbae" 移除 "ab" 會變成 "cxbae"。
-    /// 2. 移除子字串 "ba" 並獲得 y 分。例如，從 "cabxbae" 移除 "ba" 會變成 "cabxe"。
-    /// 請回傳在對 s 執行上述操作後，所能獲得的最大分數。
+    /// https://leetcode.com/problems/maximum-score-from-removing-substrings/description/
+    ///
+    /// You are given a string s and two integers x and y. You may perform these operations any number of times:
+    /// - Remove substring "ab" and gain x points. For example, removing "ab" from "c[ab]xbae" produces "cxbae".
+    /// - Remove substring "ba" and gain y points. For example, removing "ba" from "cabx[ba]e" produces "cabxe".
+    ///
+    /// Return the maximum points obtainable after applying the operations to s.
+    ///
+    /// Example 1:
+    /// Input: s = "cdbcbbaaabab", x = 4, y = 5
+    /// Output: 19
+    /// Explanation:
+    /// - Remove "ba" from "cdbcbbaaa[ba]b". s becomes "cdbcbbaaab" and the score increases by 5.
+    /// - Remove "ab" from "cdbcbbaa[ab]". s becomes "cdbcbbaa" and the score increases by 4.
+    /// - Remove "ba" from "cdbcb[ba]a". s becomes "cdbcba" and the score increases by 5.
+    /// - Remove "ba" from "cdbc[ba]". s becomes "cdbc" and the score increases by 5.
+    /// The total score is 5 + 4 + 5 + 5 = 19.
+    ///
+    /// Example 2:
+    /// Input: s = "aabbaaxybbaabb", x = 5, y = 4
+    /// Output: 20
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - 1 &lt;= x, y &lt;= 10^4
+    /// - s consists of lowercase English letters.
+    /// </para>
+    /// <para>
+    /// 1717. 刪除子字串的最大得分
+    /// https://leetcode.cn/problems/maximum-score-from-removing-substrings/description/
+    ///
+    /// 給定字串 s 與兩個整數 x 和 y。你可以任意次數執行下列操作：
+    /// - 刪除子字串 "ab" 並獲得 x 分。例如，從 "c[ab]xbae" 刪除 "ab" 後會得到 "cxbae"。
+    /// - 刪除子字串 "ba" 並獲得 y 分。例如，從 "cabx[ba]e" 刪除 "ba" 後會得到 "cabxe"。
+    ///
+    /// 回傳對 s 執行上述操作後可獲得的最大分數。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "cdbcbbaaabab", x = 4, y = 5
+    /// 輸出：19
+    /// 說明：
+    /// - 從 "cdbcbbaaa[ba]b" 刪除 "ba"，s 變為 "cdbcbbaaab"，得分增加 5。
+    /// - 從 "cdbcbbaa[ab]" 刪除 "ab"，s 變為 "cdbcbbaa"，得分增加 4。
+    /// - 從 "cdbcb[ba]a" 刪除 "ba"，s 變為 "cdbcba"，得分增加 5。
+    /// - 從 "cdbc[ba]" 刪除 "ba"，s 變為 "cdbc"，得分增加 5。
+    /// 總得分為 5 + 4 + 5 + 5 = 19。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "aabbaaxybbaabb", x = 5, y = 4
+    /// 輸出：20
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - 1 &lt;= x, y &lt;= 10^4
+    /// - s 僅由小寫英文字母組成。
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// 

@@ -3,12 +3,50 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2244. Minimum Rounds to Complete All Tasks
     /// https://leetcode.com/problems/minimum-rounds-to-complete-all-tasks/description/
-    /// 2244. 完成所有任务需要的最少轮数
+    ///
+    /// tasks[i] is a task's difficulty. In one round, complete either 2 or 3 tasks of the same difficulty. Return the minimum rounds needed to complete every task, or -1 if impossible.
+    ///
+    /// Example 1:
+    /// Input: tasks = [2,2,3,3,2,4,4,4,4,4]
+    /// Output: 4
+    /// Explanation: Complete 3 tasks of difficulty 2, 2 tasks of difficulty 3, then 3 and 2 tasks of difficulty 4. This uses 4 rounds and no fewer are possible.
+    ///
+    /// Example 2:
+    /// Input: tasks = [2,3,3]
+    /// Output: -1
+    /// Explanation: There is only 1 task of difficulty 2, but every round requires 2 or 3 tasks of one difficulty, so completion is impossible.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= tasks.length &lt;= 10^5
+    /// - 1 &lt;= tasks[i] &lt;= 10^9
+    ///
+    /// Note: This question is the same as 2870. Minimum Number of Operations to Make Array Empty.
+    /// </para>
+    /// <para>
+    /// 2244. 完成所有任務需要的最少輪數
     /// https://leetcode.cn/problems/minimum-rounds-to-complete-all-tasks/description/
-    /// 
-    /// 
+    ///
+    /// tasks[i] 表示任務難度。每一輪可以完成 2 或 3 個相同難度的任務。回傳完成全部任務所需的最少輪數；若不可能則回傳 -1。
+    ///
+    /// 範例 1：
+    /// 輸入：tasks = [2,2,3,3,2,4,4,4,4,4]
+    /// 輸出：4
+    /// 說明：完成 3 個難度 2 的任務、2 個難度 3 的任務，再完成 3 個與 2 個難度 4 的任務，共使用 4 輪且不能更少。
+    ///
+    /// 範例 2：
+    /// 輸入：tasks = [2,3,3]
+    /// 輸出：-1
+    /// 說明：難度 2 只有 1 個任務，但每輪必須完成同難度的 2 或 3 個任務，因此無法完成。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= tasks.length &lt;= 10^5
+    /// - 1 &lt;= tasks[i] &lt;= 10^9
+    ///
+    /// 註：此題與 2870「使陣列為空的最少操作次數」相同。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

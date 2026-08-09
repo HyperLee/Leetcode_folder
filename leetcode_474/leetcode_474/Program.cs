@@ -6,13 +6,56 @@ class Program
 {
     /// <summary>
     /// 474. Ones and Zeroes
-    /// https://leetcode.com/problems/ones-and-zeroes/description/?envType=daily-question&envId=2025-11-11
+    /// https://leetcode.com/problems/ones-and-zeroes/description/
+    /// <para>
+    /// You are given an array of binary strings strs and two integers m and n.
+    ///
+    /// Return the size of the largest subset of strs such that there are at most m 0's and n 1's in the subset.
+    ///
+    /// A set x is a subset of a set y if all elements of x are also elements of y.
+    ///
+    /// Example 1:
+    /// Input: strs = ["10","0001","111001","1","0"], m = 5, n = 3
+    /// Output: 4
+    /// Explanation: The largest subset with at most 5 0's and 3 1's is {"10", "0001", "1", "0"}, so the answer is 4. Other valid but smaller subsets include {"0001", "1"} and {"10", "1", "0"}. {"111001"} is invalid because it contains 4 1's, greater than the maximum of 3.
+    ///
+    /// Example 2:
+    /// Input: strs = ["10","0","1"], m = 1, n = 1
+    /// Output: 2
+    /// Explanation: The largest subset is {"0", "1"}, so the answer is 2.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= strs.length &lt;= 600
+    /// - 1 &lt;= strs[i].length &lt;= 100
+    /// - strs[i] consists only of digits '0' and '1'.
+    /// - 1 &lt;= m, n &lt;= 100
+    /// </para>
+    /// <para>
     /// 474. 一和零
-    /// https://leetcode.cn/problems/ones-and-zeroes/description/?envType=daily-question&envId=2025-11-11
-    /// 
-    /// 給定一個二進位字串陣列 strs 和兩個整數 m 和 n。
-    /// 返回 strs 中最大子集的大小，使得子集中最多有 m 個 0 和 n 個 1。
-    /// 如果集合 x 是集合 y 的子集，則 x 中的所有元素也是 y 中的元素。
+    /// https://leetcode.cn/problems/ones-and-zeroes/description/
+    ///
+    /// 給定二進位字串陣列 strs 與兩個整數 m、n。
+    ///
+    /// 回傳 strs 的最大子集大小，使該子集中最多包含 m 個 0 與 n 個 1。
+    ///
+    /// 若集合 x 的所有元素也都是集合 y 的元素，則 x 是 y 的子集。
+    ///
+    /// 範例 1：
+    /// 輸入：strs = ["10","0001","111001","1","0"], m = 5, n = 3
+    /// 輸出：4
+    /// 解釋：最多包含 5 個 0 與 3 個 1 的最大子集是 {"10", "0001", "1", "0"}，因此答案為 4。其他有效但較小的子集包括 {"0001", "1"} 與 {"10", "1", "0"}。{"111001"} 無效，因為它包含 4 個 1，超過最大值 3。
+    ///
+    /// 範例 2：
+    /// 輸入：strs = ["10","0","1"], m = 1, n = 1
+    /// 輸出：2
+    /// 解釋：最大子集為 {"0", "1"}，因此答案為 2。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= strs.length &lt;= 600
+    /// - 1 &lt;= strs[i].length &lt;= 100
+    /// - strs[i] 只由數字 '0' 與 '1' 組成。
+    /// - 1 &lt;= m, n &lt;= 100
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

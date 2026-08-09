@@ -7,27 +7,88 @@ namespace leetcode_1488;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1488. Avoid Flood in The City
-    /// https://leetcode.com/problems/avoid-flood-in-the-city/description/?envType=daily-question&envId=2025-10-07
-    /// 1488. 避免洪水泛滥
-    /// https://leetcode.cn/problems/avoid-flood-in-the-city/description/?envType=daily-question&envId=2025-10-07
-    /// 
-    /// 您的國家有無限個湖泊。最初，所有湖泊都是空的，但當第 n 個湖泊下雨時，第 n 個湖泊會滿水。
-    /// 如果在已經滿水的湖泊上再下雨，就會發生洪水。您的目標是避免任何湖泊發生洪水。
-    /// 
-    /// 給定一個整數陣列 rains，其中：
-    /// 
-    /// rains[i] > 0 表示第 rains[i] 個湖泊會下雨。
-    /// rains[i] == 0 表示這天沒有雨，您可以選擇這天清空一個湖泊。
-    /// 返回一個陣列 ans，其中：
-    /// 
-    /// ans.length == rains.length
-    /// ans[i] == -1 如果 rains[i] > 0。
-    /// ans[i] 是您在第 i 天選擇清空的湖泊，如果 rains[i] == 0。
-    /// 如果有多個有效答案，返回其中任何一個。如果不可能避免洪水，返回空陣列。
-    /// 
-    /// 注意，如果您選擇清空一個滿水的湖泊，它會變成空的，但如果您選擇清空一個空的湖泊，什麼都不會改變。
-    /// 
+    /// https://leetcode.com/problems/avoid-flood-in-the-city/description/
+    ///
+    /// Your country has 10^9 lakes. Initially, all lakes are empty, but when it rains over the n-th lake, that lake becomes
+    /// full. If it rains over a full lake, there will be a flood. Your goal is to avoid floods in every lake.
+    ///
+    /// Given an integer array rains:
+    /// - rains[i] &gt; 0 means it rains over lake rains[i].
+    /// - rains[i] == 0 means there is no rain that day, and you must choose one lake to dry.
+    ///
+    /// Return an array ans where:
+    /// - ans.length == rains.length
+    /// - ans[i] == -1 if rains[i] &gt; 0.
+    /// - ans[i] is the lake you choose to dry on day i if rains[i] == 0.
+    /// If there are multiple valid answers, return any of them. If avoiding a flood is impossible, return an empty array.
+    /// Drying a full lake empties it; drying an empty lake changes nothing.
+    ///
+    /// Example 1:
+    /// Input: rains = [1,2,3,4]
+    /// Output: [-1,-1,-1,-1]
+    /// Explanation: After days 1, 2, 3 and 4, the full lakes are [1], [1,2], [1,2,3] and [1,2,3,4], respectively.
+    /// There is no dry day and no lake floods.
+    ///
+    /// Example 2:
+    /// Input: rains = [1,2,0,0,2,1]
+    /// Output: [-1,-1,2,1,-1,-1]
+    /// Explanation: After day 1, full lakes are [1]. After day 2, they are [1,2]. On day 3, dry lake 2, leaving [1].
+    /// On day 4, dry lake 1, leaving none. After day 5, full lakes are [2]; after day 6, they are [1,2]. This avoids
+    /// flooding. [-1,-1,1,2,-1,-1] is another acceptable answer.
+    ///
+    /// Example 3:
+    /// Input: rains = [1,2,0,1,2]
+    /// Output: []
+    /// Explanation: After day 2, lakes [1,2] are full, and one must be dried on day 3. It will then rain over lakes [1,2],
+    /// so whichever lake was not dried will flood.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= rains.length &lt;= 10^5
+    /// - 0 &lt;= rains[i] &lt;= 10^9
+    /// </para>
+    /// <para>
+    /// 1488. 避免城市發生洪水
+    /// https://leetcode.cn/problems/avoid-flood-in-the-city/description/
+    ///
+    /// 你的國家有 10^9 個湖泊。起初所有湖泊都是空的；當第 n 個湖泊下雨時，該湖泊會裝滿水。若在已滿的
+    /// 湖泊再次下雨，就會發生洪水。你的目標是避免任何湖泊發生洪水。
+    ///
+    /// 給定整數陣列 rains：
+    /// - rains[i] &gt; 0 表示會在 rains[i] 號湖泊下雨。
+    /// - rains[i] == 0 表示當天不下雨，而且你必須選擇一個湖泊抽乾。
+    ///
+    /// 回傳陣列 ans，其中：
+    /// - ans.length == rains.length
+    /// - 若 rains[i] &gt; 0，則 ans[i] == -1。
+    /// - 若 rains[i] == 0，則 ans[i] 是你在第 i 天選擇抽乾的湖泊。
+    /// 若有多個有效答案，回傳任一個；若不可能避免洪水，回傳空陣列。抽乾已滿的湖泊會使其變空；抽乾空湖泊
+    /// 則不會產生任何變化。
+    ///
+    /// 範例 1：
+    /// 輸入：rains = [1,2,3,4]
+    /// 輸出：[-1,-1,-1,-1]
+    /// 解釋：第 1、2、3、4 天後，已滿湖泊依序為 [1]、[1,2]、[1,2,3]、[1,2,3,4]。沒有可抽乾湖泊的
+    /// 日子，也沒有湖泊發生洪水。
+    ///
+    /// 範例 2：
+    /// 輸入：rains = [1,2,0,0,2,1]
+    /// 輸出：[-1,-1,2,1,-1,-1]
+    /// 解釋：第 1 天後已滿湖泊為 [1]，第 2 天後為 [1,2]。第 3 天抽乾湖泊 2，剩下 [1]；第 4 天抽乾
+    /// 湖泊 1，已滿湖泊清空。第 5 天後已滿湖泊為 [2]，第 6 天後為 [1,2]，因此沒有洪水。
+    /// [-1,-1,1,2,-1,-1] 也是可接受的答案。
+    ///
+    /// 範例 3：
+    /// 輸入：rains = [1,2,0,1,2]
+    /// 輸出：[]
+    /// 解釋：第 2 天後湖泊 [1,2] 已滿，第 3 天必須抽乾其中一個；之後湖泊 [1,2] 都會下雨，因此未被
+    /// 抽乾的湖泊一定會發生洪水。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= rains.length &lt;= 10^5
+    /// - 0 &lt;= rains[i] &lt;= 10^9
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

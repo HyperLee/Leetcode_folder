@@ -3,15 +3,63 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 125. Valid Palindrome
-        /// https://leetcode.com/problems/valid-palindrome/
-        /// 125. 验证回文串
-        /// https://leetcode.cn/problems/valid-palindrome/
-        /// 
-        /// 回文判斷, 將大寫轉小寫
-        /// 以及將非文字部分忽略不比對
-        /// 從左邊 或是右邊 開始 文字要相同
-        /// 
+        /// https://leetcode.com/problems/valid-palindrome/description/
+        ///
+        /// A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and
+        /// removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric
+        /// characters include letters and numbers.
+        /// Given a string s, return true if it is a palindrome, or false otherwise.
+        ///
+        /// Example 1:
+        /// Input: s = "A man, a plan, a canal: Panama"
+        /// Output: true
+        /// Explanation: "amanaplanacanalpanama" is a palindrome.
+        ///
+        /// Example 2:
+        /// Input: s = "race a car"
+        /// Output: false
+        /// Explanation: "raceacar" is not a palindrome.
+        ///
+        /// Example 3:
+        /// Input: s = " "
+        /// Output: true
+        /// Explanation: s is an empty string "" after removing non-alphanumeric characters.
+        /// Since an empty string reads the same forward and backward, it is a palindrome.
+        ///
+        /// Constraints:
+        /// 1 &lt;= s.length &lt;= 2 * 10^5
+        /// s consists only of printable ASCII characters.
+        /// </para>
+        /// <para>
+        /// 125. 驗證回文
+        /// https://leetcode.cn/problems/valid-palindrome/description/
+        ///
+        /// 將一個片語中的所有大寫字母轉為小寫，並移除所有非英數字元後，若正向與反向讀取結果相同，
+        /// 則此片語是回文。英數字元包括字母與數字。
+        /// 給定字串 s，若它是回文則回傳 true，否則回傳 false。
+        ///
+        /// 範例 1：
+        /// 輸入：s = "A man, a plan, a canal: Panama"
+        /// 輸出：true
+        /// 解釋："amanaplanacanalpanama" 是回文。
+        ///
+        /// 範例 2：
+        /// 輸入：s = "race a car"
+        /// 輸出：false
+        /// 解釋："raceacar" 不是回文。
+        ///
+        /// 範例 3：
+        /// 輸入：s = " "
+        /// 輸出：true
+        /// 解釋：移除非英數字元後，s 會成為空字串 ""。
+        /// 由於空字串正向與反向讀取都相同，因此它是回文。
+        ///
+        /// 限制條件：
+        /// 1 &lt;= s.length &lt;= 2 * 10^5
+        /// s 只包含可列印的 ASCII 字元。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

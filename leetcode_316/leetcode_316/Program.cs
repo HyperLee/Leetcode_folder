@@ -7,11 +7,43 @@ class Program
     /// <summary>
     /// 316. Remove Duplicate Letters
     /// https://leetcode.com/problems/remove-duplicate-letters/description/
-    /// 316. 去除重复字母
+    /// <para>
+    /// Given a string s, remove duplicate letters so that every letter appears once and only once. Make sure the result is the smallest in lexicographical order among all possible results.
+    ///
+    /// Example 1:
+    /// Input: s = "bcabc"
+    /// Output: "abc"
+    ///
+    /// Example 2:
+    /// Input: s = "cbacdcbc"
+    /// Output: "acdb"
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 10^4
+    /// - s consists of lowercase English letters.
+    ///
+    /// Note: This question is the same as 1081: https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/
+    /// </para>
+    /// <para>
+    /// 316. 移除重複字母
     /// https://leetcode.cn/problems/remove-duplicate-letters/description/
-    /// 
-    /// Given a string s, remove duplicate letters so that every letter appears once and only once. 
-    /// You must make sure your result is the smallest in lexicographical order among all possible results.
+    ///
+    /// 給定一個字串 s，移除重複字母，使每個字母恰好只出現一次。你必須確保結果在所有可能答案中字典序最小。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "bcabc"
+    /// 輸出："abc"
+    ///
+    /// 範例 2：
+    /// 輸入：s = "cbacdcbc"
+    /// 輸出："acdb"
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 10^4
+    /// - s 只由小寫英文字母組成。
+    ///
+    /// 注意：本題與 1081 相同：https://leetcode.com/problems/smallest-subsequence-of-distinct-characters/
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

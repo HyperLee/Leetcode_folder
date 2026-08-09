@@ -3,20 +3,58 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 73. Set Matrix Zeroes
-    /// https://leetcode.com/problems/set-matrix-zeroes/description/?envType=problem-list-v2&envId=oizxjoit
-    /// 73. 矩阵置零
-    /// https://leetcode.cn/problems/set-matrix-zeroes/description/
-    /// 
-    /// 題目描述：
-    /// 給定一個 m x n 的矩陣，如果一個元素為 0，則將其所在的整行和整列設為 0。
-    /// 要求使用原地算法，空間複雜度為 O(1)。
-    /// 
-    /// 解題提示與想法：
-    /// 1. 使用第一行和第一列作為標記區域，記錄哪些行和列需要設為 0。
-    /// 2. 使用兩個布林變數分別記錄第一行和第一列是否需要設為 0，避免覆蓋標記資訊。
-    /// 3. 先處理內部區域（從第二行和第二列開始），最後再處理第一行和第一列。
-    /// 4. 此方法的時間複雜度為 O(m*n)，空間複雜度為 O(1)。
+    /// https://leetcode.com/problems/set-matrix-zeroes/
+    ///
+    /// Given an m x n integer matrix matrix, if an element is 0, set its entire row and column to 0's.
+    /// You must do it in place.
+    ///
+    /// Example 1:
+    /// Input: matrix = [[1,1,1],[1,0,1],[1,1,1]]
+    /// Output: [[1,0,1],[0,0,0],[1,0,1]]
+    ///
+    /// Example 2:
+    /// Input: matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+    /// Output: [[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+    ///
+    /// Constraints:
+    /// m == matrix.length
+    /// n == matrix[0].length
+    /// 1 &lt;= m, n &lt;= 200
+    /// -2^31 &lt;= matrix[i][j] &lt;= 2^31 - 1
+    ///
+    /// Follow up:
+    /// A straightforward solution using O(mn) space is probably a bad idea.
+    /// A simple improvement uses O(m + n) space, but still not the best solution.
+    /// Could you devise a constant space solution?
+    /// </para>
+    /// <para>
+    /// 73. 矩陣設零
+    /// https://leetcode.cn/problems/set-matrix-zeroes/
+    ///
+    /// 給定一個 m x n 的整數矩陣 matrix，如果某個元素為 0，請將它所在的整列與整欄都設為 0。
+    /// 你必須原地完成這項操作。
+    ///
+    /// 範例 1：
+    /// 輸入：matrix = [[1,1,1],[1,0,1],[1,1,1]]
+    /// 輸出：[[1,0,1],[0,0,0],[1,0,1]]
+    ///
+    /// 範例 2：
+    /// 輸入：matrix = [[0,1,2,0],[3,4,5,2],[1,3,1,5]]
+    /// 輸出：[[0,0,0,0],[0,4,5,0],[0,3,1,0]]
+    ///
+    /// 限制條件：
+    /// m == matrix.length
+    /// n == matrix[0].length
+    /// 1 &lt;= m, n &lt;= 200
+    /// -2^31 &lt;= matrix[i][j] &lt;= 2^31 - 1
+    ///
+    /// 進階：
+    /// 直接使用 O(mn) 空間的解法可能不是好主意。
+    /// 一個簡單的改進會使用 O(m + n) 空間，但仍不是最佳解法。
+    /// 你能設計出只使用常數空間的解法嗎？
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

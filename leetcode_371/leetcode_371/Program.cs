@@ -4,9 +4,38 @@ class Program
 {
     /// <summary>
     /// 371. Sum of Two Integers
-    /// https://leetcode.com/problems/sum-of-two-integers/description/?envType=problem-list-v2&envId=oizxjoit
-    /// 371. 两整数之和
+    /// https://leetcode.com/problems/sum-of-two-integers/description/
+    /// <para>
+    /// Given two integers a and b, return the sum of the two integers without using the operators + and -.
+    ///
+    /// Example 1:
+    /// Input: a = 1, b = 2
+    /// Output: 3
+    ///
+    /// Example 2:
+    /// Input: a = 2, b = 3
+    /// Output: 5
+    ///
+    /// Constraints:
+    /// - -1000 &lt;= a, b &lt;= 1000
+    /// </para>
+    /// <para>
+    /// 371. 兩整數之和
     /// https://leetcode.cn/problems/sum-of-two-integers/description/
+    ///
+    /// 給定兩個整數 a 與 b，在不使用 + 與 - 運算子的情況下，回傳兩整數之和。
+    ///
+    /// 範例 1：
+    /// 輸入：a = 1, b = 2
+    /// 輸出：3
+    ///
+    /// 範例 2：
+    /// 輸入：a = 2, b = 3
+    /// 輸出：5
+    ///
+    /// 限制條件：
+    /// - -1000 &lt;= a, b &lt;= 1000
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

@@ -3,19 +3,46 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2419. Longest Subarray With Maximum Bitwise AND
-    /// https://leetcode.com/problems/longest-subarray-with-maximum-bitwise-and/description/?envType=daily-question&envId=2025-07-30
-    /// 2419. 按位與最大的最長子陣列
-    /// https://leetcode.cn/problems/longest-subarray-with-maximum-bitwise-and/description/?envType=daily-question&envId=2025-07-30
-    /// 
-    /// 題目描述：
-    /// 給定一個整數陣列 nums，大小為 n。
-    /// 請考慮 nums 的一個非空子陣列，其按位與值最大。
-    /// 換句話說，設 k 為所有子陣列按位與的最大值，則只考慮按位與等於 k 的子陣列。
-    /// 返回這些子陣列中最長的長度。
-    /// 按位與是將陣列中所有數字進行按位與運算的結果。
-    /// 子陣列是陣列中連續的一段元素。
-    /// 
+    /// https://leetcode.com/problems/longest-subarray-with-maximum-bitwise-and/description/
+    ///
+    /// You are given integer array nums of size n. Consider non-empty subarrays whose bitwise AND is the maximum possible among all subarrays of nums. In other words, if k is that maximum, consider only subarrays whose bitwise AND equals k. Return the length of the longest such subarray. An array's bitwise AND applies bitwise AND to all its values, and a subarray is a contiguous sequence within an array.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,2,3,3,2,2]
+    /// Output: 2
+    /// Explanation: The maximum possible bitwise AND is 3. The longest subarray with that value is [3,3], so return 2.
+    ///
+    /// Example 2:
+    /// Input: nums = [1,2,3,4]
+    /// Output: 1
+    /// Explanation: The maximum possible bitwise AND is 4. The longest subarray with that value is [4], so return 1.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 1 &lt;= nums[i] &lt;= 10^6
+    /// </para>
+    /// <para>
+    /// 2419. 按位元 AND 最大的最長子陣列
+    /// https://leetcode.cn/problems/longest-subarray-with-maximum-bitwise-and/description/
+    ///
+    /// 給定大小為 n 的整數陣列 nums。考慮所有非空子陣列中，按位元 AND 達到最大可能值者。換言之，若 k 是所有子陣列按位元 AND 的最大值，就只考慮按位元 AND 等於 k 的子陣列。回傳其中最長子陣列的長度。陣列的按位元 AND 是對所有值套用按位元 AND；子陣列是陣列中的連續序列。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,2,3,3,2,2]
+    /// 輸出：2
+    /// 說明：可能的最大按位元 AND 是 3；具有該值的最長子陣列為 [3,3]，因此回傳 2。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [1,2,3,4]
+    /// 輸出：1
+    /// 說明：可能的最大按位元 AND 是 4；具有該值的最長子陣列為 [4]，因此回傳 1。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 1 &lt;= nums[i] &lt;= 10^6
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// 

@@ -3,12 +3,74 @@ namespace leetcode_1743;
 internal static class Program
 {
     /// <summary>
-    /// LeetCode 1743: Restore the Array From Adjacent Pairs / 從相鄰元素對還原陣列。
-    /// https://leetcode.com/problems/restore-the-array-from-adjacent-pairs/
-    /// https://leetcode.cn/problems/restore-the-array-from-adjacent-pairs/
-    /// Given every adjacent pair from an array of distinct integers in arbitrary order,
-    /// restore any valid original array. 給定一個相異整數陣列的所有相鄰元素對，且元素對
-    /// 的順序與方向皆可能被打亂；請還原任一個符合這些相鄰關係的原始陣列。
+    /// <para>
+    /// 1743. Restore the Array From Adjacent Pairs
+    /// https://leetcode.com/problems/restore-the-array-from-adjacent-pairs/description/
+    ///
+    /// There is an integer array nums containing n unique elements, but you have forgotten it. You remember every pair of adjacent elements in nums.
+    ///
+    /// You are given a 2D integer array adjacentPairs of size n - 1, where adjacentPairs[i] = [u_i, v_i] means u_i and v_i are adjacent in nums.
+    ///
+    /// Every adjacent pair nums[i] and nums[i+1] appears in adjacentPairs, either as [nums[i], nums[i+1]] or [nums[i+1], nums[i]]. The pairs may appear in any order.
+    ///
+    /// Return the original array nums. If multiple solutions exist, return any of them.
+    ///
+    /// Example 1:
+    /// Input: adjacentPairs = [[2,1],[3,4],[3,2]]
+    /// Output: [1,2,3,4]
+    /// Explanation: This array contains all adjacent pairs. Each pair may be listed in either direction.
+    ///
+    /// Example 2:
+    /// Input: adjacentPairs = [[4,-2],[1,4],[-3,1]]
+    /// Output: [-2,4,1,-3]
+    /// Explanation: Values may be negative. [-3,1,4,-2] is also accepted.
+    ///
+    /// Example 3:
+    /// Input: adjacentPairs = [[100000,-100000]]
+    /// Output: [100000,-100000]
+    ///
+    /// Constraints:
+    /// - nums.length == n
+    /// - adjacentPairs.length == n - 1
+    /// - adjacentPairs[i].length == 2
+    /// - 2 &lt;= n &lt;= 10^5
+    /// - -10^5 &lt;= nums[i], u_i, v_i &lt;= 10^5
+    /// - Some nums exists whose adjacent pairs are exactly adjacentPairs.
+    /// </para>
+    /// <para>
+    /// 1743. 從相鄰元素對還原陣列
+    /// https://leetcode.cn/problems/restore-the-array-from-adjacent-pairs/description/
+    ///
+    /// 有一個包含 n 個相異元素的整數陣列 nums，但你已忘記其內容，只記得 nums 中每一對相鄰元素。
+    ///
+    /// 給定大小為 n - 1 的二維整數陣列 adjacentPairs，其中 adjacentPairs[i] = [u_i, v_i] 表示 u_i 與 v_i 在 nums 中相鄰。
+    ///
+    /// nums 的每一對相鄰元素 nums[i] 與 nums[i+1] 都會出現在 adjacentPairs 中，形式可能是 [nums[i], nums[i+1]] 或 [nums[i+1], nums[i]]，且各元素對可按任意順序出現。
+    ///
+    /// 回傳原始陣列 nums；若有多個答案，回傳任一個即可。
+    ///
+    /// 範例 1：
+    /// 輸入：adjacentPairs = [[2,1],[3,4],[3,2]]
+    /// 輸出：[1,2,3,4]
+    /// 說明：此陣列包含所有相鄰元素對，每一對的方向都可能相反。
+    ///
+    /// 範例 2：
+    /// 輸入：adjacentPairs = [[4,-2],[1,4],[-3,1]]
+    /// 輸出：[-2,4,1,-3]
+    /// 說明：元素可以是負數，[-3,1,4,-2] 也會被接受。
+    ///
+    /// 範例 3：
+    /// 輸入：adjacentPairs = [[100000,-100000]]
+    /// 輸出：[100000,-100000]
+    ///
+    /// 限制條件：
+    /// - nums.length == n
+    /// - adjacentPairs.length == n - 1
+    /// - adjacentPairs[i].length == 2
+    /// - 2 &lt;= n &lt;= 10^5
+    /// - -10^5 &lt;= nums[i], u_i, v_i &lt;= 10^5
+    /// - 一定存在某個 nums，其所有相鄰元素對恰為 adjacentPairs。
+    /// </para>
     /// </summary>
     private static void Main()
     {

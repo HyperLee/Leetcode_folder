@@ -3,25 +3,56 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2359. Find Closest Node to Given Two Nodes
-    /// https://leetcode.com/problems/find-closest-node-to-given-two-nodes/description/?envType=daily-question&envId=2025-05-30
+    /// https://leetcode.com/problems/find-closest-node-to-given-two-nodes/description/
+    ///
+    /// You are given a directed graph of n nodes numbered 0 through n - 1, where every node has at most one outgoing edge. edges[i] is the destination from i, or -1 if i has none. Given node1 and node2, return a node reachable from both that minimizes the maximum of its two distances. Break ties by smallest index, or return -1 if none exists. The graph may contain cycles.
+    ///
+    /// Images: https://assets.leetcode.com/uploads/2022/06/07/graph4drawio-2.png and https://assets.leetcode.com/uploads/2022/06/07/graph4drawio-4.png
+    ///
+    /// Example 1:
+    /// Input: edges = [2,2,3,-1], node1 = 0, node2 = 1
+    /// Output: 2
+    /// Explanation: Node 2 is distance 1 from node 0 and distance 1 from node 1. Their maximum is 1, and no smaller maximum is possible.
+    ///
+    /// Example 2:
+    /// Input: edges = [1,2,-1], node1 = 0, node2 = 2
+    /// Output: 2
+    /// Explanation: Node 2 is distance 2 from node 0 and distance 0 from itself. Their maximum is 2, and no smaller maximum is possible.
+    ///
+    /// Constraints:
+    /// - n == edges.length
+    /// - 2 &lt;= n &lt;= 10^5
+    /// - -1 &lt;= edges[i] &lt; n
+    /// - edges[i] != i
+    /// - 0 &lt;= node1, node2 &lt; n
+    /// </para>
+    /// <para>
     /// 2359. 找到離給定兩個節點最近的節點
-    /// https://leetcode.cn/problems/find-closest-node-to-given-two-nodes/description/?envType=daily-question&envId=2025-05-30
+    /// https://leetcode.cn/problems/find-closest-node-to-given-two-nodes/description/
     ///
-    /// 題目說明（繁體中文）：
-    /// 給定一個有 n 個節點（編號從 0 到 n-1）的有向圖，每個節點最多只有一條出邊。
-    /// 這個圖用一個長度為 n 的陣列 edges 表示，edges[i] 代表從節點 i 指向 edges[i] 的有向邊。
-    /// 如果節點 i 沒有出邊，則 edges[i] == -1。
-    /// 現在給定兩個整數 node1 和 node2，請你返回一個節點的編號，使得該節點同時可以從 node1 和 node2 到達，
-    /// 並且從 node1 和 node2 到這個節點的距離的最大值最小。
-    /// 如果有多個答案，返回編號最小的那個；如果不存在這樣的節點，返回 -1。
-    /// 注意：edges 可能包含環。
+    /// 給定一張有 n 個節點、編號 0 到 n - 1 的有向圖，每個節點至多有一條出邊。edges[i] 是 i 的出邊終點；若沒有則為 -1。給定 node1 與 node2，回傳一個兩者都可到達、且兩段距離最大值最小的節點；若有多個答案則取索引最小者，若不存在則回傳 -1。圖中可能有環。
     ///
-    /// 解題思路：
-    /// 1. 此題是有向圖問題，每個節點最多只有一條出邊
-    /// 2. 分別從 node1 和 node2 沿著唯一出邊路徑追蹤，計算到所有節點的距離（非 BFS，無需佇列，僅單一路徑遍歷）。
-    /// 3. 找到兩個起始節點都能到達的節點中，距離最大值最小的節點
-    /// 4. 時間複雜度：O(n)，空間複雜度：O(n)
+    /// 圖片：https://assets.leetcode.com/uploads/2022/06/07/graph4drawio-2.png 與 https://assets.leetcode.com/uploads/2022/06/07/graph4drawio-4.png
+    ///
+    /// 範例 1：
+    /// 輸入：edges = [2,2,3,-1], node1 = 0, node2 = 1
+    /// 輸出：2
+    /// 說明：節點 2 到節點 0 的距離為 1，到節點 1 的距離為 1；最大值為 1，且不可能更小。
+    ///
+    /// 範例 2：
+    /// 輸入：edges = [1,2,-1], node1 = 0, node2 = 2
+    /// 輸出：2
+    /// 說明：節點 2 到節點 0 的距離為 2，到自身的距離為 0；最大值為 2，且不可能更小。
+    ///
+    /// 限制條件：
+    /// - n == edges.length
+    /// - 2 &lt;= n &lt;= 10^5
+    /// - -1 &lt;= edges[i] &lt; n
+    /// - edges[i] != i
+    /// - 0 &lt;= node1, node2 &lt; n
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

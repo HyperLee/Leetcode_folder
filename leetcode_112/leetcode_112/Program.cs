@@ -44,14 +44,72 @@ class Program
     }
 
     /// <summary>
+    /// <para>
     /// 112. Path Sum
-    /// English:
-    /// Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf path such that adding up all the values along the path equals targetSum.
+    /// https://leetcode.com/problems/path-sum/description/
+    ///
+    /// Given the root of a binary tree and an integer targetSum, return true if the tree has a root-to-leaf
+    /// path such that adding up all the values along the path equals targetSum.
     /// A leaf is a node with no children.
     ///
-    /// Traditional Chinese:
-    /// 給定一棵二元樹的根節點 root 和一個整數 targetSum，如果樹中存在一條從根節點到葉節點的路徑，使得沿途所有節點值的總和等於 targetSum，則回傳 true。
+    /// Example 1:
+    /// Input: root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
+    /// Output: true
+    /// Illustration: https://assets.leetcode.com/uploads/2021/01/18/pathsum1.jpg
+    /// Explanation: The root-to-leaf path with the target sum is shown.
+    ///
+    /// Example 2:
+    /// Input: root = [1,2,3], targetSum = 5
+    /// Output: false
+    /// Illustration: https://assets.leetcode.com/uploads/2021/01/18/pathsum2.jpg
+    /// Explanation: There are two root-to-leaf paths in the tree:
+    /// (1 --&gt; 2): The sum is 3.
+    /// (1 --&gt; 3): The sum is 4.
+    /// There is no root-to-leaf path with sum = 5.
+    ///
+    /// Example 3:
+    /// Input: root = [], targetSum = 0
+    /// Output: false
+    /// Explanation: Since the tree is empty, there are no root-to-leaf paths.
+    ///
+    /// Constraints:
+    /// The number of nodes in the tree is in the range [0, 5000].
+    /// -1000 &lt;= Node.val &lt;= 1000
+    /// -1000 &lt;= targetSum &lt;= 1000
+    /// </para>
+    /// <para>
+    /// 112. 路徑總和
+    /// https://leetcode.cn/problems/path-sum/description/
+    ///
+    /// 給定二元樹的根節點 root 與整數 targetSum，若樹中存在一條從根節點到葉節點的路徑，
+    /// 且沿途所有節點值的總和等於 targetSum，則回傳 true。
     /// 葉節點是沒有子節點的節點。
+    ///
+    /// 範例 1：
+    /// 輸入：root = [5,4,8,11,null,13,4,7,2,null,null,null,1], targetSum = 22
+    /// 輸出：true
+    /// 示意圖：https://assets.leetcode.com/uploads/2021/01/18/pathsum1.jpg
+    /// 解釋：圖中顯示總和等於目標值的根至葉路徑。
+    ///
+    /// 範例 2：
+    /// 輸入：root = [1,2,3], targetSum = 5
+    /// 輸出：false
+    /// 示意圖：https://assets.leetcode.com/uploads/2021/01/18/pathsum2.jpg
+    /// 解釋：樹中有兩條從根節點到葉節點的路徑：
+    /// (1 --&gt; 2)：總和為 3。
+    /// (1 --&gt; 3)：總和為 4。
+    /// 不存在總和為 5 的根至葉路徑。
+    ///
+    /// 範例 3：
+    /// 輸入：root = [], targetSum = 0
+    /// 輸出：false
+    /// 解釋：由於樹為空，因此沒有任何根至葉路徑。
+    ///
+    /// 限制條件：
+    /// 樹中的節點數量介於 [0, 5000]。
+    /// -1000 &lt;= Node.val &lt;= 1000
+    /// -1000 &lt;= targetSum &lt;= 1000
+    /// </para>
     /// </summary>
     /// <param name="args">Command-line arguments are not used.</param>
     static void Main(string[] args)

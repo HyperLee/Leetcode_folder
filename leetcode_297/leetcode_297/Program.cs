@@ -5,15 +5,50 @@ class Program
     /// <summary>
     /// 297. Serialize and Deserialize Binary Tree
     /// https://leetcode.com/problems/serialize-and-deserialize-binary-tree/description/
-    /// 297. 二叉树的序列化与反序列化
-    /// https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/description/  
+    /// <para>
+    /// Serialization is the process of converting a data structure or object into a sequence of bits so it can be stored in a file or memory buffer, or transmitted across a network connection and reconstructed later in the same or another computer environment.
     ///
-    /// wiki介紹序列化與反序列化
-    /// https://zh.wikipedia.org/zh-tw/%E5%BA%8F%E5%88%97%E5%8C%96
-    /// 
-    /// wiki 樹的走訪
-    /// https://zh.wikipedia.org/zh-tw/%E6%A0%91%E7%9A%84%E9%81%8D%E5%8E%86 
-    /// 前序走訪（Pre-Order Traversal）是依序以根節點、左節點、右節點為順序走訪的方式。
+    /// Design an algorithm to serialize and deserialize a binary tree. There is no restriction on how the algorithm should work. You only need to ensure that a binary tree can be serialized to a string and that the string can be deserialized to the original tree structure.
+    ///
+    /// Clarification: The input/output format is the same as how LeetCode serializes a binary tree. You do not have to follow this format; be creative and devise your own approach.
+    ///
+    /// Example 1:
+    /// Image: https://assets.leetcode.com/uploads/2020/09/15/serdeser.jpg
+    /// Input: root = [1,2,3,null,null,4,5]
+    /// Output: [1,2,3,null,null,4,5]
+    ///
+    /// Example 2:
+    /// Input: root = []
+    /// Output: []
+    ///
+    /// Constraints:
+    /// - The number of nodes in the tree is in the range [0, 10^4].
+    /// - -1000 &lt;= Node.val &lt;= 1000
+    /// </para>
+    /// <para>
+    /// 297. 二元樹的序列化與反序列化
+    /// https://leetcode.cn/problems/serialize-and-deserialize-binary-tree/description/
+    ///
+    /// 序列化是將資料結構或物件轉換成位元序列的過程，使其能儲存在檔案或記憶體緩衝區中，或透過網路連線傳送，之後再於相同或其他電腦環境中重建。
+    ///
+    /// 請設計一個演算法來序列化與反序列化二元樹。序列化與反序列化演算法的運作方式不受限制；你只需確保二元樹可以被序列化為字串，且該字串可以反序列化回原始樹結構。
+    ///
+    /// 說明：輸入／輸出格式與 LeetCode 序列化二元樹的方式相同。你不一定要遵循此格式，可以自行設計不同的方法。
+    ///
+    /// 範例 1：
+    /// 圖片：https://assets.leetcode.com/uploads/2020/09/15/serdeser.jpg
+    /// 輸入：root = [1,2,3,null,null,4,5]
+    /// 輸出：[1,2,3,null,null,4,5]
+    ///
+    /// 範例 2：
+    /// 輸入：root = []
+    /// 輸出：[]
+    ///
+    /// 限制條件：
+    /// - 樹中的節點數量介於 [0, 10^4]。
+    /// - -1000 &lt;= Node.val &lt;= 1000
+    /// </para>
+    /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)
     {

@@ -11,14 +11,46 @@ namespace leetcode_242
             bool Expected);
 
         /// <summary>
+        /// <para>
         /// 242. Valid Anagram
-        /// https://leetcode.com/problems/valid-anagram/
+        /// https://leetcode.com/problems/valid-anagram/description/
+        ///
+        /// Given strings s and t, return true if t is an anagram of s; otherwise return false.
+        ///
+        /// Example 1:
+        /// Input: s = "anagram", t = "nagaram"
+        /// Output: true
+        ///
+        /// Example 2:
+        /// Input: s = "rat", t = "car"
+        /// Output: false
+        ///
+        /// Constraints:
+        /// - 1 &lt;= s.length, t.length &lt;= 5 * 10^4
+        /// - s and t consist of lowercase English letters.
+        ///
+        /// Follow-up: If the inputs contain Unicode characters, how would you adapt the solution?
+        /// </para>
+        /// <para>
         /// 242. 有效的字母異位詞
-        /// https://leetcode.cn/problems/valid-anagram/
-        /// 
-        /// 比對兩輸入字串是否相同
-        /// 1.出現字母
-        /// 2.每次字母出現的頻率(次數)
+        /// https://leetcode.cn/problems/valid-anagram/description/
+        ///
+        /// 給定字串 s 與 t，若 t 是 s 的字母異位詞則回傳 true，否則回傳 false。
+        ///
+        /// 範例 1：
+        /// 輸入：s = "anagram", t = "nagaram"
+        /// 輸出：true
+        ///
+        /// 範例 2：
+        /// 輸入：s = "rat", t = "car"
+        /// 輸出：false
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= s.length, t.length &lt;= 5 * 10^4
+        /// - s 與 t 僅由小寫英文字母組成。
+        ///
+        /// 延伸問題：若輸入包含 Unicode 字元，應如何調整解法？
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

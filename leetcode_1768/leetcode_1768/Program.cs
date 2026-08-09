@@ -5,20 +5,78 @@ namespace leetcode_1768
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1768. Merge Strings Alternately
-        /// https://leetcode.com/problems/merge-strings-alternately/
-        /// 1768. 交替合并字符串
-        /// https://leetcode.cn/problems/merge-strings-alternately/
-        /// 
-        /// 兩個字串依序交叉組合成新字串
-        /// 如果有某字串特別長 那就把多餘的放在 新字串後面
-        /// 
-        /// ex:  
-        /// w1 = abc, w2 = pqr
-        /// new => apbqr
-        ///  
-        /// w1 = abc4, w2 = pqr
-        /// new => apbqcr4
+        /// https://leetcode.com/problems/merge-strings-alternately/description/
+        ///
+        /// You are given two strings word1 and word2. Merge them by adding letters in alternating order, starting with word1. If one string is longer, append its remaining letters to the end.
+        ///
+        /// Return the merged string.
+        ///
+        /// Example 1:
+        /// Input: word1 = "abc", word2 = "pqr"
+        /// Output: "apbqcr"
+        /// Explanation:
+        /// word1: a b c
+        /// word2: p q r
+        /// merged: a p b q c r
+        ///
+        /// Example 2:
+        /// Input: word1 = "ab", word2 = "pqrs"
+        /// Output: "apbqrs"
+        /// Explanation: word2 is longer, so "rs" is appended at the end.
+        /// word1: a b
+        /// word2: p q r s
+        /// merged: a p b q r s
+        ///
+        /// Example 3:
+        /// Input: word1 = "abcd", word2 = "pq"
+        /// Output: "apbqcd"
+        /// Explanation: word1 is longer, so "cd" is appended at the end.
+        /// word1: a b c d
+        /// word2: p q
+        /// merged: a p b q c d
+        ///
+        /// Constraints:
+        /// - 1 &lt;= word1.length, word2.length &lt;= 100
+        /// - word1 and word2 consist of lowercase English letters.
+        /// </para>
+        /// <para>
+        /// 1768. 交替合併字串
+        /// https://leetcode.cn/problems/merge-strings-alternately/description/
+        ///
+        /// 給定兩個字串 word1 和 word2。從 word1 開始，依序交替加入兩個字串的字元來合併它們。若其中一個字串較長，將剩餘字元附加到合併字串末尾。
+        ///
+        /// 回傳合併後的字串。
+        ///
+        /// 範例 1：
+        /// 輸入：word1 = "abc", word2 = "pqr"
+        /// 輸出："apbqcr"
+        /// 說明：
+        /// word1：a b c
+        /// word2：p q r
+        /// 合併：a p b q c r
+        ///
+        /// 範例 2：
+        /// 輸入：word1 = "ab", word2 = "pqrs"
+        /// 輸出："apbqrs"
+        /// 說明：word2 較長，因此將 "rs" 附加到末尾。
+        /// word1：a b
+        /// word2：p q r s
+        /// 合併：a p b q r s
+        ///
+        /// 範例 3：
+        /// 輸入：word1 = "abcd", word2 = "pq"
+        /// 輸出："apbqcd"
+        /// 說明：word1 較長，因此將 "cd" 附加到末尾。
+        /// word1：a b c d
+        /// word2：p q
+        /// 合併：a p b q c d
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= word1.length, word2.length &lt;= 100
+        /// - word1 和 word2 僅由小寫英文字母組成。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

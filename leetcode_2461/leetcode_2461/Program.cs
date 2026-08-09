@@ -5,17 +5,46 @@ namespace leetcode_2461
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 2461. Maximum Sum of Distinct Subarrays With Length K
-        /// https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/description/?envType=daily-question&envId=2024-11-19
-        /// 
-        /// 2461. 长度为 K 子数组中的最大和
+        /// https://leetcode.com/problems/maximum-sum-of-distinct-subarrays-with-length-k/description/
+        ///
+        /// You are given integer array nums and integer k. Among all contiguous non-empty subarrays of length k whose elements are all distinct, return the maximum sum. Return 0 if no subarray satisfies both conditions.
+        ///
+        /// Example 1:
+        /// Input: nums = [1,5,4,2,9,9,9], k = 3
+        /// Output: 15
+        /// Explanation: The subarrays of length 3 are [1,5,4] with sum 10, [5,4,2] with sum 11, [4,2,9] with sum 15, and [2,9,9] and [9,9,9], which are invalid because 9 repeats. The maximum valid sum is 15.
+        ///
+        /// Example 2:
+        /// Input: nums = [4,4,4], k = 3
+        /// Output: 0
+        /// Explanation: The only subarray of length 3 is [4,4,4], which is invalid because 4 repeats, so no subarray meets the conditions.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= k &lt;= nums.length &lt;= 10^5
+        /// - 1 &lt;= nums[i] &lt;= 10^5
+        /// </para>
+        /// <para>
+        /// 2461. 長度為 K 且元素各異的子陣列最大總和
         /// https://leetcode.cn/problems/maximum-sum-of-distinct-subarrays-with-length-k/description/
-        /// 
-        /// 您被給定一個整數陣列 nums 和一個整數 k。請找出所有滿足以下條件的子陣列中，最大的子陣列總和：
-        /// 子陣列的長度為 k，且
-        /// 子陣列中的所有元素都是互不相同的。
-        /// 返回滿足上述條件的所有子陣列中最大的子陣列總和。如果沒有任何子陣列符合條件，則返回 0。
-        /// 子陣列是陣列中連續且非空的一段元素序列。
+        ///
+        /// 給定整數陣列 nums 與整數 k。在所有長度為 k、元素皆互不相同的連續非空子陣列中，回傳最大總和；若沒有子陣列同時滿足兩項條件，則回傳 0。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [1,5,4,2,9,9,9], k = 3
+        /// 輸出：15
+        /// 說明：長度為 3 的子陣列為 [1,5,4]，總和 10；[5,4,2]，總和 11；[4,2,9]，總和 15；以及 [2,9,9]、[9,9,9]，後兩者因 9 重複而無效。有效子陣列的最大總和是 15。
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [4,4,4], k = 3
+        /// 輸出：0
+        /// 說明：唯一長度為 3 的子陣列是 [4,4,4]，但因 4 重複而無效，所以沒有子陣列符合條件。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= k &lt;= nums.length &lt;= 10^5
+        /// - 1 &lt;= nums[i] &lt;= 10^5
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         /// <remarks>

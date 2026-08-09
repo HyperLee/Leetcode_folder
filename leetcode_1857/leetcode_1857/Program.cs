@@ -3,18 +3,66 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1857. Largest Color Value in a Directed Graph
-    /// https://leetcode.com/problems/largest-color-value-in-a-directed-graph/description/?envType=daily-question&envId=2025-05-26
-    /// 
+    /// https://leetcode.com/problems/largest-color-value-in-a-directed-graph/description/
+    ///
+    /// There is a directed graph with n colored nodes and m edges. Nodes are numbered from 0 to n - 1. colors[i] is the lowercase letter representing node i's color, and edges[j] = [a_j, b_j] represents a directed edge from a_j to b_j.
+    ///
+    /// A valid path is x_1 -&gt; x_2 -&gt; ... -&gt; x_k where an edge goes from x_i to x_(i+1) for every 1 &lt;= i &lt; k. A path's color value is the number of nodes having the most frequent color on that path.
+    ///
+    /// Images: https://assets.leetcode.com/uploads/2021/04/21/leet1.png and https://assets.leetcode.com/uploads/2021/04/21/leet2.png
+    ///
+    /// Return the largest color value of any valid path, or -1 if the graph contains a cycle.
+    ///
+    /// Example 1:
+    /// Input: colors = "abaca", edges = [[0,1],[0,2],[2,3],[3,4]]
+    /// Output: 3
+    /// Explanation: Path 0 -&gt; 2 -&gt; 3 -&gt; 4 contains 3 nodes colored "a".
+    ///
+    /// Example 2:
+    /// Input: colors = "a", edges = [[0,0]]
+    /// Output: -1
+    /// Explanation: There is a cycle from 0 to 0.
+    ///
+    /// Constraints:
+    /// - n == colors.length
+    /// - m == edges.length
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - 0 &lt;= m &lt;= 10^5
+    /// - colors consists of lowercase English letters.
+    /// - 0 &lt;= a_j, b_j &lt; n
+    /// </para>
+    /// <para>
     /// 1857. 有向圖中最大顏色值
-    /// https://leetcode.cn/problems/largest-color-value-in-a-directed-graph/description/?envType=daily-question&envId=2025-05-26
-    /// 
-    /// 給定一個有 n 個顏色節點和 m 條邊的有向圖，節點編號為 0 到 n-1。
-    /// colors 是一個字串，colors[i] 代表第 i 個節點的顏色（小寫英文字母）。
-    /// edges 是一個二維陣列，edges[j] = [aj, bj] 表示存在一條從 aj 指向 bj 的有向邊。
-    /// 合法路徑為 x1 -> x2 -> ... -> xk，且對於每個 1 <= i < k，xi 到 xi+1 有有向邊。
-    /// 路徑的顏色值為該路徑上出現次數最多的顏色的節點數。
-    /// 請回傳所有合法路徑中的最大顏色值；如果圖中存在環，則回傳 -1。
+    /// https://leetcode.cn/problems/largest-color-value-in-a-directed-graph/description/
+    ///
+    /// 有一個包含 n 個彩色節點及 m 條邊的有向圖，節點編號為 0 到 n - 1。colors[i] 是代表節點 i 顏色的小寫英文字母，edges[j] = [a_j, b_j] 表示一條從 a_j 指向 b_j 的有向邊。
+    ///
+    /// 有效路徑為 x_1 -&gt; x_2 -&gt; ... -&gt; x_k，且對每個 1 &lt;= i &lt; k，都有一條從 x_i 指向 x_(i+1) 的邊。路徑的顏色值，是該路徑上出現次數最多之顏色的節點數。
+    ///
+    /// 圖片：https://assets.leetcode.com/uploads/2021/04/21/leet1.png 與 https://assets.leetcode.com/uploads/2021/04/21/leet2.png
+    ///
+    /// 回傳所有有效路徑中的最大顏色值；若圖中包含環，則回傳 -1。
+    ///
+    /// 範例 1：
+    /// 輸入：colors = "abaca", edges = [[0,1],[0,2],[2,3],[3,4]]
+    /// 輸出：3
+    /// 說明：路徑 0 -&gt; 2 -&gt; 3 -&gt; 4 包含 3 個顏色為 "a" 的節點。
+    ///
+    /// 範例 2：
+    /// 輸入：colors = "a", edges = [[0,0]]
+    /// 輸出：-1
+    /// 說明：存在一個從 0 回到 0 的環。
+    ///
+    /// 限制條件：
+    /// - n == colors.length
+    /// - m == edges.length
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - 0 &lt;= m &lt;= 10^5
+    /// - colors 僅由小寫英文字母組成。
+    /// - 0 &lt;= a_j, b_j &lt; n
+    /// </para>
     /// </summary>
     static void Main(string[] args)
     {

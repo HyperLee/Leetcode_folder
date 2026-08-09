@@ -3,14 +3,46 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 78. Subsets
-        /// https://leetcode.com/problems/subsets/description/?envType=daily-question&envId=2024-05-21
+        /// https://leetcode.com/problems/subsets/
+        ///
+        /// Given an integer array nums of unique elements, return all possible subsets (the power set).
+        /// The solution set must not contain duplicate subsets. Return the solution in any order.
+        ///
+        /// Example 1:
+        /// Input: nums = [1,2,3]
+        /// Output: [[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+        ///
+        /// Example 2:
+        /// Input: nums = [0]
+        /// Output: [[],[0]]
+        ///
+        /// Constraints:
+        /// 1 &lt;= nums.length &lt;= 10
+        /// -10 &lt;= nums[i] &lt;= 10
+        /// All the numbers of nums are unique.
+        /// </para>
+        /// <para>
         /// 78. 子集
-        /// https://leetcode.cn/problems/subsets/description/
-        /// 冪集 wiki
-        /// https://zh.wikipedia.org/zh-tw/%E5%86%AA%E9%9B%86
-        /// 
-        /// 給定一個不含重複數字的整數陣列 nums，找出所有可能的子集（包含空集合與完整集合）。
+        /// https://leetcode.cn/problems/subsets/
+        ///
+        /// 給定一個由互不相同元素組成的整數陣列 nums，請回傳所有可能的子集（冪集）。
+        /// 解答集合不可包含重複子集。你可以用任意順序回傳解答。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [1,2,3]
+        /// 輸出：[[],[1],[2],[1,2],[3],[1,3],[2,3],[1,2,3]]
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [0]
+        /// 輸出：[[],[0]]
+        ///
+        /// 限制條件：
+        /// 1 &lt;= nums.length &lt;= 10
+        /// -10 &lt;= nums[i] &lt;= 10
+        /// nums 中的所有數字都互不相同。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 主要進入點會執行四組固定案例，以不考慮子集排列順序的方式比較預期與實際結果，

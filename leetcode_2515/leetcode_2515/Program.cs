@@ -3,19 +3,60 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2515. Shortest Distance to Target String in a Circular Array
+    /// https://leetcode.com/problems/shortest-distance-to-target-string-in-a-circular-array/description/
     ///
-    /// English:
-    /// You are given a 0-indexed circular string array words and a string target. A circular array means that the array's end connects to the array's beginning.
-    /// Formally, the next element of words[i] is words[(i + 1) % n] and the previous element of words[i] is words[(i - 1 + n) % n], where n is the length of words.
-    /// Starting from startIndex, you can move to either the next word or the previous word with 1 step at a time.
-    /// Return the shortest distance needed to reach the string target. If the string target does not exist in words, return -1.
+    /// You are given a 0-indexed circular string array words and string target. The array's end connects to its beginning: the next element after words[i] is words[(i + 1) % n], and the previous element is words[(i - 1 + n) % n], where n is words.length. Starting at startIndex, each step moves to the next or previous word. Return the shortest distance to target, or -1 if target does not occur in words.
     ///
-    /// 繁體中文：
-    /// 給定一個 0-indexed 的環狀字串陣列 words 與一個字串 target。環狀陣列表示陣列的結尾會連接回陣列的開頭。
-    /// 更正式地說，words[i] 的下一個元素是 words[(i + 1) % n]，前一個元素是 words[(i - 1 + n) % n]，其中 n 為 words 的長度。
-    /// 從 startIndex 開始，你每一步都可以移動到下一個單字或前一個單字。
-    /// 回傳到達字串 target 所需的最短距離。如果 words 中不存在 target，則回傳 -1。
+    /// Example 1:
+    /// Input: words = ["hello","i","am","leetcode","hello"], target = "hello", startIndex = 1
+    /// Output: 1
+    /// Explanation: From index 1, index 4 can be reached by moving 3 steps right or 2 left, while index 0 can be reached by moving 4 right or 1 left. The shortest distance is 1.
+    ///
+    /// Example 2:
+    /// Input: words = ["a","b","leetcode"], target = "leetcode", startIndex = 0
+    /// Output: 1
+    /// Explanation: From index 0, index 2 is reached by moving 2 steps right or 1 left. The shortest distance is 1.
+    ///
+    /// Example 3:
+    /// Input: words = ["i","eat","leetcode"], target = "ate", startIndex = 0
+    /// Output: -1
+    /// Explanation: "ate" does not occur in words, so return -1.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= words.length &lt;= 100
+    /// - 1 &lt;= words[i].length &lt;= 100
+    /// - words[i] and target consist only of lowercase English letters.
+    /// - 0 &lt;= startIndex &lt; words.length
+    /// </para>
+    /// <para>
+    /// 2515. 到目標字串的最短距離
+    /// https://leetcode.cn/problems/shortest-distance-to-target-string-in-a-circular-array/description/
+    ///
+    /// 給定 0 索引環狀字串陣列 words 與字串 target。陣列尾端與開頭相連：words[i] 的下一個元素是 words[(i + 1) % n]，前一個元素是 words[(i - 1 + n) % n]，其中 n 為 words.length。從 startIndex 開始，每一步可移到下一個或前一個單字。回傳到達 target 的最短距離；若 words 中沒有 target，則回傳 -1。
+    ///
+    /// 範例 1：
+    /// 輸入：words = ["hello","i","am","leetcode","hello"], target = "hello", startIndex = 1
+    /// 輸出：1
+    /// 說明：從索引 1 出發，可向右 3 步或向左 2 步到達索引 4，也可向右 4 步或向左 1 步到達索引 0。最短距離為 1。
+    ///
+    /// 範例 2：
+    /// 輸入：words = ["a","b","leetcode"], target = "leetcode", startIndex = 0
+    /// 輸出：1
+    /// 說明：從索引 0 出發，可向右 2 步或向左 1 步到達索引 2。最短距離為 1。
+    ///
+    /// 範例 3：
+    /// 輸入：words = ["i","eat","leetcode"], target = "ate", startIndex = 0
+    /// 輸出：-1
+    /// 說明：words 中沒有 "ate"，因此回傳 -1。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= words.length &lt;= 100
+    /// - 1 &lt;= words[i].length &lt;= 100
+    /// - words[i] 與 target 僅由小寫英文字母組成。
+    /// - 0 &lt;= startIndex &lt; words.length
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數。</param>
     static void Main(string[] args)

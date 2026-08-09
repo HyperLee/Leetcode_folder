@@ -3,15 +3,66 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1072. Flip Columns For Maximum Number of Equal Rows
-        /// https://leetcode.com/problems/flip-columns-for-maximum-number-of-equal-rows/description/?envType=daily-question&envId=2024-11-22
-        /// 
-        /// 1072. 按列翻转得到最大值等行数
+        /// https://leetcode.com/problems/flip-columns-for-maximum-number-of-equal-rows/description/
+        ///
+        /// You are given an m x n binary matrix matrix.
+        /// You can choose any number of columns in the matrix and flip every cell in that column (i.e., change
+        /// the value of the cell from 0 to 1 or vice versa).
+        /// Return the maximum number of rows that have all values equal after some number of flips.
+        ///
+        /// Example 1:
+        /// Input: matrix = [[0,1],[1,1]]
+        /// Output: 1
+        /// Explanation: After flipping no values, 1 row has all values equal.
+        ///
+        /// Example 2:
+        /// Input: matrix = [[0,1],[1,0]]
+        /// Output: 2
+        /// Explanation: After flipping values in the first column, both rows have equal values.
+        ///
+        /// Example 3:
+        /// Input: matrix = [[0,0,0],[0,0,1],[1,1,0]]
+        /// Output: 2
+        /// Explanation: After flipping values in the first two columns, the last two rows have equal values.
+        ///
+        /// Constraints:
+        /// m == matrix.length
+        /// n == matrix[i].length
+        /// 1 &lt;= m, n &lt;= 300
+        /// matrix[i][j] is either 0 or 1.
+        /// </para>
+        /// <para>
+        /// 1072. 翻轉欄後相等列的最大數量
         /// https://leetcode.cn/problems/flip-columns-for-maximum-number-of-equal-rows/description/
-        /// 
-        /// 你得到了一個 m×n 的二元矩陣 matrix。
-        /// 你可以選擇矩陣中的任意列，並翻轉該列中的每個單元格（即，將單元格的值從 0 改為 1，或從 1 改為 0）。
-        /// 返回在經過若干次翻轉後，所有數值均相等的行的最大數量。
+        ///
+        /// 給定一個 m x n 的二元矩陣 matrix。
+        /// 你可以選擇矩陣中的任意數量欄，並翻轉該欄中的每個儲存格（也就是將儲存格的值從 0
+        /// 改為 1，或從 1 改為 0）。
+        /// 請回傳經過若干次翻轉後，所有值都相等的列之最大數量。
+        ///
+        /// 範例 1：
+        /// 輸入：matrix = [[0,1],[1,1]]
+        /// 輸出：1
+        /// 解釋：不翻轉任何值時，有 1 列的所有值都相等。
+        ///
+        /// 範例 2：
+        /// 輸入：matrix = [[0,1],[1,0]]
+        /// 輸出：2
+        /// 解釋：翻轉第一欄中的值後，兩列的值都各自相等。
+        ///
+        /// 範例 3：
+        /// 輸入：matrix = [[0,0,0],[0,0,1],[1,1,0]]
+        /// 輸出：2
+        /// 解釋：翻轉前兩欄中的值後，最後兩列的值都各自相等。
+        ///
+        /// 限制條件：
+        /// m == matrix.length
+        /// n == matrix[i].length
+        /// 1 &lt;= m, n &lt;= 300
+        /// matrix[i][j] 只能是 0 或 1。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

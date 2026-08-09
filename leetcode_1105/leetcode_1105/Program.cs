@@ -3,16 +3,69 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1105. Filling Bookcase Shelves
-        /// https://leetcode.com/problems/filling-bookcase-shelves/description/?envType=daily-question&envId=2024-07-31
-        /// 
-        /// 1105. 填充书架
+        /// https://leetcode.com/problems/filling-bookcase-shelves/description/
+        ///
+        /// You are given an array books where books[i] = [thickness_i, height_i] indicates the thickness and
+        /// height of the i-th book. You are also given an integer shelfWidth.
+        /// We want to place these books in order onto bookcase shelves that have a total width shelfWidth.
+        /// We choose some of the books to place on this shelf such that the sum of their thickness is less than
+        /// or equal to shelfWidth, then build another level of the shelf of the bookcase so that the total height
+        /// of the bookcase has increased by the maximum height of the books we just put down. We repeat this
+        /// process until there are no more books to place.
+        /// Note that at each step of the above process, the order of the books we place is the same order as the
+        /// given sequence of books.
+        /// - For example, if we have an ordered list of 5 books, we might place the first and second book onto
+        /// the first shelf, the third book on the second shelf, and the fourth and fifth book on the last shelf.
+        /// Return the minimum possible height that the total bookshelf can be after placing shelves in this manner.
+        ///
+        /// Example 1:
+        /// Input: books = [[1,1],[2,3],[2,3],[1,1],[1,1],[1,1],[1,2]], shelfWidth = 4
+        /// Output: 6
+        /// Illustration: https://assets.leetcode.com/uploads/2019/06/24/shelves.png
+        /// Explanation: The sum of the heights of the 3 shelves is 1 + 3 + 2 = 6.
+        /// Notice that book number 2 does not have to be on the first shelf.
+        ///
+        /// Example 2:
+        /// Input: books = [[1,3],[2,4],[3,2]], shelfWidth = 6
+        /// Output: 4
+        ///
+        /// Constraints:
+        /// 1 &lt;= books.length &lt;= 1000
+        /// 1 &lt;= thickness_i &lt;= shelfWidth &lt;= 1000
+        /// 1 &lt;= height_i &lt;= 1000
+        /// </para>
+        /// <para>
+        /// 1105. 填滿書架
         /// https://leetcode.cn/problems/filling-bookcase-shelves/description/
-        /// 
-        /// 將書本依據順序放入書架
-        /// 看最多需要幾層
-        /// 
-        /// 書籍厚度之和 小於等於 書架寬度
+        ///
+        /// 給定陣列 books，其中 books[i] = [thickness_i, height_i] 表示第 i 本書的厚度與高度。
+        /// 另外給定整數 shelfWidth。
+        /// 我們要依序將這些書放到總寬度為 shelfWidth 的書架層板上。
+        /// 選擇若干本書放在目前層板上，使其厚度總和小於或等於 shelfWidth；接著建立書架的下一層，
+        /// 此時書架總高度會增加剛放置之書籍的最大高度。重複此過程，直到沒有書可放為止。
+        /// 請注意，在上述過程的每一步中，書籍的放置順序都必須與給定的書籍序列相同。
+        /// - 例如，若有依序排列的 5 本書，可以將第 1、2 本放在第一層，第 3 本放在第二層，
+        /// 第 4、5 本放在最後一層。
+        /// 請回傳依此方式放置所有層板後，整個書架可能達到的最小高度。
+        ///
+        /// 範例 1：
+        /// 輸入：books = [[1,1],[2,3],[2,3],[1,1],[1,1],[1,1],[1,2]], shelfWidth = 4
+        /// 輸出：6
+        /// 示意圖：https://assets.leetcode.com/uploads/2019/06/24/shelves.png
+        /// 解釋：3 層書架的高度總和為 1 + 3 + 2 = 6。
+        /// 請注意，第 2 本書不一定要放在第一層。
+        ///
+        /// 範例 2：
+        /// 輸入：books = [[1,3],[2,4],[3,2]], shelfWidth = 6
+        /// 輸出：4
+        ///
+        /// 限制條件：
+        /// 1 &lt;= books.length &lt;= 1000
+        /// 1 &lt;= thickness_i &lt;= shelfWidth &lt;= 1000
+        /// 1 &lt;= height_i &lt;= 1000
+        /// </para>
         /// </summary>
         /// <param name="args">未使用；程式執行內建的固定測試資料。</param>
         /// <remarks>

@@ -3,16 +3,74 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1526. Minimum Number of Increments on Subarrays to Form a Target Array
-    /// https://leetcode.com/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/description/?envType=daily-question&envId=2025-10-30
-    /// 1526. 形成目标数组的子数组最少增加次数
-    /// https://leetcode.cn/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/description/?envType=daily-question&envId=2025-10-30
-    /// 給你一個整數陣列 target。你有一個與 target 大小相同的整數陣列 initial，所有元素最初都是零。
-    /// 在一次操作中，你可以從 initial 中選擇任何子陣列，並將每個值增加一。
-    /// 返回從 initial 形成 target 陣列所需的最少操作數。
-    /// 測試案例生成使得答案適合 32 位整數。
-    /// 
-    /// 
+    /// https://leetcode.com/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/description/
+    ///
+    /// You are given an integer array target. You have an integer array initial of the same size, initially all zeros.
+    /// In one operation, you can choose any subarray from initial and increment each value by one.
+    /// Return the minimum number of operations to form target from initial.
+    /// The test cases are generated so that the answer fits in a 32-bit integer.
+    ///
+    /// Example 1:
+    /// Input: target = [1,2,3,2,1]
+    /// Output: 3
+    /// Explanation: At least 3 operations are needed:
+    /// [[0,0,0,0,0]] increment indices 0 through 4.
+    /// [1,[1,1,1],1] increment indices 1 through 3.
+    /// [1,2,[2],2,1] increment index 2.
+    /// [1,2,3,2,1] is formed.
+    ///
+    /// Example 2:
+    /// Input: target = [3,1,1,2]
+    /// Output: 4
+    /// Explanation: [[0,0,0,0]] -&gt; [1,1,1,[1]] -&gt; [[1],1,1,2] -&gt; [[2],1,1,2] -&gt; [3,1,1,2]
+    ///
+    /// Example 3:
+    /// Input: target = [3,1,5,4,2]
+    /// Output: 7
+    /// Explanation: [[0,0,0,0,0]] -&gt; [[1],1,1,1,1] -&gt; [[2],1,1,1,1] -&gt; [3,1,[1,1,1]] -&gt;
+    /// [3,1,[2,2],2] -&gt; [3,1,[3,3],2] -&gt; [3,1,[4],4,2] -&gt; [3,1,5,4,2].
+    ///
+    /// Constraints:
+    /// - 1 &lt;= target.length &lt;= 10^5
+    /// - 1 &lt;= target[i] &lt;= 10^5
+    /// - The input is generated such that the answer fits inside a 32-bit integer.
+    /// </para>
+    /// <para>
+    /// 1526. 形成目標陣列的子陣列最少增加次數
+    /// https://leetcode.cn/problems/minimum-number-of-increments-on-subarrays-to-form-a-target-array/description/
+    ///
+    /// 給定整數陣列 target。另有一個大小相同、所有元素初始皆為零的整數陣列 initial。
+    /// 每次操作可以選擇 initial 的任意子陣列，並將其中每個值增加一。
+    /// 回傳從 initial 形成 target 所需的最少操作次數。
+    /// 測試案例保證答案可用 32 位元整數表示。
+    ///
+    /// 範例 1：
+    /// 輸入：target = [1,2,3,2,1]
+    /// 輸出：3
+    /// 解釋：至少需要 3 次操作：
+    /// [[0,0,0,0,0]] 將索引 0 到 4 增加一。
+    /// [1,[1,1,1],1] 將索引 1 到 3 增加一。
+    /// [1,2,[2],2,1] 將索引 2 增加一。
+    /// 最後形成 [1,2,3,2,1]。
+    ///
+    /// 範例 2：
+    /// 輸入：target = [3,1,1,2]
+    /// 輸出：4
+    /// 解釋：[[0,0,0,0]] -&gt; [1,1,1,[1]] -&gt; [[1],1,1,2] -&gt; [[2],1,1,2] -&gt; [3,1,1,2]
+    ///
+    /// 範例 3：
+    /// 輸入：target = [3,1,5,4,2]
+    /// 輸出：7
+    /// 解釋：[[0,0,0,0,0]] -&gt; [[1],1,1,1,1] -&gt; [[2],1,1,1,1] -&gt; [3,1,[1,1,1]] -&gt;
+    /// [3,1,[2,2],2] -&gt; [3,1,[3,3],2] -&gt; [3,1,[4],4,2] -&gt; [3,1,5,4,2]。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= target.length &lt;= 10^5
+    /// - 1 &lt;= target[i] &lt;= 10^5
+    /// - 輸入保證答案可用 32 位元整數表示。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

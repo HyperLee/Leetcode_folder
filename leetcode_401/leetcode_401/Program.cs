@@ -3,17 +3,54 @@
 class Program
 {
     /// <summary>
-    /// English — Binary Watch (LeetCode 401)
+    /// 401. Binary Watch
+    /// https://leetcode.com/problems/binary-watch/description/
     /// <para>
-    /// A binary watch has 4 LEDs on the top to represent the hours (0–11), and 6 LEDs on the bottom to represent the minutes (0–59). Each LED represents a zero or one, with the least significant bit on the right.
-    /// Given an integer <c>turnedOn</c> which represents the number of LEDs that are currently on (ignoring AM/PM), return all possible times the watch could represent. You may return the answer in any order.
-    /// The hour must not contain a leading zero (e.g. "01:00" is invalid — use "1:00"). The minute must consist of two digits and may contain a leading zero (e.g. "10:02").
+    /// A binary watch has 4 LEDs on the top to represent the hours (0-11), and 6 LEDs on the bottom to represent the minutes (0-59). Each LED represents a zero or one, with the least significant bit on the right.
+    ///
+    /// For example, the binary watch in this image reads "4:51": https://assets.leetcode.com/uploads/2021/04/08/binarywatch.jpg
+    ///
+    /// Given an integer turnedOn representing the number of LEDs that are currently on (ignoring PM), return all possible times the watch could represent. You may return the answer in any order.
+    ///
+    /// The hour must not contain a leading zero. For example, "01:00" is invalid; it should be "1:00".
+    ///
+    /// The minute must consist of two digits and may contain a leading zero. For example, "10:2" is invalid; it should be "10:02".
+    ///
+    /// Example 1:
+    /// Input: turnedOn = 1
+    /// Output: ["0:01","0:02","0:04","0:08","0:16","0:32","1:00","2:00","4:00","8:00"]
+    ///
+    /// Example 2:
+    /// Input: turnedOn = 9
+    /// Output: []
+    ///
+    /// Constraints:
+    /// - 0 &lt;= turnedOn &lt;= 10
     /// </para>
-    /// 繁體中文 — 二進位手錶 (LeetCode 401)
     /// <para>
-    /// 手錶上方有 4 顆 LED 表示小時（0–11），下方有 6 顆 LED 表示分鐘（0–59）。每顆 LED 表示 0 或 1，最右邊為最低位元。
-    /// 給定整數 <c>turnedOn</c> 表示目前亮起的 LED 數量（不考慮上午/下午），回傳手錶可能代表的所有時間，回傳順序不限。
-    /// 小時不得有前導零（例如 "01:00" 為無效，應為 "1:00"）；分鐘必須為兩位數，必要時補零（例如 "10:2" 應為 "10:02"）。
+    /// 401. 二進位手錶
+    /// https://leetcode.cn/problems/binary-watch/description/
+    ///
+    /// 二進位手錶上方有 4 顆 LED 表示小時（0-11），下方有 6 顆 LED 表示分鐘（0-59）。每顆 LED 表示零或一，最右邊是最低有效位元。
+    ///
+    /// 例如，這張圖片中的二進位手錶顯示 "4:51"：https://assets.leetcode.com/uploads/2021/04/08/binarywatch.jpg
+    ///
+    /// 給定整數 turnedOn，表示目前亮起的 LED 數量（忽略 PM），回傳手錶可能表示的所有時間。答案可以任意順序回傳。
+    ///
+    /// 小時不可有前導零。例如，"01:00" 無效，應寫成 "1:00"。
+    ///
+    /// 分鐘必須由兩位數組成，且可以有前導零。例如，"10:2" 無效，應寫成 "10:02"。
+    ///
+    /// 範例 1：
+    /// 輸入：turnedOn = 1
+    /// 輸出：["0:01","0:02","0:04","0:08","0:16","0:32","1:00","2:00","4:00","8:00"]
+    ///
+    /// 範例 2：
+    /// 輸入：turnedOn = 9
+    /// 輸出：[]
+    ///
+    /// 限制條件：
+    /// - 0 &lt;= turnedOn &lt;= 10
     /// </para>
     /// </summary>
     /// <param name="args">命令列參數（未使用）。</param>

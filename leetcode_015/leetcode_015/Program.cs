@@ -4,14 +4,68 @@
     {
         /// <summary>
         /// 15. 3Sum
-        /// https://leetcode.com/problems/3sum/
-        /// 
-        /// 15. 三数之和
-        /// https://leetcode.cn/problems/3sum/
-        /// 
-        /// 給定一個整數陣列 nums，返回所有滿足以下條件的三元組 [nums[i], nums[j], nums[k]]：
-        ///  i != j, i != k, and j != k, and nums[i] + nums[j] + nums[k] == 0.
-        /// 請注意，解集合中不得包含重複的三元組。
+        /// https://leetcode.com/problems/3sum/description/
+        /// <para>
+        /// Given an integer array nums, return all the triplets [nums[i], nums[j], nums[k]] such that i != j, i != k, j != k, and nums[i] + nums[j] + nums[k] == 0.
+        ///
+        /// Notice that the solution set must not contain duplicate triplets.
+        ///
+        /// Example 1:
+        /// Input: nums = [-1,0,1,2,-1,-4]
+        /// Output: [[-1,-1,2],[-1,0,1]]
+        /// Explanation:
+        /// nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0.
+        /// nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0.
+        /// nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0.
+        /// The distinct triplets are [-1,0,1] and [-1,-1,2].
+        /// The order of the output and the order of the triplets do not matter.
+        ///
+        /// Example 2:
+        /// Input: nums = [0,1,1]
+        /// Output: []
+        /// Explanation: The only possible triplet does not sum to 0.
+        ///
+        /// Example 3:
+        /// Input: nums = [0,0,0]
+        /// Output: [[0,0,0]]
+        /// Explanation: The only possible triplet sums to 0.
+        ///
+        /// Constraints:
+        /// - 3 &lt;= nums.length &lt;= 3000
+        /// - -10^5 &lt;= nums[i] &lt;= 10^5
+        /// </para>
+        /// <para>
+        /// 15. 三數之和
+        /// https://leetcode.cn/problems/3sum/description/
+        ///
+        /// 給定一個整數陣列 nums，請回傳所有滿足 i != j、i != k、j != k，且 nums[i] + nums[j] + nums[k] == 0 的三元組 [nums[i], nums[j], nums[k]]。
+        ///
+        /// 注意，答案集合不得包含重複的三元組。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [-1,0,1,2,-1,-4]
+        /// 輸出：[[-1,-1,2],[-1,0,1]]
+        /// 解釋：
+        /// nums[0] + nums[1] + nums[2] = (-1) + 0 + 1 = 0。
+        /// nums[1] + nums[2] + nums[4] = 0 + 1 + (-1) = 0。
+        /// nums[0] + nums[3] + nums[4] = (-1) + 2 + (-1) = 0。
+        /// 不同的三元組為 [-1,0,1] 和 [-1,-1,2]。
+        /// 輸出順序及各三元組內的元素順序均不影響答案。
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [0,1,1]
+        /// 輸出：[]
+        /// 解釋：唯一可能的三元組總和不等於 0。
+        ///
+        /// 範例 3：
+        /// 輸入：nums = [0,0,0]
+        /// 輸出：[[0,0,0]]
+        /// 解釋：唯一可能的三元組總和等於 0。
+        ///
+        /// 限制條件：
+        /// - 3 &lt;= nums.length &lt;= 3000
+        /// - -10^5 &lt;= nums[i] &lt;= 10^5
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

@@ -3,13 +3,60 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1461. Check If a String Contains All Binary Codes of Size K
-    /// https://leetcode.com/problems/check-if-a-string-contains-all-binary-codes-of-size-k/
-    /// 1461. 检查一个字符串是否包含所有长度为 K 的二进制子串
-    /// https://leetcode.cn/problems/check-if-a-string-contains-all-binary-codes-of-size-k/description/
-    /// 
-    /// Given a binary string s and an integer k, return true if every binary code of length k is a substring of s. 
+    /// https://leetcode.com/problems/check-if-a-string-contains-all-binary-codes-of-size-k/description/
+    ///
+    /// Given a binary string s and an integer k, return true if every binary code of length k is a substring of s.
     /// Otherwise, return false.
+    ///
+    /// Example 1:
+    /// Input: s = "00110110", k = 2
+    /// Output: true
+    /// Explanation: The binary codes of length 2 are "00", "01", "10" and "11". They are found as substrings at
+    /// indices 0, 1, 3 and 2, respectively.
+    ///
+    /// Example 2:
+    /// Input: s = "0110", k = 1
+    /// Output: true
+    /// Explanation: The binary codes of length 1 are "0" and "1"; both exist as a substring.
+    ///
+    /// Example 3:
+    /// Input: s = "0110", k = 2
+    /// Output: false
+    /// Explanation: The binary code "00" has length 2 and does not exist in the string.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 5 * 10^5
+    /// - s[i] is either '0' or '1'.
+    /// - 1 &lt;= k &lt;= 20
+    /// </para>
+    /// <para>
+    /// 1461. 檢查字串是否包含所有長度為 K 的二進位碼
+    /// https://leetcode.cn/problems/check-if-a-string-contains-all-binary-codes-of-size-k/description/
+    ///
+    /// 給定二進位字串 s 與整數 k；若每個長度為 k 的二進位碼都是 s 的子字串，回傳 true；否則回傳 false。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "00110110"，k = 2
+    /// 輸出：true
+    /// 解釋：長度為 2 的二進位碼為 "00"、"01"、"10" 與 "11"，它們分別可在索引 0、1、3 與 2 找到。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "0110"，k = 1
+    /// 輸出：true
+    /// 解釋：長度為 1 的二進位碼為 "0" 與 "1"；兩者都是子字串。
+    ///
+    /// 範例 3：
+    /// 輸入：s = "0110"，k = 2
+    /// 輸出：false
+    /// 解釋：二進位碼 "00" 的長度為 2，但不存在於字串中。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 5 * 10^5
+    /// - s[i] 為 '0' 或 '1'。
+    /// - 1 &lt;= k &lt;= 20
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

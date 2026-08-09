@@ -4,16 +4,58 @@ class Program
 {
     /// <summary>
     /// 3403. Find the Lexicographically Largest String From the Box I
-    /// https://leetcode.com/problems/find-the-lexicographically-largest-string-from-the-box-i/description/?envType=daily-question&envId=2025-06-04
+    /// https://leetcode.com/problems/find-the-lexicographically-largest-string-from-the-box-i/description/
+    /// <para>
+    /// You are given a string word and an integer numFriends.
+    ///
+    /// Alice is organizing a game for numFriends friends. In each of multiple rounds:
+    /// - Split word into numFriends non-empty strings so that no previous round used exactly the same split.
+    /// - Put every split string into a box.
+    ///
+    /// Find the lexicographically largest string in the box after all rounds.
+    ///
+    /// Example 1:
+    /// Input: word = "dbca", numFriends = 2
+    /// Output: "dbc"
+    /// Explanation: All splits are "d" and "bca"; "db" and "ca"; and "dbc" and "a".
+    ///
+    /// Example 2:
+    /// Input: word = "gggg", numFriends = 4
+    /// Output: "g"
+    /// Explanation: The only split is "g", "g", "g", and "g".
+    ///
+    /// Constraints:
+    /// - 1 &lt;= word.length &lt;= 5 * 10^3
+    /// - word consists only of lowercase English letters.
+    /// - 1 &lt;= numFriends &lt;= word.length
+    /// </para>
+    /// <para>
     /// 3403. 從盒子中找出字典序最大的字串 I
-    /// https://leetcode.cn/problems/find-the-lexicographically-largest-string-from-the-box-i/description/?envType=daily-question&envId=2025-06-04
-    /// 
-    /// 題目描述（繁體中文）：
-    /// 給定一個字串 word 和一個整數 numFriends。
-    /// Alice 為她的 numFriends 位朋友舉辦一個遊戲。遊戲有多輪，每一輪：
-    /// - 將 word 拆分成 numFriends 個非空字串，且每一輪的拆分方式都不能與之前完全相同。
-    /// - 將所有拆分後的字串放入盒子中。
-    /// 請找出所有輪結束後，盒子中字典序最大的字串。
+    /// https://leetcode.cn/problems/find-the-lexicographically-largest-string-from-the-box-i/description/
+    ///
+    /// 給定字串 word 與整數 numFriends。
+    ///
+    /// Alice 為 numFriends 位朋友舉辦遊戲。每一輪：
+    /// - 將 word 分割成 numFriends 個非空字串，且之前沒有任何一輪使用完全相同的分割方式。
+    /// - 將所有分割出的字串放入盒子。
+    ///
+    /// 找出所有回合結束後盒子中字典序最大的字串。
+    ///
+    /// 範例 1：
+    /// 輸入：word = "dbca", numFriends = 2
+    /// 輸出："dbc"
+    /// 解釋：所有分割方式為 "d" 與 "bca"、"db" 與 "ca"、"dbc" 與 "a"。
+    ///
+    /// 範例 2：
+    /// 輸入：word = "gggg", numFriends = 4
+    /// 輸出："g"
+    /// 解釋：唯一的分割方式是 "g"、"g"、"g"、"g"。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= word.length &lt;= 5 * 10^3
+    /// - word 只由小寫英文字母組成。
+    /// - 1 &lt;= numFriends &lt;= word.length
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

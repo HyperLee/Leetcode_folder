@@ -5,20 +5,62 @@ namespace leetcode_2322;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2322. Minimum Score After Removals on a Tree
-    /// https://leetcode.com/problems/minimum-score-after-removals-on-a-tree/description/?envType=daily-question&envId=2025-07-24
-    /// 2322. 從樹中刪除邊的最小分數
-    /// https://leetcode.cn/problems/minimum-score-after-removals-on-a-tree/description/?envType=daily-question&envId=2025-07-24
+    /// https://leetcode.com/problems/minimum-score-after-removals-on-a-tree/description/
     ///
-    /// 給定一棵有 n 個節點的無向連通樹，節點標號為 0 到 n-1，並有 n-1 條邊。
-    /// 你有一個長度為 n 的整數陣列 nums，其中 nums[i] 表示第 i 個節點的值。還有一個長度為 n-1 的二維整數陣列 edges，
-    /// 其中 edges[i] = [ai, bi] 表示存在一條連接節點 ai 和 bi 的邊。
-    /// 請移除樹上的兩條不同的邊，使樹分成三個連通元件。對於每一對被移除的邊，定義如下步驟：
-    /// 1. 分別計算三個元件中所有節點值的異或和（XOR）。
-    /// 2. 取這三個異或值中的最大值與最小值之差，作為該對邊的分數。
-    /// 例如，三個元件的節點值分別為 [4,5,7]、[1,9] 和 [3,3,3]，則三個異或值分別為 4 ^ 5 ^ 7 = 6，1 ^ 9 = 8，3 ^ 3 ^ 3 = 3。
-    /// 最大異或值為 8，最小異或值為 3，分數為 8 - 3 = 5。
-    /// 請返回所有可能移除邊對的最小分數。
+    /// An undirected connected tree has n nodes labeled 0 through n - 1 and n - 1 edges. nums[i] is node i's value and edges[i] = [a_i,b_i] is an edge. Remove two distinct edges to create three connected components. XOR the values within each component; the score is the largest of these three XOR values minus the smallest. For example, components [4,5,7], [1,9], and [3,3,3] have XOR values 4 ^ 5 ^ 7 = 6, 1 ^ 9 = 8, and 3 ^ 3 ^ 3 = 3, so the score is 8 - 3 = 5. Return the minimum score over all pairs of removed edges.
+    ///
+    /// Images: https://assets.leetcode.com/uploads/2022/05/03/ex1drawio.png and https://assets.leetcode.com/uploads/2022/05/03/ex2drawio.png
+    ///
+    /// Example 1:
+    /// Input: nums = [1,5,5,4,11], edges = [[0,1],[1,2],[1,3],[3,4]]
+    /// Output: 9
+    /// Explanation: Remove edges to form components with nodes [1,3,4], [0], and [2]. Their values are [5,4,11], [1], and [5], and their XOR values are 5 ^ 4 ^ 11 = 10, 1 = 1, and 5 = 5. The score is 10 - 1 = 9, the minimum possible.
+    ///
+    /// Example 2:
+    /// Input: nums = [5,5,2,4,4,2], edges = [[0,1],[1,2],[5,2],[4,3],[1,3]]
+    /// Output: 0
+    /// Explanation: Form components with nodes [3,4], [1,0], and [2,5]. Their values are [4,4], [5,5], and [2,2], so every XOR is 0. The score is 0 - 0 = 0, which cannot be improved.
+    ///
+    /// Constraints:
+    /// - n == nums.length
+    /// - 3 &lt;= n &lt;= 1000
+    /// - 1 &lt;= nums[i] &lt;= 10^8
+    /// - edges.length == n - 1
+    /// - edges[i].length == 2
+    /// - 0 &lt;= a_i, b_i &lt; n
+    /// - a_i != b_i
+    /// - edges represents a valid tree.
+    /// </para>
+    /// <para>
+    /// 2322. 從樹中刪除邊的最小分數
+    /// https://leetcode.cn/problems/minimum-score-after-removals-on-a-tree/description/
+    ///
+    /// 一棵無向連通樹有 n 個編號 0 到 n - 1 的節點與 n - 1 條邊。nums[i] 是節點 i 的值，edges[i] = [a_i,b_i] 表示一條邊。刪除兩條不同的邊以產生三個連通分量；分別計算各分量節點值的 XOR，分數是三個 XOR 值中的最大值減最小值。例如分量 [4,5,7]、[1,9]、[3,3,3] 的 XOR 分別為 4 ^ 5 ^ 7 = 6、1 ^ 9 = 8、3 ^ 3 ^ 3 = 3，因此分數為 8 - 3 = 5。回傳所有刪邊組合中的最小分數。
+    ///
+    /// 圖片：https://assets.leetcode.com/uploads/2022/05/03/ex1drawio.png 與 https://assets.leetcode.com/uploads/2022/05/03/ex2drawio.png
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,5,5,4,11], edges = [[0,1],[1,2],[1,3],[3,4]]
+    /// 輸出：9
+    /// 說明：刪邊後形成節點為 [1,3,4]、[0]、[2] 的分量，其值為 [5,4,11]、[1]、[5]，XOR 值為 5 ^ 4 ^ 11 = 10、1 = 1、5 = 5。分數是 10 - 1 = 9，且已是最小值。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [5,5,2,4,4,2], edges = [[0,1],[1,2],[5,2],[4,3],[1,3]]
+    /// 輸出：0
+    /// 說明：形成節點為 [3,4]、[1,0]、[2,5] 的分量，其值為 [4,4]、[5,5]、[2,2]，每個 XOR 都是 0。分數為 0 - 0 = 0，不可能更小。
+    ///
+    /// 限制條件：
+    /// - n == nums.length
+    /// - 3 &lt;= n &lt;= 1000
+    /// - 1 &lt;= nums[i] &lt;= 10^8
+    /// - edges.length == n - 1
+    /// - edges[i].length == 2
+    /// - 0 &lt;= a_i, b_i &lt; n
+    /// - a_i != b_i
+    /// - edges 表示一棵有效的樹。
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// <summary>

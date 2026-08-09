@@ -3,28 +3,58 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 190. Reverse Bits
-    /// <para>
-    /// LeetCode 190. 顛倒二進位位元
-    /// 給定一個 32 位元有號整數，將其二進位位元全部顛倒。
+    /// https://leetcode.com/problems/reverse-bits/description/
+    ///
+    /// Reverse the bits of a given 32-bit signed integer.
+    ///
+    /// Example 1:
+    /// Input: n = 43261596
+    /// Output: 964176192
+    /// Explanation:
+    /// 43261596 = 00000010100101000001111010011100
+    /// 964176192 = 00111001011110000010100101000000
+    ///
+    /// Example 2:
+    /// Input: n = 2147483644
+    /// Output: 1073741822
+    /// Explanation:
+    /// 2147483644 = 01111111111111111111111111111100
+    /// 1073741822 = 00111111111111111111111111111110
+    ///
+    /// Constraints:
+    /// - 0 &lt;= n &lt;= 2^31 - 2
+    /// - n is even.
+    ///
+    /// Follow-up: If this function is called many times, how would you optimize it?
     /// </para>
     /// <para>
-    /// 題目連結：
-    /// https://leetcode.com/problems/reverse-bits/description/?envType=daily-question&amp;envId=2026-02-16
-    /// https://leetcode.cn/problems/reverse-bits/description/?envType=daily-question&amp;envId=2026-02-16
-    /// </para>
-    /// <example>
+    /// 190. 顛倒二進位位元
+    /// https://leetcode.cn/problems/reverse-bits/description/
+    ///
+    /// 顛倒給定 32 位元有號整數的所有位元。
+    ///
     /// 範例 1：
-    /// <code>
-    /// 輸入：n = 00000010100101000001111010011100
-    /// 輸出：964176192 (00111001011110000010100101000000)
-    /// </code>
+    /// 輸入：n = 43261596
+    /// 輸出：964176192
+    /// 說明：
+    /// 43261596 = 00000010100101000001111010011100
+    /// 964176192 = 00111001011110000010100101000000
+    ///
     /// 範例 2：
-    /// <code>
-    /// 輸入：n = 11111111111111111111111111111101
-    /// 輸出：-1073741825 (10111111111111111111111111111111)
-    /// </code>
-    /// </example>
+    /// 輸入：n = 2147483644
+    /// 輸出：1073741822
+    /// 說明：
+    /// 2147483644 = 01111111111111111111111111111100
+    /// 1073741822 = 00111111111111111111111111111110
+    ///
+    /// 限制條件：
+    /// - 0 &lt;= n &lt;= 2^31 - 2
+    /// - n 為偶數。
+    ///
+    /// 進階：若此函式會被呼叫許多次，你會如何最佳化？
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

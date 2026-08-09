@@ -3,20 +3,60 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 224. Basic Calculator
     /// https://leetcode.com/problems/basic-calculator/description/
-    /// 224. 基本計算器
+    ///
+    /// Given a string s representing a valid expression, implement a basic calculator and return its result. You may not use a built-in function that evaluates strings as mathematical expressions, such as eval().
+    ///
+    /// Example 1:
+    /// Input: s = "1 + 1"
+    /// Output: 2
+    ///
+    /// Example 2:
+    /// Input: s = " 2-1 + 2 "
+    /// Output: 3
+    ///
+    /// Example 3:
+    /// Input: s = "(1+(4+5+2)-3)+(6+8)"
+    /// Output: 23
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 3 * 10^5
+    /// - s consists of digits, '+', '-', '(', ')', and spaces.
+    /// - s is a valid expression.
+    /// - '+' is not unary; "+1" and "+(2 + 3)" are invalid.
+    /// - '-' may be unary; "-1" and "-(2 + 3)" are valid.
+    /// - No two consecutive operators occur.
+    /// - Every number and intermediate result fits a signed 32-bit integer.
+    /// </para>
+    /// <para>
+    /// 224. 基本計算機
     /// https://leetcode.cn/problems/basic-calculator/description/
-    /// 
-    /// 題目描述：
-    /// 給你一個字符串表達式 s ，請你實現一個基本計算器來計算並返回它的值。
-    /// 注意:
-    /// - 整數除法僅保留整數部分。
-    /// - 輸入字符串可能包含左括號 ( 和右括號 )、加號 + 和減號 -、非負整數和空格。
-    /// - 表達式中可能存在空格。
-    /// 
-    /// 時間複雜度：O(n)，其中 n 是字符串的長度
-    /// 空間複雜度：O(n)，使用了兩個堆棧存儲數字和運算符
+    ///
+    /// 給定表示有效運算式的字串 s，實作基本計算機並回傳計算結果。不得使用會將字串直接作為數學運算式求值的內建函式，例如 eval()。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "1 + 1"
+    /// 輸出：2
+    ///
+    /// 範例 2：
+    /// 輸入：s = " 2-1 + 2 "
+    /// 輸出：3
+    ///
+    /// 範例 3：
+    /// 輸入：s = "(1+(4+5+2)-3)+(6+8)"
+    /// 輸出：23
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 3 * 10^5
+    /// - s 由數字、'+'、'-'、'('、')' 與空格組成。
+    /// - s 是有效運算式。
+    /// - '+' 不能作為一元運算；"+1" 與 "+(2 + 3)" 無效。
+    /// - '-' 可以作為一元運算；"-1" 與 "-(2 + 3)" 有效。
+    /// - 不會出現兩個連續運算子。
+    /// - 每個數字與中間結果都能放入 32 位元有號整數。
+    /// </para>
     /// </summary>
     static void Main(string[] args)
     {

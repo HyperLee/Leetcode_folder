@@ -4,21 +4,48 @@ class Program
 {
     /// <summary>
     /// 69. Sqrt(x)
+    /// https://leetcode.com/problems/sqrtx/description/
+    /// <para>
+    /// Given a non-negative integer x, return the square root of x rounded down to the nearest integer. The returned integer must also be non-negative.
     ///
-    /// English:
-    /// Given a non-negative integer x, return the square root of x rounded down to the nearest integer.
-    /// The returned integer should be non-negative as well.
     /// You must not use any built-in exponent function or operator.
-    /// For example, do not use pow(x, 0.5) in C++ or x ** 0.5 in Python.
+    /// - For example, do not use pow(x, 0.5) in C++ or x ** 0.5 in Python.
     ///
-    /// 繁體中文：
-    /// 給定一個非負整數 x，回傳 x 的平方根，並無條件捨去到最接近的整數。
-    /// 回傳的整數也必須是非負數。
-    /// 你不能使用任何內建的指數函式或運算子。
-    /// 例如，請勿在 C++ 使用 pow(x, 0.5)，也不要在 Python 使用 x ** 0.5。
+    /// Example 1:
+    /// Input: x = 4
+    /// Output: 2
+    /// Explanation: The square root of 4 is 2, so return 2.
     ///
-    /// 此主要進入點提供可直接執行的範例測試資料，輸入多組非負整數並輸出
-    /// <see cref="MySqrt"/> 的計算結果、預期答案與 PASS/FAIL 狀態。
+    /// Example 2:
+    /// Input: x = 8
+    /// Output: 2
+    /// Explanation: The square root of 8 is 2.82842..., and after rounding down to the nearest integer, 2 is returned.
+    ///
+    /// Constraints:
+    /// - 0 &lt;= x &lt;= 2^31 - 1
+    /// </para>
+    /// <para>
+    /// 69. x 的平方根
+    /// https://leetcode.cn/problems/sqrtx/description/
+    ///
+    /// 給定一個非負整數 x，請回傳 x 的平方根無條件捨去後的整數。回傳的整數也必須是非負數。
+    ///
+    /// 你不得使用任何內建的指數函式或運算子。
+    /// - 例如，不得在 C++ 使用 pow(x, 0.5)，也不得在 Python 使用 x ** 0.5。
+    ///
+    /// 範例 1：
+    /// 輸入：x = 4
+    /// 輸出：2
+    /// 解釋：4 的平方根是 2，因此回傳 2。
+    ///
+    /// 範例 2：
+    /// 輸入：x = 8
+    /// 輸出：2
+    /// 解釋：8 的平方根是 2.82842...，無條件捨去後回傳 2。
+    ///
+    /// 限制條件：
+    /// - 0 &lt;= x &lt;= 2^31 - 1
+    /// </para>
     /// </summary>
     /// <param name="args">Command-line arguments; unused.</param>
     static void Main(string[] args)

@@ -16,16 +16,59 @@ class Program
     }
 
     /// <summary>
+    /// <para>
     /// 1339. Maximum Product of Splitted Binary Tree
-    /// https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/description/?envType=daily-question&envId=2026-01-07
-    /// 1339. 分裂二叉树的最大乘积
-    /// https://leetcode.cn/problems/maximum-product-of-splitted-binary-tree/description/?envType=daily-question&envId=2026-01-07
-    /// 
-    /// 描述 (繁體中文翻譯):
-    /// 給定一個二叉樹的根節點，移除一條邊把二叉樹分成兩個子樹，使得兩個子樹節點值之和的乘積最大化。
-    /// 返回兩個子樹節點和的最大乘積。由於答案可能很大，請將結果對 10^9 + 7 取餘。
-    /// 注意：應先最大化乘積再對 10^9 + 7 取餘，而不是在取餘後再最大化。
-    /// 
+    /// https://leetcode.com/problems/maximum-product-of-splitted-binary-tree/description/
+    ///
+    /// Given the root of a binary tree, split the binary tree into two subtrees by removing one edge such that the product
+    /// of the sums of the subtrees is maximized.
+    ///
+    /// Return the maximum product of the sums of the two subtrees. Since the answer may be too large, return it modulo 10^9 + 7.
+    ///
+    /// Note that you need to maximize the answer before taking the mod and not after taking it.
+    ///
+    /// Example 1:
+    /// Official illustration: https://assets.leetcode.com/uploads/2020/01/21/sample_1_1699.png
+    /// Input: root = [1,2,3,4,5,6]
+    /// Output: 110
+    /// Explanation: Remove the red edge and get 2 binary trees with sum 11 and 10. Their product is 110 (11 * 10).
+    ///
+    /// Example 2:
+    /// Official illustration: https://assets.leetcode.com/uploads/2020/01/21/sample_2_1699.png
+    /// Input: root = [1,null,2,3,4,null,null,5,6]
+    /// Output: 90
+    /// Explanation: Remove the red edge and get 2 binary trees with sum 15 and 6. Their product is 90 (15 * 6).
+    ///
+    /// Constraints:
+    /// - The number of nodes in the tree is in the range [2, 5 * 10^4].
+    /// - 1 &lt;= Node.val &lt;= 10^4
+    /// </para>
+    /// <para>
+    /// 1339. 分裂二元樹的最大乘積
+    /// https://leetcode.cn/problems/maximum-product-of-splitted-binary-tree/description/
+    ///
+    /// 給定一棵二元樹的根節點，移除一條邊將二元樹分成兩棵子樹，使兩棵子樹節點值總和的乘積最大。
+    ///
+    /// 回傳兩棵子樹節點值總和的最大乘積。由於答案可能非常大，請回傳其對 10^9 + 7 取模後的結果。
+    ///
+    /// 請注意，必須先將答案最大化，再取模，而不是取模後再最大化。
+    ///
+    /// 範例 1：
+    /// 官方示意圖：https://assets.leetcode.com/uploads/2020/01/21/sample_1_1699.png
+    /// 輸入：root = [1,2,3,4,5,6]
+    /// 輸出：110
+    /// 解釋：移除紅色邊後得到 2 棵二元樹，其總和分別為 11 與 10。乘積為 110（11 * 10）。
+    ///
+    /// 範例 2：
+    /// 官方示意圖：https://assets.leetcode.com/uploads/2020/01/21/sample_2_1699.png
+    /// 輸入：root = [1,null,2,3,4,null,null,5,6]
+    /// 輸出：90
+    /// 解釋：移除紅色邊後得到 2 棵二元樹，其總和分別為 15 與 6。乘積為 90（15 * 6）。
+    ///
+    /// 限制條件：
+    /// - 樹中的節點數量在 [2, 5 * 10^4] 範圍內。
+    /// - 1 &lt;= Node.val &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

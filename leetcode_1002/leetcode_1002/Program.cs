@@ -3,10 +3,46 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1002. Find Common Characters
-        /// https://leetcode.com/problems/find-common-characters/description/?envType=daily-question&envId=2024-06-05
-        /// 1002. 查找共用字符
+        /// https://leetcode.com/problems/find-common-characters/description/
+        ///
+        /// Given a string array words, return an array of all characters that show up in all strings within
+        /// words (including duplicates). You may return the answer in any order.
+        ///
+        /// Example 1:
+        /// Input: words = ["bella","label","roller"]
+        /// Output: ["e","l","l"]
+        ///
+        /// Example 2:
+        /// Input: words = ["cool","lock","cook"]
+        /// Output: ["c","o"]
+        ///
+        /// Constraints:
+        /// 1 &lt;= words.length &lt;= 100
+        /// 1 &lt;= words[i].length &lt;= 100
+        /// words[i] consists of lowercase English letters.
+        /// </para>
+        /// <para>
+        /// 1002. 尋找共同字元
         /// https://leetcode.cn/problems/find-common-characters/description/
+        ///
+        /// 給定字串陣列 words，請回傳一個陣列，其中包含在 words 所有字串中都出現的全部字元
+        ///（包括重複字元）。你可以用任意順序回傳答案。
+        ///
+        /// 範例 1：
+        /// 輸入：words = ["bella","label","roller"]
+        /// 輸出：["e","l","l"]
+        ///
+        /// 範例 2：
+        /// 輸入：words = ["cool","lock","cook"]
+        /// 輸出：["c","o"]
+        ///
+        /// 限制條件：
+        /// 1 &lt;= words.length &lt;= 100
+        /// 1 &lt;= words[i].length &lt;= 100
+        /// words[i] 只包含小寫英文字母。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 不需要命令列參數；主程式會以六組合法案例驗證三種解法，

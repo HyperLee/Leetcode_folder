@@ -4,17 +4,70 @@
     {
         /// <summary>
         /// 40. Combination Sum II
-        /// https://leetcode.com/problems/combination-sum-ii/description/?envType=daily-question&envId=2024-08-13
-        /// 
-        /// 40. 组合总和 II
+        /// https://leetcode.com/problems/combination-sum-ii/description/
+        /// <para>
+        /// Given a collection of candidate numbers, candidates, and a target number, target, find all unique combinations in candidates where the candidate numbers sum to target.
+        ///
+        /// Each number in candidates may be used only once in a combination.
+        ///
+        /// Note: The solution set must not contain duplicate combinations.
+        ///
+        /// Example 1:
+        /// Input: candidates = [10,1,2,7,6,1,5], target = 8
+        /// Output:
+        /// [
+        /// [1,1,6],
+        /// [1,2,5],
+        /// [1,7],
+        /// [2,6]
+        /// ]
+        ///
+        /// Example 2:
+        /// Input: candidates = [2,5,2,1,2], target = 5
+        /// Output:
+        /// [
+        /// [1,2,2],
+        /// [5]
+        /// ]
+        ///
+        /// Constraints:
+        /// - 1 &lt;= candidates.length &lt;= 100
+        /// - 1 &lt;= candidates[i] &lt;= 50
+        /// - 1 &lt;= target &lt;= 30
+        /// </para>
+        /// <para>
+        /// 40. 組合總和 II
         /// https://leetcode.cn/problems/combination-sum-ii/description/
-        /// 
-        /// 本題目是 回溯 題型
-        /// 但不是標準回溯
-        /// 因為有扣 重覆元素 要求
-        /// 
-        /// 陣列 candidates 中可能存在重覆元素, 因此可能得到有重覆組合答案
-        /// 需要執行去重覆問題
+        ///
+        /// 給定一組候選數字 candidates 和一個目標數字 target，請找出 candidates 中所有數字總和等於 target 的唯一組合。
+        ///
+        /// candidates 中的每個數字在一個組合中只能使用一次。
+        ///
+        /// 注意：答案集合不得包含重複的組合。
+        ///
+        /// 範例 1：
+        /// 輸入：candidates = [10,1,2,7,6,1,5], target = 8
+        /// 輸出：
+        /// [
+        /// [1,1,6],
+        /// [1,2,5],
+        /// [1,7],
+        /// [2,6]
+        /// ]
+        ///
+        /// 範例 2：
+        /// 輸入：candidates = [2,5,2,1,2], target = 5
+        /// 輸出：
+        /// [
+        /// [1,2,2],
+        /// [5]
+        /// ]
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= candidates.length &lt;= 100
+        /// - 1 &lt;= candidates[i] &lt;= 50
+        /// - 1 &lt;= target &lt;= 30
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

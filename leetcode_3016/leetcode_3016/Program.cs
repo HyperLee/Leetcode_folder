@@ -4,11 +4,78 @@
     {
         /// <summary>
         /// 3016. Minimum Number of Pushes to Type Word II
-        /// https://leetcode.com/problems/minimum-number-of-pushes-to-type-word-ii/description/?envType=daily-question&envId=2024-08-06
-        /// 
-        /// 3016. 输入单词需要的最少按键次数 II
+        /// https://leetcode.com/problems/minimum-number-of-pushes-to-type-word-ii/description/
+        /// <para>
+        /// You are given a string word containing lowercase English letters.
+        ///
+        /// Telephone keypad keys are mapped to distinct collections of lowercase letters. For example, if key 2 maps to ["a","b","c"], one push types "a", two pushes type "b", and three pushes type "c".
+        ///
+        /// You may remap keys 2 through 9 to distinct collections containing any number of letters, but every letter must map to exactly one key. Find the minimum number of key pushes needed to type word.
+        ///
+        /// Return the minimum number of pushes needed after remapping the keys.
+        ///
+        /// Keypad image: https://assets.leetcode.com/uploads/2023/12/26/keypaddesc.png
+        /// Note that keys 1, *, #, and 0 do not map to letters.
+        ///
+        /// Example 1:
+        /// Image: https://assets.leetcode.com/uploads/2023/12/26/keypadv1e1.png
+        /// Input: word = "abcde"
+        /// Output: 5
+        /// Explanation: Map "a", "b", "c", "d", and "e" to the first position on keys 2, 3, 4, 5, and 6 respectively. The total is 1 + 1 + 1 + 1 + 1 = 5, and no mapping has a lower cost.
+        ///
+        /// Example 2:
+        /// Image: https://assets.leetcode.com/uploads/2024/08/20/edited.png
+        /// Input: word = "xyzxyzxyzxyz"
+        /// Output: 12
+        /// Explanation: Map "x", "y", and "z" to the first position on keys 2, 3, and 4. The total is 1 * 4 + 1 * 4 + 1 * 4 = 12, which is minimal. Key 9 need not map to a letter; every letter must be mapped, but not every key must be used.
+        ///
+        /// Example 3:
+        /// Image: https://assets.leetcode.com/uploads/2023/12/27/keypadv2.png
+        /// Input: word = "aabbccddeeffgghhiiiiii"
+        /// Output: 24
+        /// Explanation: Map "a" through "g" to the first position on keys 2 through 8, map "i" to the first position on key 9, and map "h" to the second position on key 9. The total is 1 * 2 + 1 * 2 + 1 * 2 + 1 * 2 + 1 * 2 + 1 * 2 + 1 * 2 + 2 * 2 + 6 * 1 = 24, which is minimal.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= word.length &lt;= 10^5
+        /// - word consists of lowercase English letters.
+        /// </para>
+        /// <para>
+        /// 3016. 輸入單字所需的最少按鍵次數 II
         /// https://leetcode.cn/problems/minimum-number-of-pushes-to-type-word-ii/description/
-        /// 
+        ///
+        /// 給定一個只含小寫英文字母的字串 word。
+        ///
+        /// 電話鍵盤的按鍵會分別映射到不同的小寫字母集合。例如，若按鍵 2 映射到 ["a","b","c"]，按一次可輸入 "a"，按兩次可輸入 "b"，按三次可輸入 "c"。
+        ///
+        /// 你可以將按鍵 2 到 9 重新映射到互不重複的字母集合，每個集合可含任意數量的字母，但每個字母必須恰好映射到一個按鍵。請找出輸入 word 所需的最少按鍵次數。
+        ///
+        /// 回傳重新映射按鍵後，輸入 word 所需的最少按鍵次數。
+        ///
+        /// 鍵盤圖片：https://assets.leetcode.com/uploads/2023/12/26/keypaddesc.png
+        /// 請注意，按鍵 1、*、# 和 0 不映射到任何字母。
+        ///
+        /// 範例 1：
+        /// 圖片：https://assets.leetcode.com/uploads/2023/12/26/keypadv1e1.png
+        /// 輸入：word = "abcde"
+        /// 輸出：5
+        /// 解釋：將 "a"、"b"、"c"、"d"、"e" 分別映射到按鍵 2、3、4、5、6 的第一個位置。總成本為 1 + 1 + 1 + 1 + 1 = 5，且沒有成本更低的映射。
+        ///
+        /// 範例 2：
+        /// 圖片：https://assets.leetcode.com/uploads/2024/08/20/edited.png
+        /// 輸入：word = "xyzxyzxyzxyz"
+        /// 輸出：12
+        /// 解釋：將 "x"、"y"、"z" 分別映射到按鍵 2、3、4 的第一個位置。總成本為 1 * 4 + 1 * 4 + 1 * 4 = 12，且為最小值。按鍵 9 不一定要映射字母；所有字母都必須映射，但不必使用每個按鍵。
+        ///
+        /// 範例 3：
+        /// 圖片：https://assets.leetcode.com/uploads/2023/12/27/keypadv2.png
+        /// 輸入：word = "aabbccddeeffgghhiiiiii"
+        /// 輸出：24
+        /// 解釋：將 "a" 到 "g" 分別映射到按鍵 2 到 8 的第一個位置，將 "i" 映射到按鍵 9 的第一個位置，並將 "h" 映射到按鍵 9 的第二個位置。總成本為 1 * 2 + 1 * 2 + 1 * 2 + 1 * 2 + 1 * 2 + 1 * 2 + 1 * 2 + 2 * 2 + 6 * 1 = 24，且為最小值。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= word.length &lt;= 10^5
+        /// - word 只含小寫英文字母。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 執行固定案例，比較三種最少按鍵次數解法；若任一結果不符預期，程序會以非零結束碼結束。

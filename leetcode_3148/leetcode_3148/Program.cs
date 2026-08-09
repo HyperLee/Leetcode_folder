@@ -5,9 +5,61 @@
         /// <summary>
         /// 3148. Maximum Difference Score in a Grid
         /// https://leetcode.com/problems/maximum-difference-score-in-a-grid/description/
-        /// 
-        /// 3148. 矩阵中的最大得分
-        /// https://leetcode.cn/problems/maximum-difference-score-in-a-grid/description/?envType=daily-question&envId=Invalid%20Date
+        /// <para>
+        /// You are given an m x n matrix grid consisting of positive integers. You may move from a cell to any other cell that is below it or to its right, not necessarily adjacent. The score of moving from value c1 to value c2 is c2 - c1.
+        ///
+        /// You may start at any cell, and you must make at least one move.
+        ///
+        /// Return the maximum total score you can achieve.
+        ///
+        /// Example 1:
+        /// Image: https://assets.leetcode.com/uploads/2024/03/14/grid1.png
+        /// Input: grid = [[9,5,7,3],[8,9,6,1],[6,7,14,3],[2,5,3,1]]
+        /// Output: 9
+        /// Explanation: Start at (0, 1). Move to (2, 1) for 7 - 5 = 2, then to (2, 2) for 14 - 7 = 7. The total is 2 + 7 = 9.
+        ///
+        /// Example 2:
+        /// Image: https://assets.leetcode.com/uploads/2024/04/08/moregridsdrawio-1.png
+        /// Input: grid = [[4,3,2],[3,2,1]]
+        /// Output: -1
+        /// Explanation: Start at (0, 0) and move once to (0, 1). The score is 3 - 4 = -1.
+        ///
+        /// Constraints:
+        /// - m == grid.length
+        /// - n == grid[i].length
+        /// - 2 &lt;= m, n &lt;= 1000
+        /// - 4 &lt;= m * n &lt;= 10^5
+        /// - 1 &lt;= grid[i][j] &lt;= 10^5
+        /// </para>
+        /// <para>
+        /// 3148. 網格中的最大差值分數
+        /// https://leetcode.cn/problems/maximum-difference-score-in-a-grid/description/
+        ///
+        /// 給定一個由正整數組成的 m x n 矩陣 grid。你可以從一個儲存格移動到其下方或右方的任意另一個儲存格，兩者不必相鄰。從值為 c1 的儲存格移動到值為 c2 的儲存格，分數為 c2 - c1。
+        ///
+        /// 你可以從任意儲存格開始，且必須至少移動一次。
+        ///
+        /// 回傳可以取得的最大總分。
+        ///
+        /// 範例 1：
+        /// 圖片：https://assets.leetcode.com/uploads/2024/03/14/grid1.png
+        /// 輸入：grid = [[9,5,7,3],[8,9,6,1],[6,7,14,3],[2,5,3,1]]
+        /// 輸出：9
+        /// 解釋：從 (0, 1) 開始，移到 (2, 1) 得分 7 - 5 = 2，再移到 (2, 2) 得分 14 - 7 = 7。總分為 2 + 7 = 9。
+        ///
+        /// 範例 2：
+        /// 圖片：https://assets.leetcode.com/uploads/2024/04/08/moregridsdrawio-1.png
+        /// 輸入：grid = [[4,3,2],[3,2,1]]
+        /// 輸出：-1
+        /// 解釋：從 (0, 0) 開始，移動一次到 (0, 1)。分數為 3 - 4 = -1。
+        ///
+        /// 限制條件：
+        /// - m == grid.length
+        /// - n == grid[i].length
+        /// - 2 &lt;= m, n &lt;= 1000
+        /// - 4 &lt;= m * n &lt;= 10^5
+        /// - 1 &lt;= grid[i][j] &lt;= 10^5
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 以固定案例同時驗證二維與一維動態規劃解法，並輸出預期值、實際值與通過狀態。

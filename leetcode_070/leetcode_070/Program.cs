@@ -3,18 +3,56 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 70. Climbing Stairs
-        /// https://leetcode.com/problems/climbing-stairs/submissions/
-        /// 70. 爬楼梯
+        /// https://leetcode.com/problems/climbing-stairs/
+        ///
+        /// You are climbing a staircase. It takes n steps to reach the top.
+        /// Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?
+        ///
+        /// Example 1:
+        /// Input: n = 2
+        /// Output: 2
+        /// Explanation: There are two ways to climb to the top.
+        /// 1. 1 step + 1 step
+        /// 2. 2 steps
+        ///
+        /// Example 2:
+        /// Input: n = 3
+        /// Output: 3
+        /// Explanation: There are three ways to climb to the top.
+        /// 1. 1 step + 1 step + 1 step
+        /// 2. 1 step + 2 steps
+        /// 3. 2 steps + 1 step
+        ///
+        /// Constraints:
+        /// 1 &lt;= n &lt;= 45
+        /// </para>
+        /// <para>
+        /// 70. 爬樓梯
         /// https://leetcode.cn/problems/climbing-stairs/
         ///
-        /// 本題目推薦, 解法三
-        /// 易懂好寫
-        /// 類似 fibonacci 優化解法
+        /// 你正在爬一座樓梯，需要走 n 階才能到達頂端。
+        /// 每次你可以爬 1 階或 2 階。你有多少種不同的方法可以爬到頂端？
         ///
-        /// 程式主要進入點。使用固定測試案例依序驗證黃金比例公式、純遞迴與
-        /// 迭代動態規劃三種解法，輸入為題目限制內的階梯數，輸出每筆案例的
-        /// 預期值、實際值、PASS/FAIL 狀態，以及所有案例的通過總數。
+        /// 範例 1：
+        /// 輸入：n = 2
+        /// 輸出：2
+        /// 解釋：有兩種方法可以爬到頂端。
+        /// 1. 1 階 + 1 階
+        /// 2. 2 階
+        ///
+        /// 範例 2：
+        /// 輸入：n = 3
+        /// 輸出：3
+        /// 解釋：有三種方法可以爬到頂端。
+        /// 1. 1 階 + 1 階 + 1 階
+        /// 2. 1 階 + 2 階
+        /// 3. 2 階 + 1 階
+        ///
+        /// 限制條件：
+        /// 1 &lt;= n &lt;= 45
+        /// </para>
         /// </summary>
         /// <param name="args">命令列參數；本範例不使用此參數。</param>
         static void Main(string[] args)

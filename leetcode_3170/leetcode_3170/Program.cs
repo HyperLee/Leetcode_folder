@@ -4,15 +4,56 @@ class Program
 {
     /// <summary>
     /// 3170. Lexicographically Minimum String After Removing Stars
-    /// https://leetcode.com/problems/lexicographically-minimum-string-after-removing-stars/description/?envType=daily-question&envId=2025-06-07
-    /// 3170. 刪除星號以後字典序最小的字串
-    /// https://leetcode.cn/problems/lexicographically-minimum-string-after-removing-stars/description/?envType=daily-question&envId=2025-06-07
-    /// 
-    /// 題目描述（繁體中文翻譯）：
-    /// 給定一個字串 s，可能包含任意數量的 '*' 字元。你的任務是移除所有的 '*' 字元。
-    /// 當還有 '*' 存在時，執行以下操作：
-    /// 刪除最左邊的 '*' 以及其左側最小的非 '*' 字元（如果有多個最小字元，可以刪除任意一個）。
-    /// 移除所有 '*' 後，回傳字典序最小的結果字串。
+    /// https://leetcode.com/problems/lexicographically-minimum-string-after-removing-stars/description/
+    /// <para>
+    /// You are given a string s that may contain any number of '*' characters. Your task is to remove all '*' characters.
+    ///
+    /// While a '*' remains, perform this operation:
+    /// - Delete the leftmost '*' and the smallest non-'*' character to its left. If several smallest characters exist, you may delete any of them.
+    ///
+    /// Return the lexicographically smallest resulting string after removing all '*' characters.
+    ///
+    /// Example 1:
+    /// Input: s = "aaba*"
+    /// Output: "aab"
+    /// Explanation: Delete one of the 'a' characters together with '*'. Choosing s[3] produces the lexicographically smallest result.
+    ///
+    /// Example 2:
+    /// Input: s = "abc"
+    /// Output: "abc"
+    /// Explanation: The string contains no '*'.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s consists only of lowercase English letters and '*'.
+    /// - The input is generated so that all '*' characters can be deleted.
+    /// </para>
+    /// <para>
+    /// 3170. 移除星號後字典序最小的字串
+    /// https://leetcode.cn/problems/lexicographically-minimum-string-after-removing-stars/description/
+    ///
+    /// 給定一個可能包含任意數量 '*' 字元的字串 s。你的任務是移除所有 '*' 字元。
+    ///
+    /// 只要仍有 '*'，就執行下列操作：
+    /// - 刪除最左邊的 '*'，以及它左側最小的非 '*' 字元。若最小字元有多個，可以刪除其中任一個。
+    ///
+    /// 回傳移除所有 '*' 後，字典序最小的結果字串。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "aaba*"
+    /// 輸出："aab"
+    /// 解釋：刪除其中一個 'a' 與 '*'。選擇 s[3] 可以得到字典序最小的結果。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "abc"
+    /// 輸出："abc"
+    /// 解釋：字串中沒有 '*'。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s 只由小寫英文字母與 '*' 組成。
+    /// - 輸入保證可以刪除所有 '*' 字元。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

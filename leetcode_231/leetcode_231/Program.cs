@@ -3,15 +3,56 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 231. Power of Two
-    /// https://leetcode.com/problems/power-of-two/description/?envType=daily-question&envId=2025-08-09
-    /// 231. 2 的幂
-    /// https://leetcode.cn/problems/power-of-two/description/?envType=daily-question&envId=2025-08-09
-    /// 
-    /// 給定一個整數 n，如果它是 2 的冪，則回傳 true；否則回傳 false。
-    /// 
-    /// 如果存在一個整數 x 使得 n == 2^x，則整數 n 是 2 的冪。
-    /// 
+    /// https://leetcode.com/problems/power-of-two/description/
+    ///
+    /// Given integer n, return true if it is a power of two; otherwise return false. An integer is a power of two if an integer x exists such that n == 2^x.
+    ///
+    /// Example 1:
+    /// Input: n = 1
+    /// Output: true
+    /// Explanation: 2^0 = 1.
+    ///
+    /// Example 2:
+    /// Input: n = 16
+    /// Output: true
+    /// Explanation: 2^4 = 16.
+    ///
+    /// Example 3:
+    /// Input: n = 3
+    /// Output: false
+    ///
+    /// Constraints:
+    /// - -2^31 &lt;= n &lt;= 2^31 - 1
+    ///
+    /// Follow-up: Could you solve it without loops or recursion?
+    /// </para>
+    /// <para>
+    /// 231. 2 的冪
+    /// https://leetcode.cn/problems/power-of-two/description/
+    ///
+    /// 給定整數 n，若它是 2 的冪則回傳 true，否則回傳 false。若存在整數 x 使 n == 2^x，則 n 是 2 的冪。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 1
+    /// 輸出：true
+    /// 說明：2^0 = 1。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 16
+    /// 輸出：true
+    /// 說明：2^4 = 16。
+    ///
+    /// 範例 3：
+    /// 輸入：n = 3
+    /// 輸出：false
+    ///
+    /// 限制條件：
+    /// - -2^31 &lt;= n &lt;= 2^31 - 1
+    ///
+    /// 延伸問題：可以不用迴圈或遞迴來解決嗎？
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

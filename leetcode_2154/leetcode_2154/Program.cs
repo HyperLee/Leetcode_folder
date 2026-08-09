@@ -3,18 +3,46 @@
 public class Program
 {
     /// <summary>
+    /// <para>
     /// 2154. Keep Multiplying Found Values by Two
-    /// https://leetcode.com/problems/keep-multiplying-found-values-by-two/description/?envType=daily-question&envId=2025-11-19
-    /// 2154. 將找到的值乘以 2
-    /// https://leetcode.cn/problems/keep-multiplying-found-values-by-two/description/?envType=daily-question&envId=2025-11-19
+    /// https://leetcode.com/problems/keep-multiplying-found-values-by-two/description/
     ///
-    /// 題目說明（繁體中文翻譯）:
-    /// 給定一個整數陣列 `nums`，以及一個整數 `original`，代表第一個要在 `nums` 中搜尋的數字。
-    /// 如果 `original` 在 `nums` 中找到，則把 `original` 乘以 2（即 `original = original * 2`），
-    /// 然後以新的 `original` 繼續搜尋並重複上述步驟；若未找到則停止。
-    /// 最後回傳程序結束時的 `original` 值。
-    /// 
-    /// 
+    /// You are given integer array nums and integer original. While original is found in nums, set original = 2 * original and search again. Stop when it is not found, and return the final original.
+    ///
+    /// Example 1:
+    /// Input: nums = [5,3,6,1,12], original = 3
+    /// Output: 24
+    /// Explanation: Find 3 and double it to 6; find 6 and double it to 12; find 12 and double it to 24. Since 24 is absent, return 24.
+    ///
+    /// Example 2:
+    /// Input: nums = [2,7,9], original = 4
+    /// Output: 4
+    /// Explanation: 4 is absent, so return 4.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 1000
+    /// - 1 &lt;= nums[i], original &lt;= 1000
+    /// </para>
+    /// <para>
+    /// 2154. 將找到的值乘以 2
+    /// https://leetcode.cn/problems/keep-multiplying-found-values-by-two/description/
+    ///
+    /// 給定整數陣列 nums 與整數 original。只要能在 nums 中找到 original，就設定 original = 2 * original 並再次搜尋；找不到時停止，回傳最終的 original。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [5,3,6,1,12], original = 3
+    /// 輸出：24
+    /// 說明：找到 3 後加倍為 6；找到 6 後加倍為 12；找到 12 後加倍為 24。因為找不到 24，所以回傳 24。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [2,7,9], original = 4
+    /// 輸出：4
+    /// 說明：找不到 4，因此回傳 4。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 1000
+    /// - 1 &lt;= nums[i], original &lt;= 1000
+    /// </para>
     /// </summary>
     /// <param name="args">CLI 參數（目前未使用）。</param>
     static void Main(string[] args)

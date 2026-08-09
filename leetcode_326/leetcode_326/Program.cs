@@ -4,13 +4,60 @@ class Program
 {
     /// <summary>
     /// 326. Power of Three
-    /// https://leetcode.com/problems/power-of-three/description/?envType=daily-question&envId=2025-08-13
+    /// https://leetcode.com/problems/power-of-three/description/
+    /// <para>
+    /// Given an integer n, return true if it is a power of three; otherwise, return false.
+    ///
+    /// An integer n is a power of three if there is an integer x such that n == 3^x.
+    ///
+    /// Example 1:
+    /// Input: n = 27
+    /// Output: true
+    /// Explanation: 27 = 3^3.
+    ///
+    /// Example 2:
+    /// Input: n = 0
+    /// Output: false
+    /// Explanation: There is no x such that 3^x = 0.
+    ///
+    /// Example 3:
+    /// Input: n = -1
+    /// Output: false
+    /// Explanation: There is no x such that 3^x = -1.
+    ///
+    /// Constraints:
+    /// - -2^31 &lt;= n &lt;= 2^31 - 1
+    ///
+    /// Follow-up: Could you solve it without loops or recursion?
+    /// </para>
+    /// <para>
     /// 326. 3 的冪
-    /// https://leetcode.cn/problems/power-of-three/description/?envType=daily-question&envId=2025-08-13
+    /// https://leetcode.cn/problems/power-of-three/description/
     ///
-    /// 給定一個整數 n，若 n 為 3 的冪則回傳 true，否則回傳 false。
+    /// 給定整數 n，若它是 3 的冪則回傳 true，否則回傳 false。
     ///
-    /// 一個整數 n 是 3 的冪，代表存在一個整數 x 使得 n == 3^x。
+    /// 若存在整數 x，使 n == 3^x，則整數 n 是 3 的冪。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 27
+    /// 輸出：true
+    /// 解釋：27 = 3^3。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 0
+    /// 輸出：false
+    /// 解釋：不存在 x 使 3^x = 0。
+    ///
+    /// 範例 3：
+    /// 輸入：n = -1
+    /// 輸出：false
+    /// 解釋：不存在 x 使 3^x = -1。
+    ///
+    /// 限制條件：
+    /// - -2^31 &lt;= n &lt;= 2^31 - 1
+    ///
+    /// 進階：你能不用迴圈或遞迴來解題嗎？
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

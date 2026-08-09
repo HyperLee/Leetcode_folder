@@ -3,14 +3,70 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 76. Minimum Window Substring
-    /// https://leetcode.com/problems/minimum-window-substring/description/
-    /// 76. 最小覆蓋子串
-    /// https://leetcode.cn/problems/minimum-window-substring/description/
-    /// 
-    /// 要在字符串 S 中找出包含所有目標字符串 t 中字符的最小子串
-    /// 子串必須包含 t 中所有字符，包括重複的字符
-    /// 需要找出最小長度的符合條件子串 
+    /// https://leetcode.com/problems/minimum-window-substring/
+    ///
+    /// Given two strings s and t of lengths m and n respectively, return the minimum window substring of s
+    /// such that every character in t (including duplicates) is included in the window. If there is no such
+    /// substring, return the empty string "".
+    /// The testcases will be generated such that the answer is unique.
+    ///
+    /// Example 1:
+    /// Input: s = "ADOBECODEBANC", t = "ABC"
+    /// Output: "BANC"
+    /// Explanation: The minimum window substring "BANC" includes 'A', 'B', and 'C' from string t.
+    ///
+    /// Example 2:
+    /// Input: s = "a", t = "a"
+    /// Output: "a"
+    /// Explanation: The entire string s is the minimum window.
+    ///
+    /// Example 3:
+    /// Input: s = "a", t = "aa"
+    /// Output: ""
+    /// Explanation: Both 'a's from t must be included in the window. Since the largest window of s only has
+    /// one 'a', return empty string.
+    ///
+    /// Constraints:
+    /// m == s.length
+    /// n == t.length
+    /// 1 &lt;= m, n &lt;= 10^5
+    /// s and t consist of uppercase and lowercase English letters.
+    ///
+    /// Follow up: Could you find an algorithm that runs in O(m + n) time?
+    /// </para>
+    /// <para>
+    /// 76. 最小覆蓋子字串
+    /// https://leetcode.cn/problems/minimum-window-substring/
+    ///
+    /// 給定長度分別為 m 與 n 的兩個字串 s 和 t，請回傳 s 中最短的覆蓋子字串，
+    /// 使 t 的每個字元（包括重複字元）都包含在視窗內。若不存在這樣的子字串，則回傳空字串 ""。
+    /// 測試案例會保證答案唯一。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "ADOBECODEBANC", t = "ABC"
+    /// 輸出："BANC"
+    /// 解釋：最小覆蓋子字串 "BANC" 包含字串 t 中的 'A'、'B' 與 'C'。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "a", t = "a"
+    /// 輸出："a"
+    /// 解釋：整個字串 s 就是最小視窗。
+    ///
+    /// 範例 3：
+    /// 輸入：s = "a", t = "aa"
+    /// 輸出：""
+    /// 解釋：視窗必須包含 t 中的兩個 'a'。由於 s 的最大視窗只有一個 'a'，因此回傳空字串。
+    ///
+    /// 限制條件：
+    /// m == s.length
+    /// n == t.length
+    /// 1 &lt;= m, n &lt;= 10^5
+    /// s 與 t 只包含大小寫英文字母。
+    ///
+    /// 進階：你能找出一個時間複雜度為 O(m + n) 的演算法嗎？
+    /// </para>
     /// </summary>
     /// <remarks>
     /// 主要進入點會以固定案例執行兩種滑動視窗解法，比對實際值與期望值，

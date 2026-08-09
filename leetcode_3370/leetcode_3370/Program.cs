@@ -4,15 +4,56 @@ class Program
 {
     /// <summary>
     /// 3370. Smallest Number With All Set Bits
-    /// https://leetcode.com/problems/smallest-number-with-all-set-bits/description/?envType=daily-question&envId=2025-10-29
-    /// 3370. 僅含置位位的最小整數
-    /// https://leetcode.cn/problems/smallest-number-with-all-set-bits/description/?envType=daily-question&envId=2025-10-29
+    /// https://leetcode.com/problems/smallest-number-with-all-set-bits/description/
+    /// <para>
+    /// You are given a positive number n.
     ///
-    /// 題目描述（中文）：給定一個正整數 n，回傳最小的整數 x（x >= n），使得 x 的二進位表示中只含有置位（即所有位元均為 1）。
-    /// 也就是尋找第一個不小於 n 的數，其二進位表示形如 1、11、111、1111...（全部為 1）。
-    /// 例如：
-    ///   - n = 5 (0b101)，答案為 7 (0b111)
-    ///   - n = 8 (0b1000)，答案為 15 (0b1111)
+    /// Return the smallest number x greater than or equal to n whose binary representation contains only set bits.
+    ///
+    /// Example 1:
+    /// Input: n = 5
+    /// Output: 7
+    /// Explanation: The binary representation of 7 is "111".
+    ///
+    /// Example 2:
+    /// Input: n = 10
+    /// Output: 15
+    /// Explanation: The binary representation of 15 is "1111".
+    ///
+    /// Example 3:
+    /// Input: n = 3
+    /// Output: 3
+    /// Explanation: The binary representation of 3 is "11".
+    ///
+    /// Constraints:
+    /// - 1 &lt;= n &lt;= 1000
+    /// </para>
+    /// <para>
+    /// 3370. 所有位元皆為 1 的最小數字
+    /// https://leetcode.cn/problems/smallest-number-with-all-set-bits/description/
+    ///
+    /// 給定一個正整數 n。
+    ///
+    /// 回傳大於或等於 n，且二進位表示只含已設定位元的最小數字 x。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 5
+    /// 輸出：7
+    /// 解釋：7 的二進位表示為 "111"。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 10
+    /// 輸出：15
+    /// 解釋：15 的二進位表示為 "1111"。
+    ///
+    /// 範例 3：
+    /// 輸入：n = 3
+    /// 輸出：3
+    /// 解釋：3 的二進位表示為 "11"。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= n &lt;= 1000
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

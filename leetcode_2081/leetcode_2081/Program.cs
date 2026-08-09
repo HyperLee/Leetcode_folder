@@ -3,15 +3,60 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2081. Sum of k-Mirror Numbers
-    /// https://leetcode.com/problems/sum-of-k-mirror-numbers/description/?envType=daily-question&envId=2025-06-23
-    /// 2081. k 镜像数字的和
-    /// https://leetcode.cn/problems/sum-of-k-mirror-numbers/description/?envType=daily-question&envId=2025-06-23
-    /// 
-    /// 給定一個進位制 k 和數字 n，k-鏡像數是指在十進位和 k 進位下都為回文數（正著和反著讀都一樣，且不能有前導零）的正整數。
-    /// 請回傳最小的 n 個 k-鏡像數的總和。
-    /// 例如：9 是 2-鏡像數，因為 9（十進位）和 1001（二進位）都是回文數。
-    /// 但 4 不是 2-鏡像數，因為 4（二進位為 100）不是回文數。
+    /// https://leetcode.com/problems/sum-of-k-mirror-numbers/description/
+    ///
+    /// A k-mirror number is a positive integer without leading zeros that is a palindrome in both base 10 and base k. For example, 9 is a 2-mirror number because its base-10 and base-2 representations are 9 and 1001. By contrast, 4 is not a 2-mirror number because 100 is not a palindrome.
+    ///
+    /// Given k and n, return the sum of the n smallest k-mirror numbers.
+    ///
+    /// Example 1:
+    /// Input: k = 2, n = 5
+    /// Output: 25
+    /// Explanation: The 5 smallest 2-mirror numbers are 1, 3, 5, 7, 9, represented in base 2 as 1, 11, 101, 111, 1001. Their sum is 1 + 3 + 5 + 7 + 9 = 25.
+    ///
+    /// Example 2:
+    /// Input: k = 3, n = 7
+    /// Output: 499
+    /// Explanation: The 7 smallest 3-mirror numbers are 1, 2, 4, 8, 121, 151, 212, represented in base 3 as 1, 2, 11, 22, 11111, 12121, 21212. Their sum is 1 + 2 + 4 + 8 + 121 + 151 + 212 = 499.
+    ///
+    /// Example 3:
+    /// Input: k = 7, n = 17
+    /// Output: 20379000
+    /// Explanation: The 17 smallest 7-mirror numbers are 1, 2, 3, 4, 5, 6, 8, 121, 171, 242, 292, 16561, 65656, 2137312, 4602064, 6597956, 6958596.
+    ///
+    /// Constraints:
+    /// - 2 &lt;= k &lt;= 9
+    /// - 1 &lt;= n &lt;= 30
+    /// </para>
+    /// <para>
+    /// 2081. K 鏡像數字的和
+    /// https://leetcode.cn/problems/sum-of-k-mirror-numbers/description/
+    ///
+    /// k 鏡像數是沒有前導零，且在 10 進位與 k 進位表示中都是回文的正整數。例如，9 是 2 鏡像數，因為其 10 進位與 2 進位表示分別為 9、1001。相反地，4 不是 2 鏡像數，因為 100 不是回文。
+    ///
+    /// 給定 k 與 n，回傳最小的 n 個 k 鏡像數之和。
+    ///
+    /// 範例 1：
+    /// 輸入：k = 2, n = 5
+    /// 輸出：25
+    /// 說明：最小的 5 個 2 鏡像數是 1、3、5、7、9，其 2 進位表示為 1、11、101、111、1001；總和為 1 + 3 + 5 + 7 + 9 = 25。
+    ///
+    /// 範例 2：
+    /// 輸入：k = 3, n = 7
+    /// 輸出：499
+    /// 說明：最小的 7 個 3 鏡像數是 1、2、4、8、121、151、212，其 3 進位表示為 1、2、11、22、11111、12121、21212；總和為 1 + 2 + 4 + 8 + 121 + 151 + 212 = 499。
+    ///
+    /// 範例 3：
+    /// 輸入：k = 7, n = 17
+    /// 輸出：20379000
+    /// 說明：最小的 17 個 7 鏡像數是 1、2、3、4、5、6、8、121、171、242、292、16561、65656、2137312、4602064、6597956、6958596。
+    ///
+    /// 限制條件：
+    /// - 2 &lt;= k &lt;= 9
+    /// - 1 &lt;= n &lt;= 30
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

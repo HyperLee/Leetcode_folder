@@ -4,19 +4,72 @@ class Program
 {
     /// <summary>
     /// 3583. Count Special Triplets
-    /// https://leetcode.com/problems/count-special-triplets/description/?envType=daily-question&envId=2025-12-09
-    /// 3583. 统计特殊三元组
-    /// https://leetcode.cn/problems/count-special-triplets/description/?envType=daily-question&envId=2025-12-09
+    /// https://leetcode.com/problems/count-special-triplets/description/
+    /// <para>
+    /// You are given an integer array nums.
     ///
-    /// 繁體中文翻譯:
-    /// 給你一個整數陣列 nums。
-    /// 一個「特殊三元組」被定義為索引三元組 (i, j, k)，使得：
-    ///  - 0 <= i < j < k < n，n = nums.Length
-    ///  - nums[i] == nums[j] * 2
-    ///  - nums[k] == nums[j] * 2
-    /// 請回傳陣列中所有特殊三元組的數量，答案可能很大，請對 10^9 + 7 取模。
-    /// 
-    /// 
+    /// A special triplet is defined as a triplet of indices (i, j, k) such that:
+    /// - 0 &lt;= i &lt; j &lt; k &lt; n, where n = nums.length
+    /// - nums[i] == nums[j] * 2
+    /// - nums[k] == nums[j] * 2
+    ///
+    /// Return the total number of special triplets in the array.
+    ///
+    /// Since the answer may be large, return it modulo 10^9 + 7.
+    ///
+    /// Example 1:
+    /// Input: nums = [6,3,6]
+    /// Output: 1
+    /// Explanation: The only special triplet is (i, j, k) = (0, 1, 2), where nums[0] = 6, nums[1] = 3, nums[2] = 6, nums[0] = nums[1] * 2 = 3 * 2 = 6, and nums[2] = nums[1] * 2 = 3 * 2 = 6.
+    ///
+    /// Example 2:
+    /// Input: nums = [0,1,0,0]
+    /// Output: 1
+    /// Explanation: The only special triplet is (i, j, k) = (0, 2, 3), where nums[0] = 0, nums[2] = 0, nums[3] = 0, nums[0] = nums[2] * 2 = 0 * 2 = 0, and nums[3] = nums[2] * 2 = 0 * 2 = 0.
+    ///
+    /// Example 3:
+    /// Input: nums = [8,4,2,8,4]
+    /// Output: 2
+    /// Explanation: There are exactly two special triplets. For (0, 1, 3), nums[0] = 8, nums[1] = 4, nums[3] = 8, nums[0] = nums[1] * 2 = 4 * 2 = 8, and nums[3] = nums[1] * 2 = 4 * 2 = 8. For (1, 2, 4), nums[1] = 4, nums[2] = 2, nums[4] = 4, nums[1] = nums[2] * 2 = 2 * 2 = 4, and nums[4] = nums[2] * 2 = 2 * 2 = 4.
+    ///
+    /// Constraints:
+    /// - 3 &lt;= n == nums.length &lt;= 10^5
+    /// - 0 &lt;= nums[i] &lt;= 10^5
+    /// </para>
+    /// <para>
+    /// 3583. 統計特殊三元組
+    /// https://leetcode.cn/problems/count-special-triplets/description/
+    ///
+    /// 給定一個整數陣列 nums。
+    ///
+    /// 特殊三元組定義為符合下列條件的索引三元組 (i, j, k)：
+    /// - 0 &lt;= i &lt; j &lt; k &lt; n，其中 n = nums.length
+    /// - nums[i] == nums[j] * 2
+    /// - nums[k] == nums[j] * 2
+    ///
+    /// 回傳陣列中特殊三元組的總數。
+    ///
+    /// 由於答案可能很大，請將結果對 10^9 + 7 取模後回傳。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [6,3,6]
+    /// 輸出：1
+    /// 解釋：唯一的特殊三元組為 (i, j, k) = (0, 1, 2)，其中 nums[0] = 6、nums[1] = 3、nums[2] = 6、nums[0] = nums[1] * 2 = 3 * 2 = 6，且 nums[2] = nums[1] * 2 = 3 * 2 = 6。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [0,1,0,0]
+    /// 輸出：1
+    /// 解釋：唯一的特殊三元組為 (i, j, k) = (0, 2, 3)，其中 nums[0] = 0、nums[2] = 0、nums[3] = 0、nums[0] = nums[2] * 2 = 0 * 2 = 0，且 nums[3] = nums[2] * 2 = 0 * 2 = 0。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [8,4,2,8,4]
+    /// 輸出：2
+    /// 解釋：恰有兩個特殊三元組。對於 (0, 1, 3)，nums[0] = 8、nums[1] = 4、nums[3] = 8、nums[0] = nums[1] * 2 = 4 * 2 = 8，且 nums[3] = nums[1] * 2 = 4 * 2 = 8。對於 (1, 2, 4)，nums[1] = 4、nums[2] = 2、nums[4] = 4、nums[1] = nums[2] * 2 = 2 * 2 = 4，且 nums[4] = nums[2] * 2 = 2 * 2 = 4。
+    ///
+    /// 限制條件：
+    /// - 3 &lt;= n == nums.length &lt;= 10^5
+    /// - 0 &lt;= nums[i] &lt;= 10^5
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     /// <summary>

@@ -3,11 +3,70 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 127. Word Ladder
     /// https://leetcode.com/problems/word-ladder/description/
-    /// 
-    /// 127. 单词接龙
+    ///
+    /// A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence
+    /// of words beginWord -&gt; s1 -&gt; s2 -&gt; ... -&gt; sk such that:
+    /// - Every adjacent pair of words differs by a single letter.
+    /// - Every s_i for 1 &lt;= i &lt;= k is in wordList. Note that beginWord does not need to be in wordList.
+    /// - sk == endWord.
+    /// Given two words, beginWord and endWord, and a dictionary wordList, return the number of words in the
+    /// shortest transformation sequence from beginWord to endWord, or 0 if no such sequence exists.
+    ///
+    /// Example 1:
+    /// Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]
+    /// Output: 5
+    /// Explanation: One shortest transformation sequence is "hit" -&gt; "hot" -&gt; "dot" -&gt; "dog" -&gt;
+    /// cog", which is 5 words long.
+    ///
+    /// Example 2:
+    /// Input: beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log"]
+    /// Output: 0
+    /// Explanation: The endWord "cog" is not in wordList, therefore there is no valid transformation sequence.
+    ///
+    /// Constraints:
+    /// 1 &lt;= beginWord.length &lt;= 10
+    /// endWord.length == beginWord.length
+    /// 1 &lt;= wordList.length &lt;= 5000
+    /// wordList[i].length == beginWord.length
+    /// beginWord, endWord, and wordList[i] consist of lowercase English letters.
+    /// beginWord != endWord
+    /// All the words in wordList are unique.
+    /// </para>
+    /// <para>
+    /// 127. 單字接龍
     /// https://leetcode.cn/problems/word-ladder/description/
+    ///
+    /// 使用字典 wordList，從單字 beginWord 到單字 endWord 的轉換序列，是一個如下的單字序列：
+    /// beginWord -&gt; s1 -&gt; s2 -&gt; ... -&gt; sk，且滿足：
+    /// - 每一對相鄰單字都只相差一個字母。
+    /// - 對所有 1 &lt;= i &lt;= k，s_i 都位於 wordList 中。請注意，beginWord 不必位於 wordList 中。
+    /// - sk == endWord。
+    /// 給定兩個單字 beginWord 與 endWord，以及字典 wordList，請回傳從 beginWord 到 endWord 的
+    /// 最短轉換序列所含的單字數量；若不存在這樣的序列，則回傳 0。
+    ///
+    /// 範例 1：
+    /// 輸入：beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log","cog"]
+    /// 輸出：5
+    /// 解釋：一條最短轉換序列為 "hit" -&gt; "hot" -&gt; "dot" -&gt; "dog" -&gt; "cog"，
+    /// 共包含 5 個單字。
+    ///
+    /// 範例 2：
+    /// 輸入：beginWord = "hit", endWord = "cog", wordList = ["hot","dot","dog","lot","log"]
+    /// 輸出：0
+    /// 解釋：endWord "cog" 不在 wordList 中，因此不存在有效的轉換序列。
+    ///
+    /// 限制條件：
+    /// 1 &lt;= beginWord.length &lt;= 10
+    /// endWord.length == beginWord.length
+    /// 1 &lt;= wordList.length &lt;= 5000
+    /// wordList[i].length == beginWord.length
+    /// beginWord、endWord 與 wordList[i] 只包含小寫英文字母。
+    /// beginWord != endWord
+    /// wordList 中的所有單字都互不相同。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

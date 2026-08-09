@@ -4,57 +4,78 @@ class Program
 {
     /// <summary>
     /// 13. Roman to Integer
-    /// English:
-    /// Roman numerals are represented by seven different symbols: I, V, X, L, C, D and M.
-    /// Symbol       Value
-    /// I            1
-    /// V            5
-    /// X            10
-    /// L            50
-    /// C            100
-    /// D            500
-    /// M            1000
-    /// 
-    /// For example, 2 is written as II in Roman numeral, just two ones added together.
-    /// 12 is written as XII, which is simply X + II.
-    /// The number 27 is written as XXVII, which is XX + V + II.
-    /// 
-    /// Roman numerals are usually written largest to smallest from left to right.
-    /// However, the numeral for four is not IIII. Instead, the number four is written as IV.
-    /// Because the one is before the five we subtract it making four.
-    /// The same principle applies to the number nine, which is written as IX.
-    /// There are six instances where subtraction is used:
-    /// I can be placed before V (5) and X (10) to make 4 and 9.
-    /// X can be placed before L (50) and C (100) to make 40 and 90.
-    /// C can be placed before D (500) and M (1000) to make 400 and 900.
-    /// 
-    /// Given a roman numeral, convert it to an integer.
-    /// 
-    /// Traditional Chinese:
+    /// https://leetcode.com/problems/roman-to-integer/description/
+    /// <para>
+    /// Roman numerals are represented by seven different symbols: I, V, X, L, C, D, and M.
+    /// Symbol: I, V, X, L, C, D, M
+    /// Value: 1, 5, 10, 50, 100, 500, 1000
+    ///
+    /// For example, 2 is written as II in Roman numeral, just two ones added together. 12 is written as XII, which is simply X + II. The number 27 is written as XXVII, which is XX + V + II.
+    ///
+    /// Roman numerals are usually written largest to smallest from left to right. However, the numeral for four is not IIII. Instead, four is written as IV. Because the one is before the five, it is subtracted to make four. The same principle applies to nine, which is written as IX. There are six instances where subtraction is used:
+    /// - I can be placed before V (5) and X (10) to make 4 and 9.
+    /// - X can be placed before L (50) and C (100) to make 40 and 90.
+    /// - C can be placed before D (500) and M (1000) to make 400 and 900.
+    ///
+    /// Given a Roman numeral, convert it to an integer.
+    ///
+    /// Example 1:
+    /// Input: s = "III"
+    /// Output: 3
+    /// Explanation: III = 3.
+    ///
+    /// Example 2:
+    /// Input: s = "LVIII"
+    /// Output: 58
+    /// Explanation: L = 50, V = 5, III = 3.
+    ///
+    /// Example 3:
+    /// Input: s = "MCMXCIV"
+    /// Output: 1994
+    /// Explanation: M = 1000, CM = 900, XC = 90, and IV = 4.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 15
+    /// - s contains only the characters ('I', 'V', 'X', 'L', 'C', 'D', 'M').
+    /// - It is guaranteed that s is a valid Roman numeral in the range [1, 3999].
+    /// </para>
+    /// <para>
+    /// 13. 羅馬數字轉整數
+    /// https://leetcode.cn/problems/roman-to-integer/description/
+    ///
     /// 羅馬數字由七種不同的符號表示：I、V、X、L、C、D 和 M。
-    /// 符號       數值
-    /// I          1
-    /// V          5
-    /// X          10
-    /// L          50
-    /// C          100
-    /// D          500
-    /// M          1000
-    /// 
-    /// 例如，2 寫作 II，也就是兩個 1 相加。
-    /// 12 寫作 XII，也就是 X + II。
-    /// 27 寫作 XXVII，也就是 XX + V + II。
-    /// 
-    /// 羅馬數字通常依照由大到小的順序，從左到右書寫。
-    /// 不過，4 並不是寫成 IIII，而是寫成 IV。
-    /// 因為 1 放在 5 的前面，表示要用 5 減去 1，結果為 4。
-    /// 相同原理也適用於 9，因此 9 寫成 IX。
-    /// 共有六種使用減法表示的情況：
-    /// I 可以放在 V (5) 和 X (10) 前面，分別表示 4 和 9。
-    /// X 可以放在 L (50) 和 C (100) 前面，分別表示 40 和 90。
-    /// C 可以放在 D (500) 和 M (1000) 前面，分別表示 400 和 900。
-    /// 
-    /// 給定一個羅馬數字字串，請將它轉換成整數。
+    /// 符號：I、V、X、L、C、D、M
+    /// 數值：1、5、10、50、100、500、1000
+    ///
+    /// 例如，2 在羅馬數字中寫作 II，也就是兩個 1 相加。12 寫作 XII，也就是 X + II。27 寫作 XXVII，也就是 XX + V + II。
+    ///
+    /// 羅馬數字通常由大到小、從左到右書寫。不過，4 並不是寫成 IIII，而是寫成 IV。因為 1 位於 5 前面，所以用 5 減去 1 得到 4。相同原理也適用於 9，因此 9 寫作 IX。共有六種使用減法表示的情況：
+    /// - I 可以放在 V (5) 和 X (10) 前面，分別表示 4 和 9。
+    /// - X 可以放在 L (50) 和 C (100) 前面，分別表示 40 和 90。
+    /// - C 可以放在 D (500) 和 M (1000) 前面，分別表示 400 和 900。
+    ///
+    /// 給定一個羅馬數字，請將它轉換成整數。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "III"
+    /// 輸出：3
+    /// 解釋：III = 3。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "LVIII"
+    /// 輸出：58
+    /// 解釋：L = 50、V = 5、III = 3。
+    ///
+    /// 範例 3：
+    /// 輸入：s = "MCMXCIV"
+    /// 輸出：1994
+    /// 解釋：M = 1000、CM = 900、XC = 90、IV = 4。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 15
+    /// - s 只包含字元 ('I', 'V', 'X', 'L', 'C', 'D', 'M')。
+    /// - 保證 s 是介於 [1, 3999] 的有效羅馬數字。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

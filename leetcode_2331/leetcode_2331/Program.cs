@@ -27,10 +27,56 @@
         }
 
         /// <summary>
+        /// <para>
         /// 2331. Evaluate Boolean Binary Tree
-        /// https://leetcode.com/problems/evaluate-boolean-binary-tree/description/?envType=daily-question&envId=2024-05-16
-        /// 2331. 计算布尔二叉树的值
+        /// https://leetcode.com/problems/evaluate-boolean-binary-tree/description/
+        ///
+        /// Given the root of a full binary tree, leaf values are 0 for False or 1 for True, while non-leaf values are 2 for boolean OR or 3 for boolean AND. A leaf evaluates to its value; any other node evaluates its two children and applies its represented operation. Return the root's boolean evaluation. A full binary tree has either 0 or 2 children at every node; a leaf has no children.
+        ///
+        /// Image: https://assets.leetcode.com/uploads/2022/05/16/example1drawio1.png
+        ///
+        /// Example 1:
+        /// Input: root = [2,1,3,null,null,0,1]
+        /// Output: true
+        /// Explanation: The AND node gives False AND True = False. The OR root gives True OR False = True, so return true.
+        ///
+        /// Example 2:
+        /// Input: root = [0]
+        /// Output: false
+        /// Explanation: The root is a leaf and evaluates to false.
+        ///
+        /// Constraints:
+        /// - The number of nodes is in [1,1000].
+        /// - 0 &lt;= Node.val &lt;= 3
+        /// - Every node has either 0 or 2 children.
+        /// - Leaf nodes have value 0 or 1.
+        /// - Non-leaf nodes have value 2 or 3.
+        /// </para>
+        /// <para>
+        /// 2331. 計算布林二元樹的值
         /// https://leetcode.cn/problems/evaluate-boolean-binary-tree/description/
+        ///
+        /// 給定滿二元樹的根節點；葉節點值 0 表示 False、1 表示 True，非葉節點值 2 表示布林 OR、3 表示布林 AND。葉節點的計算結果就是其值；其他節點先計算兩個子節點，再套用本身代表的運算。回傳根節點的布林計算結果。滿二元樹的每個節點都有 0 或 2 個子節點；葉節點沒有子節點。
+        ///
+        /// 圖片：https://assets.leetcode.com/uploads/2022/05/16/example1drawio1.png
+        ///
+        /// 範例 1：
+        /// 輸入：root = [2,1,3,null,null,0,1]
+        /// 輸出：true
+        /// 說明：AND 節點得到 False AND True = False；OR 根節點得到 True OR False = True，因此回傳 true。
+        ///
+        /// 範例 2：
+        /// 輸入：root = [0]
+        /// 輸出：false
+        /// 說明：根節點是葉節點，計算結果為 false。
+        ///
+        /// 限制條件：
+        /// - 節點數量在 [1,1000] 範圍內。
+        /// - 0 &lt;= Node.val &lt;= 3
+        /// - 每個節點都有 0 或 2 個子節點。
+        /// - 葉節點的值為 0 或 1。
+        /// - 非葉節點的值為 2 或 3。
+        /// </para>
         /// </summary>
         /// <param name="args">本範例未使用命令列參數。</param>
         static void Main(string[] args)

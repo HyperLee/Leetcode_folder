@@ -27,11 +27,62 @@
 
 
         /// <summary>
+        /// <para>
         /// 2471. Minimum Number of Operations to Sort a Binary Tree by Level
-        /// https://leetcode.com/problems/minimum-number-of-operations-to-sort-a-binary-tree-by-level/description/?envType=daily-question&envId=2024-12-23
-        /// 
-        /// 2471. 逐层排序二叉树所需的最少操作数目
+        /// https://leetcode.com/problems/minimum-number-of-operations-to-sort-a-binary-tree-by-level/description/
+        ///
+        /// You are given a binary tree whose values are unique. In one operation, choose any two nodes on the same level and swap their values. Return the minimum operations required to make each level's values strictly increasing. A node's level is the number of edges on the path from that node to the root.
+        ///
+        /// Images: https://assets.leetcode.com/uploads/2022/09/18/image-20220918174006-2.png, https://assets.leetcode.com/uploads/2022/09/18/image-20220918174026-3.png, and https://assets.leetcode.com/uploads/2022/09/18/image-20220918174052-4.png
+        ///
+        /// Example 1:
+        /// Input: root = [1,4,3,7,6,8,5,null,null,null,null,9,null,10]
+        /// Output: 3
+        /// Explanation: Swap 4 and 3 so level 2 becomes [3,4]. Swap 7 and 5 so level 3 becomes [5,6,8,7]. Swap 8 and 7 so level 3 becomes [5,6,7,8]. This uses 3 operations, which is minimal.
+        ///
+        /// Example 2:
+        /// Input: root = [1,3,2,7,6,5,4]
+        /// Output: 3
+        /// Explanation: Swap 3 and 2 so level 2 becomes [2,3]. Swap 7 and 4 so level 3 becomes [4,6,5,7]. Swap 6 and 5 so level 3 becomes [4,5,6,7]. This uses 3 operations, which is minimal.
+        ///
+        /// Example 3:
+        /// Input: root = [1,2,3,4,5,6]
+        /// Output: 0
+        /// Explanation: Every level is already sorted in increasing order.
+        ///
+        /// Constraints:
+        /// - The number of nodes is in [1,10^5].
+        /// - 1 &lt;= Node.val &lt;= 10^5
+        /// - Every tree value is unique.
+        /// </para>
+        /// <para>
+        /// 2471. 逐層排序二元樹所需的最少操作次數
         /// https://leetcode.cn/problems/minimum-number-of-operations-to-sort-a-binary-tree-by-level/description/
+        ///
+        /// 給定一棵節點值皆唯一的二元樹。一次操作可選擇同一層的任兩個節點並交換其值。回傳使每一層的值嚴格遞增所需的最少操作次數。節點的層數，是該節點到根節點路徑上的邊數。
+        ///
+        /// 圖片：https://assets.leetcode.com/uploads/2022/09/18/image-20220918174006-2.png、https://assets.leetcode.com/uploads/2022/09/18/image-20220918174026-3.png 與 https://assets.leetcode.com/uploads/2022/09/18/image-20220918174052-4.png
+        ///
+        /// 範例 1：
+        /// 輸入：root = [1,4,3,7,6,8,5,null,null,null,null,9,null,10]
+        /// 輸出：3
+        /// 說明：交換 4、3，使第 2 層成為 [3,4]；交換 7、5，使第 3 層成為 [5,6,8,7]；交換 8、7，使第 3 層成為 [5,6,7,8]。共使用 3 次操作，且已是最少次數。
+        ///
+        /// 範例 2：
+        /// 輸入：root = [1,3,2,7,6,5,4]
+        /// 輸出：3
+        /// 說明：交換 3、2，使第 2 層成為 [2,3]；交換 7、4，使第 3 層成為 [4,6,5,7]；交換 6、5，使第 3 層成為 [4,5,6,7]。共使用 3 次操作，且已是最少次數。
+        ///
+        /// 範例 3：
+        /// 輸入：root = [1,2,3,4,5,6]
+        /// 輸出：0
+        /// 說明：每一層都已按遞增順序排列。
+        ///
+        /// 限制條件：
+        /// - 節點數量在 [1,10^5] 範圍內。
+        /// - 1 &lt;= Node.val &lt;= 10^5
+        /// - 樹中的每個值皆唯一。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 以固定的 level-order 資料建立測試樹，逐一執行兩種解法，並輸出預期值、實際值與 PASS/FAIL。

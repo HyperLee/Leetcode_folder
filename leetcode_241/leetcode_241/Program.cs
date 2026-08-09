@@ -3,37 +3,50 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 241. Different Ways to Add Parentheses
     /// https://leetcode.com/problems/different-ways-to-add-parentheses/description/
-    /// 241. 為運算表達式設計優先級
+    ///
+    /// Given string expression containing numbers and operators, return every possible result obtained from all different ways of grouping its numbers and operators. Results may be returned in any order. Test cases guarantee that every output value fits in a 32-bit integer and that the number of different results is at most 10^4.
+    ///
+    /// Example 1:
+    /// Input: expression = "2-1-1"
+    /// Output: [0,2]
+    /// Explanation: ((2-1)-1) = 0 and (2-(1-1)) = 2.
+    ///
+    /// Example 2:
+    /// Input: expression = "2*3-4*5"
+    /// Output: [-34,-14,-10,-10,10]
+    /// Explanation: (2*(3-(4*5))) = -34; ((2*3)-(4*5)) = -14; ((2*(3-4))*5) = -10; (2*((3-4)*5)) = -10; (((2*3)-4)*5) = 10.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= expression.length &lt;= 20
+    /// - expression consists of digits and the operators '+', '-', and '*'.
+    /// - Every integer in expression is in [0,99].
+    /// - Integer values do not have a leading '-' or '+' sign.
+    /// </para>
+    /// <para>
+    /// 241. 為運算式設計優先順序
     /// https://leetcode.cn/problems/different-ways-to-add-parentheses/description/
-    /// 
-    /// 題目描述：
-    /// 給你一個由數字和運算符組成的字串 expression，按不同優先級組合數字和運算符，
-    /// 計算並返回所有可能組合的結果。你可以按任意順序返回答案。
-    /// 
-    /// 生成的測試用例滿足：
-    /// - 運算符只有 '+'、'-' 和 '*'
-    /// - 運算數只有整數
-    /// - 運算數和運算符都能被空格字元分隔
-    /// - 算式的結果在 32-bit 整數範圍內
-    /// 
-    /// 範例 1:
-    /// 輸入: expression = "2-1-1"
-    /// 輸出: [0, 2]
-    /// 解釋：
-    /// ((2-1)-1) = 0 
-    /// (2-(1-1)) = 2
-    /// 
-    /// 範例 2:
-    /// 輸入: expression = "2*3-4*5"
-    /// 輸出: [-34, -14, -10, -10, 10]
-    /// 解釋：
-    /// (2*(3-(4*5))) = -34 
-    /// ((2*3)-(4*5)) = -14 
-    /// ((2*(3-4))*5) = -10 
-    /// (2*((3-4)*5)) = -10 
-    /// (((2*3)-4)*5) = 10
+    ///
+    /// 給定包含數字與運算子的字串 expression，回傳以所有不同方式組合其中數字與運算子後得到的每個可能結果；結果可按任意順序回傳。測試案例保證所有輸出值都能放入 32 位元整數，且不同結果的數量不超過 10^4。
+    ///
+    /// 範例 1：
+    /// 輸入：expression = "2-1-1"
+    /// 輸出：[0,2]
+    /// 說明：((2-1)-1) = 0，且 (2-(1-1)) = 2。
+    ///
+    /// 範例 2：
+    /// 輸入：expression = "2*3-4*5"
+    /// 輸出：[-34,-14,-10,-10,10]
+    /// 說明：(2*(3-(4*5))) = -34；((2*3)-(4*5)) = -14；((2*(3-4))*5) = -10；(2*((3-4)*5)) = -10；(((2*3)-4)*5) = 10。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= expression.length &lt;= 20
+    /// - expression 僅由數字與運算子 '+'、'-'、'*' 組成。
+    /// - expression 中的每個整數都在 [0,99] 範圍內。
+    /// - 整數值前不會有表示正負號的 '-' 或 '+'。
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

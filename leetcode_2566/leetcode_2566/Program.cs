@@ -4,20 +4,58 @@ class Program
 {
     /// <summary>
     /// 2566. Maximum Difference by Remapping a Digit
-    /// https://leetcode.com/problems/maximum-difference-by-remapping-a-digit/description/?envType=daily-question&envId=2025-06-14
-    /// 2566. 替換一個數字後的最大差值
-    /// https://leetcode.cn/problems/maximum-difference-by-remapping-a-digit/description/?envType=daily-question&envId=2025-06-14
-    /// 
-    /// 給定一個整數 num。你知道 Bob 會偷偷地將 10 個可能的數字（0 到 9）中的一個重新映射為另一個數字。
-    /// 
-    /// 請回傳 Bob 透過恰好重新映射一個數字後，所能產生的最大值與最小值之間的差。
-    /// 
-    /// 注意：
-    ///- 當 Bob 將數字 d1 重新映射為另一個數字 d2 時，會將 num 中所有出現的 d1 都替換為 d2。
-    ///- Bob 可以將一個數字映射為它自己，此時 num 不會改變。
-    ///- 為了取得最大值與最小值，Bob 可以分別選擇不同的數字進行映射。
-    ///- 重新映射後的結果可以包含前導零。
+    /// https://leetcode.com/problems/maximum-difference-by-remapping-a-digit/description/
+    /// <para>
+    /// You are given an integer num. You know that Bob will sneakily remap one of the 10 possible digits (0 to 9) to another digit.
     ///
+    /// Return the difference between the maximum and minimum values Bob can make by remapping exactly one digit in num.
+    ///
+    /// Notes:
+    /// - When Bob remaps a digit d1 to another digit d2, Bob replaces all occurrences of d1 in num with d2.
+    /// - Bob can remap a digit to itself, in which case num does not change.
+    /// - Bob can remap different digits to obtain the minimum and maximum values respectively.
+    /// - The resulting number after remapping can contain leading zeroes.
+    ///
+    /// Example 1:
+    /// Input: num = 11891
+    /// Output: 99009
+    /// Explanation: To achieve the maximum value, Bob can remap digit 1 to digit 9 to yield 99899. To achieve the minimum value, Bob can remap digit 1 to digit 0, yielding 890. The difference between these two numbers is 99009.
+    ///
+    /// Example 2:
+    /// Input: num = 90
+    /// Output: 99
+    /// Explanation: The maximum value is 99 if 0 is replaced by 9, and the minimum value is 0 if 9 is replaced by 0. Thus, return 99.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= num &lt;= 10^8
+    /// </para>
+    /// <para>
+    /// 2566. 重新映射數字的最大差值
+    /// https://leetcode.cn/problems/maximum-difference-by-remapping-a-digit/description/
+    ///
+    /// 給定一個整數 num。你知道 Bob 會暗中把 10 個可能數字（0 到 9）中的一個重新映射為另一個數字。
+    ///
+    /// 回傳 Bob 在 num 中恰好重新映射一個數字後，所能得到的最大值與最小值之差。
+    ///
+    /// 注意事項：
+    /// - 當 Bob 將數字 d1 重新映射為數字 d2 時，他會把 num 中所有出現的 d1 都替換成 d2。
+    /// - Bob 可以把一個數字映射為它自己，此時 num 不會改變。
+    /// - Bob 可以分別重新映射不同數字，以取得最小值與最大值。
+    /// - 重新映射後的數字可以包含前導零。
+    ///
+    /// 範例 1：
+    /// 輸入：num = 11891
+    /// 輸出：99009
+    /// 解釋：為取得最大值，Bob 可以把數字 1 映射為 9，得到 99899。為取得最小值，他可以把數字 1 映射為 0，得到 890。兩數之差為 99009。
+    ///
+    /// 範例 2：
+    /// 輸入：num = 90
+    /// 輸出：99
+    /// 解釋：若將 0 替換為 9，可得到最大值 99；若將 9 替換為 0，可得到最小值 0。因此回傳 99。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= num &lt;= 10^8
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

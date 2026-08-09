@@ -3,19 +3,73 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1235. Maximum Profit in Job Scheduling
     /// https://leetcode.com/problems/maximum-profit-in-job-scheduling/description/
-    /// 1235. 规划兼职工作
+    ///
+    /// We have n jobs, where every job is scheduled to be done from startTime[i] to endTime[i], obtaining a
+    /// profit of profit[i].
+    /// You are given the startTime, endTime and profit arrays. Return the maximum profit you can take such that
+    /// there are no two jobs in the subset with overlapping time ranges.
+    /// If you choose a job that ends at time X, you will be able to start another job that starts at time X.
+    ///
+    /// Example 1:
+    /// Input: startTime = [1,2,3,3], endTime = [3,4,5,6], profit = [50,10,40,70]
+    /// Output: 120
+    /// Illustration: https://assets.leetcode.com/uploads/2019/10/10/sample1_1584.png
+    /// Explanation: The subset chosen is the first and fourth job.
+    /// Time range [1-3] + [3-6], we get profit of 120 = 50 + 70.
+    ///
+    /// Example 2:
+    /// Input: startTime = [1,2,3,4,6], endTime = [3,5,10,6,9], profit = [20,20,100,70,60]
+    /// Output: 150
+    /// Illustration: https://assets.leetcode.com/uploads/2019/10/10/sample22_1584.png
+    /// Explanation: The subset chosen is the first, fourth and fifth job.
+    /// Profit obtained 150 = 20 + 70 + 60.
+    ///
+    /// Example 3:
+    /// Input: startTime = [1,1,1], endTime = [2,3,4], profit = [5,6,4]
+    /// Output: 6
+    /// Illustration: https://assets.leetcode.com/uploads/2019/10/10/sample3_1584.png
+    ///
+    /// Constraints:
+    /// 1 &lt;= startTime.length == endTime.length == profit.length &lt;= 5 * 10^4
+    /// 1 &lt;= startTime[i] &lt; endTime[i] &lt;= 10^9
+    /// 1 &lt;= profit[i] &lt;= 10^4
+    /// </para>
+    /// <para>
+    /// 1235. 工作排程的最大收益
     /// https://leetcode.cn/problems/maximum-profit-in-job-scheduling/description/
-    /// 
-    /// 題目說明：
-    /// 有 n 份兼職工作，每份工作都有開始時間、結束時間和報酬。
-    /// 給定三個數組 startTime、endTime 和 profit，其中：
-    /// - startTime[i] 是第 i 份工作的開始時間
-    /// - endTime[i] 是第 i 份工作的結束時間
-    /// - profit[i] 是第 i 份工作的報酬
-    /// 
-    /// 要求：找出收益最大的工作計畫，工作時間不能重疊
+    ///
+    /// 有 n 份工作，每份工作排定從 startTime[i] 執行到 endTime[i]，可獲得 profit[i] 的收益。
+    /// 給定 startTime、endTime 與 profit 陣列，請回傳可取得的最大收益，且所選工作中任兩份工作的
+    /// 時間範圍都不可重疊。
+    /// 如果選擇的工作在時間 X 結束，就可以開始另一份同樣在時間 X 開始的工作。
+    ///
+    /// 範例 1：
+    /// 輸入：startTime = [1,2,3,3], endTime = [3,4,5,6], profit = [50,10,40,70]
+    /// 輸出：120
+    /// 示意圖：https://assets.leetcode.com/uploads/2019/10/10/sample1_1584.png
+    /// 解釋：選擇第一份與第四份工作。
+    /// 時間範圍為 [1-3] + [3-6]，取得的收益為 120 = 50 + 70。
+    ///
+    /// 範例 2：
+    /// 輸入：startTime = [1,2,3,4,6], endTime = [3,5,10,6,9], profit = [20,20,100,70,60]
+    /// 輸出：150
+    /// 示意圖：https://assets.leetcode.com/uploads/2019/10/10/sample22_1584.png
+    /// 解釋：選擇第一、第四與第五份工作。
+    /// 取得的收益為 150 = 20 + 70 + 60。
+    ///
+    /// 範例 3：
+    /// 輸入：startTime = [1,1,1], endTime = [2,3,4], profit = [5,6,4]
+    /// 輸出：6
+    /// 示意圖：https://assets.leetcode.com/uploads/2019/10/10/sample3_1584.png
+    ///
+    /// 限制條件：
+    /// 1 &lt;= startTime.length == endTime.length == profit.length &lt;= 5 * 10^4
+    /// 1 &lt;= startTime[i] &lt; endTime[i] &lt;= 10^9
+    /// 1 &lt;= profit[i] &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <remarks>
     /// 程式主要進入點；執行八組固定案例與三種解法，並以 process exit code 表示驗證結果。

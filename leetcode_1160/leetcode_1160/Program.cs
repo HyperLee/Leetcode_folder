@@ -3,12 +3,54 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1160. Find Words That Can Be Formed by Characters
     /// https://leetcode.com/problems/find-words-that-can-be-formed-by-characters/description/
-    /// 1160. 拼写单词
+    ///
+    /// You are given an array of strings words and a string chars.
+    /// A string is good if it can be formed by characters from chars (each character can only be used once
+    /// for each word in words).
+    /// Return the sum of lengths of all good strings in words.
+    ///
+    /// Example 1:
+    /// Input: words = ["cat","bt","hat","tree"], chars = "atach"
+    /// Output: 6
+    /// Explanation: The strings that can be formed are "cat" and "hat" so the answer is 3 + 3 = 6.
+    ///
+    /// Example 2:
+    /// Input: words = ["hello","world","leetcode"], chars = "welldonehoneyr"
+    /// Output: 10
+    /// Explanation: The strings that can be formed are "hello" and "world" so the answer is 5 + 5 = 10.
+    ///
+    /// Constraints:
+    /// 1 &lt;= words.length &lt;= 1000
+    /// 1 &lt;= words[i].length, chars.length &lt;= 100
+    /// words[i] and chars consist of lowercase English letters.
+    /// </para>
+    /// <para>
+    /// 1160. 可由字元組成的單字
     /// https://leetcode.cn/problems/find-words-that-can-be-formed-by-characters/description/
-    /// 
-    /// 
+    ///
+    /// 給定字串陣列 words 與字串 chars。
+    /// 如果一個字串可由 chars 中的字元組成，則它是好字串（對 words 中的每個單字而言，
+    /// 每個字元都只能使用一次）。
+    /// 請回傳 words 中所有好字串的長度總和。
+    ///
+    /// 範例 1：
+    /// 輸入：words = ["cat","bt","hat","tree"], chars = "atach"
+    /// 輸出：6
+    /// 解釋：可以組成的字串是 "cat" 與 "hat"，因此答案為 3 + 3 = 6。
+    ///
+    /// 範例 2：
+    /// 輸入：words = ["hello","world","leetcode"], chars = "welldonehoneyr"
+    /// 輸出：10
+    /// 解釋：可以組成的字串是 "hello" 與 "world"，因此答案為 5 + 5 = 10。
+    ///
+    /// 限制條件：
+    /// 1 &lt;= words.length &lt;= 1000
+    /// 1 &lt;= words[i].length, chars.length &lt;= 100
+    /// words[i] 與 chars 只包含小寫英文字母。
+    /// </para>
     /// </summary>
     /// <remarks>
     /// 執行四組固定範例，分別驗證逐字移除與字頻統計兩種解法。

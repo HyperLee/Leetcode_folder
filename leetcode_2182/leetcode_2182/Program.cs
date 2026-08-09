@@ -5,11 +5,46 @@ namespace leetcode_2182
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 2182. Construct String With Repeat Limit
-        /// https://leetcode.com/problems/construct-string-with-repeat-limit/description/?envType=daily-question&envId=2024-12-17
-        /// 
-        /// 2182. 构造限制重复的字符串
+        /// https://leetcode.com/problems/construct-string-with-repeat-limit/description/
+        ///
+        /// Given string s and integer repeatLimit, construct a string using characters from s so that no letter appears more than repeatLimit times consecutively. You need not use every character. Return the lexicographically largest possible valid string. At the first differing position, the string with the later alphabetic letter is larger; if one is a prefix, the longer string is larger.
+        ///
+        /// Example 1:
+        /// Input: s = "cczazcc", repeatLimit = 3
+        /// Output: "zzcccac"
+        /// Explanation: In "zzcccac", 'a', 'c', and 'z' appear consecutively at most 1, 3, and 2 times. It is the largest valid string. "zzcccca" is larger but has more than 3 consecutive 'c' characters.
+        ///
+        /// Example 2:
+        /// Input: s = "aababab", repeatLimit = 2
+        /// Output: "bbabaa"
+        /// Explanation: Only some characters are used. Neither 'a' nor 'b' appears more than 2 times consecutively. "bbabaaa" is larger but has more than 2 consecutive 'a' characters.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= repeatLimit &lt;= s.length &lt;= 10^5
+        /// - s consists of lowercase English letters.
+        /// </para>
+        /// <para>
+        /// 2182. 建構限制重複的字串
         /// https://leetcode.cn/problems/construct-string-with-repeat-limit/description/
+        ///
+        /// 給定字串 s 與整數 repeatLimit，使用 s 的字元建構一個字串，使任何字母連續出現不超過 repeatLimit 次；不必使用全部字元。回傳字典序最大的有效字串。在第一個不同位置，字母表中較後面的字母所屬字串較大；若其中一個是另一個的前綴，較長者較大。
+        ///
+        /// 範例 1：
+        /// 輸入：s = "cczazcc", repeatLimit = 3
+        /// 輸出："zzcccac"
+        /// 說明："zzcccac" 中 'a'、'c'、'z' 最多分別連續出現 1、3、2 次，且它是最大的有效字串。"zzcccca" 雖較大，但 'c' 連續超過 3 次。
+        ///
+        /// 範例 2：
+        /// 輸入：s = "aababab", repeatLimit = 2
+        /// 輸出："bbabaa"
+        /// 說明：只使用部分字元，'a' 與 'b' 都不會連續超過 2 次。"bbabaaa" 雖較大，但 'a' 連續超過 2 次。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= repeatLimit &lt;= s.length &lt;= 10^5
+        /// - s 僅由小寫英文字母組成。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 執行六組固定案例，逐一驗證雙指標與優先佇列解法；任一檢查失敗時，程式會設定非零結束碼。

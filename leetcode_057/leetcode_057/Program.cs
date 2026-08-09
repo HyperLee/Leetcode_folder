@@ -5,9 +5,65 @@
         /// <summary>
         /// 57. Insert Interval
         /// https://leetcode.com/problems/insert-interval/description/
-        /// 
-        /// 57. 插入区间
+        /// <para>
+        /// You are given an array of non-overlapping intervals, intervals, where intervals[i] = [start_i, end_i] represents the start and end of the i-th interval, and intervals is sorted in ascending order by start_i. You are also given an interval newInterval = [start, end] that represents the start and end of another interval.
+        ///
+        /// Two intervals are considered overlapping if they share at least one point.
+        ///
+        /// Insert newInterval into intervals so that intervals remains sorted in ascending order by start_i and still contains no overlapping intervals. Merge overlapping intervals if necessary.
+        ///
+        /// Return intervals after the insertion.
+        ///
+        /// Note that you do not need to modify intervals in-place. You may create and return a new array.
+        ///
+        /// Example 1:
+        /// Input: intervals = [[1,3],[6,9]], newInterval = [2,5]
+        /// Output: [[1,5],[6,9]]
+        ///
+        /// Example 2:
+        /// Input: intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
+        /// Output: [[1,2],[3,10],[12,16]]
+        /// Explanation: The new interval [4,8] overlaps with [3,5], [6,7], and [8,10].
+        ///
+        /// Constraints:
+        /// - 0 &lt;= intervals.length &lt;= 10^4
+        /// - intervals[i].length == 2
+        /// - 0 &lt;= start_i &lt;= end_i &lt;= 10^5
+        /// - intervals is sorted by start_i in ascending order.
+        /// - newInterval.length == 2
+        /// - 0 &lt;= start &lt;= end &lt;= 10^5
+        /// </para>
+        /// <para>
+        /// 57. 插入區間
         /// https://leetcode.cn/problems/insert-interval/description/
+        ///
+        /// 給定一個互不重疊的區間陣列 intervals，其中 intervals[i] = [start_i, end_i] 表示第 i 個區間的起點與終點，且 intervals 已依 start_i 遞增排序。另給定一個區間 newInterval = [start, end]，表示另一個區間的起點與終點。
+        ///
+        /// 若兩個區間共享至少一個點，則視為重疊。
+        ///
+        /// 將 newInterval 插入 intervals，使 intervals 仍依 start_i 遞增排序，且仍不包含任何重疊區間；必要時請合併重疊區間。
+        ///
+        /// 回傳插入後的 intervals。
+        ///
+        /// 注意，你不需要原地修改 intervals，可以建立並回傳新的陣列。
+        ///
+        /// 範例 1：
+        /// 輸入：intervals = [[1,3],[6,9]], newInterval = [2,5]
+        /// 輸出：[[1,5],[6,9]]
+        ///
+        /// 範例 2：
+        /// 輸入：intervals = [[1,2],[3,5],[6,7],[8,10],[12,16]], newInterval = [4,8]
+        /// 輸出：[[1,2],[3,10],[12,16]]
+        /// 解釋：新區間 [4,8] 與 [3,5]、[6,7]、[8,10] 重疊。
+        ///
+        /// 限制條件：
+        /// - 0 &lt;= intervals.length &lt;= 10^4
+        /// - intervals[i].length == 2
+        /// - 0 &lt;= start_i &lt;= end_i &lt;= 10^5
+        /// - intervals 依 start_i 遞增排序。
+        /// - newInterval.length == 2
+        /// - 0 &lt;= start &lt;= end &lt;= 10^5
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         /// <summary>

@@ -3,15 +3,76 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1342. Number of Steps to Reduce a Number to Zero
     /// https://leetcode.com/problems/number-of-steps-to-reduce-a-number-to-zero/description/
-    /// 1342. 將數字變成0 的操作次數
+    ///
+    /// Given an integer num, return the number of steps to reduce it to zero.
+    ///
+    /// In one step, if the current number is even, you have to divide it by 2; otherwise, you have to subtract 1 from it.
+    ///
+    /// Example 1:
+    /// Input: num = 14
+    /// Output: 6
+    /// Explanation:
+    /// Step 1) 14 is even; divide by 2 and obtain 7.
+    /// Step 2) 7 is odd; subtract 1 and obtain 6.
+    /// Step 3) 6 is even; divide by 2 and obtain 3.
+    /// Step 4) 3 is odd; subtract 1 and obtain 2.
+    /// Step 5) 2 is even; divide by 2 and obtain 1.
+    /// Step 6) 1 is odd; subtract 1 and obtain 0.
+    ///
+    /// Example 2:
+    /// Input: num = 8
+    /// Output: 4
+    /// Explanation:
+    /// Step 1) 8 is even; divide by 2 and obtain 4.
+    /// Step 2) 4 is even; divide by 2 and obtain 2.
+    /// Step 3) 2 is even; divide by 2 and obtain 1.
+    /// Step 4) 1 is odd; subtract 1 and obtain 0.
+    ///
+    /// Example 3:
+    /// Input: num = 123
+    /// Output: 12
+    ///
+    /// Constraints:
+    /// - 0 &lt;= num &lt;= 10^6
+    /// </para>
+    /// <para>
+    /// 1342. 將數字減少到零的步數
     /// https://leetcode.cn/problems/number-of-steps-to-reduce-a-number-to-zero/description/
-    /// 
-    /// 題目描述（繁體中文）:
-    /// 給定一個整數 num，回傳將其變為 0 所需的步數。
-    /// 每一步：若目前數字為偶數，則除以 2；否則，減 1。
-    /// 
+    ///
+    /// 給定一個整數 num，回傳將它減少到零所需的步數。
+    ///
+    /// 每一步中，如果目前數字是偶數，必須將它除以 2；否則，必須將它減去 1。
+    ///
+    /// 範例 1：
+    /// 輸入：num = 14
+    /// 輸出：6
+    /// 解釋：
+    /// 步驟 1）14 是偶數；除以 2 後得到 7。
+    /// 步驟 2）7 是奇數；減去 1 後得到 6。
+    /// 步驟 3）6 是偶數；除以 2 後得到 3。
+    /// 步驟 4）3 是奇數；減去 1 後得到 2。
+    /// 步驟 5）2 是偶數；除以 2 後得到 1。
+    /// 步驟 6）1 是奇數；減去 1 後得到 0。
+    ///
+    /// 範例 2：
+    /// 輸入：num = 8
+    /// 輸出：4
+    /// 解釋：
+    /// 步驟 1）8 是偶數；除以 2 後得到 4。
+    /// 步驟 2）4 是偶數；除以 2 後得到 2。
+    /// 步驟 3）2 是偶數；除以 2 後得到 1。
+    /// 步驟 4）1 是奇數；減去 1 後得到 0。
+    ///
+    /// 範例 3：
+    /// 輸入：num = 123
+    /// 輸出：12
+    ///
+    /// 限制條件：
+    /// - 0 &lt;= num &lt;= 10^6
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// 

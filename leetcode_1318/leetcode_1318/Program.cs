@@ -15,7 +15,60 @@
 class Program
 {
     /// <summary>
-    /// 執行題目範例與自訂測資，快速驗證兩種解法的結果。
+    /// <para>
+    /// 1318. Minimum Flips to Make a OR b Equal to c
+    /// https://leetcode.com/problems/minimum-flips-to-make-a-or-b-equal-to-c/description/
+    ///
+    /// Given 3 positive numbers a, b and c. Return the minimum flips required in some bits of a and b to make
+    /// (a OR b == c) (bitwise OR operation).
+    /// A flip operation consists of changing any single bit 1 to 0 or changing the bit 0 to 1 in their binary representation.
+    ///
+    /// Example 1:
+    /// Official illustration: https://assets.leetcode.com/uploads/2020/01/06/sample_3_1676.png
+    /// Input: a = 2, b = 6, c = 5
+    /// Output: 3
+    /// Explanation: After flips a = 1, b = 4, c = 5 such that (a OR b == c).
+    ///
+    /// Example 2:
+    /// Input: a = 4, b = 2, c = 7
+    /// Output: 1
+    ///
+    /// Example 3:
+    /// Input: a = 1, b = 2, c = 3
+    /// Output: 0
+    ///
+    /// Constraints:
+    /// - 1 &lt;= a &lt;= 10^9
+    /// - 1 &lt;= b &lt;= 10^9
+    /// - 1 &lt;= c &lt;= 10^9
+    /// </para>
+    /// <para>
+    /// 1318. 使 a OR b 等於 c 的最少翻轉次數
+    /// https://leetcode.cn/problems/minimum-flips-to-make-a-or-b-equal-to-c/description/
+    ///
+    /// 給定 3 個正整數 a、b 與 c。回傳需要翻轉 a 和 b 中某些位元的最少次數，使得
+    /// (a OR b == c)（位元 OR 運算）。
+    /// 一次翻轉操作是將二進位表示中的任意一個位元從 1 改成 0，或從 0 改成 1。
+    ///
+    /// 範例 1：
+    /// 官方示意圖：https://assets.leetcode.com/uploads/2020/01/06/sample_3_1676.png
+    /// 輸入：a = 2, b = 6, c = 5
+    /// 輸出：3
+    /// 解釋：翻轉後 a = 1、b = 4、c = 5，使得 (a OR b == c)。
+    ///
+    /// 範例 2：
+    /// 輸入：a = 4, b = 2, c = 7
+    /// 輸出：1
+    ///
+    /// 範例 3：
+    /// 輸入：a = 1, b = 2, c = 3
+    /// 輸出：0
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= a &lt;= 10^9
+    /// - 1 &lt;= b &lt;= 10^9
+    /// - 1 &lt;= c &lt;= 10^9
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數。</param>
     static void Main(string[] args)

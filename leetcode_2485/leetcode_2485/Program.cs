@@ -3,10 +3,54 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 2485. Find the Pivot Integer
-        /// https://leetcode.com/problems/find-the-pivot-integer/description/?envType=daily-question&envId=2024-03-13
-        /// 2485. 找出中枢整数
+        /// https://leetcode.com/problems/find-the-pivot-integer/description/
+        ///
+        /// Given positive integer n, find pivot integer x such that the inclusive sum from 1 through x equals the inclusive sum from x through n. Return x, or -1 if it does not exist. The input is guaranteed to have at most one pivot integer.
+        ///
+        /// Example 1:
+        /// Input: n = 8
+        /// Output: 6
+        /// Explanation: 6 is the pivot because 1 + 2 + 3 + 4 + 5 + 6 = 6 + 7 + 8 = 21.
+        ///
+        /// Example 2:
+        /// Input: n = 1
+        /// Output: 1
+        /// Explanation: 1 is the pivot because 1 = 1.
+        ///
+        /// Example 3:
+        /// Input: n = 4
+        /// Output: -1
+        /// Explanation: No pivot integer exists.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= n &lt;= 1000
+        /// </para>
+        /// <para>
+        /// 2485. 找出樞紐整數
         /// https://leetcode.cn/problems/find-the-pivot-integer/description/
+        ///
+        /// 給定正整數 n，找出樞紐整數 x，使 1 到 x 的含端點總和等於 x 到 n 的含端點總和。若存在則回傳 x，否則回傳 -1。題目保證輸入至多有一個樞紐整數。
+        ///
+        /// 範例 1：
+        /// 輸入：n = 8
+        /// 輸出：6
+        /// 說明：6 是樞紐整數，因為 1 + 2 + 3 + 4 + 5 + 6 = 6 + 7 + 8 = 21。
+        ///
+        /// 範例 2：
+        /// 輸入：n = 1
+        /// 輸出：1
+        /// 說明：1 是樞紐整數，因為 1 = 1。
+        ///
+        /// 範例 3：
+        /// 輸入：n = 4
+        /// 輸出：-1
+        /// 說明：不存在樞紐整數。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= n &lt;= 1000
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 入口會執行固定案例，逐一比較三種解法，並在任一案例失敗時回傳非零結束碼。

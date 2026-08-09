@@ -28,14 +28,52 @@ class Program
     }
 
     /// <summary>
-    /// LeetCode 230. Kth Smallest Element in a BST
-    /// 題目描述：
-    /// 給定一個二元搜尋樹（BST）的根節點 root 和一個整數 k，請你設計一個演算法，找出 BST 中第 k 小的元素。
-    /// k 從 1 開始計算。
-    /// 你必須在 O(h) 的時間複雜度內完成，h 是樹的高度。
-    /// 題目連結：
+    /// <para>
+    /// 230. Kth Smallest Element in a BST
     /// https://leetcode.com/problems/kth-smallest-element-in-a-bst/description/
+    ///
+    /// Given the root of a binary search tree and integer k, return the kth smallest value among all node values, using 1-based indexing.
+    ///
+    /// Images: https://assets.leetcode.com/uploads/2021/01/28/kthtree1.jpg and https://assets.leetcode.com/uploads/2021/01/28/kthtree2.jpg
+    ///
+    /// Example 1:
+    /// Input: root = [3,1,4,null,2], k = 1
+    /// Output: 1
+    ///
+    /// Example 2:
+    /// Input: root = [5,3,6,2,4,null,null,1], k = 3
+    /// Output: 3
+    ///
+    /// Constraints:
+    /// - The number of nodes in the tree is n.
+    /// - 1 &lt;= k &lt;= n &lt;= 10^4
+    /// - 0 &lt;= Node.val &lt;= 10^4
+    ///
+    /// Follow-up: If the BST is modified often through insertions and deletions and kth-smallest queries are frequent, how would you optimize it?
+    /// </para>
+    /// <para>
+    /// 230. 二元搜尋樹中第 K 小的元素
     /// https://leetcode.cn/problems/kth-smallest-element-in-a-bst/description/
+    ///
+    /// 給定二元搜尋樹的根節點與整數 k，以 1 為起始索引，回傳所有節點值中第 k 小的值。
+    ///
+    /// 圖片：https://assets.leetcode.com/uploads/2021/01/28/kthtree1.jpg 與 https://assets.leetcode.com/uploads/2021/01/28/kthtree2.jpg
+    ///
+    /// 範例 1：
+    /// 輸入：root = [3,1,4,null,2], k = 1
+    /// 輸出：1
+    ///
+    /// 範例 2：
+    /// 輸入：root = [5,3,6,2,4,null,null,1], k = 3
+    /// 輸出：3
+    ///
+    /// 限制條件：
+    /// - 樹中的節點數為 n。
+    /// - 1 &lt;= k &lt;= n &lt;= 10^4
+    /// - 0 &lt;= Node.val &lt;= 10^4
+    ///
+    /// 延伸問題：若 BST 經常進行插入與刪除，並且需要頻繁查詢第 k 小的元素，應如何最佳化？
+    /// </para>
     /// </summary>
     static void Main(string[] args)
     {

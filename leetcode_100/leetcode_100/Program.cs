@@ -31,31 +31,53 @@ class Program
 
 
     /// <summary>
+    /// <para>
     /// 100. Same Tree
     /// https://leetcode.com/problems/same-tree/description/
-    /// 
-    /// 100. 相同的树
+    ///
+    /// Given the roots of two binary trees p and q, write a function to check if they are the same or not.
+    /// Two binary trees are considered the same if they are structurally identical, and the nodes have the
+    /// same value.
+    ///
+    /// Example 1:
+    /// Input: p = [1,2,3], q = [1,2,3]
+    /// Output: true
+    ///
+    /// Example 2:
+    /// Input: p = [1,2], q = [1,null,2]
+    /// Output: false
+    ///
+    /// Example 3:
+    /// Input: p = [1,2,1], q = [1,1,2]
+    /// Output: false
+    ///
+    /// Constraints:
+    /// The number of nodes in both trees is in the range [0, 100].
+    /// -10^4 &lt;= Node.val &lt;= 10^4
+    /// </para>
+    /// <para>
+    /// 100. 相同的樹
     /// https://leetcode.cn/problems/same-tree/description/
-    /// 
-    /// 題目描述：
-    /// 給定兩個二元樹的根節點 p 和 q，編寫一個函數來檢查它們是否相同。
-    /// 如果兩個樹在結構上相同，並且節點具有相同的值，則認為它們是相同的。
-    /// 
+    ///
+    /// 給定兩棵二元樹的根節點 p 與 q，請撰寫一個函式檢查它們是否相同。
+    /// 如果兩棵二元樹的結構完全相同，且所有對應節點的值也相同，則視為相同的樹。
+    ///
     /// 範例 1：
     /// 輸入：p = [1,2,3], q = [1,2,3]
     /// 輸出：true
-    /// 
+    ///
     /// 範例 2：
     /// 輸入：p = [1,2], q = [1,null,2]
     /// 輸出：false
-    /// 
+    ///
     /// 範例 3：
     /// 輸入：p = [1,2,1], q = [1,1,2]
     /// 輸出：false
-    /// 
+    ///
     /// 限制條件：
-    /// - 樹中節點數目在範圍 [0, 100] 內
-    /// - -10^4 <= Node.val <= 10^4
+    /// 兩棵樹中的節點數量都介於 [0, 100]。
+    /// -10^4 &lt;= Node.val &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <remarks>
     /// 以五組固定案例執行目前的遞迴解法，逐一輸出 PASS/FAIL，最後彙整整體結果。

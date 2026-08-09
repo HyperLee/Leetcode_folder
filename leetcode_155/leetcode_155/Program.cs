@@ -3,23 +3,72 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 155. Min Stack
         /// https://leetcode.com/problems/min-stack/description/
-        /// 155. 最小栈
+        ///
+        /// Design a stack that supports push, pop, top, and retrieving the minimum element in constant time.
+        /// Implement the MinStack class:
+        /// - MinStack() initializes the stack object.
+        /// - void push(int value) pushes value onto the stack.
+        /// - void pop() removes the element on the top of the stack.
+        /// - int top() gets the top element of the stack.
+        /// - int getMin() retrieves the minimum element in the stack.
+        /// You must implement each function with O(1) time complexity.
+        ///
+        /// Example 1:
+        /// Input:
+        /// ["MinStack","push","push","push","getMin","pop","top","getMin"]
+        /// [[],[-2],[0],[-3],[],[],[],[]]
+        /// Output: [null,null,null,null,-3,null,0,-2]
+        /// Explanation:
+        /// MinStack minStack = new MinStack();
+        /// minStack.push(-2);
+        /// minStack.push(0);
+        /// minStack.push(-3);
+        /// minStack.getMin(); // return -3
+        /// minStack.pop();
+        /// minStack.top(); // return 0
+        /// minStack.getMin(); // return -2
+        ///
+        /// Constraints:
+        /// - -2^31 &lt;= val &lt;= 2^31 - 1
+        /// - pop, top and getMin are always called on non-empty stacks.
+        /// - At most 3 * 10^4 calls are made to push, pop, top and getMin.
+        /// </para>
+        /// <para>
+        /// 155. 最小堆疊
         /// https://leetcode.cn/problems/min-stack/description/
-        /// 
-        /// 在 C# 中，Stack<T> 是一種 後進先出（LIFO, Last-In-First-Out） 的資料結構，類似於現實中的疊盤子，最後放上去的物品會最先被取出。
-        /// 
-        /// Leetcode 155. Min Stack 最小堆疊
-        /// 設計一個支援 push、pop、top 及在常數時間內取得最小元素的堆疊。
-        /// 
+        ///
+        /// 設計一個支援 push、pop、top，以及在常數時間內取得最小元素的堆疊。
         /// 實作 MinStack 類別：
-        /// MinStack() 建立堆疊物件。
-        /// void Push(int val) 將元素 val 推入堆疊。
-        /// void Pop() 移除堆疊頂端元素。
-        /// int Top() 取得堆疊頂端元素。
-        /// int GetMin() 取得堆疊中的最小元素。
-        /// 所有操作必須為 O(1) 時間複雜度。
+        /// - MinStack() 初始化堆疊物件。
+        /// - void push(int value) 將 value 推入堆疊。
+        /// - void pop() 移除堆疊頂端的元素。
+        /// - int top() 取得堆疊頂端元素。
+        /// - int getMin() 取得堆疊中的最小元素。
+        /// 每個函式都必須以 O(1) 時間複雜度實作。
+        ///
+        /// 範例 1：
+        /// 輸入：
+        /// ["MinStack","push","push","push","getMin","pop","top","getMin"]
+        /// [[],[-2],[0],[-3],[],[],[],[]]
+        /// 輸出：[null,null,null,null,-3,null,0,-2]
+        /// 解釋：
+        /// MinStack minStack = new MinStack();
+        /// minStack.push(-2);
+        /// minStack.push(0);
+        /// minStack.push(-3);
+        /// minStack.getMin(); // 回傳 -3
+        /// minStack.pop();
+        /// minStack.top(); // 回傳 0
+        /// minStack.getMin(); // 回傳 -2
+        ///
+        /// 限制條件：
+        /// - -2^31 &lt;= val &lt;= 2^31 - 1
+        /// - pop、top 與 getMin 一律在非空堆疊上呼叫。
+        /// - push、pop、top 與 getMin 的呼叫次數合計最多為 3 * 10^4。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

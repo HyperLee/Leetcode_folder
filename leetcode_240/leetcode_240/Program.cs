@@ -3,24 +3,56 @@
 class Program
 {
     /// <summary>
-    /// LeetCode 240. 搜索二維矩陣 II
-    /// 題目描述：
-    /// 給定一個 m x n 的整數矩陣 matrix，該矩陣每一行從左到右遞增、每一列從上到下遞增。
-    /// 請判斷給定的目標值 target 是否存在於矩陣中。
-    /// 
-    /// 範例：
-    /// matrix = [
-    ///   [1, 4, 7, 11, 15],
-    ///   [2, 5, 8, 12, 19],
-    ///   [3, 6, 9, 16, 22],
-    ///   [10, 13, 14, 17, 24],
-    ///   [18, 21, 23, 26, 30]
-    /// ]
-    /// target = 5 回傳 true
-    /// target = 20 回傳 false
-    /// 
+    /// <para>
+    /// 240. Search a 2D Matrix II
     /// https://leetcode.com/problems/search-a-2d-matrix-ii/description/
+    ///
+    /// Write an efficient algorithm to search for target in an m x n integer matrix. Integers in every row are sorted in ascending order from left to right, and integers in every column are sorted in ascending order from top to bottom. Return whether target occurs in matrix.
+    ///
+    /// Images: https://assets.leetcode.com/uploads/2020/11/24/searchgrid2.jpg and https://assets.leetcode.com/uploads/2020/11/24/searchgrid.jpg
+    ///
+    /// Example 1:
+    /// Input: matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 5
+    /// Output: true
+    ///
+    /// Example 2:
+    /// Input: matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 20
+    /// Output: false
+    ///
+    /// Constraints:
+    /// - m == matrix.length
+    /// - n == matrix[i].length
+    /// - 1 &lt;= n, m &lt;= 300
+    /// - -10^9 &lt;= matrix[i][j] &lt;= 10^9
+    /// - Every row's integers are sorted in ascending order.
+    /// - Every column's integers are sorted in ascending order.
+    /// - -10^9 &lt;= target &lt;= 10^9
+    /// </para>
+    /// <para>
+    /// 240. 搜尋二維矩陣 II
     /// https://leetcode.cn/problems/search-a-2d-matrix-ii/description/
+    ///
+    /// 撰寫高效率演算法，在 m x n 整數矩陣中搜尋 target。每一列的整數由左至右遞增排列，每一欄的整數由上至下遞增排列。回傳 matrix 中是否存在 target。
+    ///
+    /// 圖片：https://assets.leetcode.com/uploads/2020/11/24/searchgrid2.jpg 與 https://assets.leetcode.com/uploads/2020/11/24/searchgrid.jpg
+    ///
+    /// 範例 1：
+    /// 輸入：matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 5
+    /// 輸出：true
+    ///
+    /// 範例 2：
+    /// 輸入：matrix = [[1,4,7,11,15],[2,5,8,12,19],[3,6,9,16,22],[10,13,14,17,24],[18,21,23,26,30]], target = 20
+    /// 輸出：false
+    ///
+    /// 限制條件：
+    /// - m == matrix.length
+    /// - n == matrix[i].length
+    /// - 1 &lt;= n, m &lt;= 300
+    /// - -10^9 &lt;= matrix[i][j] &lt;= 10^9
+    /// - 每一列的整數皆按遞增順序排列。
+    /// - 每一欄的整數皆按遞增順序排列。
+    /// - -10^9 &lt;= target &lt;= 10^9
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

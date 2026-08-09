@@ -5,10 +5,78 @@ namespace leetcode_1701
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1701. Average Waiting Time
-        /// https://leetcode.com/problems/average-waiting-time/?envType=daily-question&envId=2024-07-09
-        /// 1701. 平均等待时间
+        /// https://leetcode.com/problems/average-waiting-time/description/
+        ///
+        /// There is a restaurant with a single chef. You are given an array customers, where customers[i] = [arrival_i, time_i]:
+        /// - arrival_i is the arrival time of the i-th customer. The arrival times are sorted in non-decreasing order.
+        /// - time_i is the time needed to prepare the order of the i-th customer.
+        ///
+        /// When a customer arrives, they give the chef their order, and the chef starts preparing it once idle. The customer waits until the chef finishes the order. The chef prepares only one order at a time and serves customers in input order.
+        ///
+        /// Return the average waiting time of all customers. Answers within 10^-5 of the actual answer are accepted.
+        ///
+        /// Example 1:
+        /// Input: customers = [[1,2],[2,5],[4,3]]
+        /// Output: 5.00000
+        /// Explanation:
+        /// 1) The first customer arrives at time 1. The chef starts immediately at time 1 and finishes at time 3, so the waiting time is 3 - 1 = 2.
+        /// 2) The second customer arrives at time 2. The chef starts at time 3 and finishes at time 8, so the waiting time is 8 - 2 = 6.
+        /// 3) The third customer arrives at time 4. The chef starts at time 8 and finishes at time 11, so the waiting time is 11 - 4 = 7.
+        /// The average waiting time is (2 + 6 + 7) / 3 = 5.
+        ///
+        /// Example 2:
+        /// Input: customers = [[5,2],[5,4],[10,3],[20,1]]
+        /// Output: 3.25000
+        /// Explanation:
+        /// 1) The first customer arrives at time 5. The chef starts immediately at time 5 and finishes at time 7, so the waiting time is 7 - 5 = 2.
+        /// 2) The second customer arrives at time 5. The chef starts at time 7 and finishes at time 11, so the waiting time is 11 - 5 = 6.
+        /// 3) The third customer arrives at time 10. The chef starts at time 11 and finishes at time 14, so the waiting time is 14 - 10 = 4.
+        /// 4) The fourth customer arrives at time 20. The chef starts immediately at time 20 and finishes at time 21, so the waiting time is 21 - 20 = 1.
+        /// The average waiting time is (2 + 6 + 4 + 1) / 4 = 3.25.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= customers.length &lt;= 10^5
+        /// - 1 &lt;= arrival_i, time_i &lt;= 10^4
+        /// - arrival_i &lt;= arrival_(i+1)
+        /// </para>
+        /// <para>
+        /// 1701. 平均等待時間
         /// https://leetcode.cn/problems/average-waiting-time/description/
+        ///
+        /// 有一家餐廳只有一位廚師。給定陣列 customers，其中 customers[i] = [arrival_i, time_i]：
+        /// - arrival_i 是第 i 位顧客的抵達時間，且抵達時間依非遞減順序排列。
+        /// - time_i 是準備第 i 位顧客餐點所需的時間。
+        ///
+        /// 顧客抵達時會向廚師點餐；廚師空閒後便開始準備，顧客會等待到餐點完成。廚師一次只能準備一份餐點，並依輸入順序服務顧客。
+        ///
+        /// 回傳所有顧客的平均等待時間。與正確答案相差不超過 10^-5 的答案都會被接受。
+        ///
+        /// 範例 1：
+        /// 輸入：customers = [[1,2],[2,5],[4,3]]
+        /// 輸出：5.00000
+        /// 說明：
+        /// 1) 第一位顧客在時間 1 抵達。廚師於時間 1 立即開始並在時間 3 完成，因此等待時間為 3 - 1 = 2。
+        /// 2) 第二位顧客在時間 2 抵達。廚師於時間 3 開始並在時間 8 完成，因此等待時間為 8 - 2 = 6。
+        /// 3) 第三位顧客在時間 4 抵達。廚師於時間 8 開始並在時間 11 完成，因此等待時間為 11 - 4 = 7。
+        /// 平均等待時間為 (2 + 6 + 7) / 3 = 5。
+        ///
+        /// 範例 2：
+        /// 輸入：customers = [[5,2],[5,4],[10,3],[20,1]]
+        /// 輸出：3.25000
+        /// 說明：
+        /// 1) 第一位顧客在時間 5 抵達。廚師於時間 5 立即開始並在時間 7 完成，因此等待時間為 7 - 5 = 2。
+        /// 2) 第二位顧客在時間 5 抵達。廚師於時間 7 開始並在時間 11 完成，因此等待時間為 11 - 5 = 6。
+        /// 3) 第三位顧客在時間 10 抵達。廚師於時間 11 開始並在時間 14 完成，因此等待時間為 14 - 10 = 4。
+        /// 4) 第四位顧客在時間 20 抵達。廚師於時間 20 立即開始並在時間 21 完成，因此等待時間為 21 - 20 = 1。
+        /// 平均等待時間為 (2 + 6 + 4 + 1) / 4 = 3.25。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= customers.length &lt;= 10^5
+        /// - 1 &lt;= arrival_i, time_i &lt;= 10^4
+        /// - arrival_i &lt;= arrival_(i+1)
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 主要進入點會執行六組固定案例，比較完成時間、等待積壓與前綴公式三種線性解法，

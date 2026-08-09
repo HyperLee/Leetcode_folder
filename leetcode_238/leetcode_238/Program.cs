@@ -3,22 +3,48 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 238. Product of Array Except Self
         /// https://leetcode.com/problems/product-of-array-except-self/description/
-        /// 
-        /// 238. 除自身以外数组的乘积
+        ///
+        /// Given integer array nums, return array answer where answer[i] is the product of every element of nums except nums[i]. Every prefix and suffix product is guaranteed to fit in a 32-bit integer. The algorithm must run in O(n) time without division.
+        ///
+        /// Example 1:
+        /// Input: nums = [1,2,3,4]
+        /// Output: [24,12,8,6]
+        ///
+        /// Example 2:
+        /// Input: nums = [-1,1,0,-3,3]
+        /// Output: [0,0,9,0,0]
+        ///
+        /// Constraints:
+        /// - 2 &lt;= nums.length &lt;= 10^5
+        /// - -30 &lt;= nums[i] &lt;= 30
+        /// - Inputs guarantee that answer[i] fits in a 32-bit integer.
+        ///
+        /// Follow-up: Can you solve it with O(1) extra space? The output array does not count as extra space in this analysis.
+        /// </para>
+        /// <para>
+        /// 238. 除自身以外陣列的乘積
         /// https://leetcode.cn/problems/product-of-array-except-self/description/
-        /// 
-        /// 繁體中文題目說明:
-        /// 給定一個整數陣列 nums，請回傳一個陣列 answer，其中 answer[i] 等於 nums 中除 nums[i] 之外所有元素的乘積。
-        /// 要求算法在 O(n) 時間複雜度內完成，且不得使用除法運算。此題保證任一前綴或後綴的乘積可放入 32-bit 整數中。
-        /// 
-        /// 解題方式 很特殊
-        /// 左右分別計算乘積
-        /// 要注意的是，這個解法不使用除法，並且時間複雜度為 O(n)。
-        /// 
-        /// 如果可以使用除法，就可以把全部數字相乘，然後除以 index i 的數字，就可以得到 index i 的乘積
-        /// 但是如果某個 index 數值為 0 就會導致錯誤。
+        ///
+        /// 給定整數陣列 nums，回傳陣列 answer，其中 answer[i] 是 nums 中除了 nums[i] 以外所有元素的乘積。題目保證每個前綴與後綴乘積都能放入 32 位元整數。演算法必須在 O(n) 時間內完成，且不得使用除法。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [1,2,3,4]
+        /// 輸出：[24,12,8,6]
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [-1,1,0,-3,3]
+        /// 輸出：[0,0,9,0,0]
+        ///
+        /// 限制條件：
+        /// - 2 &lt;= nums.length &lt;= 10^5
+        /// - -30 &lt;= nums[i] &lt;= 30
+        /// - 輸入保證 answer[i] 能放入 32 位元整數。
+        ///
+        /// 延伸問題：可以只使用 O(1) 額外空間嗎？此空間分析不把輸出陣列計入額外空間。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

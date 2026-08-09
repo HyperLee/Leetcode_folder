@@ -3,14 +3,78 @@
 class Program
 {
     /// <summary>
-    /// 題目描述：
-    /// 給定兩個整數陣列 nums1 和 nums2，請設計一個資料結構，支援以下兩種查詢：
-    /// 1. 對 nums2 的指定索引加上一個正整數。
-    /// 2. 計算有多少對 (i, j) 使得 nums1[i] + nums2[j] 等於指定值。
-    /// 
-    /// FindSumPairs(int[] nums1, int[] nums2)：初始化物件。
-    /// void Add(int index, int val)：將 val 加到 nums2[index]。
-    /// int Count(int tot)：回傳滿足 nums1[i] + nums2[j] == tot 的組合數。
+    /// <para>
+    /// 1865. Finding Pairs With a Certain Sum
+    /// https://leetcode.com/problems/finding-pairs-with-a-certain-sum/description/
+    ///
+    /// You are given integer arrays nums1 and nums2. Implement a data structure supporting two query types:
+    /// - Add a positive integer to nums2 at a specified index.
+    /// - Count pairs (i, j) such that nums1[i] + nums2[j] equals a specified value, where 0 &lt;= i &lt; nums1.length and 0 &lt;= j &lt; nums2.length.
+    ///
+    /// Implement FindSumPairs:
+    /// - FindSumPairs(int[] nums1, int[] nums2) initializes the object.
+    /// - void add(int index, int val) applies nums2[index] += val.
+    /// - int count(int tot) returns the number of pairs whose sum equals tot.
+    ///
+    /// Example 1:
+    /// Input:
+    /// ["FindSumPairs","count","add","count","count","add","add","count"]
+    /// [[[1,1,2,2,2,3],[1,4,5,2,5,4]],[7],[3,2],[8],[4],[0,1],[1,1],[7]]
+    /// Output: [null,8,null,2,1,null,null,11]
+    /// Explanation:
+    /// Initialize with nums1 = [1,1,2,2,2,3] and nums2 = [1,4,5,2,5,4].
+    /// count(7) returns 8: six pairs make 2 + 5 and two pairs make 3 + 4.
+    /// add(3,2) changes nums2 to [1,4,5,4,5,4].
+    /// count(8) returns 2; count(4) returns 1.
+    /// add(0,1) and add(1,1) change nums2 to [2,5,5,4,5,4].
+    /// count(7) returns 11: nine pairs make 2 + 5 and two pairs make 3 + 4.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums1.length &lt;= 1000
+    /// - 1 &lt;= nums2.length &lt;= 10^5
+    /// - 1 &lt;= nums1[i] &lt;= 10^9
+    /// - 1 &lt;= nums2[i] &lt;= 10^5
+    /// - 0 &lt;= index &lt; nums2.length
+    /// - 1 &lt;= val &lt;= 10^5
+    /// - 1 &lt;= tot &lt;= 10^9
+    /// - At most 1000 calls are made to add and count each.
+    /// </para>
+    /// <para>
+    /// 1865. 尋找和為指定值的下標對
+    /// https://leetcode.cn/problems/finding-pairs-with-a-certain-sum/description/
+    ///
+    /// 給定整數陣列 nums1 和 nums2。請實作支援兩種查詢的資料結構：
+    /// - 對 nums2 指定索引的元素加上一個正整數。
+    /// - 計算滿足 nums1[i] + nums2[j] 等於指定值的 (i, j) 數量，其中 0 &lt;= i &lt; nums1.length 且 0 &lt;= j &lt; nums2.length。
+    ///
+    /// 實作 FindSumPairs：
+    /// - FindSumPairs(int[] nums1, int[] nums2) 初始化物件。
+    /// - void add(int index, int val) 執行 nums2[index] += val。
+    /// - int count(int tot) 回傳總和等於 tot 的配對數量。
+    ///
+    /// 範例 1：
+    /// 輸入：
+    /// ["FindSumPairs","count","add","count","count","add","add","count"]
+    /// [[[1,1,2,2,2,3],[1,4,5,2,5,4]],[7],[3,2],[8],[4],[0,1],[1,1],[7]]
+    /// 輸出：[null,8,null,2,1,null,null,11]
+    /// 說明：
+    /// 以 nums1 = [1,1,2,2,2,3] 與 nums2 = [1,4,5,2,5,4] 初始化。
+    /// count(7) 回傳 8：六組配對得到 2 + 5，兩組配對得到 3 + 4。
+    /// add(3,2) 將 nums2 改為 [1,4,5,4,5,4]。
+    /// count(8) 回傳 2；count(4) 回傳 1。
+    /// add(0,1) 與 add(1,1) 將 nums2 改為 [2,5,5,4,5,4]。
+    /// count(7) 回傳 11：九組配對得到 2 + 5，兩組配對得到 3 + 4。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums1.length &lt;= 1000
+    /// - 1 &lt;= nums2.length &lt;= 10^5
+    /// - 1 &lt;= nums1[i] &lt;= 10^9
+    /// - 1 &lt;= nums2[i] &lt;= 10^5
+    /// - 0 &lt;= index &lt; nums2.length
+    /// - 1 &lt;= val &lt;= 10^5
+    /// - 1 &lt;= tot &lt;= 10^9
+    /// - add 與 count 各最多呼叫 1000 次。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

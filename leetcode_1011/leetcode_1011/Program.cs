@@ -3,18 +3,92 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1011. Capacity To Ship Packages Within D Days
     /// https://leetcode.com/problems/capacity-to-ship-packages-within-d-days/description/
     ///
-    /// Problem:
     /// A conveyor belt has packages that must be shipped from one port to another within days days.
-    /// The ith package on the conveyor belt has a weight of weights[i]. Each day, we load the ship with packages on the conveyor belt (in the order given by weights). We may not load more weight than the maximum weight capacity of the ship.
-    /// Return the least weight capacity of the ship that will result in all the packages on the conveyor belt being shipped within days days.
+    /// The i-th package on the conveyor belt has a weight of weights[i]. Each day, we load the ship with
+    /// packages on the conveyor belt (in the order given by weights). We may not load more weight than the
+    /// maximum weight capacity of the ship.
+    /// Return the least weight capacity of the ship that will result in all the packages on the conveyor belt
+    /// being shipped within days days.
     ///
-    /// 繁體中文翻譯：
+    /// Example 1:
+    /// Input: weights = [1,2,3,4,5,6,7,8,9,10], days = 5
+    /// Output: 15
+    /// Explanation: A ship capacity of 15 is the minimum to ship all the packages in 5 days like this:
+    /// 1st day: 1, 2, 3, 4, 5
+    /// 2nd day: 6, 7
+    /// 3rd day: 8
+    /// 4th day: 9
+    /// 5th day: 10
+    /// Note that the cargo must be shipped in the order given, so using a ship of capacity 14 and splitting
+    /// the packages into parts like (2, 3, 4, 5), (1, 6, 7), (8), (9), (10) is not allowed.
+    ///
+    /// Example 2:
+    /// Input: weights = [3,2,2,4,1,4], days = 3
+    /// Output: 6
+    /// Explanation: A ship capacity of 6 is the minimum to ship all the packages in 3 days like this:
+    /// 1st day: 3, 2
+    /// 2nd day: 2, 4
+    /// 3rd day: 1, 4
+    ///
+    /// Example 3:
+    /// Input: weights = [1,2,3,1,1], days = 4
+    /// Output: 3
+    /// Explanation:
+    /// 1st day: 1
+    /// 2nd day: 2
+    /// 3rd day: 3
+    /// 4th day: 1, 1
+    ///
+    /// Constraints:
+    /// 1 &lt;= days &lt;= weights.length &lt;= 5 * 10^4
+    /// 1 &lt;= weights[i] &lt;= 500
+    /// </para>
+    /// <para>
+    /// 1011. 在 D 天內送達包裹的能力
+    /// https://leetcode.cn/problems/capacity-to-ship-packages-within-d-days/description/
+    ///
     /// 一條輸送帶上有數個包裹，必須在 days 天內從一個港口運送到另一個港口。
-    /// 輸送帶上第 i 個包裹的重量為 `weights[i]`。每天按 `weights` 的順序裝船，但當日裝載總重量不得超過船的最大載重。
-    /// 請回傳能使所有包裹在 days 天內運完的最小船載重能力。
+    /// 輸送帶上第 i 個包裹的重量為 weights[i]。每天，我們依照 weights 給定的順序將輸送帶上的
+    /// 包裹裝船，裝載重量不得超過船的最大載重能力。
+    /// 請回傳能讓輸送帶上的所有包裹在 days 天內運送完畢的最小船舶載重能力。
+    ///
+    /// 範例 1：
+    /// 輸入：weights = [1,2,3,4,5,6,7,8,9,10], days = 5
+    /// 輸出：15
+    /// 解釋：載重能力 15 是在 5 天內運完所有包裹的最小值，安排如下：
+    /// 第 1 天：1, 2, 3, 4, 5
+    /// 第 2 天：6, 7
+    /// 第 3 天：8
+    /// 第 4 天：9
+    /// 第 5 天：10
+    /// 請注意，貨物必須依照給定順序運送，因此不能使用載重能力 14 的船，並將包裹拆分為
+    /// (2, 3, 4, 5)、(1, 6, 7)、(8)、(9)、(10) 這樣的各批次。
+    ///
+    /// 範例 2：
+    /// 輸入：weights = [3,2,2,4,1,4], days = 3
+    /// 輸出：6
+    /// 解釋：載重能力 6 是在 3 天內運完所有包裹的最小值，安排如下：
+    /// 第 1 天：3, 2
+    /// 第 2 天：2, 4
+    /// 第 3 天：1, 4
+    ///
+    /// 範例 3：
+    /// 輸入：weights = [1,2,3,1,1], days = 4
+    /// 輸出：3
+    /// 解釋：
+    /// 第 1 天：1
+    /// 第 2 天：2
+    /// 第 3 天：3
+    /// 第 4 天：1, 1
+    ///
+    /// 限制條件：
+    /// 1 &lt;= days &lt;= weights.length &lt;= 5 * 10^4
+    /// 1 &lt;= weights[i] &lt;= 500
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

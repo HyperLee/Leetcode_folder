@@ -10,6 +10,58 @@ namespace leetcode_2348;
 /// </summary>
 class Program
 {
+    /// <summary>
+    /// <para>
+    /// 2348. Number of Zero-Filled Subarrays
+    /// https://leetcode.com/problems/number-of-zero-filled-subarrays/description/
+    ///
+    /// Given integer array nums, return the number of non-empty contiguous subarrays filled with 0.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,3,0,0,2,0,0,4]
+    /// Output: 6
+    /// Explanation: There are 4 occurrences of [0] and 2 occurrences of [0,0]. No zero-filled subarray is longer than 2, so return 6.
+    ///
+    /// Example 2:
+    /// Input: nums = [0,0,0,2,0,0]
+    /// Output: 9
+    /// Explanation: There are 5 occurrences of [0], 3 occurrences of [0,0], and 1 occurrence of [0,0,0]. No zero-filled subarray is longer than 3, so return 9.
+    ///
+    /// Example 3:
+    /// Input: nums = [2,10,2019]
+    /// Output: 0
+    /// Explanation: There is no zero-filled subarray, so return 0.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - -10^9 &lt;= nums[i] &lt;= 10^9
+    /// </para>
+    /// <para>
+    /// 2348. 全 0 子陣列的數目
+    /// https://leetcode.cn/problems/number-of-zero-filled-subarrays/description/
+    ///
+    /// 給定整數陣列 nums，回傳所有由 0 填滿且非空的連續子陣列數量。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,3,0,0,2,0,0,4]
+    /// 輸出：6
+    /// 說明：[0] 出現 4 次，[0,0] 出現 2 次；沒有長度超過 2 的零值子陣列，因此回傳 6。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [0,0,0,2,0,0]
+    /// 輸出：9
+    /// 說明：[0] 出現 5 次，[0,0] 出現 3 次，[0,0,0] 出現 1 次；沒有長度超過 3 的零值子陣列，因此回傳 9。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [2,10,2019]
+    /// 輸出：0
+    /// 說明：不存在零值子陣列，因此回傳 0。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - -10^9 &lt;= nums[i] &lt;= 10^9
+    /// </para>
+    /// </summary>
     static void Main(string[] args)
     {
         Console.WriteLine("Zero-Filled Subarray 測試範例：");

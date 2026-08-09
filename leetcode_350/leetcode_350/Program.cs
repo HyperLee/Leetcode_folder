@@ -4,16 +4,52 @@
     {
         /// <summary>
         /// 350. Intersection of Two Arrays II
-        /// https://leetcode.com/problems/intersection-of-two-arrays-ii/description/?envType=daily-question&envId=2024-07-02
-        /// 350. 两个数组的交集 II
+        /// https://leetcode.com/problems/intersection-of-two-arrays-ii/description/
+        /// <para>
+        /// Given integer arrays nums1 and nums2, return their intersection. Each result element must appear as many times as it occurs in both arrays, and the result may be returned in any order.
+        ///
+        /// Example 1:
+        /// Input: nums1 = [1,2,2,1], nums2 = [2,2]
+        /// Output: [2,2]
+        ///
+        /// Example 2:
+        /// Input: nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+        /// Output: [4,9]
+        /// Explanation: [9,4] is also accepted.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= nums1.length, nums2.length &lt;= 1000
+        /// - 0 &lt;= nums1[i], nums2[i] &lt;= 1000
+        ///
+        /// Follow-up:
+        /// - If the arrays are already sorted, how would you optimize the algorithm?
+        /// - If nums1 is small compared with nums2, which algorithm is better?
+        /// - If nums2 is stored on disk and memory cannot hold all its elements, how would you proceed?
+        /// </para>
+        /// <para>
+        /// 350. 兩個陣列的交集 II
         /// https://leetcode.cn/problems/intersection-of-two-arrays-ii/description/
-        /// 
-        /// 本題目為 349. Intersection of Two Arrays
-        /// 進階衍生題目
-        /// 
-        /// 本題目如果遇到重覆數字,需要輸出相同數量的數字
-        /// 不能只輸出一個數字當作代表
-        /// 
+        ///
+        /// 給定整數陣列 nums1 與 nums2，回傳兩者的交集。結果中每個元素的出現次數，必須等於它在兩個陣列中共同出現的次數，且可用任意順序回傳。
+        ///
+        /// 範例 1：
+        /// 輸入：nums1 = [1,2,2,1], nums2 = [2,2]
+        /// 輸出：[2,2]
+        ///
+        /// 範例 2：
+        /// 輸入：nums1 = [4,9,5], nums2 = [9,4,9,8,4]
+        /// 輸出：[4,9]
+        /// 解釋：[9,4] 也會被接受。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= nums1.length, nums2.length &lt;= 1000
+        /// - 0 &lt;= nums1[i], nums2[i] &lt;= 1000
+        ///
+        /// 進階：
+        /// - 若陣列已排序，如何最佳化演算法？
+        /// - 若 nums1 相較 nums2 很小，哪種演算法較好？
+        /// - 若 nums2 儲存在磁碟上，且記憶體無法一次載入全部元素，該如何處理？
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

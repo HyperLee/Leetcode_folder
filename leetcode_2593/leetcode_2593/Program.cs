@@ -5,17 +5,61 @@ class Program
     /// <summary>
     /// 2593. Find Score of an Array After Marking All Elements
     /// https://leetcode.com/problems/find-score-of-an-array-after-marking-all-elements/description/
-    /// 2593. 标记所有元素后数组的分数
+    /// <para>
+    /// You are given an array nums consisting of positive integers.
+    ///
+    /// Starting with score = 0, apply the following algorithm:
+    ///
+    /// - Choose the smallest integer of the array that is not marked. If there is a tie, choose the one with the smallest index.
+    /// - Add the value of the chosen integer to score.
+    /// - Mark the chosen element and its two adjacent elements if they exist.
+    /// - Repeat until all the array elements are marked.
+    ///
+    /// Return the score you get after applying the above algorithm.
+    ///
+    /// Example 1:
+    /// Input: nums = [2,1,3,4,5,2]
+    /// Output: 7
+    /// Explanation: First choose 1 and mark it and its two adjacent elements. Next choose the rightmost 2 and mark it and its left adjacent element. Finally choose 4, the only remaining unmarked element. The score is 1 + 2 + 4 = 7.
+    ///
+    /// Example 2:
+    /// Input: nums = [2,3,5,1,3,2]
+    /// Output: 5
+    /// Explanation: First choose 1 and mark it and its two adjacent elements. Next, among the two unmarked 2s, choose the leftmost one at index 0 and mark it and its right adjacent element. Finally choose the only remaining unmarked 2. The score is 1 + 2 + 2 = 5.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 1 &lt;= nums[i] &lt;= 10^6
+    /// </para>
+    /// <para>
+    /// 2593. 標記所有元素後的陣列分數
     /// https://leetcode.cn/problems/find-score-of-an-array-after-marking-all-elements/description/
-    /// 
-    /// 題目描述（中文）:
-    /// 給定一個由正整數構成的陣列 nums。
-    /// 初始 score = 0，對陣列套用下列演算法：
-    /// 1. 選擇陣列中尚未標記的最小整數；若有多個相同的最小值，選擇索引最小的那個。
-    /// 2. 將該被選中的整數的值加到 score。
-    /// 3. 將該元素以及如果存在的相鄰左右兩個元素標記為已標記。
-    /// 重複上述步驟直到所有元素都被標記。返回最終的 score。
-    /// 
+    ///
+    /// 給定一個由正整數組成的陣列 nums。
+    ///
+    /// 從 score = 0 開始，套用下列演算法：
+    ///
+    /// - 選擇陣列中尚未標記的最小整數。若有並列，選擇索引最小者。
+    /// - 將所選整數的值加到 score。
+    /// - 標記所選元素；若其左右相鄰元素存在，也一併標記。
+    /// - 重複以上步驟，直到陣列中的所有元素都已標記。
+    ///
+    /// 回傳套用上述演算法後得到的 score。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [2,1,3,4,5,2]
+    /// 輸出：7
+    /// 解釋：先選擇 1，並標記它及其左右相鄰元素。接著選擇最右邊的 2，並標記它及其左側相鄰元素。最後選擇唯一尚未標記的元素 4。分數為 1 + 2 + 4 = 7。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [2,3,5,1,3,2]
+    /// 輸出：5
+    /// 解釋：先選擇 1，並標記它及其左右相鄰元素。接著在兩個尚未標記的 2 中，選擇最左邊、索引為 0 的元素，並標記它及其右側相鄰元素。最後選擇唯一尚未標記的 2。分數為 1 + 2 + 2 = 5。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 1 &lt;= nums[i] &lt;= 10^6
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

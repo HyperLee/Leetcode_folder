@@ -9,7 +9,60 @@
 internal class Program
 {
     /// <summary>
-    /// 使用固定測試資料展示三種解法的輸出結果。
+    /// <para>
+    /// 1848. Minimum Distance to the Target Element
+    /// https://leetcode.com/problems/minimum-distance-to-the-target-element/description/
+    ///
+    /// Given a 0-indexed integer array nums and integers target and start, find an index i such that nums[i] == target and abs(i - start) is minimized. Return abs(i - start). target is guaranteed to exist in nums.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,2,3,4,5], target = 5, start = 3
+    /// Output: 1
+    /// Explanation: nums[4] = 5 is the only target, so abs(4 - 3) = 1.
+    ///
+    /// Example 2:
+    /// Input: nums = [1], target = 1, start = 0
+    /// Output: 0
+    /// Explanation: nums[0] = 1, so abs(0 - 0) = 0.
+    ///
+    /// Example 3:
+    /// Input: nums = [1,1,1,1,1,1,1,1,1,1], target = 1, start = 0
+    /// Output: 0
+    /// Explanation: Every value equals 1, and nums[0] minimizes abs(i - start), which is abs(0 - 0) = 0.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 1000
+    /// - 1 &lt;= nums[i] &lt;= 10^4
+    /// - 0 &lt;= start &lt; nums.length
+    /// - target is in nums.
+    /// </para>
+    /// <para>
+    /// 1848. 到目標元素的最小距離
+    /// https://leetcode.cn/problems/minimum-distance-to-the-target-element/description/
+    ///
+    /// 給定從 0 開始索引的整數陣列 nums，以及整數 target 和 start，找出一個索引 i，使 nums[i] == target 且 abs(i - start) 最小。回傳 abs(i - start)。保證 target 存在於 nums 中。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,2,3,4,5], target = 5, start = 3
+    /// 輸出：1
+    /// 說明：nums[4] = 5 是唯一的目標，因此 abs(4 - 3) = 1。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [1], target = 1, start = 0
+    /// 輸出：0
+    /// 說明：nums[0] = 1，因此 abs(0 - 0) = 0。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [1,1,1,1,1,1,1,1,1,1], target = 1, start = 0
+    /// 輸出：0
+    /// 說明：每個值都是 1，而 nums[0] 使 abs(i - start) 最小，即 abs(0 - 0) = 0。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 1000
+    /// - 1 &lt;= nums[i] &lt;= 10^4
+    /// - 0 &lt;= start &lt; nums.length
+    /// - target 存在於 nums 中。
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數，目前未使用。</param>
     private static void Main(string[] args)

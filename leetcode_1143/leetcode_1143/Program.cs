@@ -3,18 +3,66 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1143. Longest Common Subsequence
     /// https://leetcode.com/problems/longest-common-subsequence/description/
-    /// 1143. 最長公共子序列
+    ///
+    /// Given two strings text1 and text2, return the length of their longest common subsequence. If there is
+    /// no common subsequence, return 0.
+    /// A subsequence of a string is a new string generated from the original string with some characters
+    /// (can be none) deleted without changing the relative order of the remaining characters.
+    /// - For example, "ace" is a subsequence of "abcde".
+    /// A common subsequence of two strings is a subsequence that is common to both strings.
+    ///
+    /// Example 1:
+    /// Input: text1 = "abcde", text2 = "ace"
+    /// Output: 3
+    /// Explanation: The longest common subsequence is "ace" and its length is 3.
+    ///
+    /// Example 2:
+    /// Input: text1 = "abc", text2 = "abc"
+    /// Output: 3
+    /// Explanation: The longest common subsequence is "abc" and its length is 3.
+    ///
+    /// Example 3:
+    /// Input: text1 = "abc", text2 = "def"
+    /// Output: 0
+    /// Explanation: There is no such common subsequence, so the result is 0.
+    ///
+    /// Constraints:
+    /// 1 &lt;= text1.length, text2.length &lt;= 1000
+    /// text1 and text2 consist of only lowercase English characters.
+    /// </para>
+    /// <para>
+    /// 1143. 最長共同子序列
     /// https://leetcode.cn/problems/longest-common-subsequence/description/
     ///
-    /// 題目（繁體中文）：
-    /// 給定兩個字串 text1 和 text2，回傳它們最長公共子序列的長度。
-    /// 如果沒有公共子序列，則回傳 0。
+    /// 給定兩個字串 text1 與 text2，請回傳它們最長共同子序列的長度。
+    /// 如果不存在共同子序列，則回傳 0。
+    /// 字串的子序列是從原字串刪除某些字元（也可以不刪除任何字元），且不改變其餘字元相對順序
+    /// 所產生的新字串。
+    /// - 例如，"ace" 是 "abcde" 的一個子序列。
+    /// 兩個字串的共同子序列，是同時為這兩個字串之子序列的字串。
     ///
-    /// 子序列是從原字串刪除某些字元（可以不刪除任何字元）且不改變其餘字元的相對順序所產生的新字串。
-    /// 例如，"ace" 是 "abcde" 的一個子序列。
-    /// 公共子序列是同時為兩個字串的子序列的字串。
+    /// 範例 1：
+    /// 輸入：text1 = "abcde", text2 = "ace"
+    /// 輸出：3
+    /// 解釋：最長共同子序列為 "ace"，其長度為 3。
+    ///
+    /// 範例 2：
+    /// 輸入：text1 = "abc", text2 = "abc"
+    /// 輸出：3
+    /// 解釋：最長共同子序列為 "abc"，其長度為 3。
+    ///
+    /// 範例 3：
+    /// 輸入：text1 = "abc", text2 = "def"
+    /// 輸出：0
+    /// 解釋：不存在這樣的共同子序列，因此結果為 0。
+    ///
+    /// 限制條件：
+    /// 1 &lt;= text1.length, text2.length &lt;= 1000
+    /// text1 與 text2 只包含小寫英文字元。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

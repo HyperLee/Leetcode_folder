@@ -4,15 +4,62 @@ class Program
 {
     /// <summary>
     /// 3432. Count Partitions with Even Sum Difference
-    /// https://leetcode.com/problems/count-partitions-with-even-sum-difference/description/?envType=daily-question&envId=2025-12-05
-    /// 3432. 统计元素和差值为偶数的分区方案
-    /// https://leetcode.cn/problems/count-partitions-with-even-sum-difference/description/?envType=daily-question&envId=2025-12-05
-    /// 
-    /// 給定一個長度為 n 的整數陣列 nums。
-    /// 分割（partition）定義為索引 i，其中 0 <= i < n - 1，將陣列拆成兩個非空子陣列：
-    /// 左子陣列包含索引 [0, i]。
-    /// 右子陣列包含索引 [i + 1, n - 1]。
-    /// 請返回使左子陣列與右子陣列元素總和之差為偶數的分割數量。
+    /// https://leetcode.com/problems/count-partitions-with-even-sum-difference/description/
+    /// <para>
+    /// You are given an integer array nums of length n.
+    ///
+    /// A partition is an index i where 0 &lt;= i &lt; n - 1, splitting the array into two non-empty subarrays: the left contains [0, i], and the right contains [i + 1, n - 1].
+    ///
+    /// Return the number of partitions where the difference between the left and right sums is even.
+    ///
+    /// Example 1:
+    /// Input: nums = [10,10,3,7,6]
+    /// Output: 4
+    /// Explanation: The four partitions have sum differences 10 - 26 = -16, 20 - 16 = 4, 23 - 13 = 10, and 30 - 6 = 24; all are even.
+    ///
+    /// Example 2:
+    /// Input: nums = [1,2,2]
+    /// Output: 0
+    /// Explanation: No partition has an even sum difference.
+    ///
+    /// Example 3:
+    /// Input: nums = [2,4,6,8]
+    /// Output: 3
+    /// Explanation: Every partition has an even sum difference.
+    ///
+    /// Constraints:
+    /// - 2 &lt;= n == nums.length &lt;= 100
+    /// - 1 &lt;= nums[i] &lt;= 100
+    /// </para>
+    /// <para>
+    /// 3432. 計算總和差為偶數的分割數量
+    /// https://leetcode.cn/problems/count-partitions-with-even-sum-difference/description/
+    ///
+    /// 給定長度為 n 的整數陣列 nums。
+    ///
+    /// 分割是滿足 0 &lt;= i &lt; n - 1 的索引 i，將陣列分成兩個非空子陣列：左側包含 [0, i]，右側包含 [i + 1, n - 1]。
+    ///
+    /// 回傳左、右子陣列總和之差為偶數的分割數量。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [10,10,3,7,6]
+    /// 輸出：4
+    /// 解釋：四個分割的總和差分別為 10 - 26 = -16、20 - 16 = 4、23 - 13 = 10、30 - 6 = 24，全部都是偶數。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [1,2,2]
+    /// 輸出：0
+    /// 解釋：沒有分割會產生偶數的總和差。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [2,4,6,8]
+    /// 輸出：3
+    /// 解釋：所有分割都會產生偶數的總和差。
+    ///
+    /// 限制條件：
+    /// - 2 &lt;= n == nums.length &lt;= 100
+    /// - 1 &lt;= nums[i] &lt;= 100
+    /// </para>
     /// </summary>
     /// <param name="args">命令列引數（未使用）</param>
     static void Main(string[] args)

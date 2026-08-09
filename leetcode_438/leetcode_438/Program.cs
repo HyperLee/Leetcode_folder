@@ -5,9 +5,43 @@ class Program
     /// <summary>
     /// 438. Find All Anagrams in a String
     /// https://leetcode.com/problems/find-all-anagrams-in-a-string/description/
+    /// <para>
+    /// Given two strings s and p, return an array of all the start indices of p's anagrams in s. You may return the answer in any order.
+    ///
+    /// Example 1:
+    /// Input: s = "cbaebabacd", p = "abc"
+    /// Output: [0,6]
+    /// Explanation: The substring starting at index 0 is "cba", an anagram of "abc". The substring starting at index 6 is "bac", also an anagram of "abc".
+    ///
+    /// Example 2:
+    /// Input: s = "abab", p = "ab"
+    /// Output: [0,1,2]
+    /// Explanation: The substrings starting at indices 0, 1, and 2 are "ab", "ba", and "ab"; each is an anagram of "ab".
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length, p.length &lt;= 3 * 10^4
+    /// - s and p consist of lowercase English letters.
+    /// </para>
+    /// <para>
     /// 438. 找出字串中所有字母異位詞
     /// https://leetcode.cn/problems/find-all-anagrams-in-a-string/description/
-    /// 
+    ///
+    /// 給定兩個字串 s 與 p，回傳 s 中所有 p 的字母異位詞之起始索引所組成的陣列。答案可以任意順序回傳。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "cbaebabacd", p = "abc"
+    /// 輸出：[0,6]
+    /// 解釋：起始索引為 0 的子字串是 "cba"，它是 "abc" 的字母異位詞。起始索引為 6 的子字串是 "bac"，它也是 "abc" 的字母異位詞。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "abab", p = "ab"
+    /// 輸出：[0,1,2]
+    /// 解釋：起始索引為 0、1 與 2 的子字串分別是 "ab"、"ba" 與 "ab"；每個都是 "ab" 的字母異位詞。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length, p.length &lt;= 3 * 10^4
+    /// - s 與 p 只由小寫英文字母組成。
+    /// </para>
     /// </summary>
     /// <param name="args"></param> 
     static void Main(string[] args)

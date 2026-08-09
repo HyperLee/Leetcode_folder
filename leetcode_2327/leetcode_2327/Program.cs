@@ -3,23 +3,46 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2327. Number of People Aware of a Secret
-    /// https://leetcode.com/problems/number-of-people-aware-of-a-secret/description/?envType=daily-question&envId=2025-09-09
+    /// https://leetcode.com/problems/number-of-people-aware-of-a-secret/description/
+    ///
+    /// On day 1, one person discovers a secret. Each person shares it with one new person every day beginning delay days after learning it. Each person forgets it forget days after learning it and cannot share on that day or later. Given n, return how many people know the secret at the end of day n, modulo 10^9 + 7.
+    ///
+    /// Example 1:
+    /// Input: n = 6, delay = 2, forget = 4
+    /// Output: 5
+    /// Explanation: Day 1: A discovers the secret (1 person). Day 2: only A knows (1). Day 3: A tells B (2). Day 4: A tells C (3). Day 5: A forgets and B tells D (3). Day 6: B tells E and C tells F (5).
+    ///
+    /// Example 2:
+    /// Input: n = 4, delay = 1, forget = 3
+    /// Output: 6
+    /// Explanation: Day 1: A discovers the secret (1 person). Day 2: A tells B (2). Day 3: A and B tell C and D (4). Day 4: A forgets; B, C, and D tell three new people (6).
+    ///
+    /// Constraints:
+    /// - 2 &lt;= n &lt;= 1000
+    /// - 1 &lt;= delay &lt; forget &lt;= n
+    /// </para>
+    /// <para>
     /// 2327. 知道秘密的人數
-    /// https://leetcode.cn/problems/number-of-people-aware-of-a-secret/description/?envType=daily-question&envId=2025-09-09
+    /// https://leetcode.cn/problems/number-of-people-aware-of-a-secret/description/
     ///
-    /// 中文題目翻譯：
-    /// 第 1 天，有一個人發現了一個秘密。
-    /// 給定整數 delay，表示每個人在發現秘密 delay 天後開始，每天會把秘密分享給一個新的人。
-    /// 給定整數 forget，表示每個人在發現秘密 forget 天後就會忘記秘密。人在忘記當天以及之後的任何一天都不能分享秘密。
-    /// 給定整數 n，請返回在第 n 天結束時還知道秘密的人數。由於答案可能很大，請對 10^9 + 7 取模後返回。
+    /// 第 1 天有一人發現秘密。每個人在得知秘密的 delay 天後開始每天分享給一位新人；在得知秘密的 forget 天後忘記，且當天及之後都不能分享。給定 n，回傳第 n 天結束時仍知道秘密的人數，答案對 10^9 + 7 取模。
     ///
-    /// 範例：
-    /// 輸入: n = 6, delay = 2, forget = 4
-    /// 輸出: 5
+    /// 範例 1：
+    /// 輸入：n = 6, delay = 2, forget = 4
+    /// 輸出：5
+    /// 說明：第 1 天：A 發現秘密（1 人）。第 2 天：只有 A 知道（1）。第 3 天：A 告訴 B（2）。第 4 天：A 告訴 C（3）。第 5 天：A 忘記，B 告訴 D（3）。第 6 天：B 告訴 E，C 告訴 F（5）。
     ///
-    /// 參考（英文/中文）如上。
+    /// 範例 2：
+    /// 輸入：n = 4, delay = 1, forget = 3
+    /// 輸出：6
+    /// 說明：第 1 天：A 發現秘密（1 人）。第 2 天：A 告訴 B（2）。第 3 天：A、B 告訴 C、D（4）。第 4 天：A 忘記；B、C、D 告訴三位新人（6）。
     ///
+    /// 限制條件：
+    /// - 2 &lt;= n &lt;= 1000
+    /// - 1 &lt;= delay &lt; forget &lt;= n
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

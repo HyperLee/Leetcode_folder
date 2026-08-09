@@ -6,32 +6,56 @@ namespace leetcode_1792;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1792. Maximum Average Pass Ratio
-    /// https://leetcode.com/problems/maximum-average-pass-ratio/description/?envType=daily-question&envId=2025-09-01
+    /// https://leetcode.com/problems/maximum-average-pass-ratio/description/
+    ///
+    /// A school has several classes taking a final exam. You are given classes, where classes[i] = [pass_i, total_i]: total_i students are in class i and pass_i will pass.
+    ///
+    /// You also have extraStudents brilliant students, each guaranteed to pass any class they join. Assign every extra student to a class to maximize the average pass ratio across all classes. A class's pass ratio is passing students divided by total students; the average pass ratio is the sum of class ratios divided by the number of classes.
+    ///
+    /// Return the maximum possible average pass ratio. Answers within 10^-5 of the actual answer are accepted.
+    ///
+    /// Example 1:
+    /// Input: classes = [[1,2],[3,5],[2,2]], extraStudents = 2
+    /// Output: 0.78333
+    /// Explanation: Assign both extra students to the first class. The average is (3/4 + 3/5 + 2/2) / 3 = 0.78333.
+    ///
+    /// Example 2:
+    /// Input: classes = [[2,4],[3,9],[4,5],[2,10]], extraStudents = 4
+    /// Output: 0.53485
+    ///
+    /// Constraints:
+    /// - 1 &lt;= classes.length &lt;= 10^5
+    /// - classes[i].length == 2
+    /// - 1 &lt;= pass_i &lt;= total_i &lt;= 10^5
+    /// - 1 &lt;= extraStudents &lt;= 10^5
+    /// </para>
+    /// <para>
     /// 1792. 最大平均通過率
-    /// https://leetcode.cn/problems/maximum-average-pass-ratio/description/?envType=daily-question&envId=2025-09-01
+    /// https://leetcode.cn/problems/maximum-average-pass-ratio/description/
     ///
-    /// 題目描述（中文翻譯）:
-    /// 有一所學校有多個班級，每個班級都會舉行期末考。你被給予一個二維整數陣列 classes，其中 classes[i] = [passi, totali]。
-    /// 你事先知道第 i 個班級有 totali 名學生，但只有 passi 名學生會通過考試。
+    /// 一所學校有多個班級參加期末考。給定 classes，其中 classes[i] = [pass_i, total_i]：第 i 個班級共有 total_i 名學生，其中 pass_i 名會通過考試。
     ///
-    /// 另外給你一個整數 extraStudents。還有 extraStudents 名優秀的學生，他們被分配到任何班級時都能保證通過該班級的考試。
-    /// 你想把每一位 extraStudents 分配到某個班級，使得所有班級的平均通過率最大化。
+    /// 另有 extraStudents 名優秀學生，每人加入任何班級都保證能通過考試。請將所有額外學生分配到班級，使全部班級的平均通過率最大。一個班級的通過率等於通過人數除以總人數；平均通過率等於各班通過率總和除以班級數。
     ///
-    /// 一個班級的通過率等於該班級通過考試的學生數除以該班級的總學生數。平均通過率等於所有班級的通過率總和除以班級數。
+    /// 回傳可達到的最大平均通過率。與正確答案相差不超過 10^-5 的答案都會被接受。
     ///
-    /// 請回傳在分配 extraStudents 之後能達到的最大平均通過率。答案在 1e-5 以內被視為正確。
+    /// 範例 1：
+    /// 輸入：classes = [[1,2],[3,5],[2,2]], extraStudents = 2
+    /// 輸出：0.78333
+    /// 說明：將兩名額外學生都分配到第一個班級，平均為 (3/4 + 3/5 + 2/2) / 3 = 0.78333。
     ///
-    /// 範例輸入/輸出、限制條件等請參見原題鏈接。
+    /// 範例 2：
+    /// 輸入：classes = [[2,4],[3,9],[4,5],[2,10]], extraStudents = 4
+    /// 輸出：0.53485
     ///
-    /// 解題說明:
-    /// 本題關鍵在於每次分配一名能保證通過的學生時，應該把他分配到可以帶來最大 "邊際通過率增益" 的班級。
-    /// 假設班級當前為 (pass, total)，增加一名保證通過學生後，通過率的增量為:
-    /// delta(pass,total) = (pass+1)/(total+1) - pass/total。
-    ///
-    /// 因此採用貪婪做法並用最大堆 (priority queue) 追蹤每個班級的 delta，每次選擇 delta 最大的班級分配一名學生，更新該班的 delta 並放回堆中。
-    /// 這樣能保證在每一步讓總通過率和增加最多，最終得到最大平均通過率（平均為總和除以班級數）。
-    ///
+    /// 限制條件：
+    /// - 1 &lt;= classes.length &lt;= 10^5
+    /// - classes[i].length == 2
+    /// - 1 &lt;= pass_i &lt;= total_i &lt;= 10^5
+    /// - 1 &lt;= extraStudents &lt;= 10^5
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// 

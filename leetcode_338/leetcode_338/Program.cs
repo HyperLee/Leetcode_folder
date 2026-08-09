@@ -4,14 +4,50 @@ class Program
 {
     /// <summary>
     /// 338. Counting Bits
-    /// https://leetcode.com/problems/counting-bits/description/?envType=problem-list-v2&envId=oizxjoit
-    /// 338. 位元數
+    /// https://leetcode.com/problems/counting-bits/description/
+    /// <para>
+    /// Given an integer n, return an array ans of length n + 1 such that for each i where 0 &lt;= i &lt;= n, ans[i] is the number of 1s in the binary representation of i.
+    ///
+    /// Do not use built-in functions such as __builtin_popcount in C++.
+    ///
+    /// Example 1:
+    /// Input: n = 2
+    /// Output: [0,1,1]
+    /// Explanation: 0 --&gt; 0, 1 --&gt; 1, 2 --&gt; 10.
+    ///
+    /// Example 2:
+    /// Input: n = 5
+    /// Output: [0,1,1,2,1,2]
+    /// Explanation: 0 --&gt; 0, 1 --&gt; 1, 2 --&gt; 10, 3 --&gt; 11, 4 --&gt; 100, 5 --&gt; 101.
+    ///
+    /// Constraints:
+    /// - 0 &lt;= n &lt;= 10^5
+    ///
+    /// Follow-up: A solution in O(n log n) time is straightforward. Can you solve it in linear O(n) time, possibly in one pass?
+    /// </para>
+    /// <para>
+    /// 338. 位元計數
     /// https://leetcode.cn/problems/counting-bits/description/
-    /// 
-    /// ref:
-    /// https://leetcode.cn/problems/counting-bits/solutions/7882/hen-qing-xi-de-si-lu-by-duadua/
-    /// https://leetcode.cn/problems/counting-bits/solutions/631479/yi-bu-bu-fen-xi-tui-dao-chu-dong-tai-gui-3yog/
-    /// https://leetcode.cn/problems/counting-bits/solutions/627418/bi-te-wei-ji-shu-by-leetcode-solution-0t1i/
+    ///
+    /// 給定整數 n，回傳長度為 n + 1 的陣列 ans，使每個滿足 0 &lt;= i &lt;= n 的 i，其 ans[i] 等於 i 的二進位表示中 1 的數量。
+    ///
+    /// 不得使用 C++ 的 __builtin_popcount 等內建函式。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 2
+    /// 輸出：[0,1,1]
+    /// 解釋：0 --&gt; 0、1 --&gt; 1、2 --&gt; 10。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 5
+    /// 輸出：[0,1,1,2,1,2]
+    /// 解釋：0 --&gt; 0、1 --&gt; 1、2 --&gt; 10、3 --&gt; 11、4 --&gt; 100、5 --&gt; 101。
+    ///
+    /// 限制條件：
+    /// - 0 &lt;= n &lt;= 10^5
+    ///
+    /// 進階：O(n log n) 時間的解法很容易想到。你能用線性 O(n) 時間，甚至單次走訪完成嗎？
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

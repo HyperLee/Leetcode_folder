@@ -5,14 +5,56 @@ namespace leetcode_1957;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1957. Delete Characters to Make Fancy String
-    /// https://leetcode.com/problems/delete-characters-to-make-fancy-string/description/?envType=daily-question&envId=2025-07-21
-    /// 1957. 删除字符使字符串变好
-    /// https://leetcode.cn/problems/delete-characters-to-make-fancy-string/description/?envType=daily-question&envId=2025-07-21
-    /// 
-    /// 題目描述：
-    /// 給定一個字串 s，請刪除最少數量的字元，使得刪除後的字串不會有三個連續的字元相同。
-    /// 返回刪除後的最終字串。可以證明答案一定唯一。
+    /// https://leetcode.com/problems/delete-characters-to-make-fancy-string/description/
+    ///
+    /// A fancy string has no three consecutive equal characters. Given a string s, delete the minimum possible number of characters to make it fancy. Return the final string. The answer is always unique.
+    ///
+    /// Example 1:
+    /// Input: s = "leeetcode"
+    /// Output: "leetcode"
+    /// Explanation: Remove one 'e' from the first group. No three consecutive characters remain equal.
+    ///
+    /// Example 2:
+    /// Input: s = "aaabaaaa"
+    /// Output: "aabaa"
+    /// Explanation: Remove one 'a' from the first group to obtain "aabaaaa", then two 'a' characters from the second group to obtain "aabaa".
+    ///
+    /// Example 3:
+    /// Input: s = "aab"
+    /// Output: "aab"
+    /// Explanation: No three consecutive characters are equal.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s consists only of lowercase English letters.
+    /// </para>
+    /// <para>
+    /// 1957. 刪除字元使字串變好
+    /// https://leetcode.cn/problems/delete-characters-to-make-fancy-string/description/
+    ///
+    /// 若字串中沒有三個連續且相同的字元，則稱為好字串。給定字串 s，刪除儘可能少的字元使其成為好字串。回傳刪除後的最終字串；答案一定唯一。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "leeetcode"
+    /// 輸出："leetcode"
+    /// 說明：從第一組 'e' 中刪除一個 'e'，便不再有三個連續相同字元。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "aaabaaaa"
+    /// 輸出："aabaa"
+    /// 說明：先從第一組刪除一個 'a' 得到 "aabaaaa"，再從第二組刪除兩個 'a' 得到 "aabaa"。
+    ///
+    /// 範例 3：
+    /// 輸入：s = "aab"
+    /// 輸出："aab"
+    /// 說明：沒有三個連續相同的字元。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s 僅由小寫英文字母組成。
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// 

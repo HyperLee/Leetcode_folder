@@ -30,12 +30,78 @@ public class Program
     }
 
     /// <summary>
-    /// leetcode 1372 Longest ZigZag Path in a Binary Tree
-    /// https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/
+    /// <para>
+    /// 1372. Longest ZigZag Path in a Binary Tree
+    /// https://leetcode.com/problems/longest-zigzag-path-in-a-binary-tree/description/
+    ///
+    /// You are given the root of a binary tree.
+    ///
+    /// A ZigZag path for a binary tree is defined as follows:
+    /// - Choose any node in the binary tree and a direction (right or left).
+    /// - If the current direction is right, move to the right child of the current node; otherwise, move to the left child.
+    /// - Change the direction from right to left or from left to right.
+    /// - Repeat the second and third steps until you cannot move in the tree.
+    ///
+    /// ZigZag length is defined as the number of nodes visited - 1. A single node has a length of 0.
+    ///
+    /// Return the longest ZigZag path contained in that tree.
+    ///
+    /// Example 1:
+    /// Official illustration: https://assets.leetcode.com/uploads/2020/01/22/sample_1_1702.png
+    /// Input: root = [1,null,1,1,1,null,null,1,1,null,1,null,null,null,1]
+    /// Output: 3
+    /// Explanation: Longest ZigZag path in blue nodes (right -&gt; left -&gt; right).
+    ///
+    /// Example 2:
+    /// Official illustration: https://assets.leetcode.com/uploads/2020/01/22/sample_2_1702.png
+    /// Input: root = [1,1,1,null,1,null,null,1,1,null,1]
+    /// Output: 4
+    /// Explanation: Longest ZigZag path in blue nodes (left -&gt; right -&gt; left -&gt; right).
+    ///
+    /// Example 3:
+    /// Input: root = [1]
+    /// Output: 0
+    ///
+    /// Constraints:
+    /// - The number of nodes in the tree is in the range [1, 5 * 10^4].
+    /// - 1 &lt;= Node.val &lt;= 100
+    /// </para>
+    /// <para>
     /// 1372. 二元樹中的最長交錯路徑
-    /// https://leetcode.cn/problems/longest-zigzag-path-in-a-binary-tree/
-    /// Given the root of a binary tree, return the longest ZigZag path length, measured as the number of edges while alternating left and right moves.
-    /// 給定二元樹根節點，回傳最長交錯路徑的邊數；路徑每一步必須在向左與向右之間交替。
+    /// https://leetcode.cn/problems/longest-zigzag-path-in-a-binary-tree/description/
+    ///
+    /// 給定一棵二元樹的根節點。
+    ///
+    /// 二元樹的交錯路徑定義如下：
+    /// - 選擇二元樹中的任意節點以及一個方向（向右或向左）。
+    /// - 如果目前方向是向右，移動到目前節點的右子節點；否則，移動到左子節點。
+    /// - 將方向從向右改為向左，或從向左改為向右。
+    /// - 重複第二與第三個步驟，直到無法在樹中繼續移動。
+    ///
+    /// 交錯長度定義為造訪的節點數量 - 1。單一節點的長度為 0。
+    ///
+    /// 回傳該樹中包含的最長交錯路徑。
+    ///
+    /// 範例 1：
+    /// 官方示意圖：https://assets.leetcode.com/uploads/2020/01/22/sample_1_1702.png
+    /// 輸入：root = [1,null,1,1,1,null,null,1,1,null,1,null,null,null,1]
+    /// 輸出：3
+    /// 解釋：藍色節點構成最長交錯路徑（向右 -&gt; 向左 -&gt; 向右）。
+    ///
+    /// 範例 2：
+    /// 官方示意圖：https://assets.leetcode.com/uploads/2020/01/22/sample_2_1702.png
+    /// 輸入：root = [1,1,1,null,1,null,null,1,1,null,1]
+    /// 輸出：4
+    /// 解釋：藍色節點構成最長交錯路徑（向左 -&gt; 向右 -&gt; 向左 -&gt; 向右）。
+    ///
+    /// 範例 3：
+    /// 輸入：root = [1]
+    /// 輸出：0
+    ///
+    /// 限制條件：
+    /// - 樹中的節點數量在 [1, 5 * 10^4] 範圍內。
+    /// - 1 &lt;= Node.val &lt;= 100
+    /// </para>
     /// </summary>
     private static void Main()
     {

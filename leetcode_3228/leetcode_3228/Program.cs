@@ -6,12 +6,54 @@ class Program
 {
     /// <summary>
     /// 3228. Maximum Number of Operations to Move Ones to the End
-    /// 題目鏈結：https://leetcode.cn/problems/maximum-number-of-operations-to-move-ones-to-the-end/
+    /// https://leetcode.com/problems/maximum-number-of-operations-to-move-ones-to-the-end/description/
+    /// <para>
+    /// You are given a binary string s.
     ///
-    /// 解題說明：使用貪心 + 計數策略，從左到右掃描字串並維護已遇到的 '1' 數量。
-    /// 每當遇到一段連續的 '0' 時，該零段可以讓之前的每一個 '1' 各執行一次向右移動，
-    /// 因此把目前已見的 '1' 數量累加到答案。從左往右的貪心可以讓先出現的 '1' 被更多後續零段 "利用"，
-    /// 從而最大化操作次數。
+    /// You may perform this operation any number of times:
+    /// - Choose any index i such that i + 1 &lt; s.length, s[i] == '1', and s[i + 1] == '0'.
+    /// - Move s[i] to the right until it reaches the end of the string or another '1'. For example, for s = "010010", choosing i = 1 produces s = "000110".
+    ///
+    /// Return the maximum number of operations you can perform.
+    ///
+    /// Example 1:
+    /// Input: s = "1001101"
+    /// Output: 4
+    /// Explanation: Choose i = 0 to obtain "0011101"; choose i = 4 to obtain "0011011"; choose i = 3 to obtain "0010111"; choose i = 2 to obtain "0001111".
+    ///
+    /// Example 2:
+    /// Input: s = "00111"
+    /// Output: 0
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s[i] is either '0' or '1'.
+    /// </para>
+    /// <para>
+    /// 3228. 將 1 移到末尾的最大操作次數
+    /// https://leetcode.cn/problems/maximum-number-of-operations-to-move-ones-to-the-end/description/
+    ///
+    /// 給定一個二進位字串 s。
+    ///
+    /// 你可以任意次執行下列操作：
+    /// - 選擇任意索引 i，使 i + 1 &lt; s.length、s[i] == '1' 且 s[i + 1] == '0'。
+    /// - 將 s[i] 向右移動，直到抵達字串末尾或另一個 '1'。例如，對 s = "010010" 選擇 i = 1，會得到 s = "000110"。
+    ///
+    /// 回傳可以執行的最大操作次數。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "1001101"
+    /// 輸出：4
+    /// 解釋：選擇 i = 0 得到 "0011101"；選擇 i = 4 得到 "0011011"；選擇 i = 3 得到 "0010111"；選擇 i = 2 得到 "0001111"。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "00111"
+    /// 輸出：0
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s[i] 是 '0' 或 '1'。
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數（未使用）</param>
     static void Main(string[] args)

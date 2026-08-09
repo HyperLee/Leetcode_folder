@@ -5,9 +5,41 @@
         /// <summary>
         /// 67. Add Binary
         /// https://leetcode.com/problems/add-binary/description/
-        /// 
-        /// 67. 二进制求和
+        /// <para>
+        /// Given two binary strings a and b, return their sum as a binary string.
+        ///
+        /// Example 1:
+        /// Input: a = "11", b = "1"
+        /// Output: "100"
+        ///
+        /// Example 2:
+        /// Input: a = "1010", b = "1011"
+        /// Output: "10101"
+        ///
+        /// Constraints:
+        /// - 1 &lt;= a.length, b.length &lt;= 10^4
+        /// - a and b consist only of the characters '0' and '1'.
+        /// - Neither string contains leading zeros except for zero itself.
+        /// </para>
+        /// <para>
+        /// 67. 二進位求和
         /// https://leetcode.cn/problems/add-binary/description/
+        ///
+        /// 給定兩個二進位字串 a 和 b，請以二進位字串回傳它們的總和。
+        ///
+        /// 範例 1：
+        /// 輸入：a = "11", b = "1"
+        /// 輸出："100"
+        ///
+        /// 範例 2：
+        /// 輸入：a = "1010", b = "1011"
+        /// 輸出："10101"
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= a.length, b.length &lt;= 10^4
+        /// - a 和 b 只由字元 '0' 與 '1' 組成。
+        /// - 除了零本身之外，兩個字串都不含前導零。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 以固定案例依序驗證兩種二進位字串加法，並輸出每次執行的預期值、實際值與通過狀態。

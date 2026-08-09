@@ -5,11 +5,68 @@
         private const int Modulo = 1_000_000_007;
 
         /// <summary>
+        /// <para>
         /// 1508. Range Sum of Sorted Subarray Sums
-        /// https://leetcode.com/problems/range-sum-of-sorted-subarray-sums/description/?envType=daily-question&envId=2024-08-04
-        /// 
-        /// 1508. 子数组和排序后的区间和
+        /// https://leetcode.com/problems/range-sum-of-sorted-subarray-sums/description/
+        ///
+        /// You are given the array nums consisting of n positive integers. You computed the sums of all non-empty continuous
+        /// subarrays and sorted them in non-decreasing order, creating a new array of n * (n + 1) / 2 numbers.
+        ///
+        /// Return the sum of the numbers from index left to index right (indexed from 1), inclusive, in the new array. Since
+        /// the answer can be huge, return it modulo 10^9 + 7.
+        ///
+        /// Example 1:
+        /// Input: nums = [1,2,3,4], n = 4, left = 1, right = 5
+        /// Output: 13
+        /// Explanation: All subarray sums are 1, 3, 6, 10, 2, 5, 9, 3, 7, 4. After sorting, the array is
+        /// [1, 2, 3, 3, 4, 5, 6, 7, 9, 10]. The sum from index 1 through 5 is 1 + 2 + 3 + 3 + 4 = 13.
+        ///
+        /// Example 2:
+        /// Input: nums = [1,2,3,4], n = 4, left = 3, right = 4
+        /// Output: 6
+        /// Explanation: Using the same sorted array as Example 1, the sum from index 3 through 4 is 3 + 3 = 6.
+        ///
+        /// Example 3:
+        /// Input: nums = [1,2,3,4], n = 4, left = 1, right = 10
+        /// Output: 50
+        ///
+        /// Constraints:
+        /// - n == nums.length
+        /// - 1 &lt;= nums.length &lt;= 1000
+        /// - 1 &lt;= nums[i] &lt;= 100
+        /// - 1 &lt;= left &lt;= right &lt;= n * (n + 1) / 2
+        /// </para>
+        /// <para>
+        /// 1508. 子陣列和排序後的區間和
         /// https://leetcode.cn/problems/range-sum-of-sorted-subarray-sums/description/
+        ///
+        /// 給定由 n 個正整數組成的陣列 nums。計算所有非空連續子陣列的總和，再將這些總和按非遞減順序
+        /// 排序，形成一個含有 n * (n + 1) / 2 個數字的新陣列。
+        ///
+        /// 回傳新陣列中從索引 left 到索引 right（索引從 1 開始，包含兩端）的數字總和。由於答案可能很大，
+        /// 請回傳其對 10^9 + 7 取模後的結果。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [1,2,3,4]，n = 4，left = 1，right = 5
+        /// 輸出：13
+        /// 解釋：所有子陣列和為 1、3、6、10、2、5、9、3、7、4。排序後陣列為
+        /// [1, 2, 3, 3, 4, 5, 6, 7, 9, 10]。索引 1 到 5 的總和為 1 + 2 + 3 + 3 + 4 = 13。
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [1,2,3,4]，n = 4，left = 3，right = 4
+        /// 輸出：6
+        /// 解釋：使用與範例 1 相同的排序陣列，索引 3 到 4 的總和為 3 + 3 = 6。
+        ///
+        /// 範例 3：
+        /// 輸入：nums = [1,2,3,4]，n = 4，left = 1，right = 10
+        /// 輸出：50
+        ///
+        /// 限制條件：
+        /// - n == nums.length
+        /// - 1 &lt;= nums.length &lt;= 1000
+        /// - 1 &lt;= nums[i] &lt;= 100
+        /// - 1 &lt;= left &lt;= right &lt;= n * (n + 1) / 2
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 執行涵蓋官方範例、邊界、重複值與最大限制的確定性驗收案例，並比較兩種解法。

@@ -3,15 +3,74 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1498. Number of Subsequences That Satisfy the Given Sum Condition
-    /// https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/description/?envType=daily-question&envId=2025-06-29
-    /// 
-    /// 1498. 滿足條件的子序列數目
-    /// https://leetcode.cn/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/description/?envType=daily-question&envId=2025-06-29
-    /// 
-    /// 給定一個整數陣列 nums 和一個整數 target。
-    /// 回傳 nums 中非空子序列的數量，使得該子序列的最小值與最大值之和小於等於 target。
-    /// 由於答案可能過大，請回傳答案對 10^9 + 7 取餘數的結果。
+    /// https://leetcode.com/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/description/
+    ///
+    /// You are given an array of integers nums and an integer target.
+    /// Return the number of non-empty subsequences of nums such that the sum of the minimum and maximum element in it is less
+    /// than or equal to target. Since the answer may be too large, return it modulo 10^9 + 7.
+    ///
+    /// Example 1:
+    /// Input: nums = [3,5,6,7], target = 9
+    /// Output: 4
+    /// Explanation: There are 4 subsequences that satisfy the condition:
+    /// [3] -&gt; 3 + 3 &lt;= 9
+    /// [3,5] -&gt; 3 + 5 &lt;= 9
+    /// [3,5,6] -&gt; 3 + 6 &lt;= 9
+    /// [3,6] -&gt; 3 + 6 &lt;= 9
+    ///
+    /// Example 2:
+    /// Input: nums = [3,3,6,8], target = 10
+    /// Output: 6
+    /// Explanation: There are 6 valid subsequences (nums may contain repeated numbers):
+    /// [3], [3], [3,3], [3,6], [3,6], [3,3,6].
+    ///
+    /// Example 3:
+    /// Input: nums = [2,3,3,4,6,7], target = 12
+    /// Output: 61
+    /// Explanation: There are 63 non-empty subsequences; two do not satisfy the condition: [6,7] and [7].
+    /// The number of valid subsequences is 63 - 2 = 61.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 1 &lt;= nums[i] &lt;= 10^6
+    /// - 1 &lt;= target &lt;= 10^6
+    /// </para>
+    /// <para>
+    /// 1498. 滿足指定總和條件的子序列數目
+    /// https://leetcode.cn/problems/number-of-subsequences-that-satisfy-the-given-sum-condition/description/
+    ///
+    /// 給定整數陣列 nums 與整數 target。
+    /// 回傳 nums 中非空子序列的數量，使該子序列的最小元素與最大元素之和小於或等於 target。由於答案可能
+    /// 很大，請回傳答案對 10^9 + 7 取模後的結果。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [3,5,6,7]，target = 9
+    /// 輸出：4
+    /// 解釋：共有 4 個符合條件的子序列：
+    /// [3] -&gt; 3 + 3 &lt;= 9
+    /// [3,5] -&gt; 3 + 5 &lt;= 9
+    /// [3,5,6] -&gt; 3 + 6 &lt;= 9
+    /// [3,6] -&gt; 3 + 6 &lt;= 9
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [3,3,6,8]，target = 10
+    /// 輸出：6
+    /// 解釋：共有 6 個符合條件的子序列（nums 可以包含重複數值）：
+    /// [3]、[3]、[3,3]、[3,6]、[3,6]、[3,3,6]。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [2,3,3,4,6,7]，target = 12
+    /// 輸出：61
+    /// 解釋：共有 63 個非空子序列，其中兩個不符合條件：[6,7] 與 [7]。
+    /// 符合條件的子序列數量為 63 - 2 = 61。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 1 &lt;= nums[i] &lt;= 10^6
+    /// - 1 &lt;= target &lt;= 10^6
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

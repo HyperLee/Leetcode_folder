@@ -5,18 +5,55 @@
         /// <summary>
         /// 56. Merge Intervals
         /// https://leetcode.com/problems/merge-intervals/description/
+        /// <para>
+        /// Given an array of intervals where intervals[i] = [start_i, end_i], merge all overlapping intervals and return an array of the non-overlapping intervals that cover all intervals in the input.
+        ///
+        /// Example 1:
+        /// Input: intervals = [[1,3],[2,6],[8,10],[15,18]]
+        /// Output: [[1,6],[8,10],[15,18]]
+        /// Explanation: Since intervals [1,3] and [2,6] overlap, merge them into [1,6].
+        ///
+        /// Example 2:
+        /// Input: intervals = [[1,4],[4,5]]
+        /// Output: [[1,5]]
+        /// Explanation: Intervals [1,4] and [4,5] are considered overlapping.
+        ///
+        /// Example 3:
+        /// Input: intervals = [[4,7],[1,4]]
+        /// Output: [[1,7]]
+        /// Explanation: Intervals [1,4] and [4,7] are considered overlapping.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= intervals.length &lt;= 10^4
+        /// - intervals[i].length == 2
+        /// - 0 &lt;= start_i &lt;= end_i &lt;= 10^4
+        /// </para>
+        /// <para>
         /// 56. 合併區間
         /// https://leetcode.cn/problems/merge-intervals/description/
-        /// 
-        /// 題目描述：
-        /// 給定一組區間，請將所有重疊的區間合併，並返回一組不重疊的區間。
-        /// 解題概念與出發點：
-        /// 1. 先將區間按照起始值進行排序，確保後續處理時的順序性。
-        /// 2. 使用一個結果清單來存放合併後的區間。
-        /// 3. 遍歷排序後的區間，檢查當前區間是否與結果清單中的最後一個區間重疊。
-        ///    - 如果重疊，更新最後一個區間的結束值。
-        ///    - 如果不重疊，將當前區間加入結果清單。
-        /// 4. 最後返回結果清單。
+        ///
+        /// 給定一個區間陣列，其中 intervals[i] = [start_i, end_i]，請合併所有重疊區間，並回傳一個涵蓋輸入中所有區間的非重疊區間陣列。
+        ///
+        /// 範例 1：
+        /// 輸入：intervals = [[1,3],[2,6],[8,10],[15,18]]
+        /// 輸出：[[1,6],[8,10],[15,18]]
+        /// 解釋：因為區間 [1,3] 和 [2,6] 重疊，所以將它們合併為 [1,6]。
+        ///
+        /// 範例 2：
+        /// 輸入：intervals = [[1,4],[4,5]]
+        /// 輸出：[[1,5]]
+        /// 解釋：區間 [1,4] 和 [4,5] 視為重疊。
+        ///
+        /// 範例 3：
+        /// 輸入：intervals = [[4,7],[1,4]]
+        /// 輸出：[[1,7]]
+        /// 解釋：區間 [1,4] 和 [4,7] 視為重疊。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= intervals.length &lt;= 10^4
+        /// - intervals[i].length == 2
+        /// - 0 &lt;= start_i &lt;= end_i &lt;= 10^4
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 使用六組固定案例分別驗證排序合併法與座標事件掃描法，

@@ -3,15 +3,56 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2264. Largest 3-Same-Digit Number in String
-    /// 題目：給定字串 num 代表一個大整數，若一個整數有下列條件則稱為 good：
-    /// - 它是 num 的長度為 3 的子字串
-    /// - 它只包含單一數字
-    /// 回傳最大的 good 整數（字串形式），若不存在回傳空字串 ""。
-    /// 注意：子字串允許前導零。
+    /// https://leetcode.com/problems/largest-3-same-digit-number-in-string/description/
     ///
-    /// 解法說明：線性掃描字串，檢查每個長度為 3 的子字串是否三個字元相同，
-    /// 若相同則與目前記錄的最大值比較更新。時間複雜度 O(n)，空間 O(1)。
+    /// You are given string num representing a large integer. A good integer is a substring of length 3 containing only one unique digit. Return the maximum good integer as a string, or "" if none exists. A substring is contiguous, and leading zeros are allowed.
+    ///
+    /// Example 1:
+    /// Input: num = "6777133339"
+    /// Output: "777"
+    /// Explanation: The good integers are "777" and "333"; "777" is larger.
+    ///
+    /// Example 2:
+    /// Input: num = "2300019"
+    /// Output: "000"
+    /// Explanation: "000" is the only good integer.
+    ///
+    /// Example 3:
+    /// Input: num = "42352338"
+    /// Output: ""
+    /// Explanation: No substring of length 3 contains one unique digit.
+    ///
+    /// Constraints:
+    /// - 3 &lt;= num.length &lt;= 1000
+    /// - num consists only of digits.
+    /// </para>
+    /// <para>
+    /// 2264. 字串中最大的 3 位相同數字
+    /// https://leetcode.cn/problems/largest-3-same-digit-number-in-string/description/
+    ///
+    /// 給定表示大整數的字串 num。若一個長度為 3 的子字串只包含一種數字，則它是好整數。以字串回傳最大的好整數；若不存在則回傳 ""。子字串必須連續，且允許前導零。
+    ///
+    /// 範例 1：
+    /// 輸入：num = "6777133339"
+    /// 輸出："777"
+    /// 說明：好整數為 "777" 與 "333"，其中 "777" 較大。
+    ///
+    /// 範例 2：
+    /// 輸入：num = "2300019"
+    /// 輸出："000"
+    /// 說明："000" 是唯一的好整數。
+    ///
+    /// 範例 3：
+    /// 輸入：num = "42352338"
+    /// 輸出：""
+    /// 說明：沒有任何長度為 3 的子字串只包含一種數字。
+    ///
+    /// 限制條件：
+    /// - 3 &lt;= num.length &lt;= 1000
+    /// - num 僅由數字組成。
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數（未使用）</param>
     static void Main(string[] args)

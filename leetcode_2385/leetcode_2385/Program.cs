@@ -3,13 +3,54 @@ namespace leetcode_2385;
 internal class Program
 {
     /// <summary>
-    /// LeetCode 2385 - Amount of Time for Binary Tree to Be Infected.
-    /// LeetCode 2385 - 感染二叉樹需要的總時間。
-    /// English: https://leetcode.com/problems/amount-of-time-for-binary-tree-to-be-infected/
-    /// 中文：https://leetcode.cn/problems/amount-of-time-for-binary-tree-to-be-infected/
-    /// English: Starting from the uniquely valued node <c>start</c>, infection reaches each adjacent
-    /// parent or child node every minute; return the minutes needed to infect the whole binary tree.
-    /// 中文：從值唯一且等於 <c>start</c> 的節點開始，感染每分鐘擴散到父節點或子節點；回傳感染整棵二元樹所需分鐘數。
+    /// <para>
+    /// 2385. Amount of Time for Binary Tree to Be Infected
+    /// https://leetcode.com/problems/amount-of-time-for-binary-tree-to-be-infected/description/
+    ///
+    /// You are given the root of a binary tree whose node values are unique and integer start. At minute 0, infection begins at the node whose value is start. During each minute, a node becomes infected when it is currently uninfected and adjacent to an infected node. Return the minutes required to infect the whole tree.
+    ///
+    /// Images: https://assets.leetcode.com/uploads/2022/06/25/image-20220625231744-1.png and https://assets.leetcode.com/uploads/2022/06/25/image-20220625231812-2.png
+    ///
+    /// Example 1:
+    /// Input: root = [1,5,3,null,4,10,6,9,2], start = 3
+    /// Output: 4
+    /// Explanation: At minute 0, node 3 is infected. At minute 1, nodes 1, 10, and 6 are infected. At minute 2, node 5 is infected. At minute 3, node 4 is infected. At minute 4, nodes 9 and 2 are infected. The whole tree takes 4 minutes.
+    ///
+    /// Example 2:
+    /// Input: root = [1], start = 1
+    /// Output: 0
+    /// Explanation: At minute 0, the tree's only node is already infected, so return 0.
+    ///
+    /// Constraints:
+    /// - The number of nodes is in [1,10^5].
+    /// - 1 &lt;= Node.val &lt;= 10^5
+    /// - Every node has a unique value.
+    /// - A node whose value is start exists in the tree.
+    /// </para>
+    /// <para>
+    /// 2385. 感染二元樹需要的總時間
+    /// https://leetcode.cn/problems/amount-of-time-for-binary-tree-to-be-infected/description/
+    ///
+    /// 給定一棵節點值皆唯一的二元樹根節點與整數 start。第 0 分鐘，感染從值為 start 的節點開始。每一分鐘，若某節點尚未感染且與已感染節點相鄰，該節點就會受到感染。回傳感染整棵樹所需的分鐘數。
+    ///
+    /// 圖片：https://assets.leetcode.com/uploads/2022/06/25/image-20220625231744-1.png 與 https://assets.leetcode.com/uploads/2022/06/25/image-20220625231812-2.png
+    ///
+    /// 範例 1：
+    /// 輸入：root = [1,5,3,null,4,10,6,9,2], start = 3
+    /// 輸出：4
+    /// 說明：第 0 分鐘感染節點 3；第 1 分鐘感染節點 1、10、6；第 2 分鐘感染節點 5；第 3 分鐘感染節點 4；第 4 分鐘感染節點 9、2。整棵樹共需 4 分鐘。
+    ///
+    /// 範例 2：
+    /// 輸入：root = [1], start = 1
+    /// 輸出：0
+    /// 說明：第 0 分鐘時樹中唯一的節點已感染，因此回傳 0。
+    ///
+    /// 限制條件：
+    /// - 節點數量在 [1,10^5] 範圍內。
+    /// - 1 &lt;= Node.val &lt;= 10^5
+    /// - 每個節點的值皆唯一。
+    /// - 樹中存在值為 start 的節點。
+    /// </para>
     /// </summary>
     private static void Main()
     {

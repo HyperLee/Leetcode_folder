@@ -3,33 +3,98 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1334. Find the City With the Smallest Number of Neighbors at a Threshold Distance
-        /// https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/?envType=daily-question&envId=2024-07-26
-        /// 
-        /// 1334. 阈值距离内邻居最少的城市
+        /// https://leetcode.com/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/description/
+        ///
+        /// There are n cities numbered from 0 to n - 1. Given the array edges where edges[i] = [from_i, to_i, weight_i]
+        /// represents a bidirectional and weighted edge between cities from_i and to_i, and given the integer distanceThreshold.
+        ///
+        /// Return the city with the smallest number of cities that are reachable through some path and whose distance is at most
+        /// distanceThreshold. If there are multiple such cities, return the city with the greatest number.
+        ///
+        /// Notice that the distance of a path connecting cities i and j is equal to the sum of the edges' weights along that path.
+        ///
+        /// Example 1:
+        /// Official illustration: https://assets.leetcode.com/uploads/2024/08/23/problem1334example1.png
+        /// Input: n = 4, edges = [[0,1,3],[1,2,1],[1,3,4],[2,3,1]], distanceThreshold = 4
+        /// Output: 3
+        /// Explanation: The figure above describes the graph.
+        /// The neighboring cities at a distanceThreshold = 4 for each city are:
+        /// City 0 -&gt; [City 1, City 2]
+        /// City 1 -&gt; [City 0, City 2, City 3]
+        /// City 2 -&gt; [City 0, City 1, City 3]
+        /// City 3 -&gt; [City 1, City 2]
+        /// Cities 0 and 3 have 2 neighboring cities at a distanceThreshold = 4, but we have to return city 3 since it has
+        /// the greatest number.
+        ///
+        /// Example 2:
+        /// Official illustration: https://assets.leetcode.com/uploads/2024/08/23/problem1334example0.png
+        /// Input: n = 5, edges = [[0,1,2],[0,4,8],[1,2,3],[1,4,2],[2,3,1],[3,4,1]], distanceThreshold = 2
+        /// Output: 0
+        /// Explanation: The figure above describes the graph.
+        /// The neighboring cities at a distanceThreshold = 2 for each city are:
+        /// City 0 -&gt; [City 1]
+        /// City 1 -&gt; [City 0, City 4]
+        /// City 2 -&gt; [City 3, City 4]
+        /// City 3 -&gt; [City 2, City 4]
+        /// City 4 -&gt; [City 1, City 2, City 3]
+        /// The city 0 has 1 neighboring city at a distanceThreshold = 2.
+        ///
+        /// Constraints:
+        /// - 2 &lt;= n &lt;= 100
+        /// - 1 &lt;= edges.length &lt;= n * (n - 1) / 2
+        /// - edges[i].length == 3
+        /// - 0 &lt;= from_i &lt; to_i &lt; n
+        /// - 1 &lt;= weight_i, distanceThreshold &lt;= 10^4
+        /// - All pairs (from_i, to_i) are distinct.
+        /// </para>
+        /// <para>
+        /// 1334. 閾值距離內鄰居最少的城市
         /// https://leetcode.cn/problems/find-the-city-with-the-smallest-number-of-neighbors-at-a-threshold-distance/description/
-        /// 
-        /// 關鍵點：
-        /// 城市之間的距離：由連接兩個城市的邊的權重總和決定。
-        /// 目標城市：找到可達城市數量最少的城市。
-        /// 可達城市：距離該城市不超過指定閾值的城市。
-        /// 處理重複情況：如果有多個城市符合條件，返回城市編號最大的那個。
-        /// 
-        /// 解題思路
-        /// 1. 建立圖結構：使用鄰接矩陣或鄰接表表示城市之間的連接關係和距離。
-        /// 2. 計算城市間距離：使用圖算法（如 Dijkstra、Floyd-Warshall）計算任意兩城市之間的最短距離。
-        /// 3. 統計可達城市數量：對於每個城市，計算距離小於等於閾值的城市數量。
-        /// 4. 找出最小可達城市：在所有城市中，找到可達城市數量最小的城市，並返回其編號。
-        /// 
-        /// 算法選擇
-        /// 1. Dijkstra算法：適用於單源最短路徑問題，可以高效地計算一個城市到其他所有城市的距離。
-        /// 2. Floyd-Warshall算法：適用於求解所有城市之間的最短距離，但時間複雜度較高，對於大型圖形可能不太適合。
-        /// 
-        /// 注意：
-        /// 如果城市數量較大，鄰接矩陣可能會消耗大量記憶體，可以考慮使用鄰接表。
-        /// 可以使用堆優化的 Dijkstra 算法來提高效率。
-        /// 如果需要處理大型圖形，可以考慮使用分治或近似算法。
-        /// 
+        ///
+        /// 有 n 個城市，編號從 0 到 n - 1。給定陣列 edges，其中 edges[i] = [from_i, to_i, weight_i]
+        /// 表示城市 from_i 與 to_i 之間的一條雙向加權邊，另給定整數 distanceThreshold。
+        ///
+        /// 回傳經由某條路徑可達，且距離不超過 distanceThreshold 的城市數量最少之城市。
+        /// 如果有多個這樣的城市，回傳編號最大的城市。
+        ///
+        /// 請注意，連接城市 i 與 j 的路徑距離，等於該路徑上所有邊權重的總和。
+        ///
+        /// 範例 1：
+        /// 官方示意圖：https://assets.leetcode.com/uploads/2024/08/23/problem1334example1.png
+        /// 輸入：n = 4, edges = [[0,1,3],[1,2,1],[1,3,4],[2,3,1]], distanceThreshold = 4
+        /// 輸出：3
+        /// 解釋：上圖描述了此圖形。
+        /// 每個城市在 distanceThreshold = 4 時的鄰近城市如下：
+        /// 城市 0 -&gt; [城市 1, 城市 2]
+        /// 城市 1 -&gt; [城市 0, 城市 2, 城市 3]
+        /// 城市 2 -&gt; [城市 0, 城市 1, 城市 3]
+        /// 城市 3 -&gt; [城市 1, 城市 2]
+        /// 城市 0 與 3 都有 2 個距離不超過 distanceThreshold = 4 的鄰近城市，但必須回傳城市 3，
+        /// 因為它的編號較大。
+        ///
+        /// 範例 2：
+        /// 官方示意圖：https://assets.leetcode.com/uploads/2024/08/23/problem1334example0.png
+        /// 輸入：n = 5, edges = [[0,1,2],[0,4,8],[1,2,3],[1,4,2],[2,3,1],[3,4,1]], distanceThreshold = 2
+        /// 輸出：0
+        /// 解釋：上圖描述了此圖形。
+        /// 每個城市在 distanceThreshold = 2 時的鄰近城市如下：
+        /// 城市 0 -&gt; [城市 1]
+        /// 城市 1 -&gt; [城市 0, 城市 4]
+        /// 城市 2 -&gt; [城市 3, 城市 4]
+        /// 城市 3 -&gt; [城市 2, 城市 4]
+        /// 城市 4 -&gt; [城市 1, 城市 2, 城市 3]
+        /// 城市 0 在 distanceThreshold = 2 時有 1 個鄰近城市。
+        ///
+        /// 限制條件：
+        /// - 2 &lt;= n &lt;= 100
+        /// - 1 &lt;= edges.length &lt;= n * (n - 1) / 2
+        /// - edges[i].length == 3
+        /// - 0 &lt;= from_i &lt; to_i &lt; n
+        /// - 1 &lt;= weight_i, distanceThreshold &lt;= 10^4
+        /// - 所有 (from_i, to_i) 組合均不相同。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 執行固定案例，逐一比較 Floyd-Warshall、鄰接矩陣 Dijkstra 與優先佇列 Dijkstra 的結果。

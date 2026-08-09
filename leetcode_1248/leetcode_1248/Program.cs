@@ -3,11 +3,59 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1248. Count Number of Nice Subarrays
-        /// https://leetcode.com/problems/count-number-of-nice-subarrays/description/?envType=daily-question&envId=2024-06-22
-        /// 1248. 统计「优美子数组」
+        /// https://leetcode.com/problems/count-number-of-nice-subarrays/description/
+        ///
+        /// Given an array of integers nums and an integer k. A continuous subarray is called nice if there are
+        /// k odd numbers in it.
+        /// Return the number of nice subarrays.
+        ///
+        /// Example 1:
+        /// Input: nums = [1,1,2,1,1], k = 3
+        /// Output: 2
+        /// Explanation: The only subarrays with 3 odd numbers are [1,1,2,1] and [1,2,1,1].
+        ///
+        /// Example 2:
+        /// Input: nums = [2,4,6], k = 1
+        /// Output: 0
+        /// Explanation: There are no odd numbers in the array.
+        ///
+        /// Example 3:
+        /// Input: nums = [2,2,2,1,2,2,1,2,2,2], k = 2
+        /// Output: 16
+        ///
+        /// Constraints:
+        /// 1 &lt;= nums.length &lt;= 50000
+        /// 1 &lt;= nums[i] &lt;= 10^5
+        /// 1 &lt;= k &lt;= nums.length
+        /// </para>
+        /// <para>
+        /// 1248. 統計「優美子陣列」
         /// https://leetcode.cn/problems/count-number-of-nice-subarrays/description/
-        /// 
+        ///
+        /// 給定整數陣列 nums 與整數 k。若一個連續子陣列中恰好有 k 個奇數，則稱它為優美子陣列。
+        /// 請回傳優美子陣列的數量。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [1,1,2,1,1], k = 3
+        /// 輸出：2
+        /// 解釋：僅有 [1,1,2,1] 與 [1,2,1,1] 這兩個子陣列含有 3 個奇數。
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [2,4,6], k = 1
+        /// 輸出：0
+        /// 解釋：陣列中沒有奇數。
+        ///
+        /// 範例 3：
+        /// 輸入：nums = [2,2,2,1,2,2,1,2,2,2], k = 2
+        /// 輸出：16
+        ///
+        /// 限制條件：
+        /// 1 &lt;= nums.length &lt;= 50000
+        /// 1 &lt;= nums[i] &lt;= 10^5
+        /// 1 &lt;= k &lt;= nums.length
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

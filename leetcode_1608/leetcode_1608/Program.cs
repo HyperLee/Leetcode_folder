@@ -3,10 +3,61 @@
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 1608. Special Array With X Elements Greater Than or Equal X
-        /// https://leetcode.com/problems/special-array-with-x-elements-greater-than-or-equal-x/description/?envType=daily-question&envId=2024-05-27
-        /// 1608. 特殊数组的特征值
+        /// https://leetcode.com/problems/special-array-with-x-elements-greater-than-or-equal-x/description/
+        ///
+        /// You are given an array nums of non-negative integers. nums is special if there is a number x such that exactly x
+        /// numbers in nums are greater than or equal to x. x does not have to be an element in nums.
+        /// Return x if nums is special; otherwise return -1. If nums is special, x is unique.
+        ///
+        /// Example 1:
+        /// Input: nums = [3,5]
+        /// Output: 2
+        /// Explanation: There are 2 values, 3 and 5, that are greater than or equal to 2.
+        ///
+        /// Example 2:
+        /// Input: nums = [0,0]
+        /// Output: -1
+        /// Explanation: No x fits. For x = 0 there should be 0 values &gt;= x, but there are 2; for x = 1 there should be
+        /// 1, but there are 0; for x = 2 there should be 2, but there are 0. x cannot be larger because nums has 2 values.
+        ///
+        /// Example 3:
+        /// Input: nums = [0,4,3,0,4]
+        /// Output: 3
+        /// Explanation: There are 3 values greater than or equal to 3.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= nums.length &lt;= 100
+        /// - 0 &lt;= nums[i] &lt;= 1000
+        /// </para>
+        /// <para>
+        /// 1608. 特殊陣列的特徵值
         /// https://leetcode.cn/problems/special-array-with-x-elements-greater-than-or-equal-x/description/
+        ///
+        /// 給定非負整數陣列 nums。若存在數字 x，使 nums 中恰好有 x 個數字大於或等於 x，則 nums 是特殊
+        /// 陣列；x 不必是 nums 的元素。若 nums 特殊，回傳 x；否則回傳 -1。特殊陣列的 x 是唯一的。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [3,5]
+        /// 輸出：2
+        /// 解釋：有 2 個值 3 與 5 大於或等於 2。
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [0,0]
+        /// 輸出：-1
+        /// 解釋：沒有符合條件的 x。x = 0 時應有 0 個值 &gt;= x，但實際有 2 個；x = 1 時應有 1 個，但
+        /// 實際有 0 個；x = 2 時應有 2 個，但實際有 0 個。nums 只有 2 個值，因此 x 不可能更大。
+        ///
+        /// 範例 3：
+        /// 輸入：nums = [0,4,3,0,4]
+        /// 輸出：3
+        /// 解釋：有 3 個值大於或等於 3。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= nums.length &lt;= 100
+        /// - 0 &lt;= nums[i] &lt;= 1000
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 以固定案例比較三種解法，同時驗證回傳值與輸入陣列是否保持不變。

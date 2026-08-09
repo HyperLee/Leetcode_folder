@@ -3,21 +3,98 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1298. Maximum Candies You Can Get from Boxes
-    /// https://leetcode.com/problems/maximum-candies-you-can-get-from-boxes/description/?envType=daily-question&envId=2025-06-03
-    /// 1298. 你能从盒子里获得的最大糖果数
-    /// https://leetcode.cn/problems/maximum-candies-you-can-get-from-boxes/description/?envType=daily-question&envId=2025-06-03
-    /// 
-    /// 題目描述：
-    /// 你有 n 個盒子，標記從 0 到 n-1。給你四個陣列：status、candies、keys 和 containedBoxes，其中：
-    /// - status[i] 為 1 表示第 i 個盒子是開著的，為 0 表示第 i 個盒子是關著的
-    /// - candies[i] 是第 i 個盒子中的糖果數量
-    /// - keys[i] 是你開啟第 i 個盒子後可以開啟的其他盒子標籤列表
-    /// - containedBoxes[i] 是你在第 i 個盒子內找到的其他盒子列表
-    /// 你會得到一個整數陣列 initialBoxes，包含你最初擁有的盒子標籤。
-    /// 你可以拿取任何開著的盒子中的所有糖果，使用其中的鑰匙開啟新盒子，也可以使用你在其中找到的盒子。
-    /// 返回遵循上述規則後你能獲得的最大糖果數量。
-    /// 
+    /// https://leetcode.com/problems/maximum-candies-you-can-get-from-boxes/description/
+    ///
+    /// You have n boxes labeled from 0 to n - 1. You are given four arrays: status, candies, keys, and containedBoxes where:
+    /// - status[i] is 1 if the i-th box is open and 0 if the i-th box is closed,
+    /// - candies[i] is the number of candies in the i-th box,
+    /// - keys[i] is a list of the labels of the boxes you can open after opening the i-th box.
+    /// - containedBoxes[i] is a list of the boxes you found inside the i-th box.
+    ///
+    /// You are given an integer array initialBoxes that contains the labels of the boxes you initially have. You can take all
+    /// the candies in any open box and you can use the keys in it to open new boxes and you also can use the boxes you find in it.
+    ///
+    /// Return the maximum number of candies you can get following the rules above.
+    ///
+    /// Example 1:
+    /// Input: status = [1,0,1,0], candies = [7,5,4,100], keys = [[],[],[1],[]],
+    /// containedBoxes = [[1,2],[3],[],[]], initialBoxes = [0]
+    /// Output: 16
+    /// Explanation: You will be initially given box 0. You will find 7 candies in it and boxes 1 and 2.
+    /// Box 1 is closed and you do not have a key for it so you will open box 2. You will find 4 candies and a key to box 1 in box 2.
+    /// In box 1, you will find 5 candies and box 3 but you will not find a key to box 3 so box 3 will remain closed.
+    /// Total number of candies collected = 7 + 4 + 5 = 16 candy.
+    ///
+    /// Example 2:
+    /// Input: status = [1,0,0,0,0,0], candies = [1,1,1,1,1,1], keys = [[1,2,3,4,5],[],[],[],[],[]],
+    /// containedBoxes = [[1,2,3,4,5],[],[],[],[],[]], initialBoxes = [0]
+    /// Output: 6
+    /// Explanation: You have initially box 0. Opening it you can find boxes 1,2,3,4 and 5 and their keys.
+    /// The total number of candies will be 6.
+    ///
+    /// Constraints:
+    /// - n == status.length == candies.length == keys.length == containedBoxes.length
+    /// - 1 &lt;= n &lt;= 1000
+    /// - status[i] is either 0 or 1.
+    /// - 1 &lt;= candies[i] &lt;= 1000
+    /// - 0 &lt;= keys[i].length &lt;= n
+    /// - 0 &lt;= keys[i][j] &lt; n
+    /// - All values of keys[i] are unique.
+    /// - 0 &lt;= containedBoxes[i].length &lt;= n
+    /// - 0 &lt;= containedBoxes[i][j] &lt; n
+    /// - All values of containedBoxes[i] are unique.
+    /// - Each box is contained in one box at most.
+    /// - 0 &lt;= initialBoxes.length &lt;= n
+    /// - 0 &lt;= initialBoxes[i] &lt; n
+    /// </para>
+    /// <para>
+    /// 1298. 你能從盒子中獲得的最大糖果數
+    /// https://leetcode.cn/problems/maximum-candies-you-can-get-from-boxes/description/
+    ///
+    /// 你有 n 個盒子，標記從 0 到 n - 1。給定四個陣列 status、candies、keys 與 containedBoxes，其中：
+    /// - 如果第 i 個盒子開啟，status[i] 為 1；如果第 i 個盒子關閉，則為 0。
+    /// - candies[i] 是第 i 個盒子中的糖果數量。
+    /// - keys[i] 是開啟第 i 個盒子後，可以開啟之盒子標籤的清單。
+    /// - containedBoxes[i] 是在第 i 個盒子內找到的盒子清單。
+    ///
+    /// 給定整數陣列 initialBoxes，其中包含你最初擁有的盒子標籤。你可以拿走任何已開啟盒子中的所有糖果，
+    /// 使用其中的鑰匙開啟新盒子，也可以使用在其中找到的盒子。
+    ///
+    /// 回傳依照上述規則所能獲得的最大糖果數量。
+    ///
+    /// 範例 1：
+    /// 輸入：status = [1,0,1,0], candies = [7,5,4,100], keys = [[],[],[1],[]],
+    /// containedBoxes = [[1,2],[3],[],[]], initialBoxes = [0]
+    /// 輸出：16
+    /// 解釋：一開始會得到盒子 0。你會在其中找到 7 顆糖果以及盒子 1 和 2。
+    /// 盒子 1 是關閉的，而且你沒有它的鑰匙，因此會開啟盒子 2。你會在盒子 2 中找到 4 顆糖果和盒子 1 的鑰匙。
+    /// 在盒子 1 中會找到 5 顆糖果和盒子 3，但找不到盒子 3 的鑰匙，因此盒子 3 會保持關閉。
+    /// 收集到的糖果總數 = 7 + 4 + 5 = 16 顆。
+    ///
+    /// 範例 2：
+    /// 輸入：status = [1,0,0,0,0,0], candies = [1,1,1,1,1,1], keys = [[1,2,3,4,5],[],[],[],[],[]],
+    /// containedBoxes = [[1,2,3,4,5],[],[],[],[],[]], initialBoxes = [0]
+    /// 輸出：6
+    /// 解釋：一開始擁有盒子 0。開啟它後，可以找到盒子 1、2、3、4、5 以及它們的鑰匙。
+    /// 糖果總數會是 6。
+    ///
+    /// 限制條件：
+    /// - n == status.length == candies.length == keys.length == containedBoxes.length
+    /// - 1 &lt;= n &lt;= 1000
+    /// - status[i] 不是 0 就是 1。
+    /// - 1 &lt;= candies[i] &lt;= 1000
+    /// - 0 &lt;= keys[i].length &lt;= n
+    /// - 0 &lt;= keys[i][j] &lt; n
+    /// - keys[i] 中的所有值均不相同。
+    /// - 0 &lt;= containedBoxes[i].length &lt;= n
+    /// - 0 &lt;= containedBoxes[i][j] &lt; n
+    /// - containedBoxes[i] 中的所有值均不相同。
+    /// - 每個盒子最多被包含在一個盒子中。
+    /// - 0 &lt;= initialBoxes.length &lt;= n
+    /// - 0 &lt;= initialBoxes[i] &lt; n
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

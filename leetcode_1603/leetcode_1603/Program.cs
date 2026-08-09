@@ -3,12 +3,59 @@ namespace leetcode_1603;
 internal static class Program
 {
     /// <summary>
-    /// LeetCode 1603: Design Parking System / 設計停車系統。
-    /// https://leetcode.com/problems/design-parking-system/
-    /// https://leetcode.cn/problems/design-parking-system/
-    /// Design a parking system with independent big, medium, and small capacities; each
-    /// arriving car is accepted only when its matching space remains. 設計一個分別管理大型、
-    /// 中型與小型車位容量的停車系統；車輛只有在對應車位尚有餘額時才能停入。
+    /// <para>
+    /// 1603. Design Parking System
+    /// https://leetcode.com/problems/design-parking-system/description/
+    ///
+    /// Design a parking system for a parking lot with three kinds of spaces: big, medium, and small, each with a fixed number
+    /// of slots. Implement the ParkingSystem class:
+    /// - ParkingSystem(int big, int medium, int small) initializes the object with the slot counts for each size.
+    /// - bool addCar(int carType) checks whether a matching space is available. Types 1, 2, and 3 represent big, medium, and
+    ///   small. A car may use only its own type. If no space is available, return false; otherwise park it and return true.
+    ///
+    /// Example 1:
+    /// Input:
+    /// ["ParkingSystem","addCar","addCar","addCar","addCar"]
+    /// [[1,1,0],[1],[2],[3],[1]]
+    /// Output: [null,true,true,false,false]
+    /// Explanation:
+    /// ParkingSystem parkingSystem = new ParkingSystem(1, 1, 0);
+    /// parkingSystem.addCar(1); // true: 1 big slot was available
+    /// parkingSystem.addCar(2); // true: 1 medium slot was available
+    /// parkingSystem.addCar(3); // false: no small slot was available
+    /// parkingSystem.addCar(1); // false: the big slot is already occupied
+    ///
+    /// Constraints:
+    /// - 0 &lt;= big, medium, small &lt;= 1000
+    /// - carType is 1, 2, or 3
+    /// - At most 1000 calls will be made to addCar
+    /// </para>
+    /// <para>
+    /// 1603. 設計停車系統
+    /// https://leetcode.cn/problems/design-parking-system/description/
+    ///
+    /// 為停車場設計一個停車系統。停車場有大型、中型、小型三種車位，每種都有固定數量。實作 ParkingSystem：
+    /// - ParkingSystem(int big, int medium, int small) 以各尺寸的車位數初始化物件。
+    /// - bool addCar(int carType) 檢查是否有相符車位。類型 1、2、3 分別表示大型、中型、小型車；車輛只能停
+    ///   在自己的類型。若無空位回傳 false；否則停入並回傳 true。
+    ///
+    /// 範例 1：
+    /// 輸入：
+    /// ["ParkingSystem","addCar","addCar","addCar","addCar"]
+    /// [[1,1,0],[1],[2],[3],[1]]
+    /// 輸出：[null,true,true,false,false]
+    /// 解釋：
+    /// ParkingSystem parkingSystem = new ParkingSystem(1, 1, 0);
+    /// parkingSystem.addCar(1); // true：有 1 個大型車位
+    /// parkingSystem.addCar(2); // true：有 1 個中型車位
+    /// parkingSystem.addCar(3); // false：沒有小型車位
+    /// parkingSystem.addCar(1); // false：大型車位已被占用
+    ///
+    /// 限制條件：
+    /// - 0 &lt;= big, medium, small &lt;= 1000
+    /// - carType 為 1、2 或 3
+    /// - addCar 最多呼叫 1000 次
+    /// </para>
     /// </summary>
     private static void Main()
     {

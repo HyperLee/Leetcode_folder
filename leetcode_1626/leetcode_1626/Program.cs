@@ -41,17 +41,65 @@ class Player : IComparable<Player>
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1626. Best Team With No Conflicts
     /// https://leetcode.com/problems/best-team-with-no-conflicts/description/
-    /// 1626. 无矛盾的最佳球队
+    ///
+    /// You manage a basketball team and want the highest overall score, the sum of the selected players' scores. A conflict
+    /// exists if a younger player has a strictly higher score than an older player; players of the same age do not conflict.
+    /// Given scores and ages, where scores[i] and ages[i] are the i-th player's score and age, return the highest possible
+    /// overall score of a conflict-free team.
+    ///
+    /// Example 1:
+    /// Input: scores = [1,3,5,10,15], ages = [1,2,3,4,5]
+    /// Output: 34
+    /// Explanation: Choose all players.
+    ///
+    /// Example 2:
+    /// Input: scores = [4,5,6,5], ages = [2,1,2,1]
+    /// Output: 16
+    /// Explanation: Choose the last 3 players. Multiple players of the same age may be selected.
+    ///
+    /// Example 3:
+    /// Input: scores = [1,2,3,5], ages = [8,9,10,1]
+    /// Output: 6
+    /// Explanation: Choose the first 3 players.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= scores.length, ages.length &lt;= 1000
+    /// - scores.length == ages.length
+    /// - 1 &lt;= scores[i] &lt;= 10^6
+    /// - 1 &lt;= ages[i] &lt;= 1000
+    /// </para>
+    /// <para>
+    /// 1626. 無衝突的最佳球隊
     /// https://leetcode.cn/problems/best-team-with-no-conflicts/description/
-    /// 
-    /// 你是籃球隊的經理。為了即將到來的比賽，你想挑選一支總分最高的隊伍。
-    /// 隊伍的分數為隊內所有球員分數之和。
-    /// 
-    /// 但隊伍中不得出現衝突：當年輕球員的分數嚴格高於年長球員時，視為衝突。同齡球員之間不算衝突。
-    /// 
-    /// 給定兩個陣列 `scores` 和 `ages`，其中 `scores[i]` 與 `ages[i]` 分別表示第 i 位球員的分數與年齡，請回傳所有可能隊伍中能取得的最高總分。
+    ///
+    /// 你是籃球隊經理，希望挑選總分最高的隊伍；總分是所有入選球員分數之和。若年輕球員的分數嚴格高於
+    /// 年長球員，就存在衝突；同齡球員之間不會衝突。給定 scores 與 ages，其中 scores[i]、ages[i] 分別是
+    /// 第 i 位球員的分數與年齡，回傳所有無衝突隊伍中可能的最高總分。
+    ///
+    /// 範例 1：
+    /// 輸入：scores = [1,3,5,10,15]，ages = [1,2,3,4,5]
+    /// 輸出：34
+    /// 解釋：可以選擇所有球員。
+    ///
+    /// 範例 2：
+    /// 輸入：scores = [4,5,6,5]，ages = [2,1,2,1]
+    /// 輸出：16
+    /// 解釋：最佳選擇是最後 3 位球員；允許選擇多位同齡球員。
+    ///
+    /// 範例 3：
+    /// 輸入：scores = [1,2,3,5]，ages = [8,9,10,1]
+    /// 輸出：6
+    /// 解釋：最佳選擇是前 3 位球員。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= scores.length, ages.length &lt;= 1000
+    /// - scores.length == ages.length
+    /// - 1 &lt;= scores[i] &lt;= 10^6
+    /// - 1 &lt;= ages[i] &lt;= 1000
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

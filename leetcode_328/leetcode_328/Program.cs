@@ -15,14 +15,56 @@ class Program
 
     /// <summary>
     /// 328. Odd Even Linked List
-    /// https://leetcode.com/problems/odd-even-linked-list/
-    /// 328. 奇偶鏈表
+    /// https://leetcode.com/problems/odd-even-linked-list/description/
+    /// <para>
+    /// Given the head of a singly linked list, group all nodes with odd indices together, followed by all nodes with even indices, and return the reordered list.
+    ///
+    /// The first node is considered odd, the second node even, and so on.
+    ///
+    /// The relative order within both the odd and even groups must remain the same as in the input.
+    ///
+    /// Solve the problem in O(1) extra space and O(n) time.
+    ///
+    /// Example 1:
+    /// Image: https://assets.leetcode.com/uploads/2021/03/10/oddeven-linked-list.jpg
+    /// Input: head = [1,2,3,4,5]
+    /// Output: [1,3,5,2,4]
+    ///
+    /// Example 2:
+    /// Image: https://assets.leetcode.com/uploads/2021/03/10/oddeven2-linked-list.jpg
+    /// Input: head = [2,1,3,5,6,4,7]
+    /// Output: [2,3,6,7,1,5,4]
+    ///
+    /// Constraints:
+    /// - The number of nodes is in the range [0, 10^4].
+    /// - -10^6 &lt;= Node.val &lt;= 10^6
+    /// </para>
+    /// <para>
+    /// 328. 奇偶鏈結串列
     /// https://leetcode.cn/problems/odd-even-linked-list/description/
-    /// 
-    /// 給定一個單向鏈表的頭節點，請將所有位於奇數索引的節點聚集在一起，接著接上所有位於偶數索引的節點，並返回重新排序後的鏈表。
+    ///
+    /// 給定單向鏈結串列的 head，將所有奇數索引節點組合在一起，接著放置所有偶數索引節點，並回傳重新排列後的串列。
+    ///
     /// 第一個節點視為奇數，第二個節點視為偶數，依此類推。
-    /// 注意，在奇數組與偶數組內節點的相對順序應保持與輸入相同。
-    /// 要求使用 O(1) 的額外空間複雜度和 O(n) 的時間複雜度。
+    ///
+    /// 奇數組與偶數組內部的相對順序都必須與輸入相同。
+    ///
+    /// 請使用 O(1) 額外空間與 O(n) 時間解題。
+    ///
+    /// 範例 1：
+    /// 圖片：https://assets.leetcode.com/uploads/2021/03/10/oddeven-linked-list.jpg
+    /// 輸入：head = [1,2,3,4,5]
+    /// 輸出：[1,3,5,2,4]
+    ///
+    /// 範例 2：
+    /// 圖片：https://assets.leetcode.com/uploads/2021/03/10/oddeven2-linked-list.jpg
+    /// 輸入：head = [2,1,3,5,6,4,7]
+    /// 輸出：[2,3,6,7,1,5,4]
+    ///
+    /// 限制條件：
+    /// - 節點數量介於 [0, 10^4]。
+    /// - -10^6 &lt;= Node.val &lt;= 10^6
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// 

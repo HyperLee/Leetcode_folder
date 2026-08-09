@@ -3,13 +3,52 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 2225. Find Players With Zero or One Losses
-    /// https://leetcode.com/problems/find-players-with-zero-or-one-losses/description/?envType=daily-question&envId=2024-01-15
-    /// 2225. 找出输掉零场或一场比赛的玩家
+    /// https://leetcode.com/problems/find-players-with-zero-or-one-losses/description/
+    ///
+    /// matches[i] = [winner_i,loser_i] means winner_i defeated loser_i. Return answer of size 2: answer[0] contains players with no losses and answer[1] contains players with exactly one loss, both in increasing order. Consider only players who played at least one match. No two matches have the same outcome.
+    ///
+    /// Example 1:
+    /// Input: matches = [[1,3],[2,3],[3,6],[5,6],[5,7],[4,5],[4,8],[4,9],[10,4],[10,9]]
+    /// Output: [[1,2,10],[4,5,7,8]]
+    /// Explanation: Players 1, 2, 10 have 0 losses; players 4, 5, 7, 8 have 1; players 3, 6, 9 have 2.
+    ///
+    /// Example 2:
+    /// Input: matches = [[2,3],[1,3],[5,4],[6,4]]
+    /// Output: [[1,2,5,6],[]]
+    /// Explanation: Players 1, 2, 5, 6 have 0 losses; players 3 and 4 have 2, so no player has exactly 1 loss.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= matches.length &lt;= 10^5
+    /// - matches[i].length == 2
+    /// - 1 &lt;= winner_i, loser_i &lt;= 10^5
+    /// - winner_i != loser_i
+    /// - All matches[i] are unique.
+    /// </para>
+    /// <para>
+    /// 2225. 找出輸掉零場或一場比賽的玩家
     /// https://leetcode.cn/problems/find-players-with-zero-or-one-losses/description/
-    /// 
-    /// 不規則陣列
-    /// https://learn.microsoft.com/zh-tw/dotnet/csharp/language-reference/builtin-types/arrays#jagged-arrays
+    ///
+    /// matches[i] = [winner_i,loser_i] 表示 winner_i 擊敗 loser_i。回傳大小為 2 的 answer：answer[0] 包含從未輸過的玩家，answer[1] 包含恰好輸過一場的玩家，兩者皆按遞增順序排列。只考慮至少參加過一場比賽的玩家，且任兩場比賽結果都不同。
+    ///
+    /// 範例 1：
+    /// 輸入：matches = [[1,3],[2,3],[3,6],[5,6],[5,7],[4,5],[4,8],[4,9],[10,4],[10,9]]
+    /// 輸出：[[1,2,10],[4,5,7,8]]
+    /// 說明：玩家 1、2、10 輸 0 場；玩家 4、5、7、8 輸 1 場；玩家 3、6、9 輸 2 場。
+    ///
+    /// 範例 2：
+    /// 輸入：matches = [[2,3],[1,3],[5,4],[6,4]]
+    /// 輸出：[[1,2,5,6],[]]
+    /// 說明：玩家 1、2、5、6 輸 0 場；玩家 3、4 輸 2 場，因此沒有玩家恰好輸 1 場。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= matches.length &lt;= 10^5
+    /// - matches[i].length == 2
+    /// - 1 &lt;= winner_i, loser_i &lt;= 10^5
+    /// - winner_i != loser_i
+    /// - 所有 matches[i] 皆不重複。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

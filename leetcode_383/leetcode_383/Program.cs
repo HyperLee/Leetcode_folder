@@ -18,18 +18,52 @@
 
         /// <summary>
         /// 383. Ransom Note
-        /// https://leetcode.com/problems/ransom-note/
-        /// 
-        /// 383. 赎金信
+        /// https://leetcode.com/problems/ransom-note/description/
+        /// <para>
+        /// Given two strings ransomNote and magazine, return true if ransomNote can be constructed by using the letters from magazine and false otherwise.
+        ///
+        /// Each letter in magazine can only be used once in ransomNote.
+        ///
+        /// Example 1:
+        /// Input: ransomNote = "a", magazine = "b"
+        /// Output: false
+        ///
+        /// Example 2:
+        /// Input: ransomNote = "aa", magazine = "ab"
+        /// Output: false
+        ///
+        /// Example 3:
+        /// Input: ransomNote = "aa", magazine = "aab"
+        /// Output: true
+        ///
+        /// Constraints:
+        /// - 1 &lt;= ransomNote.length, magazine.length &lt;= 10^5
+        /// - ransomNote and magazine consist of lowercase English letters.
+        /// </para>
+        /// <para>
+        /// 383. 贖金信
         /// https://leetcode.cn/problems/ransom-note/description/
-        /// 
-        /// 给你两个字符串：ransomNote 和 magazine ，判断 ransomNote 能不能由 magazine 里面的字符构成。
-        /// 如果可以，返回 true ；否则返回 false 。
-        /// magazine 中的每个字符只能在 ransomNote 中使用一次。
-        /// 
-        /// ransomNote 能不能組合 建立出 magazine
-        /// 題目主要是說，有個犯人想要從雜誌 (magazine) 上剪貼他想要的字到勒索信 
-        /// (ransomNote) 上
+        ///
+        /// 給定兩個字串 ransomNote 與 magazine，若 ransomNote 能使用 magazine 中的字母構成則回傳 true，否則回傳 false。
+        ///
+        /// magazine 中的每個字母在 ransomNote 中只能使用一次。
+        ///
+        /// 範例 1：
+        /// 輸入：ransomNote = "a", magazine = "b"
+        /// 輸出：false
+        ///
+        /// 範例 2：
+        /// 輸入：ransomNote = "aa", magazine = "ab"
+        /// 輸出：false
+        ///
+        /// 範例 3：
+        /// 輸入：ransomNote = "aa", magazine = "aab"
+        /// 輸出：true
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= ransomNote.length, magazine.length &lt;= 10^5
+        /// - ransomNote 與 magazine 只由小寫英文字母組成。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

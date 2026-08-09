@@ -4,23 +4,54 @@ class Program
 {
     /// <summary>
     /// 3379. Transformed Array
-    /// https://leetcode.com/problems/transformed-array/description/?envType=daily-question&envId=2026-02-05
-    /// https://leetcode.cn/problems/transformed-array/description/?envType=daily-question&envId=2026-02-05
+    /// https://leetcode.com/problems/transformed-array/description/
+    /// <para>
+    /// You are given an integer array nums representing a circular array. Create result of the same size by performing these independent actions for every index i, where 0 &lt;= i &lt; nums.length:
+    /// - If nums[i] &gt; 0, move nums[i] steps right from i and set result[i] to the landing value.
+    /// - If nums[i] &lt; 0, move abs(nums[i]) steps left from i and set result[i] to the landing value.
+    /// - If nums[i] == 0, set result[i] to nums[i].
     ///
-    /// 題目說明（繁體中文）：
-    /// 給定整數陣列 nums，視為一個環狀陣列。請建立相同大小的陣列 result，對於每個索引 i（0 <= i < nums.Length）獨立地：
-    /// - 若 nums[i] > 0：從索引 i 向右移動 nums[i] 步（環狀），並將 result[i] 設為落腳索引處的值。
-    /// - 若 nums[i] < 0：從索引 i 向左移動 abs(nums[i]) 步（環狀），並將 result[i] 設為落腳索引處的值。
-    /// - 若 nums[i] == 0：將 result[i] 設為 nums[i]（即 0）。
-    /// 回傳新的陣列 result。
+    /// Return result. Movement wraps around either end because nums is circular.
     ///
-    /// Problem statement (English):
-    /// You are given an integer array nums representing a circular array, Your task is to create a new array result of the same size. 
-    /// For each index i (0 <= i < nums.Length):
-    /// - If nums[i] > 0: start at i and move nums[i] steps to the right (circular); set result[i] to the value at the landed index.
-    /// - If nums[i] < 0: start at i and move abs(nums[i]) steps to the left (circular); set result[i] to the value at the landed index.
-    /// - If nums[i] == 0: set result[i] to nums[i].
-    /// Return the new array result.
+    /// Example 1:
+    /// Input: nums = [3,-2,1,1]
+    /// Output: [1,1,1,3]
+    /// Explanation: From index 0 move 3 right to index 3, giving 1. From index 1 move 2 left to index 3, giving 1. From index 2 move 1 right to index 3, giving 1. From index 3 move 1 right to index 0, giving 3.
+    ///
+    /// Example 2:
+    /// Input: nums = [-1,4,-1]
+    /// Output: [-1,-1,4]
+    /// Explanation: From index 0 move 1 left to index 2, giving -1. From index 1 move 4 right to index 2, giving -1. From index 2 move 1 left to index 1, giving 4.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 100
+    /// - -100 &lt;= nums[i] &lt;= 100
+    /// </para>
+    /// <para>
+    /// 3379. 轉換後的陣列
+    /// https://leetcode.cn/problems/transformed-array/description/
+    ///
+    /// 給定表示環狀陣列的整數陣列 nums。對每個索引 i（0 &lt;= i &lt; nums.length）分別執行下列操作，建立相同大小的 result：
+    /// - 若 nums[i] &gt; 0，從 i 向右移動 nums[i] 步，將 result[i] 設為落點的值。
+    /// - 若 nums[i] &lt; 0，從 i 向左移動 abs(nums[i]) 步，將 result[i] 設為落點的值。
+    /// - 若 nums[i] == 0，將 result[i] 設為 nums[i]。
+    ///
+    /// 回傳 result。因 nums 為環狀，越過任一端時會繞回另一端。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [3,-2,1,1]
+    /// 輸出：[1,1,1,3]
+    /// 解釋：從索引 0 向右移動 3 步到索引 3，得到 1；從索引 1 向左移動 2 步到索引 3，得到 1；從索引 2 向右移動 1 步到索引 3，得到 1；從索引 3 向右移動 1 步到索引 0，得到 3。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [-1,4,-1]
+    /// 輸出：[-1,-1,4]
+    /// 解釋：從索引 0 向左移動 1 步到索引 2，得到 -1；從索引 1 向右移動 4 步到索引 2，得到 -1；從索引 2 向左移動 1 步到索引 1，得到 4。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 100
+    /// - -100 &lt;= nums[i] &lt;= 100
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

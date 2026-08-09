@@ -3,7 +3,55 @@
 class Program
 {
     /// <summary>
-    /// 程式進入點，包含 CountTrapezoids 方法的測試範例。
+    /// 3625. Count Number of Trapezoids II
+    /// https://leetcode.com/problems/count-number-of-trapezoids-ii/description/
+    /// <para>
+    /// You are given a 2D integer array points where points[i] = [x_i, y_i] represents the coordinates of the i-th point on the Cartesian plane.
+    ///
+    /// Return the number of unique trapezoids that can be formed by choosing any four distinct points from points.
+    ///
+    /// A trapezoid is a convex quadrilateral with at least one pair of parallel sides. Two lines are parallel if and only if they have the same slope.
+    ///
+    /// Example 1:
+    /// Input: points = [[-3,2],[3,0],[2,3],[3,2],[2,-3]]
+    /// Output: 2
+    /// Explanation: Images: https://assets.leetcode.com/uploads/2025/04/29/desmos-graph-4.png and https://assets.leetcode.com/uploads/2025/04/29/desmos-graph-3.png. There are two distinct ways to pick four points that form a trapezoid: [-3,2], [2,3], [3,2], [2,-3] form one trapezoid; [2,3], [3,2], [3,0], [2,-3] form another trapezoid.
+    ///
+    /// Example 2:
+    /// Input: points = [[0,0],[1,0],[0,1],[2,1]]
+    /// Output: 1
+    /// Explanation: Image: https://assets.leetcode.com/uploads/2025/04/29/desmos-graph-5.png. There is only one trapezoid which can be formed.
+    ///
+    /// Constraints:
+    /// - 4 &lt;= points.length &lt;= 500
+    /// - -1000 &lt;= x_i, y_i &lt;= 1000
+    /// - All points are pairwise distinct.
+    /// </para>
+    /// <para>
+    /// 3625. 統計梯形的數目 II
+    /// https://leetcode.cn/problems/count-number-of-trapezoids-ii/description/
+    ///
+    /// 給定一個二維整數陣列 points，其中 points[i] = [x_i, y_i] 表示笛卡兒平面上第 i 個點的座標。
+    ///
+    /// 回傳從 points 中選出任意四個不同的點所能形成之不重複梯形數量。
+    ///
+    /// 梯形是至少有一組平行邊的凸四邊形。兩條直線若且唯若斜率相同時互相平行。
+    ///
+    /// 範例 1：
+    /// 輸入：points = [[-3,2],[3,0],[2,3],[3,2],[2,-3]]
+    /// 輸出：2
+    /// 解釋：圖片：https://assets.leetcode.com/uploads/2025/04/29/desmos-graph-4.png 與 https://assets.leetcode.com/uploads/2025/04/29/desmos-graph-3.png。選出四個點形成梯形共有兩種不同方式：[-3,2]、[2,3]、[3,2]、[2,-3] 形成一個梯形；[2,3]、[3,2]、[3,0]、[2,-3] 形成另一個梯形。
+    ///
+    /// 範例 2：
+    /// 輸入：points = [[0,0],[1,0],[0,1],[2,1]]
+    /// 輸出：1
+    /// 解釋：圖片：https://assets.leetcode.com/uploads/2025/04/29/desmos-graph-5.png。只能形成一個梯形。
+    ///
+    /// 限制條件：
+    /// - 4 &lt;= points.length &lt;= 500
+    /// - -1000 &lt;= x_i, y_i &lt;= 1000
+    /// - 所有點兩兩不同。
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

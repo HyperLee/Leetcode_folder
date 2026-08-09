@@ -3,33 +3,65 @@ namespace leetcode_081;
 class Program
 {
     /// <summary>
+    /// <para>
     /// 81. Search in Rotated Sorted Array II
-    /// https://leetcode.com/problems/search-in-rotated-sorted-array-ii/description/
+    /// https://leetcode.com/problems/search-in-rotated-sorted-array-ii/
+    ///
+    /// There is an integer array nums sorted in non-decreasing order (not necessarily with distinct values).
+    /// Before being passed to your function, nums is rotated at an unknown pivot index k
+    /// (0 &lt;= k &lt; nums.length) such that the resulting array is
+    /// [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]] (0-indexed).
+    /// For example, [0,1,2,4,4,4,5,6,6,7] might be rotated at pivot index 5 and become
+    /// [4,5,6,6,7,0,1,2,4,4].
+    /// Given the array nums after the rotation and an integer target, return true if target is in nums,
+    /// or false if it is not in nums. You must decrease the overall operation steps as much as possible.
+    ///
+    /// Example 1:
+    /// Input: nums = [2,5,6,0,0,1,2], target = 0
+    /// Output: true
+    ///
+    /// Example 2:
+    /// Input: nums = [2,5,6,0,0,1,2], target = 3
+    /// Output: false
+    ///
+    /// Constraints:
+    /// 1 &lt;= nums.length &lt;= 5000
+    /// -10^4 &lt;= nums[i] &lt;= 10^4
+    /// nums is guaranteed to be rotated at some pivot.
+    /// -10^4 &lt;= target &lt;= 10^4
+    ///
+    /// Follow up: This problem is similar to Search in Rotated Sorted Array, but nums may contain duplicates.
+    /// Would this affect the runtime complexity? How and why?
+    /// </para>
+    /// <para>
     /// 81. 搜尋旋轉排序陣列 II
-    /// https://leetcode.cn/problems/search-in-rotated-sorted-array-ii/description/
+    /// https://leetcode.cn/problems/search-in-rotated-sorted-array-ii/
     ///
-    /// English:
-    /// There is an integer array nums sorted in non-decreasing order
-    /// (not necessarily with distinct values).
-    /// Before being passed to your function, nums is rotated at an unknown pivot
-    /// index k (0 <= k < nums.Length), such that the resulting array is
-    /// [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]
-    /// (0-indexed). For example, [0,1,2,4,4,4,5,6,6,7] might be rotated at
-    /// pivot index 5 and become [4,5,6,6,7,0,1,2,4,4].
-    /// Given the array nums after the rotation and an integer target, return
-    /// true if target is in nums, or false if it is not in nums.
-    /// You must decrease the overall operation steps as much as possible.
-    ///
-    /// Traditional Chinese:
-    /// 有一個以非遞減順序排序的整數陣列 nums，其中的值不一定互不相同。
-    /// 在傳入函式之前，nums 會在未知的樞紐索引 k
-    /// (0 <= k < nums.Length) 處旋轉，使結果陣列變成
-    /// [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]
-    /// (索引從 0 開始)。例如，[0,1,2,4,4,4,5,6,6,7] 可能在樞紐索引 5
-    /// 旋轉後變成 [4,5,6,6,7,0,1,2,4,4]。
-    /// 給定旋轉後的陣列 nums 和一個整數 target，如果 target 存在於 nums 中，
-    /// 回傳 true；否則回傳 false。
+    /// 有一個依非遞減順序排序的整數陣列 nums，其中的值不一定互不相同。
+    /// 在傳入函式之前，nums 會在未知的樞紐索引 k（0 &lt;= k &lt; nums.length）處旋轉，
+    /// 使結果陣列變成 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]
+    ///（索引從 0 開始）。例如，[0,1,2,4,4,4,5,6,6,7] 可能在樞紐索引 5 處旋轉，
+    /// 並變成 [4,5,6,6,7,0,1,2,4,4]。
+    /// 給定旋轉後的陣列 nums 與整數 target，若 target 位於 nums 中則回傳 true，否則回傳 false。
     /// 你必須盡可能減少整體操作步驟。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [2,5,6,0,0,1,2], target = 0
+    /// 輸出：true
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [2,5,6,0,0,1,2], target = 3
+    /// 輸出：false
+    ///
+    /// 限制條件：
+    /// 1 &lt;= nums.length &lt;= 5000
+    /// -10^4 &lt;= nums[i] &lt;= 10^4
+    /// nums 保證已在某個樞紐處旋轉。
+    /// -10^4 &lt;= target &lt;= 10^4
+    ///
+    /// 進階：本題與「搜尋旋轉排序陣列」相似，但 nums 可能包含重複值。
+    /// 這會影響執行時間複雜度嗎？為什麼？如何影響？
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數。</param>
     /// <summary>

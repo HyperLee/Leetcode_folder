@@ -10,16 +10,74 @@
 class Program
 {
     /// <summary>
+    /// <para>
     /// 1578. Minimum Time to Make Rope Colorful
-    /// https://leetcode.com/problems/minimum-time-to-make-rope-colorful/description/?envType=daily-question&envId=2025-11-03
-    /// 1578. 使绳子变成彩色的最短时间
-    /// https://leetcode.cn/problems/minimum-time-to-make-rope-colorful/description/?envType=daily-question&envId=2025-11-03
-    /// 
-    /// 題目描述：
-    /// Alice 有 n 個氣球排成一條繩子。給定一個 0-indexed 字串 colors，colors[i] 表示第 i 個氣球的顏色。
-    /// Alice 希望繩子是彩色的，不希望有兩個相鄰的氣球顏色相同，因此她請 Bob 幫忙。Bob 可以移除一些氣球使繩子變得彩色。
-    /// 給定一個 0-indexed 整數陣列 neededTime，neededTime[i] 表示 Bob 移除第 i 個氣球所需的時間（秒）。
-    /// 請回傳 Bob 使繩子變彩色所需的最少時間。
+    /// https://leetcode.com/problems/minimum-time-to-make-rope-colorful/description/
+    ///
+    /// Alice has n balloons arranged on a rope. You are given a 0-indexed string colors where colors[i] is the color of the
+    /// i-th balloon. Alice wants the rope to be colorful: no two consecutive balloons may have the same color. Bob can remove
+    /// some balloons. You are also given a 0-indexed integer array neededTime, where neededTime[i] is the number of seconds Bob
+    /// needs to remove the i-th balloon. Return the minimum time Bob needs to make the rope colorful.
+    ///
+    /// Example 1:
+    /// Image: https://assets.leetcode.com/uploads/2021/12/13/ballon1.jpg
+    /// Input: colors = "abaac", neededTime = [1,2,3,4,5]
+    /// Output: 3
+    /// Explanation: In the image, 'a' is blue, 'b' is red and 'c' is green. Remove the blue balloon at index 2, taking
+    /// 3 seconds. No two consecutive balloons then have the same color. Total time = 3.
+    ///
+    /// Example 2:
+    /// Image: https://assets.leetcode.com/uploads/2021/12/13/balloon2.jpg
+    /// Input: colors = "abc", neededTime = [1,2,3]
+    /// Output: 0
+    /// Explanation: The rope is already colorful, so Bob removes no balloons.
+    ///
+    /// Example 3:
+    /// Image: https://assets.leetcode.com/uploads/2021/12/13/balloon3.jpg
+    /// Input: colors = "aabaa", neededTime = [1,2,3,4,1]
+    /// Output: 2
+    /// Explanation: Remove balloons at indices 0 and 4. Each takes 1 second. Total time = 1 + 1 = 2.
+    ///
+    /// Constraints:
+    /// - n == colors.length == neededTime.length
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - 1 &lt;= neededTime[i] &lt;= 10^4
+    /// - colors contains only lowercase English letters.
+    /// </para>
+    /// <para>
+    /// 1578. 使繩子變成彩色的最短時間
+    /// https://leetcode.cn/problems/minimum-time-to-make-rope-colorful/description/
+    ///
+    /// Alice 有 n 個氣球排列在一條繩子上。給定從 0 開始索引的字串 colors，其中 colors[i] 是第 i 個氣球
+    /// 的顏色。Alice 希望繩子是彩色的，也就是任意兩個相鄰氣球都不能同色。Bob 可以移除一些氣球。
+    /// 另給定從 0 開始索引的整數陣列 neededTime，其中 neededTime[i] 是 Bob 移除第 i 個氣球所需的秒數。
+    /// 回傳 Bob 使繩子變彩色所需的最少時間。
+    ///
+    /// 範例 1：
+    /// 圖片：https://assets.leetcode.com/uploads/2021/12/13/ballon1.jpg
+    /// 輸入：colors = "abaac"，neededTime = [1,2,3,4,5]
+    /// 輸出：3
+    /// 解釋：圖中 'a' 為藍色、'b' 為紅色、'c' 為綠色。移除索引 2 的藍色氣球，耗時 3 秒；之後不再有
+    /// 兩個相鄰氣球同色。總時間 = 3。
+    ///
+    /// 範例 2：
+    /// 圖片：https://assets.leetcode.com/uploads/2021/12/13/balloon2.jpg
+    /// 輸入：colors = "abc"，neededTime = [1,2,3]
+    /// 輸出：0
+    /// 解釋：繩子已經是彩色的，Bob 不需要移除任何氣球。
+    ///
+    /// 範例 3：
+    /// 圖片：https://assets.leetcode.com/uploads/2021/12/13/balloon3.jpg
+    /// 輸入：colors = "aabaa"，neededTime = [1,2,3,4,1]
+    /// 輸出：2
+    /// 解釋：移除索引 0 與 4 的氣球，每個耗時 1 秒；總時間 = 1 + 1 = 2。
+    ///
+    /// 限制條件：
+    /// - n == colors.length == neededTime.length
+    /// - 1 &lt;= n &lt;= 10^5
+    /// - 1 &lt;= neededTime[i] &lt;= 10^4
+    /// - colors 只包含小寫英文字母。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

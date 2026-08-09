@@ -4,42 +4,62 @@ class Program
 {
     /// <summary>
     /// 3408. Design Task Manager
-    /// https://leetcode.com/problems/design-task-manager/description/?envType=daily-question&envId=2025-09-18
-    /// 3408. 设计任务管理器
+    /// https://leetcode.com/problems/design-task-manager/description/
+    /// <para>
+    /// A task management system lets users manage tasks, each with a priority, and must efficiently add, modify, execute, and remove tasks.
+    ///
+    /// Implement TaskManager:
+    /// - TaskManager(vector&lt;vector&lt;int&gt;&gt;&amp; tasks) initializes from [userId, taskId, priority] triples.
+    /// - void add(int userId, int taskId, int priority) adds a new taskId for userId. taskId does not already exist.
+    /// - void edit(int taskId, int newPriority) changes an existing task's priority.
+    /// - void rmv(int taskId) removes an existing task.
+    /// - int execTop() executes and removes the highest-priority task across all users; ties use the highest taskId. Return its userId, or -1 if no task exists.
+    ///
+    /// A user may have multiple tasks.
+    ///
+    /// Example 1:
+    /// Input: ["TaskManager","add","edit","execTop","rmv","add","execTop"], [[[[1,101,10],[2,102,20],[3,103,15]]],[4,104,5],[102,8],[],[101],[5,105,15],[]]
+    /// Output: [null,null,null,3,null,null,5]
+    /// Explanation: Initialize tasks [1,101,10], [2,102,20], [3,103,15]. Add [4,104,5]. Edit task 102 to priority 8. execTop executes task 103 for user 3. Remove task 101. Add [5,105,15]. execTop executes task 105 for user 5.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= tasks.length &lt;= 10^5
+    /// - 0 &lt;= userId &lt;= 10^5
+    /// - 0 &lt;= taskId &lt;= 10^5
+    /// - 0 &lt;= priority &lt;= 10^9
+    /// - 0 &lt;= newPriority &lt;= 10^9
+    /// - At most 2 * 10^5 total calls are made to add, edit, rmv, and execTop.
+    /// - Input guarantees taskId is valid.
+    /// </para>
+    /// <para>
+    /// 3408. 設計任務管理器
     /// https://leetcode.cn/problems/design-task-manager/description/
-    /// 
-    /// 題目描述：
-    /// 有一個任務管理系統允許使用者管理他們的任務，每個任務都有關聯的優先級。
-    /// 系統應該高效處理新增、修改、執行和刪除任務的操作。
-    /// 
-    /// 實現 TaskManager 類別：
-    /// 1. TaskManager(vector<vector<int>>& tasks) 使用使用者-任務-優先級三元組清單初始化任務管理器。
-    ///    輸入清單中的每個元素形式為 [userId, taskId, priority]，將具有給定優先級的任務添加到指定使用者。
-    /// 
-    /// 2. void add(int userId, int taskId, int priority) 將具有指定 taskId 和優先級的任務添加到 userId 使用者。
-    ///    保證 taskId 在系統中不存在。
-    /// 
-    /// 3. void edit(int taskId, int newPriority) 將現有 taskId 的優先級更新為 newPriority。
-    ///    保證 taskId 在系統中存在。
-    /// 
-    /// 4. void rmv(int taskId) 從系統中刪除由 taskId 識別的任務。
-    ///    保證 taskId 在系統中存在。
-    /// 
-    /// 5. int execTop() 執行所有使用者中具有最高優先級的任務。
-    ///    如果有多個具有相同最高優先級的任務，執行具有最高 taskId 的任務。
-    ///    執行後，taskId 從系統中刪除。返回與執行任務關聯的 userId。
-    ///    如果沒有可用任務，返回 -1。
-    /// 
-    /// 注意：使用者可能被分配多個任務。
-    /// 
-    /// 約束條件：
-    /// - 1 <= tasks.length <= 10^5
-    /// - 0 <= userId <= 10^5
-    /// - 0 <= taskId <= 10^5
-    /// - 0 <= priority <= 10^9
-    /// - 0 <= newPriority <= 10^9
-    /// - add, edit, rmv, execTop 方法總共最多被呼叫 2 * 10^5 次
-    /// - 輸入保證 taskId 是有效的
+    ///
+    /// 任務管理系統讓使用者管理各自具有優先級的任務，並須高效處理新增、修改、執行與移除任務。
+    ///
+    /// 實作 TaskManager：
+    /// - TaskManager(vector&lt;vector&lt;int&gt;&gt;&amp; tasks) 使用 [userId, taskId, priority] 三元組初始化。
+    /// - void add(int userId, int taskId, int priority) 為 userId 新增 taskId；taskId 保證尚不存在。
+    /// - void edit(int taskId, int newPriority) 修改既有任務的優先級。
+    /// - void rmv(int taskId) 移除既有任務。
+    /// - int execTop() 執行並移除所有使用者中優先級最高的任務；若並列，選 taskId 最大者。回傳其 userId；若沒有任務則回傳 -1。
+    ///
+    /// 一位使用者可以擁有多個任務。
+    ///
+    /// 範例 1：
+    /// 輸入：["TaskManager","add","edit","execTop","rmv","add","execTop"], [[[[1,101,10],[2,102,20],[3,103,15]]],[4,104,5],[102,8],[],[101],[5,105,15],[]]
+    /// 輸出：[null,null,null,3,null,null,5]
+    /// 解釋：以任務 [1,101,10]、[2,102,20]、[3,103,15] 初始化。新增 [4,104,5]。將任務 102 優先級改為 8。execTop 執行使用者 3 的任務 103。移除任務 101。新增 [5,105,15]。execTop 執行使用者 5 的任務 105。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= tasks.length &lt;= 10^5
+    /// - 0 &lt;= userId &lt;= 10^5
+    /// - 0 &lt;= taskId &lt;= 10^5
+    /// - 0 &lt;= priority &lt;= 10^9
+    /// - 0 &lt;= newPriority &lt;= 10^9
+    /// - add、edit、rmv 與 execTop 的總呼叫次數最多為 2 * 10^5。
+    /// - 輸入保證 taskId 有效。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

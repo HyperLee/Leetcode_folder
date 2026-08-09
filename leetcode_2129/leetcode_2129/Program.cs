@@ -5,10 +5,58 @@ namespace leetcode_2129
     internal class Program
     {
         /// <summary>
+        /// <para>
         /// 2129. Capitalize the Title
         /// https://leetcode.com/problems/capitalize-the-title/description/
-        /// 2129. 将标题首字母大写
-        /// https://leetcode.cn/problems/capitalize-the-title/description/?envType=daily-question&envId=Invalid%20Date
+        ///
+        /// You are given a title containing one or more words separated by one space. Capitalize each word as follows: if its length is 1 or 2, make every letter lowercase; otherwise uppercase the first letter and lowercase the rest. Return the capitalized title.
+        ///
+        /// Example 1:
+        /// Input: title = "capiTalIze tHe titLe"
+        /// Output: "Capitalize The Title"
+        /// Explanation: Every word has length at least 3, so each first letter is uppercase and the rest lowercase.
+        ///
+        /// Example 2:
+        /// Input: title = "First leTTeR of EACH Word"
+        /// Output: "First Letter of Each Word"
+        /// Explanation: "of" has length 2 and is lowercase. Every other word has length at least 3.
+        ///
+        /// Example 3:
+        /// Input: title = "i lOve leetcode"
+        /// Output: "i Love Leetcode"
+        /// Explanation: "i" has length 1 and is lowercase. The remaining words have length at least 3.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= title.length &lt;= 100
+        /// - Words are separated by one space with no leading or trailing spaces.
+        /// - Every non-empty word contains uppercase or lowercase English letters.
+        /// </para>
+        /// <para>
+        /// 2129. 將標題首字母大寫
+        /// https://leetcode.cn/problems/capitalize-the-title/description/
+        ///
+        /// 給定由一個或多個單字組成、單字間以一個空格分隔的標題。依下列規則調整每個單字：長度為 1 或 2 時全部轉為小寫；否則首字母轉為大寫，其餘轉為小寫。回傳調整後的標題。
+        ///
+        /// 範例 1：
+        /// 輸入：title = "capiTalIze tHe titLe"
+        /// 輸出："Capitalize The Title"
+        /// 說明：每個單字長度至少為 3，因此首字母大寫，其餘小寫。
+        ///
+        /// 範例 2：
+        /// 輸入：title = "First leTTeR of EACH Word"
+        /// 輸出："First Letter of Each Word"
+        /// 說明："of" 長度為 2，因此全部小寫；其他單字長度至少為 3。
+        ///
+        /// 範例 3：
+        /// 輸入：title = "i lOve leetcode"
+        /// 輸出："i Love Leetcode"
+        /// 說明："i" 長度為 1，因此小寫；其他單字長度至少為 3。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= title.length &lt;= 100
+        /// - 單字以一個空格分隔，且沒有前導或尾端空格。
+        /// - 每個非空單字由大小寫英文字母組成。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 主要進入點會執行五組固定案例，比較逐字組裝與字元陣列掃描兩種解法，
