@@ -62,11 +62,7 @@ class Program
     /// - edges 表示一棵有效的樹。
     /// </para>
     /// </summary>
-    /// <param name="args"></param> <summary>
-    /// <summary>
-    /// 主程式進入點，包含測試範例
-    /// </summary>
-    /// <param name="args">命令列參數</param>
+    /// <param name="args"></param>
     static void Main(string[] args)
     {
         Program program = new Program();
@@ -107,19 +103,19 @@ class Program
     /// 
     /// 解題思路：
     /// 1. 使用 DFS 序來處理樹的遍歷，通過 in[x] 和 out[x] 記錄每個節點子樹的遍歷範圍
-    /// 2. 如果 in[x] < in[y] < out[x]，則 x 是 y 的祖先節點
+    /// 2. 如果 in[x] &lt; in[y] &lt; out[x]，則 x 是 y 的祖先節點
     /// 3. 透過一次 DFS 計算每個子樹的異或和，然後枚舉所有可能的邊對
     /// 4. 根據兩個節點的祖先關係，計算刪除兩條邊後形成的三個部分的異或值
     /// 
     /// 時間複雜度：O(n²) - 需要枚舉所有可能的節點對
     /// 空間複雜度：O(n) - 存儲鄰接表、DFS序和子樹異或和
     /// 
-    /// ref:https://leetcode.cn/problems/minimum-score-after-removals-on-a-tree/solutions/3726042/cong-shu-zhong-shan-chu-bian-de-zui-xiao-mrrc/?envType=daily-question&envId=2025-07-24
+    /// ref:https://leetcode.cn/problems/minimum-score-after-removals-on-a-tree/solutions/3726042/cong-shu-zhong-shan-chu-bian-de-zui-xiao-mrrc/?envType=daily-question&amp;envId=2025-07-24
     /// 
     /// memo:
     /// 祖先節點的定義確實就是：
-    /// 比較早被訪問 (in_[ancestor] < in_[descendant])
-    /// 比較晚離開 (out_[ancestor] > out_[descendant])
+    /// 比較早被訪問 (in_[ancestor] &lt; in_[descendant])
+    /// 比較晚離開 (out_[ancestor] &gt; out_[descendant])
     /// 有可以理解為: 越小就是越早被訪問，越大就是越晚離開
     /// </summary>
     /// <param name="nums">每個節點的值陣列</param>
@@ -207,7 +203,7 @@ class Program
     /// 2. 計算子樹異或和：sum[x]儲存以節點x為根的子樹中所有節點值的異或結果
     /// 3. 建立祖先關係判斷基礎：透過DFS序可以判斷節點間的祖先關係
     /// 
-    /// DFS序的特性：如果節點x是節點y的祖先，則 in_[x] < in_[y] < out_[x]
+    /// DFS序的特性：如果節點x是節點y的祖先，則 in_[x] &lt; in_[y] &lt; out_[x]
     /// </summary>
     /// <param name="x">當前遍歷的節點</param>
     /// <param name="fa">當前節點的父節點</param>

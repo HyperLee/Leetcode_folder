@@ -43,7 +43,7 @@
         /// - -100 &lt;= matrix[i][j] &lt;= 100
         /// </para>
         /// </summary>
-        /// <param name="args"></param> <summary>
+        /// <param name="args"></param>
         static void Main(string[] args)
         {
             (string Name, int[][] Matrix, int[] Expected)[] testCases =
