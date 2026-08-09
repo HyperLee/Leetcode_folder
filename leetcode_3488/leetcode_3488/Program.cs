@@ -23,41 +23,121 @@ class Program
     /// 若不存在這樣的索引，則該查詢的答案為 -1。
     /// 回傳一個與 queries 大小相同的陣列 answer，其中 answer[i] 代表第 i 個查詢的結果。
     /// </summary>
-    /// <param name="args"></param>
+    /// <remarks>
+    /// 執行六組固定案例，對照二分搜尋與預先計算距離兩種解法；
+    /// 若任一驗證失敗，程序會以非零結束碼結束。
+    /// </remarks>
+    /// <param name="args">命令列參數；本範例不使用此參數。</param>
     static void Main(string[] args)
     {
-        var solution = new Program();
-
-        // Example 1: nums = [1,3,1,4,1,3,2], queries = [0,3,5]
-        // Expected: [2,-1,3]
-        int[] nums1 = [1, 3, 1, 4, 1, 3, 2];
-        int[] queries1 = [0, 3, 5];
-        Console.WriteLine($"Example 1: [{string.Join(", ", solution.SolveQueries(nums1, queries1))}]");
-
-        // Example 2: nums = [1,2,3,4], queries = [0,1,2,3]
-        // Expected: [-1,-1,-1,-1]
-        int[] nums2 = [1, 2, 3, 4];
-        int[] queries2 = [0, 1, 2, 3];
-        Console.WriteLine($"Example 2: [{string.Join(", ", solution.SolveQueries(nums2, queries2))}]");
+        int passedChecks = RunSamples();
+        Environment.ExitCode = passedChecks == 12 ? 0 : 1;
     }
 
     /// <summary>
-    /// 解法：雜湊表 + 二分搜尋
-    ///
-    /// 核心思路：
-    /// 1. 用雜湊表記錄每個元素值出現的所有索引位置。
-    /// 2. 因為陣列是環形的，在位置清單頭尾各補一個「虛擬位置」以消除邊界問題：
-    ///    - 頭部補上 lastPos - n（最後一個位置往左繞一圈）
-    ///    - 尾部補上 firstPos + n（第一個位置往右繞一圈）
-    /// 3. 對每個查詢，用二分搜尋在位置清單中定位，再取左右鄰居的最小距離。
-    /// 4. 若某元素值只出現一次（補完後 Count == 3），代表無相同元素，回傳 -1。
-    ///
-    /// 時間複雜度：O(n + q log n)，n 為陣列長度，q 為查詢數量。
-    /// 空間複雜度：O(n)。
+    /// 執行六組符合題目限制的固定案例，比較兩種解法的結果。
+    /// 案例涵蓋官方範例、單次出現、環形首尾、交錯重複與最大陣列長度。
     /// </summary>
-    /// <param name="nums">環形陣列</param>
-    /// <param name="queries">查詢索引陣列</param>
-    /// <returns>每個查詢對應的最小距離，若無相同元素則為 -1</returns>
+    /// <returns>兩種解法合計通過的驗證數。</returns>
+    private static int RunSamples()
+    {
+        (string Name, int[] Nums, int[] Queries, int[] Expected)[] cases =
+        [
+            ("官方範例 1", [1, 3, 1, 4, 1, 3, 2], [0, 3, 5], [2, -1, 3]),
+            ("官方範例 2：全部唯一值", [1, 2, 3, 4], [0, 1, 2, 3], [-1, -1, -1, -1]),
+            ("環形首尾為最近位置", [1, 2, 3, 1], [0, 3], [1, 1]),
+            ("只有兩個相同元素", [7, 7], [0, 1], [1, 1]),
+            ("多組交錯重複值", [1, 2, 1, 2, 1, 2], [0, 1, 2, 5], [2, 2, 2, 2]),
+            ("最大長度的相同元素", Enumerable.Repeat(9, 100_000).ToArray(), [0, 50_000, 99_999], [1, 1, 1])
+        ];
+
+        var solution = new Program();
+        int passedChecks = 0;
+
+        Console.WriteLine("LeetCode 3488 - Closest Equal Element Queries");
+        Console.WriteLine("兩種解法對照驗證");
+        Console.WriteLine();
+
+        for (int i = 0; i < cases.Length; i++)
+        {
+            passedChecks += RunCase(solution, i + 1, cases[i]);
+        }
+
+        Console.WriteLine($"總結：{passedChecks}/{cases.Length * 2} 項測試通過");
+        return passedChecks;
+    }
+
+    /// <summary>
+    /// 用彼此獨立的查詢陣列副本執行兩種解法，並將結果與預期陣列逐項比對。
+    /// </summary>
+    /// <param name="solution">提供兩種查詢解法的程序實例。</param>
+    /// <param name="caseNumber">顯示用的案例編號。</param>
+    /// <param name="testCase">包含名稱、環形陣列、查詢與預期結果的案例。</param>
+    /// <returns>本案例通過的解法數，範圍為 0 至 2。</returns>
+    private static int RunCase(
+        Program solution,
+        int caseNumber,
+        (string Name, int[] Nums, int[] Queries, int[] Expected) testCase)
+    {
+        int passedChecks = 0;
+
+        Console.WriteLine($"案例 {caseNumber}：{testCase.Name}");
+        Console.WriteLine($"nums = {FormatArray(testCase.Nums)}");
+        Console.WriteLine($"queries = {FormatArray(testCase.Queries)}");
+
+        int[] binarySearchQueries = testCase.Queries.ToArray();
+        IList<int> binarySearchResult = solution.SolveQueries(testCase.Nums, binarySearchQueries);
+        passedChecks += PrintResult("SolveQueries", testCase.Expected, binarySearchResult);
+
+        int[] precomputedQueries = testCase.Queries.ToArray();
+        IList<int> precomputedResult = solution.SolveQueriesByPrecomputedDistances(testCase.Nums, precomputedQueries);
+        passedChecks += PrintResult("SolveQueriesByPrecomputedDistances", testCase.Expected, precomputedResult);
+
+        Console.WriteLine();
+        return passedChecks;
+    }
+
+    /// <summary>
+    /// 輸出單一解法的預期與實際陣列，並回傳是否通過。
+    /// </summary>
+    /// <param name="methodName">顯示用的解法名稱。</param>
+    /// <param name="expected">事先人工推導的預期結果。</param>
+    /// <param name="actual">解法實際回傳的結果。</param>
+    /// <returns>結果完全相同時回傳 1，否則回傳 0。</returns>
+    private static int PrintResult(string methodName, int[] expected, IList<int> actual)
+    {
+        bool passed = expected.SequenceEqual(actual);
+        Console.WriteLine(
+            $"{methodName}: Expected = {FormatArray(expected)}, Actual = {FormatArray(actual)} => {(passed ? "PASS" : "FAIL")}");
+        return passed ? 1 : 0;
+    }
+
+    /// <summary>
+    /// 將整數清單格式化為易讀文字；長清單只顯示前後各六個值與總長度。
+    /// </summary>
+    /// <param name="values">要顯示的整數清單。</param>
+    /// <returns>方括號包覆的清單文字。</returns>
+    private static string FormatArray(IList<int> values)
+    {
+        if (values.Count <= 12)
+        {
+            return $"[{string.Join(", ", values)}]";
+        }
+
+        string firstValues = string.Join(", ", values.Take(6));
+        string lastValues = string.Join(", ", values.Skip(values.Count - 6));
+        return $"[{firstValues}, ..., {lastValues}] (length = {values.Count})";
+    }
+
+    /// <summary>
+    /// 使用索引分組與二分搜尋，解答環形陣列中每個查詢索引的最近相同元素距離。
+    /// 每個值的有序位置清單會在首尾加入環形虛擬位置，再對查詢做二分搜尋並比較左右鄰居。
+    /// 輸入必須符合題目限制：<paramref name="nums"/> 非空，且每個查詢都是有效索引。
+    /// </summary>
+    /// <param name="nums">只讀取的環形整數陣列，長度至少為 1。</param>
+    /// <param name="queries">有效的查詢索引陣列；方法會將其就地覆寫為答案。</param>
+    /// <returns>已覆寫的 <paramref name="queries"/>；無其他相同元素時對應值為 -1。</returns>
+    /// <remarks>時間複雜度為 O(n + q log n)，空間複雜度為 O(n)。</remarks>
     /// <example>
     /// <code>
     /// var result = SolveQueries([1,3,1,4,1,3,2], [0,3,5]);
@@ -68,7 +148,6 @@ class Program
     {
         int n = nums.Length;
 
-        // 雜湊表：元素值 -> 該值在 nums 中出現的所有索引位置
         Dictionary<int, List<int>> valueToPositions = new Dictionary<int, List<int>>();
 
         for (int i = 0; i < n; i++)
@@ -80,19 +159,11 @@ class Program
             valueToPositions[nums[i]].Add(i);
         }
 
-        // 為每個位置清單頭尾補上虛擬位置，處理環形邊界
-        // 例如 positions = [2, 5]，n = 7
-        //   頭部補 5 - 7 = -2，尾部補 2 + 7 = 9
-        //   變成 [-2, 2, 5, 9]，確保每個真實位置左右都有鄰居
-        foreach (var positions in valueToPositions.Values.ToList())
+        // 把最後一個位置向左平移一圈、第一個位置向右平移一圈，
+        // 使每個真實位置都能直接比較環形的左右最近鄰居。
+        foreach (List<int> positions in valueToPositions.Values)
         {
             int firstPos = positions[0];
-            // [^1] 是 C# 8 的「從尾端起算索引」語法（Index from end operator）
-            // [^1] 等同於 positions[positions.Count - 1]，即取最後一個元素
-            // 其他等效寫法：
-            //   positions[positions.Count - 1]  ← 傳統寫法
-            //   positions.Last()                ← LINQ 寫法（需 using System.Linq）
-            //   positions[^1]                   ← C# 8+ 建議寫法，最簡潔
             int lastPos = positions[^1];
             positions.Insert(0, lastPos - n);
             positions.Add(firstPos + n);
@@ -104,24 +175,79 @@ class Program
             int value = nums[queryIndex];
             List<int> positions = valueToPositions[value];
 
-            // 補完後 Count == 3 代表原本只有 1 個位置（加頭尾共 3 個），無相同元素
+            // 原本只出現一次時，加上頭尾虛擬位置後長度恰為 3。
             if (positions.Count == 3)
             {
                 queries[i] = -1;
                 continue;
             }
 
-            // 二分搜尋定位 queryIndex 在位置清單中的位置
             int idx = positions.BinarySearch(queryIndex);
             if (idx < 0)
             {
                 idx = ~idx;
             }
 
-            // 取與左鄰居、右鄰居的距離，回傳較小值
+            // 同值索引已排序，最近對象必然是左鄰居或右鄰居。
             int distRight = positions[idx + 1] - positions[idx];
             int distLeft = positions[idx] - positions[idx - 1];
             queries[i] = Math.Min(distRight, distLeft);
+        }
+
+        return queries;
+    }
+
+    /// <summary>
+    /// 先為每個陣列索引預先計算最近相同元素的環形距離，再以 O(1) 時間回答每筆查詢。
+    /// 同值索引會依陣列出現順序分組；對每個位置只需比較該組的環形前驅與後繼。
+    /// 輸入必須符合題目限制：<paramref name="nums"/> 非空，且每個查詢都是有效索引。
+    /// </summary>
+    /// <param name="nums">只讀取的環形整數陣列，長度至少為 1。</param>
+    /// <param name="queries">有效的查詢索引陣列；方法會將其就地覆寫為答案。</param>
+    /// <returns>已覆寫的 <paramref name="queries"/>；無其他相同元素時對應值為 -1。</returns>
+    /// <remarks>時間複雜度為 O(n + q)，空間複雜度為 O(n)。</remarks>
+    public IList<int> SolveQueriesByPrecomputedDistances(int[] nums, int[] queries)
+    {
+        int n = nums.Length;
+        Dictionary<int, List<int>> valueToPositions = new Dictionary<int, List<int>>();
+
+        for (int i = 0; i < n; i++)
+        {
+            if (!valueToPositions.TryGetValue(nums[i], out List<int>? positions))
+            {
+                positions = new List<int>();
+                valueToPositions[nums[i]] = positions;
+            }
+
+            positions.Add(i);
+        }
+
+        int[] distanceByIndex = new int[n];
+
+        foreach (List<int> positions in valueToPositions.Values)
+        {
+            if (positions.Count == 1)
+            {
+                distanceByIndex[positions[0]] = -1;
+                continue;
+            }
+
+            for (int i = 0; i < positions.Count; i++)
+            {
+                int current = positions[i];
+
+                // 第一與最後位置的前驅、後繼需跨越陣列邊界，
+                // 以 -n 或 +n 平移後便能直接用直線距離表示環形距離。
+                int previous = i == 0 ? positions[^1] - n : positions[i - 1];
+                int next = i == positions.Count - 1 ? positions[0] + n : positions[i + 1];
+
+                distanceByIndex[current] = Math.Min(current - previous, next - current);
+            }
+        }
+
+        for (int i = 0; i < queries.Length; i++)
+        {
+            queries[i] = distanceByIndex[queries[i]];
         }
 
         return queries;
