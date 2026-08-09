@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace leetcode_2799;
+﻿namespace leetcode_2799;
 
 class Program
 {
@@ -12,26 +10,54 @@ class Program
     /// 
     /// Array, Sliding Window, Hash Table
     /// </summary>
+    /// <remarks>
+    /// 以五組固定案例執行兩種滑動視窗解法，逐項比較預期值與實際值；若有任一項失敗，
+    /// 程式會設定非零結束碼，方便在命令列或自動化環境中辨識驗證結果。
+    /// </remarks>
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        // 測試資料
-        int[] nums1 = { 1, 3, 1, 2, 2 };
-        int[] nums2 = { 1, 2, 3, 4 };
-        int[] nums3 = { 1, 1, 1, 1 };
-
-        // 建立 Program 物件以呼叫 CountCompleteSubarrays 函式
         Program program = new Program();
+        (string Name, int[] Nums, int Expected)[] testCases =
+        {
+            ("官方範例：包含重複元素", new[] { 1, 3, 1, 2, 2 }, 4),
+            ("全部相同", new[] { 5, 5, 5, 5 }, 10),
+            ("全部相異", new[] { 1, 2, 3, 4 }, 1),
+            ("最小長度", new[] { 1 }, 1),
+            ("相異元素交錯出現", new[] { 1, 2, 1, 3, 2 }, 5)
+        };
+        (string Name, Func<int[], int> Solve)[] solutions =
+        {
+            (nameof(CountCompleteSubarrays), program.CountCompleteSubarrays),
+            (nameof(CountCompleteSubarrays2), program.CountCompleteSubarrays2)
+        };
 
-        // 驗證與測試
-        Console.WriteLine("測試資料 1: [1, 3, 1, 2, 2]");
-        Console.WriteLine("完整子陣列數量: " + program.CountCompleteSubarrays(nums1)); // 預期輸出: 4
+        int passed = 0;
+        int total = testCases.Length * solutions.Length;
 
-        Console.WriteLine("測試資料 2: [1, 2, 3, 4]");
-        Console.WriteLine("完整子陣列數量: " + program.CountCompleteSubarrays(nums2)); // 預期輸出: 10
+        foreach ((string name, int[] nums, int expected) in testCases)
+        {
+            Console.WriteLine($"案例：{name}");
+            Console.WriteLine($"輸入：[{string.Join(", ", nums)}]");
+            Console.WriteLine($"預期：{expected}");
 
-        Console.WriteLine("測試資料 3: [1, 1, 1, 1]");
-        Console.WriteLine("完整子陣列數量: " + program.CountCompleteSubarrays(nums3)); // 預期輸出: 10
+            foreach ((string solutionName, Func<int[], int> solve) in solutions)
+            {
+                int actual = solve(nums);
+                bool isPassed = actual == expected;
+                passed += isPassed ? 1 : 0;
+                Console.WriteLine($"{solutionName}: Actual = {actual}, {(isPassed ? "PASS" : "FAIL")}");
+            }
+
+            Console.WriteLine();
+        }
+
+        Console.WriteLine($"總結：{passed}/{total} 項測試通過");
+
+        if (passed != total)
+        {
+            Environment.ExitCode = 1;
+        }
     }
 
     /// <summary>
@@ -56,65 +82,102 @@ class Program
     /// 時間複雜度：O(n)，其中 n 為陣列長度
     /// 空間複雜度：O(k)，其中 k 為不同元素的數量
     /// </summary>
-    /// <param name="nums">輸入的整數陣列</param>
-    /// <returns>完整子陣列的數量</returns>
+    /// <remarks>
+    /// 輸入須符合題目限制：陣列不可為 null，長度介於 1 到 1000，每個元素介於 1 到 2000。
+    /// 此方法只讀取陣列，不會修改輸入內容。
+    /// </remarks>
+    /// <param name="nums">符合題目限制的正整數陣列。</param>
+    /// <returns>包含原陣列全部相異元素的連續非空子陣列數量。</returns>
     public int CountCompleteSubarrays(int[] nums)
     {
-        int res = 0; 
-        // 記錄當前窗口中每個元素的出現次數
-        // key 為元素，value 為該元素在當前窗口中的出現次數
-        Dictionary<int, int> count = new Dictionary<int, int>();
-        int n = nums.Length; 
-        // 右指針初始位置
-        int right = 0; 
-        // 計算原始陣列中不同元素的數量
-        int distinct = new HashSet<int>(nums).Count; 
-        
-        // 遍歷每個可能的起始位置（左指針）
-        for(int left = 0; left < n; left++)
+        int result = 0;
+        Dictionary<int, int> frequencies = new Dictionary<int, int>();
+        int length = nums.Length;
+        int right = 0;
+        int requiredDistinct = new HashSet<int>(nums).Count;
+
+        // 固定左邊界；right 只向右移動，因此每個元素至多進出視窗一次。
+        for (int left = 0; left < length; left++)
         {
-            // 當左指針移動時，需要從窗口中移除左側元素
-            if(left > 0)
+            if (left > 0)
             {
-                // 需要移除的元素
-                int remove = nums[left - 1]; 
-                // 減少該元素的計數
-                count[remove]--; 
-                // 如果該元素計數為 0，則從窗口中完全移除
-                if(count[remove] == 0) 
+                int removed = nums[left - 1];
+                frequencies[removed]--;
+                if (frequencies[removed] == 0)
                 {
-                    count.Remove(remove);
+                    frequencies.Remove(removed);
                 }
             }
 
-            // 擴展右指針，直到窗口中包含所有不同的元素
-            while(right < n && count.Count < distinct)
+            // 找到從 left 出發、第一個包含全部相異元素的最短視窗 [left, right)。
+            while (right < length && frequencies.Count < requiredDistinct)
             {
-                // 需要添加的元素
-                int add = nums[right]; 
-                // 如果該元素尚未在窗口中
-                if(!count.ContainsKey(add)) 
-                {
-                    // 初始化計數
-                    count[add] = 1; 
-                }
-                else
-                {
-                    // 如果該元素已經在窗口中，則增加計數
-                    count[add]++; 
-                }
-                // 右指針右移
-                right++; 
+                int added = nums[right];
+                frequencies[added] = frequencies.GetValueOrDefault(added) + 1;
+                right++;
             }
 
-            // 如果窗口中包含所有不同的元素（即形成了一個完整子陣列）
-            if(count.Count == distinct)
+            if (frequencies.Count == requiredDistinct)
             {
-                // 對於當前左指針，可以形成的完整子陣列數量等於從 right 到數組末尾的元素數量 + 1
-                // 這是因為任何包含 [left, right-1] 且向右延伸的子陣列都是完整的
-                res += n - right + 1;
+                // 最短完整視窗的結尾是 right - 1；再向右延伸仍然完整，共 length - right + 1 種。
+                result += length - right + 1;
             }
         }
-        return res;
+
+        return result;
+    }
+
+    /// <summary>
+    /// 統計完整子陣列的數量。先取得整個陣列的相異元素數 k，再以滑動視窗分別計算
+    /// 「至多包含 k 種元素」與「至多包含 k - 1 種元素」的子陣列數量，兩者相減即為
+    /// 恰好包含 k 種元素的完整子陣列數量。輸入須為長度 1 到 1000、元素值 1 到 2000
+    /// 的非 null 正整數陣列；方法回傳完整連續非空子陣列的總數，且不修改輸入。
+    /// </summary>
+    /// <param name="nums">符合題目限制的正整數陣列。</param>
+    /// <returns>包含原陣列全部相異元素的連續非空子陣列數量。</returns>
+    public int CountCompleteSubarrays2(int[] nums)
+    {
+        int requiredDistinct = new HashSet<int>(nums).Count;
+
+        return CountSubarraysWithAtMostDistinct(nums, requiredDistinct)
+            - CountSubarraysWithAtMostDistinct(nums, requiredDistinct - 1);
+    }
+
+    /// <summary>
+    /// 使用滑動視窗計算至多包含指定相異元素數量的連續非空子陣列。
+    /// 輸入陣列須符合題目條件，maxDistinct 須為非負整數；回傳所有符合上限的子陣列數量。
+    /// </summary>
+    /// <param name="nums">符合題目限制的正整數陣列。</param>
+    /// <param name="maxDistinct">視窗允許包含的相異元素數量上限。</param>
+    /// <returns>相異元素數量不超過 maxDistinct 的連續非空子陣列總數。</returns>
+    private static int CountSubarraysWithAtMostDistinct(int[] nums, int maxDistinct)
+    {
+        Dictionary<int, int> frequencies = new Dictionary<int, int>();
+        int left = 0;
+        int result = 0;
+
+        for (int right = 0; right < nums.Length; right++)
+        {
+            int added = nums[right];
+            frequencies[added] = frequencies.GetValueOrDefault(added) + 1;
+
+            // 移動左界直到視窗重新符合「至多 maxDistinct 種元素」。
+            while (frequencies.Count > maxDistinct)
+            {
+                int removed = nums[left];
+                frequencies[removed]--;
+                if (frequencies[removed] == 0)
+                {
+                    frequencies.Remove(removed);
+                }
+
+                left++;
+            }
+
+            // 固定 right 時，[left..right] 內的每個起點都能形成合法子陣列。
+            result += right - left + 1;
+        }
+
+        return result;
     }
 }
