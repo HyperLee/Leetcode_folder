@@ -1,6 +1,4 @@
-﻿using System.Numerics;
-
-namespace leetcode_3148
+﻿namespace leetcode_3148
 {
     internal class Program
     {
@@ -11,142 +9,216 @@ namespace leetcode_3148
         /// 3148. 矩阵中的最大得分
         /// https://leetcode.cn/problems/maximum-difference-score-in-a-grid/description/?envType=daily-question&envId=Invalid%20Date
         /// </summary>
-        /// <param name="args"></param>
+        /// <remarks>
+        /// 以固定案例同時驗證二維與一維動態規劃解法，並輸出預期值、實際值與通過狀態。
+        /// 任一檢查失敗時，程序會設定非零結束碼，方便在終端機或 CI 環境中判斷結果。
+        /// </remarks>
+        /// <param name="args">命令列參數；本範例不使用此參數。</param>
         static void Main(string[] args)
         {
-            /*
-            int[][] input = new int[][]
+            (string Name, int[][] Grid, int Expected)[] testCases =
             {
-                 new int[]{ 9,5,7,3 },
-                 new int[]{ 8,9,6,1 },
-                 new int[]{ 6,7,14,3 },
-                 new int[]{ 2,5,3,1 }
+                (
+                    "Official example 1",
+                    [
+                        [9, 5, 7, 3],
+                        [8, 9, 6, 1],
+                        [6, 7, 14, 3],
+                        [2, 5, 3, 1]
+                    ],
+                    9
+                ),
+                (
+                    "Official example 2 - decreasing grid",
+                    [
+                        [4, 3, 2],
+                        [3, 2, 1]
+                    ],
+                    -1
+                ),
+                (
+                    "Minimum 2 x 2 increasing grid",
+                    [
+                        [1, 2],
+                        [3, 4]
+                    ],
+                    3
+                ),
+                (
+                    "Duplicate values",
+                    [
+                        [5, 5],
+                        [5, 5]
+                    ],
+                    0
+                ),
+                (
+                    "Best endpoint is not bottom-right",
+                    [
+                        [1, 10, 2],
+                        [3, 4, 5]
+                    ],
+                    9
+                )
             };
-            */
 
-            int[][] input = new int[][]
+            int passedChecks = 0;
+            int totalChecks = testCases.Length * 2;
+
+            foreach ((string name, int[][] grid, int expected) in testCases)
             {
-                 new int[]{4, 3, 2},
-                 new int[]{3, 2, 1}
-            };
+                Console.WriteLine($"Case: {name}");
+                Console.WriteLine($"Input: {FormatGrid(grid)}");
+                Console.WriteLine($"Expected: {expected}");
+                passedChecks += RunSolution(nameof(MaxScore), MaxScore, grid, expected);
+                passedChecks += RunSolution(nameof(MaxScore2), MaxScore2, grid, expected);
+                Console.WriteLine();
+            }
 
-            Console.WriteLine(MaxScore2(input));
-            Console.ReadKey();
+            Console.WriteLine($"Summary: {passedChecks}/{totalChecks} checks passed");
+            if (passedChecks != totalChecks)
+            {
+                Environment.ExitCode = 1;
+            }
         }
 
 
         /// <summary>
-        /// ref:
-        /// https://leetcode.cn/problems/maximum-difference-score-in-a-grid/solutions/2774823/nao-jin-ji-zhuan-wan-dppythonjavacgo-by-swux7/?envType=daily-question&envId=Invalid%20Date
-        /// https://leetcode.cn/problems/maximum-difference-score-in-a-grid/solutions/2877233/ju-zhen-zhong-de-zui-da-de-fen-by-leetco-c5tv/?envType=daily-question&envId=Invalid%20Date
-        /// https://leetcode.cn/problems/maximum-difference-score-in-a-grid/solutions/2774923/3148-ju-zhen-zhong-de-zui-da-de-fen-by-s-g9eh/?envType=daily-question&envId=Invalid%20Date
-        /// 
-        /// 可以參考第一個連結
-        /// 他的說明比較好理解
-        /// 不然光看題目 根本不懂
-        /// 到底是要求什麼
-        /// 題目都無法理解
-        /// 
+        /// 執行指定解法並比對預期答案；每次都建立獨立矩陣，避免解法之間共享可變資料。
+        /// 輸入為解法名稱、待執行方法、符合題目限制的矩陣與手動推導的預期值，輸出為通過檢查數（0 或 1）。
         /// </summary>
-        /// <param name="grid"></param>
-        /// <returns></returns>
+        /// <param name="solutionName">顯示於測試結果的解法名稱。</param>
+        /// <param name="solution">接受矩陣並回傳最大分數的解法。</param>
+        /// <param name="sourceGrid">測試用原始矩陣。</param>
+        /// <param name="expected">手動推導的預期最大分數。</param>
+        /// <returns>答案相符時為 1，否則為 0。</returns>
+        private static int RunSolution(
+            string solutionName,
+            Func<IList<IList<int>>, int> solution,
+            int[][] sourceGrid,
+            int expected)
+        {
+            IList<IList<int>> grid = sourceGrid
+                .Select(row => (IList<int>)row.ToArray())
+                .ToList();
+
+            try
+            {
+                int actual = solution(grid);
+                bool passed = actual == expected;
+                Console.WriteLine($"  {solutionName}: Actual = {actual}, Result = {(passed ? "PASS" : "FAIL")}");
+                return passed ? 1 : 0;
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine($"  {solutionName}: Actual = ERROR ({exception.GetType().Name}), Result = FAIL");
+                return 0;
+            }
+        }
+
+
+        /// <summary>
+        /// 將測試矩陣格式化為單行巢狀陣列文字，方便同時閱讀終端輸出與 README 範例。
+        /// 輸入為非空的鋸齒陣列，輸出為不修改原資料的可讀字串。
+        /// </summary>
+        /// <param name="grid">要格式化的測試矩陣。</param>
+        /// <returns>形如 <c>[[1, 2], [3, 4]]</c> 的文字。</returns>
+        private static string FormatGrid(int[][] grid)
+        {
+            return $"[{string.Join(", ", grid.Select(row => $"[{string.Join(", ", row)}]"))}]";
+        }
+
+
+        /// <summary>
+        /// 使用二維動態規劃計算矩陣中的最大差異分數。
+        /// 多步移動的分數會消去中間項，因此只需為每個終點找出其上方或左方可達區域中的最小起點值。
+        /// 輸入必須是符合題目限制的非空矩陣，輸出為至少移動一次可取得的最大總分，且不會修改輸入矩陣。
+        /// </summary>
+        /// <remarks>
+        /// <c>prefixMinimum[i][j]</c> 保存走到對應前綴範圍時可使用的最小值。
+        /// 時間複雜度為 O(mn)，空間複雜度為 O(mn)。
+        /// </remarks>
+        /// <param name="grid">由正整數組成、至少為 2 x 2 的矩陣。</param>
+        /// <returns>從任意格開始並至少向右或向下移動一次所能取得的最大總分。</returns>
         public static int MaxScore(IList<IList<int>> grid)
         {
-            int res = int.MaxValue;
-            int m = grid.Count;
-            int n = grid[0].Count;
-            int[][] f = new int[m + 1][];
-            for(int i = 0; i < m; i++)
+            int rowCount = grid.Count;
+            int columnCount = grid[0].Count;
+            int[][] prefixMinimum = new int[rowCount + 1][];
+
+            for (int row = 0; row <= rowCount; row++)
             {
-                f[i] = new int[n + 1];
-                Array.Fill(f[0], int.MaxValue);
+                prefixMinimum[row] = new int[columnCount + 1];
+                Array.Fill(prefixMinimum[row], int.MaxValue);
             }
 
-            for(int i = 0; i < m; i++)
+            int maximumScore = int.MinValue;
+            for (int row = 0; row < rowCount; row++)
             {
-                f[i + 1][0] = int.MaxValue;
-                List<int> row = new List<int>(grid[i]);
-
-                for(int j = 0; j < n; j++)
+                for (int column = 0; column < columnCount; column++)
                 {
-                    int mn = Math.Min(f[i + 1][j], f[i][j + 1]);
-                    int x = row[j];
-                    res = Math.Max(res, x - mn);
-                    f[i + 1][j + 1] = Math.Min(mn, x);
+                    // 合法起點必須位於目前格子的上方或左方；兩個前綴狀態已涵蓋所有可達位置。
+                    int predecessorMinimum = Math.Min(
+                        prefixMinimum[row][column + 1],
+                        prefixMinimum[row + 1][column]);
+                    int currentValue = grid[row][column];
+
+                    if (row + column > 0)
+                    {
+                        // (c2-c1)+(c3-c2)+... 會消去中間項，只剩終點值減起點值。
+                        maximumScore = Math.Max(maximumScore, currentValue - predecessorMinimum);
+                    }
+
+                    prefixMinimum[row + 1][column + 1] = Math.Min(
+                        currentValue,
+                        predecessorMinimum);
                 }
             }
 
-            return res;
+            return maximumScore;
         }
 
 
         /// <summary>
-        /// https://leetcode.cn/problems/maximum-difference-score-in-a-grid/solutions/2877233/ju-zhen-zhong-de-zui-da-de-fen-by-leetco-c5tv/?envType=daily-question&envId=Invalid%20Date\
-        /// 方法二：二维前缀和
-        /// 未優化版本
-        /// 
-        /// 路徑移動方向 只能向右, 或是向下
-        /// 
-        /// 找出 終點 - 起始點 最大差異值 即可
-        /// 所以 其他點位置差值 找出 最小差異 就好
-        /// 
-        /// 由于每一步只能往右走或者往下走，因此只要起点的二维坐标均不大于终点（不能重合），那就一定存在一条移动路径。
-        /// 
-        /// 左上 (0, 0)
-        /// 枚举终点位置 (i,j)，那么起点的海拔高度越小越好。由于我们只能向右和向下走，所以起点只能在 (i,j) 的左上方向（可以是 (i,j) 的正左方向或正上方向）。
-        /// 
-        /// 二维/多维前缀和
-        /// https://oi-wiki.org/basic/prefix-sum/?query=%E5%89%8D%E7%BC%80%E5%92%8C#%E4%BA%8C%E7%BB%B4%E5%A4%9A%E7%BB%B4%E5%89%8D%E7%BC%80%E5%92%8C
+        /// 使用一維滾動動態規劃計算矩陣中的最大差異分數。
+        /// 逐列掃描時，以陣列保存各欄上方的前綴最小值，並以單一變數保存目前格子左方的前綴最小值。
+        /// 輸入必須是符合題目限制的非空矩陣，輸出為至少移動一次可取得的最大總分，且不會修改輸入矩陣。
         /// </summary>
-        /// <param name="grid"></param>
-        /// <returns></returns>
+        /// <remarks>
+        /// 此方法與 <see cref="MaxScore"/> 使用相同轉移，只壓縮不再需要的列狀態。
+        /// 時間複雜度為 O(mn)，空間複雜度為 O(n)。
+        /// </remarks>
+        /// <param name="grid">由正整數組成、至少為 2 x 2 的矩陣。</param>
+        /// <returns>從任意格開始並至少向右或向下移動一次所能取得的最大總分。</returns>
         public static int MaxScore2(IList<IList<int>> grid)
         {
-            int m = grid.Count;
-            int n = grid[0].Count;
-            int[][] premin = new int[m][];
+            int rowCount = grid.Count;
+            int columnCount = grid[0].Count;
+            int[] columnMinimum = new int[columnCount];
+            Array.Fill(columnMinimum, int.MaxValue);
 
-            for(int i = 0; i < m; i++)
+            int maximumScore = int.MinValue;
+            for (int row = 0; row < rowCount; row++)
             {
-                premin[i] = new int[n];
-                // 初始給極大值
-                Array.Fill(premin[i], int.MaxValue);
-            }
-
-            int res = int.MinValue;
-            for(int i = 0; i < m; i++)
-            {
-                for(int j = 0; j < n; j++)
+                int leftMinimum = int.MaxValue;
+                for (int column = 0; column < columnCount; column++)
                 {
-                    // 前墜和
-                    int pre = int.MaxValue;
+                    int predecessorMinimum = Math.Min(columnMinimum[column], leftMinimum);
+                    int currentValue = grid[row][column];
 
-                    if(i > 0)
+                    if (row + column > 0)
                     {
-                        // 行(左右), 前墜和取前一個 i - 1
-                        pre = Math.Min(pre, premin[i - 1][j]);
+                        maximumScore = Math.Max(maximumScore, currentValue - predecessorMinimum);
                     }
 
-                    if(j > 0)
-                    {
-                        // 列(上下), 前墜和取前一個 j - 1
-                        pre = Math.Min(pre, premin[i][j - 1]);
-                    }
-
-                    // i = j = 0 時沒有轉移
-                    if(i + j > 0)
-                    {
-                        // 轉移位置, 更新答案
-                        // 最終位置為右下角
-                        res = Math.Max(res, grid[i][j] - pre);
-                    }
-
-                    // 更新數值
-                    premin[i][j] = Math.Min(pre, grid[i][j]);
+                    // 先讀取上方舊值，再同步更新欄狀態與左側狀態，避免覆蓋尚未使用的資料。
+                    int currentMinimum = Math.Min(currentValue, predecessorMinimum);
+                    columnMinimum[column] = currentMinimum;
+                    leftMinimum = currentMinimum;
                 }
             }
 
-            return res;
+            return maximumScore;
         }
     }
 }
