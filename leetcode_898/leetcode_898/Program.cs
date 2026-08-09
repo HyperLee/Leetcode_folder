@@ -6,17 +6,62 @@ class Program
 {
     /// <summary>
     /// 898. Bitwise ORs of Subarrays
-    /// https://leetcode.com/problems/bitwise-ors-of-subarrays/description/?envType=daily-question&envId=2025-07-31
-    /// 898. 子数组按位或操作
+    /// https://leetcode.com/problems/bitwise-ors-of-subarrays/description/
+    /// <para>
+    /// Given an integer array arr, return the number of distinct bitwise OR results of all non-empty subarrays of arr.
+    ///
+    /// The bitwise OR of a subarray is the bitwise OR of every integer in that subarray. The bitwise OR of a one-integer subarray is that integer.
+    ///
+    /// A subarray is a contiguous, non-empty sequence of elements within an array.
+    ///
+    /// Example 1:
+    /// Input: arr = [0]
+    /// Output: 1
+    /// Explanation: There is only one possible result: 0.
+    ///
+    /// Example 2:
+    /// Input: arr = [1,1,2]
+    /// Output: 3
+    /// Explanation: The possible subarrays are [1], [1], [2], [1,1], [1,2], and [1,1,2]. They produce 1, 1, 2, 1, 3, and 3. There are 3 distinct values, so the answer is 3.
+    ///
+    /// Example 3:
+    /// Input: arr = [1,2,4]
+    /// Output: 6
+    /// Explanation: The possible results are 1, 2, 3, 4, 6, and 7.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= arr.length &lt;= 5 * 10^4
+    /// - 0 &lt;= arr[i] &lt;= 10^9
+    /// </para>
+    /// <para>
+    /// 898. 子陣列按位或運算
     /// https://leetcode.cn/problems/bitwise-ors-of-subarrays/description/
-    /// 
-    /// 題目描述：
-    /// 給定一個整數陣列 arr，回傳所有非空子陣列的按位或運算的不同結果數量。
-    /// 
-    /// 子陣列的按位或運算是該子陣列中每個整數的按位或運算。
-    /// 單一整數的子陣列的按位或運算就是該整數本身。
-    /// 
-    /// 子陣列是陣列中連續非空的元素序列。
+    ///
+    /// 給定整數陣列 arr，回傳 arr 所有非空子陣列之按位 OR 運算結果中，不同結果的數量。
+    ///
+    /// 子陣列的按位 OR 是對該子陣列中的每個整數執行按位 OR；若子陣列只含一個整數，結果就是該整數。
+    ///
+    /// 子陣列是陣列中一段連續且非空的元素序列。
+    ///
+    /// 範例 1：
+    /// 輸入：arr = [0]
+    /// 輸出：1
+    /// 解釋：只有一個可能結果：0。
+    ///
+    /// 範例 2：
+    /// 輸入：arr = [1,1,2]
+    /// 輸出：3
+    /// 解釋：可能的子陣列為 [1]、[1]、[2]、[1,1]、[1,2]、[1,1,2]，產生的結果依序為 1、1、2、1、3、3。共有 3 個不同值，因此答案是 3。
+    ///
+    /// 範例 3：
+    /// 輸入：arr = [1,2,4]
+    /// 輸出：6
+    /// 解釋：可能的結果為 1、2、3、4、6、7。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= arr.length &lt;= 5 * 10^4
+    /// - 0 &lt;= arr[i] &lt;= 10^9
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

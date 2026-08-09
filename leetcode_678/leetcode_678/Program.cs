@@ -12,9 +12,60 @@
 
         /// <summary>
         /// 678. Valid Parenthesis String
-        /// https://leetcode.com/problems/valid-parenthesis-string/description/?envType=daily-question&envId=2024-04-07
-        /// 678. 有效的括號字符串
+        /// https://leetcode.com/problems/valid-parenthesis-string/description/
+        /// <para>
+        /// Given a string s containing only three types of characters: '(', ')' and '*', return true if s is valid.
+        ///
+        /// The following rules define a valid string:
+        /// - Any left parenthesis '(' must have a corresponding right parenthesis ')'.
+        /// - Any right parenthesis ')' must have a corresponding left parenthesis '('.
+        /// - Left parenthesis '(' must go before the corresponding right parenthesis ')'.
+        /// - '*' could be treated as a single right parenthesis ')' or a single left parenthesis '(' or an empty string "".
+        ///
+        /// Example 1:
+        /// Input: s = "()"
+        /// Output: true
+        ///
+        /// Example 2:
+        /// Input: s = "(*)"
+        /// Output: true
+        ///
+        /// Example 3:
+        /// Input: s = "(*))"
+        /// Output: true
+        ///
+        /// Constraints:
+        /// - 1 &lt;= s.length &lt;= 100
+        /// - s[i] is '(', ')' or '*'.
+        /// </para>
+        /// <para>
+        /// 678. 有效括號字串
         /// https://leetcode.cn/problems/valid-parenthesis-string/description/
+        ///
+        /// 給定只包含三種字元 '(', ')' 與 '*' 的字串 s，若 s 有效則回傳 true。
+        ///
+        /// 有效字串由下列規則定義：
+        /// - 每個左括號 '(' 都必須有對應的右括號 ')'。
+        /// - 每個右括號 ')' 都必須有對應的左括號 '('。
+        /// - 左括號 '(' 必須出現在對應的右括號 ')' 之前。
+        /// - '*' 可以視為單一右括號 ')'、單一左括號 '('，或空字串 ""。
+        ///
+        /// 範例 1：
+        /// 輸入：s = "()"
+        /// 輸出：true
+        ///
+        /// 範例 2：
+        /// 輸入：s = "(*)"
+        /// 輸出：true
+        ///
+        /// 範例 3：
+        /// 輸入：s = "(*))"
+        /// 輸出：true
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= s.length &lt;= 100
+        /// - s[i] 是 '('、')' 或 '*'。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

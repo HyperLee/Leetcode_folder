@@ -4,13 +4,56 @@
     {
         /// <summary>
         /// 769. Max Chunks To Make Sorted
-        /// https://leetcode.com/problems/max-chunks-to-make-sorted/description/?envType=daily-question&envId=2024-12-19
-        /// 
-        /// 769. 最多能完成排序的块
+        /// https://leetcode.com/problems/max-chunks-to-make-sorted/description/
+        /// <para>
+        /// You are given an integer array arr of length n that represents a permutation of the integers in the range [0, n - 1].
+        ///
+        /// Split arr into some number of chunks (partitions), and sort each chunk individually. After concatenating the chunks, the result should equal the sorted array.
+        ///
+        /// Return the largest number of chunks that can be made to sort the array.
+        ///
+        /// Example 1:
+        /// Input: arr = [4,3,2,1,0]
+        /// Output: 1
+        /// Explanation: Splitting into two or more chunks will not produce the required result. For example, splitting into [4,3] and [2,1,0] results in [3,4,0,1,2], which is not sorted.
+        ///
+        /// Example 2:
+        /// Input: arr = [1,0,2,3,4]
+        /// Output: 4
+        /// Explanation: We can split into two chunks, such as [1,0] and [2,3,4]. However, splitting into [1,0], [2], [3], and [4] gives the largest possible number of chunks.
+        ///
+        /// Constraints:
+        /// - n == arr.length
+        /// - 1 &lt;= n &lt;= 10
+        /// - 0 &lt;= arr[i] &lt; n
+        /// - All elements of arr are unique.
+        /// </para>
+        /// <para>
+        /// 769. 最多能完成排序的區塊
         /// https://leetcode.cn/problems/max-chunks-to-make-sorted/description/
-        /// 
-        /// input資料是 0 ~ n - 1
-        /// 
+        ///
+        /// 給定長度為 n 的整數陣列 arr，它是範圍 [0, n - 1] 中所有整數的一個排列。
+        ///
+        /// 將 arr 分成若干區塊（分割區），並分別排序每個區塊。串接所有區塊後，結果應等於排序後的陣列。
+        ///
+        /// 回傳能使陣列完成排序的最大區塊數量。
+        ///
+        /// 範例 1：
+        /// 輸入：arr = [4,3,2,1,0]
+        /// 輸出：1
+        /// 解釋：分成兩個或更多區塊無法得到所需結果。例如，分成 [4,3] 與 [2,1,0] 後會得到 [3,4,0,1,2]，並未排序完成。
+        ///
+        /// 範例 2：
+        /// 輸入：arr = [1,0,2,3,4]
+        /// 輸出：4
+        /// 解釋：可以分成 [1,0] 與 [2,3,4] 兩個區塊；然而，分成 [1,0]、[2]、[3]、[4] 才能得到最多的區塊數。
+        ///
+        /// 限制條件：
+        /// - n == arr.length
+        /// - 1 &lt;= n &lt;= 10
+        /// - 0 &lt;= arr[i] &lt; n
+        /// - arr 中所有元素都不相同。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

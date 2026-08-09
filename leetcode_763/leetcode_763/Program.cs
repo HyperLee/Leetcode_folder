@@ -4,14 +4,50 @@ class Program
 {
     /// <summary>
     /// 763. Partition Labels
-    /// 
-    /// EN:
-    /// Given a string s, partition the string into as many parts as possible so that each letter appears in at most one part.
+    /// https://leetcode.com/problems/partition-labels/description/
+    /// <para>
+    /// You are given a string s. Partition it into as many parts as possible so that each letter appears in at most one part. For example, "ababcc" can be partitioned into ["abab", "cc"], but partitions such as ["aba", "bcc"] or ["ab", "ab", "cc"] are invalid.
+    ///
+    /// The partition must preserve the string: concatenating all parts in order must produce s.
+    ///
     /// Return a list of integers representing the sizes of these parts.
-    /// 
-    /// 繁體中文:
-    /// 給定字串 s，將字串劃分為盡可能多的區段，使每個字母最多只會出現在一個區段中。
-    /// 回傳一個整數串列，表示每個區段的長度。
+    ///
+    /// Example 1:
+    /// Input: s = "ababcbacadefegdehijhklij"
+    /// Output: [9,7,8]
+    /// Explanation: The partition is "ababcbaca", "defegde", "hijhklij". Each letter appears in at most one part. A partition such as "ababcbacadefegde", "hijhklij" is incorrect because it splits s into fewer parts.
+    ///
+    /// Example 2:
+    /// Input: s = "eccbbbbdec"
+    /// Output: [10]
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 500
+    /// - s consists of lowercase English letters.
+    /// </para>
+    /// <para>
+    /// 763. 劃分字母區間
+    /// https://leetcode.cn/problems/partition-labels/description/
+    ///
+    /// 給定字串 s。請將它劃分成盡可能多的區段，使每個字母最多只出現在一個區段中。例如，"ababcc" 可劃分為 ["abab", "cc"]，但 ["aba", "bcc"] 或 ["ab", "ab", "cc"] 等劃分方式無效。
+    ///
+    /// 劃分必須保留原字串：依序串接所有區段後，結果必須仍為 s。
+    ///
+    /// 回傳表示各區段大小的整數清單。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "ababcbacadefegdehijhklij"
+    /// 輸出：[9,7,8]
+    /// 解釋：劃分結果為 "ababcbaca"、"defegde"、"hijhklij"，每個字母最多只出現在一個區段中。像 "ababcbacadefegde"、"hijhklij" 這樣的劃分不正確，因為它把 s 分成較少的區段。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "eccbbbbdec"
+    /// 輸出：[10]
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 500
+    /// - s 由小寫英文字母組成。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

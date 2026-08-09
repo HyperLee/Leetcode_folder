@@ -19,20 +19,53 @@ class Program
     /// <summary>
     /// 669. Trim a Binary Search Tree
     /// https://leetcode.com/problems/trim-a-binary-search-tree/description/
+    /// <para>
+    /// Given the root of a binary search tree and the lowest and highest boundaries as low and high, trim the tree so that all its elements lie in [low, high]. Trimming the tree should not change the relative structure of the elements that will remain in the tree (i.e., any node's descendant should remain a descendant). It can be proven that there is a unique answer.
+    ///
+    /// Return the root of the trimmed binary search tree. Note that the root may change depending on the given bounds.
+    ///
+    /// Example 1:
+    /// Image: https://assets.leetcode.com/uploads/2020/09/09/trim1.jpg
+    /// Input: root = [1,0,2], low = 1, high = 2
+    /// Output: [1,null,2]
+    ///
+    /// Example 2:
+    /// Image: https://assets.leetcode.com/uploads/2020/09/09/trim2.jpg
+    /// Input: root = [3,0,4,null,2,null,null,1], low = 1, high = 3
+    /// Output: [3,2,null,1]
+    ///
+    /// Constraints:
+    /// - The number of nodes in the tree is in the range [1, 10^4].
+    /// - 0 &lt;= Node.val &lt;= 10^4
+    /// - The value of each node in the tree is unique.
+    /// - root is guaranteed to be a valid binary search tree.
+    /// - 0 &lt;= low &lt;= high &lt;= 10^4
+    /// </para>
+    /// <para>
+    /// 669. 修剪二元搜尋樹
     /// https://leetcode.cn/problems/trim-a-binary-search-tree/description/
     ///
-    /// English:
-    /// Given the root of a binary search tree and the lowest and highest boundaries as
-    /// low and high, trim the tree so that all its elements lie in [low, high]. Trimming
-    /// the tree should not change the relative structure of the elements that will
-    /// remain in the tree (i.e., any node's descendant should remain a descendant).
-    /// It can be proven that there is a unique answer. Return the root of the trimmed
-    /// binary search tree. Note that the root may change depending on the given boundaries.
+    /// 給定二元搜尋樹的根節點 root，以及下界 low 與上界 high，修剪這棵樹，使所有元素都位於 [low, high]。修剪不應改變保留元素之間的相對結構（亦即任何節點的後代仍應保持為該節點的後代）。可以證明答案是唯一的。
     ///
-    /// 繁體中文：
-    /// 給定一個二叉搜尋樹（BST）的根節點，以及下界 low 與上界 high，將樹進行修剪，使得所有節點值都位於 [low, high] 範圍內。
-    /// 修剪後不應改變剩餘節點之間的相對結構（即某節點的任一子孫仍須保持為該節點的子孫）。已證明答案是唯一的。
-    /// 回傳修剪後的 BST 的根節點，注意根節點可能會因給定範圍而改變。
+    /// 回傳修剪後二元搜尋樹的根節點。請注意，根節點可能隨給定範圍而改變。
+    ///
+    /// 範例 1：
+    /// 圖片：https://assets.leetcode.com/uploads/2020/09/09/trim1.jpg
+    /// 輸入：root = [1,0,2], low = 1, high = 2
+    /// 輸出：[1,null,2]
+    ///
+    /// 範例 2：
+    /// 圖片：https://assets.leetcode.com/uploads/2020/09/09/trim2.jpg
+    /// 輸入：root = [3,0,4,null,2,null,null,1], low = 1, high = 3
+    /// 輸出：[3,2,null,1]
+    ///
+    /// 限制條件：
+    /// - 樹中的節點數量在 [1, 10^4] 範圍內。
+    /// - 0 &lt;= Node.val &lt;= 10^4
+    /// - 樹中每個節點的值都不相同。
+    /// - root 保證是有效的二元搜尋樹。
+    /// - 0 &lt;= low &lt;= high &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

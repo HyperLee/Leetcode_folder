@@ -5,23 +5,59 @@ class Program
     /// <summary>
     /// 856. Score of Parentheses
     /// https://leetcode.com/problems/score-of-parentheses/description/
-    /// 
-    /// Given a balanced parentheses string s, return the score of the string.
-    /// 
-    /// The score of a balanced parentheses string is based on the following rule:
+    /// <para>
+    /// Given a balanced parentheses string s, return its score.
     ///
-    /// "()" has score 1.
-    /// AB has score A + B, where A and B are balanced parentheses strings.
-    /// (A) has score 2 * A, where A is a balanced parentheses string.
+    /// The score is defined by these rules:
+    /// - "()" has score 1.
+    /// - AB has score A + B, where A and B are balanced parentheses strings.
+    /// - (A) has score 2 * A, where A is a balanced parentheses string.
     ///
-    /// 給定一個平衡的括號字串 s，返回該字串的分數。
-    /// 
-    /// 平衡括號字串的分數基於以下規則：
+    /// Example 1:
+    /// Input: s = "()"
+    /// Output: 1
     ///
-    /// "()" 的分數為 1。
-    /// AB 的分數為 A + B，其中 A 和 B 是平衡的括號字串。
-    /// (A) 的分數為 2 * A，其中 A 是平衡的括號字串。
+    /// Example 2:
+    /// Input: s = "(())"
+    /// Output: 2
     ///
+    /// Example 3:
+    /// Input: s = "()()"
+    /// Output: 2
+    ///
+    /// Constraints:
+    /// - 2 &lt;= s.length &lt;= 50
+    /// - s consists only of '(' and ')'.
+    /// - s is a balanced parentheses string.
+    /// </para>
+    /// <para>
+    /// 856. 括號的分數
+    /// https://leetcode.cn/problems/score-of-parentheses/description/
+    ///
+    /// 給定平衡括號字串 s，回傳該字串的分數。
+    ///
+    /// 分數依下列規則定義：
+    /// - "()" 的分數為 1。
+    /// - AB 的分數為 A + B，其中 A 與 B 都是平衡括號字串。
+    /// - (A) 的分數為 2 * A，其中 A 是平衡括號字串。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "()"
+    /// 輸出：1
+    ///
+    /// 範例 2：
+    /// 輸入：s = "(())"
+    /// 輸出：2
+    ///
+    /// 範例 3：
+    /// 輸入：s = "()()"
+    /// 輸出：2
+    ///
+    /// 限制條件：
+    /// - 2 &lt;= s.length &lt;= 50
+    /// - s 只由 '(' 與 ')' 組成。
+    /// - s 是平衡括號字串。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

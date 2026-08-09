@@ -30,12 +30,73 @@ public class Program
     }
 
     /// <summary>
-    /// leetcode 662 Maximum Width of Binary Tree
-    /// https://leetcode.com/problems/maximum-width-of-binary-tree/
+    /// 662. Maximum Width of Binary Tree
+    /// https://leetcode.com/problems/maximum-width-of-binary-tree/description/
+    /// <para>
+    /// Given the root of a binary tree, return the maximum width of the given tree.
+    ///
+    /// The maximum width of a tree is the maximum width among all levels.
+    ///
+    /// The width of one level is defined as the length between the end-nodes (the leftmost and rightmost non-null nodes), where the null nodes between the end-nodes that would be present in a complete binary tree extending down to that level are also counted into the length calculation.
+    ///
+    /// It is guaranteed that the answer will be in the range of a 32-bit signed integer.
+    ///
+    /// Example 1:
+    /// Image: https://assets.leetcode.com/uploads/2021/05/03/width1-tree.jpg
+    /// Input: root = [1,3,2,5,3,null,9]
+    /// Output: 4
+    /// Explanation: The maximum width exists in the third level with length 4 (5,3,null,9).
+    ///
+    /// Example 2:
+    /// Image: https://assets.leetcode.com/uploads/2022/03/14/maximum-width-of-binary-tree-v3.jpg
+    /// Input: root = [1,3,2,5,null,null,9,6,null,7]
+    /// Output: 7
+    /// Explanation: The maximum width exists in the fourth level with length 7 (6,null,null,null,null,null,7).
+    ///
+    /// Example 3:
+    /// Image: https://assets.leetcode.com/uploads/2021/05/03/width3-tree.jpg
+    /// Input: root = [1,3,2,5]
+    /// Output: 2
+    /// Explanation: The maximum width exists in the second level with length 2 (3,2).
+    ///
+    /// Constraints:
+    /// - The number of nodes in the tree is in the range [1, 3000].
+    /// - -100 &lt;= Node.val &lt;= 100
+    /// </para>
+    /// <para>
     /// 662. 二元樹的最大寬度
-    /// https://leetcode.cn/problems/maximum-width-of-binary-tree/
-    /// Given the root of a binary tree, return the maximum width among its levels, counting null positions between the leftmost and rightmost non-null nodes.
-    /// 給定二元樹根節點，回傳所有層級中的最大寬度；最左與最右非空節點之間在完整二元樹中應存在的 null 位置也要計入。
+    /// https://leetcode.cn/problems/maximum-width-of-binary-tree/description/
+    ///
+    /// 給定二元樹的根節點 root，回傳這棵樹的最大寬度。
+    ///
+    /// 樹的最大寬度，是所有層級寬度中的最大值。
+    ///
+    /// 某一層的寬度定義為兩個端點節點（最左與最右的非空節點）之間的長度；若將完整二元樹延伸至該層，兩端點之間本應存在的 null 節點也要計入長度。
+    ///
+    /// 保證答案在 32 位元有號整數範圍內。
+    ///
+    /// 範例 1：
+    /// 圖片：https://assets.leetcode.com/uploads/2021/05/03/width1-tree.jpg
+    /// 輸入：root = [1,3,2,5,3,null,9]
+    /// 輸出：4
+    /// 解釋：最大寬度出現在第三層，長度為 4（5,3,null,9）。
+    ///
+    /// 範例 2：
+    /// 圖片：https://assets.leetcode.com/uploads/2022/03/14/maximum-width-of-binary-tree-v3.jpg
+    /// 輸入：root = [1,3,2,5,null,null,9,6,null,7]
+    /// 輸出：7
+    /// 解釋：最大寬度出現在第四層，長度為 7（6,null,null,null,null,null,7）。
+    ///
+    /// 範例 3：
+    /// 圖片：https://assets.leetcode.com/uploads/2021/05/03/width3-tree.jpg
+    /// 輸入：root = [1,3,2,5]
+    /// 輸出：2
+    /// 解釋：最大寬度出現在第二層，長度為 2（3,2）。
+    ///
+    /// 限制條件：
+    /// - 樹中的節點數量在 [1, 3000] 範圍內。
+    /// - -100 &lt;= Node.val &lt;= 100
+    /// </para>
     /// </summary>
     private static void Main()
     {

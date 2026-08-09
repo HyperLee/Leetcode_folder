@@ -5,13 +5,47 @@ class Program
     /// <summary>
     /// 540. Single Element in a Sorted Array
     /// https://leetcode.com/problems/single-element-in-a-sorted-array/description/
-    /// 540. 有序數組中的單一元素
+    /// <para>
+    /// You are given a sorted integer array where every element appears exactly twice except for one element, which appears exactly once.
+    ///
+    /// Return the single element that appears only once.
+    ///
+    /// Your solution must run in O(log n) time and O(1) space.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,1,2,3,3,4,4,8,8]
+    /// Output: 2
+    ///
+    /// Example 2:
+    /// Input: nums = [3,3,7,7,10,11,11]
+    /// Output: 10
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 0 &lt;= nums[i] &lt;= 10^5
+    /// </para>
+    /// <para>
+    /// 540. 有序陣列中的單一元素
     /// https://leetcode.cn/problems/single-element-in-a-sorted-array/description/
-    /// 
-    /// 題目（繁體中文）：
-    /// 給你一個已排序的整數陣列，陣列中每個元素恰好出現兩次，只有一個元素恰好出現一次。
-    /// 回傳那個只出現一次的元素。
-    /// 要求：時間複雜度必須為 O(log n)，且額外空間為 O(1)。
+    ///
+    /// 給定一個已排序的整數陣列，其中除了一個元素只出現一次之外，其餘每個元素都恰好出現兩次。
+    ///
+    /// 回傳只出現一次的那個元素。
+    ///
+    /// 解法必須在 O(log n) 時間與 O(1) 空間內執行。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,1,2,3,3,4,4,8,8]
+    /// 輸出：2
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [3,3,7,7,10,11,11]
+    /// 輸出：10
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 10^5
+    /// - 0 &lt;= nums[i] &lt;= 10^5
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

@@ -15,16 +15,70 @@ class Program
 
     /// <summary>
     /// 865. Smallest Subtree with all the Deepest Nodes
-    /// https://leetcode.com/problems/smallest-subtree-with-all-the-deepest-nodes/description/?envType=daily-question&envId=2026-01-09
+    /// https://leetcode.com/problems/smallest-subtree-with-all-the-deepest-nodes/description/
+    /// <para>
+    /// Given the root of a binary tree, the depth of each node is the shortest distance to the root.
+    ///
+    /// Return the smallest subtree that contains all the deepest nodes in the original tree.
+    ///
+    /// A node is deepest if it has the greatest depth among all nodes in the tree. A node's subtree consists of that node and all its descendants.
+    ///
+    /// Example 1:
+    /// Image: https://s3-lc-upload.s3.amazonaws.com/uploads/2018/07/01/sketch1.png
+    /// Input: root = [3,5,1,6,2,0,8,null,null,7,4]
+    /// Output: [2,7,4]
+    /// Explanation: Return the node with value 2, shown in yellow. The blue nodes are the tree's deepest nodes. Nodes 5, 3, and 2 all have subtrees containing the deepest nodes, but node 2 gives the smallest such subtree.
+    ///
+    /// Example 2:
+    /// Input: root = [1]
+    /// Output: [1]
+    /// Explanation: The root is the deepest node in the tree.
+    ///
+    /// Example 3:
+    /// Input: root = [0,1,3,null,2]
+    /// Output: [2]
+    /// Explanation: The deepest node is 2. The subtrees rooted at nodes 2, 1, and 0 are valid, but the subtree rooted at 2 is the smallest.
+    ///
+    /// Constraints:
+    /// - The number of nodes in the tree is in [1, 500].
+    /// - 0 &lt;= Node.val &lt;= 500
+    /// - Node values are unique.
+    ///
+    /// Note: This question is the same as 1123: https://leetcode.com/problems/lowest-common-ancestor-of-deepest-leaves/
+    /// </para>
+    /// <para>
     /// 865. 具有所有最深節點的最小子樹
-    /// https://leetcode.cn/problems/smallest-subtree-with-all-the-deepest-nodes/description/?envType=daily-question&envId=2026-01-09
-    /// 
-    /// 題目描述（繁體中文）：
-    /// 給定一個二叉樹的根節點，節點的深度定義為從根節點到該節點的最短距離。
-    /// 請返回一個最小的子樹，使該子樹包含原樹中所有的最深節點。
-    /// 若某節點在整棵樹中的深度為最大值，則稱該節點為最深節點。
-    /// 節點的子樹指由該節點及其所有子孫節點所構成的樹。
-    /// 
+    /// https://leetcode.cn/problems/smallest-subtree-with-all-the-deepest-nodes/description/
+    ///
+    /// 給定二元樹的根節點 root，每個節點的深度是它到根節點的最短距離。
+    ///
+    /// 回傳包含原樹中所有最深節點的最小子樹。
+    ///
+    /// 若一個節點的深度是整棵樹所有節點中的最大值，就稱為最深節點。某節點的子樹由該節點與其所有後代組成。
+    ///
+    /// 範例 1：
+    /// 圖片：https://s3-lc-upload.s3.amazonaws.com/uploads/2018/07/01/sketch1.png
+    /// 輸入：root = [3,5,1,6,2,0,8,null,null,7,4]
+    /// 輸出：[2,7,4]
+    /// 解釋：回傳圖中黃色、值為 2 的節點。藍色節點是樹中的最深節點。節點 5、3、2 的子樹都包含所有最深節點，但以節點 2 為根的子樹最小。
+    ///
+    /// 範例 2：
+    /// 輸入：root = [1]
+    /// 輸出：[1]
+    /// 解釋：根節點就是樹中的最深節點。
+    ///
+    /// 範例 3：
+    /// 輸入：root = [0,1,3,null,2]
+    /// 輸出：[2]
+    /// 解釋：最深節點是 2。以節點 2、1、0 為根的子樹都符合條件，但以節點 2 為根的子樹最小。
+    ///
+    /// 限制條件：
+    /// - 樹中的節點數量在 [1, 500] 範圍內。
+    /// - 0 &lt;= Node.val &lt;= 500
+    /// - 節點值都不相同。
+    ///
+    /// 注意：本題與 1123 相同：https://leetcode.cn/problems/lowest-common-ancestor-of-deepest-leaves/
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

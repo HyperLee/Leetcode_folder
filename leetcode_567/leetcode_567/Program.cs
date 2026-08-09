@@ -3,15 +3,47 @@
 class Program
 {
     /// <summary>
-    /// Problem 567 — Permutation in String
-    /// English: Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise.
-    /// In other words, return true if one of s1's permutations is the substring of s2.
+    /// 567. Permutation in String
+    /// https://leetcode.com/problems/permutation-in-string/description/
+    /// <para>
+    /// Given two strings s1 and s2, return true if s2 contains a permutation of s1, or false otherwise.
     ///
-    /// 中文（繁體）: 給定兩個字串 s1 與 s2，如果 s2 包含 s1 的某個排列則回傳 true，否則回傳 false。
-    /// 換句話說，若 s1 的任一排列為 s2 的子字串則回傳 true。
+    /// In other words, return true if one of s1's permutations is a substring of s2.
     ///
-    /// 參考: https://leetcode.com/problems/permutation-in-string/description/
-    /// 題號: 567. 字符串的排列
+    /// Example 1:
+    /// Input: s1 = "ab", s2 = "eidbaooo"
+    /// Output: true
+    /// Explanation: s2 contains one permutation of s1, "ba".
+    ///
+    /// Example 2:
+    /// Input: s1 = "ab", s2 = "eidboaoo"
+    /// Output: false
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s1.length, s2.length &lt;= 10^4
+    /// - s1 and s2 consist of lowercase English letters.
+    /// </para>
+    /// <para>
+    /// 567. 字串的排列
+    /// https://leetcode.cn/problems/permutation-in-string/description/
+    ///
+    /// 給定兩個字串 s1 與 s2，若 s2 包含 s1 的某個排列則回傳 true，否則回傳 false。
+    ///
+    /// 換句話說，若 s1 的某個排列是 s2 的子字串，則回傳 true。
+    ///
+    /// 範例 1：
+    /// 輸入：s1 = "ab", s2 = "eidbaooo"
+    /// 輸出：true
+    /// 解釋：s2 包含 s1 的其中一個排列 "ba"。
+    ///
+    /// 範例 2：
+    /// 輸入：s1 = "ab", s2 = "eidboaoo"
+    /// 輸出：false
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s1.length, s2.length &lt;= 10^4
+    /// - s1 與 s2 只由小寫英文字母組成。
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數（未使用）。</param>
     static void Main(string[] args)

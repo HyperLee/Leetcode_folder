@@ -7,15 +7,52 @@ class Program
 {
     /// <summary>
     /// 717. 1-bit and 2-bit Characters
-    /// https://leetcode.com/problems/1-bit-and-2-bit-characters/description/?envType=daily-question&envId=2025-11-18
-    /// 717. 1 比特与 2 比特字符
-    /// 717. 1 比特與 2 比特字元 (繁體中文翻譯)
-    /// 我們有兩種特殊字元：
-    /// 第一種字元可以由單一位元 0 表示。
-    /// 第二種字元可以由兩個位元表示 (10 或 11)。
-    /// 給定一個以 0 結尾的二進位陣列 bits，若最後一個字元一定是 1 位元字元，請回傳 true。
-    /// https://leetcode.cn/problems/1-bit-and-2-bit-characters/description/?envType=daily-question&envId=2025-11-18
-    /// 
+    /// https://leetcode.com/problems/1-bit-and-2-bit-characters/description/
+    /// <para>
+    /// We have two special characters:
+    /// - The first character can be represented by one bit 0.
+    /// - The second character can be represented by two bits (10 or 11).
+    ///
+    /// Given a binary array bits that ends with 0, return true if the last character must be a one-bit character.
+    ///
+    /// Example 1:
+    /// Input: bits = [1,0,0]
+    /// Output: true
+    /// Explanation: The only way to decode it is a two-bit character and a one-bit character. Therefore, the last character is a one-bit character.
+    ///
+    /// Example 2:
+    /// Input: bits = [1,1,1,0]
+    /// Output: false
+    /// Explanation: The only way to decode it is a two-bit character and a two-bit character. Therefore, the last character is not a one-bit character.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= bits.length &lt;= 1000
+    /// - bits[i] is either 0 or 1.
+    /// </para>
+    /// <para>
+    /// 717. 1 位元與 2 位元字元
+    /// https://leetcode.cn/problems/1-bit-and-2-bit-characters/description/
+    ///
+    /// 有兩種特殊字元：
+    /// - 第一種字元可由一個位元 0 表示。
+    /// - 第二種字元可由兩個位元表示（10 或 11）。
+    ///
+    /// 給定以 0 結尾的二進位陣列 bits，若最後一個字元必定是一位元字元，回傳 true。
+    ///
+    /// 範例 1：
+    /// 輸入：bits = [1,0,0]
+    /// 輸出：true
+    /// 解釋：唯一的解碼方式是一個二位元字元加上一個一位元字元。因此，最後一個字元是一位元字元。
+    ///
+    /// 範例 2：
+    /// 輸入：bits = [1,1,1,0]
+    /// 輸出：false
+    /// 解釋：唯一的解碼方式是兩個二位元字元。因此，最後一個字元不是一位元字元。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= bits.length &lt;= 1000
+    /// - bits[i] 是 0 或 1。
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

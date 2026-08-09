@@ -5,8 +5,55 @@
         /// <summary>
         /// 721. Accounts Merge
         /// https://leetcode.com/problems/accounts-merge/description/
-        /// 721. 账户合并
+        /// <para>
+        /// Given a list of accounts where each element accounts[i] is a list of strings, the first element accounts[i][0] is a name, and the remaining elements are emails representing emails of the account.
+        ///
+        /// We would like to merge these accounts. Two accounts definitely belong to the same person if they have any email in common. Even if two accounts have the same name, they may belong to different people because people can have the same name. A person can initially have any number of accounts, but all of that person's accounts definitely have the same name.
+        ///
+        /// After merging the accounts, return them in the following format: the first element of each account is the name, and the remaining elements are emails in sorted order. The accounts themselves can be returned in any order.
+        ///
+        /// Example 1:
+        /// Input: accounts = [["John","johnsmith@mail.com","john_newyork@mail.com"],["John","johnsmith@mail.com","john00@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
+        /// Output: [["John","john00@mail.com","john_newyork@mail.com","johnsmith@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
+        /// Explanation: The first and second John accounts are the same person because they share the email "johnsmith@mail.com". The third John and Mary are different people because none of their email addresses are used by other accounts. These lists may be returned in any order; for example, [["Mary","mary@mail.com"],["John","johnnybravo@mail.com"],["John","john00@mail.com","john_newyork@mail.com","johnsmith@mail.com"]] would also be accepted.
+        ///
+        /// Example 2:
+        /// Input: accounts = [["Gabe","Gabe0@m.co","Gabe3@m.co","Gabe1@m.co"],["Kevin","Kevin3@m.co","Kevin5@m.co","Kevin0@m.co"],["Ethan","Ethan5@m.co","Ethan4@m.co","Ethan0@m.co"],["Hanzo","Hanzo3@m.co","Hanzo1@m.co","Hanzo0@m.co"],["Fern","Fern5@m.co","Fern1@m.co","Fern0@m.co"]]
+        /// Output: [["Ethan","Ethan0@m.co","Ethan4@m.co","Ethan5@m.co"],["Gabe","Gabe0@m.co","Gabe1@m.co","Gabe3@m.co"],["Hanzo","Hanzo0@m.co","Hanzo1@m.co","Hanzo3@m.co"],["Kevin","Kevin0@m.co","Kevin3@m.co","Kevin5@m.co"],["Fern","Fern0@m.co","Fern1@m.co","Fern5@m.co"]]
+        ///
+        /// Constraints:
+        /// - 1 &lt;= accounts.length &lt;= 1000
+        /// - 2 &lt;= accounts[i].length &lt;= 10
+        /// - 1 &lt;= accounts[i][j].length &lt;= 30
+        /// - accounts[i][0] consists of English letters.
+        /// - accounts[i][j] (for j &gt; 0) is a valid email.
+        /// </para>
+        /// <para>
+        /// 721. 帳戶合併
         /// https://leetcode.cn/problems/accounts-merge/description/
+        ///
+        /// 給定帳戶清單 accounts，其中每個 accounts[i] 都是字串清單；第一個元素 accounts[i][0] 是姓名，其餘元素是該帳戶的電子郵件地址。
+        ///
+        /// 現在要合併這些帳戶。若兩個帳戶有任何共同的電子郵件，就能確定它們屬於同一個人。即使兩個帳戶姓名相同，也可能屬於不同的人，因為人們可能同名。一個人起初可以有任意數量的帳戶，但同一人的所有帳戶一定使用相同姓名。
+        ///
+        /// 合併後，以以下格式回傳帳戶：每個帳戶的第一個元素是姓名，其餘元素是按順序排序的電子郵件。帳戶本身可以任意順序回傳。
+        ///
+        /// 範例 1：
+        /// 輸入：accounts = [["John","johnsmith@mail.com","john_newyork@mail.com"],["John","johnsmith@mail.com","john00@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
+        /// 輸出：[["John","john00@mail.com","john_newyork@mail.com","johnsmith@mail.com"],["Mary","mary@mail.com"],["John","johnnybravo@mail.com"]]
+        /// 解釋：前兩個 John 帳戶具有共同的電子郵件 "johnsmith@mail.com"，因此屬於同一個人。第三個 John 與 Mary 都是不同的人，因為他們的電子郵件地址未被其他帳戶使用。這些清單可以任意順序回傳；例如 [["Mary","mary@mail.com"],["John","johnnybravo@mail.com"],["John","john00@mail.com","john_newyork@mail.com","johnsmith@mail.com"]] 也會被接受。
+        ///
+        /// 範例 2：
+        /// 輸入：accounts = [["Gabe","Gabe0@m.co","Gabe3@m.co","Gabe1@m.co"],["Kevin","Kevin3@m.co","Kevin5@m.co","Kevin0@m.co"],["Ethan","Ethan5@m.co","Ethan4@m.co","Ethan0@m.co"],["Hanzo","Hanzo3@m.co","Hanzo1@m.co","Hanzo0@m.co"],["Fern","Fern5@m.co","Fern1@m.co","Fern0@m.co"]]
+        /// 輸出：[["Ethan","Ethan0@m.co","Ethan4@m.co","Ethan5@m.co"],["Gabe","Gabe0@m.co","Gabe1@m.co","Gabe3@m.co"],["Hanzo","Hanzo0@m.co","Hanzo1@m.co","Hanzo3@m.co"],["Kevin","Kevin0@m.co","Kevin3@m.co","Kevin5@m.co"],["Fern","Fern0@m.co","Fern1@m.co","Fern5@m.co"]]
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= accounts.length &lt;= 1000
+        /// - 2 &lt;= accounts[i].length &lt;= 10
+        /// - 1 &lt;= accounts[i][j].length &lt;= 30
+        /// - accounts[i][0] 由英文字母組成。
+        /// - accounts[i][j]（j &gt; 0）是有效的電子郵件。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

@@ -5,12 +5,39 @@ class Program
     /// <summary>
     /// 491. Non-decreasing Subsequences
     /// https://leetcode.com/problems/non-decreasing-subsequences/description/
-    /// 491. 非递减子序列
+    /// <para>
+    /// Given an integer array nums, return all the different possible non-decreasing subsequences of the given array with at least two elements. You may return the answer in any order.
+    ///
+    /// Example 1:
+    /// Input: nums = [4,6,7,7]
+    /// Output: [[4,6],[4,6,7],[4,6,7,7],[4,7],[4,7,7],[6,7],[6,7,7],[7,7]]
+    ///
+    /// Example 2:
+    /// Input: nums = [4,4,3,2,1]
+    /// Output: [[4,4]]
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 15
+    /// - -100 &lt;= nums[i] &lt;= 100
+    /// </para>
+    /// <para>
+    /// 491. 非遞減子序列
     /// https://leetcode.cn/problems/non-decreasing-subsequences/description/
-    /// 
-    /// Given an integer array nums, return all the different possible non-decreasing subsequences of the given array with at least two elements. 
-    /// You may return the answer in any order.
-    /// 
+    ///
+    /// 給定整數陣列 nums，回傳該陣列中所有不同、且至少包含兩個元素的非遞減子序列。答案可以任意順序回傳。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [4,6,7,7]
+    /// 輸出：[[4,6],[4,6,7],[4,6,7,7],[4,7],[4,7,7],[6,7],[6,7,7],[7,7]]
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [4,4,3,2,1]
+    /// 輸出：[[4,4]]
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 15
+    /// - -100 &lt;= nums[i] &lt;= 100
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數</param>
     static void Main(string[] args)

@@ -4,17 +4,48 @@ class Program
 {
     /// <summary>
     /// 974. Subarray Sums Divisible by K
+    /// https://leetcode.com/problems/subarray-sums-divisible-by-k/description/
+    /// <para>
+    /// Given an integer array nums and an integer k, return the number of non-empty subarrays whose sum is divisible by k.
     ///
-    /// English:
-    /// Given an integer array nums and an integer k, return the number of non-empty subarrays that have a sum divisible by k.
     /// A subarray is a contiguous part of an array.
     ///
-    /// 繁體中文：
-    /// 給定一個整數陣列 nums 和一個整數 k，請回傳總和可以被 k 整除的非空子陣列數量。
-    /// 子陣列是陣列中一段連續的部分。
+    /// Example 1:
+    /// Input: nums = [4,5,0,-2,-3,1], k = 5
+    /// Output: 7
+    /// Explanation: The 7 subarrays with sums divisible by k = 5 are [4,5,0,-2,-3,1], [5], [5,0], [5,0,-2,-3], [0], [0,-2,-3], and [-2,-3].
     ///
-    /// https://leetcode.com/problems/subarray-sums-divisible-by-k/description/
+    /// Example 2:
+    /// Input: nums = [5], k = 9
+    /// Output: 0
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 3 * 10^4
+    /// - -10^4 &lt;= nums[i] &lt;= 10^4
+    /// - 2 &lt;= k &lt;= 10^4
+    /// </para>
+    /// <para>
+    /// 974. 和可被 K 整除的子陣列
     /// https://leetcode.cn/problems/subarray-sums-divisible-by-k/description/
+    ///
+    /// 給定整數陣列 nums 與整數 k，回傳總和可被 k 整除的非空子陣列數量。
+    ///
+    /// 子陣列是陣列中連續的一部分。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [4,5,0,-2,-3,1], k = 5
+    /// 輸出：7
+    /// 解釋：總和可被 k = 5 整除的 7 個子陣列為 [4,5,0,-2,-3,1]、[5]、[5,0]、[5,0,-2,-3]、[0]、[0,-2,-3]、[-2,-3]。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [5], k = 9
+    /// 輸出：0
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 3 * 10^4
+    /// - -10^4 &lt;= nums[i] &lt;= 10^4
+    /// - 2 &lt;= k &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <remarks>
     /// 程式進入點會建立解題物件，並以兩筆固定官方範例分別執行「邊遍歷邊統計」與

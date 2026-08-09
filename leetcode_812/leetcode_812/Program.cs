@@ -4,15 +4,46 @@ class Program
 {
     /// <summary>
     /// 812. Largest Triangle Area
-    /// https://leetcode.com/problems/largest-triangle-area/description/?envType=daily-question&envId=2025-09-27
+    /// https://leetcode.com/problems/largest-triangle-area/description/
+    /// <para>
+    /// Given an array of points on the X-Y plane, where points[i] = [x_i, y_i], return the area of the largest triangle that can be formed by any three different points. Answers within 10^-5 of the actual answer are accepted.
+    ///
+    /// Example 1:
+    /// Image: https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/04/1027.png
+    /// Input: points = [[0,0],[0,1],[1,0],[0,2],[2,0]]
+    /// Output: 2.00000
+    /// Explanation: The five points are shown in the figure. The red triangle is the largest.
+    ///
+    /// Example 2:
+    /// Input: points = [[1,0],[0,0],[0,1]]
+    /// Output: 0.50000
+    ///
+    /// Constraints:
+    /// - 3 &lt;= points.length &lt;= 50
+    /// - -50 &lt;= x_i, y_i &lt;= 50
+    /// - All the given points are unique.
+    /// </para>
+    /// <para>
     /// 812. 最大三角形面積
-    /// https://leetcode.cn/problems/largest-triangle-area/description/?envType=daily-question&envId=2025-09-27
+    /// https://leetcode.cn/problems/largest-triangle-area/description/
     ///
-    /// 題目描述（中文翻譯）:
-    /// 給定一組位於 X-Y 平面上的點陣列 points，其中 points[i] = [xi, yi]。
-    /// 請回傳由任意三個不同點所能形成的最大三角形的面積。
-    /// 答案在 10^-5 的誤差範圍內視為正確。
+    /// 給定 X-Y 平面上的點陣列 points，其中 points[i] = [x_i, y_i]，回傳任意三個不同點所能形成之三角形的最大面積。與實際答案相差不超過 10^-5 的答案都會被接受。
     ///
+    /// 範例 1：
+    /// 圖片：https://s3-lc-upload.s3.amazonaws.com/uploads/2018/04/04/1027.png
+    /// 輸入：points = [[0,0],[0,1],[1,0],[0,2],[2,0]]
+    /// 輸出：2.00000
+    /// 解釋：圖中顯示這五個點；紅色三角形的面積最大。
+    ///
+    /// 範例 2：
+    /// 輸入：points = [[1,0],[0,0],[0,1]]
+    /// 輸出：0.50000
+    ///
+    /// 限制條件：
+    /// - 3 &lt;= points.length &lt;= 50
+    /// - -50 &lt;= x_i, y_i &lt;= 50
+    /// - 所有給定的點都不相同。
+    /// </para>
     /// </summary>
     /// <param name="args">命令列參數（未使用）</param>
     static void Main(string[] args)

@@ -4,10 +4,52 @@
     {
         /// <summary>
         /// 860. Lemonade Change
-        /// https://leetcode.com/problems/lemonade-change/description/?envType=daily-question&envId=2024-08-15
-        /// 
-        /// 860. 柠檬水找零
+        /// https://leetcode.com/problems/lemonade-change/description/
+        /// <para>
+        /// At a lemonade stand, each lemonade costs $5. Customers queue and order one at a time in the order given by bills. Each customer buys one lemonade and pays with a $5, $10, or $20 bill. You must give correct change so that each customer's net payment is $5.
+        ///
+        /// You have no change initially.
+        ///
+        /// Given an integer array bills where bills[i] is the bill paid by the i-th customer, return true if you can give every customer correct change, or false otherwise.
+        ///
+        /// Example 1:
+        /// Input: bills = [5,5,5,10,20]
+        /// Output: true
+        /// Explanation: From the first 3 customers, collect three $5 bills. From the fourth, collect $10 and return $5. For the fifth, return a $10 bill and a $5 bill. Every customer receives correct change, so return true.
+        ///
+        /// Example 2:
+        /// Input: bills = [5,5,10,10,20]
+        /// Output: false
+        /// Explanation: Collect two $5 bills from the first two customers. For the next two, collect $10 and return $5 each time. For the final customer, you cannot return $15 because only two $10 bills remain. Not every customer receives correct change, so return false.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= bills.length &lt;= 10^5
+        /// - bills[i] is 5, 10, or 20.
+        /// </para>
+        /// <para>
+        /// 860. 檸檬水找零
         /// https://leetcode.cn/problems/lemonade-change/description/
+        ///
+        /// 檸檬水攤每杯檸檬水售價 $5。顧客依 bills 指定的順序排隊並逐一購買；每位顧客只買一杯，並以 $5、$10 或 $20 紙鈔付款。必須正確找零，使每位顧客的淨付款為 $5。
+        ///
+        /// 一開始手上沒有任何零錢。
+        ///
+        /// 給定整數陣列 bills，其中 bills[i] 是第 i 位顧客支付的紙鈔。若能為每位顧客正確找零，回傳 true；否則回傳 false。
+        ///
+        /// 範例 1：
+        /// 輸入：bills = [5,5,5,10,20]
+        /// 輸出：true
+        /// 解釋：先從前 3 位顧客依序收取三張 $5。第四位支付 $10，找回 $5。第五位則找回一張 $10 與一張 $5。所有顧客都得到正確找零，因此回傳 true。
+        ///
+        /// 範例 2：
+        /// 輸入：bills = [5,5,10,10,20]
+        /// 輸出：false
+        /// 解釋：先從前兩位顧客收取兩張 $5。接下來兩位各支付 $10 並各找回 $5。最後一位需要找回 $15，但手上只剩兩張 $10，無法找零。並非每位顧客都得到正確找零，因此回傳 false。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= bills.length &lt;= 10^5
+        /// - bills[i] 是 5、10 或 20。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

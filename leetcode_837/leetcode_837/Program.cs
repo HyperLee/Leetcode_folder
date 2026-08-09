@@ -3,14 +3,65 @@
 class Program
 {
     /// <summary>
+    /// 837. New 21 Game
+    /// https://leetcode.com/problems/new-21-game/description/
+    /// <para>
+    /// Alice plays the following game, loosely based on the card game "21".
+    ///
+    /// Alice starts with 0 points and draws numbers while she has fewer than k points. During each draw, she gains a random integer number of points from [1, maxPts]. Each draw is independent and all outcomes are equally likely.
+    ///
+    /// Alice stops drawing when she reaches k or more points.
+    ///
+    /// Return the probability that Alice has n or fewer points. Answers within 10^-5 of the actual answer are accepted.
+    ///
+    /// Example 1:
+    /// Input: n = 10, k = 1, maxPts = 10
+    /// Output: 1.00000
+    /// Explanation: Alice draws a single card and then stops.
+    ///
+    /// Example 2:
+    /// Input: n = 6, k = 1, maxPts = 10
+    /// Output: 0.60000
+    /// Explanation: Alice draws a single card and then stops. In 6 out of 10 possibilities, she has 6 or fewer points.
+    ///
+    /// Example 3:
+    /// Input: n = 21, k = 17, maxPts = 10
+    /// Output: 0.73278
+    ///
+    /// Constraints:
+    /// - 0 &lt;= k &lt;= n &lt;= 10^4
+    /// - 1 &lt;= maxPts &lt;= 10^4
+    /// </para>
+    /// <para>
     /// 837. 新 21 點
-    /// Alice 玩一個類似「21點」的遊戲：
-    /// Alice 從 0 分開始，只要分數小於 k，就持續抽牌。每次抽牌，她會隨機獲得 [1, maxPts] 範圍內的一個整數分數（maxPts 為整數），每次抽牌獨立且機率均等。
-    /// 當分數達到 k 或以上時，Alice 停止抽牌。
-    /// 請回傳 Alice 最終分數不超過 n 的機率。
-    /// 答案誤差在 10^-5 以內都視為正確。
-    /// 英文題目：https://leetcode.com/problems/new-21-game/description/?envType=daily-question&envId=2025-08-17
-    /// 中文題目：https://leetcode.cn/problems/new-21-game/description/?envType=daily-question&envId=2025-08-17
+    /// https://leetcode.cn/problems/new-21-game/description/
+    ///
+    /// Alice 玩一個大致以紙牌遊戲「21 點」為基礎的遊戲。
+    ///
+    /// Alice 從 0 分開始，並在分數小於 k 時持續抽取數字。每次抽取會從 [1, maxPts] 中等機率隨機得到一個整數分數；各次抽取彼此獨立。
+    ///
+    /// 當 Alice 的分數達到 k 或以上時便停止抽取。
+    ///
+    /// 回傳 Alice 最終分數不超過 n 的機率。與實際答案相差不超過 10^-5 的答案都會被接受。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 10, k = 1, maxPts = 10
+    /// 輸出：1.00000
+    /// 解釋：Alice 只抽一張牌就停止。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 6, k = 1, maxPts = 10
+    /// 輸出：0.60000
+    /// 解釋：Alice 只抽一張牌就停止；10 種可能中有 6 種使她的分數不超過 6。
+    ///
+    /// 範例 3：
+    /// 輸入：n = 21, k = 17, maxPts = 10
+    /// 輸出：0.73278
+    ///
+    /// 限制條件：
+    /// - 0 &lt;= k &lt;= n &lt;= 10^4
+    /// - 1 &lt;= maxPts &lt;= 10^4
+    /// </para>
     /// </summary>
     static void Main(string[] args)
     {

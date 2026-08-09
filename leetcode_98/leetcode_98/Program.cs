@@ -19,16 +19,55 @@
         /// <summary>
         /// 98. Validate Binary Search Tree
         /// https://leetcode.com/problems/validate-binary-search-tree/description/
-        /// 98. 验证二叉搜索树
+        /// <para>
+        /// Given the root of a binary tree, determine whether it is a valid binary search tree (BST).
+        ///
+        /// A valid BST is defined as follows:
+        /// - A node's left subtree contains only nodes with keys strictly less than the node's key.
+        /// - A node's right subtree contains only nodes with keys strictly greater than the node's key.
+        /// - Both the left and right subtrees must also be binary search trees.
+        ///
+        /// Example 1:
+        /// Image: https://assets.leetcode.com/uploads/2020/12/01/tree1.jpg
+        /// Input: root = [2,1,3]
+        /// Output: true
+        ///
+        /// Example 2:
+        /// Image: https://assets.leetcode.com/uploads/2020/12/01/tree2.jpg
+        /// Input: root = [5,1,4,null,null,3,6]
+        /// Output: false
+        /// Explanation: The root node's value is 5, but its right child's value is 4.
+        ///
+        /// Constraints:
+        /// - The number of nodes in the tree is in [1, 10^4].
+        /// - -2^31 &lt;= Node.val &lt;= 2^31 - 1
+        /// </para>
+        /// <para>
+        /// 98. 驗證二元搜尋樹
         /// https://leetcode.cn/problems/validate-binary-search-tree/description/
-        /// 
-        /// 二元搜尋樹（Binary Search Tree, BST）
-        /// 二元搜尋樹（BST, Binary Search Tree）是一種 二元樹（Binary Tree），並滿足以下特性：
-        /// 左子樹的所有節點值 < 根節點值
-        /// 右子樹的所有節點值 > 根節點值
-        /// 左右子樹同樣為 BST
-        /// 根據上述特性, 可以使用遞迴的方式來判斷是否為 BST
-        /// 
+        ///
+        /// 給定二元樹的根節點 root，判斷它是否為有效的二元搜尋樹（BST）。
+        ///
+        /// 有效 BST 定義如下：
+        /// - 節點的左子樹只包含鍵值嚴格小於該節點鍵值的節點。
+        /// - 節點的右子樹只包含鍵值嚴格大於該節點鍵值的節點。
+        /// - 左、右子樹也都必須是二元搜尋樹。
+        ///
+        /// 範例 1：
+        /// 圖片：https://assets.leetcode.com/uploads/2020/12/01/tree1.jpg
+        /// 輸入：root = [2,1,3]
+        /// 輸出：true
+        ///
+        /// 範例 2：
+        /// 圖片：https://assets.leetcode.com/uploads/2020/12/01/tree2.jpg
+        /// 輸入：root = [5,1,4,null,null,3,6]
+        /// 輸出：false
+        /// 解釋：根節點的值是 5，但其右子節點的值是 4。
+        ///
+        /// 限制條件：
+        /// - 樹中的節點數量在 [1, 10^4] 範圍內。
+        /// - -2^31 &lt;= Node.val &lt;= 2^31 - 1
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

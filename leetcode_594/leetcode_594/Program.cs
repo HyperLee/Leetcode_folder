@@ -4,13 +4,58 @@ class Program
 {
     /// <summary>
     /// 594. Longest Harmonious Subsequence
-    /// https://leetcode.com/problems/longest-harmonious-subsequence/description/?envType=daily-question&envId=2025-06-30
+    /// https://leetcode.com/problems/longest-harmonious-subsequence/description/
+    /// <para>
+    /// We define a harmonious array as an array where the difference between its maximum value and its minimum value is exactly 1.
+    ///
+    /// Given an integer array nums, return the length of its longest harmonious subsequence among all its possible subsequences.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,3,2,2,5,2,3,7]
+    /// Output: 5
+    /// Explanation: The longest harmonious subsequence is [3,2,2,2,3].
+    ///
+    /// Example 2:
+    /// Input: nums = [1,2,3,4]
+    /// Output: 2
+    /// Explanation: The longest harmonious subsequences are [1,2], [2,3], and [3,4], all of which have a length of 2.
+    ///
+    /// Example 3:
+    /// Input: nums = [1,1,1,1]
+    /// Output: 0
+    /// Explanation: No harmonic subsequence exists.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 2 * 10^4
+    /// - -10^9 &lt;= nums[i] &lt;= 10^9
+    /// </para>
+    /// <para>
     /// 594. 最長和諧子序列
-    /// https://leetcode.cn/problems/longest-harmonious-subsequence/description/?envType=daily-question&envId=2025-06-30
-    /// 
-    /// 題目描述：
-    /// 我們定義一個和諧陣列為其最大值與最小值的差正好為 1 的陣列。
-    /// 給定一個整數陣列 nums，請回傳所有可能子序列中，最長和諧子序列的長度。
+    /// https://leetcode.cn/problems/longest-harmonious-subsequence/description/
+    ///
+    /// 若一個陣列的最大值與最小值之差恰好為 1，我們便將它定義為和諧陣列。
+    ///
+    /// 給定整數陣列 nums，回傳其所有可能子序列中最長和諧子序列的長度。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,3,2,2,5,2,3,7]
+    /// 輸出：5
+    /// 解釋：最長和諧子序列為 [3,2,2,2,3]。
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [1,2,3,4]
+    /// 輸出：2
+    /// 解釋：最長和諧子序列為 [1,2]、[2,3] 與 [3,4]，長度皆為 2。
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [1,1,1,1]
+    /// 輸出：0
+    /// 解釋：不存在和諧子序列。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 2 * 10^4
+    /// - -10^9 &lt;= nums[i] &lt;= 10^9
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

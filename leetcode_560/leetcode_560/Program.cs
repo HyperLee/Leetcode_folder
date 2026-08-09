@@ -7,11 +7,45 @@ class Program
     /// <summary>
     /// 560. Subarray Sum Equals K
     /// https://leetcode.com/problems/subarray-sum-equals-k/description/
-    /// 560. 和為K 的子數組
-    /// https://leetcode.cn/problems/subarray-sum-equals-k/description/
-    /// 
-    /// Given an array of integers nums and an integer k, return the total number of subarrays whose sum equals to k.
+    /// <para>
+    /// Given an integer array nums and an integer k, return the total number of subarrays whose sum equals k.
+    ///
     /// A subarray is a contiguous non-empty sequence of elements within an array.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,1,1], k = 2
+    /// Output: 2
+    ///
+    /// Example 2:
+    /// Input: nums = [1,2,3], k = 3
+    /// Output: 2
+    ///
+    /// Constraints:
+    /// - 1 &lt;= nums.length &lt;= 2 * 10^4
+    /// - -1000 &lt;= nums[i] &lt;= 1000
+    /// - -10^7 &lt;= k &lt;= 10^7
+    /// </para>
+    /// <para>
+    /// 560. 和為 K 的子陣列
+    /// https://leetcode.cn/problems/subarray-sum-equals-k/description/
+    ///
+    /// 給定整數陣列 nums 與整數 k，回傳總和等於 k 的子陣列總數。
+    ///
+    /// 子陣列是陣列內連續且非空的元素序列。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,1,1], k = 2
+    /// 輸出：2
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [1,2,3], k = 3
+    /// 輸出：2
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= nums.length &lt;= 2 * 10^4
+    /// - -1000 &lt;= nums[i] &lt;= 1000
+    /// - -10^7 &lt;= k &lt;= 10^7
+    /// </para>
     /// </summary>
     /// <param name="args"></param> <summary>
     /// 

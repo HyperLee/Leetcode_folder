@@ -5,9 +5,51 @@
         /// <summary>
         /// 704. Binary Search
         /// https://leetcode.com/problems/binary-search/description/
-        /// 
-        /// 704. 二分查找
+        /// <para>
+        /// Given an array of integers nums which is sorted in ascending order, and an integer target, write a function to search target in nums. If target exists, return its index. Otherwise, return -1.
+        ///
+        /// You must write an algorithm with O(log n) runtime complexity.
+        ///
+        /// Example 1:
+        /// Input: nums = [-1,0,3,5,9,12], target = 9
+        /// Output: 4
+        /// Explanation: 9 exists in nums and its index is 4.
+        ///
+        /// Example 2:
+        /// Input: nums = [-1,0,3,5,9,12], target = 2
+        /// Output: -1
+        /// Explanation: 2 does not exist in nums, so return -1.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= nums.length &lt;= 10^4
+        /// - -10^4 &lt; nums[i], target &lt; 10^4
+        /// - All the integers in nums are unique.
+        /// - nums is sorted in ascending order.
+        /// </para>
+        /// <para>
+        /// 704. 二分搜尋
         /// https://leetcode.cn/problems/binary-search/description/
+        ///
+        /// 給定以遞增順序排序的整數陣列 nums，以及整數 target，撰寫函式在 nums 中搜尋 target。若 target 存在，回傳其索引；否則回傳 -1。
+        ///
+        /// 必須撰寫執行時間複雜度為 O(log n) 的演算法。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [-1,0,3,5,9,12], target = 9
+        /// 輸出：4
+        /// 解釋：9 存在於 nums 中，其索引為 4。
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [-1,0,3,5,9,12], target = 2
+        /// 輸出：-1
+        /// 解釋：2 不存在於 nums 中，因此回傳 -1。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= nums.length &lt;= 10^4
+        /// - -10^4 &lt; nums[i], target &lt; 10^4
+        /// - nums 中的所有整數皆不相同。
+        /// - nums 已按遞增順序排序。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

@@ -4,16 +4,54 @@
     {
         /// <summary>
         /// 476. Number Complement
-        /// https://leetcode.com/problems/number-complement/description/?envType=daily-question&envId=2024-08-22
-        /// 
-        /// 476. 数字的补数
+        /// https://leetcode.com/problems/number-complement/description/
+        /// <para>
+        /// The complement of an integer is the integer obtained by flipping all 0's to 1's and all 1's to 0's in its binary representation.
+        ///
+        /// For example, the integer 5 is "101" in binary and its complement is "010", which is the integer 2.
+        ///
+        /// Given an integer num, return its complement.
+        ///
+        /// Example 1:
+        /// Input: num = 5
+        /// Output: 2
+        /// Explanation: The binary representation of 5 is 101 (with no leading zero bits), and its complement is 010. Therefore, output 2.
+        ///
+        /// Example 2:
+        /// Input: num = 1
+        /// Output: 0
+        /// Explanation: The binary representation of 1 is 1 (with no leading zero bits), and its complement is 0. Therefore, output 0.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= num &lt; 2^31
+        ///
+        /// Note: This question is the same as 1009: https://leetcode.com/problems/complement-of-base-10-integer/
+        /// </para>
+        /// <para>
+        /// 476. 數字的補數
         /// https://leetcode.cn/problems/number-complement/description/
-        /// 
-        /// 本題目比較推薦 方法一 解法
-        /// 位元運算
-        /// 但是需要理解一下
-        /// 不然不是很好懂
-        /// 
+        ///
+        /// 整數的補數，是將其二進位表示中的所有 0 翻轉為 1，並將所有 1 翻轉為 0 後所得的整數。
+        ///
+        /// 例如，整數 5 的二進位表示為 "101"，其補數為 "010"，也就是整數 2。
+        ///
+        /// 給定整數 num，回傳它的補數。
+        ///
+        /// 範例 1：
+        /// 輸入：num = 5
+        /// 輸出：2
+        /// 解釋：5 的二進位表示是 101（沒有前導零位元），其補數是 010。因此輸出 2。
+        ///
+        /// 範例 2：
+        /// 輸入：num = 1
+        /// 輸出：0
+        /// 解釋：1 的二進位表示是 1（沒有前導零位元），其補數是 0。因此輸出 0。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= num &lt; 2^31
+        ///
+        /// 注意：本題與 1009 相同：https://leetcode.cn/problems/complement-of-base-10-integer/
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

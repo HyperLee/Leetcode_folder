@@ -4,9 +4,64 @@
     {
         /// <summary>
         /// 506. Relative Ranks
-        /// https://leetcode.com/problems/relative-ranks/?envType=daily-question&envId=2024-05-08
-        /// 506. 相对名次
+        /// https://leetcode.com/problems/relative-ranks/description/
+        /// <para>
+        /// You are given an integer array score of size n, where score[i] is the score of the i-th athlete in a competition. All scores are unique.
+        ///
+        /// Athletes are placed by score: 1st has the highest score, 2nd has the second-highest score, and so on. Each athlete's placement determines the rank:
+        /// - The 1st-place rank is "Gold Medal".
+        /// - The 2nd-place rank is "Silver Medal".
+        /// - The 3rd-place rank is "Bronze Medal".
+        /// - From 4th through n-th place, the rank is the placement number; the x-th-place rank is "x".
+        ///
+        /// Return an array answer of size n where answer[i] is the rank of the i-th athlete.
+        ///
+        /// Example 1:
+        /// Input: score = [5,4,3,2,1]
+        /// Output: ["Gold Medal","Silver Medal","Bronze Medal","4","5"]
+        /// Explanation: The placements are [1st, 2nd, 3rd, 4th, 5th].
+        ///
+        /// Example 2:
+        /// Input: score = [10,3,8,9,4]
+        /// Output: ["Gold Medal","5","Bronze Medal","Silver Medal","4"]
+        /// Explanation: The placements are [1st, 5th, 3rd, 2nd, 4th].
+        ///
+        /// Constraints:
+        /// - n == score.length
+        /// - 1 &lt;= n &lt;= 10^4
+        /// - 0 &lt;= score[i] &lt;= 10^6
+        /// - All values in score are unique.
+        /// </para>
+        /// <para>
+        /// 506. 相對名次
         /// https://leetcode.cn/problems/relative-ranks/description/
+        ///
+        /// 給定大小為 n 的整數陣列 score，其中 score[i] 是競賽中第 i 位運動員的分數。所有分數都不相同。
+        ///
+        /// 運動員依分數決定名次：第 1 名分數最高，第 2 名分數第二高，依此類推。每位運動員的名次決定其排名文字：
+        /// - 第 1 名的排名為 "Gold Medal"。
+        /// - 第 2 名的排名為 "Silver Medal"。
+        /// - 第 3 名的排名為 "Bronze Medal"。
+        /// - 從第 4 名到第 n 名，排名為其名次數字；第 x 名的排名為 "x"。
+        ///
+        /// 回傳大小為 n 的陣列 answer，其中 answer[i] 是第 i 位運動員的排名。
+        ///
+        /// 範例 1：
+        /// 輸入：score = [5,4,3,2,1]
+        /// 輸出：["Gold Medal","Silver Medal","Bronze Medal","4","5"]
+        /// 解釋：各運動員的名次為 [第 1 名, 第 2 名, 第 3 名, 第 4 名, 第 5 名]。
+        ///
+        /// 範例 2：
+        /// 輸入：score = [10,3,8,9,4]
+        /// 輸出：["Gold Medal","5","Bronze Medal","Silver Medal","4"]
+        /// 解釋：各運動員的名次為 [第 1 名, 第 5 名, 第 3 名, 第 2 名, 第 4 名]。
+        ///
+        /// 限制條件：
+        /// - n == score.length
+        /// - 1 &lt;= n &lt;= 10^4
+        /// - 0 &lt;= score[i] &lt;= 10^6
+        /// - score 中所有值都不相同。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

@@ -25,9 +25,60 @@
 
         /// <summary>
         /// 979. Distribute Coins in Binary Tree
-        /// https://leetcode.com/problems/distribute-coins-in-binary-tree/description/?envType=daily-question&envId=2024-05-18
-        /// 979. 在二叉树中分配硬币
+        /// https://leetcode.com/problems/distribute-coins-in-binary-tree/description/
+        /// <para>
+        /// You are given the root of a binary tree with n nodes, where each node has node.val coins. There are n coins in total throughout the tree.
+        ///
+        /// In one move, choose two adjacent nodes and move one coin from one node to the other. A move may go from parent to child or from child to parent.
+        ///
+        /// Return the minimum number of moves required to make every node have exactly one coin.
+        ///
+        /// Example 1:
+        /// Image: https://assets.leetcode.com/uploads/2019/01/18/tree1.png
+        /// Input: root = [3,0,0]
+        /// Output: 2
+        /// Explanation: Move one coin from the root to its left child and one coin from the root to its right child.
+        ///
+        /// Example 2:
+        /// Image: https://assets.leetcode.com/uploads/2019/01/18/tree2.png
+        /// Input: root = [0,3,0]
+        /// Output: 3
+        /// Explanation: Move two coins from the root's left child to the root, taking two moves. Then move one coin from the root to its right child.
+        ///
+        /// Constraints:
+        /// - The number of nodes in the tree is n.
+        /// - 1 &lt;= n &lt;= 100
+        /// - 0 &lt;= Node.val &lt;= n
+        /// - The sum of all Node.val values is n.
+        /// </para>
+        /// <para>
+        /// 979. 在二元樹中分配硬幣
         /// https://leetcode.cn/problems/distribute-coins-in-binary-tree/description/
+        ///
+        /// 給定具有 n 個節點的二元樹根節點 root，每個節點有 node.val 枚硬幣。整棵樹總共有 n 枚硬幣。
+        ///
+        /// 一次操作可選擇兩個相鄰節點，並將一枚硬幣從其中一個移到另一個。硬幣可從父節點移至子節點，也可從子節點移至父節點。
+        ///
+        /// 回傳使每個節點都恰好擁有一枚硬幣所需的最少操作次數。
+        ///
+        /// 範例 1：
+        /// 圖片：https://assets.leetcode.com/uploads/2019/01/18/tree1.png
+        /// 輸入：root = [3,0,0]
+        /// 輸出：2
+        /// 解釋：從根節點移一枚硬幣到左子節點，再移一枚到右子節點。
+        ///
+        /// 範例 2：
+        /// 圖片：https://assets.leetcode.com/uploads/2019/01/18/tree2.png
+        /// 輸入：root = [0,3,0]
+        /// 輸出：3
+        /// 解釋：從根節點的左子節點移兩枚硬幣到根節點，需要兩次操作；接著從根節點移一枚硬幣到右子節點。
+        ///
+        /// 限制條件：
+        /// - 樹中的節點數量為 n。
+        /// - 1 &lt;= n &lt;= 100
+        /// - 0 &lt;= Node.val &lt;= n
+        /// - 所有 Node.val 的總和為 n。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 建立固定測試樹，逐一比對預期與實際的最少移動次數，最後輸出整體測試結果。

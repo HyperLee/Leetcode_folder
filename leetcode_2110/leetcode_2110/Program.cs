@@ -4,13 +4,62 @@ class Program
 {
     /// <summary>
     /// 2110. Number of Smooth Descent Periods of a Stock
-    /// https://leetcode.com/problems/number-of-smooth-descent-periods-of-a-stock/description/?envType=daily-question&envId=2025-12-15
-    /// 2110. 股票平滑下跌階段的數目
-    /// https://leetcode.cn/problems/number-of-smooth-descent-periods-of-a-stock/description/?envType=daily-question&envId=2025-12-15
+    /// https://leetcode.com/problems/number-of-smooth-descent-periods-of-a-stock/description/
+    /// <para>
+    /// You are given an integer array prices representing a stock's daily price history, where prices[i] is the stock price on the i-th day.
     ///
-    /// 繁體中文題目描述：給定一個整數陣列 prices，表示股票每日的價格歷史，其中 prices[i] 為第 i 天的價格。
-    /// 一個平滑下跌階段由一個或多個連續天數組成，且從第二天起每一天的價格都比前一天低恰好 1（期間的第一天不受此規則限制）。
-    /// 回傳所有平滑下跌階段的總數。
+    /// A smooth descent period consists of one or more contiguous days such that each day's price is exactly 1 lower than the preceding day's price. The first day of the period is exempt from this rule.
+    ///
+    /// Return the number of smooth descent periods.
+    ///
+    /// Example 1:
+    /// Input: prices = [3,2,1,4]
+    /// Output: 7
+    /// Explanation: The 7 smooth descent periods are [3], [2], [1], [4], [3,2], [2,1], and [3,2,1]. A one-day period is a smooth descent period by definition.
+    ///
+    /// Example 2:
+    /// Input: prices = [8,6,7,7]
+    /// Output: 4
+    /// Explanation: The 4 smooth descent periods are [8], [6], [7], and [7]. Note that [8,6] is not a smooth descent period because 8 - 6 is not equal to 1.
+    ///
+    /// Example 3:
+    /// Input: prices = [1]
+    /// Output: 1
+    /// Explanation: There is 1 smooth descent period: [1].
+    ///
+    /// Constraints:
+    /// - 1 &lt;= prices.length &lt;= 10^5
+    /// - 1 &lt;= prices[i] &lt;= 10^5
+    /// </para>
+    /// <para>
+    /// 2110. 股票平滑下跌階段的數目
+    /// https://leetcode.cn/problems/number-of-smooth-descent-periods-of-a-stock/description/
+    ///
+    /// 給定整數陣列 prices，表示股票每日的價格歷史，其中 prices[i] 是第 i 天的股票價格。
+    ///
+    /// 股票的平滑下跌階段由一個或多個連續天數組成，且期間內每一天的價格都恰好比前一天低 1；期間的第一天不受此規則限制。
+    ///
+    /// 回傳平滑下跌階段的數量。
+    ///
+    /// 範例 1：
+    /// 輸入：prices = [3,2,1,4]
+    /// 輸出：7
+    /// 解釋：7 個平滑下跌階段為 [3]、[2]、[1]、[4]、[3,2]、[2,1]、[3,2,1]。依定義，只有一天的期間也屬於平滑下跌階段。
+    ///
+    /// 範例 2：
+    /// 輸入：prices = [8,6,7,7]
+    /// 輸出：4
+    /// 解釋：4 個平滑下跌階段為 [8]、[6]、[7]、[7]。請注意，[8,6] 不是平滑下跌階段，因為 8 - 6 不等於 1。
+    ///
+    /// 範例 3：
+    /// 輸入：prices = [1]
+    /// 輸出：1
+    /// 解釋：共有 1 個平滑下跌階段：[1]。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= prices.length &lt;= 10^5
+    /// - 1 &lt;= prices[i] &lt;= 10^5
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

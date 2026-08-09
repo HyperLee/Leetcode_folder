@@ -4,9 +4,48 @@
     {
         /// <summary>
         /// 605. Can Place Flowers
-        /// https://leetcode.com/problems/can-place-flowers/
-        /// 605. 种花问题
-        /// https://leetcode.cn/problems/can-place-flowers/
+        /// https://leetcode.com/problems/can-place-flowers/description/
+        /// <para>
+        /// You have a long flowerbed in which some plots are planted, and some are not. However, flowers cannot be planted in adjacent plots.
+        ///
+        /// Given an integer array flowerbed containing 0's and 1's, where 0 means empty and 1 means not empty, and an integer n, return true if n new flowers can be planted in the flowerbed without violating the no-adjacent-flowers rule and false otherwise.
+        ///
+        /// Example 1:
+        /// Input: flowerbed = [1,0,0,0,1], n = 1
+        /// Output: true
+        ///
+        /// Example 2:
+        /// Input: flowerbed = [1,0,0,0,1], n = 2
+        /// Output: false
+        ///
+        /// Constraints:
+        /// - 1 &lt;= flowerbed.length &lt;= 2 * 10^4
+        /// - flowerbed[i] is 0 or 1.
+        /// - There are no two adjacent flowers in flowerbed.
+        /// - 0 &lt;= n &lt;= flowerbed.length
+        /// </para>
+        /// <para>
+        /// 605. 種花問題
+        /// https://leetcode.cn/problems/can-place-flowers/description/
+        ///
+        /// 有一個很長的花圃，其中有些地塊已種花，有些尚未種花；但花不能種在相鄰地塊上。
+        ///
+        /// 給定只包含 0 與 1 的整數陣列 flowerbed，其中 0 表示空地、1 表示已有花，以及整數 n。若能在不違反花朵不可相鄰規則的情況下種入 n 朵新花，回傳 true；否則回傳 false。
+        ///
+        /// 範例 1：
+        /// 輸入：flowerbed = [1,0,0,0,1], n = 1
+        /// 輸出：true
+        ///
+        /// 範例 2：
+        /// 輸入：flowerbed = [1,0,0,0,1], n = 2
+        /// 輸出：false
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= flowerbed.length &lt;= 2 * 10^4
+        /// - flowerbed[i] 是 0 或 1。
+        /// - flowerbed 中不存在兩朵相鄰的花。
+        /// - 0 &lt;= n &lt;= flowerbed.length
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

@@ -4,20 +4,52 @@ class Program
 {
     /// <summary>
     /// 696. Count Binary Substrings
-    /// https://leetcode.com/problems/count-binary-substrings/description/?envType=daily-question&envId=2026-02-19
-    /// (LeetCode 中文頁面)
-    /// https://leetcode.cn/problems/count-binary-substrings/description/?envType=daily-question&envId=2026-02-19
+    /// https://leetcode.com/problems/count-binary-substrings/description/
+    /// <para>
+    /// Given a binary string s, return the number of non-empty substrings that have the same number of 0's and 1's, and all the 0's and all the 1's in these substrings are grouped consecutively.
     ///
-    /// English:
-    /// Given a binary string s, return the number of non-empty substrings that have the same number of 0's and 1's,
-    /// and all the 0's and all the 1's in these substrings are grouped consecutively.
     /// Substrings that occur multiple times are counted the number of times they occur.
     ///
-    /// 繁體中文:
-    /// 給定一個二元（binary）字串 `s`，回傳符合下列條件的非空子字串數量：
-    /// - 子字串中 0 與 1 的數量相同
-    /// - 在該子字串內，所有 0 與所有 1 各自連續成群（即不交錯）
-    /// 相同字串若在不同位置出現多次，則每次都要計數。
+    /// Example 1:
+    /// Input: s = "00110011"
+    /// Output: 6
+    /// Explanation: There are 6 substrings that have equal numbers of consecutive 1's and 0's: "0011", "01", "1100", "10", "0011", and "01".
+    /// Notice that some of these substrings repeat and are counted the number of times they occur.
+    /// Also, "00110011" is not a valid substring because all the 0's (and 1's) are not grouped together.
+    ///
+    /// Example 2:
+    /// Input: s = "10101"
+    /// Output: 4
+    /// Explanation: There are 4 substrings: "10", "01", "10", "01" that have equal numbers of consecutive 1's and 0's.
+    ///
+    /// Constraints:
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s[i] is either '0' or '1'.
+    /// </para>
+    /// <para>
+    /// 696. 計數二進位子字串
+    /// https://leetcode.cn/problems/count-binary-substrings/description/
+    ///
+    /// 給定二進位字串 s，回傳非空子字串的數量；這些子字串必須包含相同數量的 0 與 1，而且其中所有 0 與所有 1 都分別連續成組。
+    ///
+    /// 若相同的子字串出現多次，應依其出現次數重複計數。
+    ///
+    /// 範例 1：
+    /// 輸入：s = "00110011"
+    /// 輸出：6
+    /// 解釋：共有 6 個子字串包含相同數量且連續的 1 與 0："0011"、"01"、"1100"、"10"、"0011" 與 "01"。
+    /// 請注意，其中有些子字串重複出現，仍需按照出現次數計數。
+    /// 此外，"00110011" 並非有效子字串，因為其中所有 0（以及所有 1）並未各自連續成組。
+    ///
+    /// 範例 2：
+    /// 輸入：s = "10101"
+    /// 輸出：4
+    /// 解釋：共有 4 個子字串 "10"、"01"、"10"、"01"，它們包含相同數量且連續的 1 與 0。
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= s.length &lt;= 10^5
+    /// - s[i] 是 '0' 或 '1'。
+    /// </para>
     /// </summary>
     /// <param name="args">程式參數（未使用）</param>
     static void Main(string[] args)

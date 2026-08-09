@@ -5,9 +5,59 @@
         /// <summary>
         /// 542. 01 Matrix
         /// https://leetcode.com/problems/01-matrix/description/
-        /// 
-        /// 542. 01 矩阵
+        /// <para>
+        /// Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
+        ///
+        /// The distance between two cells sharing a common edge is 1.
+        ///
+        /// Example 1:
+        /// Image: https://assets.leetcode.com/uploads/2021/04/24/01-1-grid.jpg
+        /// Input: mat = [[0,0,0],[0,1,0],[0,0,0]]
+        /// Output: [[0,0,0],[0,1,0],[0,0,0]]
+        ///
+        /// Example 2:
+        /// Image: https://assets.leetcode.com/uploads/2021/04/24/01-2-grid.jpg
+        /// Input: mat = [[0,0,0],[0,1,0],[1,1,1]]
+        /// Output: [[0,0,0],[0,1,0],[1,2,1]]
+        ///
+        /// Constraints:
+        /// - m == mat.length
+        /// - n == mat[i].length
+        /// - 1 &lt;= m, n &lt;= 10^4
+        /// - 1 &lt;= m * n &lt;= 10^4
+        /// - mat[i][j] is either 0 or 1.
+        /// - There is at least one 0 in mat.
+        ///
+        /// Note: This question is the same as 1765: https://leetcode.com/problems/map-of-highest-peak/
+        /// </para>
+        /// <para>
+        /// 542. 01 矩陣
         /// https://leetcode.cn/problems/01-matrix/description/
+        ///
+        /// 給定 m x n 的二進位矩陣 mat，回傳每個格子到最近 0 的距離。
+        ///
+        /// 共用一條邊的兩個格子之間距離為 1。
+        ///
+        /// 範例 1：
+        /// 圖片：https://assets.leetcode.com/uploads/2021/04/24/01-1-grid.jpg
+        /// 輸入：mat = [[0,0,0],[0,1,0],[0,0,0]]
+        /// 輸出：[[0,0,0],[0,1,0],[0,0,0]]
+        ///
+        /// 範例 2：
+        /// 圖片：https://assets.leetcode.com/uploads/2021/04/24/01-2-grid.jpg
+        /// 輸入：mat = [[0,0,0],[0,1,0],[1,1,1]]
+        /// 輸出：[[0,0,0],[0,1,0],[1,2,1]]
+        ///
+        /// 限制條件：
+        /// - m == mat.length
+        /// - n == mat[i].length
+        /// - 1 &lt;= m, n &lt;= 10^4
+        /// - 1 &lt;= m * n &lt;= 10^4
+        /// - mat[i][j] 是 0 或 1。
+        /// - mat 中至少有一個 0。
+        ///
+        /// 注意：本題與 1765 相同：https://leetcode.cn/problems/map-of-highest-peak/
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

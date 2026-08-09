@@ -6,9 +6,86 @@ namespace leetcode_726
     {
         /// <summary>
         /// 726. Number of Atoms
-        /// https://leetcode.com/problems/number-of-atoms/description/?envType=daily-question&envId=2024-07-14
-        /// 726. 原子的数量
+        /// https://leetcode.com/problems/number-of-atoms/description/
+        /// <para>
+        /// Given a string formula representing a chemical formula, return the count of each atom.
+        ///
+        /// An atomic element always starts with an uppercase character, followed by zero or more lowercase letters representing its name.
+        ///
+        /// One or more digits representing that element's count may follow if the count is greater than 1. If the count is 1, no digits follow.
+        /// - For example, "H2O" and "H2O2" are possible, but "H1O2" is impossible.
+        ///
+        /// Two formulas concatenated together produce another formula.
+        /// - For example, "H2O2He3Mg4" is also a formula.
+        ///
+        /// A formula placed in parentheses, followed by an optional count, is also a formula.
+        /// - For example, "(H2O2)" and "(H2O2)3" are formulas.
+        ///
+        /// Return the count of all elements as a string in this form: the first name in sorted order, followed by its count if greater than 1; then the second name in sorted order, followed by its count if greater than 1; and so on.
+        ///
+        /// The test cases are generated so that all values in the output fit in a 32-bit integer.
+        ///
+        /// Example 1:
+        /// Input: formula = "H2O"
+        /// Output: "H2O"
+        /// Explanation: The element counts are {'H': 2, 'O': 1}.
+        ///
+        /// Example 2:
+        /// Input: formula = "Mg(OH)2"
+        /// Output: "H2MgO2"
+        /// Explanation: The element counts are {'H': 2, 'Mg': 1, 'O': 2}.
+        ///
+        /// Example 3:
+        /// Input: formula = "K4(ON(SO3)2)2"
+        /// Output: "K4N2O14S4"
+        /// Explanation: The element counts are {'K': 4, 'N': 2, 'O': 14, 'S': 4}.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= formula.length &lt;= 1000
+        /// - formula consists of English letters, digits, '(', and ')'.
+        /// - formula is always valid.
+        /// </para>
+        /// <para>
+        /// 726. 原子的數量
         /// https://leetcode.cn/problems/number-of-atoms/description/
+        ///
+        /// 給定表示化學式的字串 formula，回傳每種原子的數量。
+        ///
+        /// 原子元素名稱一定以大寫字母開頭，後接零個或多個小寫字母。
+        ///
+        /// 若該元素數量大於 1，後面可以接一個或多個表示數量的數字；若數量為 1，則不接數字。
+        /// - 例如，"H2O" 與 "H2O2" 是可能的形式，但 "H1O2" 不可能。
+        ///
+        /// 兩個化學式串接在一起會形成另一個化學式。
+        /// - 例如，"H2O2He3Mg4" 也是化學式。
+        ///
+        /// 放在括號中的化學式，後面可選擇性加上數量，也是一個化學式。
+        /// - 例如，"(H2O2)" 與 "(H2O2)3" 都是化學式。
+        ///
+        /// 依下列形式將所有元素的數量回傳為字串：先放按字母順序排列的第一個名稱，若其數量大於 1 則接上數量；再放第二個名稱與其大於 1 時的數量，依此類推。
+        ///
+        /// 測試案例保證輸出中的所有數值都在 32 位元整數範圍內。
+        ///
+        /// 範例 1：
+        /// 輸入：formula = "H2O"
+        /// 輸出："H2O"
+        /// 解釋：各元素數量為 {'H': 2, 'O': 1}。
+        ///
+        /// 範例 2：
+        /// 輸入：formula = "Mg(OH)2"
+        /// 輸出："H2MgO2"
+        /// 解釋：各元素數量為 {'H': 2, 'Mg': 1, 'O': 2}。
+        ///
+        /// 範例 3：
+        /// 輸入：formula = "K4(ON(SO3)2)2"
+        /// 輸出："K4N2O14S4"
+        /// 解釋：各元素數量為 {'K': 4, 'N': 2, 'O': 14, 'S': 4}。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= formula.length &lt;= 1000
+        /// - formula 由英文字母、數字、'(' 與 ')' 組成。
+        /// - formula 永遠有效。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

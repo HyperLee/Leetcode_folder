@@ -4,15 +4,48 @@
     {
         /// <summary>
         /// 650. 2 Keys Keyboard
-        /// https://leetcode.com/problems/2-keys-keyboard/description/?envType=daily-question&envId=2024-08-19
-        /// 
-        /// 650. 两个键的键盘
+        /// https://leetcode.com/problems/2-keys-keyboard/description/
+        /// <para>
+        /// There is only one character 'A' on the screen of a notepad. You can perform one of two operations on this notepad for each step:
+        /// - Copy All: You can copy all the characters present on the screen (a partial copy is not allowed).
+        /// - Paste: You can paste the characters which were copied last time.
+        ///
+        /// Given an integer n, return the minimum number of operations to get the character 'A' exactly n times on the screen.
+        ///
+        /// Example 1:
+        /// Input: n = 3
+        /// Output: 3
+        /// Explanation: Initially, we have one character 'A'. In step 1, we use Copy All. In step 2, we use Paste to get 'AA'. In step 3, we use Paste to get 'AAA'.
+        ///
+        /// Example 2:
+        /// Input: n = 1
+        /// Output: 0
+        ///
+        /// Constraints:
+        /// - 1 &lt;= n &lt;= 1000
+        /// </para>
+        /// <para>
+        /// 650. 只有兩個鍵的鍵盤
         /// https://leetcode.cn/problems/2-keys-keyboard/description/
-        /// 
-        /// 本題目, 比較屬於 數學題目
-        /// 需要推理公式
-        /// 看懂才比較好解題
-        /// 
+        ///
+        /// 記事本畫面上起初只有一個字元 'A'。每一步可以對記事本執行下列兩種操作之一：
+        /// - 全部複製：複製畫面上目前的所有字元（不能只複製一部分）。
+        /// - 貼上：貼上上一次複製的字元。
+        ///
+        /// 給定整數 n，回傳讓畫面上恰好出現 n 個字元 'A' 所需的最少操作次數。
+        ///
+        /// 範例 1：
+        /// 輸入：n = 3
+        /// 輸出：3
+        /// 解釋：起初有一個字元 'A'。第 1 步執行全部複製；第 2 步執行貼上得到 'AA'；第 3 步再次貼上得到 'AAA'。
+        ///
+        /// 範例 2：
+        /// 輸入：n = 1
+        /// 輸出：0
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= n &lt;= 1000
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

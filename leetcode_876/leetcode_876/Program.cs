@@ -27,12 +27,52 @@
 
         /// <summary>
         /// 876. Middle of the Linked List
-        /// https://leetcode.com/problems/middle-of-the-linked-list/
-        /// 876. 链表的中间结点
+        /// https://leetcode.com/problems/middle-of-the-linked-list/description/
+        /// <para>
+        /// Given the head of a singly linked list, return the middle node of the linked list.
+        ///
+        /// If there are two middle nodes, return the second middle node.
+        ///
+        /// Example 1:
+        /// Image: https://assets.leetcode.com/uploads/2021/07/23/lc-midlist1.jpg
+        /// Input: head = [1,2,3,4,5]
+        /// Output: [3,4,5]
+        /// Explanation: The middle node of the list is node 3.
+        ///
+        /// Example 2:
+        /// Image: https://assets.leetcode.com/uploads/2021/07/23/lc-midlist2.jpg
+        /// Input: head = [1,2,3,4,5,6]
+        /// Output: [4,5,6]
+        /// Explanation: The list has two middle nodes with values 3 and 4, so return the second one.
+        ///
+        /// Constraints:
+        /// - The number of nodes in the list is in [1, 100].
+        /// - 1 &lt;= Node.val &lt;= 100
+        /// </para>
+        /// <para>
+        /// 876. 鏈結串列的中間節點
         /// https://leetcode.cn/problems/middle-of-the-linked-list/description/
-        /// 
-        /// 輸出中間節點往後的node資料
-        /// 如果中間節點有兩個 那就輸出後面那一個開始
+        ///
+        /// 給定單向鏈結串列的頭節點 head，回傳該鏈結串列的中間節點。
+        ///
+        /// 若有兩個中間節點，回傳第二個中間節點。
+        ///
+        /// 範例 1：
+        /// 圖片：https://assets.leetcode.com/uploads/2021/07/23/lc-midlist1.jpg
+        /// 輸入：head = [1,2,3,4,5]
+        /// 輸出：[3,4,5]
+        /// 解釋：串列的中間節點是節點 3。
+        ///
+        /// 範例 2：
+        /// 圖片：https://assets.leetcode.com/uploads/2021/07/23/lc-midlist2.jpg
+        /// 輸入：head = [1,2,3,4,5,6]
+        /// 輸出：[4,5,6]
+        /// 解釋：串列有兩個中間節點，值分別為 3 與 4，因此回傳第二個。
+        ///
+        /// 限制條件：
+        /// - 串列中的節點數量在 [1, 100] 範圍內。
+        /// - 1 &lt;= Node.val &lt;= 100
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

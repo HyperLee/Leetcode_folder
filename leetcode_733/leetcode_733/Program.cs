@@ -5,26 +5,69 @@
         /// <summary>
         /// 733. Flood Fill
         /// https://leetcode.com/problems/flood-fill/description/
-        /// 
-        /// 733. 图像渲染
+        /// <para>
+        /// You are given an image represented by an m x n grid of integers image, where image[i][j] represents the pixel value of the image. You are also given three integers sr, sc, and color. Perform a flood fill on the image starting from the pixel image[sr][sc].
+        ///
+        /// To perform a flood fill:
+        /// 1. Begin with the starting pixel and change its color to color.
+        /// 2. Perform the same process for each directly adjacent pixel (one sharing a side horizontally or vertically) that has the same color as the starting pixel.
+        /// 3. Keep repeating this process by checking neighboring pixels of the updated pixels and changing their color if it matches the original color of the starting pixel.
+        /// 4. Stop when there are no more adjacent pixels of the original color to update.
+        ///
+        /// Return the modified image after performing the flood fill.
+        ///
+        /// Example 1:
+        /// Image: https://assets.leetcode.com/uploads/2021/06/01/flood1-grid.jpg
+        /// Input: image = [[1,1,1],[1,1,0],[1,0,1]], sr = 1, sc = 1, color = 2
+        /// Output: [[2,2,2],[2,2,0],[2,0,1]]
+        /// Explanation: Starting from the center at position (sr, sc) = (1, 1), all pixels connected by a path of the same color as the starting pixel are given the new color. The bottom corner is not colored 2 because it is not horizontally or vertically connected to the starting pixel.
+        ///
+        /// Example 2:
+        /// Input: image = [[0,0,0],[0,0,0]], sr = 0, sc = 0, color = 0
+        /// Output: [[0,0,0],[0,0,0]]
+        /// Explanation: The starting pixel already has color 0, the same as the target color, so no changes are made.
+        ///
+        /// Constraints:
+        /// - m == image.length
+        /// - n == image[i].length
+        /// - 1 &lt;= m, n &lt;= 50
+        /// - 0 &lt;= image[i][j], color &lt; 2^16
+        /// - 0 &lt;= sr &lt; m
+        /// - 0 &lt;= sc &lt; n
+        /// </para>
+        /// <para>
+        /// 733. 洪水填充
         /// https://leetcode.cn/problems/flood-fill/description/
-        /// 
-        /// 問題描述
-        /// 1. 輸入參數：
-        /// image 是一個 m x n 的二維整數陣列，表示影像，其中 image[i][j] 代表像素的值。
-        /// sr 和 sc 是起始像素的行和列座標（image[sr][sc] 表示起始像素）。
-        /// color 是目標顏色，即起始像素及符合條件的像素將被更新為此顏色。
-        /// 
-        /// 2. 任務:
-        /// 從起始像素 image[sr][sc] 開始，將其以及所有與其相連、具有相同顏色的像素改為 color。
-        /// 僅考慮直接相鄰（水平或垂直方向）的像素。
-        /// 
-        /// 
-        /// 渲染填充（Flood Fill）的步驟如下：
-        /// 1. 從起始像素開始，將其顏色更改為指定的目標顏色。
-        /// 2. 對每個與起始像素直接相鄰的像素（即與起始像素共享一個邊的像素，水平或垂直方向）執行相同的操作，前提是該像素的顏色與起始像素的原始顏色相同。
-        /// 3. 持續重複此過程，檢查已更新像素的鄰近像素，若它們的顏色與起始像素的原始顏色相符，則更改其顏色。
-        /// 4. 當已無任何與起始像素原始顏色相符且相鄰的像素需要更新時，該過程結束。
+        ///
+        /// 給定由 m x n 整數網格 image 表示的影像，其中 image[i][j] 代表影像的像素值；另給定三個整數 sr、sc 與 color。請從像素 image[sr][sc] 開始對影像執行洪水填充。
+        ///
+        /// 執行洪水填充的方式如下：
+        /// 1. 從起始像素開始，將其顏色改為 color。
+        /// 2. 對每個直接相鄰（水平或垂直共用一條邊）且顏色與起始像素相同的像素執行相同操作。
+        /// 3. 持續檢查已更新像素的相鄰像素；若其顏色符合起始像素的原始顏色，就修改其顏色。
+        /// 4. 當沒有更多原始顏色的相鄰像素可更新時停止。
+        ///
+        /// 回傳執行洪水填充後修改過的影像。
+        ///
+        /// 範例 1：
+        /// 圖片：https://assets.leetcode.com/uploads/2021/06/01/flood1-grid.jpg
+        /// 輸入：image = [[1,1,1],[1,1,0],[1,0,1]], sr = 1, sc = 1, color = 2
+        /// 輸出：[[2,2,2],[2,2,0],[2,0,1]]
+        /// 解釋：從影像中央位置 (sr, sc) = (1, 1) 開始，所有透過與起始像素相同顏色路徑連接的像素，都會改成新顏色。右下角不會被塗成 2，因為它與起始像素之間沒有水平或垂直連接。
+        ///
+        /// 範例 2：
+        /// 輸入：image = [[0,0,0],[0,0,0]], sr = 0, sc = 0, color = 0
+        /// 輸出：[[0,0,0],[0,0,0]]
+        /// 解釋：起始像素已是顏色 0，與目標顏色相同，因此影像不會改變。
+        ///
+        /// 限制條件：
+        /// - m == image.length
+        /// - n == image[i].length
+        /// - 1 &lt;= m, n &lt;= 50
+        /// - 0 &lt;= image[i][j], color &lt; 2^16
+        /// - 0 &lt;= sr &lt; m
+        /// - 0 &lt;= sc &lt; n
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

@@ -4,20 +4,68 @@ class Program
 {
     /// <summary>
     /// 808. Soup Servings
-    /// https://leetcode.com/problems/soup-servings/description/?envType=daily-question&envId=2025-08-08
+    /// https://leetcode.com/problems/soup-servings/description/
+    /// <para>
+    /// You have two soups, A and B, each starting with n mL. On every turn, one of these four serving operations is chosen at random, each with probability 0.25 independently of all previous turns:
+    /// - Pour 100 mL from A and 0 mL from B.
+    /// - Pour 75 mL from A and 25 mL from B.
+    /// - Pour 50 mL from A and 50 mL from B.
+    /// - Pour 25 mL from A and 75 mL from B.
+    ///
+    /// Notes:
+    /// - There is no operation that pours 0 mL from A and 100 mL from B.
+    /// - The amounts from A and B are poured simultaneously during a turn.
+    /// - If an operation asks for more soup than remains, pour all that remains of that soup.
+    ///
+    /// The process stops immediately after any turn in which one of the soups is used up.
+    ///
+    /// Return the probability that A is used up before B, plus half the probability that both soups are used up in the same turn. Answers within 10^-5 of the actual answer are accepted.
+    ///
+    /// Example 1:
+    /// Input: n = 50
+    /// Output: 0.62500
+    /// Explanation: With either of the first two operations, A becomes empty first. With the third, A and B become empty together. With the fourth, B becomes empty first. The requested probability is 0.25 * (1 + 1 + 0.5 + 0) = 0.625.
+    ///
+    /// Example 2:
+    /// Input: n = 100
+    /// Output: 0.71875
+    /// Explanation: After the first operation, A becomes empty first. After the second operation, A becomes empty when the next operation is [1, 2, 3], and both become empty when it is 4. After the third operation, A becomes empty when the next operation is [1, 2], and both become empty when it is 3. After the fourth operation, A becomes empty when the next operation is 1, and both become empty when it is 2. The requested total probability is 0.71875.
+    ///
+    /// Constraints:
+    /// - 0 &lt;= n &lt;= 10^9
+    /// </para>
+    /// <para>
     /// 808. 分湯
-    /// https://leetcode.cn/problems/soup-servings/description/?envType=daily-question&envId=2025-08-08
+    /// https://leetcode.cn/problems/soup-servings/description/
     ///
-    /// 題目說明：
-    /// 有兩種湯 A 和 B，每種最初都有 n 毫升。每回合隨機選擇以下四種操作之一（機率均為 0.25）：
-    /// 1. A 減 100，B 不變
-    /// 2. A 減 75，B 減 25
-    /// 3. A 減 50，B 減 50
-    /// 4. A 減 25，B 減 75
-    /// 若某次操作超過剩餘量，則只倒出剩下的全部。只要有一種湯被倒完，過程即停止。
+    /// 有 A、B 兩種湯，起初各有 n mL。每一回合會隨機選擇下列四種供應操作之一；各操作機率皆為 0.25，且與先前回合相互獨立：
+    /// - 從 A 倒出 100 mL，從 B 倒出 0 mL。
+    /// - 從 A 倒出 75 mL，從 B 倒出 25 mL。
+    /// - 從 A 倒出 50 mL，從 B 倒出 50 mL。
+    /// - 從 A 倒出 25 mL，從 B 倒出 75 mL。
     ///
-    /// 請返回「A 先倒完」的機率，加上「A 和 B 同時倒完」的機率的一半。
+    /// 注意：
+    /// - 沒有從 A 倒出 0 mL、從 B 倒出 100 mL 的操作。
+    /// - 每回合會同時倒出 A 與 B 的指定份量。
+    /// - 若操作要求的份量超過某種湯的剩餘量，則倒出該湯的全部剩餘量。
     ///
+    /// 任何一種湯在某回合用盡後，程序立即停止。
+    ///
+    /// 回傳 A 比 B 先用盡的機率，加上 A、B 在同一回合用盡之機率的一半。與實際答案相差不超過 10^-5 的答案都會被接受。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 50
+    /// 輸出：0.62500
+    /// 解釋：執行前兩種操作之一時，A 會先用盡；執行第三種時，A 與 B 同時用盡；執行第四種時，B 先用盡。因此所求機率為 0.25 * (1 + 1 + 0.5 + 0) = 0.625。
+    ///
+    /// 範例 2：
+    /// 輸入：n = 100
+    /// 輸出：0.71875
+    /// 解釋：先執行第一種操作時，A 先用盡。先執行第二種後，下一次操作為 [1, 2, 3] 時 A 用盡，為 4 時兩者同時用盡。先執行第三種後，下一次操作為 [1, 2] 時 A 用盡，為 3 時兩者同時用盡。先執行第四種後，下一次操作為 1 時 A 用盡，為 2 時兩者同時用盡。所求總機率為 0.71875。
+    ///
+    /// 限制條件：
+    /// - 0 &lt;= n &lt;= 10^9
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

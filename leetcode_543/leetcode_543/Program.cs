@@ -29,16 +29,51 @@
         /// <summary>
         /// 543. Diameter of Binary Tree
         /// https://leetcode.com/problems/diameter-of-binary-tree/description/
-        /// 543. 二叉树的直径
+        /// <para>
+        /// Given the root of a binary tree, return the length of the tree's diameter.
+        ///
+        /// The diameter is the length of the longest path between any two nodes in a tree. This path may or may not pass through root.
+        ///
+        /// The length of a path between two nodes is represented by the number of edges between them.
+        ///
+        /// Example 1:
+        /// Image: https://assets.leetcode.com/uploads/2021/03/06/diamtree.jpg
+        /// Input: root = [1,2,3,4,5]
+        /// Output: 3
+        /// Explanation: 3 is the length of the path [4,2,1,3] or [5,2,1,3].
+        ///
+        /// Example 2:
+        /// Input: root = [1,2]
+        /// Output: 1
+        ///
+        /// Constraints:
+        /// - The number of nodes in the tree is in [1, 10^4].
+        /// - -100 &lt;= Node.val &lt;= 100
+        /// </para>
+        /// <para>
+        /// 543. 二元樹的直徑
         /// https://leetcode.cn/problems/diameter-of-binary-tree/description/
-        /// 
-        /// Q:
-        /// 給定一棵二元樹的根節點，返回該樹的直徑長度。
-        /// 二元樹的直徑是樹中"任意兩個節點"之間最長路徑的長度。這條路徑可以經過根節點，也可以不經過根節點。
-        /// 兩個節點之間路徑的長度表示為它們之間的邊數。
-        /// 
-        /// 注意題目有說是任意兩節點, 所以最上層的 root, 不是必須要經過的節點之一
-        /// 
+        ///
+        /// 給定二元樹的根節點 root，回傳這棵樹的直徑長度。
+        ///
+        /// 二元樹的直徑，是樹中任意兩個節點之間最長路徑的長度。此路徑可能經過 root，也可能不經過。
+        ///
+        /// 兩個節點之間的路徑長度，以它們之間的邊數表示。
+        ///
+        /// 範例 1：
+        /// 圖片：https://assets.leetcode.com/uploads/2021/03/06/diamtree.jpg
+        /// 輸入：root = [1,2,3,4,5]
+        /// 輸出：3
+        /// 解釋：路徑 [4,2,1,3] 或 [5,2,1,3] 的長度都是 3。
+        ///
+        /// 範例 2：
+        /// 輸入：root = [1,2]
+        /// 輸出：1
+        ///
+        /// 限制條件：
+        /// - 樹中節點數量在 [1, 10^4] 範圍內。
+        /// - -100 &lt;= Node.val &lt;= 100
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

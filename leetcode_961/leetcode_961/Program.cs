@@ -7,9 +7,63 @@ namespace leetcode_961;
 class Program
 {
     /// <summary>
-    /// 程式進入點。
-    /// 不需要命令列參數；會執行五組合法測資，分別驗證三種解法的回傳值，
-    /// 並確認各方法不會修改輸入陣列。
+    /// 961. N-Repeated Element in Size 2N Array
+    /// https://leetcode.com/problems/n-repeated-element-in-size-2n-array/description/
+    /// <para>
+    /// You are given an integer array nums with these properties:
+    /// - nums.length == 2 * n.
+    /// - nums contains n + 1 distinct values, n of which occur exactly once.
+    /// - Exactly one element of nums is repeated n times.
+    ///
+    /// Return the element repeated n times.
+    ///
+    /// Example 1:
+    /// Input: nums = [1,2,3,3]
+    /// Output: 3
+    ///
+    /// Example 2:
+    /// Input: nums = [2,1,2,5,3,2]
+    /// Output: 2
+    ///
+    /// Example 3:
+    /// Input: nums = [5,1,5,2,5,3,5,4]
+    /// Output: 5
+    ///
+    /// Constraints:
+    /// - 2 &lt;= n &lt;= 5000
+    /// - nums.length == 2 * n
+    /// - 0 &lt;= nums[i] &lt;= 10^4
+    /// - nums contains n + 1 distinct elements, and one of them is repeated exactly n times.
+    /// </para>
+    /// <para>
+    /// 961. 長度為 2N 的陣列中重複 N 次的元素
+    /// https://leetcode.cn/problems/n-repeated-element-in-size-2n-array/description/
+    ///
+    /// 給定具有下列性質的整數陣列 nums：
+    /// - nums.length == 2 * n。
+    /// - nums 包含 n + 1 個不同值，其中 n 個值恰好出現一次。
+    /// - nums 中恰好有一個元素重複出現 n 次。
+    ///
+    /// 回傳重複 n 次的元素。
+    ///
+    /// 範例 1：
+    /// 輸入：nums = [1,2,3,3]
+    /// 輸出：3
+    ///
+    /// 範例 2：
+    /// 輸入：nums = [2,1,2,5,3,2]
+    /// 輸出：2
+    ///
+    /// 範例 3：
+    /// 輸入：nums = [5,1,5,2,5,3,5,4]
+    /// 輸出：5
+    ///
+    /// 限制條件：
+    /// - 2 &lt;= n &lt;= 5000
+    /// - nums.length == 2 * n
+    /// - 0 &lt;= nums[i] &lt;= 10^4
+    /// - nums 包含 n + 1 個不同元素，其中一個恰好重複 n 次。
+    /// </para>
     /// </summary>
     /// <param name="args">未使用的命令列參數。</param>
     private static void Main(string[] args)

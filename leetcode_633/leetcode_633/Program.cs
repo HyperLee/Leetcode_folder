@@ -4,9 +4,40 @@
     {
         /// <summary>
         /// 633. Sum of Square Numbers
-        /// https://leetcode.com/problems/sum-of-square-numbers/?envType=daily-question&envId=2024-06-17
-        /// 633. 平方数之和
+        /// https://leetcode.com/problems/sum-of-square-numbers/description/
+        /// <para>
+        /// Given a non-negative integer c, decide whether there are two integers a and b such that a^2 + b^2 = c.
+        ///
+        /// Example 1:
+        /// Input: c = 5
+        /// Output: true
+        /// Explanation: 1 * 1 + 2 * 2 = 5
+        ///
+        /// Example 2:
+        /// Input: c = 3
+        /// Output: false
+        ///
+        /// Constraints:
+        /// - 0 &lt;= c &lt;= 2^31 - 1
+        /// </para>
+        /// <para>
+        /// 633. 平方數之和
         /// https://leetcode.cn/problems/sum-of-square-numbers/description/
+        ///
+        /// 給定非負整數 c，判斷是否存在兩個整數 a 與 b，使得 a^2 + b^2 = c。
+        ///
+        /// 範例 1：
+        /// 輸入：c = 5
+        /// 輸出：true
+        /// 解釋：1 * 1 + 2 * 2 = 5
+        ///
+        /// 範例 2：
+        /// 輸入：c = 3
+        /// 輸出：false
+        ///
+        /// 限制條件：
+        /// - 0 &lt;= c &lt;= 2^31 - 1
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

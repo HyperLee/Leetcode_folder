@@ -5,8 +5,71 @@
         /// <summary>
         /// 994. Rotting Oranges
         /// https://leetcode.com/problems/rotting-oranges/description/
-        /// 994. 腐烂的橘子
+        /// <para>
+        /// You are given an m x n grid where each cell has one of three values:
+        /// - 0 represents an empty cell.
+        /// - 1 represents a fresh orange.
+        /// - 2 represents a rotten orange.
+        ///
+        /// Every minute, any fresh orange that is adjacent to a rotten orange in one of four directions becomes rotten.
+        ///
+        /// Return the minimum number of minutes until no cell contains a fresh orange. If this is impossible, return -1.
+        ///
+        /// Example 1:
+        /// Image: https://assets.leetcode.com/uploads/2019/02/16/oranges.png
+        /// Input: grid = [[2,1,1],[1,1,0],[0,1,1]]
+        /// Output: 4
+        ///
+        /// Example 2:
+        /// Input: grid = [[2,1,1],[0,1,1],[1,0,1]]
+        /// Output: -1
+        /// Explanation: The orange in the bottom-left corner (row 2, column 0) never rots because rotting spreads only in four directions.
+        ///
+        /// Example 3:
+        /// Input: grid = [[0,2]]
+        /// Output: 0
+        /// Explanation: There are already no fresh oranges at minute 0, so the answer is 0.
+        ///
+        /// Constraints:
+        /// - m == grid.length
+        /// - n == grid[i].length
+        /// - 1 &lt;= m, n &lt;= 10
+        /// - grid[i][j] is 0, 1, or 2.
+        /// </para>
+        /// <para>
+        /// 994. 腐爛的橘子
         /// https://leetcode.cn/problems/rotting-oranges/description/
+        ///
+        /// 給定 m x n 的網格 grid，每個格子具有下列三種值之一：
+        /// - 0 表示空格。
+        /// - 1 表示新鮮橘子。
+        /// - 2 表示腐爛橘子。
+        ///
+        /// 每過一分鐘，任何在四個方向之一與腐爛橘子相鄰的新鮮橘子都會腐爛。
+        ///
+        /// 回傳直到沒有格子含有新鮮橘子所需的最少分鐘數；若不可能，回傳 -1。
+        ///
+        /// 範例 1：
+        /// 圖片：https://assets.leetcode.com/uploads/2019/02/16/oranges.png
+        /// 輸入：grid = [[2,1,1],[1,1,0],[0,1,1]]
+        /// 輸出：4
+        ///
+        /// 範例 2：
+        /// 輸入：grid = [[2,1,1],[0,1,1],[1,0,1]]
+        /// 輸出：-1
+        /// 解釋：左下角的橘子（第 2 列、第 0 欄）永遠不會腐爛，因為腐爛只會沿四個方向傳播。
+        ///
+        /// 範例 3：
+        /// 輸入：grid = [[0,2]]
+        /// 輸出：0
+        /// 解釋：第 0 分鐘時已經沒有新鮮橘子，因此答案就是 0。
+        ///
+        /// 限制條件：
+        /// - m == grid.length
+        /// - n == grid[i].length
+        /// - 1 &lt;= m, n &lt;= 10
+        /// - grid[i][j] 是 0、1 或 2。
+        /// </para>
         /// </summary>
         /// <remarks>
         /// 不需要命令列參數；主程式會以七組合法案例分別驗證兩種多源 BFS 解法，

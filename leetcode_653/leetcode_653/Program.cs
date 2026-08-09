@@ -25,12 +25,49 @@ public class Program
     }
 
     /// <summary>
-    /// leetcode 653 Two Sum IV - Input is a BST
-    /// https://leetcode.com/problems/two-sum-iv-input-is-a-bst/
-    /// 两数之和 IV - 输入二叉搜索树
-    /// https://leetcode.cn/problems/two-sum-iv-input-is-a-bst/
-    /// Given a BST root and an integer k, return true if and only if two distinct tree nodes sum to k; otherwise, return false.
-    /// 給定 BST 根節點與整數 k，當且僅當兩個不同樹節點的值總和為 k 時回傳 true；否則回傳 false。
+    /// 653. Two Sum IV - Input is a BST
+    /// https://leetcode.com/problems/two-sum-iv-input-is-a-bst/description/
+    /// <para>
+    /// Given the root of a binary search tree and an integer k, return true if there exist two elements in the BST such that their sum is equal to k, or false otherwise.
+    ///
+    /// Example 1:
+    /// Image: https://assets.leetcode.com/uploads/2020/09/21/sum_tree_1.jpg
+    /// Input: root = [5,3,6,2,4,null,7], k = 9
+    /// Output: true
+    ///
+    /// Example 2:
+    /// Image: https://assets.leetcode.com/uploads/2020/09/21/sum_tree_2.jpg
+    /// Input: root = [5,3,6,2,4,null,7], k = 28
+    /// Output: false
+    ///
+    /// Constraints:
+    /// - The number of nodes in the tree is in the range [1, 10^4].
+    /// - -10^4 &lt;= Node.val &lt;= 10^4
+    /// - root is guaranteed to be a valid binary search tree.
+    /// - -10^5 &lt;= k &lt;= 10^5
+    /// </para>
+    /// <para>
+    /// 653. 兩數之和 IV－輸入二元搜尋樹
+    /// https://leetcode.cn/problems/two-sum-iv-input-is-a-bst/description/
+    ///
+    /// 給定二元搜尋樹的根節點 root 與整數 k，若 BST 中存在兩個元素，其總和等於 k，回傳 true；否則回傳 false。
+    ///
+    /// 範例 1：
+    /// 圖片：https://assets.leetcode.com/uploads/2020/09/21/sum_tree_1.jpg
+    /// 輸入：root = [5,3,6,2,4,null,7], k = 9
+    /// 輸出：true
+    ///
+    /// 範例 2：
+    /// 圖片：https://assets.leetcode.com/uploads/2020/09/21/sum_tree_2.jpg
+    /// 輸入：root = [5,3,6,2,4,null,7], k = 28
+    /// 輸出：false
+    ///
+    /// 限制條件：
+    /// - 樹中的節點數量在 [1, 10^4] 範圍內。
+    /// - -10^4 &lt;= Node.val &lt;= 10^4
+    /// - root 保證是有效的二元搜尋樹。
+    /// - -10^5 &lt;= k &lt;= 10^5
+    /// </para>
     /// </summary>
     private static void Main()
     {

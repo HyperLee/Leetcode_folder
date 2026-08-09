@@ -7,10 +7,60 @@
 
         /// <summary>
         /// 840. Magic Squares In Grid
-        /// https://leetcode.com/problems/magic-squares-in-grid/description/?envType=daily-question&envId=2024-08-09
-        /// 
-        /// 840. 矩阵中的幻方
+        /// https://leetcode.com/problems/magic-squares-in-grid/description/
+        /// <para>
+        /// A 3 x 3 magic square is a 3 x 3 grid filled with distinct numbers from 1 to 9 such that every row, column, and both diagonals have the same sum.
+        ///
+        /// Given a row x col integer grid, return the number of 3 x 3 magic-square subgrids it contains.
+        ///
+        /// Note: Although a magic square can contain only numbers from 1 to 9, grid may contain numbers up to 15.
+        ///
+        /// Example 1:
+        /// Image: https://assets.leetcode.com/uploads/2020/09/11/magic_main.jpg
+        /// Input: grid = [[4,3,8,4],[9,5,1,9],[2,7,6,2]]
+        /// Output: 1
+        /// Explanation: The following subgrid is a 3 x 3 magic square: https://assets.leetcode.com/uploads/2020/09/11/magic_valid.jpg
+        /// The other one is not: https://assets.leetcode.com/uploads/2020/09/11/magic_invalid.jpg
+        /// In total, the given grid contains only one magic square.
+        ///
+        /// Example 2:
+        /// Input: grid = [[8]]
+        /// Output: 0
+        ///
+        /// Constraints:
+        /// - row == grid.length
+        /// - col == grid[i].length
+        /// - 1 &lt;= row, col &lt;= 10
+        /// - 0 &lt;= grid[i][j] &lt;= 15
+        /// </para>
+        /// <para>
+        /// 840. 矩陣中的幻方
         /// https://leetcode.cn/problems/magic-squares-in-grid/description/
+        ///
+        /// 3 x 3 幻方是一個填入 1 到 9 各不相同數字的 3 x 3 網格，且每一列、每一欄與兩條對角線的總和都相同。
+        ///
+        /// 給定 row x col 的整數網格 grid，回傳其中 3 x 3 幻方子網格的數量。
+        ///
+        /// 注意：幻方只能包含 1 到 9，但 grid 中的數字最大可為 15。
+        ///
+        /// 範例 1：
+        /// 圖片：https://assets.leetcode.com/uploads/2020/09/11/magic_main.jpg
+        /// 輸入：grid = [[4,3,8,4],[9,5,1,9],[2,7,6,2]]
+        /// 輸出：1
+        /// 解釋：下列子網格是 3 x 3 幻方：https://assets.leetcode.com/uploads/2020/09/11/magic_valid.jpg
+        /// 另一個則不是：https://assets.leetcode.com/uploads/2020/09/11/magic_invalid.jpg
+        /// 因此給定網格中總共只有一個幻方。
+        ///
+        /// 範例 2：
+        /// 輸入：grid = [[8]]
+        /// 輸出：0
+        ///
+        /// 限制條件：
+        /// - row == grid.length
+        /// - col == grid[i].length
+        /// - 1 &lt;= row, col &lt;= 10
+        /// - 0 &lt;= grid[i][j] &lt;= 15
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

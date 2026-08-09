@@ -43,20 +43,52 @@ class Program
 
     /// <summary>
     /// 572. Subtree of Another Tree
-    /// https://leetcode.com/problems/subtree-of-another-tree/description/?envType=problem-list-v2&envId=oizxjoit
+    /// https://leetcode.com/problems/subtree-of-another-tree/description/
+    /// <para>
+    /// Given the roots of two binary trees root and subRoot, return true if there is a subtree of root with the same structure and node values as subRoot, and false otherwise.
+    ///
+    /// A subtree of a binary tree tree consists of a node in tree and all of that node's descendants. The tree tree can also be considered a subtree of itself.
+    ///
+    /// Example 1:
+    /// Image: https://assets.leetcode.com/uploads/2021/04/28/subtree1-tree.jpg
+    /// Input: root = [3,4,5,1,2], subRoot = [4,1,2]
+    /// Output: true
+    ///
+    /// Example 2:
+    /// Image: https://assets.leetcode.com/uploads/2021/04/28/subtree2-tree.jpg
+    /// Input: root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]
+    /// Output: false
+    ///
+    /// Constraints:
+    /// - The number of nodes in root is in [1, 2000].
+    /// - The number of nodes in subRoot is in [1, 1000].
+    /// - -10^4 &lt;= root.val &lt;= 10^4
+    /// - -10^4 &lt;= subRoot.val &lt;= 10^4
+    /// </para>
+    /// <para>
     /// 572. 另一棵樹的子樹
     /// https://leetcode.cn/problems/subtree-of-another-tree/description/
-    /// 題目描述：
-    /// 給定兩個二元樹 root 和 subRoot，判斷 subRoot 是否為 root 的子樹。
-    /// 子樹必須包含其所有後代節點，結構完全相同。
-    /// 
+    ///
+    /// 給定兩棵二元樹的根節點 root 與 subRoot，若 root 中存在一棵與 subRoot 結構和節點值都相同的子樹則回傳 true，否則回傳 false。
+    ///
+    /// 二元樹 tree 的子樹，由 tree 中某個節點與該節點的所有後代組成。tree 本身也可視為自己的子樹。
+    ///
+    /// 範例 1：
+    /// 圖片：https://assets.leetcode.com/uploads/2021/04/28/subtree1-tree.jpg
+    /// 輸入：root = [3,4,5,1,2], subRoot = [4,1,2]
+    /// 輸出：true
+    ///
+    /// 範例 2：
+    /// 圖片：https://assets.leetcode.com/uploads/2021/04/28/subtree2-tree.jpg
+    /// 輸入：root = [3,4,5,1,2,null,null,null,null,0], subRoot = [4,1,2]
+    /// 輸出：false
+    ///
     /// 限制條件：
-    /// - root 樹的節點數範圍為 [1, 2000]
-    /// - subRoot 樹的節點數範圍為 [1, 1000]
-    /// - -10^4 <= root.val <= 10^4
-    /// - -10^4 <= subRoot.val <= 10^4
-    /// 
-    /// 建議先去寫 100. Same Tree, 再過來解這題.
+    /// - root 中的節點數量在 [1, 2000] 範圍內。
+    /// - subRoot 中的節點數量在 [1, 1000] 範圍內。
+    /// - -10^4 &lt;= root.val &lt;= 10^4
+    /// - -10^4 &lt;= subRoot.val &lt;= 10^4
+    /// </para>
     /// </summary>
     /// <param name="args"></param>
     static void Main(string[] args)

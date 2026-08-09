@@ -4,10 +4,48 @@
     {
         /// <summary>
         /// 713. Subarray Product Less Than K
-        /// https://leetcode.com/problems/subarray-product-less-than-k/?envType=daily-question&envId=2024-03-27
-        /// 
-        /// 713. 乘积小于 K 的子数组
+        /// https://leetcode.com/problems/subarray-product-less-than-k/description/
+        /// <para>
+        /// Given an array of integers nums and an integer k, return the number of contiguous subarrays where the product of all the elements in the subarray is strictly less than k.
+        ///
+        /// Example 1:
+        /// Input: nums = [10,5,2,6], k = 100
+        /// Output: 8
+        /// Explanation: The 8 subarrays that have product less than 100 are:
+        /// [10], [5], [2], [6], [10,5], [5,2], [2,6], [5,2,6]
+        /// Note that [10,5,2] is not included, as the product of 100 is not strictly less than k.
+        ///
+        /// Example 2:
+        /// Input: nums = [1,2,3], k = 0
+        /// Output: 0
+        ///
+        /// Constraints:
+        /// - 1 &lt;= nums.length &lt;= 3 * 10^4
+        /// - 1 &lt;= nums[i] &lt;= 1000
+        /// - 0 &lt;= k &lt;= 10^6
+        /// </para>
+        /// <para>
+        /// 713. 乘積小於 K 的子陣列
         /// https://leetcode.cn/problems/subarray-product-less-than-k/description/
+        ///
+        /// 給定整數陣列 nums 與整數 k，回傳其中所有元素乘積嚴格小於 k 的連續子陣列數量。
+        ///
+        /// 範例 1：
+        /// 輸入：nums = [10,5,2,6], k = 100
+        /// 輸出：8
+        /// 解釋：乘積小於 100 的 8 個子陣列為：
+        /// [10], [5], [2], [6], [10,5], [5,2], [2,6], [5,2,6]
+        /// 請注意，[10,5,2] 不包含在內，因為其乘積為 100，並未嚴格小於 k。
+        ///
+        /// 範例 2：
+        /// 輸入：nums = [1,2,3], k = 0
+        /// 輸出：0
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= nums.length &lt;= 3 * 10^4
+        /// - 1 &lt;= nums[i] &lt;= 1000
+        /// - 0 &lt;= k &lt;= 10^6
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

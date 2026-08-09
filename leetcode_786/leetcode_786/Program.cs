@@ -4,9 +4,62 @@
     {
         /// <summary>
         /// 786. K-th Smallest Prime Fraction
-        /// https://leetcode.com/problems/k-th-smallest-prime-fraction/?envType=daily-question&envId=2024-05-10
-        /// 786. 第 K 个最小的质数分数
+        /// https://leetcode.com/problems/k-th-smallest-prime-fraction/description/
+        /// <para>
+        /// You are given a sorted integer array arr containing 1 and prime numbers, where all integers in arr are unique. You are also given an integer k.
+        ///
+        /// For every i and j where 0 &lt;= i &lt; j &lt; arr.length, consider the fraction arr[i] / arr[j].
+        ///
+        /// Return the k-th smallest fraction considered. Return the answer as an integer array of size 2, where answer[0] == arr[i] and answer[1] == arr[j].
+        ///
+        /// Example 1:
+        /// Input: arr = [1,2,3,5], k = 3
+        /// Output: [2,5]
+        /// Explanation: The fractions in sorted order are 1/5, 1/3, 2/5, 1/2, 3/5, and 2/3. The third fraction is 2/5.
+        ///
+        /// Example 2:
+        /// Input: arr = [1,7], k = 1
+        /// Output: [1,7]
+        ///
+        /// Constraints:
+        /// - 2 &lt;= arr.length &lt;= 1000
+        /// - 1 &lt;= arr[i] &lt;= 3 * 10^4
+        /// - arr[0] == 1
+        /// - arr[i] is a prime number for i &gt; 0.
+        /// - All numbers in arr are unique and sorted in strictly increasing order.
+        /// - 1 &lt;= k &lt;= arr.length * (arr.length - 1) / 2
+        ///
+        /// Follow-up: Can you solve the problem with better than O(n^2) complexity?
+        /// </para>
+        /// <para>
+        /// 786. 第 K 小的質數分數
         /// https://leetcode.cn/problems/k-th-smallest-prime-fraction/description/
+        ///
+        /// 給定已排序的整數陣列 arr，其中包含 1 與質數，且 arr 中所有整數都不相同；另給定整數 k。
+        ///
+        /// 對每一組滿足 0 &lt;= i &lt; j &lt; arr.length 的 i 與 j，考慮分數 arr[i] / arr[j]。
+        ///
+        /// 回傳所考慮分數中第 k 小的分數。答案以大小為 2 的整數陣列回傳，其中 answer[0] == arr[i]，answer[1] == arr[j]。
+        ///
+        /// 範例 1：
+        /// 輸入：arr = [1,2,3,5], k = 3
+        /// 輸出：[2,5]
+        /// 解釋：依序排列的分數為 1/5、1/3、2/5、1/2、3/5 與 2/3。第三個分數是 2/5。
+        ///
+        /// 範例 2：
+        /// 輸入：arr = [1,7], k = 1
+        /// 輸出：[1,7]
+        ///
+        /// 限制條件：
+        /// - 2 &lt;= arr.length &lt;= 1000
+        /// - 1 &lt;= arr[i] &lt;= 3 * 10^4
+        /// - arr[0] == 1
+        /// - 當 i &gt; 0 時，arr[i] 是質數。
+        /// - arr 中所有數字都不相同，並按嚴格遞增順序排列。
+        /// - 1 &lt;= k &lt;= arr.length * (arr.length - 1) / 2
+        ///
+        /// 延伸問題：能否以優於 O(n^2) 的複雜度解決此問題？
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         /// <remarks>

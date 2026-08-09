@@ -4,10 +4,58 @@
     {
         /// <summary>
         /// 592. Fraction Addition and Subtraction
-        /// https://leetcode.com/problems/fraction-addition-and-subtraction/description/?envType=daily-question&envId=2024-08-23
-        /// 
-        /// 592. 分数加减运算
+        /// https://leetcode.com/problems/fraction-addition-and-subtraction/description/
+        /// <para>
+        /// Given a string expression representing an expression of fraction addition and subtraction, return the calculation result in string format.
+        ///
+        /// The final result must be an irreducible fraction. If it is an integer, convert it to a fraction with denominator 1. For example, 2 becomes 2/1.
+        ///
+        /// Example 1:
+        /// Input: expression = "-1/2+1/2"
+        /// Output: "0/1"
+        ///
+        /// Example 2:
+        /// Input: expression = "-1/2+1/2+1/3"
+        /// Output: "1/3"
+        ///
+        /// Example 3:
+        /// Input: expression = "1/3-1/2"
+        /// Output: "-1/6"
+        ///
+        /// Constraints:
+        /// - The input string, and also the output, contains only '0' through '9', '/', '+', and '-'.
+        /// - Each input and output fraction has format ±numerator/denominator. If the first input fraction or the output is positive, '+' is omitted.
+        /// - Input contains only valid irreducible fractions whose numerator and denominator are always in [1, 10]. A denominator of 1 means the fraction is an integer in the format above.
+        /// - The number of fractions is in [1, 10].
+        /// - The final numerator and denominator are guaranteed to be valid 32-bit integers.
+        /// </para>
+        /// <para>
+        /// 592. 分數加減運算
         /// https://leetcode.cn/problems/fraction-addition-and-subtraction/description/
+        ///
+        /// 給定字串 expression，表示分數加減運算式，請以字串格式回傳計算結果。
+        ///
+        /// 最終結果必須是不可約分數。若結果是整數，請轉換為分母為 1 的分數。例如，2 應轉換為 2/1。
+        ///
+        /// 範例 1：
+        /// 輸入：expression = "-1/2+1/2"
+        /// 輸出："0/1"
+        ///
+        /// 範例 2：
+        /// 輸入：expression = "-1/2+1/2+1/3"
+        /// 輸出："1/3"
+        ///
+        /// 範例 3：
+        /// 輸入：expression = "1/3-1/2"
+        /// 輸出："-1/6"
+        ///
+        /// 限制條件：
+        /// - 輸入字串與輸出都只包含 '0' 到 '9'、'/'、'+' 與 '-'。
+        /// - 每個輸入與輸出分數的格式都是 ±分子/分母。若第一個輸入分數或輸出為正數，則省略 '+'。
+        /// - 輸入只包含有效的不可約分數，其分子與分母一定在 [1, 10] 範圍內。分母為 1 代表該分數是以上述格式表示的整數。
+        /// - 分數數量在 [1, 10] 範圍內。
+        /// - 最終結果的分子與分母保證是有效的 32 位元整數。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

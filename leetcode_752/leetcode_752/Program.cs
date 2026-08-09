@@ -4,9 +4,72 @@
     {
         /// <summary>
         /// 752. Open the Lock
-        /// https://leetcode.com/problems/open-the-lock/description/?envType=daily-question&envId=2024-04-22
-        /// 752. 打开转盘锁
+        /// https://leetcode.com/problems/open-the-lock/description/
+        /// <para>
+        /// You have a lock with 4 circular wheels. Each wheel has 10 slots: '0', '1', '2', '3', '4', '5', '6', '7', '8', '9'. The wheels rotate freely and wrap around, so '9' can turn to '0' and '0' can turn to '9'. Each move consists of turning one wheel by one slot.
+        ///
+        /// The lock initially starts at '0000', a string representing the state of the 4 wheels.
+        ///
+        /// You are given a list of deadends. If the lock displays any of these codes, its wheels stop turning and you cannot open it.
+        ///
+        /// Given a target representing the wheel state that unlocks the lock, return the minimum total number of turns required to open it, or -1 if it is impossible.
+        ///
+        /// Example 1:
+        /// Input: deadends = ["0201","0101","0102","1212","2002"], target = "0202"
+        /// Output: 6
+        /// Explanation: A valid move sequence is "0000" -&gt; "1000" -&gt; "1100" -&gt; "1200" -&gt; "1201" -&gt; "1202" -&gt; "0202". A sequence such as "0000" -&gt; "0001" -&gt; "0002" -&gt; "0102" -&gt; "0202" is invalid because the lock becomes stuck after displaying the dead end "0102".
+        ///
+        /// Example 2:
+        /// Input: deadends = ["8888"], target = "0009"
+        /// Output: 1
+        /// Explanation: Turn the last wheel in reverse to move from "0000" -&gt; "0009".
+        ///
+        /// Example 3:
+        /// Input: deadends = ["8887","8889","8878","8898","8788","8988","7888","9888"], target = "8888"
+        /// Output: -1
+        /// Explanation: The target cannot be reached without getting stuck.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= deadends.length &lt;= 500
+        /// - deadends[i].length == 4
+        /// - target.length == 4
+        /// - target will not be in deadends.
+        /// - target and deadends[i] consist only of digits.
+        /// </para>
+        /// <para>
+        /// 752. 打開轉盤鎖
         /// https://leetcode.cn/problems/open-the-lock/description/
+        ///
+        /// 有一個包含 4 個圓形轉輪的鎖。每個轉輪有 10 個槽位：'0'、'1'、'2'、'3'、'4'、'5'、'6'、'7'、'8'、'9'。轉輪可自由旋轉並循環，因此 '9' 可轉到 '0'，'0' 也可轉到 '9'。每次操作會將一個轉輪轉動一格。
+        ///
+        /// 鎖一開始位於 '0000'，此字串表示 4 個轉輪的狀態。
+        ///
+        /// 給定一份死鎖代碼清單 deadends。若鎖顯示其中任何代碼，轉輪就會停止轉動，無法再開鎖。
+        ///
+        /// 給定能解鎖的轉輪狀態 target，回傳開鎖所需的最少總轉動次數；若不可能則回傳 -1。
+        ///
+        /// 範例 1：
+        /// 輸入：deadends = ["0201","0101","0102","1212","2002"], target = "0202"
+        /// 輸出：6
+        /// 解釋：一個有效的操作順序為 "0000" -&gt; "1000" -&gt; "1100" -&gt; "1200" -&gt; "1201" -&gt; "1202" -&gt; "0202"。像 "0000" -&gt; "0001" -&gt; "0002" -&gt; "0102" -&gt; "0202" 這樣的順序無效，因為顯示死鎖代碼 "0102" 後轉輪便會卡住。
+        ///
+        /// 範例 2：
+        /// 輸入：deadends = ["8888"], target = "0009"
+        /// 輸出：1
+        /// 解釋：反向轉動最後一個轉輪，即可從 "0000" 移至 "0009"。
+        ///
+        /// 範例 3：
+        /// 輸入：deadends = ["8887","8889","8878","8898","8788","8988","7888","9888"], target = "8888"
+        /// 輸出：-1
+        /// 解釋：無法在不卡住的情況下到達目標。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= deadends.length &lt;= 500
+        /// - deadends[i].length == 4
+        /// - target.length == 4
+        /// - target 不會出現在 deadends 中。
+        /// - target 與 deadends[i] 都只由數字組成。
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)

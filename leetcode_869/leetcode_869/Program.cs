@@ -4,19 +4,42 @@ class Program
 {
     /// <summary>
     /// 869. Reordered Power of 2
-    /// https://leetcode.com/problems/reordered-power-of-2/description/?envType=daily-question&envId=2025-08-10
+    /// https://leetcode.com/problems/reordered-power-of-2/description/
+    /// <para>
+    /// You are given an integer n. Reorder its digits in any order, including the original order, without making the leading digit zero.
+    ///
+    /// Return true if and only if the resulting number can be a power of two.
+    ///
+    /// Example 1:
+    /// Input: n = 1
+    /// Output: true
+    ///
+    /// Example 2:
+    /// Input: n = 10
+    /// Output: false
+    ///
+    /// Constraints:
+    /// - 1 &lt;= n &lt;= 10^9
+    /// </para>
+    /// <para>
     /// 869. 重新排序得到 2 的冪
-    /// https://leetcode.cn/problems/reordered-power-of-2/description/?envType=daily-question&envId=2025-08-10
-    /// 
-    /// 解題說明：
-    /// 給定一個整數 n，可以重新排列 n 的數字（可原順序），使得首位數字不是 0。
-    /// 目標是判斷是否存在一種排列方式，使其對應的整數為 2 的冪。
-    /// 
-    /// 解法：
-    /// 1. 將 n 轉為字元陣列，並排序，方便去重。
-    /// 2. 使用回溯法（DFS）枚舉所有不重複的全排列，過程中跳過前導 0。
-    /// 3. 每產生一個排列，判斷其對應的整數是否為 2 的冪（利用位元運算 n & (n-1) == 0）。
-    /// 4. 若有任一排列符合條件，立即回傳 true，否則全部檢查完回傳 false。
+    /// https://leetcode.cn/problems/reordered-power-of-2/description/
+    ///
+    /// 給定整數 n。可以用任意順序（包含原順序）重新排列其數字，但排列後的首位數字不能是零。
+    ///
+    /// 若且唯若能使所得數字成為 2 的冪，回傳 true。
+    ///
+    /// 範例 1：
+    /// 輸入：n = 1
+    /// 輸出：true
+    ///
+    /// 範例 2：
+    /// 輸入：n = 10
+    /// 輸出：false
+    ///
+    /// 限制條件：
+    /// - 1 &lt;= n &lt;= 10^9
+    /// </para>
     /// </summary>
     /// <param name="args">主程式參數</param>
     static void Main(string[] args)

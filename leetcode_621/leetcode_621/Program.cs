@@ -4,24 +4,66 @@
     {
         /// <summary>
         /// 621. Task Scheduler
-        /// https://leetcode.com/problems/task-scheduler/description/?envType=daily-question&envId=2024-03-19
-        /// 621. 任务调度器
+        /// https://leetcode.com/problems/task-scheduler/description/
+        /// <para>
+        /// You are given an array of CPU tasks, each represented by letters A to Z, and a cooling time n. Each cycle or interval allows the completion of one task. Tasks can be completed in any order, but there is a constraint: identical tasks must be separated by at least n intervals due to cooling time.
+        ///
+        /// Return the minimum number of intervals required to complete all tasks.
+        ///
+        /// Example 1:
+        /// Input: tasks = ["A","A","A","B","B","B"], n = 2
+        /// Output: 8
+        /// Explanation: A possible sequence is: A -&gt; B -&gt; idle -&gt; A -&gt; B -&gt; idle -&gt; A -&gt; B.
+        /// After completing task A, you must wait two intervals before doing A again. The same applies to task B. In the 3rd interval, neither A nor B can be done, so you idle. By the 4th interval, you can do A again as two intervals have passed.
+        ///
+        /// Example 2:
+        /// Input: tasks = ["A","C","A","B","D","B"], n = 1
+        /// Output: 6
+        /// Explanation: A possible sequence is: A -&gt; B -&gt; C -&gt; D -&gt; A -&gt; B.
+        /// With a cooling interval of 1, you can repeat a task after just one other task.
+        ///
+        /// Example 3:
+        /// Input: tasks = ["A","A","A","B","B","B"], n = 3
+        /// Output: 10
+        /// Explanation: A possible sequence is: A -&gt; B -&gt; idle -&gt; idle -&gt; A -&gt; B -&gt; idle -&gt; idle -&gt; A -&gt; B.
+        /// There are only two types of tasks, A and B, which need to be separated by three intervals. This leads to idling twice between repetitions of these tasks.
+        ///
+        /// Constraints:
+        /// - 1 &lt;= tasks.length &lt;= 10^4
+        /// - tasks[i] is an uppercase English letter.
+        /// - 0 &lt;= n &lt;= 100
+        /// </para>
+        /// <para>
+        /// 621. 任務排程器
         /// https://leetcode.cn/problems/task-scheduler/description/
-        /// 
-        /// 題目說明:
-        /// 給定一個字符陣列 tasks，表示需要執行的任務順序，其中每個字母代表不同種類的任務。
-        /// 任務可以以任意順序執行，且每個任務都可以在 1 個單位時間內完成。
-        /// 每個任務之間必須至少間隔 n 個單位時間。
-        /// 
-        /// 關鍵條件:
-        /// 1. 相同任務必須間隔 n 個單位時間
-        /// 2. 不同任務之間可以立即執行
-        /// 3. 任務執行順序可調整
-        /// 
-        /// 限制條件:
-        /// - 1 <= task.length <= 10^4
-        /// - tasks[i] 是大寫英文字母
-        /// - n 的範圍是 [0, 100]
+        ///
+        /// 給定一組 CPU 任務陣列，每個任務以 A 到 Z 的字母表示，並給定冷卻時間 n。每個週期或時間區間可完成一項任務。任務能以任意順序完成，但相同任務因冷卻時間限制，彼此之間必須至少相隔 n 個區間。
+        ///
+        /// 回傳完成所有任務所需的最少區間數。
+        ///
+        /// 範例 1：
+        /// 輸入：tasks = ["A","A","A","B","B","B"], n = 2
+        /// 輸出：8
+        /// 解釋：一種可能的順序是：A -&gt; B -&gt; 閒置 -&gt; A -&gt; B -&gt; 閒置 -&gt; A -&gt; B。
+        /// 完成任務 A 後，必須等待兩個區間才能再次執行 A；任務 B 亦同。第 3 個區間無法執行 A 或 B，因此必須閒置。到了第 4 個區間，因為已經過兩個區間，所以可以再次執行 A。
+        ///
+        /// 範例 2：
+        /// 輸入：tasks = ["A","C","A","B","D","B"], n = 1
+        /// 輸出：6
+        /// 解釋：一種可能的順序是：A -&gt; B -&gt; C -&gt; D -&gt; A -&gt; B。
+        /// 冷卻區間為 1，因此只要隔著另一項任務，就能重複執行同一任務。
+        ///
+        /// 範例 3：
+        /// 輸入：tasks = ["A","A","A","B","B","B"], n = 3
+        /// 輸出：10
+        /// 解釋：一種可能的順序是：A -&gt; B -&gt; 閒置 -&gt; 閒置 -&gt; A -&gt; B -&gt; 閒置 -&gt; 閒置 -&gt; A -&gt; B。
+        /// 只有 A 與 B 兩種任務，且相同任務必須相隔三個區間，因此每次重複這些任務前都需閒置兩次。
+        ///
+        /// 限制條件：
+        /// - 1 &lt;= tasks.length &lt;= 10^4
+        /// - tasks[i] 是大寫英文字母。
+        /// - 0 &lt;= n &lt;= 100
+        /// </para>
         /// </summary>
         /// <param name="args"></param>
         static void Main(string[] args)
