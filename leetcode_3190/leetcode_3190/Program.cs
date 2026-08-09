@@ -14,102 +14,93 @@ class Program
     /// 給定一個整數陣列 nums。一次操作可以將任一元素加 1 或減 1。
     /// 返回使所有元素都可以被 3 整除所需的最少操作次數。
     /// </summary>
-    /// <param name="args"></param>
+    /// <param name="args">命令列參數；本範例不使用。</param>
     static void Main(string[] args)
     {
         Program program = new Program();
-        
-        // 測試案例 1: [1,2,3,4]
-        int[] nums1 = new int[] { 1, 2, 3, 4 };
-        Console.WriteLine($"測試案例 1: [{string.Join(", ", nums1)}]");
-        Console.WriteLine($"結果: {program.MinimumOperations(nums1)}");
-        Console.WriteLine();
-        
-        // 測試案例 2: [3,6,9]
-        int[] nums2 = new int[] { 3, 6, 9 };
-        Console.WriteLine($"測試案例 2: [{string.Join(", ", nums2)}]");
-        Console.WriteLine($"結果: {program.MinimumOperations(nums2)}");
-        Console.WriteLine();
-        
-        // 測試案例 3: [1,2,4,5,7,8]
-        int[] nums3 = new int[] { 1, 2, 4, 5, 7, 8 };
-        Console.WriteLine($"測試案例 3: [{string.Join(", ", nums3)}]");
-        Console.WriteLine($"結果: {program.MinimumOperations(nums3)}");
-        Console.WriteLine();
-        
-        Console.WriteLine("========== 方法二測試 ==========");
-        Console.WriteLine();
-        
-        // 方法二測試案例 1: [1,2,3,4]
-        Console.WriteLine($"測試案例 1: [{string.Join(", ", nums1)}]");
-        Console.WriteLine($"結果: {program.MinimumOperations2(nums1)}");
-        Console.WriteLine();
-        
-        // 方法二測試案例 2: [3,6,9]
-        Console.WriteLine($"測試案例 2: [{string.Join(", ", nums2)}]");
-        Console.WriteLine($"結果: {program.MinimumOperations2(nums2)}");
-        Console.WriteLine();
-        
-        // 方法二測試案例 3: [1,2,4,5,7,8]
-        Console.WriteLine($"測試案例 3: [{string.Join(", ", nums3)}]");
-        Console.WriteLine($"結果: {program.MinimumOperations2(nums3)}");
+        (string Name, int[] Nums, int Expected)[] testCases = new[]
+        {
+            ("官方範例一", new[] { 1, 2, 3, 4 }, 3),
+            ("已全部整除", new[] { 3, 6, 9 }, 0),
+            ("最小元素邊界", new[] { 1 }, 1),
+            ("最大值與重複值", new[] { 50, 50, 50 }, 3),
+            ("所有元素都需操作", new[] { 1, 2, 4, 5, 7, 8 }, 6)
+        };
+        (string Name, Func<int[], int> Solve)[] solutions = new (string Name, Func<int[], int> Solve)[]
+        {
+            (nameof(MinimumOperations), program.MinimumOperations),
+            (nameof(MinimumOperations2), program.MinimumOperations2)
+        };
+
+        int passedChecks = 0;
+
+        foreach ((string solutionName, Func<int[], int> solve) in solutions)
+        {
+            Console.WriteLine($"=== {solutionName} ===");
+
+            foreach ((string caseName, int[] nums, int expected) in testCases)
+            {
+                int actual = solve(nums);
+                bool passed = actual == expected;
+
+                Console.WriteLine($"Case: {caseName}");
+                Console.WriteLine($"Input: [{string.Join(", ", nums)}]");
+                Console.WriteLine($"Expected: {expected}");
+                Console.WriteLine($"Actual: {actual}");
+                Console.WriteLine($"Result: {(passed ? "PASS" : "FAIL")}");
+                Console.WriteLine();
+
+                if (passed)
+                {
+                    passedChecks++;
+                }
+            }
+        }
+
+        int totalChecks = testCases.Length * solutions.Length;
+        Console.WriteLine($"Summary: {passedChecks}/{totalChecks} checks passed");
+
+        if (passedChecks != totalChecks)
+        {
+            Environment.ExitCode = 1;
+        }
     }
 
     /// <summary>
-    /// 解題思路:
-    /// 遍歷 nums，按照元素模 3 的餘數分類:
-    /// - 如果 nums[i] = 3k，無需操作
-    /// - 如果 nums[i] = 3k+1，減一得到 3 的倍數
-    /// - 如果 nums[i] = 3k+2，加一得到 3 的倍數
-    /// 
-    /// 由此可見，對於不是 3 的倍數的元素，只需操作一次就可以變成 3 的倍數。
-    /// 所以答案為不是 3 的倍數的元素個數。
-    /// 
-    /// 時間複雜度: O(n)，其中 n 是陣列長度
-    /// 空間複雜度: O(1)
+    /// 計算讓所有元素都能被 3 整除的最少操作數。
+    /// 解法依餘數分類：餘數為 0 的元素不需操作，餘數為 1 或 2 的元素都能以一次加減 1
+    /// 變成 3 的倍數，因此只要統計不能被 3 整除的元素數量。
     /// </summary>
-    /// <param name="nums">整數陣列</param>
-    /// <returns>使所有元素都可以被 3 整除所需的最少操作次數</returns>
+    /// <param name="nums">非空正整數陣列；題目保證長度與每個元素值皆介於 1 到 50。</param>
+    /// <returns>使陣列所有元素都可以被 3 整除所需的最少操作次數。</returns>
     public int MinimumOperations(int[] nums)
     {
         int res = 0;
-        
-        // 遍歷陣列中的每個元素
-        foreach(int num in nums)
+
+        foreach (int num in nums)
         {
-            // 如果元素不能被 3 整除，則需要一次操作
-            // num % 3 == 1 時，減 1 變成 3 的倍數
-            // num % 3 == 2 時，加 1 變成 3 的倍數
+            // 餘數只有 1 或 2 時才需操作，而且都能在一次加減 1 後完成。
             res += num % 3 != 0 ? 1 : 0;
         }
-        
+
         return res;
     }
 
-
     /// <summary>
-    /// 解題思路（方法二）:
-    /// 對於任意整數 x，要使其被 3 整除，有兩種操作方案：
-    /// 1. 將 x 增加至下一個最近的 3 的倍數，所需操作次數是 3 - (x % 3)
-    /// 2. 將 x 減少至上一個 3 的倍數，所需操作次數是 x % 3
-    /// 
-    /// 選擇操作次數較少的方案：Math.Min(x % 3, 3 - (x % 3))
-    /// 對 nums 中的每個數計算最小操作次數並累計，即為結果。
-    /// 
-    /// 時間複雜度: O(n)，其中 n 是陣列長度
-    /// 空間複雜度: O(1)
+    /// 計算讓所有元素都能被 3 整除的最少操作數。
+    /// 解法先求每個元素除以 3 的餘數，再比較向下減到前一個 3 的倍數與向上加到下一個
+    /// 3 的倍數所需的步數，取較小值後以 LINQ 加總。
     /// </summary>
-    /// <param name="nums">整數陣列</param>
-    /// <returns>使所有元素都可以被 3 整除所需的最少操作次數</returns>
+    /// <param name="nums">非空正整數陣列；題目保證長度與每個元素值皆介於 1 到 50。</param>
+    /// <returns>使陣列所有元素都可以被 3 整除所需的最少操作次數。</returns>
     public int MinimumOperations2(int[] nums)
     {
         return nums.Select(x =>
         {
-            // 計算兩種操作方案的操作次數：
-            // x % 3: 減少到 3 的倍數所需次數
-            // 3 - (x % 3): 增加到 3 的倍數所需次數
-            // 取最小值作為該元素的最少操作次數
-            return Math.Min(x % 3, 3 - (x % 3));
-        }).Sum(); 
+            int remainder = x % 3;
+
+            // remainder 是向下移動的距離，3 - remainder 是向上移動的距離。
+            return Math.Min(remainder, 3 - remainder);
+        }).Sum();
     }
 }
