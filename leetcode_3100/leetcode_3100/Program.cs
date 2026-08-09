@@ -16,77 +16,154 @@ class Program
     /// 注意，你不能在同一個 numExchange 值下交換多批空瓶。例如，如果 numBottles == 3 且 numExchange == 1，你不能用 3 個空瓶交換 3 個滿瓶。
     /// 返回你可以喝的最大水瓶數量。
     /// </summary>
-    /// <param name="args"></param> <summary>
-    /// 
-    /// </summary>
-    /// <param name="args"></param>
-    static void Main(string[] args)
+    /// <remarks>
+    /// 使用固定案例比較逐次模擬與整數二分搜尋兩種解法；全部驗證通過時回傳 0，否則回傳 1。
+    /// </remarks>
+    /// <param name="args">命令列參數；本程式使用固定案例，不讀取外部輸入。</param>
+    /// <returns>全部驗證通過時回傳 0，任一驗證失敗時回傳 1。</returns>
+    static int Main(string[] args)
     {
-        // 測試資料 (numBottles, numExchange)
-        var tests = new (int numBottles, int numExchange)[]
-        {
-            (9, 3),    // 一般情況
-            (3, 1),    // 特殊交換為 1 的情況
-            (5, 5),    // 等量交換
-            (10, 2),   // 小交換數
-            (1, 2),    // 無法兌換
-            (100, 1)   // 大量、numExchange = 1
-        };
-
-        var solver = new Program();
-        foreach (var (numBottles, numExchange) in tests)
-        {
-            int drank = solver.MaxBottlesDrunk(numBottles, numExchange);
-            Console.WriteLine($"Input: numBottles={numBottles}, numExchange={numExchange} => Max drank = {drank}");
-        }
+        return RunSamples();
     }
 
     /// <summary>
-    /// 計算最多可以喝到的水瓶數量。
-    ///
-    /// 解題說明：
-    /// 1. 先將初始的所有滿瓶喝掉，這會產生等量的空瓶。
-    /// 2. 根據題目限制：在同一個 <c>numExchange</c> 值下，最多只能進行一次空瓶兌換（換一瓶）；兌換後
-    ///    會將 <c>numExchange</c> 增加 1。故此處直接模擬「每次以目前的 <c>numExchange</c> 兌換最多一瓶、喝掉並
-    ///    更新空瓶與 <c>numExchange</c>」的流程，直到空瓶不足以以當前的 <c>numExchange</c> 再兌換為止。
-    ///
-    /// 範例：numBottles = 10, numExchange = 3
-    /// - 初始喝 10 瓶，空瓶 = 10
-    /// - 用 3 個空瓶換 1 瓶（只能換一次），喝後空瓶 = 10 - 3 + 1 = 8，numExchange -> 4，總喝 = 11
-    /// - 用 4 個空瓶換 1 瓶，喝後空瓶 = 8 - 4 + 1 = 5，numExchange -> 5，總喝 = 12
-    /// - 用 5 個空瓶換 1 瓶，喝後空瓶 = 5 - 5 + 1 = 1，numExchange -> 6，總喝 = 13
-    /// - 空瓶 1 少於 6，停止。答案為 13。
-    ///
-    /// 時間複雜度：O(k)，k 為實際兌換次數；在最壞情況下 k = O(numBottles)。空間複雜度：O(1)。
-    ///
-    /// 注意：此方法假設輸入為合理的正整數（numBottles >= 0, numExchange >= 1）。若需嚴格輸入驗證，可在入口
-    /// 加入參數檢查並拋出例外。
+    /// 建立符合題目限制的固定案例，執行兩種解法並統計通過的驗證數量。
     /// </summary>
-    /// <param name="numBottles">初始滿水瓶數量。</param>
-    /// <param name="numExchange">當前需要的空瓶數以兌換一瓶（每次兌換後會自動 +1）。</param>
-    /// <returns>能喝到的最大水瓶數量。</returns>
+    /// <returns>全部驗證通過時回傳 0，否則回傳 1。</returns>
+    private static int RunSamples()
+    {
+        SampleCase[] samples =
+        {
+            new("官方範例一", 13, 6, 15),
+            new("官方範例二", 10, 3, 13),
+            new("最小值且立即兌換", 1, 1, 2),
+            new("交換門檻從一開始", 3, 1, 5),
+            new("空瓶不足無法兌換", 1, 2, 1),
+            new("空瓶剛好足夠兌換", 5, 5, 6),
+            new("一般情況", 9, 3, 11),
+            new("較小交換門檻", 10, 2, 13),
+            new("最大瓶數與最小門檻", 100, 1, 114),
+            new("最大瓶數與最大門檻", 100, 100, 101)
+        };
+
+        int passedChecks = 0;
+        foreach (SampleCase sample in samples)
+        {
+            passedChecks += RunCase(sample);
+        }
+
+        int totalChecks = samples.Length * 2;
+        Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項驗證通過");
+        return passedChecks == totalChecks ? 0 : 1;
+    }
+
+    /// <summary>
+    /// 執行單一案例，比較兩種解法的實際輸出與預期結果，並顯示 PASS 或 FAIL。
+    /// </summary>
+    /// <param name="sample">包含案例名稱、兩個輸入整數與預期最大飲用瓶數的測試資料。</param>
+    /// <returns>本案例通過的解法數量，範圍為 0 到 2。</returns>
+    private static int RunCase(SampleCase sample)
+    {
+        Program solver = new();
+        Console.WriteLine($"案例：{sample.Name}");
+        Console.WriteLine($"numBottles = {sample.NumBottles}, numExchange = {sample.NumExchange}");
+        Console.WriteLine($"預期 = {sample.Expected}");
+
+        (string Name, int Actual)[] results =
+        {
+            ("MaxBottlesDrunk", solver.MaxBottlesDrunk(sample.NumBottles, sample.NumExchange)),
+            ("MaxBottlesDrunk2", solver.MaxBottlesDrunk2(sample.NumBottles, sample.NumExchange))
+        };
+
+        int passedChecks = 0;
+        foreach ((string name, int actual) in results)
+        {
+            bool passed = actual == sample.Expected;
+            if (passed)
+            {
+                passedChecks++;
+            }
+
+            Console.WriteLine($"{name,-18} 實際 = {actual} => {(passed ? "PASS" : "FAIL")}");
+        }
+
+        Console.WriteLine();
+        return passedChecks;
+    }
+
+    /// <summary>
+    /// 描述一筆固定案例的輸入條件與預期最大飲用瓶數。
+    /// </summary>
+    /// <param name="Name">案例名稱。</param>
+    /// <param name="NumBottles">初始滿水瓶數量。</param>
+    /// <param name="NumExchange">第一次兌換所需的空瓶數量。</param>
+    /// <param name="Expected">最多可以喝到的水瓶數量。</param>
+    private sealed record SampleCase(string Name, int NumBottles, int NumExchange, int Expected);
+
+    /// <summary>
+    /// 逐次模擬喝水與空瓶兌換，計算最多可以喝到的水瓶數量。
+    /// 輸入為題目保證的正整數；每次兌換只取得一瓶水，喝完後留下空瓶並將下一次門檻加一。
+    /// </summary>
+    /// <param name="numBottles">初始滿水瓶數量，限制為 1 到 100。</param>
+    /// <param name="numExchange">第一次兌換一瓶水所需的空瓶數量，限制為 1 到 100。</param>
+    /// <returns>依照交換門檻逐次增加的規則，最多可以喝到的水瓶數量。</returns>
+    /// <remarks>
+    /// 初始滿瓶全部喝完後，滿瓶數同時是已喝總數與空瓶數。每次兌換再喝掉新水，空瓶淨減少
+    /// <c>numExchange - 1</c>，直到空瓶少於目前門檻。若實際兌換 k 次，時間複雜度為 O(k)，
+    /// 額外空間複雜度為 O(1)。
+    /// </remarks>
     public int MaxBottlesDrunk(int numBottles, int numExchange)
     {
-        // 當前手上的空瓶數（開始時喝完初始滿瓶會形成空瓶）
-        int empty = 0;
-        // 總共喝到的瓶數
-        int totalDrank = 0;
+        int emptyBottles = numBottles;
+        int totalDrank = numBottles;
 
-        // 先喝掉初始的滿瓶
-        totalDrank += numBottles;
-        empty += numBottles;
-
-        // 當空瓶數夠換新的一瓶時，持續以「每次 numExchange 只兌換一次」的規則兌換並喝
-        while (empty >= numExchange)
+        while (emptyBottles >= numExchange)
         {
-            // 每個 numExchange 值只能兌換一次（一瓶）
-            totalDrank += 1;
-            // 使用 numExchange 個空瓶兌換一瓶，喝掉後會得到一個空瓶
-            empty = empty - numExchange + 1;
-            // 每次兌換後，numExchange 增加 1
+            totalDrank++;
+
+            // 兌換會消耗目前門檻數量的空瓶，但喝完換來的水後會補回一個空瓶。
+            emptyBottles -= numExchange - 1;
             numExchange++;
         }
 
         return totalDrank;
+    }
+
+    /// <summary>
+    /// 利用累積空瓶需求的單調性，以整數二分搜尋計算可完成的最大兌換次數。
+    /// 輸入為題目保證的正整數，輸出為初始瓶數加上最多可兌換並喝掉的新水瓶數量。
+    /// </summary>
+    /// <param name="numBottles">初始滿水瓶數量，限制為 1 到 100。</param>
+    /// <param name="numExchange">第一次兌換一瓶水所需的空瓶數量，限制為 1 到 100。</param>
+    /// <returns>依照交換門檻逐次增加的規則，最多可以喝到的水瓶數量。</returns>
+    /// <remarks>
+    /// 完成 k 次兌換後，空瓶的累積淨消耗形成等差級數；若 k 大於 0，最少初始空瓶需求為
+    /// <c>k * (2 * (numExchange - 1) + k - 1) / 2 + 1</c>。最後的 1 代表完成第 k 次兌換時，
+    /// 喝完新水仍會留下的一個空瓶。需求會隨 k 單調增加，因此可二分搜尋最大可行值。
+    /// 時間複雜度為 O(log numBottles)，額外空間複雜度為 O(1)。
+    /// </remarks>
+    public int MaxBottlesDrunk2(int numBottles, int numExchange)
+    {
+        int lower = 0;
+        int upper = numBottles;
+
+        while (lower < upper)
+        {
+            int exchanges = lower + (upper - lower + 1) / 2;
+            long requiredEmptyBottles = (long)exchanges
+                * (2L * (numExchange - 1) + exchanges - 1) / 2 + 1;
+
+            // 可行解形成連續前綴；採用上中位數可在可行時安全推進下界。
+            if (requiredEmptyBottles <= numBottles)
+            {
+                lower = exchanges;
+            }
+            else
+            {
+                upper = exchanges - 1;
+            }
+        }
+
+        return numBottles + lower;
     }
 }
