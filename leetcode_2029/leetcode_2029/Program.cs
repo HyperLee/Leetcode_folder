@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace leetcode_2029;
+﻿namespace leetcode_2029;
 
 class Program
 {
@@ -30,34 +28,83 @@ class Program
     ///
     /// 假設兩位玩家都採取最佳策略，如果 Alice 獲勝則回傳 true；如果 Bob 獲勝則回傳 false。
     /// </summary>
+    /// <remarks>
+    /// 執行七組固定案例，逐一比較三種解法的結果，並在任一檢查失敗時設定非零結束碼。
+    /// </remarks>
     /// <param name="args">命令列參數；本程式目前未使用。</param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solver = new();
+        (string Name, int[] Stones, bool Expected)[] testCases =
+        [
+            ("官方範例 1：Alice 使 Bob 取到總和 3", [2, 1], true),
+            ("官方範例 2：只有一顆石子", [2], false),
+            ("官方範例 3：餘數數量平衡", [5, 1, 2, 4, 3], false),
+            ("回歸案例：偶數個餘數 0 且兩類非零餘數都存在", [1, 1, 2, 2], true),
+            ("奇數個餘數 0 且餘數 1 多三顆", [3, 1, 1, 1, 1, 2], true),
+            ("奇數個餘數 0 但數量差不足", [3, 1, 1, 2], false),
+            ("邊界案例：只有餘數 0", [3, 6, 9], false)
+        ];
+        (string Name, Func<int[], bool> Solve)[] solutions =
+        [
+            (nameof(StoneGameIX), solver.StoneGameIX),
+            (nameof(StoneGameIX2), solver.StoneGameIX2),
+            (nameof(StoneGameIX3), solver.StoneGameIX3)
+        ];
+
+        int passed = 0;
+        int total = testCases.Length * solutions.Length;
+
+        foreach ((string caseName, int[] stones, bool expected) in testCases)
+        {
+            Console.WriteLine($"案例：{caseName}");
+            Console.WriteLine($"Input: [{string.Join(", ", stones)}]");
+
+            foreach ((string solutionName, Func<int[], bool> solve) in solutions)
+            {
+                bool actual = solve(stones.ToArray());
+                bool isPassed = actual == expected;
+                passed += isPassed ? 1 : 0;
+
+                Console.WriteLine(
+                    $"  {solutionName}: Expected={expected.ToString().ToLowerInvariant()}, " +
+                    $"Actual={actual.ToString().ToLowerInvariant()}, {(isPassed ? "PASS" : "FAIL")}");
+            }
+
+            Console.WriteLine();
+        }
+
+        Console.WriteLine($"總結：{passed}/{total} 項測試通過");
+        if (passed != total)
+        {
+            Environment.ExitCode = 1;
+        }
     }
 
     /// <summary>
-    /// 
+    /// 判斷 Alice 在雙方採取最佳策略時能否獲勝。
+    /// 解法先將石子依除以 3 的餘數分成三類，再根據餘數 0 的數量奇偶，
+    /// 檢查餘數 1 與餘數 2 是否同時存在或數量差是否超過 2。
+    /// 輸入陣列長度須介於 1 到 100000，且每個石子值須介於 1 到 10000。
+    /// 若 Alice 有必勝策略則回傳 true，否則回傳 false。
     /// </summary>
-    /// <param name="stones"></param>
-    /// <returns></returns> <summary>
-    /// 
-    /// </summary>
-    /// <param name="stones"></param>
-    /// <returns></returns>
+    /// <param name="stones">每顆石子的正整數數值；方法不會修改此陣列。</param>
+    /// <returns>Alice 是否能在最佳策略下獲勝。</returns>
     public bool StoneGameIX(int[] stones)
     {
         int cnt0 = 0;
         int cnt1 = 0;
         int cnt2 = 0;
-        foreach(int val in stones)
+
+        // 勝負只取決於累加和除以 3 的餘數，無須保留石子的原始數值。
+        foreach (int val in stones)
         {
             int type = val % 3;
-            if(type == 0)
+            if (type == 0)
             {
                 cnt0++;
             }
-            else if(type == 1)
+            else if (type == 1)
             {
                 cnt1++;
             }
@@ -67,96 +114,81 @@ class Program
             }
         }
 
-        if(cnt0 % 2 == 0)
+        // 偶數顆餘數 0 不改變先後手優勢，兩種非零餘數都存在時 Alice 才能迫使 Bob 輸掉。
+        if (cnt0 % 2 == 0)
         {
             return cnt1 >= 1 && cnt2 >= 1;
         }
 
+        // 奇數顆餘數 0 會交換先後手優勢，某一種非零餘數必須至少多 3 顆。
         return cnt1 - cnt2 > 2 || cnt2 - cnt1 > 2;
     }
 
     /// <summary>
-    /// 计算最大回合数
+    /// 以分類後的勝負情況判斷 Alice 能否獲勝。
+    /// 解法使用長度為 3 的陣列統計各餘數，分別處理餘數 0 數量為偶數與奇數的情況；
+    /// 奇數情況再由輔助方法檢查餘數 1 或餘數 2 是否形成足夠大的數量優勢。
+    /// 輸入陣列長度須介於 1 到 100000，且每個石子值須介於 1 到 10000。
+    /// 若 Alice 有必勝策略則回傳 true，否則回傳 false。
     /// </summary>
-    /// <param name="stones"></param>
-    /// <returns></returns> <summary>
-    /// 
-    /// </summary>
-    /// <param name="stones"></param>
-    /// <returns></returns>
+    /// <param name="stones">每顆石子的正整數數值；方法不會修改此陣列。</param>
+    /// <returns>Alice 是否能在最佳策略下獲勝。</returns>
     public bool StoneGameIX2(int[] stones)
     {
         int[] cnt = new int[3];
 
-        foreach(int x in stones)
+        foreach (int x in stones)
         {
             cnt[x % 3]++;
         }
 
-        int n = stones.Length;
-
-        // 小技巧：
-        // 交換 cnt[1] 和 cnt[2] 再呼叫 Check，
-        // 相當於 Alice 第一回合移除了餘數為 2 的石頭
-        return Check(n, (int[])cnt.Clone()) ||
-               Check(n, new int[] { cnt[0], cnt[2], cnt[1] });
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="n"></param>
-    /// <param name="cnt"></param>
-    /// <returns></returns> <summary>
-    /// 
-    /// </summary>
-    /// <param name="n"></param>
-    /// <param name="cnt"></param>
-    /// <returns></returns>
-    private bool Check(int n, int[] cnt)
-    {
-        // Alice 第一回合必須先拿一顆餘數為 1 的石頭
-        if(cnt[1] == 0)
-        {
-            return false;
-        }
-
-        cnt[1]--;
-
-        // 第一回合 Alice 移除餘數 1
-        // 後面兩人交替移除餘數 1 和 2
-        // 中途可以插入 cnt[0] 顆餘數為 0 的石頭
-        int rounds = 1 + Math.Min(cnt[1], cnt[2] * 2 + cnt[0]);
-
-        if(cnt[1] > cnt[2])
-        {
-            // 還可以再移除一顆餘數為 1 的石頭
-            rounds++;
-        }
-        return rounds < n && rounds % 2 > 0;
-    }
-
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="stones"></param>
-    /// <returns></returns> <summary>
-    /// 
-    /// </summary>
-    /// <param name="stones"></param>
-    /// <returns></returns>
-    public bool StoneGameIX3(int[] stones)
-    {
-        int[] cnt = new int[3];
-        foreach(int x in stones)
-        {
-            cnt[x % 3]++;
-        }
-
-        if(cnt[0] % 2 == 0)
+        if (cnt[0] % 2 == 0)
         {
             return cnt[1] > 0 && cnt[2] > 0;
         }
+
+        // 奇數顆餘數 0 時，餘數 1 或餘數 2 任一方形成 3 顆以上的優勢即可獲勝。
+        return HasWinningImbalance(cnt[1], cnt[2]) ||
+               HasWinningImbalance(cnt[2], cnt[1]);
+    }
+
+    /// <summary>
+    /// 檢查某一種非零餘數的石子數量是否足以形成必勝優勢。
+    /// 當候選餘數比另一種餘數至少多 3 顆時，Alice 可以維持安全的取石順序，
+    /// 並迫使 Bob 先使累加和成為 3 的倍數。
+    /// 輸入為兩種非零餘數的計數，輸出為候選餘數是否具有必勝數量差。
+    /// </summary>
+    /// <param name="candidateCount">目前作為優勢候選的餘數石子數量。</param>
+    /// <param name="otherCount">另一種非零餘數的石子數量。</param>
+    /// <returns>候選餘數是否比另一種餘數多至少 3 顆。</returns>
+    private static bool HasWinningImbalance(int candidateCount, int otherCount)
+    {
+        return candidateCount - otherCount > 2;
+    }
+
+    /// <summary>
+    /// 以精簡數學公式判斷 Alice 在最佳策略下能否獲勝。
+    /// 解法用陣列統計三種餘數；餘數 0 為偶數時要求另外兩類都存在，
+    /// 餘數 0 為奇數時則直接檢查另外兩類的數量差是否大於 2。
+    /// 輸入陣列長度須介於 1 到 100000，且每個石子值須介於 1 到 10000。
+    /// 若 Alice 有必勝策略則回傳 true，否則回傳 false。
+    /// </summary>
+    /// <param name="stones">每顆石子的正整數數值；方法不會修改此陣列。</param>
+    /// <returns>Alice 是否能在最佳策略下獲勝。</returns>
+    public bool StoneGameIX3(int[] stones)
+    {
+        int[] cnt = new int[3];
+
+        foreach (int x in stones)
+        {
+            cnt[x % 3]++;
+        }
+
+        if (cnt[0] % 2 == 0)
+        {
+            return cnt[1] > 0 && cnt[2] > 0;
+        }
+
         return Math.Abs(cnt[1] - cnt[2]) > 2;
     }
 }
