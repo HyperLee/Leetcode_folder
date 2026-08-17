@@ -1,4 +1,6 @@
-﻿namespace leetcode_2029;
+﻿using System.ComponentModel;
+
+namespace leetcode_2029;
 
 class Program
 {
@@ -45,6 +47,116 @@ class Program
     /// <returns></returns>
     public bool StoneGameIX(int[] stones)
     {
-        
+        int cnt0 = 0;
+        int cnt1 = 0;
+        int cnt2 = 0;
+        foreach(int val in stones)
+        {
+            int type = val % 3;
+            if(type == 0)
+            {
+                cnt0++;
+            }
+            else if(type == 1)
+            {
+                cnt1++;
+            }
+            else
+            {
+                cnt2++;
+            }
+        }
+
+        if(cnt0 % 2 == 0)
+        {
+            return cnt1 >= 1 && cnt2 >= 1;
+        }
+
+        return cnt1 - cnt2 > 2 || cnt2 - cnt1 > 2;
+    }
+
+    /// <summary>
+    /// 计算最大回合数
+    /// </summary>
+    /// <param name="stones"></param>
+    /// <returns></returns> <summary>
+    /// 
+    /// </summary>
+    /// <param name="stones"></param>
+    /// <returns></returns>
+    public bool StoneGameIX2(int[] stones)
+    {
+        int[] cnt = new int[3];
+
+        foreach(int x in stones)
+        {
+            cnt[x % 3]++;
+        }
+
+        int n = stones.Length;
+
+        // 小技巧：
+        // 交換 cnt[1] 和 cnt[2] 再呼叫 Check，
+        // 相當於 Alice 第一回合移除了餘數為 2 的石頭
+        return Check(n, (int[])cnt.Clone()) ||
+               Check(n, new int[] { cnt[0], cnt[2], cnt[1] });
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="n"></param>
+    /// <param name="cnt"></param>
+    /// <returns></returns> <summary>
+    /// 
+    /// </summary>
+    /// <param name="n"></param>
+    /// <param name="cnt"></param>
+    /// <returns></returns>
+    private bool Check(int n, int[] cnt)
+    {
+        // Alice 第一回合必須先拿一顆餘數為 1 的石頭
+        if(cnt[1] == 0)
+        {
+            return false;
+        }
+
+        cnt[1]--;
+
+        // 第一回合 Alice 移除餘數 1
+        // 後面兩人交替移除餘數 1 和 2
+        // 中途可以插入 cnt[0] 顆餘數為 0 的石頭
+        int rounds = 1 + Math.Min(cnt[1], cnt[2] * 2 + cnt[0]);
+
+        if(cnt[1] > cnt[2])
+        {
+            // 還可以再移除一顆餘數為 1 的石頭
+            rounds++;
+        }
+        return rounds < n && rounds % 2 > 0;
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="stones"></param>
+    /// <returns></returns> <summary>
+    /// 
+    /// </summary>
+    /// <param name="stones"></param>
+    /// <returns></returns>
+    public bool StoneGameIX3(int[] stones)
+    {
+        int[] cnt = new int[3];
+        foreach(int x in stones)
+        {
+            cnt[x % 3]++;
+        }
+
+        if(cnt[0] % 2 == 0)
+        {
+            return cnt[1] > 0 && cnt[2] > 0;
+        }
+        return Math.Abs(cnt[1] - cnt[2]) > 2;
     }
 }
