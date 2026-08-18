@@ -21,77 +21,164 @@ class Program
     /// <para>子陣列是陣列中一段連續的元素序列。</para>
     /// </summary>
     /// <param name="args"></param>
+    /// <remarks>
+    /// 主控台進入點會以固定案例分別執行兩種解法，列出預期值、實際值與通過狀態；若任一檢查失敗，程式會以非零狀態碼結束。
+    /// </remarks>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new Program();
+        TestCase[] testCases =
+        [
+            new("官方範例一", [3, 9, 2, 1, 7], 3, 7),
+            new("官方範例二", [3, 9, 7, 2, 1, 7], 4, 3),
+            new("官方範例三", [0, 0], 1, -1),
+            new("k 等於陣列長度", [2, 1, 3], 3, 3),
+            new("k 等於 1 且包含重複值", [4, 1, 4, 2, 3], 1, 3),
+            new("單元素陣列", [6], 1, 6),
+            new("兩端值重複、無答案", [5, 1, 2, 5], 2, -1),
+            new("兩端值唯一", [8, 2, 3, 4, 9], 2, 9)
+        ];
+
+        int passedChecks = 0;
+        foreach (TestCase testCase in testCases)
+        {
+            passedChecks += RunTestCase(solution, testCase);
+        }
+
+        int totalChecks = testCases.Length * 2;
+        Console.WriteLine($"總結：{passedChecks}/{totalChecks} 項測試通過");
+        if (passedChecks != totalChecks)
+        {
+            Environment.ExitCode = 1;
+        }
     }
 
     /// <summary>
-    /// 方法一：分类讨论
-    /// 思路与算法
-    /// 该算法基于 k 的取值大小进行了三种分类讨论：
-    /// 
-    /// 当 k=n 时：
-    /// 整个数组就等于这一个滑动窗口。因此数组中的所有数字都仅满足出现在一个大小为 k 的子数组中，我们要找最大的几近缺失整
-    /// 数，其实就是直接返回数组的最大值即可。
-    /// 
-    /// 当 k=1 时：
-    /// 滑动窗口的长度为 1。题目要求找只出现过一次的数字，这就等同于寻找整个数组中全局唯一且最大的那个数字。因此我们统计完
-    /// 频数后，直接从大到小进行遍历，遇到第一个出现仅一次的数字就是最大的答案。
-    /// 
-    /// 当 1<k<n 时：
-    /// 除了数组头部和尾部这两个元素之外，所有卡在中间的元素都必定会被滑动窗口覆盖至少 2 次。所以中间元素必然不符合要求。满
-    /// 足要求的数字只能是数组首位元素或末尾元素。我们只需判断这两个元素是否在整个数组里只出现过一次。若成立，则返回它们之中
-    /// 满足条件的最大值即可。
-    /// 
-    /// 
-    /// 
+    /// 執行單一測試案例，分別呼叫兩種解法並輸出結果。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="k"></param>
-    /// <returns></returns> <summary>
-    /// 
+    /// <param name="solution">要測試的解法物件。</param>
+    /// <param name="testCase">包含輸入資料與預期答案的測試案例。</param>
+    /// <returns>該案例通過的檢查數量，範圍為 0 到 2。</returns>
+    private static int RunTestCase(Program solution, TestCase testCase)
+    {
+        Console.WriteLine($"案例：{testCase.Name}");
+        Console.WriteLine($"輸入：nums = [{string.Join(", ", testCase.Nums)}], k = {testCase.K}");
+        Console.WriteLine($"預期：{testCase.Expected}");
+
+        int classifiedResult = solution.LargestInteger(testCase.Nums.ToArray(), testCase.K);
+        bool classifiedPassed = classifiedResult == testCase.Expected;
+        Console.WriteLine($"實際：LargestInteger = {classifiedResult} => {(classifiedPassed ? "PASS" : "FAIL")}");
+
+        int windowEnumerationResult = solution.LargestIntegerByWindowEnumeration(testCase.Nums.ToArray(), testCase.K);
+        bool windowEnumerationPassed = windowEnumerationResult == testCase.Expected;
+        Console.WriteLine($"實際：LargestIntegerByWindowEnumeration = {windowEnumerationResult} => {(windowEnumerationPassed ? "PASS" : "FAIL")}");
+        Console.WriteLine();
+
+        return (classifiedPassed ? 1 : 0) + (windowEnumerationPassed ? 1 : 0);
+    }
+
+    private sealed record TestCase(string Name, int[] Nums, int K, int Expected);
+
+    /// <summary>
+    /// 使用 k 與 nums.Length 的關係，以分類討論法回傳最大的幾乎缺失整數。
+    /// 輸入 nums 為符合題目限制的整數陣列，k 為視窗長度；若不存在符合條件的值則回傳 -1。
     /// </summary>
-    /// <param name="nums"></param>
-    /// <param name="k"></param>
-    /// <returns></returns>
+    /// <remarks>
+    /// <para>當 k 等於 nums.Length 時，整個陣列只有一個視窗，因此直接回傳陣列最大值。</para>
+    /// <para>當 k 等於 1 時，每個元素各自形成一個視窗；全域出現一次就等價於只出現在一個視窗，從大到小尋找即可。</para>
+    /// <para>當 1 &lt; k &lt; nums.Length 時，內部位置至少被兩個視窗覆蓋，候選只能是陣列兩端，且端點值必須在全域只出現一次。</para>
+    /// <para>依題目限制 nums[i] 的範圍為 0 到 50，因此使用長度 51 的頻率陣列。</para>
+    /// </remarks>
+    /// <param name="nums">待檢查的整數陣列，長度介於 1 到 50，元素介於 0 到 50。</param>
+    /// <param name="k">固定子陣列長度，介於 1 到 nums.Length。</param>
+    /// <returns>最大的幾乎缺失整數；若不存在則回傳 -1。</returns>
     public int LargestInteger(int[] nums, int k)
     {
         int n = nums.Length;
-        if(n == k)
+        if (n == k)
         {
+            // 只有一個長度為 k 的視窗，所有值都只會出現在這個視窗中。
             return nums.Max();
         }
 
-        int[] count = new int[51];
-        foreach(int x in nums)
+        // 全域頻率用來判斷端點值是否也出現在其他位置。
+        int[] frequency = new int[51];
+        foreach (int value in nums)
         {
-            count[x]++;
+            frequency[value]++;
         }
 
-        if(k == 1)
+        if (k == 1)
         {
-            for(int i = 50; i >= 0; i--)
+            // 每個元素各自形成一個視窗，因此全域出現一次就是符合條件。
+            for (int value = 50; value >= 0; value--)
             {
-                if(count[i] == 1)
+                if (frequency[value] == 1)
                 {
-                    return i;
+                    return value;
                 }
             }
             return -1;
         }
 
-        int res = -1;
-        if(count[nums[0]] == 1)
+        // 1 < k < n 時，內部位置至少被兩個視窗覆蓋，候選只能來自陣列兩端。
+        int result = -1;
+        if (frequency[nums[0]] == 1)
         {
-            res = Math.Max(res, nums[0]);
+            result = Math.Max(result, nums[0]);
         }
 
-        if(count[nums[n - 1]] == 1)
+        if (frequency[nums[n - 1]] == 1)
         {
-            res = Math.Max(res, nums[n - 1]);
+            result = Math.Max(result, nums[n - 1]);
         }
-        return res;
+        return result;
+    }
+
+    /// <summary>
+    /// 枚舉所有固定長度的子陣列，回傳只出現在一個視窗中的最大整數。
+    /// 輸入 nums 為整數陣列、k 為視窗長度；若沒有符合條件的整數則回傳 -1。
+    /// </summary>
+    /// <remarks>
+    /// <para>每個視窗先放入 HashSet，讓同一個值在同一視窗內重複出現時只計算一次。</para>
+    /// <para>接著統計每個值出現於多少個視窗，最後選出視窗計數恰為 1 的最大值。</para>
+    /// <para>時間複雜度為 O((n-k+1) * k + V)，空間複雜度為 O(V+k)，其中 V 為值域大小。</para>
+    /// </remarks>
+    /// <param name="nums">待檢查的整數陣列，長度介於 1 到 50，元素介於 0 到 50。</param>
+    /// <param name="k">固定子陣列長度，介於 1 到 nums.Length。</param>
+    /// <returns>最大的幾乎缺失整數；若不存在則回傳 -1。</returns>
+    public int LargestIntegerByWindowEnumeration(int[] nums, int k)
+    {
+        int windowCount = nums.Length - k + 1;
+        int[] windowsContainingValue = new int[51];
+
+        for (int start = 0; start < windowCount; start++)
+        {
+            HashSet<int> valuesInWindow = new HashSet<int>();
+            for (int index = start; index < start + k; index++)
+            {
+                // 同一個值在同一視窗內只能貢獻一次，符合題目對「出現在視窗中」的定義。
+                valuesInWindow.Add(nums[index]);
+            }
+
+            // 每個視窗完成去重後，再累加其中包含的所有值。
+            foreach (int value in valuesInWindow)
+            {
+                windowsContainingValue[value]++;
+            }
+        }
+
+        int result = -1;
+        for (int value = 0; value < windowsContainingValue.Length; value++)
+        {
+            if (windowsContainingValue[value] == 1)
+            {
+                // 由小到大掃描並覆蓋結果，最後留下最大的合法值。
+                result = value;
+            }
+        }
+
+        return result;
     }
 
 }
