@@ -100,6 +100,58 @@ class Program
     /// <returns></returns>
     public int MaxNumberOfFamilies2(int n, int[][] reservedSeats)
     {
-        
+        // key = 第幾排
+        // value = 第 2~9 號座位的預約狀態，用二進位表示
+        Dictionary<int, int> seats = new Dictionary<int, int>();
+
+        foreach (int[] r in reservedSeats)
+        {
+            int row = r[0];
+            int seat = r[1];
+
+            // 只需要考慮 2~9 號座位
+            // 1 和 10 不會影響四人家庭的座位安排
+            if (2 <= seat && seat <= 9)
+            {
+                int mask = 1 << (seat - 2);
+
+                if (seats.TryGetValue(row, out int value))
+                {
+                    // 把對應座位的 bit 設成 1
+                    seats[row] = value | mask;
+                }
+                else
+                {
+                    seats[row] = mask;
+                }
+            }
+        }
+
+        // 如果某一排只有 1 或 10 被預約，
+        // 那麼這排不會存在 Dictionary 中，相當於整排 2~9 都是空的。
+        int emptyRows = n - seats.Count;
+
+        // 完全空的排可以安排 2 組四人家庭
+        int ans = emptyRows * 2;
+
+        foreach (int x in seats.Values)
+        {
+            // 可安排四人家庭的三種區域：
+            //
+            // 2 3 4 5     -> 00001111
+            // 4 5 6 7     -> 00111100
+            // 6 7 8 9     -> 11110000
+            //
+            // 只要其中一個區域完全沒有被預約，
+            // 這一排就可以再安排 1 組四人家庭。
+            if ((x & 0b00001111) == 0 ||
+                (x & 0b00111100) == 0 ||
+                (x & 0b11110000) == 0)
+            {
+                ans++;
+            }
+        }
+
+        return ans;        
     }
 }
