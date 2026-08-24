@@ -32,10 +32,48 @@ class Program
     /// <para>例如，若遊戲結束時 <c>num = "243801"</c>，則 Bob 獲勝，因為 2+4+3 = 8+0+1。若 <c>num = "243803"</c>，則 Alice 獲勝，因為 2+4+3 != 8+0+3。</para>
     /// <para>假設 Alice 與 Bob 都採取最佳策略，若 Alice 會獲勝則回傳 <c>true</c>；若 Bob 會獲勝則回傳 <c>false</c>。</para>
     /// </summary>
+    /// <remarks>
+    /// 直接執行程式時，這個入口會使用固定案例呼叫 <see cref="SumGame(string)"/>，
+    /// 並列印每個案例的預期與實際結果。
+    /// </remarks>
     /// <param name="args">Command-line arguments.</param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        (string Name, string Input, bool Expected)[] testCases =
+        {
+            ("Official_5023", "5023", false),
+            ("Official_25Question", "25??", true),
+            ("Official_Question3295Questions", "?3295???", false),
+            ("OddQuestionCount", "?123", true),
+            ("KnownUnequalSums", "1234", true),
+            ("EvenQuestions_SameKnownSums", "1?1?", false),
+            ("AllQuestions", "????????", false),
+            ("QuestionsOnLeft", "??00", true),
+            ("QuestionsOnRight", "00??", true)
+        };
+
+        Program solution = new Program();
+        int passedCount = 0;
+
+        Console.WriteLine("LeetCode 1927 - Sum Game");
+
+        foreach ((string Name, string Input, bool Expected) testCase in testCases)
+        {
+            bool actual = solution.SumGame(testCase.Input);
+            bool passed = actual == testCase.Expected;
+            string status = passed ? "PASS" : "FAIL";
+
+            Console.WriteLine(
+                $"{testCase.Name}: Input=\"{testCase.Input}\", Expected={testCase.Expected}, Actual={actual}, {status}");
+
+            if (passed)
+            {
+                passedCount++;
+            }
+        }
+
+        Console.WriteLine($"Summary: {passedCount}/{testCases.Length} PASS");
+        Environment.ExitCode = passedCount == testCases.Length ? 0 : 1;
     }
 
     /// <summary>
@@ -105,6 +143,7 @@ class Program
     {
         int n = num.Length;
 
+        // 只記錄兩半的已知總和與問號數量，不需要模擬所有替換順序。
         var left = Get(num.Substring(0, n / 2));
         var right = Get(num.Substring(n / 2, n / 2));
 
@@ -129,14 +168,12 @@ class Program
     }
 
     /// <summary>
-    /// 
+    /// 分析一段數字字串，計算已知數字的總和與問號數量。
     /// </summary>
-    /// <param name="s"></param>
-    /// <returns></returns> <summary>
-    /// 
-    /// </summary>
-    /// <param name="s"></param>
-    /// <returns></returns>
+    /// <param name="s">由數字與 '?' 組成的字串片段。</param>
+    /// <returns>
+    /// 回傳 tuple；<c>Item1</c> 是已知數字總和，<c>Item2</c> 是問號數量。
+    /// </returns>
     private (int, int) Get(string s)
     {
         int nn = 0;
