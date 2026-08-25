@@ -4,15 +4,22 @@ class Program
 {
     /// <summary>
     /// 3718. Smallest Missing Multiple of K
+    ///
+    /// English:
+    /// Given an integer array nums and an integer k, return the smallest positive multiple of k that is missing from nums.
+    ///
+    /// A multiple of k is any positive integer divisible by k.
+    ///
+    /// 繁體中文：
+    /// 給定一個整數陣列 nums 和一個整數 k，請回傳 nums 中缺少的最小正整數 k 的倍數。
+    ///
+    /// k 的倍數是任何可被 k 整除的正整數。
+    /// English problem:
     /// https://leetcode.com/problems/smallest-missing-multiple-of-k/description
-    /// 3718. 缺失的最小倍数
+    /// 中文題目：
     /// https://leetcode.cn/problems/smallest-missing-multiple-of-k/description
-    /// 
     /// </summary>
-    /// <param name="args"></param> <summary>
-    /// 
-    /// </summary>
-    /// <param name="args"></param>
+    /// <param name="args">Command-line arguments; no input is required.</param>
     static void Main(string[] args)
     {
         Console.WriteLine("Hello, World!");
