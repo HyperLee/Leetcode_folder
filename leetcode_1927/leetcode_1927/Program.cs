@@ -8,29 +8,29 @@ class Program
     /// 1927. Sum Game
     /// https://leetcode.com/problems/sum-game/description
     /// 1927. 求和遊戲
-    /// https://leetcode.cn/problems/sum-game/description/
+    /// https://leetcode.cn/problems/sum-game/description
     ///
-    /// <para>English original:</para>
-    /// <para>Alice and Bob take turns playing a game, with Alice starting first.</para>
-    /// <para>You are given a string <c>num</c> of even length consisting of digits and '?' characters.</para>
-    /// <para>On each turn, a player will do the following if there is still at least one '?' in <c>num</c>:</para>
-    /// <para>Choose an index <c>i</c> where <c>num[i] == '?'</c>.</para>
-    /// <para>Replace <c>num[i]</c> with any digit between '0' and '9'.</para>
-    /// <para>The game ends when there are no more '?' characters in <c>num</c>.</para>
-    /// <para>For Bob to win, the sum of the digits in the first half of <c>num</c> must be equal to the sum of the digits in the second half. For Alice to win, the sums must not be equal.</para>
-    /// <para>For example, if the game ended with <c>num = "243801"</c>, then Bob wins because 2+4+3 = 8+0+1. If the game ended with <c>num = "243803"</c>, then Alice wins because 2+4+3 != 8+0+3.</para>
-    /// <para>Assuming Alice and Bob play optimally, return <c>true</c> if Alice will win and <c>false</c> if Bob will win.</para>
+    /// English original:
+    /// Alice and Bob take turns playing a game, with Alice starting first.
+    /// You are given a string num of even length consisting of digits and '?' characters.
+    /// On each turn, a player will do the following if there is still at least one '?' in num:
+    /// Choose an index i where num[i] == '?'.
+    /// Replace num[i] with any digit between '0' and '9'.
+    /// The game ends when there are no more '?' characters in num.
+    /// For Bob to win, the sum of the digits in the first half of num must be equal to the sum of the digits in the second half. For Alice to win, the sums must not be equal.
+    /// For example, if the game ended with num = "243801", then Bob wins because 2+4+3 = 8+0+1. If the game ended with num = "243803", then Alice wins because 2+4+3 != 8+0+3.
+    /// Assuming Alice and Bob play optimally, return true if Alice will win and false if Bob will win.
     ///
-    /// <para>繁體中文翻譯：</para>
-    /// <para>Alice 和 Bob 輪流進行遊戲，由 Alice 先開始。</para>
-    /// <para>給定一個偶數長度的字串 <c>num</c>，其中由數字與 '?' 字元組成。</para>
-    /// <para>如果 <c>num</c> 中仍至少有一個 '?'，每回合玩家會執行以下操作：</para>
-    /// <para>選擇一個滿足 <c>num[i] == '?'</c> 的索引 <c>i</c>。</para>
-    /// <para>將 <c>num[i]</c> 替換為 '0' 到 '9' 之間的任一數字。</para>
-    /// <para>當 <c>num</c> 中不再有 '?' 字元時，遊戲結束。</para>
-    /// <para>若要讓 Bob 獲勝，<c>num</c> 前半部的數字總和必須等於後半部的數字總和；Alice 獲勝的條件則是兩個總和不相等。</para>
-    /// <para>例如，若遊戲結束時 <c>num = "243801"</c>，則 Bob 獲勝，因為 2+4+3 = 8+0+1。若 <c>num = "243803"</c>，則 Alice 獲勝，因為 2+4+3 != 8+0+3。</para>
-    /// <para>假設 Alice 與 Bob 都採取最佳策略，若 Alice 會獲勝則回傳 <c>true</c>；若 Bob 會獲勝則回傳 <c>false</c>。</para>
+    /// 繁體中文翻譯：
+    /// Alice 和 Bob 輪流進行遊戲，由 Alice 先開始。
+    /// 給定一個偶數長度的字串 num，其中由數字與 '?' 字元組成。
+    /// 如果 num 中仍至少有一個 '?'，每回合玩家會執行以下操作：
+    /// 選擇一個滿足 num[i] == '?' 的索引 i。
+    /// 將 num[i] 替換為 '0' 到 '9' 之間的任一數字。
+    /// 當 num 中不再有 '?' 字元時，遊戲結束。
+    /// 若要讓 Bob 獲勝，num 前半部的數字總和必須等於後半部的數字總和；Alice 獲勝的條件則是兩個總和不相等。
+    /// 例如，若遊戲結束時 num = "243801"，則 Bob 獲勝，因為 2+4+3 = 8+0+1。若 num = "243803"，則 Alice 獲勝，因為 2+4+3 != 8+0+3。
+    /// 假設 Alice 與 Bob 都採取最佳策略，若 Alice 會獲勝則回傳 true；若 Bob 會獲勝則回傳 false。
     /// </summary>
     /// <remarks>
     /// 直接執行程式時，這個入口會使用固定案例呼叫 <see cref="SumGame(string)"/>，
@@ -172,7 +172,7 @@ class Program
     /// </summary>
     /// <param name="s">由數字與 '?' 組成的字串片段。</param>
     /// <returns>
-    /// 回傳 tuple；<c>Item1</c> 是已知數字總和，<c>Item2</c> 是問號數量。
+    /// 回傳 tuple；Item1 是已知數字總和，Item2 是問號數量。
     /// </returns>
     private (int, int) Get(string s)
     {
