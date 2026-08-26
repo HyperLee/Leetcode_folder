@@ -39,40 +39,84 @@ class Program
     ///
     /// 例如，因為兩個字串第一個不同的位置在第四個字元，且 d 大於 c，所以 "abcd" 的字典序大於 "abcc"。
     /// </summary>
-    /// <param name="args"></param>
+    /// <remarks>
+    /// 程式進入點會以五組固定案例驗證兩種解法，逐一輸出實際結果與通過狀態，最後彙整通過數量。
+    /// 案例涵蓋官方範例、無解情況、同長度字典序比較，以及 k 等於字串長度的邊界。
+    /// </remarks>
+    /// <param name="args">命令列參數；本範例不使用。</param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new Program();
+        int passedChecks = 0;
+        const int totalChecks = 10;
+
+        Console.WriteLine("LeetCode 2904 - 最短且字典序最小的美麗子字串");
+        Console.WriteLine();
+
+        passedChecks += solution.RunTestCase(1, "官方案例一", "100011001", 3, "11001");
+        passedChecks += solution.RunTestCase(2, "官方案例二", "1011", 2, "11");
+        passedChecks += solution.RunTestCase(3, "無符合子字串", "000", 1, "");
+        passedChecks += solution.RunTestCase(4, "同長度字典序比較", "11011011", 3, "1011");
+        passedChecks += solution.RunTestCase(5, "k 等於字串長度", "11111", 5, "11111");
+
+        Console.WriteLine($"總結：{passedChecks}/{totalChecks} 通過");
     }
 
     /// <summary>
-    /// 解法一:枚舉
-    /// 题目要求我们在二进制字符串 s 中找到包含 k 个 1 的最短且字典序最小的字符串。
-    /// 假设 s 的长度为 n。注意到题目给定的字符串长度范围较小，在 102 内，所以我们可以用 O(n3) 时间复杂度的算法来解决这个问题。
-    /// 假设最短字符串的长度为 m，我们在 s 中枚举所有长度为 m 的子字符串，判断其中是否有 k 个 1，并返回字典序最小的字符串。m 的范围为 [k,n]。
+    /// 執行一組固定案例，分別呼叫枚舉法與滑動視窗法，並輸出預期值、實際值與 PASS/FAIL。
+    /// 輸入須符合題目限制；回傳值代表本案例通過的解法數量，範圍為 0 到 2。
     /// </summary>
-    /// <param name="s"></param>
-    /// <param name="k"></param>
-    /// <returns></returns> <summary>
-    /// 
+    /// <param name="caseNumber">從 1 開始顯示的案例編號。</param>
+    /// <param name="name">案例用途或涵蓋情境的名稱。</param>
+    /// <param name="s">只包含 '0' 和 '1' 的待測二進位字串。</param>
+    /// <param name="k">合法子字串必須包含的 '1' 數量。</param>
+    /// <param name="expected">此案例的預期最短且字典序最小結果。</param>
+    /// <returns>通過的解法數量，範圍為 0 到 2。</returns>
+    private int RunTestCase(int caseNumber, string name, string s, int k, string expected)
+    {
+        string enumerationResult = ShortestBeautifulSubstring(s, k);
+        string slidingWindowResult = ShortestBeautifulSubstring2(s, k);
+        bool enumerationPassed = enumerationResult == expected;
+        bool slidingWindowPassed = slidingWindowResult == expected;
+
+        Console.WriteLine($"案例 {caseNumber}：{name}");
+        Console.WriteLine($"輸入：s = \"{s}\"，k = {k}");
+        Console.WriteLine($"預期：\"{expected}\"");
+        Console.WriteLine(
+            $"ShortestBeautifulSubstring（枚舉）：實際 \"{enumerationResult}\" -> {(enumerationPassed ? "PASS" : "FAIL")}");
+        Console.WriteLine(
+            $"ShortestBeautifulSubstring2（滑動視窗）：實際 \"{slidingWindowResult}\" -> {(slidingWindowPassed ? "PASS" : "FAIL")}");
+        Console.WriteLine();
+
+        return (enumerationPassed ? 1 : 0) + (slidingWindowPassed ? 1 : 0);
+    }
+
+    /// <summary>
+    /// 使用枚舉法找出包含恰好 k 個 '1' 的最短子字串，再從相同長度的合法候選中保留字典序最小者。
+    /// 輸入 s 須是長度介於 1 到 100 的二進位字串，k 須介於 1 到 s.Length；若不存在合法子字串則回傳空字串。
+    /// 外層依長度由 k 遞增，內層檢查每個窗口，因此時間複雜度為 O(n³)，額外空間複雜度為 O(n)。
     /// </summary>
-    /// <param name="s"></param>
-    /// <param name="k"></param>
-    /// <returns></returns>
+    /// <param name="s">只包含 '0' 和 '1' 的二進位字串，長度介於 1 到 100。</param>
+    /// <param name="k">合法子字串必須恰好包含的 '1' 數量，介於 1 到 s.Length。</param>
+    /// <returns>最短且字典序最小的合法子字串；若不存在則回傳空字串。</returns>
     public string ShortestBeautifulSubstring(string s, int k)
     {
-        for (int m = k; m <= s.Length; m++) 
+        // 長度從 k 開始遞增；第一個找到合法候選的長度必然是最短長度。
+        for (int m = k; m <= s.Length; m++)
         {
             string ans = "";
-            for (int i = m; i <= s.Length; i++) 
+            for (int i = m; i <= s.Length; i++)
             {
                 string t = s.Substring(i - m, m);
-                if ((ans.Length == 0 || string.CompareOrdinal(t, ans) < 0) && t.Count(c => c == '1') == k) 
+
+                // 同一長度只保留合法且字典序較小的候選，外層換長度時不會遺漏答案。
+                if ((ans.Length == 0 || string.CompareOrdinal(t, ans) < 0) &&
+                    t.Count(c => c == '1') == k)
                 {
                     ans = t;
                 }
             }
-            if (ans.Length > 0) 
+            if (ans.Length > 0)
             {
                 return ans;
             }
@@ -81,31 +125,42 @@ class Program
     }
 
     /// <summary>
-    /// 解法二:滑動視窗
-    /// 我们可以维护一个滑动窗口，当窗口中的 1 数量大于 k 或窗口端点处的字符是 0，就可以缩小窗口，从而找到最短的子字符串。
+    /// 使用滑動視窗維護以目前右端點結尾的最短合法候選，並在候選長度相同時比較字典序。
+    /// 輸入 s 須是長度介於 1 到 100 的二進位字串，k 須介於 1 到 s.Length；若全字串的 '1' 不足 k 個則直接回傳空字串。
+    /// 指標掃描本身為 O(n)，但目前實作會建立並比較候選字串，最壞時間複雜度為 O(n²)，額外空間複雜度為 O(n)。
     /// </summary>
-    /// <param name="s"></param>
-    /// <param name="k"></param>
-    /// <returns></returns>
+    /// <param name="s">只包含 '0' 和 '1' 的二進位字串，長度介於 1 到 100。</param>
+    /// <param name="k">合法子字串必須恰好包含的 '1' 數量，介於 1 到 s.Length。</param>
+    /// <returns>最短且字典序最小的合法子字串；若不存在則回傳空字串。</returns>
     public string ShortestBeautifulSubstring2(string s, int k)
     {
-        if(s.Count(c => c == '1') < k) return "";
+        // 全字串的 1 不足 k 時，不可能存在符合條件的子字串。
+        if (s.Count(c => c == '1') < k)
+        {
+            return "";
+        }
 
         string ans = s;
         int cnt = 0;
         int left = 0;
-        for(int right = 0; right < s.Length; right++)
+        for (int right = 0; right < s.Length; right++)
         {
             cnt += s[right] - '0';
-            while(cnt > k || s[left] == '0')
+
+            // 移除多餘的 1，或移除左側不影響 1 數量的 0，
+            // 讓目前窗口成為以 right 結尾的最短合法候選。
+            while (cnt > k || s[left] == '0')
             {
                 cnt -= s[left++] - '0';
             }
 
-            if(cnt == k)
+            if (cnt == k)
             {
                 string t = s.Substring(left, right - left + 1);
-                if(t.Length < ans.Length || t.Length == ans.Length && string.CompareOrdinal(t, ans) < 0)
+
+                // 題目先比較長度，再比較相同長度候選的字典序。
+                if (t.Length < ans.Length ||
+                    (t.Length == ans.Length && string.CompareOrdinal(t, ans) < 0))
                 {
                     ans = t;
                 }
