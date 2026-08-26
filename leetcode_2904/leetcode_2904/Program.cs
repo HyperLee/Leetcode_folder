@@ -1,4 +1,6 @@
-﻿namespace leetcode_2904;
+﻿using System.Runtime.InteropServices.Marshalling;
+
+namespace leetcode_2904;
 
 class Program
 {
@@ -41,5 +43,74 @@ class Program
     static void Main(string[] args)
     {
         Console.WriteLine("Hello, World!");
+    }
+
+    /// <summary>
+    /// 解法一:枚舉
+    /// 题目要求我们在二进制字符串 s 中找到包含 k 个 1 的最短且字典序最小的字符串。
+    /// 假设 s 的长度为 n。注意到题目给定的字符串长度范围较小，在 102 内，所以我们可以用 O(n3) 时间复杂度的算法来解决这个问题。
+    /// 假设最短字符串的长度为 m，我们在 s 中枚举所有长度为 m 的子字符串，判断其中是否有 k 个 1，并返回字典序最小的字符串。m 的范围为 [k,n]。
+    /// </summary>
+    /// <param name="s"></param>
+    /// <param name="k"></param>
+    /// <returns></returns> <summary>
+    /// 
+    /// </summary>
+    /// <param name="s"></param>
+    /// <param name="k"></param>
+    /// <returns></returns>
+    public string ShortestBeautifulSubstring(string s, int k)
+    {
+        for (int m = k; m <= s.Length; m++) 
+        {
+            string ans = "";
+            for (int i = m; i <= s.Length; i++) 
+            {
+                string t = s.Substring(i - m, m);
+                if ((ans.Length == 0 || string.CompareOrdinal(t, ans) < 0) && t.Count(c => c == '1') == k) 
+                {
+                    ans = t;
+                }
+            }
+            if (ans.Length > 0) 
+            {
+                return ans;
+            }
+        }
+        return "";
+    }
+
+    /// <summary>
+    /// 解法二:滑動視窗
+    /// 我们可以维护一个滑动窗口，当窗口中的 1 数量大于 k 或窗口端点处的字符是 0，就可以缩小窗口，从而找到最短的子字符串。
+    /// </summary>
+    /// <param name="s"></param>
+    /// <param name="k"></param>
+    /// <returns></returns>
+    public string ShortestBeautifulSubstring2(string s, int k)
+    {
+        if(s.Count(c => c == '1') < k) return "";
+
+        string ans = s;
+        int cnt = 0;
+        int left = 0;
+        for(int right = 0; right < s.Length; right++)
+        {
+            cnt += s[right] - '0';
+            while(cnt > k || s[left] == '0')
+            {
+                cnt -= s[left++] - '0';
+            }
+
+            if(cnt == k)
+            {
+                string t = s.Substring(left, right - left + 1);
+                if(t.Length < ans.Length || t.Length == ans.Length && string.CompareOrdinal(t, ans) < 0)
+                {
+                    ans = t;
+                }
+            }
+        }
+        return ans;
     }
 }
