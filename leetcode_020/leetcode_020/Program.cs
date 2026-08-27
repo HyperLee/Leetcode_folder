@@ -138,33 +138,9 @@
         }
 
         /// <summary>
-        /// https://leetcode.com/problems/valid-parentheses/
-        /// Given a string containing just the characters '(', ')', '{', '}', '[' and ']', 
-        /// determine if the input string is valid.
-        /// An input string is valid if:
-        /// 1. Open brackets must be closed by the same type of brackets.
-        /// 2. Open brackets must be closed in the correct order.
-        /// Note that an empty string is also considered valid.
-        /// 
-        /// ref: 
-        /// 1. Stack.Peek 方法
-        ///    https://docs.microsoft.com/zh-tw/dotnet/api/system.collections.stack.peek?view=net-6.0
-        ///    
-        /// 每當遇到一個 左括號 就會期待 一個右括號 組合成一組
-        /// 所以遇到一左括號就 push 一右括號 為一組
-        /// 等後續有右括號進來就 pop 出去
-        /// 因為括號為偶數
-        /// 故最後 stack.count 為0
-        /// 就代表true 皆為兩兩一組
-        /// 反之false
-        /// 
-        /// 需要注意 左括號 對 右括號 兩兩一組
-        /// 順序大小都需要相同層級才可以
-        /// 
-        /// 其他方法可以參考
-        /// https://ithelp.ithome.com.tw/articles/10217603
-        /// https://leetcode.cn/problems/valid-parentheses/solution/you-xiao-de-gua-hao-by-leetcode-solution/
-        /// https://leetcode.cn/problems/valid-parentheses/solution/you-xiao-de-gua-hao-by-leetcode-learning-p2qg/
+        /// 判斷只包含三種括號的字串，是否每個括號都依正確種類與順序完成配對。
+        /// 解題時先排除無法完全配對的奇數長度；接著使用 <c>Stack</c> 保存每個左括號所期待的右括號，遇到右括號時核對堆疊頂端。
+        /// 掃描完成後堆疊為空，代表所有括號都已正確閉合。
         /// </summary>
         /// <param name="s"></param>
         /// <returns></returns>
