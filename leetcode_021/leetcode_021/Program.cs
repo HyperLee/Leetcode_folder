@@ -138,7 +138,7 @@
             bool recursivePassed = recursiveValues.SequenceEqual(expected);
             bool iterativePassed = iterativeValues.SequenceEqual(expected);
 
-            Console.WriteLine($"案例 {caseNumber}：l1 = {FormatList(list1Values)}，l2 = {FormatList(list2Values)}");
+            Console.WriteLine($"案例 {caseNumber}：list1 = {FormatList(list1Values)}，list2 = {FormatList(list2Values)}");
             Console.WriteLine(
                 $"  遞迴法：預期 {FormatList(expected)}，實際 {FormatList(recursiveValues)} => {(recursivePassed ? "PASS" : "FAIL")}");
             Console.WriteLine(
@@ -204,37 +204,37 @@
         /// 每次選出頭節點值較小的串列，並將該節點接到剩餘串列的遞迴合併結果之前。
         /// 輸入可為空串列；輸出會重用並重新串接原有節點，形成一條非遞減排序串列。
         /// </summary>
-        /// <param name="l1">第一條非遞減排序串列的頭節點，或 <see langword="null"/>。</param>
-        /// <param name="l2">第二條非遞減排序串列的頭節點，或 <see langword="null"/>。</param>
+        /// <param name="list1">第一條非遞減排序串列的頭節點，或 <see langword="null"/>。</param>
+        /// <param name="list2">第二條非遞減排序串列的頭節點，或 <see langword="null"/>。</param>
         /// <returns>合併後串列的頭節點；兩個輸入皆為空時回傳 <see langword="null"/>。</returns>
-        public static ListNode? MergeTwoLists(ListNode? l1, ListNode? l2)
+        public static ListNode? MergeTwoLists(ListNode? list1, ListNode? list2)
         {
-            if (l1 == null && l2 == null)
+            if (list1 == null && list2 == null)
             {
                 return null;
             }
 
-            if (l1 == null)
+            if (list1 == null)
             {
-                return l2;
+                return list2;
             }
 
-            if (l2 == null)
+            if (list2 == null)
             {
-                return l1;
+                return list1;
             }
 
-            if (l1.val <= l2.val)
+            if (list1.val <= list2.val)
             {
-                // l1 較小時固定為目前答案頭節點，再遞迴合併尚未處理的部分。
-                l1.next = MergeTwoLists(l1.next, l2);
-                return l1;
+                // list1 較小時固定為目前答案頭節點，再遞迴合併尚未處理的部分。
+                list1.next = MergeTwoLists(list1.next, list2);
+                return list1;
             }
             else
             {
-                // l2 較小時採用對稱處理，讓每層遞迴只決定一個節點。
-                l2.next = MergeTwoLists(l1, l2.next);
-                return l2;
+                // list2 較小時採用對稱處理，讓每層遞迴只決定一個節點。
+                list2.next = MergeTwoLists(list1, list2.next);
+                return list2;
             }
         }
 
@@ -243,27 +243,27 @@
         /// 使用虛擬頭節點統一首次串接流程，持續移動尾端指標並選取較小的目前節點。
         /// 輸入可為空串列；輸出會重用並重新串接原有節點，形成一條非遞減排序串列。
         /// </summary>
-        /// <param name="l1">第一條非遞減排序串列的頭節點，或 <see langword="null"/>。</param>
-        /// <param name="l2">第二條非遞減排序串列的頭節點，或 <see langword="null"/>。</param>
+        /// <param name="list1">第一條非遞減排序串列的頭節點，或 <see langword="null"/>。</param>
+        /// <param name="list2">第二條非遞減排序串列的頭節點，或 <see langword="null"/>。</param>
         /// <returns>合併後串列的頭節點；兩個輸入皆為空時回傳 <see langword="null"/>。</returns>
-        public static ListNode? MergeTwoLists2(ListNode? l1, ListNode? l2)
+        public static ListNode? MergeTwoLists2(ListNode? list1, ListNode? list2)
         {
             ListNode dummy = new ListNode();
             ListNode tail = dummy;
 
-            while (l1 is not null && l2 is not null)
+            while (list1 is not null && list2 is not null)
             {
                 ListNode selected;
 
-                if (l1.val <= l2.val)
+                if (list1.val <= list2.val)
                 {
-                    selected = l1;
-                    l1 = l1.next;
+                    selected = list1;
+                    list1 = list1.next;
                 }
                 else
                 {
-                    selected = l2;
-                    l2 = l2.next;
+                    selected = list2;
+                    list2 = list2.next;
                 }
 
                 tail.next = selected;
@@ -271,7 +271,7 @@
             }
 
             // 其中一條串列已耗盡，另一條仍保持排序，可直接整段接到結果尾端。
-            tail.next = l1 ?? l2;
+            tail.next = list1 ?? list2;
 
             return dummy.next;
         }
