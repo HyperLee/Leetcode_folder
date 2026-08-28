@@ -177,6 +177,28 @@ list2 = [1, 3, 4]
 
 迴圈結束代表至少有一條串列已耗盡。另一條串列剩餘部分本來就已排序，而且其所有節點都不小於目前結果尾端，因此可以一次執行 `tail.next = list1 ?? list2`，不必再逐節點處理。
 
+### `??` 運算子補充說明
+
+`??` 是 C# 的 Null 聯合運算子（null-coalescing operator）。`a ?? b` 表示：如果 `a` 不是 `null`，就使用 `a`；否則使用 `b`。因此：
+
+```csharp
+tail.next = list1 ?? list2;
+```
+
+等同於：
+
+```csharp
+tail.next = list1 is not null ? list1 : list2;
+```
+
+這個迴圈結束時至少有一條串列已經是 `null`，所以這行程式會處理以下三種情況：
+
+- `list1` 尚有節點：將 `list1` 的剩餘部分接到 `tail.next`。
+- `list1` 已耗盡：將 `list2` 的剩餘部分接到 `tail.next`。
+- `list1` 與 `list2` 都是 `null`：將 `tail.next` 設為 `null`，表示結果串列已到結尾。
+
+`??` 本身不會比較或合併節點；它只負責在兩個串列參考中選出第一個不是 `null` 的值。
+
 ### 虛擬碼
 
 ```text
