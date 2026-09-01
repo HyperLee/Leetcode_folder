@@ -14,79 +14,82 @@ public class Solution
 
     public int MinMoves(string[] classroom, int energy)
     {
-        int m = classroom.Length;
-        int n = classroom[0].Length;
-        int[,] id = new int[m, n];
-        int sx = 0, sy = 0, cnt = 0;
+        int rowCount = classroom.Length;
+        int columnCount = classroom[0].Length;
+        int[,] litterBitByCell = new int[rowCount, columnCount];
+        int startRow = 0, startColumn = 0, litterCount = 0;
 
-        for (int i = 0; i < m; i++)
+        for (int i = 0; i < rowCount; i++)
         {
-            for (int j = 0; j < n; j++)
+            for (int j = 0; j < columnCount; j++)
             {
-                char c = classroom[i][j];
-                if (c == 'S')
+                char cellType = classroom[i][j];
+                if (cellType == 'S')
                 {
-                    sx = i;
-                    sy = j;
+                    startRow = i;
+                    startColumn = j;
                 }
-                else if (c == 'L')
+                else if (cellType == 'L')
                 {
-                    id[i, j] = 1 << cnt;
-                    cnt++;
+                    litterBitByCell[i, j] = 1 << litterCount;
+                    litterCount++;
                 }
             }
         }
 
-        int full = 1 << cnt;
-        int[,,] bestEnergy = new int[m, n, full];
+        int maskStateCount = 1 << litterCount;
+        int allLitterMask = maskStateCount - 1;
+        int[,,] bestEnergy = new int[rowCount, columnCount, maskStateCount];
 
-        for (int i = 0; i < m; i++)
+        for (int i = 0; i < rowCount; i++)
         {
-            for (int j = 0; j < n; j++)
+            for (int j = 0; j < columnCount; j++)
             {
-                for (int k = 0; k < full; k++)
+                for (int k = 0; k < maskStateCount; k++)
                 {
                     bestEnergy[i, j, k] = -1;
                 }
             }
         }
 
-        bestEnergy[sx, sy, 0] = energy;
+        bestEnergy[startRow, startColumn, 0] = energy;
 
-        var q = new Queue<(int x, int y, int mask, int e, int steps)>();
-        q.Enqueue((sx, sy, 0, energy, 0));
+        var queue = new Queue<(int row, int column, int litterMask, int remainingEnergy, int steps)>();
+        queue.Enqueue((startRow, startColumn, 0, energy, 0));
 
-        while (q.Count > 0)
+        while (queue.Count > 0)
         {
-            var t = q.Dequeue();
+            var state = queue.Dequeue();
 
-            if (t.mask == full - 1)
+            if (state.litterMask == allLitterMask)
             {
-                return t.steps;
+                return state.steps;
             }
 
-            if (t.e == 0)
+            if (state.remainingEnergy == 0)
             {
                 continue;
             }
 
-            for (int d = 0; d < 4; d++)
+            for (int directionIndex = 0; directionIndex < 4; directionIndex++)
             {
-                int nx = t.x + dx[d];
-                int ny = t.y + dy[d];
+                int nextRow = state.row + dx[directionIndex];
+                int nextColumn = state.column + dy[directionIndex];
 
-                if (nx < 0 || nx >= m || ny < 0 || ny >= n || classroom[nx][ny] == 'X')
+                if (nextRow < 0 || nextRow >= rowCount ||
+                    nextColumn < 0 || nextColumn >= columnCount ||
+                    classroom[nextRow][nextColumn] == 'X')
                 {
                     continue;
                 }
 
-                int ne = classroom[nx][ny] == 'R' ? energy : t.e - 1;
-                int nmask = t.mask | id[nx, ny];
+                int nextEnergy = classroom[nextRow][nextColumn] == 'R' ? energy : state.remainingEnergy - 1;
+                int nextLitterMask = state.litterMask | litterBitByCell[nextRow, nextColumn];
 
-                if (ne > bestEnergy[nx, ny, nmask])
+                if (nextEnergy > bestEnergy[nextRow, nextColumn, nextLitterMask])
                 {
-                    bestEnergy[nx, ny, nmask] = ne;
-                    q.Enqueue((nx, ny, nmask, ne, t.steps + 1));
+                    bestEnergy[nextRow, nextColumn, nextLitterMask] = nextEnergy;
+                    queue.Enqueue((nextRow, nextColumn, nextLitterMask, nextEnergy, state.steps + 1));
                 }
             }
         }
@@ -106,7 +109,7 @@ public class Solution
 
 ```text
 位置 + 已清理垃圾 + 剩餘能量
-(x, y, mask, energy)
+(row, column, litterMask, remainingEnergy)
 ```
 
 BFS 會按照移動步數由少到多搜尋，所以第一次找到「所有垃圾都清完」的狀態時，就是最少移動次數。
@@ -116,13 +119,13 @@ BFS 會按照移動步數由少到多搜尋，所以第一次找到「所有垃�
 這份程式大致執行以下步驟：
 
 1. 掃描教室，找出起點 `S`，並替每個垃圾 `L` 分配一個 bit。
-2. 使用 `mask` 記錄目前已清理哪些垃圾。
+2. 使用 `litterMask` 記錄目前已清理哪些垃圾。
 3. 使用 BFS 搜尋所有可能的移動狀態。
 4. 每移動一步，能量減少一點。
 5. 走到 `R` 時，能量恢復成最大值 `energy`。
 6. `X` 是障礙物，不能進入。
-7. 使用 `bestEnergy[x, y, mask]` 剪掉沒有必要再次搜尋的狀態。
-8. 第一次取出 `mask == full - 1` 的狀態時立即回傳步數。
+7. 使用 `bestEnergy[x, y, litterMask]` 剪掉沒有必要再次搜尋的狀態。
+8. 第一次取出 `litterMask == allLitterMask` 的狀態時立即回傳步數。
 
 例如有三個垃圾：
 
@@ -153,10 +156,10 @@ static readonly int[] dy = new int[] { 1, 0, -1, 0 };
 這兩個陣列表示四個方向：
 
 ```text
-d = 0：右
-d = 1：下
-d = 2：左
-d = 3：上
+directionIndex = 0：右
+directionIndex = 1：下
+directionIndex = 2：左
+directionIndex = 3：上
 ```
 
 例如：
@@ -175,18 +178,18 @@ dy[0] = 1
 也就是往右移動。因此後面只需要使用一個迴圈，就能依序檢查四個方向：
 
 ```csharp
-for (int d = 0; d < 4; d++)
+for (int directionIndex = 0; directionIndex < 4; directionIndex++)
 {
-    int nx = t.x + dx[d];
-    int ny = t.y + dy[d];
+    int nextRow = state.row + dx[directionIndex];
+    int nextColumn = state.column + dy[directionIndex];
 }
 ```
 
 ## 3. 取得教室大小
 
 ```csharp
-int m = classroom.Length;
-int n = classroom[0].Length;
+int rowCount = classroom.Length;
+int columnCount = classroom[0].Length;
 ```
 
 假設教室如下：
@@ -203,8 +206,8 @@ classroom =
 則：
 
 ```text
-m = 3   // 列數 row
-n = 3   // 欄數 column
+rowCount = 3   // 列數 row
+columnCount = 3   // 欄數 column
 ```
 
 程式使用 `(x, y)` 表示座標，其中：
@@ -214,13 +217,13 @@ x = row
 y = column
 ```
 
-## 4. `id` 陣列
+## 4. `litterBitByCell` 陣列
 
 ```csharp
-int[,] id = new int[m, n];
+int[,] litterBitByCell = new int[rowCount, columnCount];
 ```
 
-`id[i, j]` 用來記錄：如果 `(i, j)` 是垃圾 `L`，它對應到 `mask` 中的哪一個 bit。
+`litterBitByCell[i, j]` 用來記錄：如果 `(i, j)` 是垃圾 `L`，它對應到 `litterMask` 中的哪一個 bit。
 
 例如教室如下：
 
@@ -241,15 +244,15 @@ L . L
 也就是：
 
 ```text
-id[0, 2] = 1
-id[2, 0] = 2
-id[2, 2] = 4
+litterBitByCell[0, 2] = 1
+litterBitByCell[2, 0] = 2
+litterBitByCell[2, 2] = 4
 ```
 
-非垃圾位置的 `id` 預設為 `0`。這讓程式可以直接寫成：
+非垃圾位置的 `litterBitByCell` 預設為 `0`。這讓程式可以直接寫成：
 
 ```csharp
-int nmask = t.mask | id[nx, ny];
+int nextLitterMask = state.litterMask | litterBitByCell[nextRow, nextColumn];
 ```
 
 不需要另外判斷下一格是否為 `L`。
@@ -257,35 +260,35 @@ int nmask = t.mask | id[nx, ny];
 ## 5. 找起點與垃圾
 
 ```csharp
-int sx = 0, sy = 0, cnt = 0;
+int startRow = 0, startColumn = 0, litterCount = 0;
 ```
 
 這三個變數分別代表：
 
 ```text
-sx   起點的列座標
-sy   起點的欄座標
-cnt  已找到的垃圾數量
+startRow      起點的列座標
+startColumn  起點的欄座標
+litterCount  已找到的垃圾數量
 ```
 
 接著掃描整張地圖：
 
 ```csharp
-for (int i = 0; i < m; i++)
+for (int i = 0; i < rowCount; i++)
 {
-    for (int j = 0; j < n; j++)
+    for (int j = 0; j < columnCount; j++)
     {
-        char c = classroom[i][j];
+        char cellType = classroom[i][j];
 
-        if (c == 'S')
+        if (cellType == 'S')
         {
-            sx = i;
-            sy = j;
+            startRow = i;
+            startColumn = j;
         }
-        else if (c == 'L')
+        else if (cellType == 'L')
         {
-            id[i, j] = 1 << cnt;
-            cnt++;
+            litterBitByCell[i, j] = 1 << litterCount;
+            litterCount++;
         }
     }
 }
@@ -293,9 +296,9 @@ for (int i = 0; i < m; i++)
 
 遇到 `S` 時，記錄起點座標；遇到 `L` 時，替該垃圾分配一個獨立 bit。
 
-## 6. `1 << cnt` 的意義
+## 6. `1 << litterCount` 的意義
 
-`1 << cnt` 是 Bitmask 的核心操作。
+`1 << litterCount` 是 Bitmask 的核心操作。
 
 例如：
 
@@ -345,17 +348,18 @@ for (int i = 0; i < m; i++)
 
 每個垃圾都擁有一個獨立 bit，之後就能用一個整數表示目前已清理的垃圾集合。
 
-## 7. `full` 與完成狀態
+## 7. `maskStateCount` 與 `allLitterMask`
 
 ```csharp
-int full = 1 << cnt;
+int maskStateCount = 1 << litterCount;
+int allLitterMask = maskStateCount - 1;
 ```
 
 假設共有三個垃圾：
 
 ```text
-cnt = 3
-full = 1 << 3 = 8
+litterCount = 3
+maskStateCount = 1 << litterCount = 8
 ```
 
 三個 bit 一共有 `2³ = 8` 種組合：
@@ -371,23 +375,23 @@ full = 1 << 3 = 8
 111
 ```
 
-因此 `mask` 的範圍是：
+因此 `litterMask` 的範圍是：
 
 ```text
-0 ~ full - 1
+0 ~ allLitterMask
 0 ~ 7
 ```
 
 最後一個狀態 `111` 的數值是 `7`，也就是：
 
 ```csharp
-full - 1
+allLitterMask
 ```
 
 所以：
 
 ```csharp
-if (t.mask == full - 1)
+if (state.litterMask == allLitterMask)
 ```
 
 代表所有垃圾都已經清理完成。
@@ -395,12 +399,12 @@ if (t.mask == full - 1)
 ## 8. `bestEnergy`：狀態剪枝的關鍵
 
 ```csharp
-int[,,] bestEnergy = new int[m, n, full];
+int[,,] bestEnergy = new int[rowCount, columnCount, maskStateCount];
 ```
 
-`bestEnergy[x, y, mask]` 代表：
+`bestEnergy[x, y, litterMask]` 代表：
 
-> 到達 `(x, y)`，而且已經清理 `mask` 所表示的垃圾時，曾經擁有的最大剩餘能量。
+> 到達 `(x, y)`，而且已經清理 `litterMask` 所表示的垃圾時，曾經擁有的最大剩餘能量。
 
 這不是普通的 `visited` 陣列，而是用來保存同一個位置與同一個垃圾集合下的最佳能量。
 
@@ -419,13 +423,13 @@ int[,,] bestEnergy = new int[m, n, full];
 bool[,] visited;
 ```
 
-### 為什麼 `visited[x, y, mask]` 仍然不夠？
+### 為什麼 `visited[x, y, litterMask]` 仍然不夠？
 
-即使位置與 `mask` 都相同，剩餘能量不同也代表不同的能力：
+即使位置與 `litterMask` 都相同，剩餘能量不同也代表不同的能力：
 
 ```text
-(x, y, mask = 001, energy = 2)
-(x, y, mask = 001, energy = 5)
+(x, y, litterMask = 001, remainingEnergy = 2)
+(x, y, litterMask = 001, remainingEnergy = 5)
 ```
 
 能量為 `5` 的狀態可以執行能量為 `2` 的狀態能做的所有事情，還可能走得更遠。`bestEnergy` 正是用來利用這項特性。
@@ -436,7 +440,7 @@ bool[,] visited;
 
 ```text
 位置 = (2, 3)
-mask = 011
+litterMask = 011
 ```
 
 之前曾經以剩餘能量 `5` 到達：
@@ -448,7 +452,7 @@ bestEnergy[2, 3, 011] = 5
 現在另一條路線以剩餘能量 `3` 到達：
 
 ```text
-(x = 2, y = 3, mask = 011, energy = 3)
+(x = 2, y = 3, litterMask = 011, remainingEnergy = 3)
 ```
 
 新的狀態沒有任何優勢，因為能量為 `5` 的舊狀態可以執行能量為 `3` 的新狀態能執行的所有後續行動。
@@ -456,17 +460,17 @@ bestEnergy[2, 3, 011] = 5
 因此新狀態可以被剪掉。這就是以下判斷的意義：
 
 ```csharp
-if (ne > bestEnergy[nx, ny, nmask])
+if (nextEnergy > bestEnergy[nextRow, nextColumn, nextLitterMask])
 ```
 
 ## 10. 為什麼初始化為 `-1`？
 
 ```csharp
-for (int i = 0; i < m; i++)
+for (int i = 0; i < rowCount; i++)
 {
-    for (int j = 0; j < n; j++)
+    for (int j = 0; j < columnCount; j++)
     {
-        for (int k = 0; k < full; k++)
+        for (int k = 0; k < maskStateCount; k++)
         {
             bestEnergy[i, j, k] = -1;
         }
@@ -479,7 +483,7 @@ for (int i = 0; i < m; i++)
 使用 `-1` 代表：
 
 ```text
-這個位置與 mask 組合尚未被拜訪
+這個位置與 litterMask 組合尚未被拜訪
 ```
 
 這樣即使新狀態的能量是 `0`，仍然可以透過 `0 > -1` 正確加入搜尋佇列。
@@ -487,48 +491,48 @@ for (int i = 0; i < m; i++)
 ## 11. 初始化起點
 
 ```csharp
-bestEnergy[sx, sy, 0] = energy;
+bestEnergy[startRow, startColumn, 0] = energy;
 ```
 
 一開始的狀態是：
 
 ```text
-位置   = S
-垃圾   = 0 個
-mask   = 0
-能量   = 最大值 energy
-步數   = 0
+位置             = S
+垃圾             = 0 個
+litterMask       = 0
+能量             = 最大值 energy
+步數             = 0
 ```
 
-因此起點 `(sx, sy)` 與空集合 `mask = 0` 的最佳能量就是 `energy`。
+因此起點 `(startRow, startColumn)` 與空集合 `litterMask = 0` 的最佳能量就是 `energy`。
 
 ## 12. BFS Queue 的內容
 
 ```csharp
-var q = new Queue<(int x, int y, int mask, int e, int steps)>();
+var queue = new Queue<(int row, int column, int litterMask, int remainingEnergy, int steps)>();
 ```
 
 Queue 中的每一筆狀態包含：
 
 ```text
-x       目前所在的列
-y       目前所在的欄
-mask    已清理哪些垃圾
-e       剩餘能量
-steps   已經移動幾步
+row              目前所在的列
+column           目前所在的欄
+litterMask       已清理哪些垃圾
+remainingEnergy  剩餘能量
+steps            已經移動幾步
 ```
 
 起始狀態加入方式如下：
 
 ```csharp
-q.Enqueue((sx, sy, 0, energy, 0));
+queue.Enqueue((startRow, startColumn, 0, energy, 0));
 ```
 
 代表：
 
 ```text
 位置   = S
-mask   = 000...
+litterMask = 000...
 energy = 滿能量
 steps  = 0
 ```
@@ -536,9 +540,9 @@ steps  = 0
 ## 13. 開始 BFS
 
 ```csharp
-while (q.Count > 0)
+while (queue.Count > 0)
 {
-    var t = q.Dequeue();
+    var state = queue.Dequeue();
 ```
 
 每次取出 Queue 最前面的狀態。BFS 的重要特性是依照距離逐層搜尋：
@@ -556,23 +560,23 @@ steps = 3
 ## 14. 判斷是否完成所有垃圾
 
 ```csharp
-if (t.mask == full - 1)
+if (state.litterMask == allLitterMask)
 {
-    return t.steps;
+    return state.steps;
 }
 ```
 
 例如有三個垃圾：
 
 ```text
-full = 1000₂ = 8
-full - 1 = 0111₂ = 7
+maskStateCount = 1000₂ = 8
+allLitterMask = 0111₂ = 7
 ```
 
 當：
 
 ```text
-mask = 111
+litterMask = 111
 ```
 
 就代表：
@@ -583,12 +587,12 @@ L1 ✓
 L2 ✓
 ```
 
-BFS 會按照步數從小到大取出狀態，因此可以立即回傳 `t.steps`，不必繼續搜尋。
+BFS 會按照步數從小到大取出狀態，因此可以立即回傳 `state.steps`，不必繼續搜尋。
 
 ## 15. 沒有能量時停止展開
 
 ```csharp
-if (t.e == 0)
+if (state.remainingEnergy == 0)
 {
     continue;
 }
@@ -610,13 +614,13 @@ Queue 中可能還有其他路線仍然能夠完成清理，所以不能因為�
 ## 16. 嘗試上下左右
 
 ```csharp
-for (int d = 0; d < 4; d++)
+for (int directionIndex = 0; directionIndex < 4; directionIndex++)
 {
-    int nx = t.x + dx[d];
-    int ny = t.y + dy[d];
+    int nextRow = state.row + dx[directionIndex];
+    int nextColumn = state.column + dy[directionIndex];
 ```
 
-程式依序計算四個方向的下一個位置 `(nx, ny)`。
+程式依序計算四個方向的下一個位置 `(nextRow, nextColumn)`。
 
 例如目前位於 `(2, 3)`，可能產生：
 
@@ -630,9 +634,9 @@ for (int d = 0; d < 4; d++)
 ## 17. 排除不能走的位置
 
 ```csharp
-if (nx < 0 || nx >= m ||
-    ny < 0 || ny >= n ||
-    classroom[nx][ny] == 'X')
+if (nextRow < 0 || nextRow >= rowCount ||
+    nextColumn < 0 || nextColumn >= columnCount ||
+    classroom[nextRow][nextColumn] == 'X')
 {
     continue;
 }
@@ -643,16 +647,16 @@ if (nx < 0 || nx >= m ||
 第一類是超出地圖邊界：
 
 ```text
-nx < 0
-nx >= m
-ny < 0
-ny >= n
+nextRow < 0
+nextRow >= rowCount
+nextColumn < 0
+nextColumn >= columnCount
 ```
 
 第二類是障礙物：
 
 ```text
-classroom[nx][ny] == 'X'
+classroom[nextRow][nextColumn] == 'X'
 ```
 
 這些位置都不能加入下一輪 BFS。
@@ -660,9 +664,9 @@ classroom[nx][ny] == 'X'
 ## 18. 計算新的能量
 
 ```csharp
-int ne = classroom[nx][ny] == 'R'
+int nextEnergy = classroom[nextRow][nextColumn] == 'R'
     ? energy
-    : t.e - 1;
+    : state.remainingEnergy - 1;
 ```
 
 這裡分成兩種情況。
@@ -688,7 +692,7 @@ int ne = classroom[nx][ny] == 'R'
 ## 19. 使用 OR 清理垃圾
 
 ```csharp
-int nmask = t.mask | id[nx, ny];
+int nextLitterMask = state.litterMask | litterBitByCell[nextRow, nextColumn];
 ```
 
 這是 Bitmask 的另一個核心操作。
@@ -696,13 +700,13 @@ int nmask = t.mask | id[nx, ny];
 假設目前已清理的垃圾是：
 
 ```text
-mask = 001
+litterMask = 001
 ```
 
 現在走到第二個垃圾，而該垃圾的 bit 是：
 
 ```text
-id[nx, ny] = 010
+litterBitByCell[nextRow, nextColumn] = 010
 ```
 
 使用 OR 運算：
@@ -717,14 +721,14 @@ OR 010
 因此：
 
 ```text
-nmask = 011
+nextLitterMask = 011
 ```
 
 代表第一個與第二個垃圾都已清理，第三個垃圾尚未清理。
 
-## 20. 走到普通格時的 `mask`
+## 20. 走到普通格時的 `litterMask`
 
-非垃圾格的 `id` 預設為 `0`：
+非垃圾格的 `litterBitByCell` 預設為 `0`：
 
 ```text
   011
@@ -736,13 +740,13 @@ OR 000
 因此：
 
 ```csharp
-nmask = t.mask | 0;
+nextLitterMask = state.litterMask | 0;
 ```
 
 不會改變原本的垃圾集合。這讓程式不需要另外寫：
 
 ```csharp
-if (classroom[nx][ny] == 'L')
+if (classroom[nextRow][nextColumn] == 'L')
 {
     // 另外處理垃圾
 }
@@ -753,7 +757,7 @@ if (classroom[nx][ny] == 'L')
 假設垃圾 `L1` 對應到 bit `010`，而目前狀態是：
 
 ```text
-mask = 011
+litterMask = 011
 ```
 
 代表 `L1` 已經清理過。再次走進去時：
@@ -772,10 +776,10 @@ Bitmask 透過 OR 運算自然處理了「垃圾只能算一次」的規則。
 ## 22. 最重要的剪枝
 
 ```csharp
-if (ne > bestEnergy[nx, ny, nmask])
+if (nextEnergy > bestEnergy[nextRow, nextColumn, nextLitterMask])
 {
-    bestEnergy[nx, ny, nmask] = ne;
-    q.Enqueue((nx, ny, nmask, ne, t.steps + 1));
+    bestEnergy[nextRow, nextColumn, nextLitterMask] = nextEnergy;
+    queue.Enqueue((nextRow, nextColumn, nextLitterMask, nextEnergy, state.steps + 1));
 }
 ```
 
@@ -790,7 +794,7 @@ bestEnergy[2, 3, 011] = 4
 現在新路線以 `2` 點能量到達相同狀態：
 
 ```text
-ne = 2
+nextEnergy = 2
 ```
 
 由於：
@@ -812,7 +816,7 @@ bestEnergy[2, 3, 011] = 2
 而新狀態是：
 
 ```text
-ne = 5
+nextEnergy = 5
 ```
 
 因為：
@@ -825,7 +829,7 @@ ne = 5
 
 ```csharp
 bestEnergy[2, 3, 011] = 5;
-q.Enqueue(...);
+queue.Enqueue(...);
 ```
 
 ## 23. 為什麼 Queue 還需要 `steps`？
@@ -833,7 +837,7 @@ q.Enqueue(...);
 題目要求回傳最少移動次數，所以每個 BFS 狀態都需要保存目前步數：
 
 ```csharp
-q.Enqueue((nx, ny, nmask, ne, t.steps + 1));
+queue.Enqueue((nextRow, nextColumn, nextLitterMask, nextEnergy, state.steps + 1));
 ```
 
 每移動一格，步數加一。例如：
@@ -900,15 +904,15 @@ L1 = 10
 因此：
 
 ```text
-full = 100₂ = 4
-full - 1 = 11₂
+maskStateCount = 100₂ = 4
+allLitterMask = 11₂
 ```
 
 一開始的狀態：
 
 ```text
 位置   = S
-mask   = 00
+litterMask = 00
 energy = 3
 steps  = 0
 ```
@@ -922,7 +926,7 @@ S → .
 狀態變成：
 
 ```text
-mask   = 00
+litterMask = 00
 energy = 2
 steps  = 1
 ```
@@ -936,7 +940,7 @@ steps  = 1
 更新為：
 
 ```text
-mask = 00 OR 01 = 01
+litterMask = 00 OR 01 = 01
 energy = 1
 steps = 2
 ```
@@ -950,13 +954,13 @@ energy = 3
 最後走到第二個垃圾 `L1`：
 
 ```text
-mask = 01 OR 10 = 11
+litterMask = 01 OR 10 = 11
 ```
 
 此時：
 
 ```csharp
-mask == full - 1
+litterMask == allLitterMask
 ```
 
 所以 BFS 回傳目前的 `steps`。
@@ -982,7 +986,7 @@ BFS 會依照距離分層：
 因此第一次抵達：
 
 ```text
-mask == full - 1
+litterMask == allLitterMask
 ```
 
 一定是最短路徑。
@@ -1000,15 +1004,15 @@ mask == full - 1
 這題會出錯，因為同一個位置可能對應多種不同情況：
 
 ```text
-(x, y, mask = 001, energy = 2)
-(x, y, mask = 011, energy = 2)
-(x, y, mask = 001, energy = 5)
+(x, y, litterMask = 001, remainingEnergy = 2)
+(x, y, litterMask = 011, remainingEnergy = 2)
+(x, y, litterMask = 001, remainingEnergy = 5)
 ```
 
 這些狀態的後續選擇不相同。完整狀態可以先理解成：
 
 ```text
-(x, y, mask, energy)
+(x, y, litterMask, remainingEnergy)
 ```
 
 不過這份解法沒有直接建立四維 `visited`：
@@ -1020,7 +1024,7 @@ bool[,,,] visited;
 而是使用：
 
 ```csharp
-bestEnergy[x, y, mask]
+bestEnergy[x, y, litterMask]
 ```
 
 保存同一位置、同一垃圾集合下曾經出現過的最大能量，淘汰能量較低的劣勢狀態。
@@ -1030,8 +1034,8 @@ bestEnergy[x, y, mask]
 假設有兩個狀態：
 
 ```text
-A：位置 (3, 2)，mask = 101，energy = 5
-B：位置 (3, 2)，mask = 101，energy = 2
+A：位置 (3, 2)，litterMask = 101，remainingEnergy = 5
+B：位置 (3, 2)，litterMask = 101，remainingEnergy = 2
 ```
 
 A 與 B 的位置及已清理垃圾完全相同，唯一差別是 A 的剩餘能量較高。
@@ -1046,19 +1050,19 @@ A 還可能因為能量較多而走得更遠
 所以 B 沒有繼續搜尋的必要，這就是以下判斷背後的演算法概念：
 
 ```csharp
-if (ne > bestEnergy[nx, ny, nmask])
+if (nextEnergy > bestEnergy[nextRow, nextColumn, nextLitterMask])
 ```
 
 它把原本可以想成四維的狀態：
 
 ```text
-(x, y, mask, energy)
+(x, y, litterMask, remainingEnergy)
 ```
 
 壓縮為：
 
 ```text
-(x, y, mask) → 記錄目前最大 energy
+(x, y, litterMask) → 記錄目前最大 remainingEnergy
 ```
 
 ## 29. 時間與空間複雜度
@@ -1066,13 +1070,13 @@ if (ne > bestEnergy[nx, ny, nmask])
 令：
 
 ```text
-m = 列數
-n = 欄數
+rowCount = 列數
+columnCount = 欄數
 L = 垃圾數量
 E = 最大能量
 ```
 
-垃圾集合 `mask` 有：
+垃圾集合 `litterMask` 有：
 
 ```text
 2^L
@@ -1081,19 +1085,19 @@ E = 最大能量
 種可能，因此 `bestEnergy` 的大小是：
 
 ```text
-m × n × 2^L
+rowCount × columnCount × 2^L
 ```
 
 空間複雜度主要是：
 
 ```text
-O(m × n × 2^L)
+O(rowCount × columnCount × 2^L)
 ```
 
-對於同一個 `(x, y, mask)`，`bestEnergy` 可能因為找到更高能量的路徑而更新；從保守角度估計，更新次數與能量範圍 `E` 有關，因此時間複雜度可寫成：
+對於同一個 `(x, y, litterMask)`，`bestEnergy` 可能因為找到更高能量的路徑而更新；從保守角度估計，更新次數與能量範圍 `E` 有關，因此時間複雜度可寫成：
 
 ```text
-O(m × n × 2^L × E)
+O(rowCount × columnCount × 2^L × E)
 ```
 
 每個狀態最多檢查四個方向，而 `4` 是常數，所以在大 O 表示法中省略。
@@ -1113,13 +1117,13 @@ BFS → 求最少步數
 使用：
 
 ```csharp
-1 << cnt
+1 << litterCount
 ```
 
 替垃圾分配 bit，再使用：
 
 ```csharp
-mask | id[x, y]
+litterMask | litterBitByCell[x, y]
 ```
 
 記錄哪些垃圾已經清理完成。例如：
@@ -1135,14 +1139,14 @@ mask | id[x, y]
 使用：
 
 ```csharp
-bestEnergy[x, y, mask]
+bestEnergy[x, y, litterMask]
 ```
 
 如果新狀態與舊狀態的：
 
 ```text
 位置相同
-mask 相同
+litterMask 相同
 ```
 
 但新狀態的 `energy` 更少，就沒有繼續搜尋的必要。
@@ -1150,75 +1154,74 @@ mask 相同
 ## 演算法流程圖
 
 ```text
-                     ┌──────────────┐
-                     │    S 起點     │
-                     │  mask = 0     │
-                     │  energy = E   │
-                     └──────┬───────┘
-                            │
-                            ▼
-                      BFS Queue
-                            │
-                ┌───────────┴───────────┐
-                │ 嘗試上、下、左、右     │
-                └───────────┬───────────┘
-                            │
-             ┌──────────────┴──────────────┐
-             │                             │
-          超出範圍 / X                   可以走
-             │                             │
-           丟棄                            ▼
-                                   計算新能量 ne
-                                      │
-                          ┌───────────┴──────────┐
-                          │                      │
-                         R                    普通格
-                          │                      │
-                          ▼                      ▼
-                     ne = E                ne = e - 1
-                          │                      │
-                          └──────────┬───────────┘
-                                     ▼
-                             更新垃圾 mask
-                                     │
-                          mask | id[nx, ny]
-                                     │
-                                     ▼
-                     ne > bestEnergy？
-                          │              │
-                         否              是
-                          │              │
-                        丟棄         加入 Queue
-                                         │
-                                         ▼
-                              mask == full - 1？
-                                         │
-                                        是
-                                         │
-                                         ▼
-                                    回傳 steps
+┌────────────────────────────────────────────────────┐
+│ S 起點                                             │
+│ litterMask = 0                                    │
+│ energy = E                                        │
+└──────────────────────┬─────────────────────────────┘
+                       │
+                       ▼
+                 BFS Queue
+                       │
+        ┌──────────────┴──────────────┐
+        │ 嘗試上、下、左、右           │
+        └──────────────┬──────────────┘
+                       │
+          ┌────────────┴────────────┐
+          │                         │
+      超出範圍 / X                可以走
+          │                         ▼
+        丟棄                 計算 nextEnergy
+                                  │
+                    ┌─────────────┴─────────────┐
+                    │                           │
+                走到 R                      走到普通格
+                    │                           │
+                    ▼                           ▼
+              nextEnergy = E      nextEnergy = remainingEnergy - 1
+                    │                           │
+                    └─────────────┬─────────────┘
+                                  ▼
+                  更新 litterMask
+                                  │
+                  litterMask | litterBitByCell[nextRow, nextColumn]
+                                  │
+                                  ▼
+             nextEnergy > bestEnergy？
+                     │                  │
+                    否                  是
+                     │                  │
+                   丟棄             加入 Queue
+                                        │
+                                        ▼
+                      litterMask == allLitterMask？
+                                        │
+                                       是
+                                        │
+                                        ▼
+                                   回傳 steps
 ```
 
 ## 一句話總結
 
-> 使用 BFS 尋找最少步數，用 Bitmask 記錄已清理的垃圾，並用 `bestEnergy[x, y, mask]` 保留同一狀態下最高的剩餘能量，剪掉明顯較差的路線。
+> 使用 BFS 尋找最少步數，用 Bitmask 記錄已清理的垃圾，並用 `bestEnergy[x, y, litterMask]` 保留同一狀態下最高的剩餘能量，剪掉明顯較差的路線。
 
 其中最需要理解的程式碼是：
 
 ```csharp
-if (ne > bestEnergy[nx, ny, nmask])
+if (nextEnergy > bestEnergy[nextRow, nextColumn, nextLitterMask])
 ```
 
 它將原本可以想成四維的狀態：
 
 ```text
-(x, y, mask, energy)
+(x, y, litterMask, remainingEnergy)
 ```
 
 壓縮為：
 
 ```text
-(x, y, mask) → 目前見過的最大 energy
+(x, y, litterMask) → 目前見過的最大 remainingEnergy
 ```
 
 這正是這份解法能有效搜尋狀態、避免重複探索的關鍵。

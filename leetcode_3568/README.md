@@ -22,7 +22,7 @@
 
 ## 題目說明
 
-給定一個 `m × n` 的教室網格 `classroom`。學生從起點出發，必須收集所有垃圾；每移動到相鄰格會消耗一點能量，進入重置區域時則會恢復成最大能量。請回傳完成清理的最少移動次數；若無法完成則回傳 `-1`。
+給定一個 `m × n` 的教室網格 `classroom`；在程式中，列數與欄數分別以 `rowCount` 與 `columnCount` 表示。學生從起點出發，必須收集所有垃圾；每移動到相鄰格會消耗一點能量，進入重置區域時則會恢復成最大能量。請回傳完成清理的最少移動次數；若無法完成則回傳 `-1`。
 
 每個字元的意義如下：
 
@@ -38,8 +38,8 @@
 
 ## 限制條件
 
-- `1 <= m == classroom.Length <= 20`
-- `1 <= n == classroom[i].Length <= 20`
+- `1 <= rowCount == classroom.Length <= 20`
+- `1 <= columnCount == classroom[i].Length <= 20`
 - `classroom[i][j]` 只會是 `S`、`L`、`R`、`X` 或 `.`
 - `1 <= energy <= 50`
 - 網格中恰好有一個 `S`
@@ -72,15 +72,15 @@
 例如以下狀態雖然位置相同，後續能力卻完全不同：
 
 ```text
-(x, y, mask = 001, energy = 1)
-(x, y, mask = 101, energy = 1)
-(x, y, mask = 001, energy = 4)
+(x, y, litterMask = 001, remainingEnergy = 1)
+(x, y, litterMask = 101, remainingEnergy = 1)
+(x, y, litterMask = 001, remainingEnergy = 4)
 ```
 
 因此完整搜尋狀態必須包含：
 
 ```text
-(位置 x, 位置 y, 已清理集合 mask, 剩餘能量 e, 已走步數 steps)
+(位置 row, 位置 column, 已清理集合 litterMask, 剩餘能量 remainingEnergy, 已走步數 steps)
 ```
 
 ### 為什麼使用 Bitmask？
@@ -93,7 +93,7 @@
 第 2 個垃圾：100
 ```
 
-假設目前 `mask = 001`，下一步走到 bit 為 `010` 的垃圾，使用 OR 運算即可更新集合：
+假設目前 `litterMask = 001`，下一步走到 bit 為 `010` 的垃圾，使用 OR 運算即可更新集合：
 
 ```text
 001
@@ -105,43 +105,43 @@ OR 010
 程式中的更新方式是：
 
 ```csharp
-int nmask = t.mask | id[nx, ny];
+int nextLitterMask = state.litterMask | litterBitByCell[nextRow, nextColumn];
 ```
 
-非垃圾格的 `id` 預設為零，因此 OR 後不會改變 `mask`；再次走到已收集的垃圾時，相同的 bit 也不會被重複計算。
+非垃圾格的 `litterBitByCell` 預設為零，因此 OR 後不會改變 `litterMask`；再次走到已收集的垃圾時，相同的 bit 也不會被重複計算。
 
 ## 解法：BFS＋Bitmask＋支配剪枝
 
 ### 1. 掃描起點並替垃圾編號
 
-程式先找出起點 `(sx, sy)`，並把每個垃圾對應到 `id[x, y] = 1 << cnt`。
+程式先找出起點 `(startRow, startColumn)`，並把每個垃圾對應到 `litterBitByCell[row, column] = 1 << litterCount`。
 
 若共有 `L` 個垃圾：
 
 ```text
-full = 1 << L
-完成狀態 = full - 1
+maskStateCount = 1 << L
+完成狀態 = allLitterMask = maskStateCount - 1
 ```
 
-例如兩個垃圾時，`full = 100₂`，而 `full - 1 = 11₂`，代表兩個垃圾都已清理。
+例如兩個垃圾時，`maskStateCount = 100₂`，而 `allLitterMask = 11₂`，代表兩個垃圾都已清理。
 
 ### 2. 設計 `bestEnergy`
 
-程式不是使用四維的 `visited[x, y, mask, energy]`，而是建立：
+程式不是使用四維的 `visited[x, y, litterMask, remainingEnergy]`，而是建立：
 
 ```csharp
-bestEnergy[x, y, mask]
+bestEnergy[x, y, litterMask]
 ```
 
 它表示：
 
-> 到達 `(x, y)` 且已清理集合為 `mask` 時，目前曾看過的最高剩餘能量。
+> 到達 `(x, y)` 且已清理集合為 `litterMask` 時，目前曾看過的最高剩餘能量。
 
 陣列初始值設為 `-1`，因為合法剩餘能量可能是零，不能用零代表「尚未到達」。起點狀態則是：
 
 ```text
-位置   = (sx, sy)
-mask   = 0
+位置   = (startRow, startColumn)
+litterMask = 0
 energy = 最大能量
 steps  = 0
 ```
@@ -151,13 +151,13 @@ steps  = 0
 Queue 中每筆資料為：
 
 ```csharp
-(int x, int y, int mask, int e, int steps)
+(int row, int column, int litterMask, int remainingEnergy, int steps)
 ```
 
 每次取出狀態後依序處理：
 
-1. 若 `mask == full - 1`，立即回傳 `steps`。
-2. 若 `e == 0` 且尚未完成，便無法再移動，停止展開此狀態。
+1. 若 `litterMask == allLitterMask`，立即回傳 `steps`。
+2. 若 `remainingEnergy == 0` 且尚未完成，便無法再移動，停止展開此狀態。
 3. 嘗試上下左右四個方向。
 4. 排除超出網格或位於 `X` 的位置。
 5. 計算進入下一格後的能量與垃圾集合。
@@ -182,7 +182,9 @@ Queue 中每筆資料為：
 因此程式使用：
 
 ```csharp
-int ne = classroom[nx][ny] == 'R' ? energy : t.e - 1;
+int nextEnergy = classroom[nextRow][nextColumn] == 'R'
+    ? energy
+    : state.remainingEnergy - 1;
 ```
 
 ### 5. 支配剪枝
@@ -190,8 +192,8 @@ int ne = classroom[nx][ny] == 'R' ? energy : t.e - 1;
 假設兩條路線抵達相同位置，而且清理過的垃圾集合也相同：
 
 ```text
-A = (x, y, mask = 011, energy = 5)
-B = (x, y, mask = 011, energy = 2)
+A = (x, y, litterMask = 011, remainingEnergy = 5)
+B = (x, y, litterMask = 011, remainingEnergy = 2)
 ```
 
 從 B 能走的任何後續路徑，A 都能走，而且 A 可能走得更遠。因此 A 完全支配 B，B 沒有繼續搜尋的價值。
@@ -199,13 +201,13 @@ B = (x, y, mask = 011, energy = 2)
 程式只在以下條件成立時保留新狀態：
 
 ```csharp
-if (ne > bestEnergy[nx, ny, nmask])
+if (nextEnergy > bestEnergy[nextRow, nextColumn, nextLitterMask])
 ```
 
 這項剪枝把原本直觀的四維狀態壓縮成：
 
 ```text
-(x, y, mask) → 只保存目前最高 energy
+(x, y, litterMask) → 只保存目前最高 remainingEnergy
 ```
 
 若 BFS 用盡所有可行狀態仍沒有完成，便回傳 `-1`。
@@ -226,16 +228,16 @@ energy = 4
 (1,0) R          (1,1) L1 = 10
 ```
 
-共有兩個垃圾，因此完成 mask 為 `11`。
+共有兩個垃圾，因此完成 `litterMask` 為 `11`。
 
-| 階段 | 位置 | 格子 | 步數 | 剩餘能量 | mask | 說明 |
+| 階段 | 位置 | 格子 | 步數 | 剩餘能量 | litterMask | 說明 |
 | --- | --- | --- | ---: | ---: | --- | --- |
 | 起點 | `(0,1)` | `S` | 0 | 4 | `00` | 尚未清理垃圾 |
 | 移動 1 | `(0,0)` | `L0` | 1 | 3 | `01` | `00 OR 01 = 01`，收集第一個垃圾 |
 | 移動 2 | `(1,0)` | `R` | 2 | 4 | `01` | 進入重置區域，能量恢復為 4 |
 | 移動 3 | `(1,1)` | `L1` | 3 | 3 | `11` | `01 OR 10 = 11`，所有垃圾完成 |
 
-BFS 第一次取得 `mask = 11` 的狀態時回傳 `3`，因此答案是三步。
+BFS 第一次取得 `litterMask = 11` 的狀態時回傳 `3`，因此答案是三步。
 
 另外兩個執行案例分別驗證：
 
@@ -246,7 +248,7 @@ BFS 第一次取得 `mask = 11` 的狀態時回傳 `3`，因此答案是三步�
 
 1. **垃圾集合正確**：每個垃圾擁有唯一 bit，OR 運算只會加入已抵達的垃圾，不會移除或重複計算垃圾。
 2. **移動狀態完整**：Queue 同時保存位置、垃圾集合、剩餘能量與步數，足以決定所有合法後續行動。
-3. **剪枝安全**：在位置及 `mask` 相同時，較高能量狀態能執行較低能量狀態的全部後續移動，因此捨棄後者不會失去更佳答案。
+3. **剪枝安全**：在位置及 `litterMask` 相同時，較高能量狀態能執行較低能量狀態的全部後續移動，因此捨棄後者不會失去更佳答案。
 4. **最短步數正確**：所有移動成本都為一，BFS 按步數遞增處理狀態，所以第一次完成所有垃圾時必定是最少移動次數。
 5. **無解判斷正確**：若 Queue 清空，代表所有未被安全剪枝的可行狀態都已檢查，仍未完成時即不存在合法路徑。
 
@@ -254,15 +256,15 @@ BFS 第一次取得 `mask = 11` 的狀態時回傳 `3`，因此答案是三步�
 
 令：
 
-- `m` 為列數。
-- `n` 為欄數。
+- `rowCount` 為列數。
+- `columnCount` 為欄數。
 - `L` 為垃圾數量。
 - `E` 為最大能量。
 
-`mask` 共有 `2^L` 種可能。對同一個 `(x, y, mask)`，最高能量可能隨搜尋被提高，最保守可依能量範圍估計更新次數，因此：
+`litterMask` 共有 `2^L` 種可能。對同一個 `(x, y, litterMask)`，最高能量可能隨搜尋被提高，最保守可依能量範圍估計更新次數，因此：
 
-- 時間複雜度：`O(m × n × 2^L × E)`。
-- `bestEnergy` 空間複雜度：`O(m × n × 2^L)`。
+- 時間複雜度：`O(rowCount × columnCount × 2^L × E)`。
+- `bestEnergy` 空間複雜度：`O(rowCount × columnCount × 2^L)`。
 
 每個狀態最多嘗試四個方向，常數四不影響大 O 表示法。
 

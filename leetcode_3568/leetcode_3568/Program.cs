@@ -74,83 +74,86 @@ class Program
     /// <returns>清理所有垃圾的最少移動次數；無法完成時回傳 <c>-1</c>。</returns>
     public int MinMoves(string[] classroom, int energy)
     {
-        int m = classroom.Length;
-        int n = classroom[0].Length;
-        int[,] id = new int[m, n];
-        int sx = 0, sy = 0, cnt = 0;
+        int rowCount = classroom.Length;
+        int columnCount = classroom[0].Length;
+        int[,] litterBitByCell = new int[rowCount, columnCount];
+        int startRow = 0, startColumn = 0, litterCount = 0;
 
-        for (int i = 0; i < m; i++)
+        for (int i = 0; i < rowCount; i++)
         {
-            for (int j = 0; j < n; j++)
+            for (int j = 0; j < columnCount; j++)
             {
-                char c = classroom[i][j];
-                if (c == 'S')
+                char cellType = classroom[i][j];
+                if (cellType == 'S')
                 {
-                    sx = i;
-                    sy = j;
+                    startRow = i;
+                    startColumn = j;
                 }
-                else if (c == 'L')
+                else if (cellType == 'L')
                 {
                     // 每個垃圾分配一個獨立 bit，之後可用一個整數表示已清理集合。
-                    id[i, j] = 1 << cnt;
-                    cnt++;
+                    litterBitByCell[i, j] = 1 << litterCount;
+                    litterCount++;
                 }
             }
         }
 
-        int full = 1 << cnt;
-        int[,,] bestEnergy = new int[m, n, full];
+        int maskStateCount = 1 << litterCount;
+        int allLitterMask = maskStateCount - 1;
+        int[,,] bestEnergy = new int[rowCount, columnCount, maskStateCount];
 
-        for (int i = 0; i < m; i++)
+        for (int i = 0; i < rowCount; i++)
         {
-            for (int j = 0; j < n; j++)
+            for (int j = 0; j < columnCount; j++)
             {
-                for (int k = 0; k < full; k++)
+                for (int k = 0; k < maskStateCount; k++)
                 {
                     bestEnergy[i, j, k] = -1;
                 }
             }
         }
 
-        bestEnergy[sx, sy, 0] = energy;
+        bestEnergy[startRow, startColumn, 0] = energy;
 
-        var q = new Queue<(int x, int y, int mask, int e, int steps)>();
-        q.Enqueue((sx, sy, 0, energy, 0));
+        var queue = new Queue<(int row, int column, int litterMask, int remainingEnergy, int steps)>();
+        queue.Enqueue((startRow, startColumn, 0, energy, 0));
 
         // 所有移動成本皆為 1，BFS 第一次取出完成狀態時就是最少步數。
-        while (q.Count > 0)
+        while (queue.Count > 0)
         {
-            var t = q.Dequeue();
-            if (t.mask == full - 1)
+            var state = queue.Dequeue();
+            if (state.litterMask == allLitterMask)
             {
-                return t.steps;
+                return state.steps;
             }
 
-            if (t.e == 0)
+            if (state.remainingEnergy == 0)
             {
                 continue;
             }
 
-            for (int d = 0; d < 4; d++)
+            for (int directionIndex = 0; directionIndex < 4; directionIndex++)
             {
-                int nx = t.x + dx[d];
-                int ny = t.y + dy[d];
-                if (nx < 0 || nx >= m || ny < 0 || ny >= n || classroom[nx][ny] == 'X')
+                int nextRow = state.row + dx[directionIndex];
+                int nextColumn = state.column + dy[directionIndex];
+                if (nextRow < 0 || nextRow >= rowCount ||
+                    nextColumn < 0 || nextColumn >= columnCount ||
+                    classroom[nextRow][nextColumn] == 'X')
                 {
                     continue;
                 }
 
                 // 進入 R 仍算一次移動，但抵達後能量直接恢復至最大值。
-                int ne = classroom[nx][ny] == 'R' ? energy : t.e - 1;
+                int nextEnergy = classroom[nextRow][nextColumn] == 'R' ? energy : state.remainingEnergy - 1;
 
-                // 非垃圾格的 id 為 0；OR 運算也自然避免同一垃圾被重複計算。
-                int nmask = t.mask | id[nx, ny];
+                // 非垃圾格的 litterBitByCell 為 0；OR 運算也自然避免同一垃圾被重複計算。
+                int nextLitterMask = state.litterMask | litterBitByCell[nextRow, nextColumn];
 
                 // 同位置、同 mask 下，能量較高的狀態能完成較低能量狀態的所有後續路徑。
-                if (ne > bestEnergy[nx, ny, nmask])
+                if (nextEnergy > bestEnergy[nextRow, nextColumn, nextLitterMask])
                 {
-                    bestEnergy[nx, ny, nmask] = ne;
-                    q.Enqueue((nx, ny, nmask, ne, t.steps + 1));
+                    bestEnergy[nextRow, nextColumn, nextLitterMask] = nextEnergy;
+                    queue.Enqueue((nextRow, nextColumn, nextLitterMask, nextEnergy, state.steps + 1));
                 }
             }
         }
