@@ -29,6 +29,132 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        // 直接執行官方三組範例，並以預期值自動判斷每個案例是否通過。
+        Program solution = new Program();
+        int passed = 0;
+
+        passed += RunTestCase(solution, "範例 1", ["S.", "XL"], 2, 2) ? 1 : 0;
+        passed += RunTestCase(solution, "範例 2", ["LS", "RL"], 4, 3) ? 1 : 0;
+        passed += RunTestCase(solution, "範例 3", ["L.S", "RXL"], 3, -1) ? 1 : 0;
+
+        Console.WriteLine($"總結：{passed}/3 通過");
+    }
+
+    static readonly int[] dx = [0, 1, 0, -1];
+    static readonly int[] dy = [1, 0, -1, 0];
+
+    /// <summary>
+    /// 執行一組固定測試案例，呼叫 <see cref="MinMoves"/> 計算答案，並比較實際結果與預期結果。
+    /// 輸入的教室必須符合題目定義，且 <paramref name="energy"/> 必須為正整數；
+    /// 回傳值表示本案例是否通過，主程式會使用它統計通過數量。
+    /// </summary>
+    /// <param name="solution">用來執行解法的 <see cref="Program"/> 執行個體。</param>
+    /// <param name="name">顯示於主控台的案例名稱。</param>
+    /// <param name="classroom">由等長字串組成的教室網格。</param>
+    /// <param name="energy">學生的最大能量。</param>
+    /// <param name="expected">案例預期的最少移動次數。</param>
+    /// <returns>實際結果等於預期結果時回傳 <see langword="true"/>，否則回傳 <see langword="false"/>。</returns>
+    private static bool RunTestCase(Program solution, string name, string[] classroom, int energy, int expected)
+    {
+        int actual = solution.MinMoves(classroom, energy);
+        bool passed = actual == expected;
+
+        Console.WriteLine($"{name}：{(passed ? "PASS" : "FAIL")}｜預期：{expected}｜實際：{actual}");
+        return passed;
+    }
+
+    /// <summary>
+    /// 計算清理教室內所有垃圾所需的最少移動次數。
+    /// 解法使用 BFS 依移動步數逐層搜尋，以 Bitmask 記錄已清理的垃圾，
+    /// 並為每個「位置與垃圾集合」保留最高剩餘能量，剪除被支配的較差狀態。
+    /// 輸入必須是包含唯一 <c>S</c>、至多十個 <c>L</c> 的合法矩形網格，且能量必須為正整數。
+    /// </summary>
+    /// <param name="classroom">教室網格；每格只會是 <c>S</c>、<c>L</c>、<c>R</c>、<c>X</c> 或 <c>.</c>。</param>
+    /// <param name="energy">學生出發時以及進入重置區域後擁有的最大能量。</param>
+    /// <returns>清理所有垃圾的最少移動次數；無法完成時回傳 <c>-1</c>。</returns>
+    public int MinMoves(string[] classroom, int energy)
+    {
+        int m = classroom.Length;
+        int n = classroom[0].Length;
+        int[,] id = new int[m, n];
+        int sx = 0, sy = 0, cnt = 0;
+
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                char c = classroom[i][j];
+                if (c == 'S')
+                {
+                    sx = i;
+                    sy = j;
+                }
+                else if (c == 'L')
+                {
+                    // 每個垃圾分配一個獨立 bit，之後可用一個整數表示已清理集合。
+                    id[i, j] = 1 << cnt;
+                    cnt++;
+                }
+            }
+        }
+
+        int full = 1 << cnt;
+        int[,,] bestEnergy = new int[m, n, full];
+
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                for (int k = 0; k < full; k++)
+                {
+                    bestEnergy[i, j, k] = -1;
+                }
+            }
+        }
+
+        bestEnergy[sx, sy, 0] = energy;
+
+        var q = new Queue<(int x, int y, int mask, int e, int steps)>();
+        q.Enqueue((sx, sy, 0, energy, 0));
+
+        // 所有移動成本皆為 1，BFS 第一次取出完成狀態時就是最少步數。
+        while (q.Count > 0)
+        {
+            var t = q.Dequeue();
+            if (t.mask == full - 1)
+            {
+                return t.steps;
+            }
+
+            if (t.e == 0)
+            {
+                continue;
+            }
+
+            for (int d = 0; d < 4; d++)
+            {
+                int nx = t.x + dx[d];
+                int ny = t.y + dy[d];
+                if (nx < 0 || nx >= m || ny < 0 || ny >= n || classroom[nx][ny] == 'X')
+                {
+                    continue;
+                }
+
+                // 進入 R 仍算一次移動，但抵達後能量直接恢復至最大值。
+                int ne = classroom[nx][ny] == 'R' ? energy : t.e - 1;
+
+                // 非垃圾格的 id 為 0；OR 運算也自然避免同一垃圾被重複計算。
+                int nmask = t.mask | id[nx, ny];
+
+                // 同位置、同 mask 下，能量較高的狀態能完成較低能量狀態的所有後續路徑。
+                if (ne > bestEnergy[nx, ny, nmask])
+                {
+                    bestEnergy[nx, ny, nmask] = ne;
+                    q.Enqueue((nx, ny, nmask, ne, t.steps + 1));
+                }
+            }
+        }
+
+        return -1;
     }
 }
