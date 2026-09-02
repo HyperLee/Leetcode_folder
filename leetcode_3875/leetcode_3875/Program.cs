@@ -33,9 +33,65 @@ class Program
     /// https://leetcode.cn/problems/construct-uniform-parity-array-i/description/
     ///
     /// </summary>
-    /// <param name="args">Command-line arguments supplied to the program.</param>
+    /// <remarks>
+    /// 程式進入點不要求使用者輸入，會執行五組固定案例並輸出每組 PASS/FAIL 與總結。
+    /// 案例涵蓋官方範例、全部為奇數、n = 1 與 n = 100 邊界。
+    /// </remarks>
+    /// <param name="args">命令列參數；此範例不使用。</param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solver = new Program();
+        (string Name, int[] Nums1, bool Expected)[] testCases =
+        {
+            ("官方範例 1：奇偶混合", new[] { 2, 3 }, true),
+            ("官方範例 2：全部為偶數", new[] { 4, 6 }, true),
+            ("全部為奇數", new[] { 1, 3, 5 }, true),
+            ("n = 1 邊界", new[] { 1 }, true),
+            ("n = 100 邊界", Enumerable.Range(1, 100).ToArray(), true)
+        };
+
+        Console.WriteLine("=== 3875. Construct Uniform Parity Array I ===");
+
+        int passedCount = 0;
+        foreach ((string name, int[] nums1, bool expected) in testCases)
+        {
+            passedCount += solver.RunTestCase(name, nums1, expected);
+        }
+
+        int totalCount = testCases.Length;
+        Console.WriteLine($"總結：{passedCount}/{totalCount} 通過，{totalCount - passedCount} 個失敗。");
+    }
+
+    /// <summary>
+    /// 執行一組固定測試案例，呼叫 UniformArray 並比較預期與實際結果。
+    /// 解題驗證概念是確認題目限制下的陣列都能構造出奇偶性一致的 nums2。
+    /// 輸入是案例名稱、符合限制的 nums1 與預期布林值；輸出 1 表示 PASS，0 表示 FAIL。
+    /// </summary>
+    /// <param name="name">測試案例名稱。</param>
+    /// <param name="nums1">長度 1 到 100、元素介於 1 到 100 且互異的整數陣列。</param>
+    /// <param name="expected">案例預期的可行性結果。</param>
+    /// <returns>案例通過時回傳 1，否則回傳 0。</returns>
+    private int RunTestCase(string name, int[] nums1, bool expected)
+    {
+        bool actual = UniformArray(nums1);
+        bool passed = actual == expected;
+
+        Console.WriteLine(
+            $"{name}：預期：{expected}，實際：{actual}，結果：{(passed ? "PASS" : "FAIL")}");
+
+        return passed ? 1 : 0;
+    }
+
+    /// <summary>
+    /// 輸入需符合題目限制：長度 1 到 100、元素介於 1 到 100 且互異。
+    /// 由於每個合法輸入都可行，方法不需要真的建立 nums2，輸出固定為 true。
+    /// </summary>
+    /// <param name="nums1">符合題目限制的互異整數陣列。</param>
+    /// <returns>若能建立奇偶性一致的 nums2 則回傳 true；合法輸入下固定為 true。</returns>
+    public bool UniformArray(int[] nums1)
+    {
+        // 同奇或同偶時直接保留元素；奇偶混合時任取奇數 x，
+        // 偶數減去 x 會變成奇數，奇數則保留，因此一定存在合法 nums2。
+        return true;
     }
 }
