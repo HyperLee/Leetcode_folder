@@ -40,71 +40,71 @@ class Program
         Console.WriteLine("Hello, World!");
     }
 
+
     /// <summary>
-    /// 方法一：分类讨论
-    /// 判斷是否能將 <paramref name="nums1"/> 轉換成所有元素奇偶性一致的陣列。
+    /// 
     /// </summary>
-    /// <remarks>
-    /// <para>
-    /// 每個位置可以選擇保留原值，或執行 nums1[i] - nums1[j]，
-    /// 但第二種操作必須滿足結果至少為 1，也就是 nums1[i] 必須嚴格大於 nums1[j]。
-    /// </para>
-    /// 
-    /// <para>
-    /// 由於只有減去奇數才會改變原本的奇偶性，因此關鍵在於陣列中的最小值。
-    /// 最小值無法再減去一個更小的元素，所以它本身的奇偶性會限制最終陣列可以形成的奇偶性。
-    /// </para>
-    /// 
-    /// <para>
-    /// 分類如下：
-    /// </para>
-    /// 
-    /// <list type="bullet">
-    /// <item>
-    /// <description>
-    /// 全部為偶數：不需要進行減法，直接保留所有元素即可，因此一定可以形成全偶數陣列。
-    /// </description>
-    /// </item>
-    /// <item>
-    /// <description>
-    /// 全部為奇數：同樣直接保留所有元素即可，因此一定可以形成全奇數陣列。
-    /// </description>
-    /// </item>
-    /// <item>
-    /// <description>
-    /// 同時存在奇數與偶數，且最小值為奇數：
-    /// 可以將所有元素轉成奇數。原本的奇數直接保留；
-    /// 偶數則減去最小的奇數，因為偶數減奇數為奇數，
-    /// 且該奇數是陣列最小值，所以減法結果一定大於等於 1。
-    /// </description>
-    /// </item>
-    /// <item>
-    /// <description>
-    /// 同時存在奇數與偶數，且最小值為偶數：
-    /// 無法完成轉換。最小的偶數本身無法透過減去更小的奇數變成奇數；
-    /// 而若想全部轉成偶數，最小的奇數也無法找到比它更小的奇數來改變自身奇偶性。
-    /// </description>
-    /// </item>
-    /// </list>
-    /// 
-    /// <para>
-    /// 因此最終判斷可以簡化為：
-    /// 如果最小值是奇數，則一定可行；
-    /// 如果最小值是偶數，則只有陣列中完全不存在奇數時才可行。
-    /// </para>
-    /// 
-    /// <para>
-    /// 時間複雜度：O(n)，只需要遍歷陣列一次。<br/>
-    /// 空間複雜度：O(1)。
-    /// </para>
-    /// </remarks>
-    /// <param name="nums1">由互不相同整數組成的輸入陣列。</param>
-    /// <returns>
-    /// 如果可以構造出所有元素皆為奇數或所有元素皆為偶數的陣列，回傳 <see langword="true"/>；
-    /// 否則回傳 <see langword="false"/>。
-    /// </returns>
+    /// <param name="nums1"></param>
+    /// <returns></returns>
     public bool UniformArray(int[] nums1)
     {
-        
+        int min = nums1.Min();
+        bool hasOdd = nums1.Any(x => x % 2 != 0);
+
+        return min % 2 != 0 || !hasOdd;
+    }
+
+    /// <summary>
+    /// | 陣列情況 | 最小值 | `hasOdd` | 結果 |
+    /// |---|---:|---:|---:|
+    /// | 全偶數 | 偶數 | false | true |
+    /// | 全奇數 | 奇數 | true | true |
+    /// | 奇偶混合，最小值奇數 | 奇數 | true | true |
+    /// | 奇偶混合，最小值偶數 | 偶數 | true | false |
+    /// => 只有「最小值為偶數，而且陣列內還存在奇數」時失敗。 
+    /// </summary>
+    /// <param name="nums1"></param>
+    /// <returns></returns>
+    public bool UniformArray2(int[] nums1)
+    {
+        int min = nums1.Min();
+        bool hasOdd = nums1.Any(x => x % 2 != 0);
+
+        if(min % 2 != 0)
+        {
+            return true;
+        }        
+
+        if(!hasOdd)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// 最小值無法透過第二種操作改變 ->
+    /// 最小值決定目標奇偶性 ->
+    /// 如果最小值是奇數，可以拿它去改變所有較大的偶數 ->
+    /// 如果最小值是偶數，而陣列又有奇數，就無法統一奇偶性
+    /// </summary>
+    /// <param name="nums1"></param>
+    /// <returns></returns>
+    public bool UniformArray3(int[] nums1)
+    {
+        int min = int.MaxValue;
+        bool hasOdd = false;
+
+        foreach(int num in nums1)
+        {
+            min = Math.Min(min, num);
+
+            if(num % 2 != 0)
+            {
+                hasOdd = true;
+            }
+        }
+        return min % 2 != 0 || !hasOdd;
     }
 }
