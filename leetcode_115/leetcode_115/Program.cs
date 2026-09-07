@@ -15,10 +15,60 @@ class Program
     /// 給定兩個字串 s 和 t，請回傳 s 中等於 t 的不同子序列數量。
     /// 測試案例保證答案符合 32 位元有號整數的範圍。
     /// </summary>
-    /// <param name="args"></param>
+    /// <remarks>
+    /// 程式進入點不讀取命令列或主控台輸入，會執行六組固定案例，
+    /// 並輸出每組案例的 PASS/FAIL 與最後的通過數量總結。
+    /// </remarks>
+    /// <param name="args">命令列參數；本程式不使用任何命令列輸入。</param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solver = new Program();
+        (string name, string s, string t, int expected)[] testCases =
+        {
+            ("官方範例 1", "rabbbit", "rabbit", 3),
+            ("官方範例 2", "babgbag", "bag", 5),
+            ("完全相同", "abc", "abc", 1),
+            ("重複字元", "aaa", "aa", 3),
+            ("空目標（DP 邊界）", "abc", "", 1),
+            ("s 短於 t", "ab", "abc", 0)
+        };
+
+        Console.WriteLine("=== 115. Distinct Subsequences ===");
+
+        int passedCount = 0;
+        foreach ((string name, string s, string t, int expected) in testCases)
+        {
+            if (RunTestCase(solver, name, s, t, expected))
+            {
+                passedCount++;
+            }
+        }
+
+        int totalCount = testCases.Length;
+        Console.WriteLine($"總結：{passedCount}/{totalCount} 通過，{totalCount - passedCount} 個失敗。");
+        Environment.ExitCode = passedCount == totalCount ? 0 : 1;
+    }
+
+    /// <summary>
+    /// 執行一組固定測試案例，呼叫 NumDistinct 並列印輸入、預期結果、
+    /// 實際結果與 PASS/FAIL。輸入是案例名稱、兩個字串與預期的不同子序列數量；
+    /// 回傳實際結果是否等於預期值。
+    /// </summary>
+    /// <param name="solver">包含 NumDistinct 解法的 Program 實例。</param>
+    /// <param name="name">測試案例名稱；僅供主控台輸出辨識。</param>
+    /// <param name="s">來源字串；測試案例可包含官方限制內的字串或額外邊界案例。</param>
+    /// <param name="t">目標字串；方法會計算它在 s 的不同子序列選法數量。</param>
+    /// <param name="expected">案例預期的不同子序列數量。</param>
+    /// <returns>實際結果與預期值相同時回傳 true，否則回傳 false。</returns>
+    private static bool RunTestCase(Program solver, string name, string s, string t, int expected)
+    {
+        int actual = solver.NumDistinct(s, t);
+        bool passed = actual == expected;
+
+        Console.WriteLine(
+            $"{name}：s = \"{s}\"，t = \"{t}\"，預期：{expected}，實際：{actual}，結果：{(passed ? "PASS" : "FAIL")}");
+
+        return passed;
     }
 
     /// <summary>
@@ -55,6 +105,8 @@ class Program
     {
         int m = s.Length;
         int n = t.Length;
+
+        // 來源字串比目標字串短時，沒有足夠字元可以完成 t，答案必定是 0。
         if(m < n)
         {
             return 0;
@@ -62,11 +114,13 @@ class Program
 
         int[,] dp = new int[m + 1, n + 1];
 
+        // dp[i, n] 代表從 s[i:] 組成空目標的方式；不選任何字元也是唯一一種方式。
         for(int i = 0; i <= m; i++)
         {
             dp[i, n] = 1;
         }
 
+        // 由右下往左上填表，讓轉移所需的 dp[i + 1, j] 與 dp[i + 1, j + 1] 已先完成。
         for(int i = m - 1; i >= 0; i--)
         {
             char sChar = s[i];
@@ -77,10 +131,12 @@ class Program
 
                 if(sChar == tChar)
                 {
+                    // 字元相等時可使用 s[i] 配對，或跳過 s[i] 尋找其他配對位置。
                     dp[i, j] = dp[i + 1, j + 1] + dp[i + 1, j];
                 }
                 else
                 {
+                    // 字元不同時不能配對，只能跳過目前的來源字元。
                     dp[i, j] = dp[i + 1, j];
                 }
             }
