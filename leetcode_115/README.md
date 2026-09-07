@@ -17,6 +17,7 @@
 - [題目說明](#題目說明)
 - [限制條件](#限制條件)
 - [解題概念與出發點](#解題概念與出發點)
+- [Ref](#ref)
 - [解法設計：二維 DP](#解法設計二維-dp)
 - [ASCII 陣列圖解](#ascii-陣列圖解)
 - [範例演示流程](#範例演示流程)
@@ -65,6 +66,11 @@ t = "bag"
 
 本專案另外使用 `t = ""` 驗證動態規劃的空目標邊界。空字串不在上述官方輸入限制內，
 但它能直接驗證「空目標在任何來源字串中都有一種選法：什麼都不選」這個基底條件。
+
+## Ref
+
+1. [官方解法](https://leetcode.cn/problems/distinct-subsequences/solutions/661122/bu-tong-de-zi-xu-lie-by-leetcode-solutio-urw3/?envType=daily-question&envId=2026-09-06)
+2. [灵茶山艾府](https://leetcode.cn/problems/distinct-subsequences/solutions/3060706/jiao-ni-yi-bu-bu-si-kao-dpcong-ji-yi-hua-9va6/?envType=daily-question&envId=2026-09-06)：提供 DP 以外的解法與不同思考方向。
 
 ## 解題概念與出發點
 
