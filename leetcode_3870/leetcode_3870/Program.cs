@@ -33,25 +33,70 @@ class Program
     /// <param name="args">Command-line arguments; not used by this documentation-only example. 命令列參數；此摘要範例不使用。</param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new Program();
+        string[] testNames =
+        {
+            "官方範例 1",
+            "官方範例 2",
+            "逗號門檻前",
+            "第一個逗號",
+            "最小合法輸入",
+            "最大限制"
+        };
+        int[] testInputs = { 1002, 998, 999, 1000, 1, 100000 };
+        int[] expectedResults = { 3, 0, 0, 1, 0, 99001 };
+        int passedCount = 0;
+
+        for (int index = 0; index < testInputs.Length; index++)
+        {
+            if (RunTestCase(solution, testNames[index], testInputs[index], expectedResults[index]))
+            {
+                passedCount++;
+            }
+        }
+
+        int failedCount = testInputs.Length - passedCount;
+        Console.WriteLine($"總結：{passedCount}/{testInputs.Length} 通過，{failedCount} 個失敗。");
+        Environment.ExitCode = failedCount == 0 ? 0 : 1;
     }
 
     /// <summary>
-    /// 方法一:遍歷計數
-    /// 思路与算法
-    /// 这个方法通过直接遍历从 1 到 n 的所有整数，来统计符合条件的数字个数。根据题意，在 [1,n] 的范围内（n≤105）
-    /// ，只有大于 999 的数才会在标准格式下包含一个逗号（例如 1,000）。因此，每次遇到循环变量大于 999 时，
-    /// 就将结果增加 1，最后返回总数即可。
+    /// 執行一組固定案例，分別驗證兩種 CountCommas 解法是否得到預期的逗號總數，並輸出 PASS 或 FAIL。
+    /// 輸入條件遵循題目的 1 &lt;= n &lt;= 10^5；輸出結果為該案例是否通過。
     /// </summary>
-    /// <param name="n"></param>
-    /// <returns></returns>
+    /// <param name="solution">要接受驗證的解法物件。</param>
+    /// <param name="caseName">固定案例的顯示名稱。</param>
+    /// <param name="n">要計算的整數上限。</param>
+    /// <param name="expected">案例預期的逗號總數。</param>
+    /// <returns>兩種解法都符合預期時回傳 true，否則回傳 false。</returns>
+    private static bool RunTestCase(Program solution, string caseName, int n, int expected)
+    {
+        int actualByIteration = solution.CountCommas(n);
+        int actualByFormula = solution.CountCommas2(n);
+        bool passed = actualByIteration == expected && actualByFormula == expected;
+        string result = passed ? "PASS" : "FAIL";
+
+        Console.WriteLine(
+            $"{caseName}：n = {n}，預期：{expected}，解法一：{actualByIteration}，解法二：{actualByFormula}，結果：{result}");
+        return passed;
+    }
+
+    /// <summary>
+    /// 方法一：遍歷計數。
+    /// 在題目限制 1 &lt;= n &lt;= 10^5 下，只有 1000 到 n 的數字包含逗號，且每個數字恰好包含一個逗號。
+    /// 此方法逐一檢查 1 到 n 的所有整數，遇到至少四位數的整數就累加一次，時間複雜度為 O(n)，額外空間複雜度為 O(1)。
+    /// 輸入條件是符合題目限制的整數 n，輸出結果是從 1 到 n 的逗號總數。
+    /// </summary>
+    /// <param name="n">要計算的整數上限，範圍為 1 &lt;= n &lt;= 10^5。</param>
+    /// <returns>從 1 到 n 以標準格式書寫時使用的逗號總數。</returns>
     public int CountCommas(int n)
     {
         int count = 0;
 
-        for(int i = 0; i < n; i++)
+        for (int value = 1; value <= n; value++)
         {
-            if(i > 999)
+            // 題目上限不超過 10^5，因此每個至少四位數的值恰好貢獻一個逗號。
+            if (value >= 1000)
             {
                 count++;
             }
@@ -60,22 +105,17 @@ class Program
     }
 
     /// <summary>
-    /// 方法二：直接计算
-    /// 思路与算法
-    /// 这个方法通过数学计算在 O(1) 的时间内得出答案。
-    /// 根据题目限制，在 [1,n] 的范围内（n≤105），
-    /// 只有大于等于 1000 的数才会包含且仅包含一个逗号（例如 1,000 到 100,000）。
-    /// 因此，如果 n≥1000，包含逗号的数字个数就是 n−999；
-    /// 如果 n<1000，则个数为 0。我们可以直接取 n−999 和 0 之间的最大值作为最终结果，避免了不必要的循环过程。
+    /// 方法二：直接計算。
+    /// 觀察到 1000 是第一個包含逗號的數字，而題目限制 n &lt;= 10^5，
+    /// 因此 [1000, n] 中的每個數字都恰好貢獻一個逗號。包含逗號的數字數量為 n - 999，
+    /// 再與 0 取最大值即可在 O(1) 時間、O(1) 額外空間內得到答案。
+    /// 輸入條件是符合題目限制的整數 n，輸出結果是從 1 到 n 的逗號總數。
     /// </summary>
-    /// <param name="n"></param>
-    /// <returns></returns> <summary>
-    /// 
-    /// </summary>
-    /// <param name="n"></param>
-    /// <returns></returns>
+    /// <param name="n">要計算的整數上限，範圍為 1 &lt;= n &lt;= 10^5。</param>
+    /// <returns>從 1 到 n 以標準格式書寫時使用的逗號總數。</returns>
     public int CountCommas2(int n)
     {
+        // [1000, n] 是包含逗號的整數區間，其長度為 n - 1000 + 1 = n - 999。
         return Math.Max(n - 999, 0);
     }
 }
