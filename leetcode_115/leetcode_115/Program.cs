@@ -50,11 +50,12 @@ class Program
     }
 
     /// <summary>
-    /// 執行一組固定測試案例，呼叫 NumDistinct 並列印輸入、預期結果、
-    /// 實際結果與 PASS/FAIL。輸入是案例名稱、兩個字串與預期的不同子序列數量；
-    /// 回傳實際結果是否等於預期值。
+    /// 執行一組固定測試案例，呼叫 NumDistinct 與 NumDistinct2，
+    /// 列印輸入、預期結果、兩種解法的實際結果與 PASS/FAIL。
+    /// 輸入是案例名稱、兩個字串與預期的不同子序列數量；
+    /// 只有兩種解法都符合預期值時才回傳 true。
     /// </summary>
-    /// <param name="solver">包含 NumDistinct 解法的 Program 實例。</param>
+    /// <param name="solver">包含 NumDistinct 與 NumDistinct2 解法的 Program 實例。</param>
     /// <param name="name">測試案例名稱；僅供主控台輸出辨識。</param>
     /// <param name="s">來源字串；測試案例可包含官方限制內的字串或額外邊界案例。</param>
     /// <param name="t">目標字串；方法會計算它在 s 的不同子序列選法數量。</param>
@@ -63,16 +64,17 @@ class Program
     private static bool RunTestCase(Program solver, string name, string s, string t, int expected)
     {
         int actual = solver.NumDistinct(s, t);
-        bool passed = actual == expected;
+        int optimizedActual = solver.NumDistinct2(s, t);
+        bool passed = actual == expected && optimizedActual == expected;
 
         Console.WriteLine(
-            $"{name}：s = \"{s}\"，t = \"{t}\"，預期：{expected}，實際：{actual}，結果：{(passed ? "PASS" : "FAIL")}");
+            $"{name}：s = \"{s}\"，t = \"{t}\"，預期：{expected}，解法一：{actual}（{(actual == expected ? "PASS" : "FAIL")}），解法二：{optimizedActual}（{(optimizedActual == expected ? "PASS" : "FAIL")}）");
 
         return passed;
     }
 
     /// <summary>
-    /// 使用動態規劃計算字串 <paramref name="s"/> 的所有子序列中，
+    /// 解法一：使用二維動態規劃計算字串 <paramref name="s"/> 的所有子序列中，
     /// 等於字串 <paramref name="t"/> 的不同子序列數量。
     ///
     /// 定義 dp[i, j] 表示在 s[i:] 的子序列中，t[j:] 出現的次數。
@@ -80,7 +82,7 @@ class Program
     /// 邊界條件：
     /// 1. 當 j == t.Length 時，t[j:] 為空字串。
     ///    空字串是任何字串的子序列，因此 dp[i, t.Length] = 1。
-    /// 2. 當 i == s.Length 且 j < t.Length 時，s[i:] 為空字串，
+    /// 2. 當 i == s.Length 且 j &lt; t.Length 時，s[i:] 為空字串，
     ///    無法組成非空的 t[j:]，因此 dp[s.Length, j] = 0。
     ///
     /// 狀態轉移：
@@ -107,7 +109,7 @@ class Program
         int n = t.Length;
 
         // 來源字串比目標字串短時，沒有足夠字元可以完成 t，答案必定是 0。
-        if(m < n)
+        if (m < n)
         {
             return 0;
         }
@@ -115,21 +117,21 @@ class Program
         int[,] dp = new int[m + 1, n + 1];
 
         // dp[i, n] 代表從 s[i:] 組成空目標的方式；不選任何字元也是唯一一種方式。
-        for(int i = 0; i <= m; i++)
+        for (int i = 0; i <= m; i++)
         {
             dp[i, n] = 1;
         }
 
         // 由右下往左上填表，讓轉移所需的 dp[i + 1, j] 與 dp[i + 1, j + 1] 已先完成。
-        for(int i = m - 1; i >= 0; i--)
+        for (int i = m - 1; i >= 0; i--)
         {
             char sChar = s[i];
 
-            for(int j = n - 1; j >= 0; j--)
+            for (int j = n - 1; j >= 0; j--)
             {
                 char tChar = t[j];
 
-                if(sChar == tChar)
+                if (sChar == tChar)
                 {
                     // 字元相等時可使用 s[i] 配對，或跳過 s[i] 尋找其他配對位置。
                     dp[i, j] = dp[i + 1, j + 1] + dp[i + 1, j];
@@ -143,5 +145,57 @@ class Program
         }
 
         return dp[0, 0];
+    }
+
+    /// <summary>
+    /// 解法二：使用一維動態規劃陣列計算字串 <paramref name="s"/> 的所有子序列中，
+    /// 等於字串 <paramref name="t"/> 的不同子序列數量。
+    ///
+    /// 沿用解法一的後綴狀態，但只保留目前列與下一列共用的欄位：
+    /// dp[j] 表示從目前的 s[i..] 組成 t[j..] 的方法數。
+    /// 每次處理新的 s[i] 前，dp[j] 仍是下一列的 dp[i + 1, j]，
+    /// 而尚未更新的 dp[j + 1] 是下一列的 dp[i + 1, j + 1]。
+    /// 當 s[i] == t[j] 時，將兩種選擇相加；不相等時保留原值，
+    /// 代表跳過目前的來源字元。
+    ///
+    /// 由於本方法使用後綴狀態，目標索引 j 必須由左至右更新，
+    /// 才能在覆寫 dp[j] 前保留上一列的 dp[j + 1]。
+    ///
+    /// 時間複雜度：O(m * n)。
+    /// 空間複雜度：O(n)。
+    /// 其中 m 為 s.Length，n 為 t.Length。
+    /// </summary>
+    /// <param name="s">來源字串，用來選擇子序列。</param>
+    /// <param name="t">目標字串。</param>
+    /// <returns>字串 <paramref name="s"/> 的子序列中，等於 <paramref name="t"/> 的不同子序列數量。</returns>
+    public int NumDistinct2(string s, string t)
+    {
+        int m = s.Length;
+        int n = t.Length;
+
+        if (m < n)
+        {
+            return 0;
+        }
+
+        int[] dp = new int[n + 1];
+
+        // dp[n] 代表空目標；不選取任何字元是唯一一種組成方式。
+        dp[n] = 1;
+
+        // 保留後綴狀態的依賴關係，因此來源索引由右至左、目標索引由左至右處理。
+        for (int i = m - 1; i >= 0; i--)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (s[i] == t[j])
+                {
+                    // dp[j] 是跳過 s[i] 的數量，尚未更新的 dp[j + 1] 是使用 s[i] 的數量。
+                    dp[j] += dp[j + 1];
+                }
+            }
+        }
+
+        return dp[0];
     }
 }
