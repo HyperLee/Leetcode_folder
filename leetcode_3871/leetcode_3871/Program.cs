@@ -97,7 +97,7 @@ class Program
 
     /// <summary>
     /// 執行一組固定案例，驗證 CountCommas 是否回傳預期的逗號總數並輸出結果。
-    /// 輸入條件遵循題目的 1 &lt;= n &lt;= 10^15；兩者相等時回傳 true，否則回傳 false。
+    /// 輸入條件遵循題目的 1 <= n <= 10^15；兩者相等時回傳 true，否則回傳 false。
     /// </summary>
     /// <param name="solution">要接受驗證的解法物件。</param>
     /// <param name="caseName">固定案例的顯示名稱。</param>
@@ -118,10 +118,10 @@ class Program
     /// <summary>
     /// 使用門檻貢獻法，計算從 1 到 n 以標準格式書寫時的逗號總數。
     /// 每個 1000 的次方代表一個逗號位置；對於每個不超過 n 的門檻，
-    /// [門檻, n] 中的每個整數各貢獻一個逗號。輸入條件為 1 &lt;= n &lt;= 10^15，
+    /// [門檻, n] 中的每個整數各貢獻一個逗號。輸入條件為 1 <= n <= 10^15，
     /// 輸出結果為所有整數使用的逗號總數，時間複雜度為 O(log_1000 n)，額外空間複雜度為 O(1)。
     /// </summary>
-    /// <param name="n">要計算的整數上限，範圍為 1 &lt;= n &lt;= 10^15。</param>
+    /// <param name="n">要計算的整數上限，範圍為 1 <= n <= 10^15。</param>
     /// <returns>從 1 到 n 以標準格式書寫時使用的逗號總數。</returns>
     public long CountCommas(long n)
     {
