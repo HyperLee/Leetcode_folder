@@ -96,8 +96,8 @@ class Program
     }
 
     /// <summary>
-    /// 執行一組固定案例，驗證 CountCommas 是否回傳預期的逗號總數並輸出結果。
-    /// 輸入條件遵循題目的 1 <= n <= 10^15；兩者相等時回傳 true，否則回傳 false。
+    /// 執行一組固定案例，驗證兩種解法是否回傳預期的逗號總數並輸出結果。
+    /// 輸入條件遵循題目的 1 <= n <= 10^15；兩種解法結果都符合預期時回傳 true，否則回傳 false。
     /// </summary>
     /// <param name="solution">要接受驗證的解法物件。</param>
     /// <param name="caseName">固定案例的顯示名稱。</param>
@@ -107,11 +107,12 @@ class Program
     private static bool RunTestCase(Program solution, string caseName, long n, long expected)
     {
         long actual = solution.CountCommas(n);
-        bool passed = actual == expected;
+        long actual2 = solution.CountCommas2(n);
+        bool passed = actual == expected && actual2 == expected;
         string result = passed ? "PASS" : "FAIL";
 
         Console.WriteLine(
-            $"{caseName}：n = {n}，預期：{expected}，實際：{actual}，結果：{result}");
+            $"{caseName}：n = {n}，預期：{expected}，解法一：{actual}，解法二：{actual2}，結果：{result}");
         return passed;
     }
 
@@ -135,5 +136,22 @@ class Program
         }
 
         return totalCommas;
+    }
+
+    /// <summary>
+    /// 使用固定數學公式，計算從 1 到 n 以標準格式書寫時的逗號總數。
+    /// 第 k 個逗號的門檻為 1000^k，因此該位置的貢獻是
+    /// max(n - (1000^k - 1), 0)。依照題目 n <= 10^15 的限制，
+    /// 直接展開五個可能的逗號位置；時間複雜度為 O(1)，額外空間複雜度為 O(1)。
+    /// </summary>
+    /// <param name="n">要計算的整數上限，範圍為 1 <= n <= 10^15。</param>
+    /// <returns>從 1 到 n 以標準數字格式書寫時使用的逗號總數。</returns>
+    public long CountCommas2(long n)
+    {
+        return Math.Max(n - 999L, 0L)
+            + Math.Max(n - 999_999L, 0L)
+            + Math.Max(n - 999_999_999L, 0L)
+            + Math.Max(n - 999_999_999_999L, 0L)
+            + Math.Max(n - 999_999_999_999_999L, 0L);
     }
 }
