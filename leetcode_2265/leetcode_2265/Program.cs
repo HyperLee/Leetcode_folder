@@ -52,15 +52,15 @@ internal class Program
     {
         (string Name, string Input, string Expected, Func<string> Evaluate)[] cases =
         [
-            ("Official example", "[4,8,5,0,1,null,6]", "5", () => AverageOfSubtree(CreateOfficialTree()).ToString()),
-            ("Single node", "[1]", "1", () => AverageOfSubtree(new TreeNode(1)).ToString()),
-            ("Root equals truncated average", "[2,1,4]", "3", () => AverageOfSubtree(new TreeNode(2, new TreeNode(1), new TreeNode(4))).ToString()),
-            ("Root does not equal average", "[9,1,1]", "2", () => AverageOfSubtree(new TreeNode(9, new TreeNode(1), new TreeNode(1))).ToString()),
-            ("All zeroes", "[0,0,0]", "3", () => AverageOfSubtree(new TreeNode(0, new TreeNode(0), new TreeNode(0))).ToString()),
-            ("Right-skewed mixed values", "[3,null,1,null,0]", "1", () => AverageOfSubtree(new TreeNode(3, null, new TreeNode(1, null, new TreeNode(0)))).ToString()),
-            ("Repeated call on same official tree", "same [4,8,5,0,1,null,6] instance", "(5, 5)", EvaluateRepeatedCall),
-            ("Truncating average and tree topology preservation", "snapshot [2,1]", "1; True", VerifyTruncatingAverageAndTopologyPreserved),
-            ("Right-skewed limit spot check", "1000 zero-valued nodes", "1000", () => AverageOfSubtree(CreateRightSkewedZeroTree(1000)).ToString())
+            ("Official example", "[4,8,5,0,1,null,6]", "5; 5", () => EvaluateBoth(CreateOfficialTree)),
+            ("Single node", "[1]", "1; 1", () => EvaluateBoth(() => new TreeNode(1))),
+            ("Root equals truncated average", "[2,1,4]", "3; 3", () => EvaluateBoth(() => new TreeNode(2, new TreeNode(1), new TreeNode(4)))),
+            ("Root does not equal average", "[9,1,1]", "2; 2", () => EvaluateBoth(() => new TreeNode(9, new TreeNode(1), new TreeNode(1)))),
+            ("All zeroes", "[0,0,0]", "3; 3", () => EvaluateBoth(() => new TreeNode(0, new TreeNode(0), new TreeNode(0)))),
+            ("Right-skewed mixed values", "[3,null,1,null,0]", "1; 1", () => EvaluateBoth(() => new TreeNode(3, null, new TreeNode(1, null, new TreeNode(0))))),
+            ("Repeated call on same official tree", "same [4,8,5,0,1,null,6] instance", "(5, 5); (5, 5)", EvaluateRepeatedCall),
+            ("Truncating average and tree topology preservation", "snapshot [2,1]", "1; 1; True", VerifyTruncatingAverageAndTopologyPreserved),
+            ("Right-skewed limit spot check", "1000 zero-valued nodes", "1000; 1000", () => EvaluateBoth(() => CreateRightSkewedZeroTree(1000)))
         ];
 
         int passed = 0;
@@ -140,10 +140,18 @@ internal class Program
             new TreeNode(5, null, new TreeNode(6)));
     }
 
+    private static string EvaluateBoth(Func<TreeNode> createTree)
+    {
+        Program solutionTwo = new();
+        TreeNode root = createTree();
+        return $"{AverageOfSubtree(root)}; {solutionTwo.AverageOfSubtree2(root)}";
+    }
+
     private static string EvaluateRepeatedCall()
     {
+        Program solutionTwo = new();
         TreeNode root = CreateOfficialTree();
-        return $"({AverageOfSubtree(root)}, {AverageOfSubtree(root)})";
+        return $"({AverageOfSubtree(root)}, {AverageOfSubtree(root)}); ({solutionTwo.AverageOfSubtree2(root)}, {solutionTwo.AverageOfSubtree2(root)})";
     }
 
     private static string VerifyTruncatingAverageAndTopologyPreserved()
@@ -152,7 +160,9 @@ internal class Program
         List<(TreeNode Node, int Value, TreeNode? Left, TreeNode? Right)> snapshot = [];
         SnapshotTopology(root, snapshot);
 
-        int matches = AverageOfSubtree(root);
+        Program solutionTwo = new();
+        int methodOneMatches = AverageOfSubtree(root);
+        int methodTwoMatches = solutionTwo.AverageOfSubtree2(root);
         bool isTopologyPreserved = true;
 
         foreach ((TreeNode node, int value, TreeNode? left, TreeNode? right) in snapshot)
@@ -164,7 +174,7 @@ internal class Program
             }
         }
 
-        return $"{matches}; {isTopologyPreserved}";
+        return $"{methodOneMatches}; {methodTwoMatches}; {isTopologyPreserved}";
     }
 
     private static void SnapshotTopology(TreeNode? node, List<(TreeNode Node, int Value, TreeNode? Left, TreeNode? Right)> snapshot)
@@ -191,5 +201,50 @@ internal class Program
         }
 
         return root;
+    }
+
+    /// <summary>
+    /// 使用後序深度優先搜尋，統計節點值等於其完整子樹整數平均值的節點數。
+    /// 每個遞迴呼叫以長度為二的陣列回傳目前子樹的節點值總和與節點數，並在合併完成後判斷目前節點；
+    /// 輸入為題目保證至少包含一個節點、節點值介於 0 與 1000 的二元樹，回傳符合條件的節點總數。
+    /// </summary>
+    /// <param name="root">待統計的非空二元樹根節點。</param>
+    /// <returns>值等於其子樹整數平均值的節點數。</returns>
+    public int AverageOfSubtree2(TreeNode root)
+    {
+        int matches = 0;
+        Dfs2(root, ref matches);
+        return matches;
+    }
+
+    /// <summary>
+    /// 以後序走訪回傳目前子樹的節點值總和與節點數，並透過區域參考參數累計符合條件的節點。
+    /// 回傳陣列的索引 0 是總和、索引 1 是節點數；空節點回傳 `[0, 0]`，非空節點則先合併左右結果，
+    /// 再以整數除法判斷目前節點是否等於子樹平均值。
+    /// </summary>
+    /// <param name="node">目前子樹的根節點；空節點代表沒有子樹資料。</param>
+    /// <param name="matches">目前走訪已累計的符合節點數，只在本次呼叫的區域狀態中更新。</param>
+    /// <returns>長度為二的陣列 `[子樹總和, 子樹節點數]`。</returns>
+    private static int[] Dfs2(TreeNode? node, ref int matches)
+    {
+        if (node is null)
+        {
+            return [0, 0];
+        }
+
+        int[] left = Dfs2(node.left, ref matches);
+        int[] right = Dfs2(node.right, ref matches);
+
+        // 左右子樹完成後，才能合併出目前子樹的總和與節點數。
+        int sum = left[0] + right[0] + node.val;
+        int count = left[1] + right[1] + 1;
+
+        // 題目要求使用整數除法；符合時只更新本次公開方法的區域計數。
+        if (node.val == sum / count)
+        {
+            matches++;
+        }
+
+        return [sum, count];
     }
 }
