@@ -63,8 +63,8 @@ left_1 < right_1 <= left_2 < right_2 <= ... <= left_k < right_k
 
 ```text
 points:    0---1---2---3
-segment 1: [===========]
-           0           2
+segment 1: [=======]
+           0       2
 segment 2:         [===]
                    2   3
 
