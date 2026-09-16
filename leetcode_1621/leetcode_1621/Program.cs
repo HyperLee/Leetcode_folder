@@ -61,9 +61,139 @@ class Program
     /// - 1 &lt;= k &lt;= n - 1
     /// </para>
     /// </summary>
+    /// <remarks>
+    /// 直接執行程式時會使用題目提供的三組範例，分別呼叫兩種解法，輸出預期值、實際值與 PASS/FAIL；
+    /// 所有案例都通過時結束碼為 0，否則為 1。
+    /// </remarks>
     /// <param name="args"></param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        Program solution = new();
+        (int n, int k, int expected)[] testCases =
+        {
+            (4, 2, 5),
+            (3, 1, 3),
+            (30, 7, 796297179)
+        };
+
+        int passedCount = 0;
+        for (int caseIndex = 0; caseIndex < testCases.Length; caseIndex++)
+        {
+            (int n, int k, int expected) testCase = testCases[caseIndex];
+            int dynamicProgrammingResult = solution.NumberOfSets(testCase.n, testCase.k);
+            int combinatoricsResult = solution.NumberOfSets2(testCase.n, testCase.k);
+            bool dynamicProgrammingPassed = dynamicProgrammingResult == testCase.expected;
+            bool combinatoricsPassed = combinatoricsResult == testCase.expected;
+            bool casePassed = dynamicProgrammingPassed && combinatoricsPassed;
+
+            Console.WriteLine($"Case: Example {caseIndex + 1} (n = {testCase.n}, k = {testCase.k})");
+            Console.WriteLine($"Expected: {testCase.expected}");
+            Console.WriteLine($"NumberOfSets (DP): {dynamicProgrammingResult} [{(dynamicProgrammingPassed ? "PASS" : "FAIL")}]");
+            Console.WriteLine($"NumberOfSets2 (Combinatorics): {combinatoricsResult} [{(combinatoricsPassed ? "PASS" : "FAIL")}]");
+            Console.WriteLine();
+
+            if (casePassed)
+            {
+                passedCount++;
+            }
+        }
+
+        Console.WriteLine($"Summary: {passedCount}/{testCases.Length} cases passed.");
+        Environment.ExitCode = passedCount == testCases.Length ? 0 : 1;
+    }
+
+    /// <summary>
+    /// 方法一：使用一維動態規劃計算恰好繪製 k 條不重疊線段的方式數量。
+    /// <c>dp[j]</c> 表示目前線段數量下，所有端點不超過第 j 個點的方式數；
+    /// 轉移時用前綴和一次整理「最後一條線段以 j 為右端點」的所有起點選擇。
+    /// 輸入必須符合 <c>2 &lt;= n &lt;= 1000</c> 與 <c>1 &lt;= k &lt;= n - 1</c>，輸出為對 10^9 + 7 取模後的方式數。
+    /// </summary>
+    /// <param name="n">一維平面上的點數，範圍為 2 到 1000。</param>
+    /// <param name="k">必須繪製的線段數，範圍為 1 到 n - 1。</param>
+    /// <returns>繪製恰好 k 條不重疊線段的方式數量，結果已對 10^9 + 7 取模。</returns>
+    public int NumberOfSets(int n, int k)
+    {
+        const int MOD = 1000000007;
+        int[] dp = new int[n];
+        int[] prefixSums = new int[n + 1];
+
+        // k = 0 時不選任何線段，因此每個右界都只有一種空集合。
+        for(int j = 0; j < n; j++)
+        {
+            dp[j] = 1;
+            prefixSums[j + 1] = (prefixSums[j] + dp[j]) % MOD;
+        }
+
+        for(int i = 1; i <= k; i++)
+        {
+            dp[0] = 0;
+            for(int j = 1; j < n; j++)
+            {
+                // 不使用 j 作為端點時沿用 dp[j - 1]；使用 j 作為最後右端點時，
+                // prefixSums[j] 已累加所有合法起點 t < j 的前一輪狀態。
+                dp[j] = (dp[j - 1] + prefixSums[j]) % MOD;
+            }
+
+            // 將本輪結果重建為前綴和，供下一條線段的轉移使用。
+            for(int j = 0; j < n; j++)
+            {
+                prefixSums[j + 1] = (prefixSums[j] + dp[j]) % MOD;
+            }
+        }
+        return dp[n - 1];
+    }
+
+
+    private const long MOD = 1000000007;
+
+    /// <summary>
+    /// 使用二進位快速冪計算 <c>a^e mod MOD</c>。
+    /// 指數 e 必須是非負數；此方法也用來依費馬小定理求組合數分母的模反元素。
+    /// </summary>
+    /// <param name="a">要計算的底數，會在每次乘法後對 MOD 取模。</param>
+    /// <param name="e">非負整數指數。</param>
+    /// <returns>a 的 e 次方對 MOD 取模後的結果。</returns>
+    private long QuickPow(long a, long e)
+    {
+        long res = 1;
+        while(e > 0)
+        {
+            // 指數的最低位為 1 時，將目前這一位的冪乘入答案。
+            if((e & 1) != 0)
+            {
+                res = res * a % MOD;
+            }
+
+            // 平方底數，準備處理指數的下一個二進位位元。
+            a = a * a % MOD;
+            e >>= 1;
+        }
+        return res;
+    }
+
+    /// <summary>
+    /// 方法二：使用組合數學計算答案 <c>C(n + k - 1, 2k)</c>。
+    /// 將線段端點轉換為嚴格遞增序列後，問題等價於從 n + k - 1 個位置選出 2k 個端點；
+    /// 方法以乘法累計分子與分母，再用費馬小定理的模反元素完成除法。
+    /// 輸入必須符合 <c>2 &lt;= n &lt;= 1000</c> 與 <c>1 &lt;= k &lt;= n - 1</c>，輸出為取模後的方式數。
+    /// </summary>
+    /// <param name="n">一維平面上的點數，範圍為 2 到 1000。</param>
+    /// <param name="k">必須繪製的線段數，範圍為 1 到 n - 1。</param>
+    /// <returns>繪製恰好 k 條不重疊線段的方式數量，結果已對 10^9 + 7 取模。</returns>
+    public int NumberOfSets2(int n, int k)
+    {
+        int m = 2 * k;
+        long numerator = 1;
+        long denominator = 1;
+
+        // C(n + k - 1, 2k) = 分子 / (2k)!；每一步都先取模避免整數溢位。
+        for(int i = 1; i <= m; i++)
+        {
+            numerator = numerator * (n + k - i) % MOD;
+            denominator = denominator * i % MOD;
+        }
+
+        // MOD 是質數，依費馬小定理以 denominator^(MOD - 2) 取代模除法。
+        return (int)(numerator * QuickPow(denominator, MOD - 2) % MOD);
     }
 }
