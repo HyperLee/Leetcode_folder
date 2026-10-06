@@ -1,7 +1,7 @@
 # LeetCode 921：使括號有效的最少添加
 
 這個專案使用 C# / .NET 10 實作 LeetCode 921「Minimum Add to Make Parentheses Valid」。
-程式以貪心法從左至右掃描括號字串，計算最少需要插入多少個括號，才能讓整個字串成為有效括號字串。
+程式提供兩種解法：解法一使用貪心法從左至右掃描，解法二使用 Stack 保存未配對括號；兩者都計算最少需要插入多少個括號，才能讓整個字串成為有效括號字串。
 
 題目連結：[Minimum Add to Make Parentheses Valid](https://leetcode.com/problems/minimum-add-to-make-parentheses-valid/description/)
 
@@ -78,6 +78,62 @@
 - 時間複雜度：`O(n)`，每個字元只掃描一次。
 - 空間複雜度：`O(1)`，只使用 `leftCount`、`res` 與少量迴圈變數。
 
+## 解法二：Stack 保存未配對括號
+
+### 核心想法
+
+解法一只記錄「尚未配對的左括號數量」；解法二則直接使用 `Stack<char>` 保存目前尚未配對的括號，讓每個括號的配對過程更直觀：
+
+- 讀到 `(`：推入 Stack，等待後面的 `)` 配對。
+- 讀到 `)`：若 Stack 頂端是 `(`，就取出頂端完成一組配對。
+- 讀到 `)` 且無法與 Stack 頂端的 `(` 配對：把這個 `)` 推入 Stack，表示之後必須插入一個 `(`。
+
+掃描結束後，Stack 中每個尚未配對的括號都需要一個插入的括號：未配對的 `(` 需要補 `)`，未配對的 `)` 需要補 `(`。因此 Stack 的元素數量就是最少插入次數。
+
+### 掃描流程
+
+對字串中的每個字元依序處理：
+
+1. 若字元是 `(`，執行 `stack.Push(c)`。
+2. 若字元是 `)` 且 Stack 不為空、頂端是 `(`，執行 `stack.Pop()` 完成配對。
+3. 其他情況代表目前的 `)` 沒有可配對的左括號，執行 `stack.Push(c)` 保留這個未配對的右括號。
+4. 掃描結束後回傳 `stack.Count`。
+
+### 為什麼是最少次數
+
+當遇到 `)` 時，只要 Stack 頂端有未配對的 `(`，就立即配對；這不需要新增括號，也是當下能減少未配對數量的唯一方式。若沒有可配對的 `(`，這個 `)` 必須由某個新插入的 `(` 配對，因此保留在 Stack 中代表一個不可避免的插入成本。
+
+掃描結束後，Stack 中的每個元素都仍然缺少一個相反方向的括號，而且一個插入的括號最多只能補足一個未配對括號。因此每個 Stack 元素各需要一次插入，`stack.Count` 正好是最少答案。
+
+### 程式狀態與實作對照
+
+| 程式條件或動作 | Stack 狀態變化 | 解題意義 |
+| --- | --- | --- |
+| `c == '('` | `stack.Push(c)` | 保存一個等待右括號的左括號 |
+| 頂端是 `(` 且目前是 `)` | `stack.Pop()` | 取出一個左括號，完成配對 |
+| 目前的 `)` 無法配對 | `stack.Push(c)` | 保存一個需要補左括號的右括號 |
+| 迴圈結束 | `return stack.Count` | 每個剩餘括號各需要補一個相反括號 |
+
+### 複雜度
+
+- 時間複雜度：`O(n)`，每個字元只會被 Push 一次，或在配對時被 Pop 一次。
+- 空間複雜度：`O(n)`，最壞情況下所有字元都會留在 Stack 中，例如 `"((("` 或 `")))"`。
+
+### 範例演示流程
+
+以 `s = "())(()"` 為例，Stack 內容由底部到頂端表示如下：
+
+| 索引 | 字元 | 動作 | Stack（底 → 頂） |
+| ---: | :---: | --- | --- |
+| 0 | `(` | Push `(` | `[(]` |
+| 1 | `)` | 與頂端 `(` 配對並 Pop | `[]` |
+| 2 | `)` | 沒有 `(` 可配對，Push `)` | `[)]` |
+| 3 | `(` | Push `(` | `[), (]` |
+| 4 | `(` | Push `(` | `[), (, (]` |
+| 5 | `)` | 與頂端 `(` 配對並 Pop | `[), (]` |
+
+掃描結束後 Stack 還有一個 `)` 與一個 `(`，所以需要分別補一個 `(` 與一個 `)`；答案是 `2`。
+
 ## 範例演示流程
 
 ### 範例一：`s = "())"`
@@ -129,14 +185,14 @@ dotnet run --no-build --project .\leetcode_921\leetcode_921.csproj
 `Main` 不讀取 stdin，而是直接執行 `Program.cs` 中的七筆固定案例。成功時預期輸出如下：
 
 ```text
-<empty> -> expected=0, actual=0, result=PASS
-"()" -> expected=0, actual=0, result=PASS
-"())" -> expected=1, actual=1, result=PASS
-"(((" -> expected=3, actual=3, result=PASS
-"))" -> expected=2, actual=2, result=PASS
-"())(()" -> expected=2, actual=2, result=PASS
-"()))" -> expected=2, actual=2, result=PASS
-Summary: 7/7 checks passed.
+<empty> -> expected=0, greedy=0 (PASS), stack=0 (PASS)
+"()" -> expected=0, greedy=0 (PASS), stack=0 (PASS)
+"())" -> expected=1, greedy=1 (PASS), stack=1 (PASS)
+"(((" -> expected=3, greedy=3 (PASS), stack=3 (PASS)
+"))" -> expected=2, greedy=2 (PASS), stack=2 (PASS)
+"())(()" -> expected=2, greedy=2 (PASS), stack=2 (PASS)
+"()))" -> expected=2, greedy=2 (PASS), stack=2 (PASS)
+Summary: greedy=7/7, stack=7/7 checks passed.
 ```
 
 ## 邊界案例整理
@@ -164,4 +220,4 @@ leetcode_921/
 └── README.md
 ```
 
-`Program.cs` 包含題目 XML 描述、固定案例 runner，以及 `MinAddToMakeValid` 貪心解法；`leetcode_921.csproj` 定義 .NET 10 console 專案。
+`Program.cs` 包含題目 XML 描述、固定案例 runner、`MinAddToMakeValid` 貪心解法與 `MinAddToMakeValid2` Stack 解法；`leetcode_921.csproj` 定義 .NET 10 console 專案。

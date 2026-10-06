@@ -36,8 +36,8 @@ class Program
     /// 請回傳使 s 變成有效括號字串所需的最少操作次數。
     /// </summary>
     /// <remarks>
-    /// Main 使用固定測試案例呼叫解法並輸出每筆案例的預期值、實際值與 PASS/FAIL 結果，
-    /// 不讀取標準輸入。
+    /// Main 使用固定測試案例呼叫貪心與 Stack 兩種解法，並輸出每筆案例的預期值、實際值與
+    /// PASS/FAIL 結果，不讀取標準輸入。
     /// </remarks>
     /// <param name="args"></param>
     static void Main(string[] args)
@@ -54,27 +54,40 @@ class Program
         };
 
         var solution = new Program();
-        int passed = 0;
+        int greedyPassed = 0;
+        int stackPassed = 0;
 
         foreach (var testCase in testCases)
         {
-            int actual = solution.MinAddToMakeValid(testCase.Input);
-            bool isPassed = actual == testCase.Expected;
-            if (isPassed)
+            int greedyActual = solution.MinAddToMakeValid(testCase.Input);
+            int stackActual = solution.MinAddToMakeValid2(testCase.Input);
+            bool greedyIsPassed = greedyActual == testCase.Expected;
+            bool stackIsPassed = stackActual == testCase.Expected;
+            if (greedyIsPassed)
             {
-                passed++;
+                greedyPassed++;
+            }
+
+            if (stackIsPassed)
+            {
+                stackPassed++;
             }
 
             string displayInput = testCase.Input.Length == 0
                 ? "<empty>"
                 : $"\"{testCase.Input}\"";
-            string result = isPassed ? "PASS" : "FAIL";
+            string greedyResult = greedyIsPassed ? "PASS" : "FAIL";
+            string stackResult = stackIsPassed ? "PASS" : "FAIL";
             Console.WriteLine(
-                $"{displayInput} -> expected={testCase.Expected}, actual={actual}, result={result}");
+                $"{displayInput} -> expected={testCase.Expected}, " +
+                $"greedy={greedyActual} ({greedyResult}), " +
+                $"stack={stackActual} ({stackResult})");
         }
 
-        Console.WriteLine($"Summary: {passed}/{testCases.Length} checks passed.");
-        if (passed != testCases.Length)
+        Console.WriteLine(
+            $"Summary: greedy={greedyPassed}/{testCases.Length}, " +
+            $"stack={stackPassed}/{testCases.Length} checks passed.");
+        if (greedyPassed != testCases.Length || stackPassed != testCases.Length)
         {
             Environment.ExitCode = 1;
         }
@@ -118,5 +131,35 @@ class Program
         // 掃描結束後，每個未配對的左括號都必須補一個右括號。
         res += leftCount;
         return res;
+    }
+
+    /// <summary>
+    /// 使用 Stack 保存尚未配對的括號，計算使輸入變成有效括號字串所需的最少插入次數。
+    /// 遇到左括號時推入堆疊；遇到右括號時，若堆疊頂端是左括號就取出配對，否則保留這個
+    /// 無法配對的右括號。掃描結束後，堆疊中的每個括號都需要一個插入的括號才能完成修正。
+    /// </summary>
+    /// <param name="s">只包含 '(' 與 ')' 的括號字串。</param>
+    /// <returns>使 s 成為有效括號字串所需的最少插入數量。</returns>
+    public int MinAddToMakeValid2(string s)
+    {
+        Stack<char> stack = new();
+
+        foreach (char c in s)
+        {
+            if (c == '(')
+            {
+                stack.Push(c);
+            }
+            else if (stack.Count > 0 && stack.Peek() == '(')
+            {
+                stack.Pop();
+            }
+            else
+            {
+                stack.Push(c);
+            }
+        }
+
+        return stack.Count;
     }
 }
