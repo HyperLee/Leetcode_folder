@@ -1,4 +1,6 @@
-﻿namespace leetcode_301;
+﻿using System.Text;
+
+namespace leetcode_301;
 
 class Program
 {
@@ -34,31 +36,41 @@ class Program
         };
 
         var solution = new Program();
+        var methods = new (string Name, Func<string, IList<string>> Solve)[]
+        {
+            ("解法 1 - 回溯與剪枝", solution.RemoveInvalidParentheses),
+            ("解法 2 - 餘額剪枝 DFS", solution.RemoveInvalidParentheses2),
+            ("解法 3 - BFS", solution.RemoveInvalidParentheses3)
+        };
         int passedCount = 0;
+        int totalChecks = testCases.Length * methods.Length;
 
         foreach (var (input, expected) in testCases)
         {
-            string[] actual = solution.RemoveInvalidParentheses(input)
-                .OrderBy(value => value, StringComparer.Ordinal)
-                .ToArray();
             string[] expectedSorted = expected
                 .OrderBy(value => value, StringComparer.Ordinal)
                 .ToArray();
-            bool passed = actual.SequenceEqual(expectedSorted);
-
             string inputDisplay = input.Length == 0 ? "\"\"" : $"\"{input}\"";
             string expectedDisplay = "[" + string.Join(", ", expectedSorted.Select(value => "\"" + value + "\"")) + "]";
-            string actualDisplay = "[" + string.Join(", ", actual.Select(value => "\"" + value + "\"")) + "]";
 
-            Console.WriteLine($"{(passed ? "PASS" : "FAIL")}: input={inputDisplay}, expected={expectedDisplay}, actual={actualDisplay}");
-            if (passed)
+            foreach (var (name, solve) in methods)
             {
-                passedCount++;
+                string[] actual = solve(input)
+                    .OrderBy(value => value, StringComparer.Ordinal)
+                    .ToArray();
+                bool passed = actual.SequenceEqual(expectedSorted);
+                string actualDisplay = "[" + string.Join(", ", actual.Select(value => "\"" + value + "\"")) + "]";
+
+                Console.WriteLine($"{name} {(passed ? "PASS" : "FAIL")}: input={inputDisplay}, expected={expectedDisplay}, actual={actualDisplay}");
+                if (passed)
+                {
+                    passedCount++;
+                }
             }
         }
 
-        Console.WriteLine($"{passedCount}/{testCases.Length} checks passed.");
-        Environment.ExitCode = passedCount == testCases.Length ? 0 : 1;
+        Console.WriteLine($"{passedCount}/{totalChecks} checks passed.");
+        Environment.ExitCode = passedCount == totalChecks ? 0 : 1;
     }
 
     private IList<string> res = new List<string>();
@@ -97,6 +109,147 @@ class Program
         // 固定最少移除數後，只搜尋符合這兩個數量的候選字串。
         Helper(s, 0, lremove, rremove);
         return res;
+    }
+
+    /// <summary>
+    /// 以 StringBuilder 和括號餘額剪枝，回傳所有只需最少刪除次數即可成為有效字串的唯一結果。
+    /// </summary>
+    /// <param name="s">只包含小寫英文字母、左括號與右括號的字串；空字串也可供本專案的額外案例驗證。</param>
+    /// <returns>所有刪除最少數量括號後得到的有效字串；回傳順序不限。</returns>
+    public IList<string> RemoveInvalidParentheses2(string s)
+    {
+        int leftRemove = 0;
+        int rightRemove = 0;
+
+        for (int i = 0; i < s.Length; i++)
+        {
+            if (s[i] == '(')
+            {
+                leftRemove++;
+            }
+            else if (s[i] == ')')
+            {
+                if (leftRemove == 0)
+                {
+                    rightRemove++;
+                }
+                else
+                {
+                    leftRemove--;
+                }
+            }
+        }
+
+        int[] remainingLeft = new int[s.Length + 1];
+        int[] remainingRight = new int[s.Length + 1];
+        for (int i = s.Length - 1; i >= 0; i--)
+        {
+            remainingLeft[i] = remainingLeft[i + 1] + (s[i] == '(' ? 1 : 0);
+            remainingRight[i] = remainingRight[i + 1] + (s[i] == ')' ? 1 : 0);
+        }
+
+        var path = new StringBuilder(s.Length);
+        var results = new HashSet<string>(StringComparer.Ordinal);
+        Search(0, leftRemove, rightRemove, 0);
+        return results.ToList();
+
+        void Search(int index, int leftRemaining, int rightRemaining, int balance)
+        {
+            if (leftRemaining > remainingLeft[index] || rightRemaining > remainingRight[index])
+            {
+                return;
+            }
+
+            // 剩餘的右括號中，必須刪除 rightRemaining 個，其餘才能用來配對目前餘額。
+            if (balance > remainingRight[index] - rightRemaining)
+            {
+                return;
+            }
+
+            if (index == s.Length)
+            {
+                if (leftRemaining == 0 && rightRemaining == 0 && balance == 0)
+                {
+                    results.Add(path.ToString());
+                }
+                return;
+            }
+
+            char current = s[index];
+            if (current == '(' && leftRemaining > 0
+                && (path.Length == 0 || path[^1] != current))
+            {
+                // 若結果尾端已有相同括號，刪除目前括號會與刪除尾端括號形成等價候選。
+                Search(index + 1, leftRemaining - 1, rightRemaining, balance);
+            }
+            else if (current == ')' && rightRemaining > 0
+                && (path.Length == 0 || path[^1] != current))
+            {
+                Search(index + 1, leftRemaining, rightRemaining - 1, balance);
+            }
+
+            if (current == '(')
+            {
+                path.Append(current);
+                Search(index + 1, leftRemaining, rightRemaining, balance + 1);
+                path.Length--;
+            }
+            else if (current == ')')
+            {
+                if (balance > 0)
+                {
+                    path.Append(current);
+                    Search(index + 1, leftRemaining, rightRemaining, balance - 1);
+                    path.Length--;
+                }
+            }
+            else
+            {
+                path.Append(current);
+                Search(index + 1, leftRemaining, rightRemaining, balance);
+                path.Length--;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 以逐層廣度優先搜尋移除括號，回傳最少刪除層級中的所有有效唯一結果。
+    /// </summary>
+    /// <param name="s">只包含小寫英文字母、左括號與右括號的字串；空字串也可供本專案的額外案例驗證。</param>
+    /// <returns>所有刪除最少數量括號後得到的有效字串；回傳順序不限。</returns>
+    public IList<string> RemoveInvalidParentheses3(string s)
+    {
+        var currentLevel = new HashSet<string>(StringComparer.Ordinal) { s };
+
+        while (true)
+        {
+            List<string> validResults = currentLevel.Where(IsValid).ToList();
+            if (validResults.Count > 0)
+            {
+                return validResults;
+            }
+
+            var nextLevel = new HashSet<string>(StringComparer.Ordinal);
+            foreach (string candidate in currentLevel)
+            {
+                for (int i = 0; i < candidate.Length; i++)
+                {
+                    if (candidate[i] != '(' && candidate[i] != ')')
+                    {
+                        continue;
+                    }
+
+                    if (i > 0 && candidate[i] == candidate[i - 1])
+                    {
+                        continue;
+                    }
+
+                    nextLevel.Add(candidate.Remove(i, 1));
+                }
+            }
+
+            currentLevel = nextLevel;
+        }
     }
 
     /// <summary>
