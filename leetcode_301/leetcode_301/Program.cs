@@ -133,10 +133,16 @@ class Program
 
             if (lremove > 0 && str[i] == '(')
             {
+                // 把字串 str 中索引 i 的那一個字元刪掉，產生一個新的字串。
+                // 因為字元會左移，所以下一層遞迴仍從索引 i 開始搜尋。
+                // 以及 lremove - 1，表示已刪除一個左括號。
                 Helper(str.Substring(0, i) + str.Substring(i + 1), i, lremove - 1, rremove);
             }
             if (rremove > 0 && str[i] == ')')
             {
+                // 把字串 str 中索引 i 的那一個字元刪掉，產生一個新的字串。
+                // 因為字元會左移，所以下一層遞迴仍從索引 i 開始搜尋。
+                // 以及 rremove - 1，表示已刪除一個右括號。
                 Helper(str.Substring(0, i) + str.Substring(i + 1), i, lremove, rremove - 1);
             }
         }
