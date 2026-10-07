@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": ".NET: Launch leetcode_301",
+            "type": "coreclr",
+            "request": "launch",
+            "program": "${workspaceFolder}/leetcode_301/bin/Debug/net10.0/leetcode_301.dll",
+            "cwd": "${workspaceFolder}/leetcode_301",
+            "stopAtEntry": false,
+            "console": "integratedTerminal",
+            "args": [],
+            "preLaunchTask": "build leetcode_301"
+        }
+    ]
+}
