@@ -37,4 +37,46 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 方法一：贪心
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <param name="k"></param>
+    /// <returns></returns>
+    public int MaxSum(IList<int> nums, int k)
+    {
+        const int MOD = 1000000007;
+        int[] cnt = new int[30];
+
+        // 统计每个位上 1 的数量
+        foreach(int num in nums)
+        {
+            for(int i = 0; i < 30; i++)
+            {
+                if((num & (1 << i)) != 0)
+                {
+                    cnt[i]++;
+                }
+            }
+        }
+
+        long result = 0;
+        for(int i = 0; i < k; i++)
+        {
+            long num = 0;
+            // 从高位到低位构造当前数字
+            for(int j = 29; j >= 0; j--)
+            {
+                if(cnt[j] > 0)
+                {
+                    num |= (1L << j);
+                    cnt[j]--;
+                }
+            }
+            result = (result + num * num) % MOD;
+        }
+
+        return (int)result;
+    }
 }
