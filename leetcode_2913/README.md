@@ -38,7 +38,41 @@
 2. 加入新元素後，集合大小就是 `nums[start..end]` 的不同值數量 `d`。
 3. 將 `d * d` 加入總和，接著延伸至下一個終點。
 
-每個連續子陣列恰有一組起點與終點，所以雙層迴圈會計算每個子陣列一次。每次延伸時只把一個新元素加入集合，不必重新掃描整段子陣列。
+### 對照 `SumCounts` 程式
+
+```csharp
+public int SumCounts(IList<int> nums)
+{
+    int n = nums.Count;
+    int result = 0;
+
+    for (int start = 0; start < n; start++)
+    {
+        var distinctValues = new HashSet<int>();
+        for (int end = start; end < n; end++)
+        {
+            distinctValues.Add(nums[end]);
+            int distinctCount = distinctValues.Count;
+            result += distinctCount * distinctCount;
+        }
+    }
+
+    return result;
+}
+```
+
+| 程式碼 | 運作方式 |
+| --- | --- |
+| `int n = nums.Count` | 記錄陣列長度，作為兩層迴圈的索引上限。 |
+| `int result = 0` | 保存目前所有子陣列的平方和。 |
+| `for (int start = 0; start < n; start++)` | 依序固定子陣列起點；每次進入外層迴圈，都建立新的 `HashSet`，避免前一個起點的值殘留。 |
+| `for (int end = start; end < n; end++)` | 固定起點後，讓終點從 `start` 向右延伸至 `n - 1`；`start` 和 `end` 都是子陣列的包含式索引。 |
+| `distinctValues.Add(nums[end])` | 只需把新延伸到的元素加入集合，不必重新掃描整段子陣列。若這個值已出現，`HashSet` 會保留一份，因此集合大小不增加。 |
+| `distinctValues.Count` | 取得目前子陣列的不同值數量 `d`。 |
+| `result += distinctCount * distinctCount` | 將目前子陣列的 `d²` 加入總和。每延伸一次終點，就完成一個子陣列的計算。 |
+| `return result` | 回傳所有子陣列平方和的總和。 |
+
+內層迴圈每完成一輪，`distinctValues` 恰好包含 `nums[start..end]` 中所有不同的值。這在第一次加入 `nums[start]` 時成立；之後每輪只加入下一個元素，而 `HashSet` 會自動排除重複值，因此集合大小始終等於目前子陣列的不同值數量。另一方面，每個非空連續子陣列都有唯一的起點與終點，雙層迴圈會讓每一組 `start <= end` 恰好出現一次，所以每個子陣列的平方都會且只會加入一次。
 
 ### 範例演示：`nums = [1, 2, 1]`
 
