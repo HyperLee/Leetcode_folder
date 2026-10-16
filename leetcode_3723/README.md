@@ -36,6 +36,19 @@
 3. 計算 `remainder = sum % 9`；若不為 `0`，將它接在 `9` 之後。
 4. 以 `0` 補足到 `num` 位，讓結果符合指定位數，並保持所有高位數字盡可能大。
 
+### 程式碼與步驟對照
+
+| 程式碼 | 對應動作 |
+| --- | --- |
+| `if (sum > 9 * num)` | 檢查 `num` 位最多能容納的數位和；超過上限就回傳空字串。 |
+| `fullNines = sum / 9`、`remainder = sum % 9` | 用商決定 `9` 的個數，用餘數決定是否還要放一個 `1` 至 `8`。 |
+| `result.Append('9', fullNines)` | 使用 `StringBuilder` 重複加入指定數量的字元 `9`。 |
+| `result.Append((char)('0' + remainder))` | 餘數大於 `0` 時，將數字餘數轉成對應字元，例如 `2` 轉為 `'2'`。 |
+| `result.Append('0', num - result.Length)` | 依目前長度補上剩餘的 `0`，使結果剛好有 `num` 位。 |
+| `return result.ToString()` | 將 `StringBuilder` 的內容轉成方法回傳的字串。 |
+
+通過容量檢查後，已加入的 `9` 與餘數字元不會超過 `num` 個，因此補零數量 `num - result.Length` 不會是負數。題目又保證 `sum ≥ 1`，所以結果至少有一個非零數字排在前面，不會產生前導 `0`。
+
 ### 範例演示：`num = 4`、`sum = 20`
 
 | 步驟 | 計算或動作 | 結果字串 |
