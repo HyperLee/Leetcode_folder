@@ -33,7 +33,7 @@ class Program
     /// </summary>
     /// <param name="args">本範例不讀取命令列參數；測試資料固定寫在 Main 中。</param>
     /// <remarks>
-    /// 程式進入點會以固定案例呼叫 MaxSumOfSquares，逐例輸出期望值與實際結果，並在任一案例失敗時設定非零結束碼。
+    /// 程式進入點會以固定案例呼叫兩種解法，逐例輸出期望值與實際結果，並在任一案例失敗時設定非零結束碼。
     /// </remarks>
     static void Main(string[] args)
     {
@@ -49,21 +49,30 @@ class Program
         };
 
         int passedCount = 0;
+        int totalCheckCount = testCases.Length * 2;
         foreach ((string Name, int Num, int Sum, string Expected) testCase in testCases)
         {
-            string actual = solution.MaxSumOfSquares(testCase.Num, testCase.Sum);
-            bool passed = actual == testCase.Expected;
-            if (passed)
+            (string MethodName, string Actual)[] results =
             {
-                passedCount++;
-            }
+                ("StringBuilder", solution.MaxSumOfSquares(testCase.Num, testCase.Sum)),
+                ("string.Create", solution.MaxSumOfSquaresWithStringCreate(testCase.Num, testCase.Sum))
+            };
 
-            string status = passed ? "PASS" : "FAIL";
-            Console.WriteLine($"{status} {testCase.Name}: num={testCase.Num}, sum={testCase.Sum}, expected=\"{testCase.Expected}\", actual=\"{actual}\"");
+            foreach ((string MethodName, string Actual) result in results)
+            {
+                bool passed = result.Actual == testCase.Expected;
+                if (passed)
+                {
+                    passedCount++;
+                }
+
+                string status = passed ? "PASS" : "FAIL";
+                Console.WriteLine($"{status} {testCase.Name} ({result.MethodName}): num={testCase.Num}, sum={testCase.Sum}, expected=\"{testCase.Expected}\", actual=\"{result.Actual}\"");
+            }
         }
 
-        Console.WriteLine($"Summary: {passedCount}/{testCases.Length} checks passed.");
-        Environment.ExitCode = passedCount == testCases.Length ? 0 : 1;
+        Console.WriteLine($"Summary: {passedCount}/{totalCheckCount} checks passed.");
+        Environment.ExitCode = passedCount == totalCheckCount ? 0 : 1;
     }
 
     /// <summary>
@@ -95,5 +104,38 @@ class Program
         // 高位優先放較大的數字以取得同分中的最大整數，其餘位數補 0。
         result.Append('0', num - result.Length);
         return result.ToString();
+    }
+
+    /// <summary>
+    /// 使用與 <see cref="MaxSumOfSquares(int, int)"/> 相同的貪心配置，並以 <see cref="string.Create"/> 直接填入結果字串。
+    /// 輸入須符合 1 ≤ num ≤ 2 × 10^5、1 ≤ sum ≤ 2 × 10^6；若 sum 大於 9 * num，則回傳空字串。
+    /// </summary>
+    /// <param name="num">目標位數，範圍為 1 至 2 × 10^5。</param>
+    /// <param name="sum">目標數位和，範圍為 1 至 2 × 10^6。</param>
+    /// <returns>數位平方和最大的整數字串；若無法組成則回傳空字串。</returns>
+    public string MaxSumOfSquaresWithStringCreate(int num, int sum)
+    {
+        // 每位最多為 9；超過 num 位可容納的最大數位和時沒有解。
+        if (sum > 9 * num)
+        {
+            return string.Empty;
+        }
+
+        int fullNines = sum / 9;
+        int remainder = sum % 9;
+
+        return string.Create(
+            num,
+            (FullNines: fullNines, Remainder: remainder),
+            static (digits, state) =>
+            {
+                // 先將全部位置設為 0，再覆寫最高位的 9 與可能存在的餘數。
+                digits.Fill('0');
+                digits[..state.FullNines].Fill('9');
+                if (state.Remainder > 0)
+                {
+                    digits[state.FullNines] = (char)('0' + state.Remainder);
+                }
+            });
     }
 }

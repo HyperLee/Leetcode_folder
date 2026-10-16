@@ -27,7 +27,7 @@
 
 反覆套用這個交換方式，最佳配置會盡量填滿 `9`，最多只留下另一個非零餘數，其餘數位都是 `0`。平方和只取決於數字有哪些，不取決於排列順序；要在分數相同時取最大整數，則將較大的數字放在較高位。因此依序輸出 `9`、餘數、`0`。
 
-## 解法一：貪心建構
+## 解法一：貪心建構與 `StringBuilder`
 
 `MaxSumOfSquares` 先檢查容量上限，再用整數除法與餘數一次算出要放幾個 `9`、是否有一個非零餘數，以及還要補多少個 `0`。
 
@@ -77,7 +77,80 @@
 ### 複雜度
 
 - 時間：`O(num)`，需建立並回傳 `num` 個字元。
-- 空間：`O(num)`，用 `StringBuilder` 建立結果字串。
+- 空間：回傳字串為 `O(num)`；此外 `StringBuilder` 也需要 `O(num)` 的中間緩衝區，轉成字串時會建立最終結果。
+
+## 解法二：`string.Create` 直接建構
+
+此解法沿用前面的貪心配置：先放盡可能多個 `9`，再放一個非零餘數，其餘補 `0`。差別在結果字串的建立方式：`string.Create` 先配置正確長度的最終字串，並把可寫入的 `Span<char>` 傳給 callback，因此可以直接填入結果，不必先建立 `StringBuilder` 中間內容再轉成字串。
+
+```csharp
+public string MaxSumOfSquaresWithStringCreate(int num, int sum)
+{
+    if (sum > 9 * num)
+    {
+        return string.Empty;
+    }
+
+    int fullNines = sum / 9;
+    int remainder = sum % 9;
+
+    return string.Create(
+        num,
+        (FullNines: fullNines, Remainder: remainder),
+        static (digits, state) =>
+        {
+            digits.Fill('0');
+            digits[..state.FullNines].Fill('9');
+            if (state.Remainder > 0)
+            {
+                digits[state.FullNines] = (char)('0' + state.Remainder);
+            }
+        });
+}
+```
+
+### 程式碼與步驟對照
+
+| 程式碼 | 對應動作 |
+| --- | --- |
+| `if (sum > 9 * num)` | 檢查位數容量；超過上限時回傳空字串。 |
+| `(FullNines: fullNines, Remainder: remainder)` | 將要填入的 `9` 數量與餘數傳給 callback。這是值 tuple，作為 `string.Create` 的狀態資料。 |
+| `static (digits, state) =>` | 建立不捕捉外部變數的 callback；`digits` 是最終字串內容的可寫 `Span<char>`，`state` 是上述 tuple。 |
+| `digits.Fill('0')` | 先將 `num` 個位置全部填成 `0`。 |
+| `digits[..state.FullNines].Fill('9')` | 將開頭 `fullNines` 個位置改填為 `9`。 |
+| `digits[state.FullNines] = ...` | 餘數非零時，將其轉成字元並填在 `9` 之後。 |
+
+容量檢查通過後，`fullNines` 不會大於 `num`。若餘數大於 `0`，則 `fullNines < num`，所以餘數索引仍在字串範圍內。題目又保證 `sum ≥ 1`，因此最終結果不會是全零字串，也不會有前導零。
+
+### 範例演示：`num = 4`、`sum = 20`
+
+1. `20 ≤ 9 × 4`，可組成四位數。
+2. `fullNines = 20 / 9 = 2`、`remainder = 20 % 9 = 2`。
+3. `digits.Fill('0')` 後為 `0000`；填入兩個 `9` 後為 `9900`。
+4. 將餘數 `2` 填在索引 `2`，結果為 `9920`。
+
+其配置與解法一相同，因此平方和仍是 `9² + 9² + 2² + 0² = 166`；較大的數字放在高位，也符合同分時取最大整數的規則。
+
+### 正確性說明
+
+兩種方法使用相同的 `fullNines`、`remainder` 與數位排列順序，差異只在如何寫入結果字串。解法一透過 `StringBuilder.Append` 逐段建立內容；本解法把同一組字元直接寫入最終字串，所以沿用前述交換論證與平手處理，得到相同的最佳答案。
+
+### 複雜度
+
+- 時間：`O(num)`，初始化並填入 `num` 個字元。
+- 額外工作空間：不計回傳字串為 `O(1)`；回傳字串本身仍需 `O(num)` 空間。
+
+## 兩種方法優缺點比較
+
+| 面向 | 解法一：`StringBuilder` | 解法二：`string.Create` |
+| --- | --- | --- |
+| 數位配置 | 貪心：`9`、餘數、`0` | 相同的貪心配置 |
+| 時間複雜度 | `O(num)` | `O(num)` |
+| 空間 | 回傳字串 `O(num)`，另有 `O(num)` 的 builder 中間緩衝區 | 回傳字串 `O(num)`，不另建 `O(num)` 的文字緩衝區；額外工作空間 `O(1)` |
+| 優點 | 步驟直觀，透過 `Append` 容易閱讀與維護 | 直接填入最終字串，省去 builder 中間內容及轉字串時的複製 |
+| 取捨 | 中間緩衝區與最終字串會同時占用記憶體 | callback、tuple 狀態與 `Span<char>` 切片較不直觀 |
+
+兩種方法都必須配置 `num` 個字元作為回傳結果，所以總空間皆為 `O(num)`。`string.Create` 的優勢是少一份與輸出同級的中間儲存；這是配置方式上的差異，沒有基準測試時不推論實際執行時間一定較快。若優先考慮易讀性，解法一已足夠；若希望減少大型輸出時的中間配置，可採用解法二。
 
 ## 建置與執行範例
 
@@ -88,18 +161,24 @@ dotnet build .\leetcode_3723\leetcode_3723.csproj
 dotnet run --project .\leetcode_3723\leetcode_3723.csproj
 ```
 
-`Main` 會執行題目範例、不可行輸入、最小有效輸入、最大數位和，以及多個 `9` 加餘數的案例。結果不符合預期時會輸出 `FAIL`，並以非零結束碼離開。
+`Main` 會以題目範例、不可行輸入、最小有效輸入、最大數位和，以及多個 `9` 加餘數等六個案例，分別檢查兩種方法。結果不符合預期時會輸出 `FAIL`，並以非零結束碼離開；全部通過時共為 `12/12` 項檢查。
 
 預期執行輸出：
 
 ```text
-PASS Example 1: num=2, sum=3, expected="30", actual="30"
-PASS Example 2: num=2, sum=17, expected="98", actual="98"
-PASS Example 3 (impossible): num=1, sum=10, expected="", actual=""
-PASS Minimum feasible: num=1, sum=1, expected="1", actual="1"
-PASS Maximum digit sum: num=2, sum=18, expected="99", actual="99"
-PASS Multiple 9s and remainder: num=4, sum=20, expected="9920", actual="9920"
-Summary: 6/6 checks passed.
+PASS Example 1 (StringBuilder): num=2, sum=3, expected="30", actual="30"
+PASS Example 1 (string.Create): num=2, sum=3, expected="30", actual="30"
+PASS Example 2 (StringBuilder): num=2, sum=17, expected="98", actual="98"
+PASS Example 2 (string.Create): num=2, sum=17, expected="98", actual="98"
+PASS Example 3 (impossible) (StringBuilder): num=1, sum=10, expected="", actual=""
+PASS Example 3 (impossible) (string.Create): num=1, sum=10, expected="", actual=""
+PASS Minimum feasible (StringBuilder): num=1, sum=1, expected="1", actual="1"
+PASS Minimum feasible (string.Create): num=1, sum=1, expected="1", actual="1"
+PASS Maximum digit sum (StringBuilder): num=2, sum=18, expected="99", actual="99"
+PASS Maximum digit sum (string.Create): num=2, sum=18, expected="99", actual="99"
+PASS Multiple 9s and remainder (StringBuilder): num=4, sum=20, expected="9920", actual="9920"
+PASS Multiple 9s and remainder (string.Create): num=4, sum=20, expected="9920", actual="9920"
+Summary: 12/12 checks passed.
 ```
 
 ## 專案結構
