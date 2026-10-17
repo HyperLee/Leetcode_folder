@@ -22,4 +22,137 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 并查集
+    /// 1. 计算每个元素的数位和
+    /// 2. 按照排序规则对下标进行排序，得到排序后的目标顺序
+    /// 3. 对每个原始位置 i，确定其元素在排序后应处于的位置 pos[i]
+    /// 4. 初始化并查集，每个位置自成一个集合
+    /// 5. 遍历所有位置，将 i 和 pos[i] 合并；若两个位置原本不在同一集合中，连通分量数减一
+    /// 6. 返回 n−components
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <returns></returns>
+    public int MinSwaps(int[] nums)
+    {
+        int n = nums.Length;
+        int[] digitSum = new int[n];
+        for(int i = 0; i < n; i++)
+        {
+            int x = nums[i], sum = 0;
+            while(x > 0)
+            {
+                sum += x % 10;
+                x /= 10;
+            }
+            digitSum[i] = sum;
+        }
+
+        int[] indices = new int[n];
+        for(int i = 0; i < n; i++)
+        {
+            indices[i] = i;
+        }
+
+        Array.Sort(indices, (a, b) =>
+        {
+            if(digitSum[a] != digitSum[b])
+            {
+                return digitSum[a].CompareTo(digitSum[b]);
+            }
+            return nums[a].CompareTo(nums[b]);
+        });
+
+        int[] targetPos = new int[n];
+        for(int pos = 0; pos < n; pos++)
+        {
+            targetPos[indices[pos]] = pos;
+        }
+
+        int[] parent = new int[n];
+        for(int i = 0; i < n; i++)
+        {
+            parent[i] = i;
+        }
+
+        int components = n;
+        for(int i = 0; i < n; i++)
+        {
+            int ri = Find(parent, i);
+            int rj = Find(parent, targetPos[i]);
+            if(ri != rj)
+            {
+                parent[ri] = rj;
+                components--;
+            }
+        }
+
+        return n - components;
+    }
+
+    private int Find(int[] parent, int x)
+    {
+        if(parent[x] != x)
+        {
+            parent[x] = Find(parent, parent[x]);
+        }
+        return parent[x];
+    }
+
+    /// <summary>
+    /// 置换环
+    /// 1. 计算每个元素的数位和
+    /// 2. 按照 (数位和, 数值) 的排序规则对下标进行排序，得到排序后的目标顺序
+    /// 3. 对每个原始位置 i，确定其元素在排序后应处于的位置 pos[i]
+    /// 4. 循环遍历所有置换环，统计环的数量
+    /// 5. 返回 n−cycles
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <returns></returns>
+    public int MinSwaps2(int[] nums)
+    {
+        int n = nums.Length;
+        int[] digitSum = new int[n];
+        for (int i = 0; i < n; i++) {
+            int x = nums[i], sum = 0;
+            while (x > 0) {
+                sum += x % 10;
+                x /= 10;
+            }
+            digitSum[i] = sum;
+        }
+
+        int[] indices = new int[n];
+        for (int i = 0; i < n; i++) {
+            indices[i] = i;
+        }
+        Array.Sort(indices, (a, b) => {
+            if (digitSum[a] != digitSum[b]) {
+                return digitSum[a].CompareTo(digitSum[b]);
+            }
+            return nums[a].CompareTo(nums[b]);
+        });
+
+        int[] targetPos = new int[n];
+        for (int pos = 0; pos < n; pos++) {
+            targetPos[indices[pos]] = pos;
+        }
+
+        bool[] visited = new bool[n];
+        int cycles = 0;
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                cycles++;
+                int j = i;
+                while (!visited[j]) {
+                    visited[j] = true;
+                    j = targetPos[j];
+                }
+            }
+        }
+
+        return n - cycles;
+     
+    }
 }
