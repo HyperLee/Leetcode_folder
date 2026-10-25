@@ -26,6 +26,8 @@ class Program
     ///
     /// 時間複雜度：O(m * n)
     /// 空間複雜度：O(m * n)，最壞情況為遞迴堆疊
+    /// 
+    /// https://chatgpt.com/s/t_6ade24d1fed88191aa2f2c274cbdc4aa
     /// </summary>
     public int ClosedIsland(int[][] grid)
     {
