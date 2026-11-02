@@ -13,7 +13,7 @@
 class Program
 {
     /// <summary>
-    /// 使用內建案例驗證 LeetCode 453 解法，並以預期結果比對最小值差額總和的計算結果。
+    /// 使用八組內建案例驗證 LeetCode 453 的兩種解法，分別比對預期結果。
     /// 此入口不讀取命令列輸入；案例全數通過時列印驗證結果，若有不符則拋出例外。
     /// </summary>
     /// <param name="args">未使用的命令列引數。</param>
@@ -25,21 +25,39 @@ class Program
             (new[] { 1, 2, 3 }, 3),
             (new[] { 1, 1, 1 }, 0),
             (new[] { 42 }, 0),
-            (new[] { -1_000_000_000, 1_000_000_000 }, 2_000_000_000)
+            (new[] { -1_000_000_000, 1_000_000_000 }, 2_000_000_000),
+            (new[] { 5, 6, 1 }, 9),
+            (new[] { -3, -1, -2 }, 3),
+            (Enumerable.Repeat(1_000_000_000, 100_000).ToArray(), 0),
+            (Enumerable.Repeat(-1_000_000_000, 100_000).ToArray(), 0)
+        };
+        (string Name, Func<int[], int> Solve)[] solutions =
+        {
+            (nameof(MinMoves), solution.MinMoves),
+            (nameof(MinMoves2), solution.MinMoves2)
         };
 
         foreach ((int[] nums, int expected) in testCases)
         {
-            int actual = solution.MinMoves(nums);
-            if (actual != expected)
-            {
-                throw new InvalidOperationException(
-                    $"Expected {expected} moves for [{string.Join(", ", nums)}], but got {actual}.");
-            }
+            string input = nums.Length <= 10
+                ? $"[{string.Join(", ", nums)}]"
+                : $"[length={nums.Length}, first={nums[0]}, last={nums[^1]}]";
 
-            Console.WriteLine(
-                $"[PASS] nums=[{string.Join(", ", nums)}], expected={expected}, actual={actual}");
+            foreach ((string methodName, Func<int[], int> solve) in solutions)
+            {
+                int actual = solve(nums);
+                if (actual != expected)
+                {
+                    throw new InvalidOperationException(
+                        $"{methodName}: expected {expected} moves for {input}, but got {actual}.");
+                }
+
+                Console.WriteLine(
+                    $"[PASS] method={methodName}, nums={input}, expected={expected}, actual={actual}");
+            }
         }
+
+        Console.WriteLine($"All {testCases.Length * solutions.Length} checks passed.");
     }
 
     /// <summary>
@@ -62,5 +80,32 @@ class Program
         }
 
         return res;
+    }
+
+    /// <summary>
+    /// 解法二：單次走訪同時計算總和與最小值，利用 sum - n * minNum 求得最少操作次數。
+    /// 題目保證 nums 非空且答案符合 32 位元有號整數範圍；總和與乘積則使用 long 避免中間計算溢位。
+    /// 不修改輸入陣列，時間複雜度為 O(n)，額外空間複雜度為 O(1)。
+    /// </summary>
+    /// <param name="nums">符合題目限制的非空整數陣列。</param>
+    /// <returns>使所有元素相等所需的最少操作次數。</returns>
+    public int MinMoves2(int[] nums)
+    {
+        int minNum = nums[0];
+        long sum = 0;
+
+        foreach (int num in nums)
+        {
+            // 每個元素都必須累加；這行不依賴 minNum，與下方最小值更新的順序可以交換。
+            sum += num;
+
+            if (num < minNum)
+            {
+                minNum = num;
+            }
+        }
+
+        // 必須在走訪結束後使用最終最小值，且先轉為 long 再相乘，避免 int 乘法溢位。
+        return (int)(sum - ((long)minNum * nums.Length));
     }
 }
