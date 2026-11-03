@@ -3,7 +3,7 @@
 ![C#](https://img.shields.io/badge/C%23-68217A?logo=csharp&logoColor=white)
 ![.NET 10](https://img.shields.io/badge/.NET-10.0-512BD4?logo=dotnet&logoColor=white)
 
-使用 C# 解題，示範如何把「每次增加 `n - 1` 個元素」轉換成最小值差額加總，並比較兩次走訪與單次走訪的實作方式。
+使用 C# 解題，示範如何把「每次增加 `n - 1` 個元素」轉換成最小值差額加總，並比較 LINQ 最小值搜尋、單次走訪公式計算與自行走訪找最小值這三種實作方式。
 
 - [LeetCode 題目](https://leetcode.com/problems/minimum-moves-to-equal-array-elements/description/)
 - [中文題目](https://leetcode.cn/problems/minimum-moves-to-equal-array-elements/description/)
@@ -62,7 +62,7 @@ moves = Σ(nums[i] - min(nums))
 
 這裡的最小值是「等價減少視角」的目標。原題實際操作會增加元素，例如上述範例最後得到 `[4, 4, 4]`，而不是 `[1, 1, 1]`；兩者之間相差三次操作所帶來的共同增量。
 
-以下兩種解法都實作這個公式，差別在於如何取得並組合所需資訊。兩個方法都位於 `leetcode_453/Program.cs`。
+以下三種解法都實作這個公式，差別在於如何取得並組合所需資訊。三個方法都位於 `leetcode_453/Program.cs`。
 
 ## 解法一：最小值差額加總
 
@@ -241,6 +241,92 @@ sum - ((long)minNum * nums.Length)
 - 額外空間：`O(1)`，只使用固定數量的變數，不修改輸入陣列。
 
 
+## 解法三：自行走訪找最小值，再累加差額
+
+對應方法：`MinMoves3(int[] nums)`。這個方法沿用解法一的差額公式，但把 `nums.Min()` 改寫成明確的 `foreach` 迴圈，方便觀察最小值如何逐步確定。它沒有使用 LINQ 的 `Min()`，仍使用內建的 `Math.Min(a, b)` 比較兩個數值；並非完全不使用內建函式。
+
+### 設計出發點與變數
+
+我們需要的是完整陣列的最小值，才能讓每個元素都使用相同的目標計算操作次數。因此分成兩個階段：第一階段只找最小值，第二階段才計算答案，不在最小值尚未確定時累加差額。
+
+| 變數 | 意義與初始值 |
+| --- | --- |
+| `minNum` | 目前已走訪元素的最小值，初始化為 `nums[0]` |
+| `x` | 當前迴圈處理的元素；兩個迴圈各自走訪完整陣列 |
+| `res` | 已處理元素與最終最小值的差額總和，初始化為 `0` |
+
+1. 題目保證陣列非空，因此用 `nums[0]` 作為最小值的起點。若以 `0` 初始化，對 `[5, 6, 1]` 就會錯誤保留不存在於陣列中的 `0`。
+2. 第一次 `foreach` 逐一執行 `minNum = Math.Min(minNum, x)`，保留舊最小值與目前元素之中較小的一個。第一個元素會再比較一次，不影響結果。
+3. 第一次走訪結束後，`minNum` 就是完整陣列的最小值。
+4. 第二次 `foreach` 使用固定的 `minNum`，將每個 `x - minNum` 加入 `res`。
+5. 回傳差額總和；過程不修改 `nums`，也不實際模擬每一步增減。
+
+```csharp
+int minNum = nums[0];
+int res = 0;
+
+foreach (int x in nums)
+{
+    minNum = Math.Min(minNum, x);
+}
+
+foreach (int x in nums)
+{
+    res += x - minNum;
+}
+
+return res;
+```
+
+### 範例演示一：`[1, 2, 3]`
+
+初始化 `minNum = 1`、`res = 0`。第一次走訪只找最小值：
+
+| 步驟 | 元素 `x` | 更新前 `minNum` | `Math.Min(minNum, x)`／更新後 `minNum` |
+| --- | ---: | ---: | ---: |
+| 1 | 1 | 1 | 1 |
+| 2 | 2 | 1 | 1 |
+| 3 | 3 | 1 | 1 |
+
+第二次走訪固定使用 `minNum = 1`：
+
+| 步驟 | 元素 `x` | 差額 `x - minNum` | 累加前 `res` | 累加後 `res` |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 1 | 0 | 0 | 0 |
+| 2 | 2 | 1 | 0 | 1 |
+| 3 | 3 | 2 | 1 | 3 |
+
+回傳 `3`，與前兩種解法一致。
+
+### 範例演示二：`[5, 6, 1]`，最小值最後才出現
+
+初始化 `minNum = 5`、`res = 0`。第一次走訪：
+
+| 步驟 | 元素 `x` | 更新前 `minNum` | `Math.Min(minNum, x)`／更新後 `minNum` |
+| --- | ---: | ---: | ---: |
+| 1 | 5 | 5 | 5 |
+| 2 | 6 | 5 | 5 |
+| 3 | 1 | 5 | 1 |
+
+前兩輪的最小值仍是 `5`，到第三輪才得到最終最小值 `1`。第二次走訪從頭重新讀取元素，以 `1` 為共同目標：
+
+| 步驟 | 元素 `x` | 差額 `x - minNum` | 累加前 `res` | 累加後 `res` |
+| --- | ---: | ---: | ---: | ---: |
+| 1 | 5 | 4 | 0 | 4 |
+| 2 | 6 | 5 | 4 | 9 |
+| 3 | 1 | 0 | 9 | 9 |
+
+回傳 `9`。若把兩個迴圈直接合併，每輪更新最小值後就累加 `x - minNum`，會得到 `0 + 1 + 0 = 1`：最後才發現的 `1` 無法自動修正前兩個元素已少算的差額。保留兩次走訪，就能確保每個差額都以最終最小值計算；若要單次走訪，可採用解法二的總和公式。
+
+### 正確性、整數安全性與複雜度
+
+第一次迴圈開始前，`minNum` 是第一個元素；每處理一個 `x`，`Math.Min` 都保留已讀取元素中的最小值，因此第一次走訪結束時得到全域最小值。第二次迴圈每輪將目前元素的完整差額加入 `res`，所以結束時 `res = Σ(nums[i] - minNum)`；依照前面的等價轉換與最優目標推導，這就是最少操作次數。
+
+`int` 的安全性與解法一相同：單一差額最多為 `2_000_000_000`；每個差額皆非負，部分累加不超過題目保證可由 `int` 表示的最終答案。此保證適用於符合題目限制的輸入，並非宣稱任意整數陣列都不會溢位。
+
+- 時間：`O(n)`，兩次完整走訪共 `O(n) + O(n)`。
+- 額外空間：`O(1)`，只保留固定數量的變數，不建立新陣列。
+
 ## 建置與執行範例
 
 在專案根目錄使用 PowerShell 執行：
@@ -250,7 +336,7 @@ dotnet build .\leetcode_453\leetcode_453.csproj
 dotnet run --no-build --project .\leetcode_453\leetcode_453.csproj
 ```
 
-請依序執行；`--no-build` 會使用前一步建置的結果。專案沒有獨立測試專案，也不讀取命令列輸入；`Main` 會用下列八組資料分別驗證兩種解法，共十六次結果比對。任一結果不符時會拋出例外，列出方法名稱、輸入摘要、預期值與實際值，並使執行失敗。
+請依序執行；`--no-build` 會使用前一步建置的結果。專案沒有獨立測試專案，也不讀取命令列輸入；`Main` 會用下列八組資料分別驗證三種解法，共二十四次結果比對。任一結果不符時會拋出例外，列出方法名稱、輸入摘要、預期值與實際值，並使執行失敗。
 
 | 輸入 | 預期答案 | 驗證重點 |
 | --- | ---: | --- |
@@ -270,21 +356,29 @@ dotnet run --no-build --project .\leetcode_453\leetcode_453.csproj
 ```text
 [PASS] method=MinMoves, nums=[1, 2, 3], expected=3, actual=3
 [PASS] method=MinMoves2, nums=[1, 2, 3], expected=3, actual=3
+[PASS] method=MinMoves3, nums=[1, 2, 3], expected=3, actual=3
 [PASS] method=MinMoves, nums=[1, 1, 1], expected=0, actual=0
 [PASS] method=MinMoves2, nums=[1, 1, 1], expected=0, actual=0
+[PASS] method=MinMoves3, nums=[1, 1, 1], expected=0, actual=0
 [PASS] method=MinMoves, nums=[42], expected=0, actual=0
 [PASS] method=MinMoves2, nums=[42], expected=0, actual=0
+[PASS] method=MinMoves3, nums=[42], expected=0, actual=0
 [PASS] method=MinMoves, nums=[-1000000000, 1000000000], expected=2000000000, actual=2000000000
 [PASS] method=MinMoves2, nums=[-1000000000, 1000000000], expected=2000000000, actual=2000000000
+[PASS] method=MinMoves3, nums=[-1000000000, 1000000000], expected=2000000000, actual=2000000000
 [PASS] method=MinMoves, nums=[5, 6, 1], expected=9, actual=9
 [PASS] method=MinMoves2, nums=[5, 6, 1], expected=9, actual=9
+[PASS] method=MinMoves3, nums=[5, 6, 1], expected=9, actual=9
 [PASS] method=MinMoves, nums=[-3, -1, -2], expected=3, actual=3
 [PASS] method=MinMoves2, nums=[-3, -1, -2], expected=3, actual=3
+[PASS] method=MinMoves3, nums=[-3, -1, -2], expected=3, actual=3
 [PASS] method=MinMoves, nums=[length=100000, first=1000000000, last=1000000000], expected=0, actual=0
 [PASS] method=MinMoves2, nums=[length=100000, first=1000000000, last=1000000000], expected=0, actual=0
+[PASS] method=MinMoves3, nums=[length=100000, first=1000000000, last=1000000000], expected=0, actual=0
 [PASS] method=MinMoves, nums=[length=100000, first=-1000000000, last=-1000000000], expected=0, actual=0
 [PASS] method=MinMoves2, nums=[length=100000, first=-1000000000, last=-1000000000], expected=0, actual=0
-All 16 checks passed.
+[PASS] method=MinMoves3, nums=[length=100000, first=-1000000000, last=-1000000000], expected=0, actual=0
+All 24 checks passed.
 ```
 
 ## 專案結構
@@ -302,19 +396,21 @@ All 16 checks passed.
 └── README.md
 ```
 
-## 兩種解法比較
+## 三種解法比較
 
-| 比較項目 | 解法一：`MinMoves` | 解法二：`MinMoves2` |
-| --- | --- | --- |
-| 核心公式 | `Σ(nums[i] - minNum)` | `sum - n × minNum` |
-| 走訪方式 | 先找最小值，再累加差額，共兩次 | 同時計算總和與最小值，共一次 |
-| 時間複雜度 | `O(n)` | `O(n)` |
-| 額外空間複雜度 | `O(1)` | `O(1)` |
-| 中間計算型別 | `int`，非負差額的累加不超過最終答案 | 總和與乘積使用 `long`，最後轉回 `int` |
-| 是否修改輸入 | 否 | 否 |
-| 閱讀方式 | 逐一計算每個元素所需的操作次數，直接對應題意轉換 | 先理解公式展開，再一次收集所需資訊 |
-| 實際效能 | 包含內建 `Min()` 與差額累加 | 少一次走訪，可能降低常數成本，仍需實測 |
+| 比較項目 | 解法一：`MinMoves` | 解法二：`MinMoves2` | 解法三：`MinMoves3` |
+| --- | --- | --- | --- |
+| 核心公式 | `Σ(nums[i] - minNum)` | `sum - n × minNum` | `Σ(nums[i] - minNum)` |
+| 最小值取得方式 | LINQ `nums.Min()` | `foreach` 搭配 `if` 比較 | `foreach` 搭配 `Math.Min` |
+| 走訪方式 | 先找最小值，再累加差額，共兩次 | 同時計算總和與最小值，共一次 | 先找最小值，再累加差額，共兩次 |
+| 時間複雜度 | `O(n)` | `O(n)` | `O(n)` |
+| 額外空間複雜度 | `O(1)` | `O(1)` | `O(1)` |
+| 中間計算型別 | `int`，非負差額累加不超過最終答案 | 總和與乘積使用 `long`，最後轉回 `int` | `int`，理由與解法一相同 |
+| 是否修改輸入 | 否 | 否 | 否 |
+| 學習重點 | 直接實作差額公式，以 LINQ 表達最小值搜尋 | 展開公式並在一次走訪中收集資訊 | 明確展示最小值搜尋與差額累加的兩階段流程 |
 
-兩者在最壞情況下都必須讀取每個元素；若漏看某個元素，就可能漏掉更小的最小值或改變總和的數值，因此 `O(n)` 已達到這題的漸近最佳時間複雜度。從兩次走訪合併成一次，不會改變大 O 表示法，也不能直接推論執行時間會減半。
+三種方法在最壞情況下都必須讀取每個元素；若漏看某個元素，就可能漏掉更小的最小值或改變總和的數值，因此 `O(n)` 已達到這題的漸近最佳時間複雜度。從兩次走訪合併成一次，不會改變大 O 表示法，也不能直接推論執行時間會減半。
 
-若著重推導直觀，可以先閱讀解法一；若想練習把公式整理成單次走訪，可以閱讀解法二。單次走訪是可嘗試的實作改善，但本專案的十六次結果比對只驗證正確性，並未進行效能基準測試或 LeetCode 提交測量，因此不宣稱解法二一定更快，也不保證 beats 排名提高。
+若著重推導直觀，可以先閱讀解法一；若想練習把公式整理成單次走訪，可以閱讀解法二；若想觀察最小值如何在迴圈中維護，可以對照解法三。解法三把最小值搜尋寫出來，有助於理解，但仍使用內建 `Math.Min`，也不代表一定比 LINQ `Min()` 快。
+
+本專案的二十四次結果比對只驗證正確性，並未進行效能基準測試或 LeetCode 提交測量，因此不宣稱任何一種解法一定更快，也不保證 beats 排名提高。
