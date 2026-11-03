@@ -26,4 +26,46 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 方法一：贪心
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <returns></returns>
+    public int MinMoves(int[] nums)
+    {
+        int max = nums.Max();
+        int moves = 0;
+        foreach (var num in nums)
+        {
+            moves += max - num;
+        }
+        return moves;
+    }
+
+    /// <summary>
+    /// 方法一：贪心
+    /// 不採用 nums.Max()
+    /// 改用 foreach 找出最大數值, 再計算移動次數
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <returns></returns>
+    public int MinMoves2(int[] nums)
+    {
+        int max = nums[0];
+        int moves = 0;
+
+        // 找出最大數值
+        foreach(int x in nums)
+        {
+            max = Math.Max(max, x);
+        }
+
+        // 計算移動次數
+        foreach(int x in nums)
+        {
+            moves += max - x;
+        }
+        return moves;
+    }
 }
