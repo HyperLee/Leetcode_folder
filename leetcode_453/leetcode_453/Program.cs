@@ -108,4 +108,26 @@ class Program
         // 必須在走訪結束後使用最終最小值，且先轉為 long 再相乘，避免 int 乘法溢位。
         return (int)(sum - ((long)minNum * nums.Length));
     }
+
+    /// <summary>
+    /// 解法三:參考解法一 但是不使用內建函式 `nums.Min()`，改用 foreach 迴圈找出最小值。
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <returns></returns>
+    public int MinMoves3(int[] nums)
+    {
+        int minNum = nums[0];
+        int res = 0;
+
+        foreach(int x in nums)
+        {
+            minNum = Math.Min(minNum, x);
+        }
+
+        foreach(int x in nums)
+        {
+            res += x - minNum;
+        }
+        return res;
+    }
 }
