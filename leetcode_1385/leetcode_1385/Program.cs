@@ -25,4 +25,91 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 解法一:模擬
+    /// </summary>
+    /// <param name="arr1"></param>
+    /// <param name="arr2"></param>
+    /// <param name="d"></param>
+    /// <returns></returns>
+    public int FindTheDistanceValue(int[] arr1, int[] arr2, int d)
+    {
+        int cnt = 0;
+        foreach(int x in arr1)
+        {
+            bool isValid = true;
+            foreach(int y in arr2)
+            {
+                if(Math.Abs(x - y) <= d)
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+            if(isValid)
+            {
+                cnt++;
+            }
+        }
+        return cnt;
+    }
+
+    /// <summary>
+    /// 解法二:模擬 採用 邏輯運算
+    /// </summary>
+    /// <param name="arr1"></param>
+    /// <param name="arr2"></param>
+    /// <param name="d"></param>
+    /// <returns></returns>
+    public int FindTheDistanceValue2(int[] arr1, int[] arr2, int d)
+    {
+        int cnt = 0;
+        foreach(int x in arr1)
+        {
+            bool isValid = true;
+            foreach(int y in arr2)
+            {
+                isValid &= Math.Abs(x - y) > d;
+            }
+
+            cnt += isValid ? 1 : 0;
+        }
+        return cnt;
+    }
+
+    /// <summary>
+    /// 解法三：二分法查找
+    /// </summary>
+    /// <param name="arr1"></param>
+    /// <param name="arr2"></param>
+    /// <param name="d"></param>
+    /// <returns></returns>
+    public int FindTheDistanceValue3(int[] arr1, int[] arr2, int d)
+    {
+        Array.Sort(arr2);
+        int cnt = 0;
+
+        foreach(int x in arr1)
+        {
+            int p = Array.BinarySearch(arr2, x);
+            if(p < 0)
+            {
+                p = ~p;
+            }
+
+            bool isValid = true;
+            if(p < arr2.Length)
+            {
+                isValid &= Math.Abs(arr2[p] - x) > d;
+            }
+
+            if(p - 1 >= 0 && p - 1 < arr2.Length)
+            {
+                isValid &= Math.Abs(arr2[p - 1] - x) > d;
+            }
+            cnt += isValid ? 1 : 0;
+        }
+        return cnt;
+    }
 }
