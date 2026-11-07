@@ -76,6 +76,69 @@ C# `ValueTuple` 的預設比較依欄位順序進行，因此 `(weight, idx)` �
 > [!IMPORTANT]
 > 不能在全部忙碌時只取出一台最早完成的伺服器就直接分配。當多台同時完成，忙碌佇列取出的第一台未必擁有最小權重或最小索引。
 
+#### 補充：預設比較器與自訂比較器有什麼差異？
+
+以下兩種宣告都是 C#，在本題中會得到相同的出隊順序：**先選權重小的伺服器，權重相同時再選索引小的伺服器**。
+
+第一種使用預設比較器：
+
+```csharp
+var idle = new PriorityQueue<(int weight, int idx), (int weight, int idx)>();
+```
+
+`PriorityQueue<TElement, TPriority>` 的第一個型別是存放的資料，第二個型別是決定出隊順序的優先權。沒有傳入比較器時，會使用 `Comparer<TPriority>.Default`；對這裡的 `(int, int)` 元組，預設採用字典序比較：先比較第一個欄位 `weight`，只有相同時才比較第二個欄位 `idx`，兩者都是較小者優先。
+
+例如，依序加入下列資料：
+
+```csharp
+idle.Enqueue((3, 2), (3, 2));
+idle.Enqueue((1, 5), (1, 5));
+idle.Enqueue((3, 0), (3, 0));
+```
+
+連續呼叫三次 `Dequeue()`，取出的元素依序為：
+
+```text
+(1, 5)  // 權重最小
+(3, 0)  // 權重相同時，索引較小
+(3, 2)
+```
+
+注意，`Enqueue(element, priority)` **比較的是第二個參數 `priority`**。本題刻意讓元素與優先權都使用 `(weight, idx)`，才會看起來像是在直接比較元素。
+
+第二種則自行指定比較器，明確寫出相同的比較規則：
+
+```csharp
+var idle = new PriorityQueue<(int w, int idx), (int, int)>(
+    Comparer<(int, int)>.Create((a, b) =>
+    {
+        if (a.Item1 != b.Item1)
+        {
+            return a.Item1 - b.Item1;
+        }
+
+        return a.Item2 - b.Item2;
+    }));
+```
+
+比較器回傳負數表示 `a` 優先於 `b`，正數表示 `b` 優先，零表示兩者優先權相同。這段程式先比較權重，再比較索引，因此在本題限制下與第一種等效。元組欄位名稱是 `weight`、`w` 或使用 `Item1` 存取，都不會改變比較規則。
+
+一般用途的自訂比較器建議使用 `CompareTo`，避免兩個整數相減可能溢位：
+
+```csharp
+var idle = new PriorityQueue<(int weight, int idx), (int weight, int idx)>(
+    Comparer<(int weight, int idx)>.Create((a, b) =>
+    {
+        int result = a.weight.CompareTo(b.weight);
+        return result != 0 ? result : a.idx.CompareTo(b.idx);
+    }));
+```
+
+本題使用預設比較器即可；需要權重由大到小、不同的欄位優先順序等規則時，再自訂比較器。
+
+> [!NOTE]
+> `PriorityQueue` 保證每次 `Peek()` 或 `Dequeue()` 取得優先權最小的元素，內部並非完整排序的陣列。透過 `UnorderedItems` 列舉內容時，不保證依優先權排列；若兩個元素的完整優先權相同，也不保證依加入順序取出。
+
 ### 2. 初始化
 
 將全部 `n` 台伺服器加入 `idle`，`busy` 為空。目前時間 `ts = 0`，答案陣列長度為 `m`。
