@@ -62,44 +62,119 @@ class Program
     /// <param name="args">命令列引數。</param>
     static void Main(string[] args)
     {
-        Console.WriteLine("Hello, World!");
+        var cases = new (string Name, int[] Servers, int[] Tasks, int[] Expected)[]
+        {
+            ("OfficialExample1", [3, 3, 2], [1, 2, 3, 2, 1, 2], [2, 2, 0, 2, 1, 2]),
+            ("OfficialExample2", [5, 1, 4, 3, 2], [2, 1, 2, 4, 5, 2, 1], [1, 4, 1, 4, 1, 3, 2]),
+            ("EqualWeights_UsesSmallestIndex", [2, 2], [1, 1, 1], [0, 0, 0]),
+            ("WeightBeforeIndex", [5, 1], [3, 1], [1, 0]),
+            ("SimultaneousReleases_UsesWeight", [3, 1, 2], [4, 3, 2, 1, 1, 1], [1, 2, 0, 1, 2, 1]),
+            ("SimultaneousReleases_UsesIndex", [1, 1], [3, 2, 1, 1], [0, 1, 0, 1]),
+            ("QueuedTasks_JumpsToRelease", [2, 1], [5, 5, 1, 1, 1], [1, 0, 1, 1, 0]),
+            ("ReleaseAtArrival_IsAvailable", [1, 2], [1, 1, 1], [0, 0, 0]),
+            ("SingleServer_ProcessesInOrder", [7], [5, 2, 3], [0, 0, 0]),
+            ("SingleTask_UsesLowestWeight", [3, 1, 2], [5], [1]),
+            ("SingleServer_TimeExceedsInt32", [1], Enumerable.Repeat(200_000, 11_000).ToArray(), new int[11_000]),
+            ("TwoServers_TimeExceedsInt32", [1, 1], Enumerable.Repeat(200_000, 22_000).ToArray(),
+                Enumerable.Range(0, 22_000).Select(i => i % 2).ToArray())
+        };
+
+        var solution = new Program();
+        int passed = 0;
+        foreach (var test in cases)
+        {
+            if (RunTest(solution, test.Name, test.Servers, test.Tasks, test.Expected))
+            {
+                passed++;
+            }
+        }
+
+        Console.WriteLine($"測試結果：{passed}/{cases.Length} 通過。");
+        Environment.ExitCode = passed == cases.Length ? 0 : 1;
     }
 
     /// <summary>
-    /// 方法一：优先队列
+    /// 執行一組合法題目輸入，以完整預期陣列驗證分配結果，並檢查輸入未被修改。
+    /// 小型案例顯示分配陣列，大型案例僅顯示數量；失敗時回報第一個差異並回傳 false。
     /// </summary>
-    /// <param name="servers"></param>
-    /// <param name="tasks"></param>
-    /// <returns></returns>
+    /// <param name="solution">接受測試的雙優先佇列解法。</param>
+    /// <param name="name">描述案例行為的名稱。</param>
+    /// <param name="servers">符合題目限制的伺服器權重。</param>
+    /// <param name="tasks">符合題目限制的任務耗時。</param>
+    /// <param name="expected">每個任務預期分配的伺服器索引。</param>
+    /// <returns>結果完全相符且輸入保持原樣時為 true，否則為 false。</returns>
+    private static bool RunTest(Program solution, string name, int[] servers, int[] tasks, int[] expected)
+    {
+        int[] originalServers = (int[])servers.Clone();
+        int[] originalTasks = (int[])tasks.Clone();
+        try
+        {
+            int[] actual = solution.AssignTasks(servers, tasks);
+            if (!servers.SequenceEqual(originalServers) || !tasks.SequenceEqual(originalTasks))
+            {
+                Console.WriteLine($"[FAIL] {name}：輸入陣列被修改。");
+                return false;
+            }
+
+            if (actual.Length != expected.Length)
+            {
+                Console.WriteLine($"[FAIL] {name}：預期長度 {expected.Length}，實際 {actual.Length}。");
+                return false;
+            }
+
+            for (int i = 0; i < expected.Length; i++)
+            {
+                if (actual[i] != expected[i])
+                {
+                    Console.WriteLine($"[FAIL] {name}：任務 {i} 預期 {expected[i]}，實際 {actual[i]}。");
+                    return false;
+                }
+            }
+
+            string result = actual.Length <= 20 ? $"[{string.Join(",", actual)}]" : $"{actual.Length:N0} 個任務";
+            Console.WriteLine($"[PASS] {name}：{result}");
+            return true;
+        }
+        catch (Exception exception)
+        {
+            Console.WriteLine($"[FAIL] {name}：{exception.GetType().Name}：{exception.Message}");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// 使用雙優先佇列與事件跳躍，依任務到達順序分配權重最小、同權重時索引最小的閒置伺服器。
+    /// 輸入須符合題目限制：兩陣列長度介於 1 與 200,000，元素介於 1 與 200,000。
+    /// 回傳與 tasks 等長的伺服器索引陣列，不修改輸入；以 long 儲存可能超過 Int32 上限的時間。
+    /// </summary>
+    /// <param name="servers">各伺服器的權重，陣列索引即伺服器編號。</param>
+    /// <param name="tasks">各任務耗時；任務 i 於第 i 秒到達。</param>
+    /// <returns>第 i 個元素為處理任務 i 的伺服器索引。</returns>
     public int[] AssignTasks(int[] servers, int[] tasks)
     {
-        // 工作中的服务器，存储二元组 (t, idx)
-        var busy = new PriorityQueue<(int t, int idx), int>();
-        // 空闲的服务器，存储二元组 (weight, idx)
-        var idle = new PriorityQueue<(int weight, int idx), (int weight, int idx)>(
-            Comparer<(int, int)>.Create((a, b) => {
-                if (a.Item1 != b.Item1) {
-                    return a.Item1 - b.Item1;
-                }
-                return a.Item2 - b.Item2;
-            })
-        );
+        // busy 只需依完成時間排序；同時完成者會全部移入 idle 後再比較權重與索引。
+        var busy = new PriorityQueue<(long t, int idx), long>();
+        var idle = new PriorityQueue<(int weight, int idx), (int weight, int idx)>();
 
-        for(int i = 0; i < servers.Length; i++)
+        for (int i = 0; i < servers.Length; i++)
         {
+            // ValueTuple 的預設比較先比較 weight，再比較 idx。
             idle.Enqueue((servers[i], i), (servers[i], i));
         }
 
-        int ts = 0;
+        // 最長累計時間可達 200,000 × 200,000，完成時間與優先權也必須使用 long。
+        long ts = 0;
         int[] ans = new int[tasks.Length];
 
-        for(int i = 0; i < tasks.Length; i++)
+        // 依索引處理即維持 FIFO；即使 ts 已超過到達時間，也不會讓後面的任務插隊。
+        for (int i = 0; i < tasks.Length; i++)
         {
             ts = Math.Max(ts, i);
             Release(busy, idle, servers, ts);
 
-            if(idle.Count == 0)
+            if (idle.Count == 0)
             {
+                // 無閒置伺服器時直接跳到下一個完成事件，避免逐秒等待。
                 ts = busy.Peek().t;
                 Release(busy, idle, servers, ts);
             }
@@ -107,16 +182,27 @@ class Program
             var server = idle.Dequeue();
             int idx = server.idx;
             ans[i] = idx;
-            busy.Enqueue((ts + tasks[i], idx), ts + tasks[i]);
+            long finishTime = ts + tasks[i];
+            busy.Enqueue((finishTime, idx), finishTime);
         }
+
         return ans;
     }
 
-    // 将优先队列 busy 中满足 t<=ts 依次取出并放入优先队列 idle
-    private void Release(PriorityQueue<(int t, int idx), int> busy, 
-                        PriorityQueue<(int w, int idx), (int, int)> idle, 
-                        int[] servers, int ts) {
-        while (busy.Count > 0 && busy.Peek().t <= ts) 
+    /// <summary>
+    /// 將完成時間不晚於 ts 的所有忙碌伺服器移回閒置佇列，讓下一次選擇遵循權重與索引順序。
+    /// 兩個佇列須描述同一組伺服器且互不重複；方法更新佇列，不修改權重陣列，無回傳值。
+    /// </summary>
+    /// <param name="busy">以 long 完成時間排序的忙碌伺服器佇列。</param>
+    /// <param name="idle">以權重、索引依序排序的閒置伺服器佇列。</param>
+    /// <param name="servers">用於查回伺服器權重的原始陣列。</param>
+    /// <param name="ts">目前模擬時間，必須不小於零。</param>
+    private void Release(PriorityQueue<(long t, int idx), long> busy,
+                         PriorityQueue<(int weight, int idx), (int weight, int idx)> idle,
+                         int[] servers, long ts)
+    {
+        // 必須使用 while 與 <=：包含恰好完成者，並一次釋放所有同時完成的伺服器。
+        while (busy.Count > 0 && busy.Peek().t <= ts)
         {
             var server = busy.Dequeue();
             int idx = server.idx;
