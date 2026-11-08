@@ -25,7 +25,7 @@ class Program
     /// <param name="args">命令列引數。</param>
     static void Main(string[] args)
     {
-        // 無需輸入：以固定預期值檢查兩種解法及輸入是否保持不變。
+        // 無需輸入：以固定預期值檢查三種解法及輸入是否保持不變。
         (string Name, int[][] Grid, int Expected)[] testCases =
         [
             ("Example1_IsolatedServers", [[1, 0], [0, 1]], 0),
@@ -48,7 +48,8 @@ class Program
         (string Name, Func<int[][], int> Solve)[] solutions =
         [
             (nameof(CountServers), solution.CountServers),
-            (nameof(CountServersBruteForce), solution.CountServersBruteForce)
+            (nameof(CountServersBruteForce), solution.CountServersBruteForce),
+            (nameof(CountServersDictionary), solution.CountServersDictionary)
         ];
 
         int passed = 0;
@@ -157,6 +158,51 @@ class Program
                 }
 
                 if (canCommunicate)
+                {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    /// <summary>
+    /// 以字典記錄有伺服器的列與欄，再以第二次遍歷計算可通訊數量。
+    /// 輸入須符合題目限制，且不修改輸入；雜湊操作平均／攤銷 O(1) 下，時間 O(mn)。
+    /// 額外空間 O(r+c)，r、c 為有伺服器的列、欄數，最壞 O(m+n)。
+    /// 與陣列統計法相比，字典查找與更新通常有較高的常數成本。
+    /// </summary>
+    /// <param name="grid">非空矩形的 0/1 矩陣，列數與欄數均介於 1 到 250。</param>
+    /// <returns>能與至少一台其他伺服器通訊的伺服器數量。</returns>
+    public int CountServersDictionary(int[][] grid)
+    {
+        int m = grid.Length;
+        int n = grid[0].Length;
+        IDictionary<int, int> rows = new Dictionary<int, int>();
+        IDictionary<int, int> cols = new Dictionary<int, int>();
+
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                if (grid[i][j] == 1)
+                {
+                    // 只在第一次遇到該列或欄時加入鍵，既有計數不會重設。
+                    rows.TryAdd(i, 0);
+                    ++rows[i];
+                    cols.TryAdd(j, 0);
+                    ++cols[j];
+                }
+            }
+        }
+
+        int count = 0;
+        for (int i = 0; i < m; i++)
+        {
+            for (int j = 0; j < n; j++)
+            {
+                // 第一輪已為每台伺服器建立列、欄鍵；短路判斷避免查詢空格的鍵。
+                if (grid[i][j] == 1 && (rows[i] > 1 || cols[j] > 1))
                 {
                     count++;
                 }
