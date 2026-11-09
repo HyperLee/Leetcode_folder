@@ -108,26 +108,172 @@ assigned server:   0       1       2       1       X (drop)
 | `busy` | `PriorityQueue<(int finishTime, int server), int>` | 元素記錄完成時間與編號，優先值是完成時間；初始為空 |
 | `requests` | `int[k]` | 各伺服器成功接收請求的次數；初始為零 |
 
+#### `SortedSet<int>` 是什麼？
+
+```csharp
+SortedSet<int> available = new SortedSet<int>();
+```
+
+這行建立一個空集合，命名為 `available`，用來保存目前空閒的伺服器編號。名稱可以拆開理解：
+
+| 部分 | 意義 |
+| --- | --- |
+| `Sorted` | 元素會自動排序；這裡的整數預設由小到大排列 |
+| `Set` | 集合，不允許重複元素 |
+| `<int>` | 元素的型別是整數 |
+| `new SortedSet<int>()` | 建立一個新的空集合物件 |
+
+以下獨立範例刻意打亂加入順序，並重複加入 2：
+
+```csharp
+SortedSet<int> available = new SortedSet<int>();
+available.Add(4);
+available.Add(0);
+available.Add(2);
+available.Add(2); // 已經有 2，不會重複加入。
+
+Console.WriteLine(string.Join(", ", available)); // 0, 2, 4
+```
+
+因此集合內容是 `{0,2,4}`。下表各列都以這個集合為操作前的狀態：
+
+| 操作 | 結果與本題用途 |
+| --- | --- |
+| `available.Add(1)` | 加入後為 `{0,1,2,4}`；伺服器完成工作時放回空閒集合 |
+| `available.Remove(2)` | 移除後為 `{0,4}`；伺服器接下工作時移出空閒集合 |
+| `available.Min` | 取得最小空閒編號 0，不移除元素 |
+| `available.Max` | 取得最大空閒編號 4，不移除元素 |
+| `available.Count` | 取得空閒伺服器數量 3 |
+
+`SortedSet<int>` 不支援用 `available[0]` 依索引取得第一個元素；這裡要取得最小編號應使用 `available.Min`。
+相較之下，`List<int>` 支援索引與重複元素，但加入元素時不會自動排序。本題選擇 `SortedSet<int>`，是為了在伺服器持續加入、移除時，仍能依編號快速尋找下一台空閒伺服器。
+
+正式程式會用 `for` 逐一加入 `0..k-1`。例如 `k=3`，初始狀態為：
+
+```text
+available = {0,1,2}
+busy      = 空
+requests  = [0,0,0]
+```
+
+#### `busy` 的元素與優先值
+
+```csharp
+PriorityQueue<(int finishTime, int server), int> busy = new PriorityQueue<(int, int), int>(
+    Comparer<int>.Create((a, b) => a.CompareTo(b)));
+```
+
+`PriorityQueue<TElement, TPriority>` 的第一個型別代表「儲存的元素」，第二個型別代表「決定取出順序的優先值」：
+
+- 元素 `(int finishTime, int server)` 同時記錄完成時間與伺服器編號。
+- 優先值 `int` 在每次入列時指定為完成時間。
+- `a.CompareTo(b)` 依整數由小到大比較，讓完成時間較小的項目先取出；這也等同 `int` 的預設比較順序。
+
+例如 `busy.Enqueue((6, 0), 6)` 表示「伺服器 0 將在時間 6 完成」，並以 6 作為優先值。
+因此佇列頂端是最早完成的項目，並非編號最小或最早加入的伺服器。
+
 ### 每個請求的處理步驟
 
 1. 持續取出 `busy` 中 `finishTime <= arrival[i]` 的元素，將伺服器加入 `available`。必須使用 `while`，因為可能有多台同時完成。
 2. 若 `available.Count == 0`，丟棄目前請求。
 3. 令 `target = i % k`，選擇不小於 `target` 的最小空閒編號；如果所有空閒編號都小於它，就繞回最小編號。
-4. 次數加一，將選中的編號移出空閒集合，再以 `arrival[i] + load[i]` 作為完成時間加入 `busy`。
+4. 次數加一，以 `arrival[i] + load[i]` 作為完成時間加入 `busy`，再將選中的編號移出空閒集合。
 5. 全部請求處理完後，求最大次數並收集所有相等的編號。
+
+### 逐行理解：釋放所有已完成的伺服器
+
+```csharp
+while (busy.Count > 0 && busy.Peek().finishTime <= arrival[i])
+{
+    var item = busy.Dequeue();
+    available.Add(item.server);
+}
+```
+
+這段可以讀成：「只要忙碌佇列不為空，而且最早的完成時間不晚於目前請求到達時間，就將那台伺服器移回空閒集合，接著繼續檢查下一台。」
+
+| 程式 | 意義 |
+| --- | --- |
+| `busy.Count > 0` | 先確認佇列還有項目 |
+| `&&` | 左邊成立才計算右邊；若佇列為空，就不會呼叫 `Peek()`，避免空佇列存取錯誤 |
+| `busy.Peek()` | 查看最早完成的元素，但不移除它 |
+| `.finishTime <= arrival[i]` | 判斷這台伺服器是否已在新請求到達前或到達當下完成 |
+| `busy.Dequeue()` | 移除最早完成的元素，並將它回傳給 `item`；`var` 讓編譯器推斷其型別為完成時間與編號的 tuple |
+| `available.Add(item.server)` | 取出該元素中的伺服器編號，加入空閒集合 |
+
+假設新請求在時間 6 到達，原本沒有空閒伺服器，而 `busy` 的取出順序為 `(4,1)、(6,0)、(9,2)`；每一組是 `(完成時間, 伺服器編號)`：
+
+| 檢查頂端 | 條件 | 動作 | 動作後的 `available` |
+| --- | --- | --- | --- |
+| `(4,1)` | `4 <= 6` 成立 | 移除項目，釋放伺服器 1 | `{1}` |
+| `(6,0)` | `6 <= 6` 成立 | 移除項目，釋放伺服器 0 | `{0,1}` |
+| `(9,2)` | `9 <= 6` 不成立 | 停止迴圈，項目留在 `busy` | `{0,1}` |
+
+使用 `<=`，是因為時間 6 完成的工作不會占用時間 6 新到達的請求所需的處理時段。
+使用 `while` 而非 `if`，則是為了在分派前釋放**所有**已完成的伺服器；這個例子若只釋放一台，就會漏掉已空閒的伺服器 0。
+
+### 沒有空閒伺服器時，丟棄目前請求
+
+```csharp
+if (available.Count == 0)
+{
+    continue;
+}
+```
+
+必須先釋放已完成的伺服器，再判斷集合是否為空，才能使用剛完成工作的伺服器。
+若釋放後仍為空，`continue` 會跳過本輪分派與計數，但外層 `for` 仍會執行 `i++`。
+例如 `k=3`、索引 `i=2` 的請求被丟棄後，下一個索引仍是 `i=3`，搜尋起點為 `3 % 3 = 0`；不能改用成功接收的請求數計算起點。
 
 ### 如何快速找下一台
 
+先決定搜尋起點，再決定實際分派對象：
+
 ```csharp
+int target = i % k;
 int serverId = available.Max < target
     ? available.Min
     : available.GetViewBetween(target, k - 1).Min;
 ```
 
-假設 `available = {0,2,4}`：
+`%` 是取餘數。假設 `k=6`，請求索引 `i=3、5、8` 時，`target` 分別為 `3、5、2`。
+**`target` 只是從哪個編號開始找，不保證該伺服器空閒；`serverId` 才是最後選中的空閒伺服器。**
 
-- `target = 3`：區間 `[3,k-1]` 中最小值是 4。
-- `target = 5`（假設 `k >= 6`）：最大空閒編號 4 小於 5，繞回選 0。
+三元運算式 `條件 ? 成立時的值 : 不成立時的值`，可改寫成完全等價的 `if / else`，較容易分開閱讀：
+
+```csharp
+int target = i % k;
+int serverId;
+
+if (available.Max < target)
+{
+    // 連最大的空閒編號都小於起點，後面沒有可選對象，必須繞回。
+    serverId = available.Min;
+}
+else
+{
+    // 起點或後面還有空閒伺服器，選其中編號最小的。
+    serverId = available.GetViewBetween(target, k - 1).Min;
+}
+```
+
+以下三種情況都固定使用 `k=6`、`available={0,2,4}`，也就是編號 0、2、4 空閒，1、3、5 忙碌：
+
+| `target` | 依題意搜尋的順序 | `available.Max < target` | 查找方式 | `serverId` |
+| --- | --- | --- | --- | --- |
+| 2 | `2 → 3 → 4 → 5 → 0 → 1` | `4 < 2` 不成立 | 區間 `[2,5]` 有 `{2,4}`，取最小值 | 2 |
+| 3 | `3 → 4 → 5 → 0 → 1 → 2` | `4 < 3` 不成立 | 區間 `[3,5]` 只有 `{4}`，取最小值 | 4 |
+| 5 | `5 → 0 → 1 → 2 → 3 → 4` | `4 < 5` 成立 | 起點後方沒有空閒編號，繞回取全體最小值 | 0 |
+
+以 `target=3` 展開 `available.GetViewBetween(3, 5).Min`：
+
+1. `GetViewBetween(3, 5)` 取得編號介於 3 到 5 的集合視圖，**包含上下界**；這裡視圖中只有 `{4}`。
+2. 視圖連結到原集合，並非另外複製一份集合；此處僅讀取，不修改內容。
+3. `.Min` 取得該範圍內最小的空閒編號，因此選 4。
+
+若 `target=2`，因為範圍包含下界，所以可以直接選到空閒的起點 2。
+若 `target=5`，最大空閒編號才到 4，代表 `[5,5]` 沒有空閒伺服器，必須繞回選 0。
+也不能每次一律取 `available.Min`：從 3 開始搜尋時會先遇到 4，雖然 0 也空閒，仍必須等繞回後才輪到它。
 
 前面已排除空集合。當 `available.Max >= target` 時，區間內必定有元素，所以能安全取 `Min`。
 這個查找相當於 ceiling（大於等於目標的最小值），不需要從最小編號逐一走訪。
@@ -166,6 +312,23 @@ search:                         5 | 0 ->1 ->2 ->3 ->4
 循環順序其實就是先查 `[target,k-1]`，再查 `[0,target-1]`。
 只要右半段有空閒編號，左半段再小也不能優先選；右半段完全沒有空閒時，才繞回。
 這正是「找後繼，找不到就取全體最小值」的由來。
+
+### 分派成功後，更新次數與忙碌狀態
+
+```csharp
+requests[serverId]++;
+busy.Enqueue((arrival[i] + load[i], serverId), arrival[i] + load[i]);
+available.Remove(serverId);
+```
+
+這三行依序完成：
+
+1. 該伺服器成功接收的請求數加一；比較的是請求數量，不是累計負載。
+2. 計算新完成時間，以 `(完成時間, 編號)` 作為元素、完成時間作為優先值加入 `busy`。
+3. 將該編號移出 `available`，避免同一台伺服器同時接到另一個請求。
+
+例如 `serverId=1`、`arrival[i]=4`、`load[i]=3`，就會將 `requests[1]` 加一，執行 `busy.Enqueue((7, 1), 7)`，並從空閒集合移除 1。
+完成時間是 `4+3=7`，因為成功分派的請求會在到達時立即開始處理，沒有等待佇列。
 
 ### ASCII 圖：完成時間佇列與集合如何交接
 
@@ -209,6 +372,28 @@ ASSIGN server 1:
 | 2 | 3 / 3 | 無 | `{2}` | 2 | 2，完成於 6 | `[1,1,1]` |
 | 3 | 4 / 3 | 1 | `{1}` | 0 | 後繼為 1，完成於 7 | `[1,2,1]` |
 | 4 | 5 / 3 | 無 | `{}` | 1 | 丟棄 | `[1,2,1]` |
+
+### 收集全部並列最多的伺服器
+
+```csharp
+int maxRequests = requests.Max();
+List<int> result = new List<int>();
+for (int i = 0; i < k; i++)
+{
+    if (requests[i] == maxRequests)
+    {
+        result.Add(i);
+    }
+}
+return result;
+```
+
+`requests.Max()` 先求出最多的請求數，再逐台檢查，將所有達到該次數的編號加入結果。
+例如 `requests=[3,1,3,2]`，最大值是 3，編號 0、2 都達到最大值，所以回傳 `[0,2]`，不能只保留第一台。
+官方範例一的次數為 `[1,2,1]`，因此回傳 `[1]`。
+
+實際建立的是 `List<int>`；因為它實作 `IList<int>` 介面，所以可以作為此方法的回傳值。
+請求分派成功時就已計數，後續完成事件不會改變次數，因此全部請求分派完後，不必再清空 `busy` 或模擬到最後一台完成。
 
 ### 正確性與複雜度
 
