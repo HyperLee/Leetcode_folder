@@ -47,6 +47,55 @@
 不必逐時間單位模擬，只在每個請求到達時更新狀態。每台伺服器恰好存在於空閒或忙碌容器之一，避免重複分派。
 即使請求丟棄，`i` 仍代表原始輸入索引，下一個起點不能改用已接受請求的數量。
 
+### 先分清楚兩條軸：請求索引與實際時間
+
+`i` 決定「從哪台開始找」，`arrival[i]` 決定「哪些伺服器已完成」。這兩個數值用途不同，不能互相替換。
+以官方範例一為例：
+
+```text
+request index i :   0       1       2       3       4
+arrival[i]     :   1       2       3       4       5
+i % 3          :   0       1       2       0       1
+assigned server:   0       1       2       1       X (drop)
+```
+
+這個範例剛好每隔一個時間單位到達，但輸入也可以是 `[1,10,100]`。
+即使時間跳了很大一段，起點仍依序為 0、1、2；只需要在下一次到達時，一次釋放所有已完成的伺服器。
+
+### 共同流程 ASCII 圖
+
+```text
+                 request i arrives at time t
+                              |
+                              v
+             +--------------------------------+
+             | while busy.min.finishTime <= t |
+             |   pop completed server         |
+             |   add to available             |
+             | repeat until false / empty     |
+             +--------------------------------+
+                              |
+                              v
+                   available is empty ?
+                     | yes           | no
+                     v               v
+                   DROP        choose next server
+                     |         from target = i % k
+                     |               |
+                     |               v
+                     |         requests[id] += 1
+                     |         remove from available
+                     |         busy.push(t + load[i], id)
+                     |               |
+                     +-------+-------+
+                             v
+                          i = i + 1
+```
+
+釋放迴圈會重新檢查堆積頂端，直到最早的完成時間也大於 `t`，才往下進行。
+`busy` 依完成時間排序，因此頂端還沒完成時，其他忙碌項目也一定沒完成，不需要掃描整個佇列。
+若多台同時完成，它們的取出順序不重要：分派前會先全部放回空閒容器。
+
 ## 解法一：有序集合與完成時間優先佇列
 
 對應 `BusiestServers(int k, int[] arrival, int[] load)`，回傳 `IList<int>`。
@@ -85,6 +134,68 @@ int serverId = available.Max < target
 
 在 [.NET 10 的 TreeSubSet 原始碼](https://github.com/dotnet/runtime/blob/v10.0.0/src/libraries/System.Collections/src/System/Collections/Generic/SortedSet.TreeSubSet.cs)中，區間定位與最小值查找沿樹路徑進行；區間 `Count` 則可能觸發重新走訪計數。
 因此這裡直接依母集合的 `Max` 判斷是否需要繞回，避免以區間視圖的 `Count` 判斷有無後繼。母集合的 `available.Count` 不屬於這個問題。
+
+### ASCII 圖：把循環搜尋拆成兩段
+
+以 `k=6`、空閒編號 `{0,2,4}` 為例。`F` 表示空閒，`B` 表示忙碌。
+圖中的編號列是邏輯順序，不是 `SortedSet` 的內部樹形。
+
+```text
+server:     0   1   2   3   4   5
+state :     F   B   F   B   F   B
+
+case A: target = 3
+search:                 3 ->4 ->5 | 0 ->1 ->2
+                            ^
+                            first free = 4
+
+        [target .. k-1] = [3 .. 5]
+        available in this range = {4}
+        choose range.Min = 4
+
+case B: target = 5
+search:                         5 | 0 ->1 ->2 ->3 ->4
+                                    ^
+                                    first free = 0
+
+        [target .. k-1] = [5 .. 5]
+        available in this range = {}
+        wrap around -> choose available.Min = 0
+```
+
+循環順序其實就是先查 `[target,k-1]`，再查 `[0,target-1]`。
+只要右半段有空閒編號，左半段再小也不能優先選；右半段完全沒有空閒時，才繞回。
+這正是「找後繼，找不到就取全體最小值」的由來。
+
+### ASCII 圖：完成時間佇列與集合如何交接
+
+以下放大官方範例一的第 3 輪。圖中 `busy` 按完成時間展開，表示取出順序，並非實際堆積陣列布局。
+`(finish,id)` 代表完成時間與伺服器編號。
+
+```text
+i = 3, t = arrival[3] = 4, load[3] = 3, target = 0
+
+BEFORE release:
+    busy      : [(4,1), (6,0), (6,2)]
+    available : {}
+    requests  : [1,1,1]
+
+    (4,1) -- finish <= t --> release server 1
+    (6,0) -- finish >  t --> stop releasing
+
+AFTER release:
+    busy      : [(6,0), (6,2)]
+    available : {1}
+                     target 0 -> next free 1
+
+ASSIGN server 1:
+    available : {1} -- remove 1 --> {}
+    busy      : [(6,0), (6,2)] -- push (4+3,1) --> [(6,0), (6,2), (7,1)]
+    requests  : [1,1,1] -- count server 1 --> [1,2,1]
+```
+
+下一輪 `i=4, t=5` 時，最早完成時間是 6，所以沒有伺服器可釋放；空閒集合仍為空，該請求便丟棄。
+伺服器 1 的完成時間會從 4 更新成 7，因為它接到的是一個新請求。
 
 ### 逐步演示：官方範例一
 
@@ -130,6 +241,41 @@ int serverId = available.Max < target
 
 第 `i` 輪從虛擬位置 `i` 開始；對伺服器 `id`，需要第一個不小於 `i` 且與 `id` 模 `k` 同餘的位置。
 
+### ASCII 圖：用一段長度 k 的視窗看循環順序
+
+仍以 `k=3` 為例，第 `i=4` 輪的起點是編號 `4 % 3 = 1`。
+只看虛擬位置 `[4,6]`，就剛好包含每個編號一次，而且順序正好是 1、2、0。
+
+```text
+virtual position:   0  1  2 | 3  4  5 | 6  7  8
+server id       :   0  1  2 | 0  1  2 | 0  1  2
+                                [-------]
+window [i,i+k-1]:                4  5    6
+cyclic order    :                1  2    0
+                                ^
+                                start at i = 4
+```
+
+假設此時編號 0、2 空閒，編號 1 忙碌：
+
+```text
+id             :    1       2       0
+state          :    B       F       F
+distance       :    0       1       2
+priority (pos) :    4       5       6
+                            ^
+                            minimum available priority
+                            choose id 2
+
+available entries (element=id, priority=pos):
+    [(id=2, pos=5), (id=0, pos=6)]
+       |
+       +-- Dequeue() returns 2
+```
+
+雖然編號 0 比 2 小，但順位 6 比 5 大，所以會正確選到 2。
+這個視窗是理解排序的工具，程式不會真的建立無限序列，也不會建立長度 `k` 的視窗陣列；它只替空閒伺服器儲存一個順位整數。
+
 ### 推導釋放時的順位公式
 
 ```csharp
@@ -146,6 +292,22 @@ int pos = i + distance;
 這代表本輪從編號 1 開始，經過 1、2 後才到 0。
 順位上界為 `(n-1)+(k-1) <= 199,998`，同樣可使用 `int`。
 
+### 把公式逐步算一次
+
+設定 `k=3, i=4`。下表是各編號**若在本輪釋放**時要使用的順位；忙碌而未完成的編號不會加入空閒佇列。
+
+| id | id - i | C# `(id-i) % k` | 加 k 再取餘數得到 distance | pos = i + distance |
+| --- | --- | --- | --- | --- |
+| 0 | -4 | -1 | `(-1+3)%3 = 2` | 6 |
+| 1 | -3 | 0 | `(0+3)%3 = 0` | 4 |
+| 2 | -2 | -2 | `(-2+3)%3 = 1` | 5 |
+
+因此順位遞增的順序是 `id=1 -> id=2 -> id=0`，剛好是本輪需要的循環順序。
+這也說明不能直接使用 `(id-i)%k`：編號 0、2 的距離會是負數，失去「向前走幾步」的意義。
+
+`pos` 加上 `i` 也有用途：不同輪釋放的伺服器需要使用同一條虛擬位置軸。
+如果僅存當輪算出的 `distance`，舊項目的相對距離會隨起點移動而失效；儲存絕對位置 `pos`，搭配每輪取走最小值，才能安全保留舊項目。
+
 ### 為什麼舊的空閒順位不用每輪更新
 
 關鍵不變量是：**第 `i` 輪釋放完畢後，每個空閒伺服器的順位都位於 `[i,i+k-1]`，且順位模 `k` 等於編號。**
@@ -157,6 +319,44 @@ int pos = i + distance;
 5. 下一輪既有順位都至少為 `i+1`，上界仍不超過下一輪的上界 `i+k`，因此仍是各編號最早的合法位置。若本輪丟棄，佇列為空，也沒有過期順位留下。
 
 所以只需要在伺服器「從忙碌變空閒」時計算一次順位，不能將每輪更新整個堆積當成必要步驟。
+
+### ASCII 圖：留下的順位為什麼不會過期
+
+先看 `k=3, arrival=[1,2,3,4], load=[1,2,1,2]`，這是官方範例二。
+以下 `id:pos` 代表「元素是編號、優先值是順位」，不是完成時間。
+
+```text
+i=0, t=1, window=[0,2]
+    available before assignment: [0:0, 1:1, 2:2]
+    choose 0:0  --> remaining:   [1:1, 2:2]
+                                 ^ both positions >= 1
+
+i=1, t=2, window=[1,3]
+    server 0 finishes at t=2
+    reinsert 0 with pos=1+2=3
+    available before assignment: [1:1, 2:2, 0:3]
+    choose 1:1  --> remaining:   [2:2, 0:3]
+                                 ^ both positions >= 2
+
+i=2, t=3, window=[2,4]
+    no release
+    available before assignment: [2:2, 0:3]
+    choose 2:2  --> remaining:   [0:3]
+                                 ^ position >= 3
+
+i=3, t=4, window=[3,5]
+    servers 1 and 2 finish at t=4
+    reinsert 1 with pos=4, 2 with pos=5
+    available before assignment: [0:3, 1:4, 2:5]
+    choose 0:3
+```
+
+注意伺服器 0 在第 1 輪以順位 3 放回後，第 2 輪仍然保留順位 3，直到第 3 輪才被選中。
+它不需要改成新的順位，因為本輪的起點還沒越過位置 3；等起點真的走到 3 時，它會是最小值並被取出。
+若某輪跳過起點順位、選到更大的順位，也代表佇列中本來就沒有較小的順位，所以同樣不會留下已過期的項目。
+
+這個性質依賴每輪最多移動一個請求索引 `i`，而不是依時間跳躍。
+例如從 `arrival[i]=3` 跳到下一個到達時間 100，虛擬起點仍只從 `i` 變成 `i+1`；完成時間佇列負責處理這段期間所有完成的請求。
 
 ### 每個請求的處理步驟
 
@@ -180,6 +380,29 @@ int pos = i + distance;
 | 4 | 5 / 3 | 無 | 空 | 丟棄 | `[1,2,1]` |
 
 第 3 輪從編號 0 開始，但可用編號 1 的順位是 4，所以選擇 1，與有序集合結果相同。
+
+### ASCII 圖：同一台伺服器在兩個佇列間移動
+
+以官方範例一 `i=3, t=4` 為例，伺服器 1 的上一個請求剛完成。
+
+```text
+busy ordered by finish time        available ordered by virtual position
+
+[(4,1), (6,0), (6,2)]              []
+   |
+   +-- release id=1
+       pos = 3 + ((1-3)%3+3)%3
+           = 3 + 1 = 4
+                     --------------------> [id=1, pos=4]
+                                                |
+                                      Dequeue() returns id=1
+                                                |
+[(6,0), (6,2), (7,1)] <--------------------------+
+                  finish = arrival[3] + load[3] = 4 + 3 = 7
+```
+
+兩個佇列的優先值回答不同問題：完成時間 4 告訴我們「現在能釋放」，虛擬順位 4 告訴我們「現在應先選誰」。
+此例兩者碰巧都是 4，沒有必須相等的關係；新完成時間是 7，也不會拿來當空閒順位。
 
 ### 正確性與複雜度
 
