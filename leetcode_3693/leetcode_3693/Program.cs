@@ -46,20 +46,22 @@ class Program
     /// <returns>從第 0 階抵達第 n 階的最小總費用。</returns>
     public int ClimbStairs(int n, int[] costs)
     {
-        // 計算第 k = i + 1 階前，a、b、c 分別對應 f[k-3]、f[k-2]、f[k-1]。
+        // 計算第 k = i + 1 階前，minCostThreeStepsBack、minCostTwoStepsBack、minCostOneStepBack 分別對應 f[k-3]、f[k-2]、f[k-1]。
         // 起初前兩格是虛擬狀態：第 1 階的 +1 勝過 +4、+9；
         // 第 2 階的虛擬 +9 也比合法的 f[0]+4 大，因此全設 0 不會選到非法前驅。
-        int a = 0, b = 0, c = 0;
+        int minCostThreeStepsBack = 0;
+        int minCostTwoStepsBack = 0;
+        int minCostOneStepBack = 0;
         for (int i = 0; i < n; i++)
         {
             // costs[i] 是第 i+1 階的落點費用；9、4、1 分別是跳三、二、一階的平方。
-            int next = Math.Min(Math.Min(a + 9, b + 4), c + 1) + costs[i];
+            int next = Math.Min(Math.Min(minCostThreeStepsBack + 9, minCostTwoStepsBack + 4), minCostOneStepBack + 1) + costs[i];
             // 先用舊狀態算完 next，再向前移動視窗，避免覆寫仍需讀取的值。
-            a = b;
-            b = c;
-            c = next;
+            minCostThreeStepsBack = minCostTwoStepsBack;
+            minCostTwoStepsBack = minCostOneStepBack;
+            minCostOneStepBack = next;
         }
-        return c;
+        return minCostOneStepBack;
     }
 
     /// <summary>

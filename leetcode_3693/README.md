@@ -142,56 +142,56 @@ f[4] = min(f[1] + 9, f[2] + 4, f[3] + 1) + costs[3]
 
 三個候選的落點相同，所以先取最小值，再統一加一次落點費用。
 
-### 對應到 a、b、c 與 next
+### 滾動變數與 next 的狀態對應
 
-每一輪只需要最近三個狀態，不必保留完整陣列。程式用 `a、b、c` 保存它們，並用 `next` 保存目前這一階的新答案。
+每一輪只需要最近三個狀態，不必保留完整陣列。程式用 `minCostThreeStepsBack、minCostTwoStepsBack、minCostOneStepBack` 保存它們，並用 `next` 保存目前這一階的新答案。
 
 注意：**題目公式中的 `i` 表示出發階梯，程式迴圈的 `i` 則是陣列索引，兩者用途不同。** 程式目前計算的目的階梯為 `k = i + 1`，落點費用是 `costs[i] = costs[k-1]`。當三個前驅都合法時，計算前的變數意義為：
 
 | 變數 | 對應狀態 | 到目的地的跳距 |
 | --- | --- | --- |
-| `a` | `f[k-3]` | 3，平方為 9 |
-| `b` | `f[k-2]` | 2，平方為 4 |
-| `c` | `f[k-1]` | 1，平方為 1 |
+| `minCostThreeStepsBack` | `f[k-3]` | 3，平方為 9 |
+| `minCostTwoStepsBack` | `f[k-2]` | 2，平方為 4 |
+| `minCostOneStepBack` | `f[k-1]` | 1，平方為 1 |
 
 ```csharp
-int next = Math.Min(Math.Min(a + 9, b + 4), c + 1) + costs[i];
+int next = Math.Min(Math.Min(minCostThreeStepsBack + 9, minCostTwoStepsBack + 4), minCostOneStepBack + 1) + costs[i];
 ```
 
 這行先比較「前驅的累積最低費用 + 這次跳躍的平方費用」，再加上目前階梯的落點費用。巢狀的 `Math.Min` 只是用來取三個候選的最小值。
 
 ### 算完一階後，如何移動視窗？
 
-先用舊的 `a、b、c` 算出 `next`，再依序更新：
+先用舊的 `minCostThreeStepsBack、minCostTwoStepsBack、minCostOneStepBack` 算出 `next`，再依序更新：
 
 ```csharp
-a = b;
-b = c;
-c = next;
+minCostThreeStepsBack = minCostTwoStepsBack;
+minCostTwoStepsBack = minCostOneStepBack;
+minCostOneStepBack = next;
 ```
 
-`a = b` 是把當下 `b` 的數值複製給 `a`，不會讓兩個變數永久綁定；之後 `b` 改變，`a` 不會跟著改變。三行由上往下依序執行，因此 `a` 接收舊的 `b`、`b` 接收舊的 `c`，最後 `c` 接收剛算好的 `next`。
+`minCostThreeStepsBack = minCostTwoStepsBack` 是把當下 `minCostTwoStepsBack` 的數值複製給 `minCostThreeStepsBack`，不會讓兩個變數永久綁定；之後 `minCostTwoStepsBack` 改變，`minCostThreeStepsBack` 不會跟著改變。三行由上往下依序執行，因此 `minCostThreeStepsBack` 接收舊的 `minCostTwoStepsBack`、`minCostTwoStepsBack` 接收舊的 `minCostOneStepBack`，最後 `minCostOneStepBack` 接收剛算好的 `next`。
 
-**`a、b、c` 只在進入迴圈前初始化為 `0`，下一輪會沿用這一輪更新後的值，不會重新歸零。** 新答案先存進 `c`，之後也會逐輪移到 `b` 和 `a`，供後續計算使用。
+**`minCostThreeStepsBack、minCostTwoStepsBack、minCostOneStepBack` 只在進入迴圈前初始化為 `0`，下一輪會沿用這一輪更新後的值，不會重新歸零。** 新答案先存進 `minCostOneStepBack`，之後也會逐輪移到 `minCostTwoStepsBack` 和 `minCostThreeStepsBack`，供後續計算使用。
 
 以剛算完第 `4` 階、準備算第 `5` 階為例：
 
 ```text
-計算第 4 階前：a = f[1]，b = f[2]，c = f[3]
+計算第 4 階前：minCostThreeStepsBack = f[1]，minCostTwoStepsBack = f[2]，minCostOneStepBack = f[3]
 算出新答案：  next = f[4]
 
-a = b;       → a 保存舊的 f[2]
-b = c;       → b 保存舊的 f[3]
-c = next;    → c 保存新的 f[4]
+minCostThreeStepsBack = minCostTwoStepsBack;→ minCostThreeStepsBack 保存舊的 f[2]
+minCostTwoStepsBack = minCostOneStepBack; → minCostTwoStepsBack 保存舊的 f[3]
+minCostOneStepBack = next;                → minCostOneStepBack 保存新的 f[4]
 
-計算第 5 階前：a = f[2]，b = f[3]，c = f[4]
+計算第 5 階前：minCostThreeStepsBack = f[2]，minCostTwoStepsBack = f[3]，minCostOneStepBack = f[4]
 ```
 
-變數名稱維持不變，但代表的階梯持續往前移動。必須先算好 `next` 再更新；若太早覆寫，就會混用不同階數的資料。迴圈結束後 `c` 即為 `f[n]`，因此回傳 `c`。
+變數名稱維持不變，但代表的階梯持續往前移動。必須先算好 `next` 再更新；若太早覆寫，就會混用不同階數的資料。迴圈結束後 `minCostOneStepBack` 即為 `f[n]`，因此回傳 `minCostOneStepBack`。
 
-### 為什麼 a、b、c 都能初始化為 0？
+### 為什麼三個滾動變數都能初始化為 0？
 
-程式將 `a、b、c` 都初始化為 `0`。前兩個起始位置是虛擬狀態，並不代表可以從負階梯出發：
+程式將 `minCostThreeStepsBack、minCostTwoStepsBack、minCostOneStepBack` 都初始化為 `0`。前兩個起始位置是虛擬狀態，並不代表可以從負階梯出發：
 
 - 計算第 `1` 階時，三個候選為 `9、4、1`，合法的 `f[0]+1` 必定勝出。
 - 計算第 `2` 階時，唯一仍虛擬的候選是 `0+9`，合法的 `f[0]+4 = 4` 更小。
@@ -201,50 +201,52 @@ c = next;    → c 保存新的 f[4]
 
 ### 範例演示與 ASCII 視窗
 
-使用 `costs = [1, 2, 3, 4]`，`k = i + 1` 是本輪要計算的階梯。「本輪開始」表示尚未執行本輪的三行賦值，但已經沿用上一輪更新後的結果。三個候選依序為 `a+9、b+4、c+1`；`next` 則是「最小候選值 + 本階落點費用 `costs[k-1]`」。
+使用 `costs = [1, 2, 3, 4]`，`k = i + 1` 是本輪要計算的階梯。「本輪開始」表示尚未執行本輪的三行賦值，但已經沿用上一輪更新後的結果。三個候選依序為 `minCostThreeStepsBack+9、minCostTwoStepsBack+4、minCostOneStepBack+1`；`next` 則是「最小候選值 + 本階落點費用 `costs[k-1]`」。
 
-| k | 本輪開始 `(a,b,c)` | 三個候選的完整算式 | next | 更新後 `(a,b,c)` |
+下表的三元組依序為 `(minCostThreeStepsBack, minCostTwoStepsBack, minCostOneStepBack)`。
+
+| k | 本輪開始（三元組） | 三個候選的完整算式 | next | 更新後（三元組） |
 | --- | --- | --- | --- | --- |
 | 1 | `(0,0,0)` | `0+9=9、0+4=4、0+1=1` | `1+1=2` | `(0,0,2)` |
 | 2 | `(0,0,2)` | `0+9=9、0+4=4、2+1=3` | `3+2=5` | `(0,2,5)` |
 | 3 | `(0,2,5)` | `0+9=9、2+4=6、5+1=6` | `6+3=9` | `(2,5,9)` |
 | 4 | `(2,5,9)` | `2+9=11、5+4=9、9+1=10` | `9+4=13` | `(5,9,13)` |
 
-**每列的「更新後」，就是下一列的「本輪開始」。** 例如第 1 輪把 `c` 更新為 `2`，所以第 2 輪的 `c+1` 就變成 `2+1=3`。
+**每列的「更新後」，就是下一列的「本輪開始」。** 例如第 1 輪把 `minCostOneStepBack` 更新為 `2`，所以第 2 輪的 `minCostOneStepBack+1` 就變成 `2+1=3`。
 
 把第 1 輪到第 2 輪之間的執行過程展開來看：
 
 ```csharp
-// 第 1 輪開始：a = 0、b = 0、c = 0，costs[0] = 1。
-int next = Math.Min(Math.Min(a + 9, b + 4), c + 1) + costs[0];
+// 第 1 輪開始：minCostThreeStepsBack = 0、minCostTwoStepsBack = 0、minCostOneStepBack = 0，costs[0] = 1。
+int next = Math.Min(Math.Min(minCostThreeStepsBack + 9, minCostTwoStepsBack + 4), minCostOneStepBack + 1) + costs[0];
 // next = min(9, 4, 1) + 1 = 2。
 
-a = b;     // a = 0，複製當下 b 的值。
-b = c;     // b = 0，複製當下 c 的值。
-c = next;  // c = 2，保存這一輪的新答案。
+minCostThreeStepsBack = minCostTwoStepsBack;// minCostThreeStepsBack = 0，複製當下 minCostTwoStepsBack 的值。
+minCostTwoStepsBack = minCostOneStepBack; // minCostTwoStepsBack = 0，複製當下 minCostOneStepBack 的值。
+minCostOneStepBack = next;                // minCostOneStepBack = 2，保存這一輪的新答案。
 
-// 第 2 輪開始：沿用 a = 0、b = 0、c = 2，costs[1] = 2。
-next = Math.Min(Math.Min(a + 9, b + 4), c + 1) + costs[1];
+// 第 2 輪開始：沿用 minCostThreeStepsBack = 0、minCostTwoStepsBack = 0、minCostOneStepBack = 2，costs[1] = 2。
+next = Math.Min(Math.Min(minCostThreeStepsBack + 9, minCostTwoStepsBack + 4), minCostOneStepBack + 1) + costs[1];
 // 三個候選是 0+9=9、0+4=4、2+1=3。
 // next = min(9, 4, 3) + 2 = 5。
 
-a = b;     // a = 0。
-b = c;     // b = 2。
-c = next;  // c = 5，下一輪便從 (0,2,5) 開始。
+minCostThreeStepsBack = minCostTwoStepsBack;// minCostThreeStepsBack = 0。
+minCostTwoStepsBack = minCostOneStepBack; // minCostTwoStepsBack = 2。
+minCostOneStepBack = next;                // minCostOneStepBack = 5，下一輪便從 (0,2,5) 開始。
 ```
 
 再用 ASCII 視窗回顧完整四輪：
 
 ```text
-初始    [a=0, b=0, c=0]
-算第1階       | next=2
-更新    [a=0, b=0, c=2]
-算第2階       | next=5
-更新    [a=0, b=2, c=5]
-算第3階       | next=9
-更新    [a=2, b=5, c=9]
-算第4階       | next=13
-更新    [a=5, b=9, c=13] --> 回傳 13
+初始    [minCostThreeStepsBack=0, minCostTwoStepsBack=0, minCostOneStepBack=0]
+算第1階                                  | next=2
+更新    [minCostThreeStepsBack=0, minCostTwoStepsBack=0, minCostOneStepBack=2]
+算第2階                                  | next=5
+更新    [minCostThreeStepsBack=0, minCostTwoStepsBack=2, minCostOneStepBack=5]
+算第3階                                  | next=9
+更新    [minCostThreeStepsBack=2, minCostTwoStepsBack=5, minCostOneStepBack=9]
+算第4階                                  | next=13
+更新    [minCostThreeStepsBack=5, minCostTwoStepsBack=9, minCostOneStepBack=13] --> 回傳 13
 ```
 
 每階只做固定次數的比較：時間 `O(n)`，額外空間 `O(1)`。此寫法適合只需要最小費用的情境。
@@ -430,7 +432,7 @@ f[3]=9 -- +1 --> 10 --/
 
 雖然程式有兩層迴圈，內層的執行次數不會隨 `i` 一直增加：第 `1` 階檢查一次、第 `2` 階檢查兩次，之後每階都只檢查三次。總轉移次數最多 `3n`，因此時間為 `O(n)`，而非 `O(n²)`；保存 `n+1` 格，額外空間為 `O(n)`。
 
-這個版本保留完整費用表，適合學習與除錯。計算第 `i` 階時，只有 `f[i-3]、f[i-2]、f[i-1]` 中的合法狀態會被讀取；更早的狀態已不會再用到。將這三格分別存入解法一的 `a、b、c`，算完後再向前移動，就能把空間降為 `O(1)`。解法一前兩輪的虛擬狀態初始化，則依該節的說明處理。
+這個版本保留完整費用表，適合學習與除錯。計算第 `i` 階時，只有 `f[i-3]、f[i-2]、f[i-1]` 中的合法狀態會被讀取；更早的狀態已不會再用到。將這三格分別存入解法一的 `minCostThreeStepsBack、minCostTwoStepsBack、minCostOneStepBack`，算完後再向前移動，就能把空間降為 `O(1)`。解法一前兩輪的虛擬狀態初始化，則依該節的說明處理。
 
 ## 解法比較與數值範圍
 
