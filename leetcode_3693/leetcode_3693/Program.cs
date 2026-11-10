@@ -32,22 +32,29 @@ class Program
     /// <param name="args"></param>
     static void Main(string[] args)
     {
+        // 執行固定案例與獨立窮舉驗證；任何不一致都會擲出例外並使程序失敗。
         SolutionChecks.Run();
     }
 
     /// <summary>
-    /// 方法一：动态规划
-    ///
+    /// 解法一：以三個滾動變數保存前三階的最小費用。
+    /// 最後一步可跳一至三階，取前驅費用加跳距平方的最小值，再加落點費用。
+    /// 僅接受題目有效輸入；時間複雜度 O(n)，額外空間 O(1)。
     /// </summary>
-    /// <param name="n"></param>
-    /// <param name="costs"></param>
-    /// <returns></returns>
+    /// <param name="n">目標階梯編號，1 至 100000，必須等於 costs.Length。</param>
+    /// <param name="costs">長度為 n，各值為 1 至 10000；第 k 階費用存於 costs[k - 1]。</param>
+    /// <returns>從第 0 階抵達第 n 階的最小總費用。</returns>
     public int ClimbStairs(int n, int[] costs)
     {
+        // 計算第 k = i + 1 階前，a、b、c 分別對應 f[k-3]、f[k-2]、f[k-1]。
+        // 起初前兩格是虛擬狀態：第 1 階的 +1 勝過 +4、+9；
+        // 第 2 階的虛擬 +9 也比合法的 f[0]+4 大，因此全設 0 不會選到非法前驅。
         int a = 0, b = 0, c = 0;
         for (int i = 0; i < n; i++)
         {
+            // costs[i] 是第 i+1 階的落點費用；9、4、1 分別是跳三、二、一階的平方。
             int next = Math.Min(Math.Min(a + 9, b + 4), c + 1) + costs[i];
+            // 先用舊狀態算完 next，再向前移動視窗，避免覆寫仍需讀取的值。
             a = b;
             b = c;
             c = next;
@@ -65,8 +72,8 @@ class Program
     /// 改寫自靈茶山艾府的 Java 解法（非商業引用，保留作者出處）：
     /// https://leetcode.cn/problems/climbing-stairs-ii/solutions/3793871/jiao-ni-yi-bu-bu-si-kao-dpcong-ji-yi-hua-lkrf/
     /// </summary>
-    /// <param name="n">目標階梯編號。</param>
-    /// <param name="costs">第 i 階的費用存於 costs[i - 1]。</param>
+    /// <param name="n">目標階梯編號，1 至 100000，必須等於 costs.Length。</param>
+    /// <param name="costs">長度為 n，各值為 1 至 10000；第 i 階費用存於 costs[i - 1]。</param>
     /// <returns>到達第 n 階的最小總費用。</returns>
     public int ClimbStairs2(int n, int[] costs)
     {
@@ -75,6 +82,15 @@ class Program
         return Dfs(n, costs, memo);
     }
 
+    /// <summary>
+    /// 求到達第 i 階的最小費用：遞迴計算合法前驅，並保存結果以重用重疊子問題。
+    /// 第 0 階回傳 0；其餘狀態從最多三個前驅轉移。單一新狀態最多做三次轉移，
+    /// 整次搜尋的時間為 O(n)，快取與最壞遞迴堆疊空間為 O(n)。
+    /// </summary>
+    /// <param name="i">要查詢的階梯編號，介於 0 與 costs.Length。</param>
+    /// <param name="costs">符合題目限制的落點費用，第 k 階對應 costs[k - 1]。</param>
+    /// <param name="memo">本次輸入專用、長度為 costs.Length + 1 的快取；0 表示尚未計算。</param>
+    /// <returns>到達第 i 階的最小總費用，並快取非起點的結果。</returns>
     private int Dfs(int i, int[] costs, int[] memo)
     {
         // 遞迴終點：出發點第 0 階不需支付費用。
@@ -116,8 +132,8 @@ class Program
     /// 改寫自靈茶山艾府的 Java 遞推解法（非商業引用，保留作者出處）：
     /// https://leetcode.cn/problems/climbing-stairs-ii/solutions/3793871/jiao-ni-yi-bu-bu-si-kao-dpcong-ji-yi-hua-lkrf/
     /// </summary>
-    /// <param name="n">目標階梯編號。</param>
-    /// <param name="costs">第 i 階的費用存於 costs[i - 1]。</param>
+    /// <param name="n">目標階梯編號，1 至 100000，必須等於 costs.Length。</param>
+    /// <param name="costs">長度為 n，各值為 1 至 10000；第 i 階費用存於 costs[i - 1]。</param>
     /// <returns>到達第 n 階的最小總費用。</returns>
     public int ClimbStairs3(int n, int[] costs)
     {
