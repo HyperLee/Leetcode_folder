@@ -1,0 +1,14 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug LeetCode 3105",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build",
+            "program": "${workspaceFolder}/leetcode_3105/bin/Debug/net10.0/leetcode_3105.dll",
+            "cwd": "${workspaceFolder}/leetcode_3105",
+            "console": "internalConsole"
+        }
+    ]
+}
