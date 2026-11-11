@@ -28,7 +28,7 @@ class Program
     /// 你必須購買足夠的物品，使第 1 類需求的總貢獻量至少為 need1，且第 2 類需求的總貢獻量至少為 need2。
     /// 回傳一個整數，代表滿足這兩項需求所需的最低總成本。
     /// </summary>
-    /// <remarks>執行固定測資，逐筆比較最低成本與預期值。全部通過時結束碼為 0，任一案例失敗時為 1。</remarks>
+    /// <remarks>以固定測資分別驗證兩種解法。全部通過時結束碼為 0，任一解法的任一案例失敗時為 1。</remarks>
     /// <param name="args">命令列參數，此測試入口不使用。</param>
     static void Main(string[] args)
     {
@@ -43,25 +43,40 @@ class Program
             ("共同需求的兩種買法同價", 3, 2, 5, 2, 3, 12),
             ("兩邊需求相等，配對後無剩餘", 5, 4, 6, 2, 2, 12),
             ("成本與需求達上限", 1_000_000, 1_000_000, 1_000_000, 1_000_000_000, 1_000_000_000, 1_000_000_000_000_000L),
+            ("第 1 類剩餘需求買單品", 3, 6, 5, 4, 1, 14),
+            ("第 2 類需求為零，組合包較便宜", 4, 5, 2, 3, 0, 6),
+            ("組合包與剩餘單品同價", 6, 3, 3, 1, 4, 12),
         ];
 
-        int passedCount = 0;
+        int passedCount1 = 0;
+        int passedCount2 = 0;
         foreach (var testCase in testCases)
         {
             long actual = solution.MinimumCost(
                 testCase.Cost1, testCase.Cost2, testCase.CostBoth, testCase.Need1, testCase.Need2);
+            long actual2 = solution.MinimumCost2(
+                testCase.Cost1, testCase.Cost2, testCase.CostBoth, testCase.Need1, testCase.Need2);
             bool passed = actual == testCase.Expected;
+            bool passed2 = actual2 == testCase.Expected;
             if (passed)
             {
-                passedCount++;
+                passedCount1++;
+            }
+
+            if (passed2)
+            {
+                passedCount2++;
             }
 
             Console.WriteLine(
-                $"[{(passed ? "PASS" : "FAIL")}] {testCase.Name} | 預期 {testCase.Expected} | 實際 {actual}");
+                $"[{(passed ? "PASS" : "FAIL")}] 解法一 | {testCase.Name} | 預期 {testCase.Expected} | 實際 {actual}");
+            Console.WriteLine(
+                $"[{(passed2 ? "PASS" : "FAIL")}] 解法二 | {testCase.Name} | 預期 {testCase.Expected} | 實際 {actual2}");
         }
 
-        Console.WriteLine($"通過 {passedCount}/{testCases.Length} 筆測試");
-        Environment.ExitCode = passedCount == testCases.Length ? 0 : 1;
+        Console.WriteLine($"解法一通過 {passedCount1}/{testCases.Length} 筆測試");
+        Console.WriteLine($"解法二通過 {passedCount2}/{testCases.Length} 筆測試");
+        Environment.ExitCode = passedCount1 == testCases.Length && passedCount2 == testCases.Length ? 0 : 1;
     }
 
     /// <summary>
@@ -104,5 +119,40 @@ class Program
         }
 
         return totalCost;
+    }
+
+    /// <summary>
+    /// 解法二：比較全部單品、共同需求買組合包及全部組合包三種方案，取最低成本。
+    /// 時間複雜度與額外空間複雜度皆為 O(1)。
+    /// </summary>
+    /// <remarks>
+    /// 固定組合包數量 x 後，成本為 x * costBoth + max(need1 - x, 0) * cost1
+    /// + max(need2 - x, 0) * cost2。在 0 到最小需求、最小需求到最大需求兩個區間內，
+    /// 成本皆為線性變化，因此只需檢查端點 0、最小需求及最大需求。
+    /// 超過最大需求後，兩類皆已達標，繼續購買只會增加成本。
+    /// </remarks>
+    /// <param name="cost1">第 1 類物品的單價，介於 1 到 1,000,000。</param>
+    /// <param name="cost2">第 2 類物品的單價，介於 1 到 1,000,000。</param>
+    /// <param name="costBoth">第 3 類物品的單價，介於 1 到 1,000,000。</param>
+    /// <param name="need1">第 1 類需求的最低數量，介於 0 到 1,000,000,000。</param>
+    /// <param name="need2">第 2 類需求的最低數量，介於 0 到 1,000,000,000。</param>
+    /// <returns>以 <see cref="long"/> 表示的最低總成本。</returns>
+    public long MinimumCost2(int cost1, int cost2, int costBoth, int need1, int need2)
+    {
+        long paired = Math.Min(need1, need2);
+        long maxNeed = Math.Max(need1, need2);
+
+        // 方案一：不買組合包，兩類需求全部用單品滿足。
+        long separate = 1L * need1 * cost1 + 1L * need2 * cost2;
+
+        // 方案二：買 paired 件組合包滿足共同需求，剩餘需求用對應單品補足。
+        long mixed = paired * costBoth
+                   + (need1 - paired) * cost1
+                   + (need2 - paired) * cost2;
+
+        // 方案三：買 maxNeed 件組合包，允許較小需求的那一類超額供應。
+        long allBoth = maxNeed * costBoth;
+
+        return Math.Min(separate, Math.Min(mixed, allBoth));
     }
 }
