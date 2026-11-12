@@ -20,4 +20,42 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 方法一：朴素模拟
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <returns></returns>
+    public int LongestMonotonicSubarray(int[] nums)
+    {
+        int cnt1 = 1, cnt2 = 1;
+        int ans = 1;
+        int n = nums.Length;
+
+        for(int i = 1; i < n; i++)
+        {
+            if(nums[i] <= nums[i - 1])
+            {
+                ans = Math.Max(ans, cnt1);
+                cnt1 = 1;
+            }
+            else
+            {
+                cnt1++;
+            }
+
+            if(nums[i] >= nums[i - 1])
+            {
+                ans = Math.Max(ans, cnt2);
+                cnt2 = 1;
+            }
+            else
+            {
+                cnt2++;
+            }
+        }
+
+        ans = Math.Max(ans, Math.Max(cnt1, cnt2));
+        return ans;
+    }
 }
