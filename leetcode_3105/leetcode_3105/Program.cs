@@ -58,4 +58,35 @@ class Program
         ans = Math.Max(ans, Math.Max(cnt1, cnt2));
         return ans;
     }
+
+    /// <summary>
+    /// 方法二：基调标志 + 模拟
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <returns></returns>
+    public int LongestMonotonicSubarray2(int[] nums)
+    {
+        int ans = 1;
+        int i = 0;
+        int n = nums.Length;
+        while(i < n - 1)
+        {
+            if(nums[i + 1] == nums[i])
+            {
+                i++;
+                continue;
+            }
+
+            int j = i;
+            bool inc = nums[i + 1] > nums[i];
+            i += 2;
+            while(i < n && nums[i] != nums[i - 1] && (nums[i] > nums[i - 1] == inc))
+            {
+                i++;
+            }
+            ans = Math.Max(ans, i - j);
+            i--;
+        }
+        return ans;
+    }
 }
