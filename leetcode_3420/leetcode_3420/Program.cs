@@ -11,12 +11,11 @@ class Program
     /// For each subarray of <c>nums</c>, you can apply up to <c>k</c> operations on it. In each operation, you increment any element of the subarray by 1.
     ///
     /// Note that each subarray is considered independently, meaning changes made to one subarray do not persist to another.
-    ///
     /// Return the number of subarrays that you can make non-decreasing after performing at most <c>k</c> operations.
     ///
-    /// An array is said to be non-decreasing if each element is greater than or equal to its previous element, if it exists.
+    /// An array is said to be non-decreasing if each element is greater than than or equal to its previous element, if it exists.
     ///
-    /// Example 1:
+    /// /// Example 1:
     /// Input: nums = [6,3,1,2,4,4], k = 7
     /// Output: 17
     ///
@@ -44,10 +43,9 @@ class Program
     /// 對於 <c>nums</c> 的每個子陣列，你最多可以對該子陣列執行 <c>k</c> 次操作。每次操作中，將子陣列中的任意一個元素加 1。
     ///
     /// 請注意，每個子陣列都會獨立計算，也就是說，對某個子陣列所做的變更不會延續到其他子陣列。
-    ///
     /// 請回傳最多執行 <c>k</c> 次操作後，可以調整為非遞減的子陣列數量。
     ///
-    /// 若陣列中每個元素都大於或等於其前一個元素（若存在前一個元素），則稱此陣列為非遞減。
+    /// 若陣列中每個元素（若有前一個元素）都大於或等於前一個元素，則稱此陣列為非遞減。
     ///
     /// 範例 1：
     /// 輸入：nums = [6,3,1,2,4,4], k = 7
