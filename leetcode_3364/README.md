@@ -60,11 +60,13 @@ length = 3
 
 ## 解法二．前綴和
 
-`MinimumSumSubarray2` 先把每個位置前方的元素總和存起來。令 `prefixSum[i]` 為前 `i` 個元素的總和，則 `prefixSum[0] = 0`，且 `prefixSum[i + 1] = prefixSum[i] + nums[i]`。陣列需要 `n + 1` 格，最後一格存整個陣列的和。
+`MinimumSumSubarray2` 先把每個位置前方的元素總和存起來。`prefixSum[i]` 存的是前 `i` 個元素的總和，因此陣列需要 `n + 1` 格，從前 0 個元素的總和 `prefixSum[0] = 0` 到全部元素的總和 `prefixSum[n]`。
 
-要求從 `start` 開始、長度為 `length` 的區間，先取 `end = start + length`。半開區間 `[start, end)` 包含 `start`，最後一個元素的索引是 `end - 1`。從 `prefixSum[end]` 扣除起點前方的 `prefixSum[start]`，就只剩下區間內的總和。
+建立前綴和的迴圈從 `i = 0` 開始，每輪執行 `prefixSum[i + 1] = prefixSum[i] + nums[i]`。`i` 是目前元素的索引，加上 `nums[i]` 後，共累加了 `i + 1` 個元素，所以結果寫到 `prefixSum[i + 1]`。第一輪讀取 `prefixSum[0]` 的 `0`，加上 `nums[0]` 的 `4`，得到 `prefixSum[1] = 4`。
 
-外層枚舉 `length = l ... r`，內層枚舉 `start = 0 ... n - length`。條件 `start + length <= n` 允許 `end = n`，因此剛好延伸到陣列末尾的區間也會被檢查。
+從 `start` 開始、長度為 `length` 的半開區間寫成 `[start, end)`，其中 `end = start + length` 是右邊界，最後一個元素的索引是 `end - 1`。以 `[1, 3)` 為例，右邊界是 `3`，最後一個元素的索引是 `2`。`prefixSum[3] - prefixSum[1]` 扣掉共同的 `nums[0]`，留下 `nums[1] + nums[2]`。如果把右邊界的前綴和改成 `prefixSum[2]`，就會少算 `nums[2]`。
+
+外層依序選定 `l` 到 `r` 的每個長度。每換一個 `length`，內層的 `start` 都從 `0` 重新掃到 `n - length`。條件 `start + length <= n` 中的等號允許右邊界剛好等於 `n`。例如 `n = 4`、`length = 2` 時，起點 `2` 仍符合條件，因此會檢查最後一段 `[2, 4)`，用 `prefixSum[4] - prefixSum[2]` 算出 `2`。
 
 ```text
 boundary      0       1       2       3       4
@@ -81,7 +83,7 @@ length   interval   subtraction                     sum   best
   3       [1,4)     prefixSum[4] - prefixSum[1]       1      1
 ```
 
-例如 `[1, 3)` 涵蓋 `-1` 與 `-2`。前綴和相減為 `1 - 4 = -3`，因此略過。每組合法的 `(length, start)` 都恰好計算一次，最後回傳 `1`。
+`minSum` 在兩層迴圈外初始化，換長度時會保留已找到的最小正和。長度為 `2` 時，`[1, 3)` 的總和為 `1 - 4 = -3`，因此略過，掃到 `[2, 4)` 時才把 `minSum` 從 `3` 更新為 `2`。接著掃長度 `3`，第一段 `[0, 3)` 的總和為 `1`，比目前的 `2` 小，因此更新。最後一段的總和同樣為 `1`，所以維持原值並回傳 `1`。
 
 建立前綴和花費 `O(n)` 時間，每個候選區間只需一次減法，總時間為 `O(n + n(r-l+1))`，額外空間為 `O(n)`。
 
