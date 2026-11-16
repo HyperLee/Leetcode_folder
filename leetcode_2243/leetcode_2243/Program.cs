@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 
 namespace leetcode_2243;
@@ -65,11 +66,13 @@ internal class Program
         foreach ((string name, string input, int k, string expected) in cases)
         {
             string actual = DigitSum(input, k);
-            bool isPass = actual == expected;
+            string actualInPlace = DigitSumInPlace(input, k);
+            bool isPass = actual == expected && actualInPlace == expected;
 
             Console.WriteLine($"Case: {name}; Input: \"{input}\", k = {k}");
             Console.WriteLine($"Expected: {expected}");
             Console.WriteLine($"Actual: {actual}");
+            Console.WriteLine($"Actual (Span): {actualInPlace}");
             Console.WriteLine(isPass ? "PASS" : "FAIL");
 
             if (isPass)
@@ -115,5 +118,43 @@ internal class Program
         }
 
         return s;
+    }
+
+    /// <summary>
+    /// 使用同一塊字元緩衝區完成各輪分組加總，最後將有效內容轉成字串。
+    /// </summary>
+    private static string DigitSumInPlace(string s, int k)
+    {
+        int length = s.Length;
+        if (length <= k)
+        {
+            return s;
+        }
+
+        Span<char> buffer = stackalloc char[length];
+        s.AsSpan().CopyTo(buffer);
+
+        while (length > k)
+        {
+            int writeIndex = 0;
+            for (int groupStart = 0; groupStart < length; groupStart += k)
+            {
+                int groupEnd = Math.Min(groupStart + k, length);
+                int sum = 0;
+
+                for (int readIndex = groupStart; readIndex < groupEnd; readIndex++)
+                {
+                    sum += buffer[readIndex] - '0';
+                }
+
+                // 寫入起點不超過群組起點，且總和的位數至多等於群組長度。
+                _ = sum.TryFormat(buffer[writeIndex..groupEnd], out int written, provider: CultureInfo.InvariantCulture);
+                writeIndex += written;
+            }
+
+            length = writeIndex;
+        }
+
+        return new string(buffer[..length]);
     }
 }

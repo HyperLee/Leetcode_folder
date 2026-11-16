@@ -23,7 +23,7 @@ public static string DigitSum(string s, int k)
 
 `DigitSum` 是純函式：不輸出主控台、不修改呼叫端可觀察的外部資料，僅回傳最終字串。所有 console I/O 都位於 `Main` 的 acceptance harness。
 
-## 迭代分組設計
+## 解法一：`StringBuilder` 迭代分組
 
 核心流程是「分組 → 各組逐位加總 → 依序串接 → 檢查是否需要下一輪」。每輪由左至右處理所有字元，最後不足 `k` 個字元的群組也必須求和；只有當字串長度 `<= k` 時才停止。
 
@@ -146,9 +146,88 @@ C# 字串不可變；重新指定區域參數 `s` 只會讓它指向下一輪字
 
 這個做法直接對應題意，沒有遞迴堆疊成本，也以一個下一輪緩衝區隔開讀取與寫入。代價是每輪都會建立新字串；這些內容也是下一輪計算所需的資料。
 
+## 解法二：`Span<char>` 原地覆寫
+
+下方是可貼到 LeetCode 的完整 C# 提交版本，包含 `Solution` 類別與 `CultureInfo` 所需的 `using System.Globalization;`。本機專案以 `DigitSumInPlace` 呼叫同一套演算法。
+
+初始長度已經 `<= k` 時，直接回傳 `s`。其餘情況用 `stackalloc` 在堆疊上配置一塊與輸入等長的字元緩衝區，把 `s` 複製進去。往後每輪都在這塊緩衝區內讀取與寫入，最後只把有效範圍轉成結果字串。
+
+```csharp
+using System;
+using System.Globalization;
+
+public class Solution
+{
+    public string DigitSum(string s, int k)
+    {
+        int length = s.Length;
+        if (length <= k)
+        {
+            return s;
+        }
+
+        Span<char> buffer = stackalloc char[length];
+        s.AsSpan().CopyTo(buffer);
+
+        while (length > k)
+        {
+            int writeIndex = 0;
+            for (int groupStart = 0; groupStart < length; groupStart += k)
+            {
+                int groupEnd = Math.Min(groupStart + k, length);
+                int sum = 0;
+
+                for (int readIndex = groupStart; readIndex < groupEnd; readIndex++)
+                {
+                    sum += buffer[readIndex] - '0';
+                }
+
+                // 寫入起點不超過群組起點，且總和的位數至多等於群組長度。
+                _ = sum.TryFormat(buffer[writeIndex..groupEnd], out int written, provider: CultureInfo.InvariantCulture);
+                writeIndex += written;
+            }
+
+            length = writeIndex;
+        }
+
+        return new string(buffer[..length]);
+    }
+}
+```
+
+### 先讀完整組，再寫回
+
+每輪開始時，`groupStart` 和 `writeIndex` 都從 `0` 出發。長度為 `t` 的群組，其和最多是 `9t`，而 `9t` 至多有 `t` 位。每組的輸出因此最多和該組一樣長。處理到下一組時，累計寫入的字元數 `writeIndex` 至多等於先前已讀取的字元數 `groupStart`。
+
+讀完整組後，`buffer[writeIndex..groupEnd]` 一定能容納總和，而且最後一個可寫位置在 `groupEnd` 之前。`TryFormat` 用十進位直接寫入字元，`written` 是實際寫入的位數，包含總和為 `0` 時寫入的一位。每輪結束後，`length = writeIndex` 將下一輪的讀取範圍限在已寫入的前綴。
+
+以 `s = "9999"`、`k = 2` 為例：
+
+| 輪次 | 讀取範圍 | 讀到的字元 | 數字和 | `writeIndex` 變化 | 寫入後的整塊緩衝區 |
+| ---: | --- | --- | ---: | --- | --- |
+| 1 | `[0, 2)` | `99` | 18 | `0 → 2` | `1899` |
+| 1 | `[2, 4)` | `99` | 18 | `2 → 4` | `1818` |
+| 2 | `[0, 2)` | `18` | 9 | `0 → 1` | `9818` |
+| 2 | `[2, 4)` | `18` | 9 | `1 → 2` | `9918` |
+
+第 1 輪結束時，有效長度仍是 `4`，因此繼續。第 2 輪結束時，有效長度變成 `2`，因此只取 `[0, 2)` 回傳 `"99"`。緩衝區尾端的 `18` 超出有效範圍。
+
+### 攤銷分析與兩種解法的比較
+
+兩種解法單輪都只掃描一次當輪字元。即使某輪等長，所有輪次合計仍只需掃描 `O(n)` 個字元。令 `D` 為當前字串的數位總和，使用 `Φ = 字串長度 + D / 9` 追蹤剩餘工作量。
+
+例如一組 `99` 變成 `18`，其數位總和從 `18` 降到 `9`，所以即使輸出保留兩個字元，`Φ` 仍下降 `1`。一般來說，若群組和 `x` 有 `d` 位，`x` 減去自身的數位總和至少是 `9(d - 1)`。一位數的差是 `0`，兩位數的差至少是 `9`，三位數的差至少是 `99`。題目中群組和最多三位，因此每組對下一輪 `Φ` 的貢獻，至多是 `1 + x / 9`。
+
+長度為 `m` 的一輪有 `⌈m/k⌉` 組，所以 `Φ` 至少下降 `m - ⌈m/k⌉`。由於 `k >= 2`，這個差至少是 `⌊m/2⌋`。初始 `Φ` 最多是 `2n`，且始終非負，因此全部輪次的掃描字元數總和為 `O(n)`。最壞情況第一輪至少要掃描 `n` 個字元，總時間為 `Θ(n)`。
+
+| 解法 | 最壞總時間 | 輔助空間 | 字串配置 |
+| --- | --- | --- | --- |
+| `StringBuilder` | `Θ(n)` | `O(n)` | 每輪建立下一輪字串。 |
+| `Span<char>` | `Θ(n)` | `O(n)` | 需要處理時只建立最終字串，最多使用 100 個 `char` 的堆疊緩衝區。 |
+
 ## Acceptance Harness
 
-`Main` 執行八個確定性案例，每案比較一次 `DigitSum` 的回傳值；八項皆成功時，輸出必須以 `Summary: 8/8 checks passed.` 結尾，任一失敗則 process exit code 為 `1`。
+`Main` 執行八個確定性案例。每案都將 `DigitSum` 與 `DigitSumInPlace` 的回傳值分別和同一個預期值比較，兩版皆正確才算通過。八項皆成功時，輸出以 `Summary: 8/8 checks passed.` 結尾。任一失敗時，process exit code 為 `1`。
 
 | # | 輸入 | 預期值 | 驗證目的／可捕捉的錯誤 |
 | ---: | --- | --- | --- |
@@ -183,34 +262,42 @@ dotnet run --no-build --project leetcode_2243/leetcode_2243.csproj
 Case: Official example; Input: "11111222223", k = 3
 Expected: 135
 Actual: 135
+Actual (Span): 135
 PASS
 Case: All zeroes; Input: "00000000", k = 3
 Expected: 000
 Actual: 000
+Actual (Span): 000
 PASS
 Case: Single character; Input: "1", k = 2
 Expected: 1
 Actual: 1
+Actual (Span): 1
 PASS
 Case: Already k characters; Input: "123", k = 3
 Expected: 123
 Actual: 123
+Actual (Span): 123
 PASS
 Case: Two complete groups; Input: "123456", k = 3
 Expected: 615
 Actual: 615
+Actual (Span): 615
 PASS
 Case: Final short group; Input: "1234567", k = 3
 Expected: 127
 Actual: 127
+Actual (Span): 127
 PASS
 Case: Multiple rounds; Input: "987654321", k = 2
 Expected: 36
 Actual: 36
+Actual (Span): 36
 PASS
 Case: Near limit group; Input: "9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999", k = 99
 Expected: 8919
 Actual: 8919
+Actual (Span): 8919
 PASS
 Summary: 8/8 checks passed.
 ```
