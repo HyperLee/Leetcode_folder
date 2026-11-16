@@ -5,7 +5,6 @@ namespace leetcode_2243;
 internal class Program
 {
     /// <summary>
-    /// <para>
     /// 2243. Calculate Digit Sum of a String
     /// https://leetcode.com/problems/calculate-digit-sum-of-a-string/description/
     ///
@@ -22,11 +21,10 @@ internal class Program
     /// Explanation: Groups "000", "000", "00" have sums 0, 0, 0, producing "000", whose length equals 3.
     ///
     /// Constraints:
-    /// - 1 &lt;= s.length &lt;= 100
-    /// - 2 &lt;= k &lt;= 100
+    /// - 1 <= s.length <= 100
+    /// - 2 <= k <= 100
     /// - s consists only of digits.
-    /// </para>
-    /// <para>
+    /// 
     /// 2243. 計算字串的數字和
     /// https://leetcode.cn/problems/calculate-digit-sum-of-a-string/description/
     ///
@@ -43,10 +41,10 @@ internal class Program
     /// 說明：群組 "000"、"000"、"00" 的總和為 0、0、0，得到 "000"，長度等於 3。
     ///
     /// 限制條件：
-    /// - 1 &lt;= s.length &lt;= 100
-    /// - 2 &lt;= k &lt;= 100
+    /// - 1 <= s.length <= 100
+    /// - 2 <= k <= 100
     /// - s 僅由數字組成。
-    /// </para>
+    /// 
     /// </summary>
     private static void Main()
     {
