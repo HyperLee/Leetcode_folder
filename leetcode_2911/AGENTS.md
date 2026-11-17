@@ -3,7 +3,7 @@
 ## Project Structure & Module Organization
 
 - `PROBLEM.md` contains the LeetCode 2911 problem statement in English and Traditional Chinese.
-- `leetcode_2911/` is the .NET console project. `Program.cs` holds the solution entry point, and `leetcode_2911.csproj` targets .NET 11.
+- `leetcode_2911/` is the .NET console project. `Program.cs` holds the solution entry point, and `leetcode_2911.csproj` targets .NET 10.
 - `.vscode/` contains the build task and debugger launch configuration. Treat `bin/` and `obj/` as generated output; do not edit or commit them.
 
 ## Build, Test, and Development Commands
