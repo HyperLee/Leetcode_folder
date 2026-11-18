@@ -79,6 +79,26 @@ Return 2
 
 第一組與最後一組已符合條件。中間兩組分別修改索引 `3` 和 `5`，累計值依序為 `0 -> 1 -> 2 -> 2`。
 
+## XOR 累加 `MinChangesXor`
+
+`'0'` 和 `'1'` 的 UTF-16 編碼分別是 `0x0030` 和 `0x0031`，只有最低位元不同。每組直接把 `s[i] ^ s[i + 1]` 加到答案。`00` 和 `11` 得到 `0`，`01` 和 `10` 得到 `1`，剛好是該組的修改次數。
+
+## SIMD 批次比較 `MinChangesSimd`
+
+1. 用 `MemoryMarshal.Cast<char, uint>` 將每兩個 UTF-16 字元視為一個 `uint`，直接讀取原本的字串記憶體。
+2. 每次載入四個 `uint` 到 `Vector128<uint>`，也就是四組配對。每個元素右移 16 位，再和原值做 XOR，使配對內兩個字元的最低位元對齊比較。用 `& 1u` 取出各組的 `0` 或 `1`。
+3. 將每批結果累加到向量，最後用 `Vector128.Sum` 加總四個元素。尾端不足四組時，逐組做 XOR。執行環境缺少 128 位元向量硬體加速時，整串交由 `MinChangesXor` 處理。
+
+以 `0010011110` 為例，SIMD 先處理 `00 | 10 | 01 | 11`，得到 `2`，尾端的 `10` 再加 `1`，總共需要修改 `3` 次。
+
+| 解法 | 時間 | 額外空間 |
+| --- | --- | --- |
+| 貪心 `MinChanges` | `O(n)` | `O(1)` |
+| XOR `MinChangesXor` | `O(n)` | `O(1)` |
+| SIMD `MinChangesSimd` | `O(n)` | `O(1)` |
+
+三種寫法都計算相同的固定配對。實際速度取決於 CPU、JIT 和輸入資料，需透過效能測試比較。
+
 ## 建置與執行範例
 
 安裝 .NET 10 SDK 後，在包含本 README 的目錄執行下列指令。
@@ -88,12 +108,14 @@ dotnet build ./leetcode_2914/leetcode_2914.csproj -c Release
 dotnet run --project ./leetcode_2914/leetcode_2914.csproj -c Release --no-build
 ```
 
-`Main` 會執行三筆官方案例，以及已合法分段的 `1100` 和混合相等、不相等配對的 `00100111`。其中 `10` 涵蓋最短輸入，`0000` 涵蓋全字元相同的情況。任何結果與預期不符時，對應案例會顯示 `FAIL`，且程序在跑完所有案例後以非零狀態碼結束。
+`Main` 對每筆輸入執行三種解法。七筆案例涵蓋官方範例、合法分段、剛好填滿一批 SIMD 的 8 字元、含一組尾端的 10 字元，以及 100,000 字元的題目上限。任一解法的結果與預期不符時，該案例會顯示 `FAIL`，程序跑完所有案例後以非零狀態碼結束。
 
 ```text
-s = "1001" | actual = 2 | expected = 2 | PASS
-s = "10" | actual = 1 | expected = 1 | PASS
-s = "0000" | actual = 0 | expected = 0 | PASS
-s = "1100" | actual = 0 | expected = 0 | PASS
-s = "00100111" | actual = 2 | expected = 2 | PASS
+s = "1001" | greedy = 2 | xor = 2 | simd = 2 | expected = 2 | PASS
+s = "10" | greedy = 1 | xor = 1 | simd = 1 | expected = 1 | PASS
+s = "0000" | greedy = 0 | xor = 0 | simd = 0 | expected = 0 | PASS
+s = "1100" | greedy = 0 | xor = 0 | simd = 0 | expected = 0 | PASS
+s = "00100111" | greedy = 2 | xor = 2 | simd = 2 | expected = 2 | PASS
+s = "0010011110" | greedy = 3 | xor = 3 | simd = 3 | expected = 3 | PASS
+重複 01（長度 100000） | greedy = 50000 | xor = 50000 | simd = 50000 | expected = 50000 | PASS
 ```
