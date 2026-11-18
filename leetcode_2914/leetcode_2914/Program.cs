@@ -8,25 +8,21 @@ class Program
     /// 2914. 使二進位字串變美麗的最少修改次數
     /// https://leetcode.cn/problems/minimum-number-of-changes-to-make-binary-string-beautiful/description/
     ///
-    /// <para><b>English</b></para>
-    /// <para>You are given a <b>0-indexed</b> binary string <c>s</c> having an even length.</para>
-    /// <para>A string is <b>beautiful</b> if it's possible to partition it into one or more substrings such that:</para>
-    /// <list type="bullet">
-    /// <item><description>Each substring has an <b>even length</b>.</description></item>
-    /// <item><description>Each substring contains <b>only</b> <c>1</c>'s or <b>only</b> <c>0</c>'s.</description></item>
-    /// </list>
-    /// <para>You can change any character in <c>s</c> to <c>0</c> or <c>1</c>.</para>
-    /// <para>Return the <b>minimum</b> number of changes required to make the string <c>s</c> beautiful.</para>
+    /// English
+    /// You are given a 0-indexed binary string s having an even length.
+    /// A string is beautiful if it's possible to partition it into one or more substrings such that:
+    /// Each substring has an even length.
+    /// Each substring contains only 1's or only 0's.
+    /// You can change any character in s to 0 or 1.
+    /// Return the minimum number of changes required to make the string s beautiful.
     ///
-    /// <para><b>繁體中文</b></para>
-    /// <para>給定一個從索引 <c>0</c> 開始、長度為偶數的二進位字串 <c>s</c>。</para>
-    /// <para>如果能將一個字串分割成一個或多個符合下列條件的子字串，這個字串就是<b>美麗的</b>。</para>
-    /// <list type="bullet">
-    /// <item><description>每個子字串的長度都是<b>偶數</b>。</description></item>
-    /// <item><description>每個子字串都<b>只包含</b> <c>1</c>，或<b>只包含</b> <c>0</c>。</description></item>
-    /// </list>
-    /// <para>你可以將 <c>s</c> 中的任意字元改為 <c>0</c> 或 <c>1</c>。</para>
-    /// <para>請回傳使字串 <c>s</c> 成為美麗字串所需的<b>最少修改次數</b>。</para>
+    /// 繁體中文
+    /// 給定一個從索引 0 開始、長度為偶數的二進位字串 s。
+    /// 如果能將一個字串分割成一個或多個符合下列條件的子字串，這個字串就是美麗的。
+    /// 每個子字串的長度都是偶數。
+    /// 每個子字串都只包含 1，或只包含 0。
+    /// 你可以將 s 中的任意字元改為 0 或 1。
+    /// 請回傳使字串 s 成為美麗字串所需的最少修改次數。
     /// </summary>
     /// <param name="args"></param>
     /// <remarks>
@@ -64,7 +60,7 @@ class Program
     /// 計算將偶數長度的二進位字串變成美麗字串所需的最少修改次數。
     /// 以貪心法從索引 0 起每兩個字元配成一組，每組字元不同時累計一次修改。
     /// </summary>
-    /// <param name="s">長度介於 2 與 100,000 之間且為偶數，只包含 <c>0</c> 和 <c>1</c> 的字串。</param>
+    /// <param name="s">長度介於 2 與 100,000 之間且為偶數，只包含 0 和 1 的字串。</param>
     /// <returns>使所有固定配對內的字元相同所需的最少修改次數。</returns>
     public int MinChanges(string s)
     {
