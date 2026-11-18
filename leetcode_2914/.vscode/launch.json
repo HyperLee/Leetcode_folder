@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "偵錯 leetcode_2914",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build leetcode_2914",
+      "program": "${workspaceFolder}/leetcode_2914/bin/Debug/net10.0/leetcode_2914.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_2914",
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    }
+  ]
+}
