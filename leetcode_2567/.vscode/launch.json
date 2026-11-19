@@ -1,0 +1,16 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug leetcode_2567",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "build",
+      "program": "${workspaceFolder}/leetcode_2567/bin/Debug/net11.0/leetcode_2567.dll",
+      "args": [],
+      "cwd": "${workspaceFolder}/leetcode_2567",
+      "console": "integratedTerminal",
+      "stopAtEntry": false
+    }
+  ]
+}
