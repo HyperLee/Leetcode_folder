@@ -5,13 +5,13 @@
 This folder contains the C# console project for LeetCode 3411, Maximum Subarray With Equal Products. The parent Git repository also contains other LeetCode projects.
 
 - `leetcode_3411/Program.cs` contains the console entry point and bilingual problem summary.
-- `leetcode_3411/leetcode_3411.csproj` targets `net11.0` with nullable reference types and implicit usings enabled.
+- `leetcode_3411/leetcode_3411.csproj` targets `net10.0` with nullable reference types and implicit usings enabled.
 - `Problem_Description.md` records the problem statement, examples, and constraints in Traditional Chinese.
 - `.vscode/` contains the build task and debug configuration. Keep generated `bin/` and `obj/` directories out of commits.
 
 ## Build and Run
 
-Use the .NET 11 SDK. Run these commands from the directory containing this guide.
+Use the .NET 10 SDK. Run these commands from the directory containing this guide.
 
 - `dotnet build leetcode_3411/leetcode_3411.csproj` restores dependencies and compiles the console app.
 - `dotnet run --project leetcode_3411/leetcode_3411.csproj` builds and runs the console entry point.

@@ -79,15 +79,16 @@ class Program
         int res = 0;
         for (int i = 0; i < nums.Length; i++)
         {
-            long prodVal = nums[i];
-            long gcdVal = nums[i];
-            long lcmVal = nums[i];
+            int prodVal = nums[i];
+            int gcdVal = nums[i];
+            int lcmVal = nums[i];
 
             for (int j = i + 1; j < nums.Length; j++)
             {
+                // 剪枝讓乘入新元素前的乘積至多為 25,200，乘入後至多為 252,000。
                 prodVal = prodVal * nums[j];
-                gcdVal = Gcd(gcdVal, nums[j]);
-                lcmVal = lcmVal * nums[j] / Gcd(lcmVal, nums[j]);
+                gcdVal = GCD2(gcdVal, nums[j]);
+                lcmVal = lcmVal * nums[j] / GCD2(lcmVal, nums[j]);
 
                 // 延伸區間時，乘積除以 LCM 不會下降，GCD 也不會上升。
                 if (prodVal > gcdVal * lcmVal)
@@ -103,24 +104,6 @@ class Program
         }
 
         return res;
-    }
-
-    /// <summary>
-    /// 使用歐幾里得演算法，反覆取餘數直到第二個數為零。
-    /// </summary>
-    /// <param name="a">第一個正整數。</param>
-    /// <param name="b">第二個正整數。</param>
-    /// <returns>兩個數的最大公因數。</returns>
-    private long Gcd(long a, long b)
-    {
-        while (b != 0)
-        {
-            long temp = b;
-            b = a % b;
-            a = temp;
-        }
-
-        return a;
     }
 
     /// <summary>
@@ -156,10 +139,10 @@ class Program
     }
 
     /// <summary>
-    /// 使用歐幾里得演算法，求滑動視窗乘積與新元素的最大公因數。
+    /// 使用歐幾里得演算法，反覆取餘數直到第二個數為零。
     /// </summary>
-    /// <param name="a">視窗中的正整數乘積，空視窗時為 1。</param>
-    /// <param name="b">即將加入視窗的正整數。</param>
+    /// <param name="a">第一個正整數。</param>
+    /// <param name="b">第二個正整數。</param>
     /// <returns>兩個數的最大公因數，等於 1 代表彼此互質。</returns>
     private int GCD2(int a, int b)
     {
