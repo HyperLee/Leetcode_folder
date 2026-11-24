@@ -34,4 +34,83 @@ class Program
     {
         Console.WriteLine("Hello, World!");
     }
+
+    /// <summary>
+    /// 枚舉
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <returns></returns>
+    public int MaxLength(int[] nums)
+    {
+        int res = 0;
+        for(int i = 0; i < nums.Length; i++)
+        {
+            long prodVal = nums[i];
+            long gdcVal = nums[i];
+            long lcmVal = nums[i];
+
+            for(int j = i + 1; j < nums.Length; j++)
+            {
+                prodVal = prodVal * nums[j];
+                gdcVal = GCD(gdcVal, nums[j]);
+                lcmVal = lcmVal * nums[j] / GCD(lcmVal, nums[j]);
+
+                if(prodVal > gdcVal * lcmVal)
+                {
+                    res = Math.Max(res, j - i + 1);
+                }
+            }
+        }
+        return res;
+    }
+
+    private long GCD(long a, long b)
+    {
+        while(b != 0)
+        {
+            long temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    }
+
+    /// <summary>
+    /// 滑動視窗
+    /// </summary>
+    /// <param name="nums"></param>
+    /// <returns></returns>
+    public int MaxLength2(int[] nums)
+    {
+        int res = 2;
+        int prodVal = 1;
+        int n = nums.Length;
+        int start = 0;
+        int end = 0;
+
+        while(end < n)
+        {
+            while(GCD2(prodVal, nums[end]) > 1)
+            {
+                prodVal /= nums[start];
+                start++;
+            }
+
+            prodVal *= nums[end];
+            res = Math.Max(res, end - start + 1);
+            end++;
+        }
+        return res;
+    }
+
+    private int GCD2(int nums1, int nums2)
+    {
+        while(nums2 != 0)
+        {
+            int temp = nums1;
+            nums1 = nums2;
+            nums2 = temp % nums2;
+        }
+        return nums1;
+    }
 }
