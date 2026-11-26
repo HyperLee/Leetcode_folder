@@ -23,7 +23,7 @@ class Program
     /// 給定一個正整數 ，如果 Alice 贏得遊戲，回傳 true，否則回傳 false。
     /// </summary>
     /// <remarks>
-    /// 使用固定的題目範例與邊界資料，比對兩種解法的回傳值並輸出結果。
+    /// 以固定範例與邊界資料驗證四種解法，並比對所有合法輸入的結果。
     /// </remarks>
     /// <param name="args">命令列引數，範例執行時不需要提供。</param>
     /// <returns>全部案例通過時回傳 0，任一案例失敗時回傳 1。</returns>
@@ -37,8 +37,16 @@ class Program
             (12, true),
             (18, true),
             (19, false),
+            (26, false),
+            (27, true),
+            (33, true),
+            (34, false),
+            (39, false),
+            (40, true),
             (44, true),
             (45, false),
+            (48, false),
+            (49, true),
             (50, true)
         ];
 
@@ -49,7 +57,12 @@ class Program
         {
             bool simulationResult = solution.CanAliceWin(stones);
             bool formulaResult = solution.CanAliceWin2(stones);
-            bool passed = simulationResult == expected && formulaResult == expected;
+            bool rangeResult = solution.CanAliceWinByRange(stones);
+            bool binarySearchResult = solution.CanAliceWinByBinarySearch(stones);
+            bool passed = simulationResult == expected
+                && formulaResult == expected
+                && rangeResult == expected
+                && binarySearchResult == expected;
 
             if (passed)
             {
@@ -58,11 +71,37 @@ class Program
 
             string status = passed ? "PASS" : "FAIL";
             Console.WriteLine(
-                $"n={stones} Expected={expected} Simulation={simulationResult} Formula={formulaResult} {status}");
+                $"n={stones} Expected={expected} Simulation={simulationResult} Formula={formulaResult} "
+                + $"Range={rangeResult} BinarySearch={binarySearchResult} {status}");
         }
 
         Console.WriteLine($"Passed {passedCases}/{testCases.Length} cases.");
-        return passedCases == testCases.Length ? 0 : 1;
+        const int maxStones = 50;
+        int matchingInputs = 0;
+
+        for (int stones = 1; stones <= maxStones; stones++)
+        {
+            bool simulationResult = solution.CanAliceWin(stones);
+            bool formulaResult = solution.CanAliceWin2(stones);
+            bool rangeResult = solution.CanAliceWinByRange(stones);
+            bool binarySearchResult = solution.CanAliceWinByBinarySearch(stones);
+
+            if (formulaResult == simulationResult
+                && rangeResult == simulationResult
+                && binarySearchResult == simulationResult)
+            {
+                matchingInputs++;
+            }
+            else
+            {
+                Console.WriteLine(
+                    $"Mismatch at n={stones}: Simulation={simulationResult} Formula={formulaResult} "
+                    + $"Range={rangeResult} BinarySearch={binarySearchResult}");
+            }
+        }
+
+        Console.WriteLine($"All four methods agree for {matchingInputs}/{maxStones} valid inputs.");
+        return passedCases == testCases.Length && matchingInputs == maxStones ? 0 : 1;
     }
 
     /// <summary>
@@ -100,5 +139,47 @@ class Program
         // 較小根給出回合數上限。將非負根轉為整數，得到實際可完成的最多回合數。
         int completedTurns = (int)((21 - Math.Sqrt(441 - 8 * n)) / 2);
         return completedTurns % 2 == 1;
+    }
+
+    /// <summary>
+    /// 比對累計取石門檻所劃出的四個區間，判斷 Alice 是否完成最後一回合。
+    /// </summary>
+    /// <param name="n">初始石頭數，範圍為 1 到 50。</param>
+    /// <returns>Alice 獲勝時回傳 <see langword="true"/>，否則回傳 <see langword="false"/>。</returns>
+    public bool CanAliceWinByRange(int n)
+    {
+        return n is (>= 10 and < 19)
+                 or (>= 27 and < 34)
+                 or (>= 40 and < 45)
+                 or (>= 49 and <= 50);
+    }
+
+    /// <summary>
+    /// 以二分搜尋找出最多可完成的回合數，依回合數的奇偶判斷勝負。
+    /// </summary>
+    /// <param name="n">初始石頭數，範圍為 1 到 50。</param>
+    /// <returns>Alice 獲勝時回傳 <see langword="true"/>，否則回傳 <see langword="false"/>。</returns>
+    public bool CanAliceWinByBinarySearch(int n)
+    {
+        int low = 0;
+        int high = 7; // 第 8 回合累計需要 52 顆，超過題目上限。
+
+        while (low < high)
+        {
+            // 取靠右的中點，讓條件成立時下界仍會向右移動。
+            int middle = low + (high - low + 1) / 2;
+            int requiredStones = middle * (21 - middle) / 2;
+
+            if (requiredStones <= n)
+            {
+                low = middle;
+            }
+            else
+            {
+                high = middle - 1;
+            }
+        }
+
+        return low % 2 == 1;
     }
 }
