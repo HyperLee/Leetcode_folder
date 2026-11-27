@@ -60,6 +60,8 @@ ascending:  dp[2] becomes 2, then dp[4] reads dp[2] = 2 -> 4
 
 ## 解法一 · 逐項整除與 0-1 背包
 
+第一次接觸這個概念，可以先讀 [0-1 背包入門](KNAPSACK_01.md)，再回來看下面的解法。
+
 [`MaximumSaleItems`](leetcode_3946/Program.cs#L82) 在同一個方法內完成整除計數、背包更新和結算。
 
 1. 對每個物品讀取 `factor` 與 `price`，並更新最低單價 `minPrice`。掃描所有物品，每次遇到 `other[0] % factor == 0` 就將 `firstPurchaseCount` 加一。同一索引計為付費首件，其餘符合條件的索引各計為一件贈品。
